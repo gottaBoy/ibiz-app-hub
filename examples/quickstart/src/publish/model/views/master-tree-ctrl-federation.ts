@@ -2,7 +2,8 @@ export default {
   showDataInfoBar: true,
   loadDefault: true,
   deviewCodeName: 'tree_ctrl_federation',
-  deviewId: 'e07fe398a6c3be19f3a1e73474f81a71',
+  deviewId: '0c905d97c001734e9f6cbe4e3056381d',
+  appWFId: 'workflow',
   accUserMode: 2,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -182,7 +183,7 @@ export default {
           controlParam: {
             id: 'treeexpbar_tree',
           },
-          modelId: '6ca27d7e7d7b8d77169175a8013dab23',
+          modelId: '7de00ad034384e77b2b8fad5e46131d4',
           modelType: 'PSDETREEVIEW',
           name: 'treeexpbar_tree',
           id: 'web.master.tree_ctrl_federation_tree_view',
@@ -194,7 +195,7 @@ export default {
       controlParam: {
         id: 'treeexpbar',
       },
-      modelId: 'ef3c63ff5529b54bd2ee14b8ca03b061_treeexpbar',
+      modelId: '2f60a9568e537f6735b479ec345080df_treeexpbar',
       modelType: 'PSEXPBAR',
       name: 'treeexpbar',
       id: 'tree_ctrl_federation_treeexpbar',
@@ -239,7 +240,7 @@ export default {
   viewType: 'DETREEEXPVIEW',
   enableDP: true,
   showCaptionBar: true,
-  modelId: 'ef3c63ff5529b54bd2ee14b8ca03b061',
+  modelId: '2f60a9568e537f6735b479ec345080df',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERtree_ctrl_federation',
   id: 'web.master_tree_ctrl_federation',

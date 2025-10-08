@@ -14,7 +14,7 @@ import './coop-pos.scss';
  *      - 勾选【登记打开数据】 -> 显示浏览用户
  *      - 勾选【登记更新数据】 -> 显示编辑用户
  *      - 勾选【提示刷新数据】 -> 显示更新用户
- * @panelitemparams {name:showmode,parameterType:avatar|default,defaultvalue:default,description:当值为avatar时会绘制头像}
+ * @panelitemparams {name:showmode,parameterType:'avatar' | 'default',defaultvalue:'default',description:当值为avatar时会绘制头像}
  *
  */
 

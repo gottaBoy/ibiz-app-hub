@@ -2,7 +2,7 @@ import type _XGantt from './root/index';
 import type _XGanttColumn from './column/index';
 import type _XGanttSlider from './slider/index';
 
-import './components';
+import './components.d';
 
 declare const _default: {
   install: (app: any, options?: Record<string, unknown> | undefined) => void;

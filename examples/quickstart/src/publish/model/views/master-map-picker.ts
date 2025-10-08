@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'map_picker',
   deviewId: '463d3050d8e462233b799b38a1adfa18',
+  appWFId: 'workflow',
   accUserMode: 2,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -65,6 +66,16 @@ export default {
         appDataEntityId: 'web.master',
         id: 'update',
       },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
+      },
       deformPages: [
         {
           layout: {
@@ -91,6 +102,7 @@ export default {
                         id: 'longitude,latitude',
                       },
                     ],
+                    placeHolder: '请选择地址',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'address',
@@ -116,7 +128,7 @@ export default {
                   editor: {
                     halign: 'LEFT',
                     valign: 'MIDDLE',
-                    wrapMode: 'NOWRAP',
+                    wrapMode: 'WRAP',
                     editorType: 'SPAN',
                     valueType: 'SIMPLE',
                     editable: true,
@@ -143,7 +155,7 @@ export default {
                   editor: {
                     halign: 'LEFT',
                     valign: 'MIDDLE',
-                    wrapMode: 'NOWRAP',
+                    wrapMode: 'WRAP',
                     editorType: 'SPAN',
                     valueType: 'SIMPLE',
                     editable: true,
@@ -172,6 +184,78 @@ export default {
               },
               showCaption: true,
               id: 'group1',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  createDV: '江苏省苏州市昆山市千灯镇少卿西路5号',
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      readonly: 'true',
+                    },
+                    editorType: 'MAPPICKER',
+                    placeHolder: '请选择地址',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    readOnly: true,
+                    id: 'formitem',
+                  },
+                  updateDV: '江苏省苏州市昆山市千灯镇少卿西路5号',
+                  allowEmpty: true,
+                  codeName: 'formitem',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用readonly参数控制编辑器是否为只读态。当前编辑器为只读态',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem1',
+                  },
+                  codeName: 'rawitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem1',
+                },
+              ],
+              caption: '只读态',
+              codeName: 'grouppanel1',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel1',
             },
             {
               dataType: 25,

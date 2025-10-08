@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'chart_view',
   deviewId: 'ad3f8de543dcf1159bf0b966e29753a6',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -80,6 +81,7 @@ export default {
       },
       dechartSerieses: [
         {
+          caption: '柱状',
           catalogField: 'NAME',
           echartsType: 'bar',
           chartCoordinateSystemId: '0',
@@ -194,6 +196,15 @@ export default {
       },
       name: 'chart',
       id: 'web.master.chart_view_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

@@ -14,6 +14,7 @@ import { IApiMDControlController } from './i-api-md-control.controller';
  * @ctrlparams { name:strareacode,title:区域编码是否是字符串,parameterType:boolean,defaultvalue:false,description:该值为true时，将默认地区编码 `defaultareacode` 值转为字符串类型，默认转为数值类型}
  * @ctrlparams { name:jsonbaseurl,title:地图json数据基础路径,parameterType:string,defaultvalue:'./assets/json/map',description:获取地图地理数据的请求路径}
  * @ctrlparams { name:enableddrilldown,title:是否允许下钻,parameterType:boolean,defaultvalue:true,description:自定义样式下，是否启用地图下钻功能，默认开启}
+ * @ctrlparams { name:enabledfullscreen,title:是否允许全屏,parameterType:boolean,defaultvalue:false,description:自定义样式下，是否启用地图全屏功能，默认关闭}
  * @ctrlparams { name:defaultopts,title:地图默认参数,parameterType:string,description:自定义样式下，配置该参数可调整地图呈现模式，参数为IAPiMapOptions}
  * @template T
  * @template S
@@ -28,4 +29,17 @@ export interface IApiMapController<
    * @memberof IApiMapController
    */
   chart?: EChartsType;
+
+  /**
+   * @description 下钻
+   * @param {(string | number)} areaCode
+   * @memberof IApiMapController
+   */
+  drillDown(areaCode: string | number): void;
+
+  /**
+   * @description 返回
+   * @memberof IApiMapController
+   */
+  back(): void;
 }

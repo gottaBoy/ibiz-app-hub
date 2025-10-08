@@ -4,11 +4,12 @@ export default {
   loadDefault: true,
   deviewCodeName: 'searchform_filter',
   deviewId: '286c7b0c17b76431905c5e0bcc6bcdc9',
+  appWFId: 'workflow',
   accUserMode: 2,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
-  caption: '搜索表单_过滤',
+  caption: '过滤',
   codeName: 'master_searchform_filter',
   appDataEntityId: 'web.master',
   appViewEngines: [
@@ -64,6 +65,7 @@ export default {
       id: 'opendata',
     },
   ],
+  appViewMsgGroupId: 'searchform_save_filter',
   appViewRefs: [
     {
       realTitle: '主数据数据重定向视图',
@@ -125,6 +127,7 @@ export default {
       columnEnableLink: 2,
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
+      orderValueAppDEFieldId: 'px',
       degridColumns: [
         {
           clconvertMode: 'NONE',
@@ -173,10 +176,34 @@ export default {
           id: 'region_id',
         },
         {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
           appDEFieldId: 'name',
           valueType: 'SIMPLE',
           dataType: 25,
           id: 'srfmajortext',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'wf_status',
         },
       ],
       degridEditItems: [
@@ -198,6 +225,7 @@ export default {
       pagingMode: 1,
       pagingSize: 20,
       sortMode: 'REMOTE',
+      hasWFDataItems: true,
       enableCustomized: true,
       enablePagingBar: true,
       navViewPos: 'NONE',
@@ -243,6 +271,7 @@ export default {
               appDEFieldId: 'name',
               editor: {
                 editorType: 'TEXTBOX',
+                placeHolder: '请输入名称',
                 valueType: 'SIMPLE',
                 editable: true,
                 id: 'n_name_like',
@@ -256,8 +285,8 @@ export default {
               detailStyle: 'DEFAULT',
               detailType: 'FORMITEM',
               layoutPos: {
-                colLG: 12,
-                colMD: 12,
+                colLG: 8,
+                colMD: 8,
                 layout: 'TABLE_24COL',
               },
               showCaption: true,
@@ -274,6 +303,7 @@ export default {
                 singleSelect: true,
                 appCodeListId: 'web.mock__cl_categories',
                 editorType: 'DROPDOWNLIST',
+                placeHolder: '请选择类型',
                 valueType: 'SIMPLE',
                 editable: true,
                 id: 'n_type_eq',
@@ -285,8 +315,8 @@ export default {
               detailStyle: 'DEFAULT',
               detailType: 'FORMITEM',
               layoutPos: {
-                colLG: 12,
-                colMD: 12,
+                colLG: 8,
+                colMD: 8,
                 layout: 'TABLE_24COL',
               },
               showCaption: true,
@@ -343,7 +373,7 @@ export default {
       capLanguageRes: {
         lanResTag: 'DE.LNAME.MASTER',
       },
-      caption: '搜索表单_过滤',
+      caption: '过滤',
       codeName: 'searchform_filter_captionbar',
       controlType: 'CAPTIONBAR',
       appDataEntityId: 'web.master',
@@ -363,11 +393,11 @@ export default {
     controlParam: {},
     id: 'layoutpanel',
   },
-  title: '搜索表单_过滤',
+  title: '过滤',
   viewStyle: 'DEFAULT',
   viewType: 'DEGRIDVIEW',
   enableDP: true,
-  showCaptionBar: false,
+  showCaptionBar: true,
   modelId: 'ab704d0b983a6282f8bd73cce5762b9e',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERsearchform_filter',

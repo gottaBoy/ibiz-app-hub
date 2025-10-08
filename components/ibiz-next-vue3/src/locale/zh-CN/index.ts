@@ -316,6 +316,7 @@ export default {
         tip: '全天',
         tomorrow: '明天',
         nextweek: '下周',
+        selectdate: '选择日期',
       },
       calendarmonth: {
         weeks: {
@@ -349,6 +350,8 @@ export default {
           saturday: '周六',
           sunday: '周日',
         },
+        selectWeekRange: '选择周范围',
+        weekFormat: 'YYYY年第ww周',
       },
     },
     chart: {
@@ -699,6 +702,13 @@ export default {
       expandAll: '全部展开',
       collapseAll: '全部收起',
     },
+    signature: {
+      undo: '撤销',
+      rewrite: '重写',
+      confirm: '确认',
+      addSignature: '点击此处添加签名',
+      signaturePrompt: '请在空白区域内横向书写',
+    },
   },
   panelComponent: {
     authUserinfo: {
@@ -801,6 +811,10 @@ export default {
       aiDesc: '删除后，该对话将不可恢复。确认删除吗？',
       clearTopic: '清空会话',
       clearTopicDesc: '确认清空除当前激活项外的所有会话数据？',
+    },
+    appModal: {
+      prev: '上一个记录',
+      next: '下一个记录',
     },
   },
   // runTime

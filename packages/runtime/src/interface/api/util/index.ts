@@ -24,3 +24,8 @@ export type {
 } from './i-api-short-cut-util';
 export type { IApiVoiceUtil } from './i-api-voice-util';
 export type { IApiAiChatParam, IApiAppUtil } from './i-api-app-util';
+export type {
+  IApiChangeHistoryItem,
+  IApiChangeTracker,
+} from './i-api-change-tracker';
+export type { IApiWaterMarkUtil } from './i-api-water-mark-util';

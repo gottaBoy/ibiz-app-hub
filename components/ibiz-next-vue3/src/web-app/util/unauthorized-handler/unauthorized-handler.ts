@@ -24,6 +24,14 @@ export class UnauthorizedHandler implements IErrorHandler {
   }
 
   /**
+   * @description 是否存在403错误未处理
+   * @protected
+   * @type {boolean}
+   * @memberof UnauthorizedHandler
+   */
+  protected hasPermErrPending: boolean = false;
+
+  /**
    * oauth登录处理
    *
    * @author tony001
@@ -113,10 +121,16 @@ export class UnauthorizedHandler implements IErrorHandler {
    */
   protected async handle403(error: HttpError): Promise<void> {
     if (error.tag === 'APPINIT') {
+      // 存在403错误用户未确认，再次触发403错误时不做处理
+      if (this.hasPermErrPending) {
+        return;
+      }
+      this.hasPermErrPending = true;
       const result = await ibiz.confirm.warning({
         title: ibiz.i18n.t('webApp.unauthorizedHandler.forbiddenAccess'),
         desc: ibiz.i18n.t('webApp.unauthorizedHandler.logoutAccount'),
       });
+      this.hasPermErrPending = false;
       if (result) {
         const bol = await ibiz.hub.controller.logout();
         if (bol) {
@@ -140,7 +154,11 @@ export class UnauthorizedHandler implements IErrorHandler {
       if (error.status === 401) {
         // 若是匿名登录，则直接使用匿名账户登录。不用跳转登录页
         const search = qs.parse(window.location.search.replace('?', ''));
-        if (search.isAnonymous || ibiz.env.enableAnonymous) {
+        if (
+          (search.isAnonymous || ibiz.env.enableAnonymous) &&
+          // 匿名登录获取视图模型发生异常，走普通登录，防止循环执行
+          error.tag !== 'APPINIT'
+        ) {
           ibiz.auth.anonymousLogin().then(bol => {
             if (bol) {
               // 登录成功后直接刷新页面，避免界面初始化异常

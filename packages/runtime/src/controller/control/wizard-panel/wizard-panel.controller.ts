@@ -268,7 +268,7 @@ export class WizardPanelController
     }
     const wizardForm = this.model.dewizard.dewizardForms.find(
       (form: IDEWizardForm) => {
-        return form.formTag === tag;
+        return form.stepTag === tag;
       },
     );
     if (!wizardForm) {

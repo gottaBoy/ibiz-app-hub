@@ -47,6 +47,12 @@ $user-info: (
       margin: 0;
     }
   }
+
+  @include when(readonly) {
+    .el-dropdown {
+      cursor: default;
+    }
+  }
 }
 
 @include b(user-info-avatar) {

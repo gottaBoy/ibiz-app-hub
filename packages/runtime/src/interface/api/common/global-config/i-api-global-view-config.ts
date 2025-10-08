@@ -37,10 +37,26 @@ export interface IApiGlobalViewConfig {
   mobShowPresetBack: boolean;
 
   /**
+   * @description 移动端是否视图头
+   * @default true
+   * @type {boolean}
+   * @memberof IApiGlobalViewConfig
+   */
+  mobShowViewHeader: boolean;
+
+  /**
    * @description 用户操作超时周期，超过该时间刷新用户访问状态
    * @default 300s
    * @type {number}
    * @memberof IApiGlobalViewConfig
    */
   timeoutDuration: number;
+
+  /**
+   * @description 是否只显示信息栏，为true时，存在主数据信息则只显示信息栏，无主数据信息时显示标题
+   * @type {boolean}
+   * @default false
+   * @memberof IApiGlobalViewConfig
+   */
+  onlyShowDataInfo: boolean;
 }

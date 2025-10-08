@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Chart_scatter',
   deviewId: 'ff0c072288e8897e9754665eea69d1e8',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -17,7 +18,6 @@ export default {
       id: 'engine',
     },
   ],
-  appViewMsgGroupId: 'chart_scatter',
   controls: [
     {
       searchButtonStyle: 'DEFAULT',
@@ -76,12 +76,13 @@ export default {
         id: '0',
       },
       dechartLegend: {
-        legendPos: 'BOTTOM',
+        legendPos: 'RIGHT',
         showLegend: true,
         id: '0',
       },
       dechartSerieses: [
         {
+          caption: '散点',
           catalogField: 'TYPE',
           echartsType: 'scatter',
           chartCoordinateSystemId: '0',
@@ -91,20 +92,17 @@ export default {
             chartYAxisId: '0',
             x: ['TYPE'],
             y: ['QUANTITY'],
-            itemId: 'NAME',
-            itemName: 'NAME',
             type: 'XY',
             name: '坐标系编码',
             id: '0',
           },
-          seriesField: 'NAME',
           seriesLayoutBy: 'column',
           seriesType: 'scatter',
           valueField: 'QUANTITY',
           enableChartDataSet: true,
           userParam: {
             'EC.itemStyle':
-              '{"color":"#C92424","borderWidth":5,"borderColor":"#C92424"}',
+              '{"color":"#C92424","borderColor":"#C92424","borderWidth":5}',
           },
           id: 'scatter_0',
         },
@@ -131,15 +129,9 @@ export default {
               id: '0',
             },
             {
-              groupField: true,
               index: 1,
-              name: 'NAME',
-              id: '1',
-            },
-            {
-              index: 2,
               name: 'QUANTITY',
-              id: '2',
+              id: '1',
             },
           ],
           name: 'scatter_0-DEFAULT',
@@ -187,7 +179,7 @@ export default {
       showBusyIndicator: true,
       codeName: 'chart_scatter_chart',
       controlType: 'CHART',
-      height: 300,
+      height: 400,
       logicName: 'Chart13',
       appDataEntityId: 'web.master',
       controlParam: {
@@ -201,6 +193,15 @@ export default {
       },
       name: 'chart',
       id: 'web.master.chart_scatter_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

@@ -1,6 +1,5 @@
 { "allPSAppViews": [
   { "id": "web.master_child_appc_view2", "priority": -1 },
-  { "id": "web.about_appc", "priority": -1 },
   { "id": "web.welcome_appc", "priority": -1 },
   { "id": "web.master_child_appc_view", "priority": -1 },
   { "id": "web.master_child_appc_view3", "priority": -1 },

@@ -7,6 +7,7 @@ import {
   SysUIActionTag,
   EventBase,
   getWFContext,
+  IApiMobMDViewCall,
 } from '@ibiz-template/runtime';
 import { IAppDEMobMDView, IDEListItem } from '@ibiz/model-core';
 
@@ -30,8 +31,11 @@ export class MobMDViewEngine extends MDViewEngine {
     return this.view.getController('mdctrl') as IMobMDCtrlController;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  async call(key: string, args: any): Promise<IData | null | undefined> {
+  async call(
+    key: keyof IApiMobMDViewCall,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    args: any,
+  ): Promise<IData | null | undefined> {
     if (key === SysUIActionTag.LOAD_MORE) {
       await this.loadMore();
       return null;

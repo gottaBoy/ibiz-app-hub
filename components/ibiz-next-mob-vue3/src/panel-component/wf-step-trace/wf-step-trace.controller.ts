@@ -89,10 +89,8 @@ export class WFStepTraceController extends PanelItemController<IPanelRawItem> {
   }
 
   /**
-   * 获取数据
-   *
-   * @author zk
-   * @date 2023-07-04 05:07:57
+   * @description 获取数据
+   * @exposedoc
    * @return {*}
    * @memberof WFStepTraceController
    */

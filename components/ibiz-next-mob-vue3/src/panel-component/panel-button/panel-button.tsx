@@ -5,13 +5,24 @@ import { PanelButtonController } from './panel-button.controller';
 import { convertBtnType } from '../../util';
 import './panel-button.scss';
 
+/**
+ * 按钮组件
+ * @primary
+ * @description 面板中最常见的按钮组件，支持配置界面行为、界面逻辑等，同时支持权限配置是否显示、是否禁用。
+ */
 export const PanelButton = defineComponent({
   name: 'IBizPanelButton',
   props: {
+    /**
+     * @description 按钮模型
+     */
     modelData: {
       type: Object as PropType<IPanelButton>,
       required: true,
     },
+    /**
+     * @description 按钮控制器
+     */
     controller: {
       type: PanelButtonController,
       required: true,

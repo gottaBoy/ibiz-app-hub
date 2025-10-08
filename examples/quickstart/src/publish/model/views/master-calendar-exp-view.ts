@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'calendar_exp_view',
   deviewId: '61e38e357dd4e3ba692649cad72d6e85',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -69,8 +70,8 @@ export default {
           legendPos: 'NONE',
           sysCalendarItems: [
             {
-              beginTimeAppDEFieldId: 'create_time',
-              endTimeAppDEFieldId: 'create_time',
+              beginTimeAppDEFieldId: 'start_time',
+              endTimeAppDEFieldId: 'end_time',
               idAppDEFieldId: 'id',
               itemStyle: 'DEFAULT',
               itemType: 'master',

@@ -8,13 +8,24 @@ import './view-header-panel-container.scss';
 import { useRoute } from 'vue-router';
 import { useViewStack } from '../../util';
 
+/**
+ * 面板容器（视图头部）
+ * @primary
+ * @description 用于绘制视图头部内容。
+ */
 export const ViewHeaderPanelContainer = defineComponent({
   name: 'IBizViewHeaderPanelContainer',
   props: {
+    /**
+     * @description 容器模型数据
+     */
     modelData: {
       type: Object as PropType<IPanelContainer>,
       required: true,
     },
+    /**
+     * @description 容器控制器
+     */
     controller: {
       type: PanelContainerController,
       required: true,
@@ -51,7 +62,18 @@ export const ViewHeaderPanelContainer = defineComponent({
       ];
       return result;
     });
-    return { ns, classArr, backButtonVisible, view };
+
+    const showHeader = computed(() => {
+      const { appViewParams } = view.model;
+      const value: string | undefined = appViewParams?.find(
+        (item: IData) => item.id!.toLowerCase() === 'mobshowviewheader',
+      )?.value;
+      const mobShowViewHeader = value
+        ? Object.is(value, 'true')
+        : ibiz.config.view.mobShowViewHeader;
+      return mobShowViewHeader;
+    });
+    return { ns, classArr, backButtonVisible, view, showHeader };
   },
   render() {
     if (this.controller.state.visible === false) {
@@ -78,8 +100,16 @@ export const ViewHeaderPanelContainer = defineComponent({
     //     })}
     //   </div>
     // ) : (
+    const style: IData = {};
+    if (!this.showHeader) {
+      style.display = 'none';
+    }
     return (
-      <iBizRow class={this.classArr} layout={this.modelData.layout}>
+      <iBizRow
+        class={this.classArr}
+        style={style}
+        layout={this.modelData.layout}
+      >
         <iBizPresetViewBack view={this.view}></iBizPresetViewBack>
         {defaultSlots.map((slot, index) => {
           const props = slot.props as IData;

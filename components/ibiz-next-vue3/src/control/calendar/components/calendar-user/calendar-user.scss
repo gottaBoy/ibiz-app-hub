@@ -13,16 +13,33 @@ $calendar-user: (
 
     @include e('cell'){
         min-height: getCssVar(calendar-user, cell-min-height);
+        padding: 0 getCssVar(spacing, base);
         border-bottom: 1px solid getCssVar(color,tertiary);
         border-left: 1px solid getCssVar(color,tertiary);
 
         &:last-child{
             border-right: 1px solid getCssVar(color,tertiary);
         }
+        .#{bem(control-calendar-item)}{
+            height: auto;
+            @include when('active'){
+                color:getCssVar(color,primary,text);
+                background-color: getCssVar(color,primary)
+            }
+        }
     }
     @include e('black'){
         width: 100%;
         height: 100%;
+    }
+    @include e('custom-user-popover'){
+        .#{bem(control-calendar-item)}{
+            height: auto;
+            @include when('active'){
+                color:getCssVar(color,primary,text);
+                background-color: getCssVar(color,primary)
+            }
+        }
     }
 
     @include b('calendar-user-more'){

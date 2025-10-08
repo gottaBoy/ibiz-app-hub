@@ -3,13 +3,12 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-destructuring */
 import {
-  DataTypes,
+  clone,
   RuntimeError,
   isElementSame,
   RuntimeModelError,
 } from '@ibiz-template/core';
 import { IDEKanban, IUIActionGroupDetail } from '@ibiz/model-core';
-import { clone, isNil } from 'ramda';
 import {
   IController,
   IKanbanEvent,
@@ -22,7 +21,7 @@ import {
   IKanbanGroupState,
   IToolbarController,
 } from '../../../interface';
-import { calcDeCodeNameById, getParentTextAppDEFieldId } from '../../../model';
+import { getParentTextAppDEFieldId } from '../../../model';
 import { ControlVO } from '../../../service';
 import { DataViewControlController } from '../data-view';
 import { KanbanService } from './kanban.service';
@@ -104,7 +103,6 @@ export class KanbanController
   protected initState(): void {
     super.initState();
     this.state.size = this.model.pagingSize || 1000;
-    this.state.updating = false;
     this.state.batching = false;
     this.state.selectGroupKey = '';
     this.state.swimlanes = [];
@@ -134,41 +132,7 @@ export class KanbanController
     _params?: IParams,
   ): Promise<void> {}
 
-  /**
-   * 本地排序items
-   * @author lxm
-   * @date 2023-09-04 09:30:55
-   * @param {IData[]} items
-   */
-  sortItems(items: IData[]): void {
-    const { minorSortAppDEFieldId, minorSortDir } = this.model;
-    if (!minorSortAppDEFieldId || !minorSortDir) return;
-    const sortField = this.dataEntity?.appDEFields?.find(
-      _item => _item.codeName === minorSortAppDEFieldId,
-    );
-    if (!sortField || !DataTypes.isNumber(sortField.stdDataType!)) {
-      ibiz.log.warn(
-        ibiz.i18n.t('runtime.controller.control.kanban.invalidSortType'),
-      );
-      return;
-    }
-    const isAsc = minorSortDir === 'ASC';
-    // 格式化排序属性的值
-    items.forEach(item => {
-      const sortValue = item[minorSortAppDEFieldId];
-      if (isNil(sortValue)) item[minorSortAppDEFieldId] = 0;
-    });
-    // 排序
-    items.sort((a, b) =>
-      isAsc
-        ? a[minorSortAppDEFieldId] - b[minorSortAppDEFieldId]
-        : b[minorSortAppDEFieldId] - a[minorSortAppDEFieldId],
-    );
-  }
-
   async afterLoad(args: MDCtrlLoadParams, items: IData[]): Promise<IData[]> {
-    // 每次加载回来先本地排序，把数据的排序属性规范一下
-    this.sortItems(this.state.items);
     super.afterLoad(args, items);
     this.handleLaneData();
     return items;
@@ -426,15 +390,16 @@ export class KanbanController
    * @memberof KanbanController
    */
   async onDragChange(info: IDragChangeInfo): Promise<void> {
-    if (!this.enableEditGroup) {
-      if (info.from !== info.to) {
-        ibiz.message.warning(
-          ibiz.i18n.t('runtime.controller.control.kanban.adjustmentsGroup'),
-        );
-        return;
-      }
-    }
     const { from, to, fromIndex, toIndex, fromLane, toLane } = info;
+    if (!this.enableEditGroup && from !== to)
+      return ibiz.message.warning(
+        ibiz.i18n.t('runtime.controller.common.md.adjustmentsGroup'),
+      );
+    if (!this.enableEditOrder && from === to && fromLane === toLane)
+      return ibiz.message.warning(
+        ibiz.i18n.t('runtime.controller.common.md.noAllowReorder'),
+      );
+
     const {
       groupAppDEFieldId = '',
       moveControlAction,
@@ -443,238 +408,42 @@ export class KanbanController
     } = this.model;
     const fromGroup = this.state.groups.find(x => x.key === from)!;
     const toGroup = this.state.groups.find(x => x.key === to)!;
-
-    if (!this.enableEditOrder) {
-      if (from === to && fromLane === toLane) {
-        ibiz.message.warning(
-          ibiz.i18n.t('runtime.controller.control.kanban.noAllowReorder'),
-        );
-        return;
-      }
-
-      // 只修改分组不管排序
-      const draggedItem = fromGroup.children[fromIndex];
-      // 变更分组
-      draggedItem[groupAppDEFieldId] = to;
-      // 变更泳道
-      if (swimlaneAppDEFieldId) draggedItem[swimlaneAppDEFieldId] = toLane;
-      return this.updateChangedItems([draggedItem] as ControlVO[]);
-    }
-
-    if (!minorSortAppDEFieldId) {
-      throw new RuntimeModelError(
-        this.model,
-        ibiz.i18n.t('runtime.controller.control.kanban.sortingProperties'),
-      );
-    }
-
-    const originArr = [...toGroup.children];
-    const moveAction = moveControlAction?.appDEMethodId;
-
-    if (!moveAction) {
-      throw new RuntimeModelError(
-        this.model,
-        ibiz.i18n.t('runtime.controller.common.md.noMoveDataCconfig'),
-      );
-    }
-
-    this.state.updating = true;
-    // 计算移动数据,目标分组指定位置存在数据，则添加到目标分组指定位置之前，若没有，则添加到当前分组数据排序值最大的后面
-    const computeMoveData = (
-      _fromIndex: number,
-      _toIndex: number,
-      _draggedItem: IData,
-      targetArray: IData[],
-      isCrossGroup: boolean,
-    ): IData => {
-      let moveData = {};
-      const targetItem = targetArray[_toIndex];
-      if (!targetItem) {
-        let tempArray: IData[] = [];
-        if (targetArray.length > 0) {
-          tempArray = targetArray;
-        }
-        if (tempArray.length > 0) {
-          const maxItem = tempArray.reduce((prev, curr) => {
-            const sortCondition =
-              prev[minorSortAppDEFieldId] > curr[minorSortAppDEFieldId];
-            if (
-              sortCondition &&
-              prev[this.dataEntity.keyAppDEFieldId!] !== _draggedItem.srfkey
-            ) {
-              return prev;
-            }
-            if (
-              !sortCondition &&
-              curr[this.dataEntity.keyAppDEFieldId!] !== _draggedItem.srfkey
-            ) {
-              return curr;
-            }
-            return prev;
-          });
-          if (
-            maxItem &&
-            maxItem[this.dataEntity.keyAppDEFieldId!] !== _draggedItem.srfkey
-          ) {
-            moveData = {
-              srftargetkey: maxItem.srfkey,
-              srfmovetype: 'MOVEAFTER',
-            };
-          }
-        }
-      } else {
-        moveData = {
-          srftargetkey: targetItem.srfkey,
-          srfmovetype:
-            _toIndex < targetArray.length - 1
-              ? 'MOVEBEFORE'
-              : isCrossGroup
-                ? 'MOVEBEFORE'
-                : 'MOVEAFTER',
-        };
-      }
-      return moveData;
-    };
-
-    // 拖拽数据
     const draggedItem = clone(fromGroup.children[fromIndex]);
+    // 分组变更
+    if (from !== to && groupAppDEFieldId) draggedItem[groupAppDEFieldId] = to;
+    // 泳道变更
+    if (fromLane !== toLane && swimlaneAppDEFieldId)
+      draggedItem[swimlaneAppDEFieldId] = to;
 
-    // 前台先改值
-    const removeItems = fromGroup.children.splice(fromIndex, 1);
-    toGroup.children.splice(toIndex, 0, ...removeItems);
-
-    if (info.from !== info.to) {
-      // 变更分组
-      draggedItem[groupAppDEFieldId] = info.to;
-      // 存在移动数据行为，先变更分组再变更排序
-      const app = ibiz.hub.getApp(this.model.appId);
-      const deName = calcDeCodeNameById(this.model.appDataEntityId!);
-      const tempContext = this.context.clone();
-      tempContext[deName] = draggedItem.srfkey;
-      try {
-        await app.deService.exec(
-          this.model.appDataEntityId!,
-          'update',
-          tempContext,
-          draggedItem,
-        );
-        const index = this.state.items.findIndex(
-          x => x.srfkey === draggedItem[this.dataEntity.keyAppDEFieldId!],
-        );
-        if (index !== -1) {
-          this.state.items.splice(index, 1, draggedItem);
-        }
-      } catch (error) {
-        this.state.updating = false;
+    // 仅变更分组
+    if (!this.enableEditOrder) {
+      await this.updateChangedItems([draggedItem] as ControlVO[]);
+    } else {
+      // 排序变更
+      if (!minorSortAppDEFieldId)
         throw new RuntimeModelError(
           this.model,
-          ibiz.i18n.t('runtime.controller.common.md.changeGroupError'),
+          ibiz.i18n.t('runtime.controller.common.md.sortingProperties'),
         );
+      const moveAction = moveControlAction?.appDEMethodId;
+      if (!moveAction)
+        throw new RuntimeModelError(
+          this.model,
+          ibiz.i18n.t('runtime.controller.common.md.noMoveDataCconfig'),
+        );
+      // 存在移动数据行为，先变更分组或泳道再变更排序
+      if (from !== to || fromLane !== toLane) {
+        await this.updateChangedItems([draggedItem] as ControlVO[]);
       }
-    }
-    // 移动排序
-    const params = computeMoveData(
-      fromIndex,
-      toIndex,
-      draggedItem,
-      originArr,
-      info.from !== info.to,
-    );
-    try {
-      const { ok, result } = await this.moveOrderItem(draggedItem, params);
-      if (ok) {
-        // 通知实体数据变更
-        this.emitDEDataChange('update', draggedItem);
-        // 返回空数组不做处理，非空数组同步界面数据,无数据界面重刷新
-        if (Array.isArray(result) && result.length > 0) {
-          result.forEach(item => {
-            const index = this.state.items.findIndex(
-              x => x.srfkey === item[this.dataEntity.keyAppDEFieldId!],
-            );
-            if (index !== -1) {
-              this.state.items[index][minorSortAppDEFieldId] =
-                item[minorSortAppDEFieldId];
-            }
-          });
-        } else {
-          await this.refresh();
-        }
-      }
-    } catch (error) {
-      this.state.updating = false;
-      this.actionNotification(`MOVEERROR`, {
-        error: error as Error,
-      });
-    } finally {
-      await this.afterLoad({}, this.state.items);
-      this.state.updating = false;
-    }
-  }
 
-  /**
-   * 移动并排序数据
-   *
-   * @author tony001
-   * @date 2024-06-17 15:06:22
-   * @param {IData} draggedItem
-   * @param {IData} moveMeta
-   * @return {*}  {Promise<ControlVO[]>}
-   */
-  async moveOrderItem(
-    draggedItem: IData,
-    moveMeta: IData,
-  ): Promise<{ ok: boolean; result?: ControlVO[] }> {
-    const deName = calcDeCodeNameById(this.model.appDataEntityId!);
-    const tempContext = this.context.clone();
-    tempContext[deName] = draggedItem.srfkey;
-    if (!moveMeta.srftargetkey || !moveMeta.srfmovetype) {
-      ibiz.log.error(
-        ibiz.i18n.t('runtime.controller.common.md.computeMoveMetaError'),
+      const params = this.computeMoveDataParam(
+        fromIndex,
+        toIndex,
+        draggedItem,
+        toGroup.children,
+        info.from !== info.to,
       );
-      return { ok: false };
-    }
-    const res = await this.service.moveOrderItem(
-      tempContext,
-      draggedItem as ControlVO,
-      moveMeta,
-    );
-    return { ok: true, result: res.data };
-  }
-
-  /**
-   * 批量更新修改的项，并更新后台返回的数据，然后重新计算分组和排序
-   * @author lxm
-   * @date 2023-09-11 04:13:15
-   * @param {ControlVO[]} changedItems
-   * @return {*}  {Promise<void>}
-   */
-  async updateChangedItems(changedItems: ControlVO[]): Promise<void> {
-    try {
-      this.state.updating = true;
-      await Promise.all(
-        changedItems.map(async item => {
-          // 往上下文添加主键
-          const deName = calcDeCodeNameById(this.model.appDataEntityId!);
-          const tempContext = this.context.clone();
-          tempContext[deName] = item.srfkey;
-
-          // 调用接口修改数据
-          const res = await this.service.updateGroup(tempContext, item);
-
-          // 更新完之后更新state里的数据。
-          if (res.ok) {
-            // 通知实体数据变更
-            this.emitDEDataChange('update', res.data);
-            const index = this.state.items.findIndex(
-              x => x.srfkey === item.srfkey,
-            );
-            this.state.items.splice(index, 1, res.data);
-          }
-        }),
-      );
-    } finally {
-      this.state.updating = false;
-      await this.afterLoad({}, this.state.items);
+      await this.moveOrderItem(draggedItem as ControlVO, params);
     }
   }
 

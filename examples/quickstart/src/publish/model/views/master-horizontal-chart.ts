@@ -1,0 +1,205 @@
+export default {
+  enableSearch: true,
+  loadDefault: true,
+  deviewCodeName: 'Horizontal_Chart',
+  deviewId: 'fa5212d633ab2465104598822fdbd690',
+  appWFId: 'workflow',
+  accUserMode: 2,
+  capLanguageRes: {
+    lanResTag: 'DE.LNAME.MASTER',
+  },
+  caption: '水平图表模式',
+  codeName: 'master_horizontal_chart',
+  appDataEntityId: 'web.master',
+  appViewEngines: [
+    {
+      engineCat: 'VIEW',
+      engineType: 'ChartView',
+      id: 'engine',
+    },
+  ],
+  appViewMsgGroupId: 'horizontal_chart',
+  controls: [
+    {
+      chartCoordinateSystems: [
+        {
+          chartGrid: {
+            chartGridXAxis0Id: '0',
+            chartGridYAxis0Id: '0',
+            chartCoordinateSystemId: '0',
+            type: 'grid',
+            name: '[bar_0]直角坐标系[0]',
+            id: '0',
+          },
+          echartsType: 'cartesian2d',
+          type: 'XY',
+          name: '[bar_0]直角坐标系[0]',
+          id: '0',
+        },
+      ],
+      dechartDataGrid: {
+        id: '0',
+      },
+      dechartLegend: {
+        showLegend: true,
+        id: '0',
+      },
+      dechartSerieses: [
+        {
+          caption: '柱状',
+          catalogField: 'TYPE',
+          echartsType: 'bar',
+          chartCoordinateSystemId: '0',
+          chartDataSetId: '0',
+          chartSeriesEncode: {
+            chartXAxisId: '0',
+            chartYAxisId: '0',
+            x: ['QUANTITY'],
+            y: ['TYPE'],
+            type: 'XY',
+            name: '坐标系编码',
+            id: '0',
+          },
+          seriesLayoutBy: 'column',
+          seriesType: 'bar',
+          valueField: 'QUANTITY',
+          enableChartDataSet: true,
+          userParam: {
+            'EC.label': '{"show":1,"position":"right"}',
+            'EC.lineStyle': '{"color":"rgba(15, 234, 234, 1)"}',
+          },
+          id: 'bar_0',
+        },
+      ],
+      dechartTitle: {
+        title: '水平图表模式_图表',
+        id: '0',
+      },
+      chartDataSetGroups: [
+        {
+          appDEDataSetId: 'fetch_default',
+          appDataEntityId: 'web.master',
+          name: 'DEFAULT',
+          id: '0',
+        },
+      ],
+      chartDataSets: [
+        {
+          chartDataSetFields: [
+            {
+              groupField: true,
+              name: 'TYPE',
+              id: '0',
+            },
+            {
+              index: 1,
+              name: 'QUANTITY',
+              id: '1',
+            },
+          ],
+          name: 'bar_0-DEFAULT',
+          id: '0',
+        },
+      ],
+      chartGrids: [
+        {
+          chartGridXAxis0Id: '0',
+          chartGridYAxis0Id: '0',
+          chartCoordinateSystemId: '0',
+          type: 'grid',
+          name: '[bar_0]直角坐标系[0]',
+          id: '0',
+        },
+      ],
+      chartXAxises: [
+        {
+          echartsPos: 'xAxis',
+          echartsType: 'value',
+          position: 'bottom',
+          type: 'numeric',
+          name: 'axis_xAxis_1',
+          id: '0',
+        },
+      ],
+      chartYAxises: [
+        {
+          echartsPos: 'yAxis',
+          echartsType: 'category',
+          position: 'left',
+          type: 'category',
+          name: 'axis_yAxis_0',
+          id: '0',
+        },
+      ],
+      navViewPos: 'NONE',
+      fetchControlAction: {
+        appDEMethodId: 'fetch_default',
+        appDataEntityId: 'web.master',
+        id: 'fetch',
+      },
+      readOnly: true,
+      autoLoad: true,
+      showBusyIndicator: true,
+      codeName: 'horizontal_chart_chart',
+      controlType: 'CHART',
+      height: 500,
+      logicName: 'Chart19',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        ctrlParams: {
+          MODE: 'ROW',
+        },
+        id: 'chart',
+      },
+      modelId: '3362af7290c1a82b072140d1f6567871',
+      modelType: 'PSDECHART',
+      userParam: {
+        'EC.color':
+          '["#5470c6","#91cc75","#fac858","#ee6666","#73c0de","#3ba272","#fc8452","#9a60b4","#ea7ccc","#5470c6","#91cc75"]',
+      },
+      name: 'chart',
+      id: 'web.master.horizontal_chart_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
+    },
+    {
+      capLanguageRes: {
+        lanResTag: 'DE.LNAME.MASTER',
+      },
+      caption: '水平图表模式',
+      codeName: 'horizontal_chart_captionbar',
+      controlType: 'CAPTIONBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {},
+      name: 'captionbar',
+      id: 'horizontal_chart_captionbar',
+    },
+  ],
+  viewLayoutPanel: {
+    layoutBodyOnly: true,
+    useDefaultLayout: true,
+    layoutPanel: true,
+    codeName: 'layoutpanel',
+    controlStyle: 'APPDECHARTVIEW',
+    controlType: 'VIEWLAYOUTPANEL',
+    appDataEntityId: 'web.master',
+    controlParam: {},
+    id: 'layoutpanel',
+  },
+  title: '水平图表模式',
+  viewStyle: 'DEFAULT',
+  viewType: 'DECHARTVIEW',
+  enableDP: true,
+  showCaptionBar: false,
+  modelId: '2432aa4dd587d188d938b30ea662e77b',
+  modelType: 'PSAPPDEVIEW',
+  name: 'MASTERHorizontal_Chart',
+  id: 'web.master_horizontal_chart',
+};

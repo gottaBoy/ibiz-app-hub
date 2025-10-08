@@ -25,6 +25,7 @@ import {
   IEditViewEvent,
   IDataAbilityParams,
   FormSaveParams,
+  IApiChangeTracker,
 } from '../../../../interface';
 import {
   calcDeCodeNameById,
@@ -32,7 +33,7 @@ import {
   hasDeCodeName,
 } from '../../../../model';
 import { Srfuf, ControlVO } from '../../../../service';
-import { ScriptFactory } from '../../../../utils';
+import { ChangeTracker, ScriptFactory } from '../../../../utils';
 import { FormNotifyState } from '../../../constant';
 import { FormController } from '../form';
 import { EditFormService } from './edit-form.service';
@@ -65,6 +66,14 @@ export class EditFormController
       IEditViewEvent
     >;
   }
+
+  /**
+   * @description 变更记录器
+   * @protected
+   * @type {IApiChangeTracker<ControlVO>}
+   * @memberof EditFormController
+   */
+  protected changeTracker: IApiChangeTracker<ControlVO> = new ChangeTracker();
 
   /**
    * 表单旧数据
@@ -192,6 +201,7 @@ export class EditFormController
     }
 
     this.state.data = res.data;
+    this.changeTracker.reset(this.data.clone());
     this.formStateNotify(FormNotifyState.DRAFT);
 
     await this.evt.emit('onLoadDraftSuccess', undefined);
@@ -246,6 +256,7 @@ export class EditFormController
 
     this.state.modified = false;
     this.state.data = res.data;
+    this.changeTracker.reset(this.data.clone());
     this.formStateNotify(FormNotifyState.LOAD);
 
     await this.evt.emit('onLoadSuccess', { args: res.data });
@@ -302,6 +313,7 @@ export class EditFormController
     this.state.data = res.data;
     // 缓存旧数据
     this.oldData = this.data.clone();
+    this.changeTracker.reset(this.oldData as ControlVO);
     this.formStateNotify(FormNotifyState.LOAD);
 
     await this.evt.emit('onLoadSuccess', { args: res.data });
@@ -389,6 +401,7 @@ export class EditFormController
       }
       // 保存结束后更新旧数据
       this.oldData = this.data.clone();
+      this.changeTracker.reset(this.oldData as ControlVO);
       this.data.tempsrfkey = this.data.srfkey;
     }
     this.state.modified = false;
@@ -469,6 +482,7 @@ export class EditFormController
     // 删除完成后都要置空当前表单数据
     this.state.data = new ControlVO();
     this.state.modified = false;
+    this.changeTracker.reset(this.data.clone());
     await this.evt.emit('onRemoveSuccess', { args: this.data });
     this.actionNotification('REMOVESUCCESS');
 
@@ -755,8 +769,15 @@ export class EditFormController
    * @param {IData} data
    */
   setSimpleData(data: IData): void {
+    // fix:修复向导面板后退时data变成vo对象导致界面异常（#PLM评审新建向导）
+    const newData: IData = {};
+    if (Object.keys(data).length > 0) {
+      Object.keys(data).forEach(key => {
+        newData[key] = data[key];
+      });
+    }
     // data由外部直接修改，先克隆一份隔离跟外部的对象。补全对应表单项字段不存在的时候设置为null，避免响应式问题。
-    const UIData: ControlVO = this.service.toUIData(data);
+    const UIData: ControlVO = this.service.toUIData(newData);
     const cloneData = UIData.clone();
     this.oldData = this.state.data.clone();
     this.formItems.forEach(item => {
@@ -766,7 +787,7 @@ export class EditFormController
     });
     this.state.modified = false;
     this.state.data = cloneData;
-
+    this.changeTracker.reset(this.data.clone());
     if (!this.state.isLoaded) {
       // 第一次设置的时候走更新通知，触发更新默认值
       this.formStateNotify(FormNotifyState.LOAD);
@@ -884,5 +905,30 @@ export class EditFormController
       return visible;
     };
     deformPages.forEach(clacVisible);
+  }
+
+  /**
+   * @description 取消变更，'UNDO' | 'REDO'暂未支持
+   * @param {('INIT' | 'UNDO' | 'REDO')} [targetState] 目标状态，初始化状态|撤销上一步操作|重做下一步操作
+   * @returns {*}  {Promise<void>}
+   * @memberof FormController
+   */
+  async cancelChanges(
+    targetState: 'INIT' | 'UNDO' | 'REDO' = 'INIT',
+  ): Promise<void> {
+    if (targetState !== 'INIT') {
+      return;
+    }
+    // 后续需支持undo和redo后再行调整
+    const initSate = this.changeTracker.getState();
+    if (initSate) {
+      this.state.modified = false;
+      this.state.data = initSate;
+      this.oldData = this.data.clone();
+      this.changeTracker.reset(this.oldData as ControlVO);
+      this.formStateNotify(FormNotifyState.LOAD);
+      await this.evt.emit('onLoadSuccess', { args: initSate });
+      this.state.isLoaded = true;
+    }
   }
 }

@@ -6,8 +6,13 @@ import {
   isExistSessionId,
   isExistSrfKey,
 } from '../service-exist-util/service-exist-util';
-import { IDataEntity, ITransaction } from '../../../interface';
+import {
+  IApiChangeTracker,
+  IDataEntity,
+  ITransaction,
+} from '../../../interface';
 import { findModelChild } from '../../../model';
+import { ChangeTracker } from '../../../utils';
 
 /**
  * 实体缓存工具类
@@ -47,6 +52,14 @@ export class DECache {
    * @type {Map<string, IDataEntity>}
    */
   readonly cacheMap: Map<string, IDataEntity> = new Map();
+
+  /**
+   * @description 变更记录器
+   * @type {IApiChangeTracker< Map<string, IDataEntity>>}
+   * @memberof DECache
+   */
+  public changeTracker: IApiChangeTracker<Map<string, IDataEntity>> =
+    new ChangeTracker();
 
   /**
    * 强制设置数据，忽略其他逻辑
@@ -102,11 +115,11 @@ export class DECache {
     // 联合主键相关数据处理
     if (this.isUnionKey) {
       this.calcUnionKey(entity);
-      if (this.checkData(context, entity.srfkey)) {
+      if (this.checkData(context, entity.srfunionkey)) {
         ibiz.log.error(
           new RuntimeError(
             ibiz.i18n.t('runtime.service.createPrimaryKeyData', {
-              srfkey: entity.srfkey,
+              srfkey: entity.srfunionkey,
             }),
           ),
         );
@@ -169,28 +182,32 @@ export class DECache {
    */
   update(context: IContext, entity: IDataEntity): IDataEntity | null {
     const oldKey = entity.srfkey!;
-    // 联合主键相关数据处理
-    if (this.isUnionKey) {
-      this.calcUnionKey(entity);
-      // 只在临时数据的新建更新时，主键改变的时候，检测变更之后的主键是否已经存在
-      if (oldKey !== entity.srfkey && this.checkData(context, entity.srfkey)) {
-        ibiz.log.error(
-          new RuntimeError(
-            ibiz.i18n.t('runtime.service.updatePrimaryKeyData', {
-              srfkey: entity.srfkey,
-            }),
-          ),
-        );
-        return null;
-      }
-    }
-
     try {
       isExistSessionId('update', context);
       isExistSrfKey('update', entity);
-      entity.srftempdate = new Date().getTime();
       const data = this.cacheMap.get(oldKey);
       if (data) {
+        // 联合主键相关数据处理
+        if (this.isUnionKey) {
+          const oldUnionKey = data.srfunionkey;
+          this.calcUnionKey(entity);
+          // 只在临时数据的新建更新时，主键改变的时候，检测变更之后的主键是否已经存在
+          if (
+            oldUnionKey !== entity.srfunionkey &&
+            this.checkData(context, entity.srfunionkey)
+          ) {
+            ibiz.log.error(
+              new RuntimeError(
+                ibiz.i18n.t('runtime.service.updatePrimaryKeyData', {
+                  srfkey: entity.srfunionkey,
+                }),
+              ),
+            );
+            return null;
+          }
+        }
+
+        entity.srftempdate = new Date().getTime();
         const _data = clone(data);
         _data.assign!(entity);
         // 提交回调
@@ -320,28 +337,28 @@ export class DECache {
         const entity = entities[i];
         isExistSrfKey('update', entity);
         const oldKey = entity.srfkey!;
-        // 联合主键相关数据处理
-        if (this.isUnionKey) {
-          this.calcUnionKey(entity);
-          // 主键改变的时候，检测变更之后的主键是否已经存在
-          if (
-            oldKey !== entity.srfkey &&
-            this.checkData(context, entity.srfkey)
-          ) {
-            ibiz.log.error(
-              new RuntimeError(
-                ibiz.i18n.t('runtime.service.updatePrimaryKeyData', {
-                  srfkey: entity.srfkey,
-                }),
-              ),
-            );
-            continue;
-          }
-        }
-
-        entity.srftempdate = new Date().getTime();
         const data = this.cacheMap.get(entity.srfkey!);
         if (data) {
+          // 联合主键相关数据处理
+          if (this.isUnionKey) {
+            const oldUnionKey = data.srfunionkey;
+            this.calcUnionKey(entity);
+            // 主键改变的时候，检测变更之后的主键是否已经存在
+            if (
+              oldUnionKey !== entity.srfunionkey &&
+              this.checkData(context, entity.srfunionkey)
+            ) {
+              ibiz.log.error(
+                new RuntimeError(
+                  ibiz.i18n.t('runtime.service.updatePrimaryKeyData', {
+                    srfkey: entity.srfunionkey,
+                  }),
+                ),
+              );
+              continue;
+            }
+          }
+          entity.srftempdate = new Date().getTime();
           const _data = clone(data);
           _data.assign!(entity);
           entities[i] = _data;
@@ -409,6 +426,13 @@ export class DECache {
    * @return {*}  {boolean}
    */
   checkData(_context: IContext, srfkey: string): boolean {
+    if (this.isUnionKey) {
+      const items = this.getList();
+      const targetIndex = items.findIndex(item => {
+        return item.srfunionkey === srfkey;
+      });
+      return targetIndex !== -1;
+    }
     return !!this.cacheMap.get(srfkey);
   }
 
@@ -480,7 +504,7 @@ export class DECache {
       }
       return data[key];
     });
-    data.srfkey = unionValues.join('||');
+    data.srfunionkey = unionValues.join('||');
   }
 
   /**
@@ -498,5 +522,46 @@ export class DECache {
       return uiDomain.transaction;
     }
     return null;
+  }
+
+  /**
+   * @description 记录变更
+   * @param {('ADD' | 'RESET' | 'UNDO' | 'REDO')} actionType 操作类型，添加数据 | 重置数据
+   * @returns {*}  {void}
+   * @memberof DECache
+   */
+  recordChanges(actionType: 'ADD' | 'RESET'): void {
+    const trackMap = new Map();
+    if (this.cacheMap.size > 0) {
+      this.cacheMap.forEach((value, key) => {
+        trackMap.set(key, value.clone());
+      });
+    }
+    if (actionType === 'ADD') {
+      this.changeTracker.add(new Map(trackMap));
+    }
+    if (actionType === 'RESET') {
+      this.changeTracker.reset(new Map(trackMap));
+    }
+  }
+
+  /**
+   * @description 取消变更，'UNDO' | 'REDO'暂未支持
+   * @param {('INIT' | 'UNDO' | 'REDO')} [targetState='INIT'] 目标状态，初始化状态|撤销上一步操作|重做下一步操作
+   * @returns {*}  {void}
+   * @memberof DECache
+   */
+  cancelChanges(targetState: 'INIT' | 'UNDO' | 'REDO' = 'INIT'): void {
+    if (targetState !== 'INIT') {
+      return;
+    }
+    // 后续需支持undo和redo后再行调整
+    const initSate = this.changeTracker.getState();
+    if (initSate) {
+      this.clear();
+      initSate.forEach((value, key) => {
+        this.cacheMap.set(key, value.clone());
+      });
+    }
   }
 }

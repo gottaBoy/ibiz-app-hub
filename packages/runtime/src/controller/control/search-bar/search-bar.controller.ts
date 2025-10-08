@@ -1,5 +1,10 @@
 import { mergeInLeft, recursiveIterate } from '@ibiz-template/core';
-import { IAppDataEntity, ISearchBar, ISearchBarFilter } from '@ibiz/model-core';
+import {
+  IAppDataEntity,
+  ISearchBar,
+  ISearchBarFilter,
+  ISearchBarGroup,
+} from '@ibiz/model-core';
 import { clone } from 'ramda';
 import { isString } from 'lodash-es';
 import {
@@ -32,6 +37,7 @@ import {
 import { ItemsValueOPs, isSimpleItems } from './util';
 import { SearchBarFilterSimpleItemsController } from './search-bar-filter-simple-items.controller';
 import { findFieldById } from '../../../model';
+import { AppCounter, CounterService } from '../../../service';
 
 const ScriptValueRegex = /\$\{[^}]*\}/; // 匹配${xxx}格式字符串
 
@@ -95,6 +101,13 @@ export class SearchBarController
    * @Date: 2023-12-21 10:17:43
    */
   hasDefaultSelect = false;
+
+  /**
+   * @description 计数器对象
+   * @type {AppCounter}
+   * @memberof SearchBarController
+   */
+  counter?: AppCounter;
 
   /**
    * 启用自定义过滤项
@@ -245,6 +258,7 @@ export class SearchBarController
     await this.initByEntitySchema();
 
     await super.onCreated();
+    await this.initCounter();
 
     if (this.model.appDataEntityId) {
       const appDataEntity = await ibiz.hub.getAppDataEntity(
@@ -644,6 +658,8 @@ export class SearchBarController
               order: (index + 1) * 100,
               defaultSelect: false,
               noEdit: true,
+              counterId: item.counterId,
+              counterMode: item.counterMode,
             };
             if (item.data) {
               try {
@@ -1020,6 +1036,60 @@ export class SearchBarController
         this.evt.emit('onTabChange', { data: [target] });
         this.onSearch();
       }
+    }
+  }
+
+  /**
+   * @description 计算计数器显示状态
+   * @param {(IBackendSearchBarGroup | ISearchBarGroup)} item
+   * @returns {*}  {boolean}
+   * @memberof SearchBarController
+   */
+  public calcCountVisible(
+    item: IBackendSearchBarGroup | ISearchBarGroup,
+  ): boolean {
+    if (!this.counter) {
+      return true;
+    }
+    const { counterId, counterMode } = item;
+    if (counterId) {
+      // 显示模式为1，且计数器数据为0时隐藏
+      const count = this.counter.getCounter(counterId);
+      if (counterMode === 1 && count === 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * @description 初始化计数器
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof SearchBarController
+   */
+  protected async initCounter(): Promise<void> {
+    const { appCounterRefs } = this.model as IData;
+    const appCounterRef = appCounterRefs?.[0];
+    if (appCounterRef) {
+      this.counter = await CounterService.getCounterByRef(
+        appCounterRef,
+        this.context,
+        { ...this.params },
+      );
+    }
+  }
+
+  /**
+   * @description 监听组件销毁
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof SearchBarController
+   */
+  protected async onDestroyed(): Promise<void> {
+    await super.onDestroyed();
+    if (this.counter) {
+      this.counter.destroy();
     }
   }
 }

@@ -9,8 +9,8 @@ import { IButtonContainerState, PanelItemState } from '@ibiz-template/runtime';
  */
 export class PanelButtonListState extends PanelItemState {
   /**
-   * 按钮组状态
-   *
+   * @description 按钮组状态
+   * @exposedoc
    * @type {IButtonContainerState}
    * @memberof PanelButtonListState
    */

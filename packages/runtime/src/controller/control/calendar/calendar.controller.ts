@@ -3,14 +3,14 @@ import { ISysCalendar, ISysCalendarItem } from '@ibiz/model-core';
 import dayjs from 'dayjs';
 import { RuntimeError, RuntimeModelError } from '@ibiz-template/core';
 import {
+  CodeListItem,
   ICalendarState,
   ICalendarEvent,
-  ICalendarController,
-  MDCtrlLoadParams,
-  ICalendarItemData,
   IUILogicParams,
   IUIActionResult,
-  CodeListItem,
+  MDCtrlLoadParams,
+  ICalendarItemData,
+  ICalendarController,
 } from '../../../interface';
 import { MDControlController } from '../../common';
 import { CalendarService } from './calendar.service';
@@ -18,6 +18,7 @@ import { ViewLogicScheduler } from '../../../logic-scheduler';
 import { calcDeCodeNameById, getViewLogics } from '../../../model';
 import { ContextMenuController } from '../context-menu';
 import { UIActionUtil } from '../../../ui-action';
+import { Srfuf } from '../../../service';
 
 /**
  * 日历部件控制器
@@ -69,7 +70,14 @@ export class CalendarController
    */
   protected initState(): void {
     super.initState();
-    this.state.selectedDate = new Date();
+    // 初始化默认时间 配置控件参数时指定值格式为： YYYY-MM-DD 示例： 2025-01-01
+    if (this.model.controlParam?.ctrlParams?.DEFAULTDATETIME) {
+      this.state.selectedDate = new Date(
+        this.model.controlParam?.ctrlParams?.DEFAULTDATETIME,
+      );
+    } else {
+      this.state.selectedDate = new Date();
+    }
     this.state.size = 1000;
     this.state.legends = [];
     this.state.groups = [];
@@ -117,41 +125,26 @@ export class CalendarController
   }
 
   /**
-   * 执行行为
-   *
+   * @description 执行行为
    * @param {string} uiActionId
-   * @param {ICalendarItemData} calendatData
+   * @param {ICalendarItemData} data
    * @param {MouseEvent} event
    * @param {string} appId
-   * @return {*}  {Promise<void>}
+   * @returns {*}  {Promise<void>}
    * @memberof CalendarController
    */
   async doUIAction(
     uiActionId: string,
-    calendatData: ICalendarItemData,
+    item: ICalendarItemData,
     event: MouseEvent,
     appId: string,
   ): Promise<void> {
     const eventArgs = this.getEventArgs();
-    const data = calendatData.deData;
-    const { sysCalendarItems } = this.model;
-    const targetCalendarItem = sysCalendarItems?.find(
-      (item: ISysCalendarItem) => {
-        return item.id === calendatData.itemType;
-      },
-    );
-    if (
-      targetCalendarItem &&
-      targetCalendarItem.textAppDEFieldId &&
-      !data.srfmajortext
-    ) {
-      data.srfmajortext = data[targetCalendarItem.textAppDEFieldId];
-    }
     const result = await UIActionUtil.exec(
       uiActionId!,
       {
         ...eventArgs,
-        data: [data],
+        data: [item.deData],
         context: this.context.clone(),
         params: this.params,
         event,
@@ -237,50 +230,85 @@ export class CalendarController
     this._evt.emit('onActive', {
       data: item ? [item] : [],
     });
-    if (!item) {
-      return;
-    }
-    await this.openData(item);
+    if (!item) return;
+    await this.openData(item.deData);
   }
 
   /**
-   * 打开编辑数据视图
-   *
-   * @param {ICalendarItemData} item
-   * @memberof CalendarService
+   * @description 打开编辑数据视图
+   * @param {IData} item
+   * @param {MouseEvent} [event]
+   * @returns {*}  {Promise<IUIActionResult>}
+   * @memberof CalendarController
    */
-  async openData(item: ICalendarItemData): Promise<IUIActionResult> {
+  async openData(item: IData, event?: MouseEvent): Promise<IUIActionResult> {
+    const calendarItem = this.getItemModelByKey(item.srfkey);
+    if (!calendarItem)
+      throw new RuntimeError(
+        ibiz.i18n.t('runtime.controller.control.calendar.noFoundModel'),
+      );
     // 添加选中数据的主键
     const context = this.context.clone();
-    const deName =
-      item.deData?.srfdecodename?.toLowerCase() ||
-      calcDeCodeNameById(this.model.appDataEntityId!);
-    context[deName!.toLowerCase()] = item.deData.srfkey;
-
+    const deName = calcDeCodeNameById(calendarItem.appDataEntityId!);
+    context[deName!.toLowerCase()] = item.srfkey;
+    context.srfnavctrlid = this.ctrlId;
     const result = await this.viewScheduler?.triggerCustom(
-      `${item.itemType!.toLowerCase()}_opendata`,
+      `${calendarItem.itemType!.toLowerCase()}_opendata`,
       {
+        event,
         context,
         params: this.params,
-        data: [item.deData],
-        event: undefined,
+        data: [item],
         view: this.view,
         ctrl: this,
       },
     );
-
-    if (result === -1) {
+    if (result === -1)
       throw new RuntimeModelError(
-        this.model,
-        ibiz.i18n.t('runtime.controller.control.calendar.missingViewLogic', {
-          itemType: item.itemType!.toLowerCase(),
+        calendarItem,
+        ibiz.i18n.t('runtime.controller.common.md.logicOpendata', {
+          itemType: calendarItem.itemType!.toLowerCase(),
         }),
       );
-    } else {
-      return {
-        cancel: result ? result.ok : true,
-      };
-    }
+    return {
+      cancel: result ? result.ok : true,
+    };
+  }
+
+  /**
+   * @description 打开新建编辑视图
+   * @param {IData} item
+   * @returns {*}  {Promise<IUIActionResult>}
+   * @memberof CalendarController
+   */
+  async newData(item: IData, event?: MouseEvent): Promise<IUIActionResult> {
+    const calendarItem = this.getItemModelByKey(item.srfkey);
+    if (!calendarItem)
+      throw new RuntimeError(
+        ibiz.i18n.t('runtime.controller.control.calendar.noFoundModel'),
+      );
+    const context = this.context.clone();
+    context.srfnavctrlid = this.ctrlId;
+    const result = await this.viewScheduler?.triggerCustom(
+      `${calendarItem.itemType!.toLowerCase()}_newdata`,
+      {
+        event,
+        context: this.context,
+        params: this.params,
+        view: this.view,
+        ctrl: this,
+      },
+    );
+    if (result === -1)
+      throw new RuntimeModelError(
+        calendarItem,
+        ibiz.i18n.t('runtime.controller.common.md.logicNewdata', {
+          itemType: calendarItem.itemType!.toLowerCase(),
+        }),
+      );
+    return {
+      cancel: result ? result.ok : true,
+    };
   }
 
   /**
@@ -358,17 +386,7 @@ export class CalendarController
    * @memberof CalendarController
    */
   async afterLoad(args: MDCtrlLoadParams, items: IData[]): Promise<IData[]> {
-    // 初始化加载时需重置选中数据
-    if (args.isInitialLoad || this.refreshMode === 'nocache') {
-      this.state.selectedData = [];
-    } else if (this.refreshMode === 'cache') {
-      // 重新计算选中数据
-      this.state.selectedData = this.state.items.filter(item =>
-        this.state.selectedData.find(
-          select => select.deData.tempsrfkey === item.deData.tempsrfkey,
-        ),
-      );
-    }
+    super.afterLoad(args, items);
     this.sortItems(this.state.items);
     this.calcShowMode(this.state.items);
     await this.handleDataGroup();
@@ -628,5 +646,53 @@ export class CalendarController
    */
   setSelectDate(date: Date): void {
     this.state.selectedDate = date;
+  }
+
+  /**
+   * @description 根据数据主键获取日历项模型
+   * @param {string} key
+   * @returns {*}  {(ISysCalendarItem | undefined)}
+   * @memberof CalendarController
+   */
+  getItemModelByKey(key: string): ISysCalendarItem | undefined {
+    const item = this.state.items.find(_item => _item.srfkey === key);
+    return this.model.sysCalendarItems?.find(
+      sysItem => sysItem.itemType === item?.itemType,
+    );
+  }
+
+  /**
+   * @description 处理项删除
+   * @param {ICalendarItemData} item 日历项
+   * @param {IContext} context 上下文
+   * @param {IParams} params 视图参数
+   * @returns {*}  {Promise<boolean>}
+   * @memberof CalendarController
+   */
+  async handleItemRemove(
+    item: IData,
+    context: IContext,
+    params: IParams,
+  ): Promise<boolean> {
+    let needRefresh = false;
+    const calendarItem = this.getItemModelByKey(item.srfkey);
+    if (!calendarItem)
+      throw new RuntimeError(
+        ibiz.i18n.t('runtime.controller.control.calendar.noFoundModel'),
+      );
+    if (calendarItem.appDataEntityId && item.srfuf !== Srfuf.CREATE) {
+      // 删除后台的数据
+      const deName = calcDeCodeNameById(calendarItem.appDataEntityId);
+      const tempContext = context.clone();
+      tempContext[deName] = item.srfkey;
+      await this.service.removeItem(
+        calendarItem.appDataEntityId,
+        tempContext,
+        params,
+        calendarItem.removeAppDEActionId,
+      );
+      needRefresh = true;
+    }
+    return needRefresh;
   }
 }

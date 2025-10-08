@@ -11,12 +11,12 @@ import {
 import {
   Srfuf,
   ControlVO,
-  GridController,
   GridRowState,
   IColumnState,
-  IControlProvider,
   IGridRowState,
   ScriptFactory,
+  GridController,
+  IControlProvider,
 } from '@ibiz-template/runtime';
 import {
   IDEGrid,
@@ -378,7 +378,7 @@ export function useITableEvent(c: GridController): {
   ): Promise<void> {
     // 新建行拦截行点击事件
     if (data.srfuf === Srfuf.CREATE) {
-      if (c.editShowMode === 'row') {
+      if (c.editShowMode === 'row' && !data.isGroupRow) {
         const row = c.findRowState(data);
         // 新建行值被修改过就保存，否则取消
         if (row) await c.switchRowEdit(row);
@@ -406,6 +406,10 @@ export function useITableEvent(c: GridController): {
     _column: IData,
     event: MouseEvent,
   ): Promise<void> {
+    if (data.isGroupRow) {
+      tableRef.value?.store.loadOrToggle(data);
+      return;
+    }
     // 非shift点击时需标记选中数据
     if (!event.shiftKey) {
       const index = c.findRowStateIndex(data);
@@ -444,9 +448,7 @@ export function useITableEvent(c: GridController): {
 
   function onDbRowClick(data: ControlVO): void {
     // 新建行拦截行双击事件
-    if (data.srfuf === Srfuf.CREATE) {
-      return;
-    }
+    if (data.srfuf === Srfuf.CREATE || data.isGroupRow) return;
     c.onDbRowClick(data);
   }
 
@@ -455,6 +457,20 @@ export function useITableEvent(c: GridController): {
     if (!forbidChange && !c.state.isLoading) c.setSelection(selection);
   }
 
+  // element表格选中数据
+  const elSelection = computed(() => {
+    const items: IData[] = [];
+    const keys = c.state.selectedData.map(selected => selected.srfkey);
+    if (tableRef.value)
+      recursiveIterate(
+        { children: tableRef.value.store.states.data.value },
+        item => {
+          if (keys.includes(item.srfkey)) items.push(item);
+        },
+      );
+    return items;
+  });
+
   // 监听选中数据，操作表格来界面回显选中效果。
   watch(
     [
@@ -462,25 +478,18 @@ export function useITableEvent(c: GridController): {
       (): boolean => c.state.isLoaded,
       (): IData[] => c.state.selectedData,
     ],
-    ([table, isLoaded, newVal]) => {
+    ([table, isLoaded, _newVal]) => {
       if (!isLoaded || !table) return;
-      if (c.state.singleSelect) {
-        // 单选，选中效果回显。
-        if (newVal[0]) {
-          tableRef.value!.setCurrentRow(newVal[0], true);
+      forbidChange = true;
+      setTimeout(() => {
+        if (c.state.singleSelect) {
+          table.setCurrentRow(elSelection.value[0]);
         } else {
-          tableRef.value!.setCurrentRow();
+          // 修复选中值中有父值时导致子全选中问题
+          table.store.states.selection.value = elSelection.value;
         }
-      } else {
-        forbidChange = true;
-        tableRef.value!.clearSelection();
-        setTimeout(() => {
-          newVal.forEach(item =>
-            tableRef.value!.toggleRowSelection(item, true),
-          );
-          forbidChange = false;
-        });
-      }
+        forbidChange = false;
+      });
     },
   );
 
@@ -532,10 +541,9 @@ export function useITableEvent(c: GridController): {
     let activeClassName = '';
     if (c.state.selectedData.length > 0) {
       c.state.selectedData.forEach((data: IData) => {
-        if (data === row) {
-          // current-row用于多选激活样式与单选保持一致，有背景色
+        // current-row用于多选激活样式与单选保持一致，有背景色
+        if (data === row || data.srfkey === row.srfkey)
           activeClassName = 'current-row';
-        }
       });
     }
     const rowState = c.findRowState(row);
@@ -689,23 +697,17 @@ export function useAppGridBase(
   headerDragend: (newWidth: number, oldWidth: number, column: IData) => void;
 } {
   const initSimpleData = (): void => {
-    if (!props.data) {
-      return;
-    }
-    c.state.items = props.data;
+    if (!props.data) return;
+    const items = (props.data as IData[]).map(item => new ControlVO(item));
+    c.state.items = items;
     if (c.runMode === 'DESIGN') {
-      c.state.simpleData = props.data;
+      c.state.simpleData = items;
       c.state.total = props.data.length;
       c.state.curPage = 1;
       c.state.items =
         chunk(c.state.simpleData, c.state.size)[c.state.curPage - 1] || [];
     }
-    c.state.rows = c.state.items.map(item => {
-      const row = new GridRowState(new ControlVO(item), c);
-      return row;
-    });
-    c.calcAggResult(c.state.items);
-    c.calcTotalData();
+    c.afterLoad({ isInitialLoad: true }, c.state.items as ControlVO[]);
   };
 
   const defaultSort = computed(() => {
@@ -732,9 +734,7 @@ export function useAppGridBase(
   watch(
     () => props.data,
     () => {
-      if (props.isSimple) {
-        initSimpleData();
-      }
+      if (props.isSimple) initSimpleData();
     },
     {
       deep: true,
@@ -745,21 +745,29 @@ export function useAppGridBase(
   const tableData = computed(() => {
     const state = c.state;
     if (c.state.enableGroup) {
+      const grouprowmode = c.controlParams.grouprowmode;
       const result: IData[] = [];
       state.groups.forEach(item => {
-        if (!item.children.length) {
-          return;
+        if (!item.children.length) return;
+        if (grouprowmode === 'NEWROW') {
+          result.push({
+            ...item,
+            srfkey: item.key,
+            tempsrfkey: item.key,
+            isGroupRow: true,
+          });
+        } else {
+          const children = [...item.children];
+          const first = children.shift();
+          result.push({
+            tempsrfkey: first?.tempsrfkey || item.caption,
+            srfkey: first?.srfkey || item.caption,
+            isGroupData: true,
+            caption: item.caption,
+            first,
+            children,
+          });
         }
-        const children = [...item.children];
-        const first = children.shift();
-        result.push({
-          tempsrfkey: first?.tempsrfkey || item.caption,
-          srfkey: first?.srfkey || item.caption,
-          isGroupData: true,
-          caption: item.caption,
-          first,
-          children,
-        });
       });
       return result;
     }
@@ -965,6 +973,18 @@ export function useAppGridBase(
       return {
         rowspan: 1,
         colspan,
+      };
+    }
+    // 设置分组行的合并
+    if (row.isGroupRow) {
+      const total = c.state.singleSelect
+        ? renderColumns.value.length
+        : renderColumns.value.length + 1;
+      const index = c.state.singleSelect ? 0 : 1;
+      if (columnIndex === index) return { rowspan: 1, colspan: total };
+      return {
+        rowspan: 0,
+        colspan: 0,
       };
     }
   };

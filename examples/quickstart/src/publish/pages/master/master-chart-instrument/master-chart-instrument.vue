@@ -5,12 +5,6 @@
     :modal="props.modal"
     :model-data="model"
   >
-    <template #searchform="slotProps">
-      <i-biz-search-form-control v-bind="slotProps" />
-    </template>
-    <template #chart="slotProps">
-      <i-biz-chart-control v-bind="slotProps" />
-    </template>
   </i-biz-view>
 </template>
 <script setup lang="ts">

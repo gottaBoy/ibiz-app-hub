@@ -1,9 +1,11 @@
 export default {
   showDataInfoBar: true,
+  enableSearch: true,
   expandSearchForm: true,
   loadDefault: true,
   deviewCodeName: 'portlet_plugin',
   deviewId: 'b47abcfed91d80397a539bff5a8f536d',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -71,6 +73,15 @@ export default {
       modelType: 'PSSYSDASHBOARD',
       name: 'dashboard',
       id: 'web.master.dashboard2',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

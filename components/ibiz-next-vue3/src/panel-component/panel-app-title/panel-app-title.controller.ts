@@ -28,7 +28,7 @@ export class PanelAppTitleController extends PanelItemController<IPanelRawItem> 
   declare panel: ViewLayoutPanelController;
 
   /**
-   * @description 分隔符,将标题以`|`符分割，分隔符前面为caption，后面为caption2
+   * @description 分隔符，将标题以`\|`符分割，分隔符前面为caption，后面为caption2
    * @exposedoc
    * @return {*}
    * @memberof PanelAppTitleController
@@ -100,8 +100,12 @@ export class PanelAppTitleController extends PanelItemController<IPanelRawItem> 
       this.state.isSvg = true;
     }
 
-    // 环境变量中的系统标题权重最大
-    if (ibiz.env.AppTitle) this.state.caption = ibiz.env.AppTitle;
+    // 只有主应用才处理环境参数
+    const defaultApp = ibiz.hub.getApp();
+    if (defaultApp.model.appId === indexViewModel.appId) {
+      // 环境变量中的系统标题权重最大
+      if (ibiz.env.AppTitle) this.state.caption = ibiz.env.AppTitle;
+    }
   }
 
   /**

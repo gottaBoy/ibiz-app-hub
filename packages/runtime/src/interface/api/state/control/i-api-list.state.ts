@@ -1,5 +1,5 @@
+import { IApiButtonContainerState } from '../common';
 import { IApiMDControlState } from './i-api-md-control.state';
-import { IButtonContainerState } from '../../../controller';
 
 /**
  * @description 列表部件状态接口
@@ -9,6 +9,30 @@ import { IButtonContainerState } from '../../../controller';
  * @extends {IApiMDControlState}
  */
 export interface IApiListState extends IApiMDControlState {
+  /**
+   * @description 是否正在更新
+   * @type {boolean}
+   * @default false
+   * @memberof IApiListState
+   */
+  updating: boolean;
+
+  /**
+   * @description 是否可拖拽
+   * @type {boolean}
+   * @default false
+   * @memberof IApiListState
+   */
+  draggable: boolean;
+
+  /**
+   * @description 是否只读
+   * @type {boolean}
+   * @default false
+   * @memberof IApiListState
+   */
+  readonly: boolean;
+
   /**
    * @description 是否显示分页栏
    * @type {boolean}
@@ -27,8 +51,8 @@ export interface IApiListState extends IApiMDControlState {
 
   /**
    * @description 列表操作项状态集合
-   * @type {{ [p: string]: IButtonContainerState }}
+   * @type {{ [p: string]: IApiButtonContainerState }}
    * @memberof IKanbanState
    */
-  uaState: { [p: string]: IButtonContainerState };
+  uaState: { [p: string]: IApiButtonContainerState };
 }

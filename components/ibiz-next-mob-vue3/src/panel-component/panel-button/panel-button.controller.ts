@@ -24,17 +24,16 @@ export class PanelButtonController extends PanelItemController<IPanelButton> {
   }
 
   /**
-   * 面板控制器
-   *
+   * @description 面板控制器
+   * @exposedoc
    * @type {ViewLayoutPanelController}
    * @memberof PanelButtonController
    */
   declare panel: ViewLayoutPanelController;
 
   /**
-   * 父容器数据对象数据
-   * @author lxm
-   * @date 2023-07-15 01:33:58
+   * @description 父容器数据对象数据
+   * @exposedoc
    * @readonly
    * @type {IData}
    */

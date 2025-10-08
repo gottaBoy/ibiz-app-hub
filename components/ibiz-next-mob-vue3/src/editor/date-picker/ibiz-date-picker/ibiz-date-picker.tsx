@@ -12,6 +12,13 @@ import { DatePickerEditorController } from '../date-picker-editor.controller';
 import { IBizCommonRightIcon } from '../../common/right-icon/right-icon';
 import { usePopstateListener } from '../../../util';
 
+/**
+ * 移动端时间选择器
+ * @primary
+ * @description  基于rolldate的轻量时间选择器，默认时间格式为年月日-时分秒，可通过配置值格式化串来格式化日期。支持编辑器类型包含: `移动端时间选择器`、`移动端时间选择器（YYYY-MM-DD HH）`、`移动端时间选择器（YYYY-MM-DD HH:mm）`、`移动端时间选择器（HH:mm:ss）`、`移动端时间选择器（HH:mm）`、`移动端时间选择器（YYYY-MM-DD）`、`移动端时间选择器（YYYY-MM-DD HH:mm:ss）`
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizDatePicker = defineComponent({
   name: 'IBizDatePicker',
   props: getDatePickerProps<DatePickerEditorController>(),

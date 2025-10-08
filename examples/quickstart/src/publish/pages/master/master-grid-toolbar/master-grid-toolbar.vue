@@ -5,11 +5,8 @@
     :modal="props.modal"
     :model-data="model"
   >
-    <template #grid="slotProps">
-      <i-biz-grid-control v-bind="slotProps" />
-    </template>
-    <template #searchform="slotProps">
-      <i-biz-search-form-control v-bind="slotProps" />
+    <template #tabexppanel="slotProps">
+      <i-biz-dr-tab-control v-bind="slotProps" />
     </template>
   </i-biz-view>
 </template>

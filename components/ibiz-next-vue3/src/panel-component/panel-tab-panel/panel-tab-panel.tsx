@@ -83,7 +83,7 @@ export const PanelTabPanel = defineComponent({
               name={c.model.id}
               lazy
             >
-              {slot}
+              {this.state.activeTab === c.model.id && slot}
             </el-tab-pane>
           );
         })}

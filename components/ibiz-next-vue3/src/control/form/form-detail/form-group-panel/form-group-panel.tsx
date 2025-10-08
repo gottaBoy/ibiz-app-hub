@@ -20,6 +20,8 @@ export const FormGroupPanel = defineComponent({
     const ns = useNamespace('form-group');
     const c = props.controller;
 
+    const zIndex = props.controller.form.state.zIndex;
+
     const changeCollapse = (): void => {
       if (!c.disableClose) {
         c.state.collapse = !c.state.collapse;
@@ -43,7 +45,7 @@ export const FormGroupPanel = defineComponent({
       return caption;
     });
 
-    return { ns, captionText, changeCollapse, onActionClick };
+    return { ns, zIndex, captionText, changeCollapse, onActionClick };
   },
   render() {
     const { state } = this.controller;
@@ -109,6 +111,7 @@ export const FormGroupPanel = defineComponent({
           <div class={[this.ns.be('header', 'right')]}>
             {this.modelData.uiactionGroup && (
               <iBizActionToolbar
+                zIndex={this.zIndex}
                 class={this.ns.e('toolbar')}
                 action-details={
                   this.modelData.uiactionGroup.uiactionGroupDetails

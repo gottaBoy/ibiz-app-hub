@@ -7,7 +7,7 @@ import {
   existsSync,
 } from 'node:fs';
 import { resolve, join } from 'node:path';
-import { HtmlTagDescriptor, Plugin } from 'vite';
+import { HtmlTagDescriptor, Plugin, loadEnv } from 'vite';
 import cpy from 'cpy';
 
 function IBizVitePlugin(): Plugin[] {
@@ -15,6 +15,7 @@ function IBizVitePlugin(): Plugin[] {
     name: 'iBizSys:System',
     apply: 'build',
     closeBundle() {
+      const env = loadEnv('build', process.cwd(), 'VITE_');
       // 模板底包
       const templatePackages = ['core', 'runtime', 'model-helper'];
       // 组件底包
@@ -77,6 +78,14 @@ function IBizVitePlugin(): Plugin[] {
         '<script src="./assets/ionicons/ionicons/ionicons.js"></script>',
         '<script nomodule src="./assets/ionicons/ionicons/ionicons.js"></script>',
       );
+      // 添加wx公众号sdk文件
+      if (env.VITE_APP_BUILD_ENV === 'weixin') {
+        html = html.replace(
+          '<script src="./environments/environment.js"></script>',
+          `<script src="./environments/environment.js"></script>
+    <script src="./scripts/jweixin-min.js"></script>`,
+        );
+      }
       writeFileSync(htmlFilePath, html, 'utf-8');
       // 重新修改 system-import.json 补充时间戳
       {
@@ -141,7 +150,19 @@ function IBizVitePlugin(): Plugin[] {
       cpy(cpDir, outDir);
     },
     transformIndexHtml(html) {
+      const env = loadEnv('serve', process.cwd(), 'VITE_');
       const tags: HtmlTagDescriptor[] = [];
+      // 添加wx公众号sdk文件
+      if (env.VITE_APP_BUILD_ENV === 'weixin') {
+        tags.push({
+          tag: 'script',
+          attrs: {
+            href: './scripts/jweixin-min.js',
+          },
+          injectTo: 'head-prepend',
+        });
+      }
+
       const extraPath = resolve(__dirname, '../public/extras');
       const json = JSON.parse(
         readFileSync(resolve(extraPath, 'json/system-import.json'), 'utf-8'),

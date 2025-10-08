@@ -1,17 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router } from 'vue-router';
 import {
   IAiChatParam,
   IApiViewController,
-  IApiViewState,
   IAppUtil,
   IAuthResult,
 } from '@ibiz-template/runtime';
-import { IApiParams, IChatMessage, RuntimeError } from '@ibiz-template/core';
-import { IAppView } from '@ibiz/model-core';
+import { IChatMessage, RuntimeError } from '@ibiz-template/core';
+import { route2routePath, routePath2string } from '@ibiz-template/vue3-util';
 
 export class AppUtil implements IAppUtil {
+  /**
+   * @description 视图缓存中心
+   * @type {Map<string, IApiViewController>}
+   * @memberof AppUtil
+   */
+  viewCacheCenter: Map<string, IApiViewController> = new Map();
+
   /**
    * Creates an instance of AppUtil.
    * @author tony001
@@ -20,39 +27,24 @@ export class AppUtil implements IAppUtil {
    */
   constructor(protected router: Router) {}
 
-  onRouteIsReady(): Promise<void> {
-    throw new Error('Method not implemented.');
+  /**
+   * @description 路由是否初始化构建完成
+   * @returns {*}  {Promise<void>}
+   * @memberof AppUtil
+   */
+  async onRouteIsReady(): Promise<void> {
+    return this.router.isReady();
   }
 
-  getAppContext(): IApiParams | undefined {
-    throw new Error('Method not implemented.');
-  }
-
-  viewCacheCenter: Map<string, IApiViewController<IAppView, IApiViewState>> =
-    new Map();
-
-  route2routeObject(isRouteModal?: boolean): {
-    appContext?: IApiParams;
-    pathNodes: {
-      viewName: string;
-      context?: IApiParams;
-      params?: IApiParams;
-      srfnav?: string;
-    }[];
-  } {
-    throw new Error('Method not implemented.');
-  }
-
-  routeObject2String(routePath: {
-    appContext?: IApiParams;
-    pathNodes: {
-      viewName: string;
-      context?: IApiParams;
-      params?: IApiParams;
-      srfnav?: string;
-    }[];
-  }): string {
-    throw new Error('Method not implemented.');
+  /**
+   * 获取应用上下文
+   *
+   * @return {*}  {(IParams | undefined)}
+   * @memberof AppUtil
+   */
+  getAppContext(): IParams | undefined {
+    const routePath = route2routePath(this.router.currentRoute.value as any);
+    return routePath.appContext;
   }
 
   /**
@@ -238,5 +230,58 @@ export class AppUtil implements IAppUtil {
    */
   async openAiChat(params: IAiChatParam): Promise<IChatMessage[]> {
     throw new RuntimeError(ibiz.i18n.t('app.noSupport'));
+  }
+
+  /**
+   * @description 当前路由转换成路由路径对象
+   * @param {boolean} [isRouteModal]
+   * @returns {*}  {{
+   *     appContext?: IParams;
+   *     pathNodes: {
+   *       viewName: string;
+   *       context?: IParams;
+   *       params?: IParams;
+   *       srfnav?: string;
+   *     }[];
+   *   }}
+   * @memberof AppUtil
+   */
+  route2routeObject(isRouteModal?: boolean): {
+    appContext?: IParams;
+    pathNodes: {
+      viewName: string;
+      context?: IParams;
+      params?: IParams;
+      srfnav?: string;
+    }[];
+  } {
+    const routePath = route2routePath(this.router.currentRoute.value as any);
+    return routePath;
+  }
+
+  /**
+   * @description 路由路径对象转化为路由路径
+   * @param {{
+   *     appContext?: IParams;
+   *     pathNodes: {
+   *       viewName: string;
+   *       context?: IParams;
+   *       params?: IParams;
+   *       srfnav?: string;
+   *     }[];
+   *   }} routePath
+   * @returns {*}  {string}
+   * @memberof AppUtil
+   */
+  routeObject2String(routePath: {
+    appContext?: IParams;
+    pathNodes: {
+      viewName: string;
+      context?: IParams;
+      params?: IParams;
+      srfnav?: string;
+    }[];
+  }): string {
+    return routePath2string(routePath);
   }
 }

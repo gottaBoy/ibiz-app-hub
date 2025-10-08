@@ -325,7 +325,7 @@
       "itemStyle": "DEFAULT",
       "itemType": "CONTAINER",
       "layoutPos": {
-        "shrink": 1,
+        "shrink": 0,
         "layout": "FLEX"
       },
       "id": "container"

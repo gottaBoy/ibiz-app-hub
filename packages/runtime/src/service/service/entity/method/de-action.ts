@@ -191,6 +191,12 @@ export class DEActionMethod extends Method {
       }
     }
 
+    // 非临时操作需重置缓存变更记录
+    if (this.isLocalMode === false) {
+      const app = ibiz.hub.getApp(context.srfappid);
+      app.deService.recordUIDomainChanges(context.srfsessionid, 'RESET');
+    }
+
     if (this.method.afterCode) {
       await ScriptFactory.asyncExecScriptFn(
         {

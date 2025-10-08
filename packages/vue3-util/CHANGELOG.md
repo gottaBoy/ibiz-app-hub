@@ -7,6 +7,37 @@
 
 ## [Unreleased]
 
+## [0.7.41-alpha.21] - 2025-08-27
+
+### Added
+
+-  新增useControlPopoverzIndex管理部件popover层级
+
+## [0.7.41-alpha.20] - 2025-08-24
+
+### Added
+
+- 新增视图挂载时添加水印逻辑，适配视图默认参数 waterMarkOption（视图水印配置参数，可在视图动态参数中配置，示例：waterMarkOption={"enable":true,"text":"示例系统"}）
+- 面板容器动态tooltip配置支持传递el-tooltip组件属性
+- 新增电子签名画板基础组件
+
+## [0.7.41-alpha.19] - 2025-08-18
+
+### Added
+
+- 更新模态可调用视图的记录切换能力，modaloption 参数新增 openIndicator 配置项，用于控制模态是否显示数据切换指示器
+
+## [0.7.41-alpha.18] - 2025-08-14
+
+### Changed
+
+- 路由路径上若存在srfmenuitem预置字段，则始终维护，便于面包屑组件使用
+
+### Fixed
+
+- 新增飘窗参数appendTo（指示飘窗的内容将附加在哪一个网页元素上）
+- 修复计数器数据大于99后样式显示异常
+
 ## [0.7.41-alpha.14] - 2025-07-23
 
 ### Fixed

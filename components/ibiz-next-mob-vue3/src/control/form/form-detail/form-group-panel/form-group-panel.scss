@@ -76,12 +76,12 @@ $form-group-content: (
 
 // 折叠相关样式
 @include b(form-group-collapse) {
-  >.#{bem(form-group-content)} {
+  >.#{bem(form-group__content)} {
     display: block;
   }
 
   @include when(collapse) {
-    >.#{bem(form-group-content)} {
+    >.#{bem(form-group__content)} {
       display: none;
     }
   }

@@ -7,7 +7,8 @@ import { ViewMsgPosController } from './view-msg-pos.controller';
  * 视图消息占位
  * @primary
  * @description 使用el-alert组件，读取视图状态的viewMessages数据，用于在界面布局中给视图消息提供一个显示位置。
- * @panelitemparams {name:scroll,parameterType:boolean,defaultvalue:false,description:是否滚动显示}
+ * @panelitemparams {name:scroll,parameterType:boolean,defaultvalue:false,description:是否滚动展示}
+ * @panelitemparams {name:position,parameterType:'TOP' | 'BOTTOM' | 'BODY',defaultvalue:'BODY',description:指定展示哪个位置的视图消息，TOP代表视图上方，BOTTOM代表视图下方，BODY代表视图内容区}
  */
 export const ViewMsgPos = defineComponent({
   name: 'IBizViewMsgPos',

@@ -10,6 +10,12 @@ $swimlane-kanban: (
   width: 100%;
   height: 100%;
   padding: getCssVar('spacing', 'tight');
+  background-color: getCssVar('color', 'white');
+
+  .#{bem(swimlane-kanban, default-item)},
+  .#{bem(swimlane-kanban, panel-item)} {
+    flex-grow: 1;
+  }
 
   @include e('default') {
     .#{bem('swimlane-kanban', 'cell')}:not(.is-collapsed) {
@@ -26,6 +32,12 @@ $swimlane-kanban: (
 
   @include e('table') {
     overflow: auto hidden;
+  }
+
+  @include e(drag-icon) {
+    margin-right: getCssVar('spacing', 'tight');
+    cursor: move;
+    visibility: hidden;
   }
 
   @include e('header') {
@@ -241,6 +253,19 @@ $swimlane-kanban: (
 
     @include when('selected') {
       background-color: getCssVar(color, fill, 0);
+    }
+
+    @include m(content) {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    &:hover {
+      .#{bem(swimlane-kanban, drag-icon)} {
+        visibility: visible;
+      }
     }
   }
 

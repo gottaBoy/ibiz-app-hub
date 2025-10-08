@@ -19,7 +19,7 @@ import { getNestedRoutePath } from '../../util';
  * 导航占位
  * @primary
  * @description 面板中的导航视图占位组件，用于绘制导航视图，并存储导航视图信息与缓存。
- * @panelitemparams {name:expcache,parameterType:string,defaultvalue:-,description:当值为NO_CACHE时禁用缓存，即每次导航切换时都是重新绘制新的视图，否则使用keepAlive包裹绘制的导航视图}
+ * @panelitemparams {name:expcache,parameterType:'CACHE' | 'NO_CACHE',defaultvalue:-,description:当值为NO_CACHE时禁用缓存，即每次导航切换时都是重新绘制新的视图，否则使用keepAlive包裹绘制的导航视图}
  * @panelitemparams {name:ignoreembedkey,parameterType:boolean,defaultvalue:-,description:忽略嵌入视图key参数}
  * @panelitemparams {name:expmode,parameterType:'ROUTE' | 'NO_ROUTE',defaultvalue:-,description:导航模式，ROUTE为路由模式，NO_ROUTE为非路由模式，在路由模式下会通过路由打开视图，在非路由的模式下，则会通过视图模型去绘制视图}
  * @panelitemparams {"name":"routeattributekeys","parameterType":"string","defaultvalue":"-","description":"路由透传参数，参数值为上下文对象的key，多个值用竖线`|`分隔，透传的参数将会在路由组件进行解析，并显示声明在路由上进行传递"}

@@ -20,9 +20,9 @@ import { IDataEntity } from '../../interface';
 export class AppDataEntity implements IDataEntity {
   [key: string | symbol]: any;
 
-  declare protected _data: IData;
+  protected declare _data: IData;
 
-  declare protected _entity: IAppDataEntity;
+  protected declare _entity: IAppDataEntity;
 
   declare srfdeid: string;
 
@@ -39,6 +39,8 @@ export class AppDataEntity implements IDataEntity {
   declare tempsrfkey: string;
 
   declare srfordervalue: number;
+
+  declare srfunionkey: string;
 
   get srfuf(): Srfuf {
     return this.srfkey === this.tempsrfkey ? Srfuf.UPDATE : Srfuf.CREATE;
@@ -138,6 +140,14 @@ export class AppDataEntity implements IDataEntity {
       value: isNil(this.srfkey) ? createUUID() : this.srfkey,
     });
 
+    // 设置联合主键（存在联合主键属性集合才有值）
+    Object.defineProperty(this, 'srfunionkey', {
+      enumerable: false,
+      configurable: true,
+      writable: true,
+      value: '',
+    });
+
     this.defineProperties();
   }
 
@@ -151,17 +161,32 @@ export class AppDataEntity implements IDataEntity {
   protected defineProperties(): void {
     const { _data, convertVal } = this;
     const properties: { [key: string]: PropertyDescriptor } = {};
+    // fix：odoo#0059
+    const excludeKeys = [
+      '_entity',
+      '_data',
+      'srfdeid',
+      'srfdecodename',
+      'srfkeyfield',
+      'srfkey',
+      'srfmajorfield',
+      'srfmajortext',
+      'tempsrfkey',
+      'srfunionkey',
+    ];
     const keys = Object.keys(_data);
     keys.forEach(key => {
-      properties[key] = {
-        enumerable: true,
-        set(val: unknown): void {
-          _data[key] = val;
-        },
-        get(): any {
-          return _data[key];
-        },
-      };
+      if (excludeKeys.indexOf(key) === -1) {
+        properties[key] = {
+          enumerable: true,
+          set(val: unknown): void {
+            _data[key] = val;
+          },
+          get(): any {
+            return _data[key];
+          },
+        };
+      }
     });
     this._entity.appDEFields?.forEach(field => {
       const key = field.codeName!.toLowerCase();
@@ -191,6 +216,7 @@ export class AppDataEntity implements IDataEntity {
     const entity = new AppDataEntity(this._entity, this._data);
     entity.srfkey = this.srfkey;
     entity.srfordervalue = this.srfordervalue;
+    entity.srfunionkey = this.srfunionkey;
     return entity;
   }
 

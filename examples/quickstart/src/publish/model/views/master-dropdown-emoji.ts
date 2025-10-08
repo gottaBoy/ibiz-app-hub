@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'dropdown_emoji',
   deviewId: '6ec9961e13f9014a1871fd63aa220e35',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -65,6 +66,16 @@ export default {
         appDataEntityId: 'web.master',
         id: 'update',
       },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
+      },
       deformPages: [
         {
           layout: {
@@ -114,6 +125,80 @@ export default {
               },
               showCaption: true,
               id: 'group1',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  createDV: 'JUYwJTlGJTk4JTgw',
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    singleSelect: true,
+                    editorParams: {
+                      readonly: 'true',
+                    },
+                    editorStyle: 'EMOJI_PICKER',
+                    editorType: 'DROPDOWNLIST',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    readOnly: true,
+                    id: 'formitem1',
+                  },
+                  updateDV: 'JUYwJTlGJTk4JTgw',
+                  allowEmpty: true,
+                  needCodeListConfig: true,
+                  codeName: 'formitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem1',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用readonly参数控制编辑器是否为只读态。当前编辑器为只读态',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem1',
+                  },
+                  codeName: 'rawitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem1',
+                },
+              ],
+              caption: '只读态',
+              codeName: 'grouppanel1',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel1',
             },
             {
               dataType: 25,

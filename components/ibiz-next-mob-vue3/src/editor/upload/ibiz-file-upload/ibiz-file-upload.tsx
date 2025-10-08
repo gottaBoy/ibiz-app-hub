@@ -8,6 +8,18 @@ import './ibiz-file-upload.scss';
 import { useVanUpload } from '../use/use-van-upload';
 import { UploadEditorController } from '../upload-editor.controller';
 
+/**
+ * 移动端文件控件
+ * @primary
+ * @description 使用van-uploader组件，用于对文件进行上传，可限制上传文件类型与数量，并对已上传的文件进行回显。支持编辑器类型包含：`移动端文件控件（单项）`、`移动端文件控件（多项）`
+ * @editorparams {name:multiple,parameterType:boolean,description:是否支持多选文件，van-uploader组件的multiple属性}
+ * @editorparams {name:accept,parameterType:string,description:允许上传的文件类型，van-uploader组件的accept属性}
+ * @editorparams {name:uploadParams,parameterType:IData,description:上传参数}
+ * @editorparams {name:exportParams,parameterType:IData,description:下载参数}
+ * @ignoreprops autoFocus | overflowMode
+ * @ignoreemits blur | focus | enter | infoTextChange
+ *
+ */
 export const IBizFileUpload = defineComponent({
   name: 'IBizFileUpload',
   props: getUploadProps<UploadEditorController>(),

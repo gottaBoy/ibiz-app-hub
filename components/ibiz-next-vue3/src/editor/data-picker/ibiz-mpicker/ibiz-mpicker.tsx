@@ -14,6 +14,7 @@ import {
   getDataPickerProps,
 } from '@ibiz-template/vue3-util';
 import { clone } from 'lodash-es';
+import { IAppDEUIActionGroupDetail } from '@ibiz/model-core';
 import { showTitle } from '@ibiz-template/core';
 import { PickerEditorController } from '../picker-editor.controller';
 import './ibiz-mpicker.scss';
@@ -29,6 +30,8 @@ import './ibiz-mpicker.scss';
  * @editorparams {"name":"objectnamefield","parameterType":"string","description":"值类型为OBJECTS时的对象名称属性。也用于控制是否触发下拉区域数据的默认加载，配置时会触发默认加载，不配置时不会触发默认加载"}
  * @editorparams {"name":"objectvaluefield","parameterType":"string","description":"值类型为OBJECTS时的对象值属性"}
  * @editorparams {"name":"readonly","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否为只读态"}
+ * @editorparams {"name":"ac","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否启用AC自填模式"}
+ * @editorparams {"name":"actionpostion","parameterType":"'top' | 'bottom'","defaultvalue":"'bottom'","description":"设置AC自填模式行为组位置，默认在下拉底部"}
  * @ignoreprops overflowMode
  */
 export const IBizMPicker = defineComponent({
@@ -60,6 +63,17 @@ export const IBizMPicker = defineComponent({
 
     // 编辑器Ref
     const editorRef = ref();
+
+    // 行为位置
+    const actionPostion: 'top' | 'bottom' =
+      c.model.editorParams?.actionpostion || 'bottom';
+
+    const overflowMode =
+      c.editorParams.overflowMode ||
+      c.editorParams.overflowmode ||
+      ibiz.config.pickerEditor.overflowMode;
+
+    const isEllipsis = overflowMode === 'ellipsis';
 
     // 是否显示表单默认内容
     const showFormDefaultContent = computed(() => {
@@ -153,25 +167,41 @@ export const IBizMPicker = defineComponent({
     };
 
     // 处理视图关闭，往外抛值
-    const handleOpenViewClose = (result: IData[]) => {
+    const handleOpenViewClose = async (result: IData[]) => {
       // 抛出值集合
       const selects: IData[] = [];
       if (result && Array.isArray(result)) {
-        result.forEach((select: IData) => {
+        const calcPromises = result.map(async select => {
+          const item = select;
+          // 选择树视图特殊处理
+          if (select.srfnodeid) {
+            Object.assign(item, select._deData);
+          }
+          const dataItems = await c.calcFillDataItems(item);
+          const res = {};
+          dataItems.forEach(dataItem => {
+            Object.assign(res, { [dataItem.id]: dataItem.value });
+          });
+          return res;
+        });
+        const dataItemsList = await Promise.all(calcPromises);
+        result.forEach((select: IData, _index: number) => {
           Object.assign(select, {
             [c.keyName]: select[c.keyName] ? select[c.keyName] : select.srfkey,
             [c.textName]: select[c.textName]
               ? select[c.textName]
               : select.srfmajortext,
           });
+          const data = dataItemsList[_index];
           if (c.model.valueType === 'OBJECTS') {
-            selects.push(c.handleObjectParams(select));
+            selects.push({ ...c.handleObjectParams(select), ...data });
           } else if (c.objectIdField) {
             selects.push(select[c.keyName]);
           } else {
             selects.push({
               [c.keyName]: select[c.keyName],
               [c.textName]: select[c.textName],
+              ...data,
             });
           }
           const index = items.value.findIndex(item =>
@@ -214,15 +244,19 @@ export const IBizMPicker = defineComponent({
     };
 
     // 下拉选中回调
-    const onSelect = (selects: string[]) => {
+    const onSelect = async (selects: string[]) => {
       setEditable(false);
-      if (selects.includes('empty')) {
-        resetCurValue();
-        return;
+      if (
+        selects.includes('empty') ||
+        selects.some(selectKey => selectKey.includes('DEUIACTION'))
+      ) {
+        // 执行行为时关闭下拉，防止弹窗层级异常
+        editorRef.value?.blur();
+        return resetCurValue();
       }
       const val: Array<IData> = [];
       let value: string | Array<IData> | null = null;
-      selects.forEach((select: string) => {
+      const selections = selects.map((select: string) => {
         let index = items.value.findIndex(item =>
           Object.is(item[c.keyName], select),
         );
@@ -237,14 +271,28 @@ export const IBizMPicker = defineComponent({
             item = selectItems.value[index];
           }
         }
+        return item;
+      });
+      const calcPromises = selections.map(async select => {
+        const dataItems = await c.calcFillDataItems(select);
+        const res = {};
+        dataItems.forEach(dataItem => {
+          Object.assign(res, { [dataItem.id]: dataItem.value });
+        });
+        return res;
+      });
+      const dataItemsList = await Promise.all(calcPromises);
+      selections.forEach((item: IData, index: number) => {
+        const data = dataItemsList[index];
         if (c.model.valueType === 'OBJECTS') {
-          val.push(c.handleObjectParams(item));
+          val.push({ ...c.handleObjectParams(item), ...data });
         } else if (c.objectIdField) {
           val.push(item[c.keyName]);
         } else {
           val.push({
             [c.keyName]: item[c.keyName],
             [c.textName]: item[c.textName],
+            ...data,
           });
         }
       });
@@ -364,50 +412,136 @@ export const IBizMPicker = defineComponent({
       }
     });
 
-    const renderEmpty = () => {
-      if (items.value.length) {
-        return;
-      }
-      return (
-        <el-option value={'empty'}>
-          <iBizNoData
-            class={ns.e('empty')}
-            onClick={(event: MouseEvent) => event.stopPropagation()}
-          ></iBizNoData>
-        </el-option>
-      );
+    /**
+     * @description 绘制行为列表
+     * @returns {*}
+     */
+    const renderActionItems = () => {
+      return c.actionDetails.map((item: IAppDEUIActionGroupDetail) => {
+        if (!c.groupActionState[item.id!].visible) return;
+        return (
+          <el-option
+            key={item.id}
+            label={item.caption}
+            value={`DEUIACTION-${item.id}`}
+            disabled={c.groupActionState[item.id!].disabled}
+            title={showTitle(isEllipsis ? item.tooltip : '')}
+          >
+            {{
+              default: () => (
+                <div
+                  class={[
+                    ns.e('action-item'),
+                    ns.is('disabled', c.groupActionState[item.id!].disabled),
+                  ]}
+                  onClick={event => {
+                    if (!c.groupActionState[item.id!].disabled)
+                      c.onActionClick(item, props.data, event);
+                  }}
+                >
+                  {item.showIcon && item.sysImage && (
+                    <iBizIcon
+                      class={ns.em('action-item', 'icon')}
+                      icon={item.sysImage}
+                    ></iBizIcon>
+                  )}
+                  <span class={ns.em('action-item', 'caption')}>
+                    {item.showCaption ? item.caption : ''}
+                  </span>
+                </div>
+              ),
+            }}
+          </el-option>
+        );
+      });
+    };
+
+    /**
+     * @description 绘制下拉列表
+     * @returns {*}
+     */
+    const renderListItems = () => {
+      if (!items.value.length)
+        return [
+          <el-option value={'empty'}>
+            <iBizNoData
+              class={ns.e('empty')}
+              onClick={(event: MouseEvent) => event.stopPropagation()}
+            ></iBizNoData>
+          </el-option>,
+        ];
+      return items.value.map(item => {
+        return (
+          <el-option
+            key={item[c.keyName]}
+            value={item[c.keyName]}
+            label={item[c.textName]}
+            title={showTitle(isEllipsis ? item[c.textName] : '')}
+          >
+            {{
+              default: () => {
+                if (c.acItemProvider) {
+                  const component = resolveComponent(
+                    c.acItemProvider.component,
+                  );
+                  return h(component, {
+                    item,
+                    controller: c,
+                  });
+                }
+                const panel = c.deACMode?.itemLayoutPanel;
+                if (panel)
+                  return (
+                    <iBizControlShell
+                      data={item}
+                      modelData={panel}
+                      context={c.context}
+                      params={c.params}
+                    ></iBizControlShell>
+                  );
+                return (
+                  <span>
+                    {item[c.textName] != null ? item[c.textName] : ''}
+                  </span>
+                );
+              },
+            }}
+          </el-option>
+        );
+      });
+    };
+
+    const renderListContent = () => {
+      if (actionPostion === 'top')
+        return [...renderActionItems(), ...renderListItems()];
+      return [...renderListItems(), ...renderActionItems()];
     };
 
     return {
-      ns,
       c,
-      curValue,
-      loading,
+      ns,
       items,
+      loading,
+      curValue,
       valueText,
+      editorRef,
+      isEllipsis,
+      isEditable,
+      selectItems,
+      showFormDefaultContent,
+      onBlur,
+      onFocus,
       onSearch,
-      onOpenChange,
       onSelect,
       onRemove,
-      openPickUpView,
-      onFocus,
-      onBlur,
+      onOpenChange,
       handleKeyUp,
-      selectItems,
-      editorRef,
-      isEditable,
       setEditable,
-      showFormDefaultContent,
-      renderEmpty,
+      openPickUpView,
+      renderListContent,
     };
   },
   render() {
-    const overflowMode =
-      this.c.editorParams.overflowMode ||
-      this.c.editorParams.overflowmode ||
-      ibiz.config.pickerEditor.overflowMode;
-    const isEllipsis = overflowMode === 'ellipsis';
-
     // 编辑态内容
     const editContent = [
       !this.readonly && (
@@ -433,53 +567,11 @@ export const IBizMPicker = defineComponent({
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onKeyup={this.handleKeyUp}
-          fit-input-width={isEllipsis}
+          fit-input-width={this.isEllipsis}
           remote-show-suffix={this.c.model.showTrigger}
           {...this.$attrs}
         >
-          {this.items.map(item => {
-            return (
-              <el-option
-                title={showTitle(isEllipsis ? item[this.c.textName] : '')}
-                key={item[this.c.keyName]}
-                value={item[this.c.keyName]}
-                label={item[this.c.textName]}
-              >
-                {{
-                  default: () => {
-                    if (this.c.acItemProvider) {
-                      const component = resolveComponent(
-                        this.c.acItemProvider.component,
-                      );
-                      return h(component, {
-                        item,
-                        controller: this.c,
-                      });
-                    }
-                    const panel = this.c.deACMode?.itemLayoutPanel;
-                    if (panel) {
-                      return (
-                        <iBizControlShell
-                          data={item}
-                          modelData={panel}
-                          context={this.c.context}
-                          params={this.c.params}
-                        ></iBizControlShell>
-                      );
-                    }
-                    return (
-                      <span>
-                        {item[this.c.textName] != null
-                          ? item[this.c.textName]
-                          : ''}
-                      </span>
-                    );
-                  },
-                }}
-              </el-option>
-            );
-          })}
-          {this.renderEmpty()}
+          {this.renderListContent()}
         </el-select>
       ),
       !this.readonly && (

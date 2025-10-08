@@ -8,6 +8,14 @@ import {
 import './ibiz-switch.scss';
 import { SwitchEditorController } from '../switch-editor.controller';
 
+/**
+ * 移动端开关部件
+ *
+ * @description 使用van-switch组件，表示两种相互对立的状态间的切换，多用于触发「开/关」。支持编辑器类型包含：`移动端开关部件`
+ * @primary
+ * @ignoreprops overflowMode | autoFocus
+ * @ignoreemits enter | infoTextChange
+ */
 export const IBizSwitch = defineComponent({
   name: 'IBizSwitch',
   props: getSwitchProps<SwitchEditorController>(),

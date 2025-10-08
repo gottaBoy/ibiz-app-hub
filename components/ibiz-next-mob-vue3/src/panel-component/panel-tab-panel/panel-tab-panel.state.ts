@@ -11,10 +11,8 @@ import { PanelItemState } from '@ibiz-template/runtime';
  */
 export class PanelTabPanelState extends PanelItemState {
   /**
-   * 当前激活分页
-   *
-   * @author tony001
-   * @date 2024-05-12 14:05:36
+   * @description 当前激活分页
+   * @exposedoc
    * @type {string}
    */
   activeTab: string = '';

@@ -1,6 +1,6 @@
 {
   "name": "@ibiz/rt-model-api",
-  "version": "0.2.77",
+  "version": "0.2.79",
   "license": "MIT",
   "description": "iBiz前端运行时模型编译库",
   "author": "iBiz",

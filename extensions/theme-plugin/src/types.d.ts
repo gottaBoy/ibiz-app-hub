@@ -1,0 +1,1 @@
+import '@ibiz-template/runtime';

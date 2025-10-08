@@ -10,6 +10,13 @@ import { IApiControllerState } from '../common/i-api-controller.state';
  */
 export interface IApiControlState extends IApiControllerState {
   /**
+   * @description popover层级
+   * @type {number}
+   * @default -
+   * @memberof IApiControlState
+   */
+  zIndex?: number;
+  /**
    * @description 当前部件是否为激活状态(缓存下的激活状态，一般与框架的生命周期相同)
    * @type {boolean}
    * @default false

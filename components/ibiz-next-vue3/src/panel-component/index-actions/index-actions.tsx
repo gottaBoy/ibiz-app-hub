@@ -8,6 +8,7 @@ import './index-actions.scss';
 
 /**
  * 首页行为容器组件
+ * @primary
  * @description 用于包裹首页预定义布局中的四个预定义按钮组件。
  * @param {IPanelContainer} props
  * @returns

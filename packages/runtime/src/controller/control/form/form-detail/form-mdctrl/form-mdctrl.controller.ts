@@ -7,6 +7,7 @@ import { FormNotifyState } from '../../../../constant';
 import { UIActionUtil } from '../../../../../ui-action';
 import { EditFormController } from '../../edit-form';
 import { IFormMDCtrlController } from '../../../../../interface';
+import { getAllUIActionItems } from '../../../../../model';
 
 /**
  * @description 表单多数据部件控制器
@@ -140,11 +141,10 @@ export class FormMDCtrlController
    */
   async initActionStates(): Promise<void> {
     const { uiactionGroup } = this.model;
-    if (!uiactionGroup?.uiactionGroupDetails?.length) {
-      return;
-    }
+    if (!uiactionGroup?.uiactionGroupDetails?.length) return;
     const containerState = new ButtonContainerState();
-    uiactionGroup.uiactionGroupDetails.forEach(detail => {
+    const actions = getAllUIActionItems(uiactionGroup.uiactionGroupDetails);
+    actions.forEach(detail => {
       const actionid = detail.uiactionId;
       if (actionid) {
         const buttonState = new UIActionButtonState(

@@ -2,6 +2,7 @@ import { Namespace } from '@ibiz-template/core';
 import { ListController, MDCtrlController } from '@ibiz-template/runtime';
 import { VNode } from 'vue';
 import { ILayoutPanel } from '@ibiz/model-core';
+import { JSX } from 'vue/jsx-runtime';
 
 /**
  * 列表绘制工具

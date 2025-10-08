@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Chart_stackedColumn',
   deviewId: 'fce505190b9c3819fe876547c1359581',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -83,14 +84,15 @@ export default {
       dechartSerieses: [
         {
           stack: true,
-          catalogField: 'TYPE',
+          catalogField: 'STATUS',
+          catalogCodeListId: 'web.mock__cl_status',
           echartsType: 'bar',
           chartCoordinateSystemId: '0',
           chartDataSetId: '0',
           chartSeriesEncode: {
             chartXAxisId: '0',
             chartYAxisId: '0',
-            x: ['TYPE'],
+            x: ['STATUS'],
             y: ['QUANTITY'],
             itemId: 'NAME',
             itemName: 'NAME',
@@ -104,8 +106,6 @@ export default {
           valueField: 'QUANTITY',
           enableChartDataSet: true,
           userParam: {
-            'EC.label': "{position:'inside'}",
-            'EC.barWidth': '40',
             'EC.stack': "'chart'",
           },
           id: 'bar_0',
@@ -128,8 +128,9 @@ export default {
         {
           chartDataSetFields: [
             {
+              codeListId: 'web.mock__cl_status',
               groupField: true,
-              name: 'TYPE',
+              name: 'STATUS',
               id: '0',
             },
             {
@@ -189,7 +190,7 @@ export default {
       showBusyIndicator: true,
       codeName: 'mastermaster_chart_stacked_column_chart',
       controlType: 'CHART',
-      height: 300,
+      height: 400,
       logicName: 'Chart7',
       appDataEntityId: 'web.master',
       controlParam: {
@@ -203,6 +204,15 @@ export default {
       },
       name: 'chart',
       id: 'web.master.mastermaster_chart_stacked_column_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

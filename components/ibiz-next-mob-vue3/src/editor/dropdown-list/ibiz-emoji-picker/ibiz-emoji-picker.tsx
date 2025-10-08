@@ -6,9 +6,17 @@ import {
 } from '@ibiz-template/vue3-util';
 import { base64ToStr, strToBase64, isEmoji } from '@ibiz-template/core';
 import './ibiz-emoji-picker.scss';
+import { JSX } from 'vue/jsx-runtime';
 import { DropDownListEditorController } from '../dropdown-list-editor.controller';
 import { usePopstateListener } from '../../../util';
 
+/**
+ * 表情选择器（扩展）
+ * @primary
+ * @description  使用van-popup组件，通过弹出底部抽屉来绘制表情列表，进而支持对表情数据的搜索与选择。基于`移动端下拉列表（单选）`编辑器扩展，编辑器样式代码名称为：EMOJI_PICKER
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizEmojiPicker = defineComponent({
   name: 'IBizEmojiPicker',
   props: getDropdownProps<DropDownListEditorController>(),

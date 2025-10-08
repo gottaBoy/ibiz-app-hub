@@ -1,16 +1,18 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { RuntimeModelError } from '@ibiz-template/core';
 import {
-  IAppDEAction,
-  IAppDEDataSet,
-  IAppDEMethod,
-  IAppDataEntity,
-  IAppView,
-  IAppViewRef,
-  IControl,
-  IControlRender,
-  IModelObject,
   IPanel,
+  IAppView,
+  IControl,
+  IAppViewRef,
+  IModelObject,
   ISysPFPlugin,
+  IAppDEAction,
+  IAppDEMethod,
+  IAppDEDataSet,
+  IAppDataEntity,
+  IControlRender,
+  IDEUIActionGroupDetail,
 } from '@ibiz/model-core';
 import { PredefinedControlRender } from '../../constant';
 
@@ -242,4 +244,28 @@ export function getCtrlTeleportParams(control: IControl): {
     teleportTag,
     teleportFlag,
   };
+}
+
+/**
+ * @description 获取所有的界面行为项模型集合
+ * @export
+ * @param {IDEUIActionGroupDetail[]} details
+ * @returns {*}  {IDEUIActionGroupDetail[]}
+ */
+export function getAllUIActionItems(
+  details: IDEUIActionGroupDetail[] = [],
+): IDEUIActionGroupDetail[] {
+  const actions: IDEUIActionGroupDetail[] = [];
+  const addAction = (items: IDEUIActionGroupDetail[]) => {
+    items.forEach(item => {
+      if (item.detailType === 'DEUIACTIONGROUP') {
+        const childrenDetails = item.refUIActionGroup?.uiactionGroupDetails;
+        if (childrenDetails?.length) addAction(childrenDetails);
+      } else {
+        actions.push(item);
+      }
+    });
+  };
+  addAction(details);
+  return actions;
 }

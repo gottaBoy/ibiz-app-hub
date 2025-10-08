@@ -1,9 +1,9 @@
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { computed, defineComponent, PropType } from 'vue';
 import { IUIActionGroupDetail } from '@ibiz/model-core';
-import './portlet-layout.scss';
 import { PortletPartController } from '@ibiz-template/runtime';
 import { showTitle } from '@ibiz-template/core';
+import './portlet-layout.scss';
 
 /**
  * 门户控件布局
@@ -23,7 +23,7 @@ export const PortletLayout = defineComponent({
     const ns = useNamespace('portlet-layout');
     const portletType = `portlet-${props.controller.model.portletType?.toLowerCase()}`;
     const c = props.controller;
-
+    const zIndex = props.controller.dashboard.state.zIndex;
     const popperClass = computed(() => {
       const classNames = [ns.em('toolbar', `${portletType}-${c.model.id}`)];
       const { codeName } = c.dashboard.view.model;
@@ -67,12 +67,13 @@ export const PortletLayout = defineComponent({
     return {
       c,
       ns,
+      zIndex,
       popperClass,
       portletType,
       isShowHeader,
-      onActionClick,
       openLink,
       clickPorlet,
+      onActionClick,
     };
   },
   render() {
@@ -115,6 +116,7 @@ export const PortletLayout = defineComponent({
             <div class={this.ns.be('header', 'right')}>
               {model.portletType !== 'ACTIONBAR' && model.uiactionGroup && (
                 <iBizActionToolbar
+                  zIndex={this.zIndex}
                   class={this.ns.e('toolbar')}
                   action-details={model.uiactionGroup.uiactionGroupDetails}
                   actions-state={state.actionGroupState}

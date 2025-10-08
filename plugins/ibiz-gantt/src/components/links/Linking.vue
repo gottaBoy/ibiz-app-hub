@@ -3,9 +3,8 @@
     <path
       :d="path"
       fill="transparent"
-      stroke="red"
+      stroke="var(--gantt-color-linking)"
       stroke-width="2"
-      stroke-dasharray="5,5"
       :marker-end="`url(#${id})`"
     />
 
@@ -19,7 +18,7 @@
         orient="auto"
         markerUnits="strokeWidth"
       >
-        <path d="M0,0 L0,4 L5,2 z" fill="red" />
+        <circle cx="2" cy="2" r="2" fill="var(--gantt-color-linking)" />
       </marker>
     </defs>
   </g>

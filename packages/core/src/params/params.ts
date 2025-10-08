@@ -16,7 +16,7 @@ export class IBizParams implements IParams {
    * @type {IParams}
    * @memberof IBizParams
    */
-  declare protected _params: IParams;
+  protected declare _params: IParams;
 
   /**
    * @description 父视图参数
@@ -24,7 +24,7 @@ export class IBizParams implements IParams {
    * @type {IParams}
    * @memberof IBizParams
    */
-  declare protected _parent?: IParams;
+  protected declare _parent?: IParams;
 
   /**
    * Creates an instance of IBizParams.

@@ -32,9 +32,13 @@ export class CaptionBarController
 
     this.view.evt.on('onViewInfoChange', ({ caption: _caption, dataInfo }) => {
       const { showDataInfoBar } = this.view.model as IData;
-      this.state.caption = `${this.view.model.caption}${
-        showDataInfoBar && dataInfo ? `-${dataInfo}` : ''
-      }`;
+      if (ibiz.config.view.onlyShowDataInfo && dataInfo) {
+        this.state.caption = dataInfo;
+      } else {
+        this.state.caption = `${this.view.model.caption}${
+          showDataInfoBar && dataInfo ? `-${dataInfo}` : ''
+        }`;
+      }
       this.setBrowserTabTitle();
     });
 

@@ -14,14 +14,19 @@ import {
 } from '@ibiz-template/vue3-util';
 import { isNumber } from 'lodash-es';
 import {
+  EventBase,
   IModalData,
   IModalOptions,
   IOverlayContainer,
+  IViewController,
   Modal,
+  SysUIActionTag,
   ViewMode,
+  ViewShellHooks,
 } from '@ibiz-template/runtime';
 import './app-modal-component.scss';
 import { calcOpenModeStyle } from '@ibiz-template/core';
+import { ArrowLeftBold, ArrowRightBold } from '../icon/icon';
 
 export const AppModalComponent = defineComponent({
   props: {
@@ -35,6 +40,7 @@ export const AppModalComponent = defineComponent({
     const isShow = ref(false);
     const { zIndex } = useUIStore();
     const modalZIndex = zIndex.increment();
+    let modalView: IViewController | undefined;
 
     // 处理自定义样式
     const customStyle = reactive<IData>({});
@@ -70,6 +76,18 @@ export const AppModalComponent = defineComponent({
       },
     });
 
+    const viewShellHooks = new ViewShellHooks();
+
+    viewShellHooks.hooks.viewCreated.tapPromise(
+      async (_event: EventBase): Promise<void> => {
+        modalView = _event.view;
+      },
+    );
+
+    const handleViewCreated = (event: EventBase) => {
+      modalView = event.view;
+    };
+
     // Modal自身的所有关闭方式最终都走这个
     const onBeforeClose = async (done: () => void) => {
       const isClose = await modal.dismiss();
@@ -87,6 +105,15 @@ export const AppModalComponent = defineComponent({
       isShow.value = true;
     };
 
+    // 上一条
+    const prevRecord = () => {
+      modalView?.call(SysUIActionTag.PREV_RECORD);
+    };
+    // 下一条
+    const nextRecord = () => {
+      modalView?.call(SysUIActionTag.NEXT_RECORD);
+    };
+
     return {
       ns,
       isShow,
@@ -94,9 +121,13 @@ export const AppModalComponent = defineComponent({
       modalZIndex,
       customStyle,
       modal,
+      viewShellHooks,
       present,
       dismiss,
       onBeforeClose,
+      prevRecord,
+      nextRecord,
+      handleViewCreated,
     };
   },
   render() {
@@ -115,7 +146,28 @@ export const AppModalComponent = defineComponent({
         beforeClose: this.onBeforeClose,
         ...this.options,
       },
-      this.$slots.default?.(this.modal),
+      [
+        // eslint-disable-next-line vue/no-multiple-slot-args
+        this.$slots.default?.(this.modal, this.viewShellHooks),
+        this.options.openIndicator && (
+          <div class={this.ns.e('record')}>
+            <el-button
+              class={this.ns.em('record', 'prev')}
+              title={ibiz.i18n.t('util.appModal.prev')}
+              onClick={this.prevRecord}
+            >
+              {ArrowLeftBold()}
+            </el-button>
+            <el-button
+              class={this.ns.em('record', 'next')}
+              title={ibiz.i18n.t('util.appModal.next')}
+              onClick={this.nextRecord}
+            >
+              {ArrowRightBold()}
+            </el-button>
+          </div>
+        ),
+      ],
     );
   },
 });

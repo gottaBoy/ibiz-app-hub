@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   RuntimeError,
   isElementSame,
@@ -128,6 +129,7 @@ export class MDControlController<
     this.state.showRowDetail = navViewPos === 'ROWDETAIL';
     this.state.items = [];
     this.state.selectedData = [];
+    this.state.selectedKeys = [];
     this.state.searchParams = {};
     this.state.noSort = false;
     this.state.sortQuery = '';
@@ -479,6 +481,41 @@ export class MDControlController<
   }
 
   /**
+   * @description 根据选中标识计算选中数据
+   * @protected
+   * @memberof MDControlController
+   */
+  protected calcSelectDataBySelectKey(): void {
+    if (!this.state.selectedKeys.length) return;
+    const selectedData = this.state.items.filter(
+      item =>
+        this.state.selectedKeys.includes(item.srfkey) &&
+        !this.state.selectedData.some(
+          selected => selected.srfkey === item.srfkey,
+        ),
+    );
+    this.state.selectedData.push(...selectedData);
+  }
+
+  /**
+   * @description 处理刷新模式
+   * @protected
+   * @param {MDCtrlLoadParams} args
+   * @memberof MDControlController
+   */
+  protected handleRefreshMode(args: MDCtrlLoadParams): void {
+    // 初始化加载时需重置选中数据
+    if (args.isInitialLoad || this.refreshMode === 'nocache') {
+      this.state.selectedData = [];
+    } else if (this.refreshMode === 'cache') {
+      // 重新计算选中数据
+      this.state.selectedData = this.state.items.filter(item =>
+        this.state.selectedData.find(select => select.srfkey === item.srfkey),
+      );
+    }
+  }
+
+  /**
    * 部件加载后处理
    *
    * @author chitanda
@@ -488,17 +525,8 @@ export class MDControlController<
    * @return {*}  {Promise<IData[]>} 返回给后续处理的数据
    */
   async afterLoad(args: MDCtrlLoadParams, items: IData[]): Promise<IData[]> {
-    // 初始化加载时需重置选中数据
-    if (args.isInitialLoad || this.refreshMode === 'nocache') {
-      this.state.selectedData = [];
-    } else if (this.refreshMode === 'cache') {
-      // 重新计算选中数据
-      this.state.selectedData = this.state.items.filter(item =>
-        this.state.selectedData.find(
-          select => select.tempsrfkey === item.tempsrfkey,
-        ),
-      );
-    }
+    this.handleRefreshMode(args);
+    this.calcSelectDataBySelectKey();
     return items;
   }
 
@@ -607,10 +635,12 @@ export class MDControlController<
   }
 
   /**
-   * 删除每一项
-   * @return {*}
-   * @author: zhujiamin
-   * @Date: 2024-02-27 09:47:52
+   * @description 处理项删除
+   * @param {IData} item
+   * @param {IContext} context
+   * @param {IParams} params
+   * @returns {*}  {Promise<boolean>}
+   * @memberof MDControlController
    */
   async handleItemRemove(
     item: IData,
@@ -655,6 +685,20 @@ export class MDControlController<
    */
   getData(): IData[] {
     return this.state.selectedData || [];
+  }
+
+  /**
+   * @description 设置选中数据
+   * @param {IData[]} items
+   * @memberof MDControlController
+   */
+  setSelectedData(items: IData[]): void {
+    this.state.selectedKeys = items
+      .filter(item => item.srfkey)
+      .map(item => item.srfkey);
+    this.state.selectedData = this.state.items.filter(item =>
+      this.state.selectedKeys.includes(item.srfkey),
+    );
   }
 
   /**
@@ -1002,5 +1046,16 @@ export class MDControlController<
     const tempContext = Object.assign(this.context.clone(), resultContext);
     const tempParams = { ...resultParams };
     return { context: tempContext, params: tempParams };
+  }
+
+  /**
+   * @description 新建行
+   * - 子类实现
+   * @param {MDCtrlLoadParams} [args={}]
+   * @returns {*}  {Promise<void>}
+   * @memberof MDControlController
+   */
+  async newRow(args: MDCtrlLoadParams = {}): Promise<void> {
+    throw new RuntimeError(ibiz.i18n.t('runtime.common.unrealized'));
   }
 }

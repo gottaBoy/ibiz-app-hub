@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'list_quicktoolbar',
   deviewId: 'aae082535838402ca046fdbfc9082d58',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -66,7 +67,6 @@ export default {
       id: 'opendata',
     },
   ],
-  appViewMsgGroupId: 'list_quicktoolbar',
   appViewRefs: [
     {
       realOpenMode: 'POPUPMODAL',
@@ -87,6 +87,7 @@ export default {
     {
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
+      orderValueAppDEFieldId: 'px',
       delistDataItems: [
         {
           appDEFieldId: 'id',
@@ -103,8 +104,30 @@ export default {
           dataType: 25,
           id: 'region_id',
         },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          frontCodeListId: 'web.wfstates',
+          dataType: 25,
+          id: 'wf_status',
+        },
       ],
       pagingSize: 1000,
+      hasWFDataItems: true,
       showHeader: true,
       navViewPos: 'NONE',
       createControlAction: {

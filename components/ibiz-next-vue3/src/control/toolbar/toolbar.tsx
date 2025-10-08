@@ -74,10 +74,10 @@ export const ToolbarControl = defineComponent({
       required: true,
     },
     /**
-     * @description 绘制模式
+     * @description 绘制模式，可选值为DESIGN、RUNTIME，默认值为RUNTIME
      */
     runMode: {
-      type: String as PropType<'DESIGN' | 'RUNTIME'>,
+      type: String,
       default: 'RUNTIME',
     },
     /**

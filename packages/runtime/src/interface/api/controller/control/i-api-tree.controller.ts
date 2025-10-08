@@ -15,7 +15,7 @@ import { IApiNewTreeNodeParams } from './tree';
  * @ctrlparams {name:contextmenurightclickinvoke,title:拦截右键点击事件,parameterType:boolean,defaultvalue:true,description:当该值为false时，拦截右键点击事件不弹出节点的右键上下文菜单,effectPlatform:web}
  * @ctrlparams {"name":"menushowmode","title":"右键菜单显示模式","parameterType":"'default' | 'hover'","defaultvalue":"'default'","description":"上下文菜单的显示时机支持两种配置模式：始终显示的 'default' 模式，以及仅鼠标悬停树节点时显示对应菜单的 'hover' 模式","effectPlatform":"web"}
  * @ctrlparams {"name":"mdctrlrefreshmode","title":"刷新模式","defaultvalue":"'cache'","parameterType":"'nocache' | 'cache'","description":"多数据部件刷新模式，当值为 'cache'，部件刷新时保留选中数据；当值为 'nocache'，部件刷新时清空选中数据","effectPlatform":"web"}
- * @ctrlparams {name:searchphseparator,title:快速搜索提示分隔符,parameterType:string,defaultvalue:、,description:搜索栏输入框根据该值将所有输入项提示文本进行拼接展示}
+ * @ctrlparams {name:searchphseparator,title:快速搜索提示分隔符,parameterType:string,defaultvalue:'、',description:搜索栏输入框根据该值将所有输入项提示文本进行拼接展示}
  * @template T
  * @template S
  */
@@ -46,12 +46,11 @@ export interface IApiTreeController<
   expandNodeByKey(expandedKeys: string[]): Promise<void>;
 
   /**
-   * 展开/收缩节点
-   * @description 展开/收缩节点
-   * @param {IApiData} [params]
-   * @memberof ITreeController
+   * @description 切换折叠，其中tag表示操作指定树节点标识，若不传则操作当前树的第一层节点展开状态，expand表示是否展开，若不传则基于节点展开状态取反
+   * @param {{ tag?: string; expand?: boolean }} [params]
+   * @memberof IApiTreeController
    */
-  changeCollapse(params?: IApiData): void;
+  changeCollapse(params?: { tag?: string; expand?: boolean }): void;
 
   /**
    * 获取节点模型

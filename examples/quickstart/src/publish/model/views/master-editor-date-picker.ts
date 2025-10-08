@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'editor_date_picker',
   deviewId: 'bda36e3dbb1f37602aa8537a2b14df0c',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -65,6 +66,16 @@ export default {
         appDataEntityId: 'web.master',
         id: 'update',
       },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
+      },
       deformPages: [
         {
           layout: {
@@ -81,7 +92,7 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
-                  itemWidth: 160,
+                  itemWidth: 200,
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
@@ -90,7 +101,8 @@ export default {
                       TIMEFMT: 'YYYY-MM-DD HH:mm:ss',
                     },
                     editorType: 'DATEPICKER',
-                    editorWidth: 160,
+                    editorWidth: 200,
+                    placeHolder: '请选择时间',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'formitem',
@@ -127,7 +139,7 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
-                  itemWidth: 100,
+                  itemWidth: 200,
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
@@ -136,7 +148,8 @@ export default {
                       TIMEFMT: 'YYYY-MM-DD',
                     },
                     editorType: 'DATEPICKEREX_NOTIME',
-                    editorWidth: 100,
+                    editorWidth: 200,
+                    placeHolder: '请选择时间',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'formitem1',
@@ -173,7 +186,7 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
-                  itemWidth: 120,
+                  itemWidth: 200,
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
@@ -182,7 +195,8 @@ export default {
                       TIMEFMT: 'YYYY-MM-DD HH',
                     },
                     editorType: 'DATEPICKEREX_HOUR',
-                    editorWidth: 120,
+                    editorWidth: 200,
+                    placeHolder: '请选择时间',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'formitem3',
@@ -219,7 +233,7 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
-                  itemWidth: 140,
+                  itemWidth: 200,
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
@@ -228,7 +242,8 @@ export default {
                       TIMEFMT: 'YYYY-MM-DD HH:mm',
                     },
                     editorType: 'DATEPICKEREX_MINUTE',
-                    editorWidth: 140,
+                    editorWidth: 200,
+                    placeHolder: '请选择时间',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'formitem4',
@@ -265,7 +280,7 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
-                  itemWidth: 160,
+                  itemWidth: 200,
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
@@ -274,7 +289,8 @@ export default {
                       TIMEFMT: 'YYYY-MM-DD HH:mm:ss',
                     },
                     editorType: 'DATEPICKEREX_SECOND',
-                    editorWidth: 160,
+                    editorWidth: 200,
+                    placeHolder: '请选择时间',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'formitem5',
@@ -311,7 +327,7 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
-                  itemWidth: 90,
+                  itemWidth: 200,
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
@@ -320,7 +336,8 @@ export default {
                       TIMEFMT: 'HH:mm:ss',
                     },
                     editorType: 'DATEPICKEREX_NODAY',
-                    editorWidth: 90,
+                    editorWidth: 200,
+                    placeHolder: '请选择时间',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'formitem6',
@@ -357,7 +374,7 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
-                  itemWidth: 70,
+                  itemWidth: 200,
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
@@ -366,7 +383,8 @@ export default {
                       TIMEFMT: 'HH:mm',
                     },
                     editorType: 'DATEPICKEREX_NODAY_NOSECOND',
-                    editorWidth: 70,
+                    editorWidth: 200,
+                    placeHolder: '请选择时间',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'formitem7',
@@ -403,7 +421,7 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
-                  itemWidth: 160,
+                  itemWidth: 200,
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
@@ -412,7 +430,8 @@ export default {
                       TIMEFMT: 'YYYY-MM-DD HH:mm:ss',
                     },
                     editorType: 'DATEPICKER',
-                    editorWidth: 160,
+                    editorWidth: 200,
+                    placeHolder: '请选择时间',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'dateyyyymm',
@@ -457,6 +476,81 @@ export default {
               },
               showCaption: true,
               id: 'grouppanel8',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  createDV: '2025-07-11 18:37:33',
+                  dataType: 25,
+                  enableCond: 3,
+                  itemWidth: 200,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    dateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
+                    editorParams: {
+                      TIMEFMT: 'YYYY-MM-DD HH:mm:ss',
+                      readonly: 'true',
+                    },
+                    editorType: 'DATEPICKER',
+                    editorWidth: 200,
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    readOnly: true,
+                    id: 'formitem2',
+                  },
+                  updateDV: '2025-07-11 18:37:33',
+                  allowEmpty: true,
+                  codeName: 'formitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem2',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用readonly参数控制编辑器是否为只读态。当前编辑器为只读态',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem1',
+                  },
+                  codeName: 'rawitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem1',
+                },
+              ],
+              caption: '只读态',
+              codeName: 'grouppanel2',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel2',
             },
             {
               dataType: 25,

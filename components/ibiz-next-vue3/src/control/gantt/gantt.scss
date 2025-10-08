@@ -33,6 +33,11 @@
     // 警示色
     --gantt-warning: var(--ibiz-color-warning);
 
+    // 链接线颜色
+
+    --gantt-color-linking: #{getCssVar(color, primary)};
+    --gantt-link-path-hover: #{getCssVar(color, primary)};
+
     .xg-table-body .xg-table-row {
       cursor: pointer;
 
@@ -161,6 +166,16 @@
     border: none;
     box-shadow: getCssVar('shadow', 'elevated');
   }
+
+  @include e('link-path-popover') {
+    z-index: 300 !important;
+    width: auto;
+    min-width: 300px;
+    padding: 12px;
+    border: none;
+    box-shadow: getCssVar('shadow', 'elevated');
+  }
+
   .#{bem('tree-grid-ex-field-column','','ellipsis')} {
     .#{bem('tree-grid-ex-field-column-text-container')} {
       min-width: 0;
@@ -177,5 +192,5 @@
 .xg-view-toolbar-switch-action {
   // 文本
   --gantt-text-switch-item: var(--ibiz-color-text-3);
-  --gantt-bg-hover-switch-item: var(--ibiz-color-bg-0);;
+  --gantt-bg-hover-switch-item: var(--ibiz-color-bg-0);
 }

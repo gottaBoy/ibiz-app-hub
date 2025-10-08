@@ -22,7 +22,7 @@ export default {
     {
       codeName: 'enable',
       logicName: '逻辑有效标识',
-      predefinedType: 'NONE',
+      predefinedType: 'LOGICVALID',
       stdDataType: 9,
       name: 'ENABLE',
       id: 'enable',
@@ -30,7 +30,7 @@ export default {
     {
       codeName: 'create_man',
       logicName: '创建人',
-      predefinedType: 'NONE',
+      predefinedType: 'CREATEMAN',
       stdDataType: 25,
       stringLength: 100,
       name: 'CREATE_MAN',
@@ -39,7 +39,7 @@ export default {
     {
       codeName: 'create_time',
       logicName: '创建时间',
-      predefinedType: 'NONE',
+      predefinedType: 'CREATEDATE',
       stdDataType: 5,
       valueFormat: 'YYYY-MM-DD HH:mm:ss',
       name: 'CREATE_TIME',
@@ -48,7 +48,7 @@ export default {
     {
       codeName: 'update_man',
       logicName: '更新人',
-      predefinedType: 'NONE',
+      predefinedType: 'UPDATEMAN',
       stdDataType: 25,
       stringLength: 100,
       name: 'UPDATE_MAN',
@@ -57,7 +57,7 @@ export default {
     {
       codeName: 'update_time',
       logicName: '更新时间',
-      predefinedType: 'NONE',
+      predefinedType: 'UPDATEDATE',
       stdDataType: 5,
       valueFormat: 'YYYY-MM-DD HH:mm:ss',
       name: 'UPDATE_TIME',
@@ -428,6 +428,25 @@ export default {
       appDataEntityId: 'web.master',
       name: '子应用C追加界面行为',
       id: 'open_child_appc_view@master',
+    },
+    {
+      actionLevel: 100,
+      actionTarget: 'SINGLEDATA',
+      buttonStyle: 'DEFAULT',
+      caption: '配置',
+      codeName: 'panel_auto61647987_button_link_click',
+      frontProcessType: 'OPENHTMLPAGE',
+      fullCodeName: 'master_panel_auto61647987_button_link_click',
+      htmlPageUrl:
+        'https://open.ibizlab.cn/modeldesign/#/psdevslnsys=49de9d09-8372-b6cf-7da8-d83f222ae8b6/modelingindex/psdevslnsys=49de9d09-8372-b6cf-7da8-d83f222ae8b6;psdeviewbase=1913c5c4d99435e6660e91ecb8f7ca06/psdeviewbasedesignview/-',
+      uiactionMode: 'FRONT',
+      uiactionTag: 'panel_auto61647987_button_link_click',
+      uiactionType: 'DEUIACTION',
+      showBusyIndicator: true,
+      noPrivDisplayMode: 2,
+      appDataEntityId: 'web.master',
+      name: '配置',
+      id: 'panel_auto61647987_button_link_click@master',
     },
   ],
   deopprivs: [

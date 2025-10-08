@@ -2,6 +2,7 @@
 import { createUUID } from 'qx-util';
 import { IDEChartSeries } from '@ibiz/model-core';
 import { IChartData } from '../../../interface';
+import { TimeScale, calcDateRangeByScale } from '../../../utils';
 
 // 更新属性，缺的补充定义
 function updateKeyDefine(target: IParams, keys: string[]): void {
@@ -34,8 +35,8 @@ export class ChartData implements IChartData {
   _catalogLevelData?: IData[];
 
   constructor(
-    deData: IData,
-    seriesModel?: IDEChartSeries,
+    private deData: IData,
+    private seriesModel?: IDEChartSeries,
     catalog?: string,
     groupName?: string,
     chartId?: string,
@@ -81,5 +82,44 @@ export class ChartData implements IChartData {
         return allKeys;
       },
     });
+  }
+
+  /**
+   * @description 预定义导航参数
+   * @returns {*}  {IData}
+   * @memberof ChartData
+   */
+  get navParams(): IData {
+    const params: IData = { srfcategory: this._catalog };
+    if (!this.seriesModel) return params;
+    const {
+      groupMode,
+      seriesField,
+      catalogField,
+      seriesCodeListId,
+      catalogCodeListId,
+    } = this.seriesModel;
+    // catalogField.toLowerCase()_value 和 seriesField.toLowerCase()_value 为分类属性和名称属性的原始值
+    if (catalogField && catalogCodeListId)
+      Object.assign(params, {
+        srfcategoryvalue: this.deData[`${catalogField.toLowerCase()}_value`],
+      });
+    if (seriesField) Object.assign(params, { srfgroup: this._groupName });
+    if (seriesField && seriesCodeListId)
+      Object.assign(params, {
+        srfgroupvalue: this.deData[`${seriesField.toLowerCase()}_value`],
+      });
+    if (groupMode && groupMode !== 'CODELIST') {
+      const dateRange = calcDateRangeByScale(
+        this._catalog!,
+        groupMode.toLowerCase() as TimeScale,
+      );
+      if (dateRange)
+        Object.assign(params, {
+          srfstarttime: dateRange.start,
+          srfendtime: dateRange.end,
+        });
+    }
+    return params;
   }
 }

@@ -4,13 +4,25 @@ import './auth-userinfo.scss';
 import { IPanelRawItem } from '@ibiz/model-core';
 import { PanelItemController } from '@ibiz-template/runtime';
 
+/**
+ * 用户信息组件
+ * @description 用于显示当前登录用户的基本信息，如姓名，组织名等。
+ * @primary
+ *
+ */
 export const AuthUserinfo = defineComponent({
   name: 'IBizAuthUserinfo',
   props: {
+    /**
+     * @description 用户信息组件模型数据
+     */
     modelData: {
       type: Object as PropType<IPanelRawItem>,
       required: true,
     },
+    /**
+     * @description 用户信息组件控制器
+     */
     controller: {
       type: PanelItemController,
       required: true,

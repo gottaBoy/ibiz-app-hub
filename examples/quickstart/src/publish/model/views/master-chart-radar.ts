@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Chart_Radar',
   deviewId: 'c7da85392db15e03d420b15ca3dd5cce',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -17,7 +18,6 @@ export default {
       id: 'engine',
     },
   ],
-  appViewMsgGroupId: 'chart_radar',
   controls: [
     {
       searchButtonStyle: 'DEFAULT',
@@ -140,7 +140,7 @@ export default {
       showBusyIndicator: true,
       codeName: 'chart_radar_chart',
       controlType: 'CHART',
-      height: 300,
+      height: 400,
       logicName: 'Chart11',
       appDataEntityId: 'web.master',
       controlParam: {
@@ -154,6 +154,15 @@ export default {
       },
       name: 'chart',
       id: 'web.master.chart_radar_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

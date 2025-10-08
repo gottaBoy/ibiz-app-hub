@@ -66,7 +66,7 @@ export class NavPosIndexController extends PanelItemController<IPanelRawItem> {
 
   /**
    * @exposedoc
-   * @description 当前视图的路由层级，非路由模式不存在。
+   * @description 当前视图的路由层级，非路由模式不存在
    * @readonly
    * @type {(number | undefined)}
    * @memberof NavPosIndexController

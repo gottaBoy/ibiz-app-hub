@@ -174,7 +174,7 @@ export function convertNavDataByArray(
 }
 
 /**
- * 根据导航参数把多条数据转换成单条数据，用；分隔
+ * 根据导航参数把多条数据转换成单条数据，用 , 分隔
  * @author lxm
  * @date 2023-07-10 04:31:30
  * @export
@@ -197,13 +197,13 @@ export function formatMultiData(
   const data1 = dataArr[0];
   naviArr.forEach(naviParam => {
     const { rawValue, value } = naviParam;
-    // 非直接且取值的属性是数据的属性时，把多条数据的值合并到一起，用；分隔
+    // 非直接且取值的属性是数据的属性时，把多条数据的值合并到一起，用 , 分隔
     if (
       !rawValue &&
       value &&
       Object.prototype.hasOwnProperty.call(data1, value)
     ) {
-      result[value] = dataArr.map(item => item[value]).join(';');
+      result[value] = dataArr.map(item => item[value]).join(',');
     }
   });
   return result;

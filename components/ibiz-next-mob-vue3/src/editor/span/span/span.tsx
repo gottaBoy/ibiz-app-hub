@@ -21,6 +21,16 @@ function isValidDateFormat(dateStr: string, format: string): boolean {
   return dayjs(dateStr, format, true).isValid(); // 严格模式判断是否是复合值格式化要求的日期文本
 }
 
+/**
+ * 标签
+ * @primary
+ * @description 直接呈现文本内容，可配置单位。支持编辑器类型包含：`标签`
+ * @editorparams {name:TEXTSEPARATOR,parameterType:string,defaultvalue:'',description:文本分隔符。如果是数组数据，在呈现时用逗号分隔并且转换为字符串显示}
+ * @editorparams {name:REVERSECOLOR,parameterType:boolean,description:是否反转颜色，即代码表项的color是否用于代码表项的背景色}
+ * @editorparams {name:SHOWMODE,parameterType:'DEFAULT' | 'ICON' | 'TEXT',defaultvalue:'DEFAULT',description:显示模式，即代码表项的显示情况，值为DEFAULT：显示图标和文本，值为ICON：只显示图标，值为TEXT：只显示文本}
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter | change | blur | focus
+ */
 export const IBizSpan = defineComponent({
   name: 'IBizSpan',
   props: getSpanProps<SpanEditorController>(),

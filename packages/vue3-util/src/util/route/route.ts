@@ -335,6 +335,11 @@ export async function generateRoutePath(
     }
   }
 
+  let srfmenuitem = params?.srfmenuitem;
+  if (!srfmenuitem && routePath.pathNodes.length > 1) {
+    srfmenuitem = routePath.pathNodes[1].params?.srfmenuitem;
+  }
+
   // 删除目标层级和之后的路由，保留之前层级的路由
   routePath.pathNodes.splice(depth - 1, routePath.pathNodes.length - depth + 1);
 
@@ -381,6 +386,11 @@ export async function generateRoutePath(
       const deName = calcDeCodeNameById(appView.appDataEntityId!);
       delete routePath.pathNodes[0].context![deName];
     }
+  }
+
+  if (srfmenuitem && routePath.pathNodes.length > 1) {
+    const tempParams = routePath.pathNodes[1].params || {};
+    routePath.pathNodes[1].params = { ...tempParams, srfmenuitem };
   }
 
   return { path: routePath2string(routePath) };

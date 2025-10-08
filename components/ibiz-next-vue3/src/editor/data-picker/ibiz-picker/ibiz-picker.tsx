@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import {
   h,
   ref,
@@ -16,10 +17,7 @@ import {
 } from '@ibiz-template/vue3-util';
 import { isEmpty, isNil } from 'ramda';
 import { showTitle } from '@ibiz-template/core';
-import {
-  IUIActionGroupDetail,
-  IAppDEUIActionGroupDetail,
-} from '@ibiz/model-core';
+import { IAppDEUIActionGroupDetail } from '@ibiz/model-core';
 import { PickerEditorController } from '../picker-editor.controller';
 import './ibiz-picker.scss';
 
@@ -34,6 +32,7 @@ import './ibiz-picker.scss';
  * @editorparams {"name":"objectnamefield","parameterType":"string","description":"值类型为OBJECT时的对象名称属性"}
  * @editorparams {"name":"objectvaluefield","parameterType":"string","description":"值类型为OBJECT时的对象值属性"}
  * @editorparams {"name":"readonly","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否为只读态"}
+ * @editorparams {"name":"actionpostion","parameterType":"'top' | 'bottom'","defaultvalue":"'bottom'","description":"设置AC模式行为组位置，默认在下拉底部"}
  * @ignoreprops overflowMode
  */
 export const IBizPicker = defineComponent({
@@ -64,6 +63,10 @@ export const IBizPicker = defineComponent({
     const isLoaded = ref(false);
 
     const isReverse = ref(false);
+
+    // 行为位置
+    const actionPostion: 'top' | 'bottom' =
+      c.model.editorParams?.actionpostion || 'bottom';
 
     // 是否显示表单默认内容
     const showFormDefaultContent = computed(() => {
@@ -129,6 +132,7 @@ export const IBizPicker = defineComponent({
         [c.keyName]: data[c.keyName] ? data[c.keyName] : data.srfkey,
         [c.textName]: data[c.textName] ? data[c.textName] : data.srfmajortext,
       });
+
       if (c.valueItem) {
         emit('change', data[c.keyName], c.valueItem);
       }
@@ -141,10 +145,40 @@ export const IBizPicker = defineComponent({
       setEditable(false);
     };
 
+    /**
+     * @description 计算选中项数据
+     * @returns {*}  {IData[]}
+     */
+    const calcSelectItem = (): IData[] => {
+      const selectItems: IData[] = [];
+      if (curValue.value) {
+        const selectItem = {
+          srfkey: props.data[c.valueItem],
+          srfmajortext: curValue.value,
+          ...(c.model.valueType === 'OBJECT' &&
+          props.value &&
+          c.objectValueField
+            ? (props.value as IData)[c.objectValueField as string]
+            : {}),
+        };
+        if (c.deACMode && c.dataItems.length)
+          c.dataItems.forEach((item: IData) =>
+            Object.assign(selectItem, {
+              [item.appDEFieldId]: props.data[item.id],
+            }),
+          );
+        selectItems.push(selectItem);
+      }
+      return selectItems;
+    };
+
     // 打开数据选择视图
     const openPickUpView = async (e: MouseEvent) => {
       e.stopPropagation();
-      const res = await c.openPickUpView(props.data);
+      const res = await c.openPickUpView(
+        props.data,
+        JSON.stringify(calcSelectItem()),
+      );
       if (res && res[0]) {
         await handleDataSelect(res[0]);
       }
@@ -171,14 +205,13 @@ export const IBizPicker = defineComponent({
           items.value = res.data as IData[];
           isLoaded.value = true;
           if (cb && cb instanceof Function) {
-            if (items.value.length) {
-              cb([...items.value, ...c.actionDetails]);
-            } else {
-              const empty = {
-                srftype: 'empty',
-              };
-              cb([empty, ...c.actionDetails]);
-            }
+            const callbackItems: IData[] = items.value.length
+              ? [...items.value]
+              : [{ srftype: 'empty' }];
+            actionPostion === 'top'
+              ? callbackItems.unshift(...c.actionDetails)
+              : callbackItems.push(...c.actionDetails);
+            cb(callbackItems);
           }
         }
       }
@@ -189,17 +222,9 @@ export const IBizPicker = defineComponent({
       isShowAll.value = true;
       setEditable(false);
       // 回车选中空白
-      if (item.srftype === 'empty') {
-        resetCurValue();
-        return;
-      }
-      // 回车选中行为项，手动触发
-      if (item.detailType === 'DEUIACTION') {
-        c.onActionClick(item as IUIActionGroupDetail, props.data);
-        resetCurValue();
-      } else {
-        await handleDataSelect(item);
-      }
+      if (item.srftype === 'empty' || item.detailType === 'DEUIACTION')
+        return resetCurValue();
+      await handleDataSelect(item);
     };
 
     // 清除
@@ -295,22 +320,28 @@ export const IBizPicker = defineComponent({
     });
 
     const renderActionItem = (detail: IAppDEUIActionGroupDetail) => {
-      if (!c.groupActionState[detail.id!].visible) {
-        return;
-      }
+      if (!c.groupActionState[detail.id!].visible) return;
       return (
         <div
+          title={showTitle(detail.tooltip)}
           class={[
             ns.e('action-item'),
             ns.is('disabled', c.groupActionState[detail.id!].disabled),
           ]}
-          onClick={event => c.onActionClick(detail, props.data, event)}
-          title={showTitle(detail.tooltip)}
+          onClick={event => {
+            if (!c.groupActionState[detail.id!].disabled)
+              c.onActionClick(detail, props.data, event);
+          }}
         >
           {detail.showIcon && detail.sysImage && (
-            <iBizIcon icon={detail.sysImage}></iBizIcon>
+            <iBizIcon
+              class={ns.em('action-item', 'icon')}
+              icon={detail.sysImage}
+            ></iBizIcon>
           )}
-          {detail.showCaption ? detail.caption : ''}
+          <span class={ns.em('action-item', 'caption')}>
+            {detail.showCaption ? detail.caption : ''}
+          </span>
         </div>
       );
     };
@@ -327,25 +358,25 @@ export const IBizPicker = defineComponent({
     return {
       ns,
       c,
+      items,
       curValue,
       valueText,
-      items,
-      openPickUpView,
-      openLinkView,
-      onACSelect,
-      onSearch,
       editorRef,
-      onClear,
-      onFocus,
-      onBlur,
-      handleKeyUp,
       closeCircle,
       isEditable,
       isReverse,
-      setEditable,
       showFormDefaultContent,
-      renderActionItem,
+      onBlur,
+      onFocus,
+      onClear,
+      onSearch,
+      onACSelect,
+      handleKeyUp,
+      setEditable,
       renderEmpty,
+      openLinkView,
+      openPickUpView,
+      renderActionItem,
     };
   },
   render() {
@@ -474,21 +505,14 @@ export const IBizPicker = defineComponent({
         >
           {{
             default: ({ item }: { item: IData }) => {
-              if (this.$slots.append) {
-                return this.$slots.append({});
-              }
-              if (item.srftype === 'empty') {
-                return this.renderEmpty();
-              }
-              if (item.detailType === 'DEUIACTION') {
+              if (this.$slots.append) return this.$slots.append({});
+              if (item.srftype === 'empty') return this.renderEmpty();
+              if (item.detailType === 'DEUIACTION')
                 return this.renderActionItem(item as IAppDEUIActionGroupDetail);
-              }
               return itemContent(item);
             },
             suffix: () => {
-              if (this.c.noButton) {
-                return;
-              }
+              if (this.c.noButton) return;
               return [
                 this.c.model.pickupAppViewId ? (
                   <ion-icon

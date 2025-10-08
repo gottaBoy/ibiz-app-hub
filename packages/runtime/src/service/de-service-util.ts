@@ -398,4 +398,54 @@ export class DEServiceUtil implements IApiDEServiceUtil {
     }
     return result;
   }
+
+  /**
+   * @description 记录当前域变更
+   * @param {('ADD' | 'RESET' | 'UNDO' | 'REDO')} actionType 添加数据 | 重置数据
+   * @returns {*}  {void}
+   * @memberof DEServiceUtil
+   */
+  recordUIDomainChanges(
+    srfsessionid: string,
+    actionType: 'ADD' | 'RESET',
+  ): void {
+    if (!this.cache.has(srfsessionid)) {
+      return;
+    }
+    const map = this.cache.get(srfsessionid)!;
+    if (map.size > 0) {
+      const services = Array.from(map.values());
+      for (let i = 0; i < services.length; i++) {
+        services[i].local.recordChanges(actionType);
+      }
+    }
+  }
+
+  /**
+   * @description 取消当前域变更，'UNDO' | 'REDO'暂未支持
+   * @param {string} srfsessionid 域标识
+   * @param {('INIT' | 'UNDO' | 'REDO')} targetState 目标状态，初始化状态|撤销上一步操作|重做下一步操作
+   * @returns {*}  {void}
+   * @memberof DEServiceUtil
+   */
+  cancelUIDomainDChanges(
+    srfsessionid: string,
+    targetState: 'INIT' | 'UNDO' | 'REDO',
+  ): void {
+    // 后续需支持undo和redo后再行调整
+    if (!this.cache.has(srfsessionid) || targetState !== 'INIT') {
+      return;
+    }
+    // 还原界面域变更数据
+    const map = this.cache.get(srfsessionid)!;
+    if (map.size > 0) {
+      const services = Array.from(map.values());
+      for (let i = 0; i < services.length; i++) {
+        services[i].local.cancelChanges(targetState);
+      }
+    }
+    // 还原界面域变更状态
+    const uiDomain = ibiz.uiDomainManager.get(srfsessionid);
+    uiDomain?.dataChangeCompleted();
+  }
 }

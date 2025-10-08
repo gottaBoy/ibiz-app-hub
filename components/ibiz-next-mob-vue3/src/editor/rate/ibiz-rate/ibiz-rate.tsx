@@ -9,6 +9,14 @@ import { toNumber } from 'lodash-es';
 import { RateEditorController } from '../rate-editor.controller';
 import './ibiz-rate.scss';
 
+/**
+ * 移动端评分器
+ * @primary
+ * @description 使用van-rate组件，用于给某些东西进行评分。支持编辑器类型包含：`移动端评分器`
+ * @editorparams {name:maxValue,parameterType:number,defaultvalue:5,description:设置最大评分值，van-rate组件的count属性}
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizRate = defineComponent({
   name: 'IBizRate',
   props: getRateProps<RateEditorController>(),

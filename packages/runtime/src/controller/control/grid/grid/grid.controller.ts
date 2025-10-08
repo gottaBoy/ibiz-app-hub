@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   plus,
   DataTypes,
@@ -15,10 +16,10 @@ import {
   IDEGrid,
   IDEGridColumn,
   IDEDataExport,
+  IControlLogic,
   IDEGridGroupColumn,
   IDEGridFieldColumn,
   IAppDEDataExport,
-  IControlLogic,
 } from '@ibiz/model-core';
 import { clone, isNil } from 'ramda';
 import dayjs from 'dayjs';
@@ -372,6 +373,7 @@ export class GridController<
     this.state.hideHeader = hideHeader;
     this.state.enablePagingBar = enablePagingBar;
     this.state.simpleData = [];
+    this.state.expandRowKeys = [];
   }
 
   /**
@@ -701,6 +703,18 @@ export class GridController<
   }
 
   /**
+   * @description 处理刷新模式
+   * @protected
+   * @param {MDCtrlLoadParams} args
+   * @memberof GridController
+   */
+  protected handleRefreshMode(args: MDCtrlLoadParams): void {
+    super.handleRefreshMode(args);
+    if (args.isInitialLoad || this.refreshMode === 'nocache')
+      this.state.expandRowKeys = [];
+  }
+
+  /**
    * 更新行状态
    * @param rows
    */
@@ -796,8 +810,11 @@ export class GridController<
           item => item.value === key,
         );
         this.state.groups.push({
-          caption: codeListItem?.text || `${key}`,
-          key,
+          caption:
+            codeListItem?.text ||
+            (key as string) ||
+            ibiz.i18n.t('runtime.controller.common.md.unclassified'),
+          key: `${key}`,
           children: value,
         });
       });
@@ -888,12 +905,12 @@ export class GridController<
   }
 
   /**
-   * 新建行
-   *
-   * @author lxm
-   * @date 2022-09-06 21:09:05
+   * @description 新建行
+   * @param {MDCtrlLoadParams} [args]
+   * @returns {*}  {Promise<void>}
+   * @memberof GridController
    */
-  async newRow(): Promise<void> {
+  async newRow(args: MDCtrlLoadParams = {}): Promise<void> {
     if (this.state.isAutoGrid) {
       await newRowDynamic(this);
       return;
@@ -1831,9 +1848,25 @@ export class GridController<
   findRowStateIndex(data: IData): number {
     const isCreate = data.srfuf === Srfuf.CREATE;
     const compareKey = isCreate ? 'tempsrfkey' : 'srfkey';
-    return this.state.rows.findIndex(
-      item => item.data[compareKey] === data[compareKey],
-    );
+    // 识别联合主键场景，unionkeys参数以|分割，同一条数据关联多个版本情况
+    const unionKeys = this.controlParams.unionkeys
+      ? this.controlParams.unionkeys.split('|')
+      : undefined;
+    return this.state.rows.findIndex(item => {
+      if (unionKeys) {
+        let result = item.data[compareKey] === data[compareKey];
+        if (!result) return false;
+        for (let i = 0; i < unionKeys.length; i++) {
+          const tempResult = item.data[unionKeys[i]] === data[unionKeys[i]];
+          if (!tempResult) {
+            return false;
+          }
+          result = result && tempResult;
+        }
+        return result;
+      }
+      return item.data[compareKey] === data[compareKey];
+    });
   }
 
   /**
@@ -2143,12 +2176,12 @@ export class GridController<
   }
 
   /**
-   * 切换行展开
+   * 切换折叠(分组表格使用),其中tag表示操作指定表格分组行标识，若不传则操作当前表格的所有分组展开状态，expand表示是否展开，若不传则以当前分组状态为基准切换
    * @author: zzq
    * @date 2024-08-23 17:12:58
    * @return {*}  {void}
    */
-  changeCollapse(params: IData = {}): void {
+  changeCollapse(params: { tag?: string; expand?: boolean } = {}): void {
     const { tag, expand } = params;
     // 存在分组id则展开/收缩分组
     if (tag) {
@@ -2165,6 +2198,23 @@ export class GridController<
           this._evt.emit('onToggleRowExpansion', { row, expand });
         }
       });
+    }
+  }
+
+  /**
+   * @description 展开改变
+   * @param {IData} item
+   * @param {boolean} expanded
+   * @memberof TreeGridController
+   */
+  expandChange(item: IData, expanded: boolean): void {
+    const index = this.state.expandRowKeys.findIndex(
+      key => key === item.srfkey,
+    );
+    if (index === -1 && expanded) {
+      this.state.expandRowKeys.push(item.srfkey);
+    } else if (index > -1 && !expanded) {
+      this.state.expandRowKeys.splice(index, 1);
     }
   }
 

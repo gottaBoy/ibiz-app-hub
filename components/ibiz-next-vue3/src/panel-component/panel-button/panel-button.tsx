@@ -109,6 +109,7 @@ export const PanelButton = defineComponent({
           <el-button
             type={this.buttonType}
             text={this.isText}
+            data-id={this.modelData.id}
             title={showTitle(this.tooltip)}
             disabled={this.state.disabled}
             loading={this.state.loading}

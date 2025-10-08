@@ -96,9 +96,7 @@ export const MDCtrlContainer = defineComponent({
     };
 
     const renderRemoveBtn = (item: IData, index: number) => {
-      if (!props.enableDelete) {
-        return null;
-      }
+      if (!props.enableDelete) return null;
       if (ibiz.config.form.mdCtrlConfirmBeforeRemove) {
         return (
           <el-popconfirm
@@ -160,9 +158,7 @@ export const MDCtrlContainer = defineComponent({
 
     // 样式2删除按钮
     const renderStyle2RemoveBtn = (item: IData, index: number) => {
-      if (!props.enableDelete) {
-        return null;
-      }
+      if (!props.enableDelete) return null;
       if (ibiz.config.form.mdCtrlConfirmBeforeRemove) {
         return (
           <el-popconfirm
@@ -216,14 +212,14 @@ export const MDCtrlContainer = defineComponent({
 
       return (
         <div class={ns.b('item')}>
-          {props.enableSort && renderDragBtn()}
+          <div class={ns.be('item', 'left')}>
+            {props.enableSort && renderDragBtn()}
+          </div>
           {formComponent}
-          {showActions.value && (
-            <div class={ns.b('item-actions')}>
-              {index === 0 && props.enableCreate && renderAddBtn()}
-              {renderRemoveBtn(item, index)}
-            </div>
-          )}
+          {renderRemoveBtn(item, index)}
+          <div class={ns.be('item', 'right')}>
+            {index === 0 && props.enableCreate && renderAddBtn()}
+          </div>
         </div>
       );
     };
@@ -289,13 +285,13 @@ export const MDCtrlContainer = defineComponent({
     if (this.items?.length) {
       defaultContent = this.enableSort ? (
         <draggable
-          ref='container'
-          class={[this.ns.e('drag')]}
-          chosenClass={this.ns.is('drag-chosen', true)}
-          list={this.dragItems}
           itemKey='id'
+          ref='container'
+          list={this.dragItems}
+          class={[this.ns.e('drag')]}
           handle={`.${this.dragClssName}`}
           onChange={this.handleDragChange}
+          chosenClass={this.ns.is('drag-chosen', true)}
         >
           {{
             item: ({ element, index }: { element: IData; index: number }) =>

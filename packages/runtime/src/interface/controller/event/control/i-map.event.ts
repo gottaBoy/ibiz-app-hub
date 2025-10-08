@@ -99,4 +99,17 @@ export interface IMapEvent extends IMDControlEvent {
     event: EventBase;
     emitArgs: { data: IData };
   };
+
+  /**
+   * @description 下钻
+   * @type {({
+   *     event: EventBase;
+   *     emitArgs: { data: IData };
+   *   })}
+   * @memberof IMapEvent
+   */
+  onDrillDown: {
+    event: EventBase;
+    emitArgs: { data: IData };
+  };
 }

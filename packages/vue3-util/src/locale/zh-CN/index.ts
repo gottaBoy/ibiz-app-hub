@@ -5,6 +5,7 @@ export const zhCn = {
       onFoundCorrespondingPart: '未定义未找到对应部件的适配器',
       noFoundViewModel: '未找到视图模型',
       noSupportLoadingDynamic: '{codeName}无实体,暂不支持加载动态模型',
+      invalidPointCoordinates: '点坐标无效: ({x}, {y})',
     },
     control: {
       unsupportedPanel: '暂未支持的面板项: {id} - {itemType}',

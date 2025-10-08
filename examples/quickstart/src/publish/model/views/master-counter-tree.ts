@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'counter_tree',
   deviewId: '77db7e21ff352c9456d57f80f8cbe5fd',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -18,18 +19,10 @@ export default {
       id: 'engine',
     },
   ],
-  appViewMsgGroupId: 'counter_tree',
   controls: [
     {
       appCounterRefId: 'c08c472f59332aa507b4952a6d4e5c5f',
       detreeNodeRSs: [
-        {
-          childDETreeNodeId: 'node_2',
-          parentDETreeNodeId: 'node',
-          parentValueLevel: 1,
-          searchMode: 3,
-          id: '节点名称（node）-节点名称2（node_2）',
-        },
         {
           childDETreeNodeId: 'node',
           parentDETreeNodeId: 'root',
@@ -37,6 +30,13 @@ export default {
           searchMode: 3,
           name: '默认根节点（ROOT）-节点名称（node）',
           id: '默认根节点（root）-节点名称（node）',
+        },
+        {
+          childDETreeNodeId: 'node_2',
+          parentDETreeNodeId: 'node',
+          parentValueLevel: 1,
+          searchMode: 3,
+          id: '节点名称（node）-节点名称2（node_2）',
         },
         {
           childDETreeNodeId: 'node_1',

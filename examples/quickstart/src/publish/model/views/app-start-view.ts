@@ -1,0 +1,31 @@
+export default {
+  caption: '应用启动视图',
+  codeName: 'app_start_view',
+  controls: [
+    {
+      caption: '应用启动视图',
+      codeName: 'captionbar',
+      controlType: 'CAPTIONBAR',
+      controlParam: {},
+      id: 'captionbar',
+    },
+  ],
+  viewLayoutPanel: {
+    layoutBodyOnly: true,
+    useDefaultLayout: true,
+    layoutPanel: true,
+    codeName: 'layoutpanel',
+    controlStyle: 'APPSTARTVIEW',
+    controlType: 'VIEWLAYOUTPANEL',
+    controlParam: {},
+    id: 'layoutpanel',
+  },
+  title: '应用启动视图',
+  viewStyle: 'DEFAULT',
+  viewType: 'APPSTARTVIEW',
+  showCaptionBar: true,
+  modelId: '9a66fe4a73755ba09ba6ea9112dfa895',
+  modelType: 'PSAPPUTILVIEW',
+  name: 'AppStartView',
+  id: 'web.app_start_view',
+};

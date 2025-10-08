@@ -10,6 +10,12 @@ import { IApiGridState } from './i-api-grid.state';
  */
 export interface IApiTreeGridState extends IApiGridState {
   /**
+   * @description 表格绑定的key，用于强制刷新组件
+   * @type {string}
+   * @memberof IApiTreeGridState
+   */
+  tableKey: string;
+  /**
    * @description 树表格是否显示树形结构(默认为true)
    * @type {boolean}
    * @default true

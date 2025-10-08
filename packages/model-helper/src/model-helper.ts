@@ -206,8 +206,17 @@ export class ModelHelper {
       for (let i = 0; i < subAppRefs.length; i++) {
         const subApp = subAppRefs[i];
         const sourceSubApp = getAllPSSubAppRefs[i];
-        // eslint-disable-next-line no-await-in-loop
-        await this.initSubApp(app, subApp, sourceSubApp);
+        // 控制插件应用访问权限、通过应用样式参数SUBAPPACCESSKEY定义权限标识
+        if (subApp.accessKey) {
+          const mianApp = await ibiz.hub.getApp(ibiz.env.appId);
+          await mianApp.authority.init();
+          const permitted = mianApp.authority.calcByResCode(subApp.accessKey);
+          if (permitted) {
+            await this.initSubApp(app, subApp, sourceSubApp);
+          }
+        } else {
+          await this.initSubApp(app, subApp, sourceSubApp);
+        }
       }
     }
   }

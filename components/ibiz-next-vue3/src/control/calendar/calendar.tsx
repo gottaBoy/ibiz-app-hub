@@ -1,34 +1,34 @@
 /* eslint-disable no-nested-ternary */
 import {
-  hasEmptyPanelRenderer,
+  useUIStore,
+  useNamespace,
   IBizCustomRender,
   useControlController,
-  useNamespace,
-  useUIStore,
+  hasEmptyPanelRenderer,
 } from '@ibiz-template/vue3-util';
 import {
-  defineComponent,
-  PropType,
   ref,
-  resolveComponent,
   VNode,
   watch,
+  PropType,
+  defineComponent,
+  resolveComponent,
 } from 'vue';
 import {
-  IDETBGroupItem,
   IDETBRawItem,
-  IDETBUIActionItem,
-  IDEToolbarItem,
   ILayoutPanel,
   ISysCalendar,
+  IDEToolbarItem,
+  IDETBGroupItem,
   ISysCalendarItem,
+  IDETBUIActionItem,
 } from '@ibiz/model-core';
 import {
+  IButtonState,
+  IControlProvider,
+  ICalendarItemData,
   CalendarController,
   IButtonContainerState,
-  IButtonState,
-  ICalendarItemData,
-  IControlProvider,
 } from '@ibiz-template/runtime';
 import dayjs from 'dayjs';
 import { showTitle } from '@ibiz-template/core';
@@ -954,7 +954,10 @@ export const CalendarControl = defineComponent({
 
     return (
       <iBizControlNavigation controller={this.c}>
-        <iBizControlBase controller={this.c}>
+        <iBizControlBase
+          controller={this.c}
+          class={this.ns.e(this.c.model.calendarStyle?.toLowerCase())}
+        >
           {renderCalendar()}
           {this.c.state.enableNavView && this.c.state.showNavIcon ? (
             !this.c.state.showNavView ? (

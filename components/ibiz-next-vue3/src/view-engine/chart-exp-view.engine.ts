@@ -1,13 +1,12 @@
 import {
   ViewController,
-  ViewEngineBase,
-  IChartExpBarController,
   IChartExpViewEvent,
   IChartExpViewState,
 } from '@ibiz-template/runtime';
 import { IAppDEChartExplorerView } from '@ibiz/model-core';
+import { ExpViewEngine } from './exp-view.engine';
 
-export class ChartExpViewEngine extends ViewEngineBase {
+export class ChartExpViewEngine extends ExpViewEngine {
   /**
    * 图表导航视图控制器
    *
@@ -26,22 +25,12 @@ export class ChartExpViewEngine extends ViewEngineBase {
   >;
 
   /**
-   * 图表导航栏
-   *
+   * @description 导航栏部件名称
    * @readonly
+   * @type {string}
    * @memberof ChartExpViewEngine
    */
-  get chartExpBar(): IChartExpBarController {
-    return this.view.getController('chartexpbar') as IChartExpBarController;
-  }
-
-  async onCreated(): Promise<void> {
-    await super.onCreated();
-    const { childNames } = this.view;
-    childNames.push('chartexpbar');
-    if (!this.view.slotProps.chartexpbar) {
-      this.view.slotProps.chartexpbar = {};
-    }
-    this.view.slotProps.chartexpbar.srfnav = this.view.state.srfnav;
+  get expBarName(): string {
+    return 'chartexpbar';
   }
 }

@@ -10,7 +10,6 @@
       "getPSUIActionGroupDetails": [
         {
           "actionLevel": 200,
-          "buttonStyle": "DEFAULT",
           "caption": "子应用C追加界面行为",
           "detailType": "DEUIACTION",
           "name": "u97fed1b",

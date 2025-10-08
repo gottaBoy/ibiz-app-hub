@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'editor_raw',
   deviewId: '1d3e2d2abce4277ce70df8ac539ea9e0',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -221,6 +222,16 @@ export default {
           appDataEntityId: 'web.master',
           id: 'update',
         },
+        wfstartControlAction: {
+          appDEMethodId: 'wfstart',
+          appDataEntityId: 'web.master',
+          id: 'wfstart',
+        },
+        wfsubmitControlAction: {
+          appDEMethodId: 'wfsubmit',
+          appDataEntityId: 'web.master',
+          id: 'wfsubmit',
+        },
         deformPages: [
           {
             layout: {
@@ -235,23 +246,27 @@ export default {
                 },
                 deformDetails: [
                   {
-                    rawItem: {
-                      caption: '这是直接内容',
-                      halign: 'LEFT',
-                      valign: 'MIDDLE',
-                      wrapMode: 'NOWRAP',
+                    createDV: '这是直接内容',
+                    dataType: 25,
+                    enableCond: 3,
+                    labelPos: 'NONE',
+                    noPrivDisplayMode: 1,
+                    editor: {
                       contentType: 'RAW',
-                      id: 'rawitem1',
+                      editorType: 'RAW',
+                      valueType: 'SIMPLE',
+                      editable: true,
+                      id: 'formitem12',
                     },
-                    codeName: 'rawitem1',
+                    allowEmpty: true,
+                    codeName: 'formitem12',
                     detailStyle: 'DEFAULT',
-                    detailType: 'RAWITEM',
+                    detailType: 'FORMITEM',
                     layoutPos: {
                       colMD: 24,
                       layout: 'TABLE_24COL',
                     },
-                    showCaption: true,
-                    id: 'rawitem1',
+                    id: 'formitem12',
                   },
                 ],
                 caption: '默认样式',
@@ -264,6 +279,141 @@ export default {
                 },
                 showCaption: true,
                 id: 'grouppanel1',
+              },
+              {
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                deformDetails: [
+                  {
+                    createDV:
+                      'https://cdn.ibizlab.cn/plm/img/ibiz%20%EF%BD%9C%20PLM.svg',
+                    dataType: 25,
+                    enableCond: 3,
+                    itemWidth: 160,
+                    labelPos: 'NONE',
+                    noPrivDisplayMode: 1,
+                    editor: {
+                      contentType: 'IMAGE',
+                      editorParams: {
+                        contenttype: 'IMAGE',
+                      },
+                      editorType: 'RAW',
+                      editorWidth: 160,
+                      valueType: 'SIMPLE',
+                      editable: true,
+                      id: 'formitem4',
+                    },
+                    allowEmpty: true,
+                    codeName: 'formitem4',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'FORMITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    id: 'formitem4',
+                  },
+                ],
+                caption: '图片样式',
+                codeName: 'grouppanel6',
+                detailStyle: 'DEFAULT',
+                detailType: 'GROUPPANEL',
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                showCaption: true,
+                id: 'grouppanel6',
+              },
+              {
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                deformDetails: [
+                  {
+                    createDV: '这是一个一级标题',
+                    dataType: 25,
+                    enableCond: 3,
+                    labelPos: 'NONE',
+                    noPrivDisplayMode: 1,
+                    editor: {
+                      contentType: 'HEADING1',
+                      editorParams: {
+                        contenttype: 'HEADING1',
+                      },
+                      editorType: 'RAW',
+                      valueType: 'SIMPLE',
+                      editable: true,
+                      id: 'formitem5',
+                    },
+                    allowEmpty: true,
+                    codeName: 'formitem5',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'FORMITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    id: 'formitem5',
+                  },
+                ],
+                caption: '标题样式',
+                codeName: 'grouppanel7',
+                detailStyle: 'DEFAULT',
+                detailType: 'GROUPPANEL',
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                showCaption: true,
+                id: 'grouppanel7',
+              },
+              {
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                deformDetails: [
+                  {
+                    createDV: '这是一个段落',
+                    dataType: 25,
+                    enableCond: 3,
+                    labelPos: 'NONE',
+                    noPrivDisplayMode: 1,
+                    editor: {
+                      contentType: 'PARAGRAPH',
+                      editorParams: {
+                        contenttype: 'PARAGRAPH',
+                      },
+                      editorType: 'RAW',
+                      valueType: 'SIMPLE',
+                      editable: true,
+                      id: 'formitem6',
+                    },
+                    allowEmpty: true,
+                    codeName: 'formitem6',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'FORMITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    id: 'formitem6',
+                  },
+                ],
+                caption: '段落样式',
+                codeName: 'grouppanel8',
+                detailStyle: 'DEFAULT',
+                detailType: 'GROUPPANEL',
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                showCaption: true,
+                id: 'grouppanel8',
               },
               {
                 layout: {
@@ -317,6 +467,191 @@ export default {
                 },
                 deformDetails: [
                   {
+                    createDV: "{path: ''}",
+                    dataType: 25,
+                    enableCond: 3,
+                    labelPos: 'NONE',
+                    noPrivDisplayMode: 1,
+                    editor: {
+                      contentType: 'VIDEO',
+                      editorParams: {
+                        contenttype: 'VIDEO',
+                      },
+                      editorType: 'RAW',
+                      valueType: 'SIMPLE',
+                      editable: true,
+                      id: 'formitem7',
+                    },
+                    allowEmpty: true,
+                    codeName: 'formitem7',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'FORMITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    id: 'formitem7',
+                  },
+                ],
+                caption: '视频样式',
+                codeName: 'grouppanel9',
+                detailStyle: 'DEFAULT',
+                detailType: 'GROUPPANEL',
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                showCaption: true,
+                id: 'grouppanel9',
+              },
+              {
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                deformDetails: [
+                  {
+                    createDV: "{html:'这是一个分割线'}",
+                    dataType: 25,
+                    enableCond: 3,
+                    labelPos: 'NONE',
+                    noPrivDisplayMode: 1,
+                    editor: {
+                      contentType: 'DIVIDER',
+                      editorParams: {
+                        contenttype: 'DIVIDER',
+                      },
+                      editorType: 'RAW',
+                      valueType: 'SIMPLE',
+                      editable: true,
+                      id: 'formitem8',
+                    },
+                    allowEmpty: true,
+                    codeName: 'formitem8',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'FORMITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    id: 'formitem8',
+                  },
+                ],
+                caption: '分割线样式',
+                codeName: 'grouppanel10',
+                detailStyle: 'DEFAULT',
+                detailType: 'GROUPPANEL',
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                showCaption: true,
+                id: 'grouppanel10',
+              },
+              {
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                deformDetails: [
+                  {
+                    createDV: "{title:'这是一个常规提示'}",
+                    dataType: 25,
+                    enableCond: 3,
+                    labelPos: 'NONE',
+                    noPrivDisplayMode: 1,
+                    editor: {
+                      contentType: 'INFO',
+                      editorParams: {
+                        contenttype: 'INFO',
+                      },
+                      editorType: 'RAW',
+                      valueType: 'SIMPLE',
+                      editable: true,
+                      id: 'formitem9',
+                    },
+                    allowEmpty: true,
+                    codeName: 'formitem9',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'FORMITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    id: 'formitem9',
+                  },
+                  {
+                    createDV: "{title:'这是一个警告提示'}",
+                    dataType: 25,
+                    enableCond: 3,
+                    labelPos: 'NONE',
+                    noPrivDisplayMode: 1,
+                    editor: {
+                      contentType: 'WARNING',
+                      editorParams: {
+                        contenttype: 'WARNING',
+                      },
+                      editorType: 'RAW',
+                      valueType: 'SIMPLE',
+                      editable: true,
+                      id: 'formitem10',
+                    },
+                    allowEmpty: true,
+                    codeName: 'formitem10',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'FORMITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    id: 'formitem10',
+                  },
+                  {
+                    createDV: "{title:'这是一个错误提示'}",
+                    dataType: 25,
+                    enableCond: 3,
+                    labelPos: 'NONE',
+                    noPrivDisplayMode: 1,
+                    editor: {
+                      contentType: 'ERROR',
+                      editorParams: {
+                        contenttype: 'ERROR',
+                      },
+                      editorType: 'RAW',
+                      valueType: 'SIMPLE',
+                      editable: true,
+                      id: 'formitem11',
+                    },
+                    allowEmpty: true,
+                    codeName: 'formitem11',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'FORMITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    id: 'formitem11',
+                  },
+                ],
+                caption: '提示样式',
+                codeName: 'grouppanel11',
+                detailStyle: 'DEFAULT',
+                detailType: 'GROUPPANEL',
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                showCaption: true,
+                id: 'grouppanel11',
+              },
+              {
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                deformDetails: [
+                  {
+                    createDV: '这是MARKDOWN文本内容',
                     dataType: 25,
                     enableCond: 3,
                     labelPos: 'NONE',
@@ -352,6 +687,150 @@ export default {
                 },
                 showCaption: true,
                 id: 'grouppanel3',
+              },
+              {
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                deformDetails: [
+                  {
+                    dataType: 25,
+                    enableCond: 3,
+                    itemHeight: 30,
+                    labelPos: 'NONE',
+                    noPrivDisplayMode: 1,
+                    editor: {
+                      contentType: 'PLACEHOLDER',
+                      editorHeight: 30,
+                      editorParams: {
+                        contenttype: 'PLACEHOLDER',
+                      },
+                      editorType: 'RAW',
+                      valueType: 'SIMPLE',
+                      editable: true,
+                      id: 'formitem3',
+                    },
+                    allowEmpty: true,
+                    codeName: 'formitem3',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'FORMITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    id: 'formitem3',
+                  },
+                  {
+                    rawItem: {
+                      caption:
+                        '说明：占位样式无内容显示，只是占据对应的布局空间',
+                      halign: 'LEFT',
+                      valign: 'MIDDLE',
+                      wrapMode: 'NOWRAP',
+                      contentType: 'RAW',
+                      sysCss: {
+                        cssName: 'description-text',
+                      },
+                      id: 'rawitem3',
+                    },
+                    codeName: 'rawitem3',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'RAWITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    showCaption: true,
+                    id: 'rawitem3',
+                  },
+                ],
+                caption: '占位样式',
+                codeName: 'grouppanel5',
+                detailStyle: 'DEFAULT',
+                detailType: 'GROUPPANEL',
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                showCaption: true,
+                id: 'grouppanel5',
+              },
+              {
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                deformDetails: [
+                  {
+                    createDV:
+                      '[{"id":"text1","name":"文本1"},{"id":"text2","name":"文本2"},{"id":"text3","name":"文本3"}]',
+                    dataType: 25,
+                    enableCond: 3,
+                    labelPos: 'NONE',
+                    noPrivDisplayMode: 1,
+                    editor: {
+                      contentType: 'RAW',
+                      template:
+                        '{{#each this}}{{id}}-{{name}}{{#if @last}}{{else}}、{{/if}}{{/each}}',
+                      editorParams: {
+                        template:
+                          '{{#each this}}{{id}}-{{name}}{{#if @last}}{{else}}、{{/if}}{{/each}}',
+                      },
+                      editorType: 'RAW',
+                      valueType: 'SIMPLE',
+                      editable: true,
+                      id: 'formitem2',
+                    },
+                    updateDV:
+                      '[{"id":"text1","name":"文本1"},{"id":"text2","name":"文本2"},{"id":"text3","name":"文本3"}]',
+                    allowEmpty: true,
+                    codeName: 'formitem2',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'FORMITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    id: 'formitem2',
+                  },
+                  {
+                    rawItem: {
+                      content:
+                        '<p>说明：使用template参数指定动态渲染的内容，内容格式为handlerBars模板内容格式，handlerBars语法格式可查看 <a href="https://www.handlebarsjs.cn" target="_blank">https://www.handlebarsjs.cn</a> 。当前编辑器值为[{"id":"text1","name":"文本1"},{"id":"text2","name":"文本2"},{"id":"text3","name":"文本3"}]，模板内容为{{#each this}}{{id}}-{{name}}{{#if @last}}{{else}}、{{/if}}{{/each}}</p>',
+                      contentType: 'HTML',
+                      sysCss: {
+                        cssName: 'description-text',
+                      },
+                      id: 'rawitem2',
+                    },
+                    codeName: 'rawitem2',
+                    detailStyle: 'DEFAULT',
+                    detailType: 'RAWITEM',
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    showCaption: true,
+                    id: 'rawitem2',
+                  },
+                ],
+                caption: '动态渲染内容',
+                codeName: 'grouppanel4',
+                detailStyle: 'DEFAULT',
+                detailType: 'GROUPPANEL',
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                showCaption: true,
+                id: 'grouppanel4',
               },
               {
                 dataType: 25,

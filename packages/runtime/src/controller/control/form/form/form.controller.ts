@@ -145,6 +145,7 @@ export abstract class FormController<
     this.state.modified = false;
     this.state.formIsDestroyed = false;
     this.state.simpleDataIndex = 0;
+    this.state.mdCtrlFormIndex = 0;
   }
 
   /**
@@ -173,6 +174,24 @@ export abstract class FormController<
    */
   getSimpleDataIndex(): number {
     return this.state.simpleDataIndex;
+  }
+
+  /**
+   * @description 获取多数据部件表单模式下当前表单索引
+   * @returns {*}  {number}
+   * @memberof FormController
+   */
+  getMdCtrlFormIndex(): number {
+    return this.state.mdCtrlFormIndex;
+  }
+
+  /**
+   * @description 设置多数据部件表单模式下当前表单的索引
+   * @param {number} index
+   * @memberof FormController
+   */
+  setMdCtrlFormIndex(index: number): void {
+    this.state.mdCtrlFormIndex = index;
   }
 
   /**
@@ -610,10 +629,11 @@ export abstract class FormController<
   }
 
   /**
-   * @description 切换分组折叠
+   * @description 切换折叠，其中tag表示操作指定分组标识，若不传则操作当前表单的所有分组展开状态，expand表示是否展开，若不传则以当前分组状态为基准切换
+   * @param {{ tag?: string; expand?: boolean }} [params={}]
    * @memberof FormController
    */
-  changeCollapse(params: IData = {}): void {
+  changeCollapse(params: { tag?: string; expand?: boolean } = {}): void {
     const { tag, expand } = params;
     // 存在分组id则展开/收缩分组
     if (tag) {
@@ -641,7 +661,7 @@ export abstract class FormController<
         if ((group as IData).model.detailType === 'GROUPPANEL') {
           (group as FormGroupPanelController).state.collapse = isBoolean(expand)
             ? !expand
-            : (group as FormGroupPanelController).state.collapse;
+            : !(group as FormGroupPanelController).state.collapse;
         }
       });
     }

@@ -7,6 +7,7 @@ import { IApiShortCutUtil } from './i-api-short-cut-util';
 import { IApiFileUtil } from './i-api-file-util';
 import { IApiHtml2canvasUtil } from './i-api-html2canvas-util';
 import { IApiVoiceUtil } from './i-api-voice-util';
+import { IApiWaterMarkUtil } from './i-api-water-mark-util';
 
 /**
  * @description 全局工具接口
@@ -76,6 +77,13 @@ export interface IApiGlobalUtil {
    * @memberof IApiGlobalUtil
    */
   readonly voice: IApiVoiceUtil;
+
+  /**
+   * @description 水印工具类
+   * @type {IApiWaterMarkUtil}
+   * @memberof IApiGlobalUtil
+   */
+  readonly watermark: IApiWaterMarkUtil;
 
   /**
    * @description 设置浏览器标题

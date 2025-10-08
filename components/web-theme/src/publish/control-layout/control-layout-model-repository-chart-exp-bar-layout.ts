@@ -127,6 +127,7 @@ export default {
           "id": "control_header_right"
         }
       ],
+      "predefinedType": "EXP_HEADER",
       "layout": {
         "align": "space-between",
         "dir": "row",

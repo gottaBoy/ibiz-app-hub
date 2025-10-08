@@ -1,18 +1,18 @@
 import {
   IControl,
-  IControlLogic,
-  ICtrlMsgItem,
   IMDControl,
+  ICtrlMsgItem,
+  IControlLogic,
   IViewLayoutPanel,
 } from '@ibiz/model-core';
 import {
   HttpError,
-  IBizContext,
+  StringUtil,
   IBizParams,
-  IPortalMessage,
+  IBizContext,
   NoticeError,
   RuntimeError,
-  StringUtil,
+  IPortalMessage,
 } from '@ibiz-template/core';
 import { clone, isNil } from 'ramda';
 import { notNilEmpty } from 'qx-util';
@@ -20,18 +20,18 @@ import { BaseController } from '..';
 import { CTX } from '../../ctx';
 import {
   EventBase,
-  IControlController,
   IControlEvent,
   IControlState,
   IViewController,
+  IControlController,
   IViewLayoutPanelController,
 } from '../../../interface/controller';
 import { ControllerEvent } from '../../utils';
 import {
-  IApiMaskOption,
-  IDataAbilityParams,
   IProvider,
+  IApiMaskOption,
   IUILogicParams,
+  IDataAbilityParams,
 } from '../../../interface';
 import { ControlLogicScheduler } from '../../../logic-scheduler';
 import { getControlProvider } from '../../../register';
@@ -220,6 +220,7 @@ export class ControlController<
     this.state.isLoading = false;
     this.state.disabled = false;
     this.state.maskOption = { mode: 'BLANK' };
+    this.state.zIndex = undefined;
   }
 
   protected async onCreated(): Promise<void> {

@@ -1,57 +1,57 @@
 /* eslint-disable no-nested-ternary */
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import {
-  computed,
-  defineComponent,
-  nextTick,
-  onMounted,
-  onUnmounted,
-  PropType,
-  Ref,
   ref,
-  resolveComponent,
+  Ref,
   VNode,
   watch,
+  computed,
+  nextTick,
+  PropType,
+  onMounted,
+  onUnmounted,
+  defineComponent,
+  resolveComponent,
 } from 'vue';
 import { MenuItem } from '@imengyu/vue3-context-menu';
 import { createUUID } from 'qx-util';
 import { cloneDeep, debounce } from 'lodash-es';
 import {
-  IDETBGroupItem,
-  IDETBRawItem,
-  IDETBUIActionItem,
-  IDEToolbarItem,
+  IPanel,
   IDETree,
   IDETreeNode,
-  IPanel,
+  IDETBRawItem,
+  IDEToolbarItem,
+  IDETBGroupItem,
+  IDETBUIActionItem,
 } from '@ibiz/model-core';
 import {
-  IButtonContainerState,
   IButtonState,
-  IControlProvider,
   ITreeNodeData,
-  TreeController,
   AppDataEntity,
+  TreeController,
+  IControlProvider,
   PanelItemEventName,
+  IButtonContainerState,
 } from '@ibiz-template/runtime';
-import './tree.scss';
 import { RuntimeError } from '@ibiz-template/core';
 import { ElTree } from 'element-plus';
 import {
-  AllowDropType,
   NodeDropType,
+  AllowDropType,
 } from 'element-plus/es/components/tree/src/tree.type';
 import { isNil } from 'ramda';
 import {
   findNodeData,
-  formatNodeDropType,
-  useAppTreeBase,
   useElTreeUtil,
+  useAppTreeBase,
   findChildItems,
-  getNewNodeControlPanel,
-  getNodeControlPanel,
   useLoadMoreUtil,
+  formatNodeDropType,
+  getNodeControlPanel,
+  getNewNodeControlPanel,
 } from './el-tree-util';
+import './tree.scss';
 
 export const TreeControl = defineComponent({
   name: 'IBizTreeControl',
@@ -473,30 +473,6 @@ export const TreeControl = defineComponent({
       });
     };
 
-    // 值变更优化，加载成功后的值变更需要等渲染完成之后执行，其他情况不用
-    let selectionWait = false;
-    c.evt.on('onLoadSuccess', () => {
-      selectionWait = true;
-      setTimeout(() => {
-        selectionWait = false;
-      }, 200);
-    });
-
-    // 选中数据回显
-    c.evt.on('onSelectionChange', async () => {
-      if (selectionWait) {
-        await nextTick();
-      }
-      if (c.state.singleSelect) {
-        treeRef.value!.setCurrentKey(c.state.selectedData[0]?._id || undefined);
-      } else {
-        // el-tree，会把没选中的反选，且不触发check事件
-        treeRef.value!.setCheckedKeys(
-          c.state.selectedData.map(item => item._id),
-        );
-      }
-    });
-
     /**
      * 多选时选中节点变更
      */
@@ -532,10 +508,8 @@ export const TreeControl = defineComponent({
         editCurrentNodeText();
       }
 
-      // 多选的时候设置节点的当前节点
-      if (!c.state.singleSelect) {
-        treeRef.value?.setCurrentKey(nodeData._id);
-      }
+      // 设置节点的当前节点
+      treeRef.value?.setCurrentKey(nodeData._id);
 
       // 导航树节点不配置导航视图的时候，只切换展开状态
       if (c.state.navigational) {
@@ -546,7 +520,7 @@ export const TreeControl = defineComponent({
         }
       }
       if (props.isSimple) {
-        treeRef.value!.setCurrentKey(data?._id || undefined);
+        treeRef.value!.setCurrentKey(data?._id);
       } else {
         c.onTreeNodeClick(nodeData, evt);
       }

@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'searchform_auto',
   deviewId: 'c49db5b9cbd1e6e7f03d9e4906d22ec3',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -67,6 +68,7 @@ export default {
       id: 'opendata',
     },
   ],
+  appViewMsgGroupId: 'searchform_auto_search',
   appViewRefs: [
     {
       realOpenMode: 'POPUPMODAL',
@@ -103,6 +105,7 @@ export default {
               appDEFieldId: 'name',
               editor: {
                 editorType: 'TEXTBOX',
+                placeHolder: '请输入名称',
                 valueType: 'SIMPLE',
                 editable: true,
                 id: 'n_name_like',
@@ -116,8 +119,8 @@ export default {
               detailStyle: 'DEFAULT',
               detailType: 'FORMITEM',
               layoutPos: {
-                colLG: 12,
-                colMD: 12,
+                colLG: 8,
+                colMD: 8,
                 layout: 'TABLE_24COL',
               },
               showCaption: true,
@@ -132,28 +135,22 @@ export default {
               appDEFieldId: 'type',
               editor: {
                 singleSelect: true,
-                handlerType: 'PickupText',
-                enableAC: true,
-                forceSelection: true,
-                showTrigger: true,
-                editorParams: {
-                  AC: 'TRUE',
-                  TRIGGER: 'TRUE',
-                  PICKUPVIEW: 'FALSE',
-                },
-                editorType: 'PICKEREX_TRIGGER',
+                appCodeListId: 'web.mock__cl_categories',
+                editorType: 'DROPDOWNLIST',
+                placeHolder: '请选择类型',
                 valueType: 'SIMPLE',
                 editable: true,
                 id: 'n_type_eq',
               },
               allowEmpty: true,
+              needCodeListConfig: true,
               caption: '类型(=)',
               codeName: 'n_type_eq',
               detailStyle: 'DEFAULT',
               detailType: 'FORMITEM',
               layoutPos: {
-                colLG: 12,
-                colMD: 12,
+                colLG: 8,
+                colMD: 8,
                 layout: 'TABLE_24COL',
               },
               showCaption: true,
@@ -203,6 +200,7 @@ export default {
       columnEnableLink: 2,
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
+      orderValueAppDEFieldId: 'px',
       degridColumns: [
         {
           clconvertMode: 'NONE',
@@ -251,10 +249,34 @@ export default {
           id: 'region_id',
         },
         {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
           appDEFieldId: 'name',
           valueType: 'SIMPLE',
           dataType: 25,
           id: 'srfmajortext',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'wf_status',
         },
       ],
       degridEditItems: [
@@ -276,6 +298,7 @@ export default {
       pagingMode: 1,
       pagingSize: 10,
       sortMode: 'REMOTE',
+      hasWFDataItems: true,
       enableCustomized: true,
       enablePagingBar: true,
       navViewPos: 'NONE',

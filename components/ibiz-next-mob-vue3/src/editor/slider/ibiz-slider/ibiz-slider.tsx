@@ -9,6 +9,21 @@ import { toNumber } from 'lodash-es';
 import { SliderEditorController } from '../slider-editor.controller';
 import './ibiz-slider.scss';
 
+/**
+ * 移动端滑动输入条
+ * @primary
+ * @description 使用van-slider组件，用于在给定的范围内选择一个值的场景。支持编辑器类型包含：`移动端滑动输入条`
+ * @editorparams {name:stepValue,parameterType:number,defaultvalue:1,description:步长，van-slider组件的step属性}
+ * @editorparams {name:maxValue,parameterType:number,defaultvalue:100,description:最大值，van-slider组件的max属性}
+ * @editorparams {name:minValue,parameterType:number,defaultvalue:0,description:最小值，van-slider组件的min属性}
+ * @editorparams {name:range,parameterType:boolean,defaultvalue:false,description:是否开启双滑块模式，van-slider组件的range属性}
+ * @editorparams {name:type,parameterType:string,defaultvalue:line,description:进度条类型，可选值为line（线形）或circle（环形）}
+ * @editorparams {name:textItem,parameterType:string,description:环形时显示的文本属性}
+ * @editorparams {name:showText,parameterType:boolean,defaultvalue:false,description:环形时是否显示文本}
+ * @editorparams {name:format,parameterType:string,defaultvalue:0%,description:环形时显示文本的格式化规则}
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizSlider = defineComponent({
   name: 'IBizSlider',
   props: getSliderProps<SliderEditorController>(),

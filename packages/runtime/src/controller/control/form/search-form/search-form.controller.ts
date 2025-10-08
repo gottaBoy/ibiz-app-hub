@@ -130,6 +130,7 @@ export class SearchFormController
     }
     this.state.data = res.data;
     this.state.isLoaded = true;
+    await this.evt.emit('onLoadDraftSuccess', undefined);
     this.formStateNotify(FormNotifyState.DRAFT);
     this.actionNotification('GETDRAFTSUCCESS');
     return this.data;

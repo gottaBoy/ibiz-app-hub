@@ -22,10 +22,8 @@ export const AttachmentColumn = defineComponent({
   },
   setup(props) {
     const ns = useNamespace('attachment-column');
-    const { downloadUrl, files, onDownload } = useFilesParse(
-      props,
-      props.controller,
-    );
+    const { getDownloadUrl, files, onDownload, getDownloadTicketParams } =
+      useFilesParse(props, props.controller);
     const loading = ref(true);
 
     const onLoad = (): void => {
@@ -59,7 +57,20 @@ export const AttachmentColumn = defineComponent({
 
     /** 处理PDF预览 */
     const handlePDFPreview = async (file: IData): Promise<void> => {
-      const url = file.url || downloadUrl.value.replace('%fileId%', file.id);
+      const downloadUrl = getDownloadUrl(props.data, file);
+      let url = file.url || downloadUrl.replace('%fileId%', file.id);
+      if (ibiz.config.common.enableDownloadTicket) {
+        const downloadTicket = await ibiz.util.file.getDownloadTicket(
+          props.controller.context,
+          props.controller.params,
+          props.data,
+          { fileId: file.id },
+          getDownloadTicketParams(),
+        );
+        if (downloadTicket && downloadTicket.ticket) {
+          url = downloadUrl.replace('%fileId%', downloadTicket.ticket);
+        }
+      }
       // 适配 url 拉起的文件没有 Content-Type 的情况。没有 Content-Type , link.click()会直接调用下载逻辑
       const response = await ibiz.net.request(url, {
         method: 'get',

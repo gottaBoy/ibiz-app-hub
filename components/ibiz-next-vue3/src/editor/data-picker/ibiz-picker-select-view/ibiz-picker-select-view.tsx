@@ -16,7 +16,7 @@ import {
   getDataPickerProps,
 } from '@ibiz-template/vue3-util';
 import { clone } from 'ramda';
-import { IModalData, Modal, ViewMode } from '@ibiz-template/runtime';
+import { EventBase, IModalData, Modal, ViewMode } from '@ibiz-template/runtime';
 import { PickerEditorController } from '../picker-editor.controller';
 import './ibiz-picker-select-view.scss';
 
@@ -73,10 +73,15 @@ export const IBizPickerSelectView = defineComponent({
     const pickViewWidth = ref('auto');
 
     // 视图上下文
-    const context: Ref<IContext> = ref(c.context);
+    const context: Ref<IContext> = ref(c.context.clone());
 
     // 视图参数
-    const params: Ref<IData> = ref(c.params);
+    const params: Ref<IData> = ref({ ...c.params });
+
+    // 克隆的视图参数
+    const cloneParams = computed(() => {
+      return { ...params.value };
+    });
 
     watch(
       () => props.data,
@@ -84,8 +89,12 @@ export const IBizPickerSelectView = defineComponent({
         // 转换视图上下文、视图参数
         const { context: tempContext, params: tempParams } =
           c.handlePublicParams(newVal, c.context, c.params);
-        Object.assign(context.value, tempContext);
-        Object.assign(params.value, tempParams);
+        const newContext = Object.assign(c.context.clone(), tempContext);
+        const newParams = { ...c.params, ...tempParams };
+        if (JSON.stringify(context.value) !== JSON.stringify(newContext))
+          context.value = newContext;
+        if (JSON.stringify(params.value) !== JSON.stringify(newParams))
+          params.value = newParams;
       },
       { immediate: true, deep: true },
     );
@@ -157,15 +166,12 @@ export const IBizPickerSelectView = defineComponent({
           } else {
             queryValue.value = (newVal as string) || '';
           }
-          if (!props.data || !c.valueItem || !props.data[c.valueItem]) {
-            if (!isDesignPreview) {
-              ibiz.log.error('值项异常');
-            }
+          if (!c.valueItem && !isDesignPreview) {
+            ibiz.log.error('值项异常');
           } else {
             selectedData.value = [
               { srfkey: props.data[c.valueItem], srfmajortext: props.value },
             ];
-            params.value.selecteddata = selectedData.value;
           }
         } else {
           const selectItems: IData[] = [];
@@ -191,11 +197,7 @@ export const IBizPickerSelectView = defineComponent({
                 }
               });
               selectItems.push(...(newVal as IData[]));
-            } else if (
-              !props.data ||
-              !c.valueItem ||
-              !props.data[c.valueItem]
-            ) {
+            } else if (!c.valueItem) {
               ibiz.log.error('值项异常');
             } else {
               const tempValue = props.data[c.valueItem].split(',');
@@ -429,10 +431,13 @@ export const IBizPickerSelectView = defineComponent({
     };
 
     // 绑定事件
-    const onSelectionChange = (event: IModalData) => {
+    const onSelectionChange = (
+      event: EventBase | IModalData,
+      isClose: boolean = false,
+    ) => {
       if (event.data) {
         onViewDataChange(event.data);
-        if (singleSelect.value && editorRef.value) {
+        if (isClose && editorRef.value) {
           editorRef.value.handleClose();
         }
       }
@@ -442,7 +447,7 @@ export const IBizPickerSelectView = defineComponent({
       mode: ViewMode.DRAWER,
       viewUsage: 2,
       dismiss: (_data: IModalData) => {
-        onSelectionChange(_data);
+        onSelectionChange(_data, true);
       },
     });
 
@@ -507,38 +512,39 @@ export const IBizPickerSelectView = defineComponent({
     };
 
     return {
-      ns,
       c,
-      singleSelect,
-      keySet,
+      ns,
       items,
-      queryValue,
-      visible,
-      pickViewWidth,
-      context,
-      params,
-      editorRef,
-      onInputChange,
-      triggerMenu,
-      onViewDataChange,
-      onClear,
-      openLinkView,
-      onSelectChange,
-      remoteMethod,
-      onSelectionChange,
       modal,
-      onFocus,
-      onBlur,
-      handleKeyUp,
+      keySet,
+      params,
+      visible,
+      context,
+      showView,
+      editorRef,
       valueText,
       isEditable,
-      setEditable,
-      showFormDefaultContent,
-      onVisibleChange,
-      showView,
+      queryValue,
+      cloneParams,
       selectedData,
-      handleDropDownKeyDown,
+      singleSelect,
+      pickViewWidth,
+      showFormDefaultContent,
       arrow,
+      onBlur,
+      onClear,
+      onFocus,
+      triggerMenu,
+      setEditable,
+      handleKeyUp,
+      openLinkView,
+      remoteMethod,
+      onInputChange,
+      onSelectChange,
+      onVisibleChange,
+      onViewDataChange,
+      onSelectionChange,
+      handleDropDownKeyDown,
     };
   },
   render() {
@@ -627,16 +633,14 @@ export const IBizPickerSelectView = defineComponent({
             );
           },
           dropdown: () => {
-            if (!this.showView) {
-              return;
-            }
-
+            if (!this.showView) return;
             const viewShell = resolveComponent('IBizViewShell');
             return (
               this.c.pickupView &&
               h(viewShell, {
+                modal: this.modal,
                 context: this.context,
-                params: this.params,
+                params: this.cloneParams,
                 viewId: this.c.pickupView.id,
                 style: {
                   height: `${
@@ -650,8 +654,8 @@ export const IBizPickerSelectView = defineComponent({
                   singleSelect: this.singleSelect,
                   selectedData: this.selectedData,
                 },
-                onSelectionChange: this.onSelectionChange,
-                modal: this.modal,
+                onSelectionChange: (event: EventBase) =>
+                  this.onSelectionChange(event, this.singleSelect),
               })
             );
           },

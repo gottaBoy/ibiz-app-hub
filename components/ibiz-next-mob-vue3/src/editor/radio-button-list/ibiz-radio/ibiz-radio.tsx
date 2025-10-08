@@ -8,6 +8,13 @@ import {
 import './ibiz-radio.scss';
 import { RadioButtonListEditorController } from '../radio-button-list.controller';
 
+/**
+ * 移动端单选项列表
+ * @primary
+ * @description 使用van-radio-group组件和van-radio组件，用于在一组备选项中进行单选的场景。支持编辑器类型包含：`移动端单选项列表`
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizRadio = defineComponent({
   name: 'IBizRadio',
   props: getRadioProps<RadioButtonListEditorController>(),

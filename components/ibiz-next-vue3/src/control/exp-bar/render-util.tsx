@@ -67,15 +67,15 @@ export function useExpBarRender(
     );
     if (modelData) {
       // 由于搜索栏部件参数无法配置，合并导航栏部件参数到搜索栏部件参数中
-      if (modelData.controlParam) {
-        const { SEARCHPHSEPARATOR } = c.model.controlParam?.ctrlParams || {};
-        if (SEARCHPHSEPARATOR) {
-          modelData.controlParam.ctrlParams = {
-            ...(modelData.controlParam.ctrlParams || {}),
-            SEARCHPHSEPARATOR,
-          };
-        }
-      }
+      // if (modelData.controlParam) {
+      //   const { SEARCHPHSEPARATOR } = c.model.controlParam?.ctrlParams || {};
+      //   if (SEARCHPHSEPARATOR) {
+      //     modelData.controlParam.ctrlParams = {
+      //       ...(modelData.controlParam.ctrlParams || {}),
+      //       SEARCHPHSEPARATOR,
+      //     };
+      //   }
+      // }
       const ctrlProps = {
         context: c.context,
         params: c.params,

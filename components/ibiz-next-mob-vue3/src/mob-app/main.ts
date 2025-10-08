@@ -48,6 +48,7 @@ export async function runApp(plugins?: Plugin[]): Promise<void> {
   installCore();
   installRuntime();
 
+  AppHooks.appResorceInited.call(ibiz.hub);
   // 插件对象初始化放置在创建 app 之前
   ibiz.plugin = new PluginFactory();
   ibiz.util.error.register(new UnauthorizedHandler());

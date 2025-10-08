@@ -12,10 +12,8 @@ import { IPanelRawItem, IRawItemParam, ISysImage } from '@ibiz/model-core';
  */
 export class PanelCarouselController extends PanelItemController<IPanelRawItem> {
   /**
-   * 图片集
-   *
-   * @author zk
-   * @date 2023-12-08 01:12:38
+   * @description 图片集
+   * @exposedoc
    * @memberof PanelCarouselController
    */
   public images: ISysImage[] = [];

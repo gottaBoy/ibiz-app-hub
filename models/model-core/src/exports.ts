@@ -674,6 +674,7 @@ export { IDELogicLinkSingleCond } from './dataentity/logic/idelogic-link-single-
 export { IDELogicNode } from './dataentity/logic/idelogic-node';
 export { IDELogicNodeParam } from './dataentity/logic/idelogic-node-param';
 export { IDELogicParam } from './dataentity/logic/idelogic-param';
+export { IDEMemoLogic } from './dataentity/logic/idememo-logic';
 export { IDEPrepareParamLogic } from './dataentity/logic/ideprepare-param-logic';
 export { IDERawCodeLogic } from './dataentity/logic/ideraw-code-logic';
 export { IDERenewParamLogic } from './dataentity/logic/iderenew-param-logic';
@@ -702,6 +703,7 @@ export { IDEUILogicLinkSingleCond } from './dataentity/logic/ideuilogic-link-sin
 export { IDEUILogicNode } from './dataentity/logic/ideuilogic-node';
 export { IDEUILogicNodeParam } from './dataentity/logic/ideuilogic-node-param';
 export { IDEUILogicParam } from './dataentity/logic/ideuilogic-param';
+export { IDEUIMemoLogic } from './dataentity/logic/ideuimemo-logic';
 export { IDEUIMsgBoxLogic } from './dataentity/logic/ideuimsg-box-logic';
 export { IDEUIPFPluginLogic } from './dataentity/logic/ideuipfplugin-logic';
 export { IDEUIRawCodeLogic } from './dataentity/logic/ideuiraw-code-logic';

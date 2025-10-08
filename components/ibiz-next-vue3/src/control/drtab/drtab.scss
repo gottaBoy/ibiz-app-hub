@@ -60,6 +60,10 @@ $control-drtab: (
   .el-tabs__nav-next {
     line-height: var(--el-tabs-header-height);
   }
+
+  .#{bem(badge)} {
+    text-align: center;
+  }
 }
 
 @include b(control-drtab-label) {
@@ -153,33 +157,33 @@ $control-drtab: (
 
 @include b(control-drtab-dropdown-list) {
   .#{bem(badge)} {
-    width: getCssVar(width, icon-medium);
-    height: getCssVar(width, icon-medium);
     display: flex;
     align-items: center;
     justify-content: center;
+    width: getCssVar(width, icon-medium);
+    height: getCssVar(width, icon-medium);
     font-size: getCssVar(font-size, small);
   }
   @include e(trigger) {
     display: flex;
-    cursor: pointer;
     align-items: center;
     font-size: getCssVar(font-size, header-5);
+    cursor: pointer;
 
     .caption {
       position: relative;
       padding: getCssVar(spacing, tight);
       .#{bem(badge)} {
+        position: absolute;
         top: 0;
         right: -6px;
-        position: absolute;
       }
     }
   }
 
   @include e(popper) {
-    max-width: 220px;
     min-width: 150px;
+    max-width: 220px;
 
     @include m(content) {
       max-height: 26vh;
@@ -195,23 +199,24 @@ $control-drtab: (
       }
 
       .#{bem(badge)} {
-        width: getCssVar(width, icon-medium);
-        height: getCssVar(width, icon-medium);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: getCssVar(font-size, small);
+        width: getCssVar(width, icon-medium);
+        height: getCssVar(width, icon-medium);
         margin-right: getCssVar(spacing, tight);
+        font-size: getCssVar(font-size, small);
       }
 
       ion-icon {
-        color: getCssVar(color, primary);
         font-size: getCssVar(width, icon-medium);
+        color: getCssVar(color, primary);
       }
       @include when(active) {
         background-color: getCssVar(color, fill-0) !important;
       }
     }
+
     &.el-popper.el-dropdown__popper .el-scrollbar .el-dropdown__list {
       background-color: transparent;
 

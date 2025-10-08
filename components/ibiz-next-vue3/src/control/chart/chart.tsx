@@ -240,6 +240,7 @@ const ChartControl = defineComponent({
           border
           style={{ width: '100%' }}
           max-height={maxHeight.value}
+          span-method={c.spanMethod.bind(c)}
           header-row-class-name={ns.e('grid-header')}
         >
           {c.state.gridHeaders.map((column: IData) => {

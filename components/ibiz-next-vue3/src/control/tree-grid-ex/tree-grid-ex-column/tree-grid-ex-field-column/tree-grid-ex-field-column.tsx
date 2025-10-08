@@ -24,6 +24,8 @@ export const TreeGridExFieldColumn = defineComponent({
   setup(props) {
     const ns = useNamespace('tree-grid-ex-field-column');
 
+    const zIndex = props.controller.treeGrid.state.zIndex;
+
     /** 行数据对应属性列的值 */
     const fieldValue = computed(() => {
       // 非实体节点行的第一列显示文本值
@@ -125,14 +127,15 @@ export const TreeGridExFieldColumn = defineComponent({
 
     return {
       ns,
-      nodeColumn,
-      fieldValue,
+      zIndex,
+      tooltip,
       showText,
       clickable,
-      tooltip,
-      onInfoTextChange,
+      nodeColumn,
+      fieldValue,
       onTextClick,
       onActionClick,
+      onInfoTextChange,
     };
   },
   render() {
@@ -175,6 +178,7 @@ export const TreeGridExFieldColumn = defineComponent({
     } else if (this.row.columnActionsStates[this.controller.name]) {
       actions = (
         <iBizActionToolbar
+          zIndex={this.zIndex}
           class={this.ns.e('toolbar')}
           action-details={
             this.nodeColumn?.nodeColumn!.deuiactionGroup!.uiactionGroupDetails

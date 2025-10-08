@@ -1,11 +1,11 @@
 <template>
-  <i-biz-special-view
+  <i-biz-view
     :context="props.context"
     :params="props.params"
     :modal="props.modal"
     :model-data="model"
   >
-  </i-biz-special-view>
+  </i-biz-view>
 </template>
 <script setup lang="ts">
 import { IModal } from '@ibiz-template/runtime';

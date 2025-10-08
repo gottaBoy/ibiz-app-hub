@@ -1,13 +1,16 @@
 {
   "name": "@ibiz-template/next-mob",
   "private": true,
+  "type": "module",
   "version": "0.0.50",
   "description": "mob-runner",
   "author": "iBiz",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "dev:weixin": "VITE_APP_BUILD_ENV=weixin vite",
+    "build": "node build/set-version.js && vite build",
+    "build:weixin": "node build/set-version.js && VITE_APP_BUILD_ENV=weixin vite build",
     "preview": "pnpm run build && vite preview",
     "compute-pkg": "ibiz-temp compute-pkg -m /root/workspace/Booking/booking-core/src/main/resources/model/com/ibizlab/booking --app bookingserver",
     "download-pkg": "ibiz-temp download-pkg",
@@ -44,7 +47,7 @@
   "devDependencies": {
     "@commitlint/cli": "^18.4.1",
     "@commitlint/config-conventional": "^18.4.0",
-    "@ibiz-template/cli": "^0.3.13",
+    "@ibiz-template/cli": "^0.3.15",
     "@types/jest": "^29.5.8",
     "@types/lodash-es": "^4.17.11",
     "@types/node": "^20.9.0",

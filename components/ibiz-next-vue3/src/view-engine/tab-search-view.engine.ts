@@ -174,8 +174,10 @@ export class TabSearchViewEngine extends TabExpViewEngine {
     }
 
     // 直接赋值 caption
-    (this.searchBar as IParams).placeHolder = caption || '';
-    this.searchBar.state.quickSearchPlaceHolder = caption || '';
+    if (this.searchBar) {
+      (this.searchBar as IParams).placeHolder = caption || '';
+      this.searchBar.state.quickSearchPlaceHolder = caption || '';
+    }
   }
 
   async call(

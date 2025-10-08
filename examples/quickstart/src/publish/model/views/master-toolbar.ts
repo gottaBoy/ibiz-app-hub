@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'toolbar',
   deviewId: 'c1c8ec236e5b72f1736f9ee1db9c8d34',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -28,9 +29,29 @@ export default {
           id: 'base',
         },
         {
+          caption: '分组',
+          appViewId: 'web.master_toolbar_group',
+          id: 'group',
+        },
+        {
           caption: '界面样式及图标',
           appViewId: 'web.master_toolbar_style',
           id: 'css',
+        },
+        {
+          caption: '动态逻辑',
+          appViewId: 'web.master_toolbar_dynamic_logic',
+          id: 'logic',
+        },
+        {
+          caption: '计数器',
+          appViewId: 'web.master_toolbar_counter',
+          id: 'counter',
+        },
+        {
+          caption: '计数器禁用',
+          appViewId: 'web.master_toolbar_counter_disabled',
+          id: 'disable_counter',
         },
       ],
       dataRelationTag: 'toolbar_DR',

@@ -1,0 +1,77 @@
+export default {
+  deviewCodeName: 'Pickup_cardpickupview',
+  deviewId: '3b8e4c36b6b1fc6d0146f50f8c1536ff',
+  appWFId: 'workflow',
+  accUserMode: 2,
+  capLanguageRes: {
+    lanResTag: 'DE.LNAME.MASTER',
+  },
+  caption: '卡片数据选择视图',
+  codeName: 'master_pickup_cardpickupview',
+  appDataEntityId: 'web.master',
+  appViewEngines: [
+    {
+      engineCat: 'VIEW',
+      engineType: 'PickupView',
+      id: 'engine',
+    },
+  ],
+  appViewLogics: [
+    {
+      eventNames: 'onSelectionChange',
+      logicTrigger: 'CTRLEVENT',
+      logicType: 'SCRIPT',
+      ctrlName: 'pickupviewpanel',
+      scriptCode:
+        "const tips = '选择视图面板的选中数据变更事件触发';\r\nibiz.message.info(tips);\r\nconsole.log(tips, `选中数据:`, data);",
+      builtinLogic: true,
+      id: 'logic',
+    },
+  ],
+  appViewMsgGroupId: 'pickup_eventandcall',
+  controls: [
+    {
+      embeddedAppDEViewId: 'web.master_pickup_cardpickupcontrolview',
+      codeName: 'pickup_cardpickupview_pickupviewpanel',
+      controlType: 'PICKUPVIEWPANEL',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'pickupviewpanel',
+      },
+      name: 'pickupviewpanel',
+      id: 'pickup_cardpickupview_pickupviewpanel',
+    },
+    {
+      capLanguageRes: {
+        lanResTag: 'DE.LNAME.MASTER',
+      },
+      caption: '卡片数据选择视图',
+      codeName: 'pickup_cardpickupview_captionbar',
+      controlType: 'CAPTIONBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {},
+      name: 'captionbar',
+      id: 'pickup_cardpickupview_captionbar',
+    },
+  ],
+  viewLayoutPanel: {
+    layoutBodyOnly: true,
+    useDefaultLayout: true,
+    layoutPanel: true,
+    codeName: 'layoutpanel',
+    controlStyle: 'APPDEPICKUPVIEW',
+    controlType: 'VIEWLAYOUTPANEL',
+    appDataEntityId: 'web.master',
+    controlParam: {},
+    id: 'layoutpanel',
+  },
+  title: '选择视图面板_卡片数据选择视图',
+  viewStyle: 'DEFAULT',
+  viewType: 'DEPICKUPVIEW',
+  enableDP: true,
+  showCaptionBar: true,
+  modelId: '5c1c688559dca36791889e89dadf98c2',
+  modelType: 'PSAPPDEVIEW',
+  name: 'MASTERPickup_cardpickupview',
+  id: 'web.master_pickup_cardpickupview',
+};

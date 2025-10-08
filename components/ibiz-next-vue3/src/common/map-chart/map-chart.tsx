@@ -2,7 +2,7 @@
 import { defineComponent, onMounted, PropType, computed } from 'vue';
 import { isNil, mergeDeepWithKey } from 'ramda';
 import { useNamespace } from '@ibiz-template/vue3-util';
-import { IMapData } from '@ibiz-template/runtime';
+import { IMapData, MapController } from '@ibiz-template/runtime';
 import { defaultOpts, MapOptions } from './map-chart.util';
 import { useMapManager } from './map-manager';
 import './map-chart.scss';
@@ -19,6 +19,10 @@ export const IBizMapChart = defineComponent({
     options: {
       type: Object as PropType<Partial<MapOptions>>,
       default: () => ({}),
+    },
+    controller: {
+      type: MapController,
+      required: true,
     },
   },
   setup(props, { emit }) {
@@ -45,6 +49,7 @@ export const IBizMapChart = defineComponent({
 
     const { chartRef, historyNames, changeMap, getCityName, goBack } =
       useMapManager(
+        props.controller,
         options,
         mapName => {
           const {
@@ -181,9 +186,6 @@ export const IBizMapChart = defineComponent({
         },
         (name, e) => {
           switch (name) {
-            case 'mapChange':
-              emit('mapChange', e);
-              break;
             case 'pointClick':
               emit('pointClick', findData(e._id, 'point'));
               break;

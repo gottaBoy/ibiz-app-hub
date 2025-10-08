@@ -12,6 +12,9 @@ import { IApiDataViewControlController } from './i-api-data-view-control.control
  * @extends {IApiDataViewControlController<T, S>}
  * @ctrlparams {"name":"draggablemode","title":"拖拽模式","defaultvalue": "3","parameterType":"0 | 1 | 2 | 3","description":"该参数控制看板的拖拽能力，可选值为：0：无拖拽， 1：仅同分组，2：仅同泳道，3：全部","effectPlatform":"web"}
  * @ctrlparams {"name":"lanedescription","title":"泳道描述","defaultvalue": "","parameterType":"string","description":"该参数用于显示泳道的描述信息，默认为实体逻辑名称","effectPlatform":"web"}
+ * @ctrlparams {"name":"mdctrlrefreshmode","title":"刷新模式","defaultvalue":"'cache'","parameterType":"'nocache' | 'cache'","description":"多数据部件刷新模式，当值为 'cache'，部件刷新时保留选中数据；当值为 'nocache'，部件刷新时清空选中数据","effectPlatform":"web"}
+ * @ctrlparams {"name":"enablefullscreen","title":"是否启用全屏功能","defaultvalue": "true","parameterType":"boolean","description":"该参数用于设置看板是否启用全屏功能","effectPlatform":"web"}
+ * @ctrlparams {"name":"enablegrouphidden","title":"是否启用隐藏分组功能","defaultvalue": "false","parameterType":"boolean","description":"该参数用于设置看板是否启用隐藏分组功能","effectPlatform":"web"}
  * @template T
  * @template S
  */

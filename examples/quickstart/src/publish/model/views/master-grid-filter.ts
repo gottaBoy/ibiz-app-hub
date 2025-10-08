@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'grid_filter',
   deviewId: '37fe1eb096884f40d393fed43b6ec88f',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -90,6 +91,7 @@ export default {
       columnEnableLink: 2,
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
+      orderValueAppDEFieldId: 'px',
       degridColumns: [
         {
           clconvertMode: 'NONE',
@@ -97,6 +99,7 @@ export default {
           excelCaption: '名称',
           filterEditor: {
             editorType: 'TEXTBOX',
+            placeHolder: '请输入名称',
             valueType: 'SIMPLE',
             editable: true,
             id: 'n_name_like',
@@ -123,6 +126,7 @@ export default {
           excelCaption: '数量',
           filterEditor: {
             editorType: 'TEXTBOX',
+            placeHolder: '请输入数量',
             valueType: 'SIMPLE',
             editable: true,
             id: 'n_quantity_lt',
@@ -148,6 +152,7 @@ export default {
             singleSelect: true,
             appCodeListId: 'web.mock__cl_status',
             editorType: 'DROPDOWNLIST',
+            placeHolder: '请选择状态',
             valueType: 'SIMPLE',
             editable: true,
             id: 'n_status_eq',
@@ -205,10 +210,34 @@ export default {
           id: 'region_id',
         },
         {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
           appDEFieldId: 'name',
           valueType: 'SIMPLE',
           dataType: 25,
           id: 'srfmajortext',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'wf_status',
         },
       ],
       degridEditItems: [
@@ -230,6 +259,7 @@ export default {
       pagingMode: 1,
       pagingSize: 10,
       sortMode: 'REMOTE',
+      hasWFDataItems: true,
       enableColFilter: true,
       enableCustomized: true,
       enablePagingBar: true,

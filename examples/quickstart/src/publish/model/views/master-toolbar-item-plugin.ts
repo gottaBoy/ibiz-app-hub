@@ -1,10 +1,10 @@
 export default {
   enableDirtyChecking: true,
-  showDataInfoBar: true,
   xdataControlName: 'form',
   loadDefault: true,
   deviewCodeName: 'toolbar_item_plugin',
   deviewId: 'fa34487d31e955690074eaf7346cf2af',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -61,7 +61,7 @@ export default {
         id: 'loaddraftfrom',
       },
       getDraftControlAction: {
-        appDEMethodId: 'de_action_plugin',
+        appDEMethodId: 'get_draft',
         appDataEntityId: 'web.master',
         id: 'loaddraft',
       },
@@ -79,6 +79,16 @@ export default {
         appDEMethodId: 'update',
         appDataEntityId: 'web.master',
         id: 'update',
+      },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
       },
       deformPages: [
         {
@@ -219,16 +229,6 @@ export default {
       id: 'web.master.main11',
     },
     {
-      codeName: 'toolbar_item_plugin_datainfobar',
-      controlType: 'DATAINFOBAR',
-      appDataEntityId: 'web.master',
-      controlParam: {
-        id: 'datainfobar',
-      },
-      name: 'datainfobar',
-      id: 'toolbar_item_plugin_datainfobar',
-    },
-    {
       capLanguageRes: {
         lanResTag: 'DE.LNAME.MASTER',
       },
@@ -256,7 +256,7 @@ export default {
   viewStyle: 'DEFAULT',
   viewType: 'DEEDITVIEW',
   enableDP: true,
-  showCaptionBar: false,
+  showCaptionBar: true,
   modelId: '78f85a946f4bf1c5749b784b951dddf2',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERR9ToolbarItemPluginId',

@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Chart_regional',
   deviewId: '896c8beb20d6176205f9f6c0516409f5',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -17,7 +18,6 @@ export default {
       id: 'engine',
     },
   ],
-  appViewMsgGroupId: 'chart_regional',
   controls: [
     {
       searchButtonStyle: 'DEFAULT',
@@ -63,12 +63,12 @@ export default {
             chartGridYAxis0Id: '0',
             chartCoordinateSystemId: '0',
             type: 'grid',
-            name: '[line_0]直角坐标系[0]',
+            name: '[area_1]直角坐标系[0]',
             id: '0',
           },
           echartsType: 'cartesian2d',
           type: 'XY',
-          name: '[line_0]直角坐标系[0]',
+          name: '[area_1]直角坐标系[0]',
           id: '0',
         },
       ],
@@ -82,29 +82,25 @@ export default {
       },
       dechartSerieses: [
         {
-          catalogField: 'DATE',
+          caption: '区域',
+          catalogField: 'TYPE',
           echartsType: 'line',
           chartCoordinateSystemId: '0',
           chartDataSetId: '0',
           chartSeriesEncode: {
             chartXAxisId: '0',
             chartYAxisId: '0',
-            x: ['DATE'],
+            x: ['TYPE'],
             y: ['QUANTITY'],
             type: 'XY',
             name: '坐标系编码',
             id: '0',
           },
           seriesLayoutBy: 'column',
-          seriesType: 'line',
+          seriesType: 'area',
           valueField: 'QUANTITY',
           enableChartDataSet: true,
-          userParam: {
-            'EC.label': '{"show":0}',
-            'EC.lineStyle': '{"color":"#AAD5FD"}',
-            'EC.areaStyle': '"#AAD5FD"',
-          },
-          id: 'line_0',
+          id: 'area_1',
         },
       ],
       dechartTitle: {
@@ -125,7 +121,7 @@ export default {
           chartDataSetFields: [
             {
               groupField: true,
-              name: 'DATE',
+              name: 'TYPE',
               id: '0',
             },
             {
@@ -134,7 +130,7 @@ export default {
               id: '1',
             },
           ],
-          name: 'line_0-DEFAULT',
+          name: 'area_1-DEFAULT',
           id: '0',
         },
       ],
@@ -144,7 +140,7 @@ export default {
           chartGridYAxis0Id: '0',
           chartCoordinateSystemId: '0',
           type: 'grid',
-          name: '[line_0]直角坐标系[0]',
+          name: '[area_1]直角坐标系[0]',
           id: '0',
         },
       ],
@@ -179,7 +175,7 @@ export default {
       showBusyIndicator: true,
       codeName: 'mastermaster_chart_regional_chart',
       controlType: 'CHART',
-      height: 300,
+      height: 400,
       logicName: 'Chart9',
       appDataEntityId: 'web.master',
       controlParam: {
@@ -193,6 +189,15 @@ export default {
       },
       name: 'chart',
       id: 'web.master.mastermaster_chart_regional_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

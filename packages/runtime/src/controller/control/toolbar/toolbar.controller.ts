@@ -1,20 +1,20 @@
 import { recursiveIterate, RuntimeError } from '@ibiz-template/core';
 import {
   IDEToolbar,
-  IDEToolbarItem,
-  IDETBUIActionItem,
   IControlLogic,
+  IDEToolbarItem,
   IDETBGroupItem,
+  IDETBUIActionItem,
   IUIActionGroupDetail,
 } from '@ibiz/model-core';
 import { ViewCallTag, ViewMode } from '../../../constant';
 import {
   EventBase,
+  IExtraButton,
+  IButtonState,
   IToolbarState,
   IToolbarEvent,
   IToolbarController,
-  IExtraButton,
-  IButtonState,
   IToolbarItemProvider,
 } from '../../../interface';
 import { getUIActionById } from '../../../model';
@@ -23,9 +23,9 @@ import { UIActionUtil } from '../../../ui-action';
 import { ControlController } from '../../common';
 import {
   ControllerEvent,
-  ButtonContainerState,
-  UIActionButtonState,
   formatSeparator,
+  UIActionButtonState,
+  ButtonContainerState,
 } from '../../utils';
 import { getToolbarItemProvider } from '../../../register';
 
@@ -74,6 +74,21 @@ export class ToolbarController<
    * @type {AppCounter}
    */
   counter?: AppCounter;
+
+  /**
+   * @description 数据部件控制器
+   * @readonly
+   * @protected
+   * @type {(ControlController | undefined)}
+   * @memberof ToolbarController
+   */
+  protected get xdataControl(): ControlController | undefined {
+    const { xdataControlName } = this.model;
+    if (xdataControlName)
+      return this.view.getController(
+        xdataControlName.toLowerCase(),
+      ) as ControlController;
+  }
 
   protected initState(): void {
     super.initState();
@@ -148,16 +163,10 @@ export class ToolbarController<
    * @memberof ToolbarController
    */
   async getToolbarEventArgs(): Promise<Omit<EventBase, 'eventName'>> {
-    const { xdataControlName } = this.model;
     const result = this.getEventArgs();
     let data: IData[] = [];
-    if (xdataControlName) {
-      data =
-        (
-          this.view.getController(
-            xdataControlName.toLowerCase(),
-          ) as ControlController
-        )?.getData() || [];
+    if (this.xdataControl) {
+      data = this.xdataControl?.getData() || [];
     } else {
       data = (await this.ctx.view.call(ViewCallTag.GET_DATA)) || [];
     }
@@ -296,7 +305,33 @@ export class ToolbarController<
   protected async onMounted(): Promise<void> {
     await super.onMounted();
     this.initCounter();
+    this.listenerXdataControlEvent();
     this.counter?.onChange(this.onCounterChange.bind(this));
+  }
+
+  /**
+   * @description 监听数据部件事件
+   * @protected
+   * @memberof ToolbarController
+   */
+  protected listenerXdataControlEvent(): void {
+    const { name } = this.model;
+    // 排除默认工具栏（默认工具栏和分页默认传送工具栏交由视图自行处理）
+    if (!this.xdataControl || !name || ['toolbar', 'tabtoolbar'].includes(name))
+      return;
+    const listener = (event: EventBase): void => {
+      const data = event.data[0];
+      const model = event.ctrl?.model?.appDataEntityId;
+      this.calcButtonState(data, model, event);
+    };
+    // 加载成功
+    (this.xdataControl as IData).evt.on('onLoadSuccess', listener);
+    // 加载草稿
+    (this.xdataControl as IData).evt.on('onLoadDraftSuccess', listener);
+    // 数据变更
+    (this.xdataControl as IData).evt.on('onDataChange', listener);
+    // 选中数据改变
+    (this.xdataControl as IData).evt.on('onSelectionChange', listener);
   }
 
   /**

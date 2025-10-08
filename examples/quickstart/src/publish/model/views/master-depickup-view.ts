@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'depickup_view',
   deviewId: '845dd006a50432b1c3fc3f0303124c85',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -60,7 +61,7 @@ export default {
         id: 'loaddraft',
       },
       getControlAction: {
-        appDEMethodId: 'get_sample_date',
+        appDEMethodId: 'get_sample_data',
         appDataEntityId: 'web.master',
         id: 'load',
       },
@@ -73,6 +74,16 @@ export default {
         appDEMethodId: 'update',
         appDataEntityId: 'web.master',
         id: 'update',
+      },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
       },
       deformPages: [
         {
@@ -177,9 +188,6 @@ export default {
                   editor: {
                     enablePickupView: true,
                     pickupAppViewId: 'web.region_m_pickup_view',
-                    appDEACModeId: 'default',
-                    appDEDataSetId: 'fetch_default',
-                    appDataEntityId: 'web.region',
                     forceSelection: true,
                     showTrigger: true,
                     editorParams: {

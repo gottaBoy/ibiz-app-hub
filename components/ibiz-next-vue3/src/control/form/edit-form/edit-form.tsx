@@ -42,9 +42,12 @@ export const EditFormControl: ReturnType<typeof defineComponent> =
       loadDefault: { type: Boolean, default: true },
       /**
        * @description 简单模式下传入的数据索引
-       * @default false
        */
       simpleDataIndex: { type: Number, required: false },
+      /**
+       * @description 多数据部件表单模式下传入的表单索引
+       */
+      mdCtrlFormIndex: { type: Number, required: false },
     },
     setup(props) {
       const c = useControlController(
@@ -85,6 +88,11 @@ export const EditFormControl: ReturnType<typeof defineComponent> =
           },
           { deep: true },
         );
+      }
+
+      // 多数据部件表单模式下传入的数据索引直接设置到state中
+      if (props.mdCtrlFormIndex || props.mdCtrlFormIndex === 0) {
+        c.setMdCtrlFormIndex(props.mdCtrlFormIndex);
       }
 
       c.evt.on('onCreated', () => {

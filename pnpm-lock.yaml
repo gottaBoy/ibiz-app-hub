@@ -247,8 +247,8 @@ importers:
         specifier: ^18.4.0
         version: 18.6.3
       '@ibiz-template/cli':
-        specifier: ^0.3.13
-        version: 0.3.20(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8)
+        specifier: ^0.3.15
+        version: 0.3.28(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8)
       '@types/jest':
         specifier: ^29.5.8
         version: 29.5.14
@@ -497,8 +497,8 @@ importers:
         specifier: ^18.4.3
         version: 18.6.3
       '@ibiz-template/cli':
-        specifier: ^0.3.21
-        version: 0.3.21(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8)
+        specifier: ^0.3.23
+        version: 0.3.28(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8)
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -857,6 +857,9 @@ importers:
       snabbdom:
         specifier: ^3.3.1
         version: 3.6.2
+      sortablejs:
+        specifier: ^1.15.6
+        version: 1.15.6
       vue:
         specifier: 3.3.8
         version: 3.3.8(typescript@5.3.3)
@@ -880,8 +883,8 @@ importers:
         specifier: ^18.5.0
         version: 18.6.3
       '@ibiz-template/cli':
-        specifier: 0.3.10
-        version: 0.3.10(@types/node@20.11.5)(postcss@8.5.6)(typescript@5.3.3)(vue@3.3.8)
+        specifier: ^0.3.23
+        version: 0.3.28(@types/node@20.11.5)(postcss@8.5.6)(vue@3.3.8)
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -897,6 +900,9 @@ importers:
       '@types/ramda':
         specifier: 0.29.10
         version: 0.29.10
+      '@types/sortablejs':
+        specifier: ^1.15.8
+        version: 1.15.8
       '@vitejs/plugin-vue':
         specifier: 5.0.4
         version: 5.0.4(vite@5.0.12)(vue@3.3.8)
@@ -1175,9 +1181,6 @@ importers:
       '@ibiz-template-plugin/data-view':
         specifier: workspace:*
         version: link:../../plugins/ibiz-data-view
-      '@ibiz-template/cli':
-        specifier: ^0.3.13
-        version: 0.3.20(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8)
       '@ibiz-template/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -1284,9 +1287,15 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^17.8.0
         version: 17.8.1
+      '@ibiz-template/cli':
+        specifier: ^0.3.28
+        version: 0.3.28(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8)
+      '@ibiz-template/full-code-generator':
+        specifier: ^0.0.5
+        version: 0.0.5(@ibizlab/model@0.2.15)
       '@ibizlab/cli':
-        specifier: ^0.2.26
-        version: 0.2.26(@ibizlab/model@0.2.15)
+        specifier: ^0.2.29
+        version: 0.2.29(@ibizlab/model@0.2.15)
       '@types/lodash-es':
         specifier: ^4.17.10
         version: 4.17.12
@@ -1422,9 +1431,6 @@ importers:
       '@ibiz-template-plugin/data-view':
         specifier: workspace:*
         version: link:../../plugins/ibiz-data-view
-      '@ibiz-template/cli':
-        specifier: ^0.3.13
-        version: 0.3.20(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8)
       '@ibiz-template/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -1531,9 +1537,15 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^17.8.0
         version: 17.8.1
+      '@ibiz-template/cli':
+        specifier: ^0.3.28
+        version: 0.3.28(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8)
+      '@ibiz-template/full-code-generator':
+        specifier: ^0.0.5
+        version: 0.0.5(@ibizlab/model@0.2.15)
       '@ibizlab/cli':
-        specifier: ^0.2.26
-        version: 0.2.26(@ibizlab/model@0.2.15)
+        specifier: ^0.2.29
+        version: 0.2.29(@ibizlab/model@0.2.15)
       '@types/lodash-es':
         specifier: ^4.17.10
         version: 4.17.12
@@ -1778,9 +1790,12 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^17.8.0
         version: 17.8.1
+      '@ibiz-template/full-code-generator':
+        specifier: ^0.0.5
+        version: 0.0.5(@ibizlab/model@0.2.15)
       '@ibizlab/cli':
-        specifier: ^0.2.26
-        version: 0.2.26(@ibizlab/model@0.2.15)
+        specifier: ^0.2.29
+        version: 0.2.29(@ibizlab/model@0.2.15)
       '@types/lodash-es':
         specifier: ^4.17.10
         version: 4.17.12
@@ -1898,6 +1913,2814 @@ importers:
       vue-tsc:
         specifier: ^1.8.19
         version: 1.8.27(typescript@5.2.2)
+
+  extensions/ac-item-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/control-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/counter-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/de-action-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/editor-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/entity-field-grid:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/form-user-control-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/global-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/grid-column-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/panel-item-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/portlet-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/replace-default-demo:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/theme-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz-template/web-theme':
+        specifier: workspace:*
+        version: link:../../components/web-theme
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/toolbar-item-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/ui-action-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/ui-logic-node-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
+
+  extensions/view-plugin:
+    devDependencies:
+      '@floating-ui/dom':
+        specifier: ^1.5.3
+        version: 1.7.1
+      '@ibiz-template/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ibiz-template/model-helper':
+        specifier: workspace:*
+        version: link:../../packages/model-helper
+      '@ibiz-template/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ibiz-template/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@ibiz-template/vue3-util':
+        specifier: workspace:*
+        version: link:../../packages/vue3-util
+      '@ibiz/model-core':
+        specifier: workspace:*
+        version: link:../../models/model-core
+      '@qx-chitanda/vite-plugin-lib-legacy':
+        specifier: ^4.1.1
+        version: 4.1.1(terser@5.43.1)(vite@4.5.14)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/ramda':
+        specifier: ^0.29.6
+        version: 0.29.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.11.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.11.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.2.2)
+      '@vitejs/plugin-vue':
+        specifier: ^4.4.1
+        version: 4.6.2(vite@4.5.14)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx':
+        specifier: ^3.0.2
+        version: 3.1.0(vite@4.5.14)(vue@3.3.8)
+      async-validator:
+        specifier: ^4.2.5
+        version: 4.2.5
+      axios:
+        specifier: ^1.6.2
+        version: 1.10.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.13
+      element-plus:
+        specifier: ^2.4.2
+        version: 2.4.4(vue@3.3.8)
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.1
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: ^5.0.1
+        version: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue:
+        specifier: ^9.18.1
+        version: 9.33.0(eslint@8.57.1)
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      lerna:
+        specifier: ^7.4.2
+        version: 7.4.2
+      lint-staged:
+        specifier: ^15.1.0
+        version: 15.5.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      prettier:
+        specifier: ^3.1.0
+        version: 3.6.1
+      qs:
+        specifier: ^6.11.2
+        version: 6.14.0
+      qx-util:
+        specifier: ^0.4.8
+        version: 0.4.8
+      ramda:
+        specifier: ^0.29.1
+        version: 0.29.1
+      rollup-plugin-visualizer:
+        specifier: ^5.9.2
+        version: 5.14.0(rollup@4.44.1)
+      sass:
+        specifier: 1.69.5
+        version: 1.69.5
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.2.2)
+      stylelint-config-prettier:
+        specifier: ^9.0.5
+        version: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order:
+        specifier: ^4.3.0
+        version: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard:
+        specifier: ^34.0.0
+        version: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss:
+        specifier: ^11.1.0
+        version: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss:
+        specifier: 5.3.1
+        version: 5.3.1(stylelint@15.11.0)
+      terser:
+        specifier: ^5.24.0
+        version: 5.43.1
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.6.3
+        version: 3.9.1(@types/node@20.19.1)(rollup@4.44.1)(typescript@5.2.2)(vite@4.5.14)
+      vite-plugin-eslint:
+        specifier: ^1.8.1
+        version: 1.8.1(eslint@8.57.1)(vite@4.5.14)
+      vite-plugin-libcss:
+        specifier: ^1.1.1
+        version: 1.1.1(vite@4.5.14)
+      vue:
+        specifier: ^3.3.8
+        version: 3.3.8(typescript@5.2.2)
+      vue-eslint-parser:
+        specifier: ^9.3.2
+        version: 9.4.3(eslint@8.57.1)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.8)
+      vue-tsc:
+        specifier: 1.8.22
+        version: 1.8.22(typescript@5.2.2)
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.3.8)
 
   models/model-core:
     devDependencies:
@@ -4607,7 +7430,6 @@ packages:
   /@ctrl/tinycolor@3.6.1:
     resolution: {integrity: sha512-SITSV6aIXsuVNV3f3O0f2n/cgyEDWoSqtZMYiAmcsYHydcKrOz3gUxB/iXd/Qf08+IZX4KpgNbvUdMBmWz+kcA==}
     engines: {node: '>=10'}
-    dev: false
 
   /@element-plus/icons-vue@2.3.1(vue@3.3.8):
     resolution: {integrity: sha512-XxVUZv48RZAd87ucGS48jPf6pKu0yV5UCg9f4FFwtrYxXOwWuVJo6wOvSLKEoMQKjv8GsX/mhP6UsC1lRwbUWg==}
@@ -4615,7 +7437,6 @@ packages:
       vue: ^3.2.0
     dependencies:
       vue: 3.3.8(typescript@5.3.3)
-    dev: false
 
   /@esbuild/aix-ppc64@0.19.12:
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -5445,18 +8266,15 @@ packages:
     resolution: {integrity: sha512-azI0DrjMMfIug/ExbBaeDVJXcY0a7EPvPjb2xAJPa4HeimBX+Z18HK8QQR3jb6356SnDDdxx+hinMLcJEDdOjw==}
     dependencies:
       '@floating-ui/utils': 0.2.9
-    dev: false
 
   /@floating-ui/dom@1.7.1:
     resolution: {integrity: sha512-cwsmW/zyw5ltYTUeeYJ60CnQuPqmGwuGVhG9w0PRaRKkAyi38BT5CKrpIbb+jtahSwUl04cWzSx9ZOIxeS6RsQ==}
     dependencies:
       '@floating-ui/core': 1.7.1
       '@floating-ui/utils': 0.2.9
-    dev: false
 
   /@floating-ui/utils@0.2.9:
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
-    dev: false
 
   /@gar/promisify@1.1.3:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
@@ -5550,77 +8368,6 @@ packages:
       - sugarss
       - supports-color
       - terser
-      - typescript
-      - vue
-    dev: true
-
-  /@ibiz-template/cli-core@0.3.10(@types/node@20.11.5)(postcss@8.5.6)(typescript@5.3.3)(vue@3.3.8):
-    resolution: {integrity: sha512-Pv1ZK6R/9u3t3u3XHblMrdE2eAurFSdhJLqJOgXIICONHsxj7R304W9sefIEXCY4rt1/RFr6LChn5vOm3ewHog==}
-    dependencies:
-      '@babel/core': 7.27.4
-      '@babel/preset-env': 7.27.2(@babel/core@7.27.4)
-      '@rollup/plugin-babel': 6.0.4(@babel/core@7.27.4)(rollup@4.44.1)
-      '@rollup/plugin-commonjs': 25.0.8(rollup@4.44.1)
-      '@rollup/plugin-eslint': 9.0.5(rollup@4.44.1)
-      '@rollup/plugin-json': 6.1.0(rollup@4.44.1)
-      '@rollup/plugin-node-resolve': 15.3.1(rollup@4.44.1)
-      '@rollup/plugin-terser': 0.4.4(rollup@4.44.1)
-      '@rollup/pluginutils': 5.2.0(rollup@4.44.1)
-      '@typescript-eslint/eslint-plugin': 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.3.3)
-      '@typescript-eslint/parser': 6.21.0(eslint@8.57.1)(typescript@5.3.3)
-      '@vitejs/plugin-vue': 5.0.4(vite@5.3.5)(vue@3.3.8)
-      '@vitejs/plugin-vue-jsx': 3.1.0(vite@5.3.5)(vue@3.3.8)
-      chalk: 4.1.2
-      chokidar: 3.6.0
-      consola: 3.4.2
-      core-js: 3.43.0
-      cp-file: 8.0.1
-      esbuild: 0.19.12
-      eslint: 8.57.1
-      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
-      eslint-config-prettier: 9.1.0(eslint@8.57.1)
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
-      eslint-plugin-prettier: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
-      eslint-plugin-unused-imports: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
-      eslint-plugin-vue: 9.33.0(eslint@8.57.1)
-      fast-glob: 3.3.3
-      fs-extra: 11.3.0
-      gulp: 4.0.2
-      gulp-autoprefixer: 8.0.0(gulp@4.0.2)
-      gulp-clean-css: 4.3.0
-      gulp-sass: 5.1.0
-      ora: 5.4.1
-      pacote: 17.0.7
-      prettier: 3.6.1
-      ramda: 0.29.1
-      rimraf: 5.0.10
-      rollup: 4.44.1
-      rollup-plugin-esbuild: 6.2.1(esbuild@0.19.12)(rollup@4.44.1)
-      rollup-plugin-scss: 4.0.1
-      sass: 1.89.2
-      stylelint: 15.11.0(typescript@5.3.3)
-      stylelint-config-ali: 1.1.0(postcss@8.5.6)(stylelint@15.11.0)
-      stylelint-config-prettier: 9.0.5(stylelint@15.11.0)
-      stylelint-config-recess-order: 4.4.0(stylelint@15.11.0)
-      stylelint-config-standard: 34.0.0(stylelint@15.11.0)
-      stylelint-config-standard-scss: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
-      stylelint-scss: 5.3.1(stylelint@15.11.0)
-      tar: 6.2.1
-      terser: 5.43.1
-      vite: 5.3.5(@types/node@20.11.5)(sass@1.89.2)(terser@5.43.1)
-    transitivePeerDependencies:
-      - '@types/babel__core'
-      - '@types/eslint'
-      - '@types/node'
-      - bluebird
-      - eslint-import-resolver-typescript
-      - eslint-import-resolver-webpack
-      - less
-      - lightningcss
-      - postcss
-      - stylus
-      - sugarss
-      - supports-color
       - typescript
       - vue
     dev: true
@@ -5798,7 +8545,7 @@ packages:
       rollup-plugin-esbuild: 6.2.1(esbuild@0.19.12)(rollup@4.44.1)
       rollup-plugin-scss: 4.0.1
       sass: 1.89.2
-      stylelint: 15.11.0(typescript@5.4.5)
+      stylelint: 15.11.0(typescript@5.8.3)
       stylelint-config-ali: 1.1.0(postcss@8.5.6)(stylelint@15.11.0)
       stylelint-config-prettier: 9.0.5(stylelint@15.11.0)
       stylelint-config-recess-order: 4.4.0(stylelint@15.11.0)
@@ -5825,8 +8572,80 @@ packages:
       - vue
     dev: true
 
-  /@ibiz-template/cli-core@0.3.21(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8):
-    resolution: {integrity: sha512-i+4j/jQ13Vb1PQbR+aWzRO2Q6gnM0E4boh9bZ3PawjIgJR8JB5XrHL5iY2WM9EF58MSr4AloeRbuVUFWZljIRg==}
+  /@ibiz-template/cli-core@0.3.28(@types/node@20.11.5)(postcss@8.5.6)(vue@3.3.8):
+    resolution: {integrity: sha512-PQfsf4DJih4CODV1gAz/8AlbEvGHu38fQ5/0jMHj/8AhEjTnSluBsP7ZYnB1b0TRTX5hOLbSg+9dcgy307Hmdw==}
+    dependencies:
+      '@babel/core': 7.27.4
+      '@babel/preset-env': 7.27.2(@babel/core@7.27.4)
+      '@rollup/plugin-babel': 6.0.4(@babel/core@7.27.4)(rollup@4.44.1)
+      '@rollup/plugin-commonjs': 25.0.8(rollup@4.44.1)
+      '@rollup/plugin-eslint': 9.0.5(rollup@4.44.1)
+      '@rollup/plugin-json': 6.1.0(rollup@4.44.1)
+      '@rollup/plugin-node-resolve': 15.3.1(rollup@4.44.1)
+      '@rollup/plugin-terser': 0.4.4(rollup@4.44.1)
+      '@rollup/pluginutils': 5.2.0(rollup@4.44.1)
+      '@typescript-eslint/eslint-plugin': 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.8.3)
+      '@typescript-eslint/parser': 6.21.0(eslint@8.57.1)(typescript@5.3.3)
+      '@vitejs/plugin-vue': 5.0.4(vite@5.3.5)(vue@3.3.8)
+      '@vitejs/plugin-vue-jsx': 3.1.0(vite@5.3.5)(vue@3.3.8)
+      chalk: 4.1.2
+      chokidar: 3.6.0
+      consola: 3.4.2
+      core-js: 3.43.0
+      cp-file: 8.0.1
+      esbuild: 0.19.12
+      eslint: 8.57.1
+      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-config-prettier: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)
+      eslint-plugin-prettier: 5.5.1(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.6.1)
+      eslint-plugin-unused-imports: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      eslint-plugin-vue: 9.33.0(eslint@8.57.1)
+      fast-glob: 3.3.3
+      fs-extra: 11.3.0
+      gulp: 4.0.2
+      gulp-autoprefixer: 8.0.0(gulp@4.0.2)
+      gulp-clean-css: 4.3.0
+      gulp-sass: 5.1.0
+      handlebars: 4.7.8
+      ora: 5.4.1
+      pacote: 17.0.7
+      prettier: 3.6.1
+      ramda: 0.29.1
+      rimraf: 5.0.10
+      rollup: 4.44.1
+      rollup-plugin-esbuild: 6.2.1(esbuild@0.19.12)(rollup@4.44.1)
+      rollup-plugin-scss: 4.0.1
+      sass: 1.89.2
+      stylelint: 15.11.0(typescript@5.8.3)
+      stylelint-config-ali: 1.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-config-prettier: 9.0.5(stylelint@15.11.0)
+      stylelint-config-recess-order: 4.4.0(stylelint@15.11.0)
+      stylelint-config-standard: 34.0.0(stylelint@15.11.0)
+      stylelint-config-standard-scss: 11.1.0(postcss@8.5.6)(stylelint@15.11.0)
+      stylelint-scss: 5.3.1(stylelint@15.11.0)
+      tar: 6.2.1
+      terser: 5.43.1
+      typescript: 5.8.3
+      vite: 5.3.5(@types/node@20.11.5)(sass@1.89.2)(terser@5.43.1)
+    transitivePeerDependencies:
+      - '@types/babel__core'
+      - '@types/eslint'
+      - '@types/node'
+      - bluebird
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - less
+      - lightningcss
+      - postcss
+      - stylus
+      - sugarss
+      - supports-color
+      - vue
+    dev: true
+
+  /@ibiz-template/cli-core@0.3.28(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8):
+    resolution: {integrity: sha512-PQfsf4DJih4CODV1gAz/8AlbEvGHu38fQ5/0jMHj/8AhEjTnSluBsP7ZYnB1b0TRTX5hOLbSg+9dcgy307Hmdw==}
     dependencies:
       '@babel/core': 7.27.4
       '@babel/preset-env': 7.27.2(@babel/core@7.27.4)
@@ -5860,6 +8679,7 @@ packages:
       gulp-autoprefixer: 8.0.0(gulp@4.0.2)
       gulp-clean-css: 4.3.0
       gulp-sass: 5.1.0
+      handlebars: 4.7.8
       ora: 5.4.1
       pacote: 17.0.7
       prettier: 3.6.1
@@ -5916,31 +8736,6 @@ packages:
       - sugarss
       - supports-color
       - terser
-      - typescript
-      - vue
-    dev: true
-
-  /@ibiz-template/cli@0.3.10(@types/node@20.11.5)(postcss@8.5.6)(typescript@5.3.3)(vue@3.3.8):
-    resolution: {integrity: sha512-OZlb9/wZ6uHH6K1BtHG/0xoUqTLZUzBx1iXamy1louZfyO0tH1pslzXANIEFWZ8SaoPAZv+VU7Bctyb7bNMydg==}
-    hasBin: true
-    dependencies:
-      '@ibiz-template/cli-core': 0.3.10(@types/node@20.11.5)(postcss@8.5.6)(typescript@5.3.3)(vue@3.3.8)
-      commander: 11.1.0
-      consola: 3.4.2
-      fs-extra: 11.3.0
-    transitivePeerDependencies:
-      - '@types/babel__core'
-      - '@types/eslint'
-      - '@types/node'
-      - bluebird
-      - eslint-import-resolver-typescript
-      - eslint-import-resolver-webpack
-      - less
-      - lightningcss
-      - postcss
-      - stylus
-      - sugarss
-      - supports-color
       - typescript
       - vue
     dev: true
@@ -6020,12 +8815,12 @@ packages:
       - vue
     dev: true
 
-  /@ibiz-template/cli@0.3.21(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8):
-    resolution: {integrity: sha512-j9XDMrKGqDPxZZ4UK9QinZqzXsxZclaE2fCKAM2Y8CzDyFX3b/5SnbA0gw1tCMNoAsJsfXUPmJsmCfuSs7g14A==}
+  /@ibiz-template/cli@0.3.28(@types/node@20.11.5)(postcss@8.5.6)(vue@3.3.8):
+    resolution: {integrity: sha512-hzwDWnDidtouA/DJBgFSIrIC643C+KIu8Y1mC/uNuJbumJi+D7uS6nCuIKr/0o0yw9z6QLNHpsG5YN0K79mh+w==}
     hasBin: true
     dependencies:
       '@clack/prompts': 0.10.1
-      '@ibiz-template/cli-core': 0.3.21(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8)
+      '@ibiz-template/cli-core': 0.3.28(@types/node@20.11.5)(postcss@8.5.6)(vue@3.3.8)
       '@types/prompts': 2.4.9
       commander: 11.1.0
       consola: 3.4.2
@@ -6046,6 +8841,43 @@ packages:
       - vue
     dev: true
 
+  /@ibiz-template/cli@0.3.28(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8):
+    resolution: {integrity: sha512-hzwDWnDidtouA/DJBgFSIrIC643C+KIu8Y1mC/uNuJbumJi+D7uS6nCuIKr/0o0yw9z6QLNHpsG5YN0K79mh+w==}
+    hasBin: true
+    dependencies:
+      '@clack/prompts': 0.10.1
+      '@ibiz-template/cli-core': 0.3.28(@types/node@20.19.1)(postcss@8.5.6)(vue@3.3.8)
+      '@types/prompts': 2.4.9
+      commander: 11.1.0
+      consola: 3.4.2
+      fs-extra: 11.3.0
+    transitivePeerDependencies:
+      - '@types/babel__core'
+      - '@types/eslint'
+      - '@types/node'
+      - bluebird
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - less
+      - lightningcss
+      - postcss
+      - stylus
+      - sugarss
+      - supports-color
+      - vue
+    dev: true
+
+  /@ibiz-template/full-code-generator@0.0.5(@ibizlab/model@0.2.15):
+    resolution: {integrity: sha512-atCutDYMZhUflxVl7SfoU8bbSSbVv/uakjI3JnHwWEmKRO+zHSmjh2prj8dBNHljZv2y0ghGbJQoN9/4RkIdRQ==}
+    hasBin: true
+    dependencies:
+      '@ibizlab/cli': 0.2.29(@ibizlab/model@0.2.15)
+      commander: 12.1.0
+      prettier: 3.6.1
+    transitivePeerDependencies:
+      - '@ibizlab/model'
+    dev: true
+
   /@ibiz-template/scss-utils@0.0.2:
     resolution: {integrity: sha512-zjX6HPijRjz3WV2EuU6yvgk/QpyJO8w0wCE0hyV4CbsTfk4pUp/1Iy7eRlCQHkCDdyOKbdpwEJu6jpIS+s9rjA==}
     dev: false
@@ -6058,11 +8890,28 @@ packages:
     resolution: {integrity: sha512-lrJzvrwqeXGuGcE+3WML4O4d2oty+cD35cA7XdTtNVX9XrmJdpYmSAGb2s2BKuNxrrIsfiJJhKblKLdwGywMwA==}
     dev: true
 
+  /@ibiz/rt-model-api@0.2.79:
+    resolution: {integrity: sha512-TY6i1B6zWDvLUQnFkRVuULHCL/b0kBL19z5NMhtchDUS9Rgh977pPVG29DAZmSx27eOFVuuZ9xprhRy6MKg24g==}
+    dev: true
+
   /@ibizlab/cli@0.2.26(@ibizlab/model@0.2.15):
     resolution: {integrity: sha512-2+Ea35ziD7B0xub4ND89ln5VAWzA1sKi1/OWGVAzgF2QQ1LyWbw+DNMdw11PJb+dum4lH2ElAw++Awbj3sZB1g==}
     hasBin: true
     dependencies:
       '@ibizlab/template': 0.2.26(@ibizlab/model@0.2.15)
+      chalk: 4.1.2
+      commander: 11.1.0
+      fs-extra: 11.3.0
+      rimraf: 5.0.10
+    transitivePeerDependencies:
+      - '@ibizlab/model'
+    dev: true
+
+  /@ibizlab/cli@0.2.29(@ibizlab/model@0.2.15):
+    resolution: {integrity: sha512-AYoLmYJ4IYgb9mGvACUEd6lD3onWWHcSk3q29To5PirXEVtwSz931whTrM6GmDhUy2OWEvyb/k9b3oUz7zLMbw==}
+    hasBin: true
+    dependencies:
+      '@ibizlab/template': 0.2.29(@ibizlab/model@0.2.15)
       chalk: 4.1.2
       commander: 11.1.0
       fs-extra: 11.3.0
@@ -6123,6 +8972,20 @@ packages:
       qx-util: 0.4.8
     dev: true
 
+  /@ibizlab/template-model@0.2.29(@ibizlab/model@0.2.15):
+    resolution: {integrity: sha512-VkIA9cr9sPOLsumDZsZWgkAeomTOQJAZ9bATdGO0ZKNPCPKIV6BB1tvgN52o//lqg238gmf+6GPFlPBh3pK3nQ==}
+    peerDependencies:
+      '@ibizlab/model': ^0.2.15
+    dependencies:
+      '@ibiz/rt-model-api': 0.2.79
+      '@ibizlab/model': 0.2.15
+      '@ibizlab/template-generator': 0.2.4
+      fs-extra: 11.3.0
+      lodash: 4.17.21
+      pluralize: 8.0.0
+      qx-util: 0.4.8
+    dev: true
+
   /@ibizlab/template@0.2.26(@ibizlab/model@0.2.15):
     resolution: {integrity: sha512-lnhNNyWbdLNJUxJMfIPyQXq8pGWfi5Ib2/l19TV9B/keMB3TutIkuVJ6RQfexdo3LhojHA2vSdc6zUeNJaIgdw==}
     peerDependencies:
@@ -6133,6 +8996,21 @@ packages:
       '@ibizlab/template-generator': 0.2.4
       '@ibizlab/template-handlebars': 0.2.4
       '@ibizlab/template-model': 0.2.26(@ibizlab/model@0.2.15)
+      chokidar: 3.6.0
+      fs-extra: 11.3.0
+      qx-util: 0.4.8
+    dev: true
+
+  /@ibizlab/template@0.2.29(@ibizlab/model@0.2.15):
+    resolution: {integrity: sha512-fzninMl5q1jHrX59IrM5axFUUEslyBQINVhYcteVXqOD2w+YQ/zUK+rCqMFVqR11EwQkuQU/WvuOiOEVOXj7PA==}
+    peerDependencies:
+      '@ibizlab/model': ^0.2.14
+    dependencies:
+      '@ibizlab/model': 0.2.15
+      '@ibizlab/template-core': 0.2.2
+      '@ibizlab/template-generator': 0.2.4
+      '@ibizlab/template-handlebars': 0.2.4
+      '@ibizlab/template-model': 0.2.29(@ibizlab/model@0.2.15)
       chokidar: 3.6.0
       fs-extra: 11.3.0
       qx-util: 0.4.8
@@ -7458,7 +10336,7 @@ packages:
       regenerator-runtime: 0.14.1
       systemjs: 6.15.1
       terser: 5.43.1
-      vite: 4.5.14(@types/node@20.19.1)(sass@1.89.2)(terser@5.43.1)
+      vite: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8108,7 +10986,6 @@ packages:
 
   /@sxzz/popperjs-es@2.11.7:
     resolution: {integrity: sha512-Ccy0NlLkzr0Ex2FKvh2X+OyERHXJ88XJ1MXtsI9y9fGexlaXaVTPzBCRBwIxFkORuOb+uBqeu+RqnpgYTEZRUQ==}
-    dev: false
 
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -8396,7 +11273,6 @@ packages:
 
   /@types/web-bluetooth@0.0.16:
     resolution: {integrity: sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==}
-    dev: false
 
   /@types/web-bluetooth@0.0.20:
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
@@ -9552,16 +12428,35 @@ packages:
       pretty-format: 29.7.0
     dev: true
 
+  /@volar/language-core@1.10.10:
+    resolution: {integrity: sha512-nsV1o3AZ5n5jaEAObrS3MWLBWaGwUj/vAsc15FVNIv+DbpizQRISg9wzygsHBr56ELRH8r4K75vkYNMtsSNNWw==}
+    dependencies:
+      '@volar/source-map': 1.10.10
+    dev: true
+
   /@volar/language-core@1.11.1:
     resolution: {integrity: sha512-dOcNn3i9GgZAcJt43wuaEykSluAuOkQgzni1cuxLxTV0nJKanQztp7FxyswdRILaKH+P2XZMPRp2S4MV/pElCw==}
     dependencies:
       '@volar/source-map': 1.11.1
     dev: true
 
+  /@volar/source-map@1.10.10:
+    resolution: {integrity: sha512-GVKjLnifV4voJ9F0vhP56p4+F3WGf+gXlRtjFZsv6v3WxBTWU3ZVeaRaEHJmWrcv5LXmoYYpk/SC25BKemPRkg==}
+    dependencies:
+      muggle-string: 0.3.1
+    dev: true
+
   /@volar/source-map@1.11.1:
     resolution: {integrity: sha512-hJnOnwZ4+WT5iupLRnuzbULZ42L7BWWPMmruzwtLhJfpDVoZLjNBxHDi2sY2bgZXCKlpU5XcsMFoYrsQmPhfZg==}
     dependencies:
       muggle-string: 0.3.1
+    dev: true
+
+  /@volar/typescript@1.10.10:
+    resolution: {integrity: sha512-4a2r5bdUub2m+mYVnLu2wt59fuoYWe7nf0uXtGHU8QQ5LDNfzAR0wK7NgDiQ9rcl2WT3fxT2AA9AylAwFtj50A==}
+    dependencies:
+      '@volar/language-core': 1.10.10
+      path-browserify: 1.0.1
     dev: true
 
   /@volar/typescript@1.11.1:
@@ -9703,6 +12598,25 @@ packages:
       vue-eslint-parser: 9.4.3(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@vue/language-core@1.8.22(typescript@5.2.2):
+    resolution: {integrity: sha512-bsMoJzCrXZqGsxawtUea1cLjUT9dZnDsy5TuZ+l1fxRMzUGQUG9+Ypq4w//CqpWmrx7nIAJpw2JVF/t258miRw==}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@volar/language-core': 1.10.10
+      '@volar/source-map': 1.10.10
+      '@vue/compiler-dom': 3.5.17
+      '@vue/shared': 3.5.17
+      computeds: 0.0.1
+      minimatch: 9.0.5
+      muggle-string: 0.3.1
+      typescript: 5.2.2
+      vue-template-compiler: 2.7.16
     dev: true
 
   /@vue/language-core@1.8.27(typescript@5.2.2):
@@ -9872,7 +12786,6 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
-    dev: false
 
   /@vueuse/integrations@10.11.1(sortablejs@1.15.6)(vue@3.3.8):
     resolution: {integrity: sha512-Y5hCGBguN+vuVYTZmdd/IMXLOdfS60zAmDmFYc4BKBcMUPZH1n4tdyDECCPjXm0bNT3ZRUy1xzTLGaUje8Xyaw==}
@@ -9930,7 +12843,6 @@ packages:
 
   /@vueuse/metadata@9.13.0:
     resolution: {integrity: sha512-gdU7TKNAUVlXXLbaF+ZCfte8BjRJQWPCa2J55+7/h+yDtzw3vOoGQDRXzI6pyKyo6bXFT5/QoPE4hAknExjRLQ==}
-    dev: false
 
   /@vueuse/shared@10.11.1(vue@3.3.8):
     resolution: {integrity: sha512-LHpC8711VFZlDaYUXEBbFBCQ7GS3dVU9mjOhhMhXP6txTV4EhYQg/KGnQuvt/sPAtoUKq7VVUnL6mVtFoL42sA==}
@@ -9948,7 +12860,6 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
-    dev: false
 
   /@wangeditor/basic-modules@1.1.7(@wangeditor/core@1.1.19)(dom7@3.0.0)(lodash.throttle@4.1.1)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.2):
     resolution: {integrity: sha512-cY9CPkLJaqF05STqfpZKWG4LpxTMeGSIIF1fHvfm/mz+JXatCagjdkbxdikOuKYlxDdeqvOeBmsUBItufDLXZg==}
@@ -11435,6 +14346,11 @@ packages:
     resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
     engines: {node: '>=16'}
 
+  /commander@12.1.0:
+    resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
+    engines: {node: '>=18'}
+    dev: true
+
   /commander@13.1.0:
     resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
     engines: {node: '>=18'}
@@ -12841,7 +15757,6 @@ packages:
       vue: 3.3.8(typescript@5.3.3)
     transitivePeerDependencies:
       - '@vue/composition-api'
-    dev: false
 
   /element-resize-detector@1.2.4:
     resolution: {integrity: sha512-Fl5Ftk6WwXE0wqCgNoseKWndjzZlDCwuPTcoVZfCP9R3EHQF8qUtr3YUPNETegRBOKqQKPW3n4kiIWngGi8tKg==}
@@ -13224,7 +16139,6 @@ packages:
 
   /escape-html@1.0.3:
     resolution: {integrity: sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==}
-    dev: false
 
   /escape-string-regexp@1.0.5:
     resolution: {integrity: sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg==}
@@ -14944,6 +17858,10 @@ packages:
     resolution: {integrity: sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==}
     dev: false
 
+  /immutable@4.3.7:
+    resolution: {integrity: sha512-1hqclzwYwjRDFLjcFxOM5AYkkG0rpFPpr1RLPMEuGczoS7YA8gLhy8SWXYRAA/XwfEHpfo3cw5JGioS32fnMRw==}
+    dev: true
+
   /immutable@5.1.3:
     resolution: {integrity: sha512-+chQdDfvscSF1SJqv2gn4SRO2ZyS3xL3r7IW/wWEEzrzLisnOlKiQu5ytC/BVNcS15C39WT2Hg/bjKjDMcu+zg==}
 
@@ -15019,7 +17937,7 @@ packages:
       read-package-json: 6.0.4
       semver: 7.7.2
       validate-npm-package-license: 3.0.4
-      validate-npm-package-name: 5.0.0
+      validate-npm-package-name: 5.0.1
     dev: true
 
   /inquirer@8.2.6:
@@ -16599,7 +19517,6 @@ packages:
       '@types/lodash-es': 4.17.12
       lodash: 4.17.21
       lodash-es: 4.17.21
-    dev: false
 
   /lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
@@ -16906,7 +19823,6 @@ packages:
 
   /memoize-one@6.0.0:
     resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
-    dev: false
 
   /meow@10.1.5:
     resolution: {integrity: sha512-/d+PQ4GKmGvM9Bee/DPa8z3mXs/pkvJE2KEThngVNOqtmljC6K7NMPxtc2JeZYTmpWb9k/TmxjeL18ez3h7vCw==}
@@ -17527,7 +20443,6 @@ packages:
 
   /normalize-wheel-es@1.2.0:
     resolution: {integrity: sha512-Wj7+EJQ8mSuXr2iWfnujrimU35R2W4FAErEyTmJoJ7ucwTn2hOUSsRehMb5RSYkxXGTM7Y9QpvPmp++w5ftoJw==}
-    dev: false
 
   /now-and-later@2.0.1:
     resolution: {integrity: sha512-KGvQ0cB70AQfg107Xvs/Fbu+dGmZoTRJp2TaPwcwQm3/7PteUyN2BCgk8KBMPGBUXZdVwyWS8fDCGFygBm19UQ==}
@@ -18122,7 +21037,7 @@ packages:
       read-package-json-fast: 3.0.2
       sigstore: 1.9.0
       ssri: 10.0.6
-      tar: 6.1.11
+      tar: 6.2.1
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -19717,6 +22632,16 @@ packages:
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
+  /sass@1.69.5:
+    resolution: {integrity: sha512-qg2+UCJibLr2LCVOt3OlPhr/dqVHWOa9XtZf2OjbLs/T4VPSJ00udtgJxH3neXZm+QqX8B+3cU7RaLqp1iVfcQ==}
+    engines: {node: '>=14.0.0'}
+    hasBin: true
+    dependencies:
+      chokidar: 3.6.0
+      immutable: 4.3.7
+      source-map-js: 1.2.1
+    dev: true
+
   /sass@1.89.2:
     resolution: {integrity: sha512-xCmtksBKd/jdJ9Bt9p7nPKiuqrlBMBuuGkQlkhZjjQk3Ty48lv93k5Dq6OPkKt4XwxDJ7tvlfrTa1MPA9bf+QA==}
     engines: {node: '>=14.0.0'}
@@ -20091,7 +23016,6 @@ packages:
 
   /sortablejs@1.14.0:
     resolution: {integrity: sha512-pBXvQCs5/33fdN1/39pPL0NZF20LeRbLQ5jtnheIPN9JQAaufGjKdWduZn4U7wCtVuzKhmRkI0DFYHYRbB2H1w==}
-    dev: false
 
   /sortablejs@1.15.6:
     resolution: {integrity: sha512-aNfiuwMEpfBM/CN6LY0ibyhxPfPbyFeBTYJKCvzkJ2GkUpazIt3H+QIPAMHwqQ7tMKaHz1Qj+rJJCqljnf4p3A==}
@@ -21904,7 +24828,7 @@ packages:
       kolorist: 1.8.0
       magic-string: 0.30.17
       typescript: 5.2.2
-      vite: 4.5.14(@types/node@20.19.1)(sass@1.89.2)(terser@5.43.1)
+      vite: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
       vue-tsc: 1.8.27(typescript@5.2.2)
     transitivePeerDependencies:
       - '@types/node'
@@ -22019,7 +24943,7 @@ packages:
       vite: '*'
     dependencies:
       minimatch: 9.0.5
-      vite: 4.5.14(@types/node@20.19.1)(sass@1.89.2)(terser@5.43.1)
+      vite: 4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1)
     dev: true
 
   /vite-plugin-libcss@1.1.1(vite@5.3.5):
@@ -22042,6 +24966,44 @@ packages:
       source-map: 0.7.4
       stack-trace: 1.0.0-pre2
       vite: 5.3.5(@types/node@20.19.1)(sass@1.89.2)(terser@5.43.1)
+    dev: true
+
+  /vite@4.5.14(@types/node@20.19.1)(sass@1.69.5)(terser@5.43.1):
+    resolution: {integrity: sha512-+v57oAaoYNnO3hIu5Z/tJRZjq5aHM2zDve9YZ8HngVHbhk66RStobhb1sqPMIPEleV6cNKYK4eGrAbE9Ulbl2g==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 20.19.1
+      esbuild: 0.18.20
+      postcss: 8.5.6
+      rollup: 3.29.5
+      sass: 1.69.5
+      terser: 5.43.1
+    optionalDependencies:
+      fsevents: 2.3.3
     dev: true
 
   /vite@4.5.14(@types/node@20.19.1)(sass@1.89.2)(terser@5.43.1):
@@ -22330,7 +25292,6 @@ packages:
         optional: true
     dependencies:
       vue: 3.3.8(typescript@5.2.2)
-    dev: false
 
   /vue-demi@0.14.10(vue@3.5.17):
     resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
@@ -22423,7 +25384,6 @@ packages:
     dependencies:
       '@vue/devtools-api': 6.6.4
       vue: 3.3.8(typescript@5.2.2)
-    dev: false
 
   /vue-router@4.5.1(vue@3.3.8):
     resolution: {integrity: sha512-ogAF3P97NPm8fJsE4by9dwSYtDwXIY1nFY9T6DyQnGHd1E2Da94w9JIolpe42LJGIl0DwOHBi8TcRPlPGwbTtw==}
@@ -22455,6 +25415,18 @@ packages:
     dependencies:
       rollup: 3.29.5
     dev: false
+
+  /vue-tsc@1.8.22(typescript@5.2.2):
+    resolution: {integrity: sha512-j9P4kHtW6eEE08aS5McFZE/ivmipXy0JzrnTgbomfABMaVKx37kNBw//irL3+LlE3kOo63XpnRigyPC3w7+z+A==}
+    hasBin: true
+    peerDependencies:
+      typescript: '*'
+    dependencies:
+      '@volar/typescript': 1.10.10
+      '@vue/language-core': 1.8.22(typescript@5.2.2)
+      semver: 7.7.2
+      typescript: 5.2.2
+    dev: true
 
   /vue-tsc@1.8.27(typescript@5.2.2):
     resolution: {integrity: sha512-WesKCAZCRAbmmhuGl3+VrdWItEvfoFIPXOvUJkjULi+x+6G/Dy69yO3TBRJDr9eUlmsNAwVmxsNZxvHKzbkKdg==}
@@ -22569,7 +25541,6 @@ packages:
     dependencies:
       sortablejs: 1.14.0
       vue: 3.3.8(typescript@5.2.2)
-    dev: false
 
   /w3c-hr-time@1.0.2:
     resolution: {integrity: sha512-z8P5DvDNjKDoFIHK7q8r8lackT6l+jo/Ye3HOle7l9nICP9lf1Ci25fy9vHd0JOWewkIFzXIEig3TdKT7JQ5fQ==}

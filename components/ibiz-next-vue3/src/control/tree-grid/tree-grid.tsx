@@ -1,25 +1,29 @@
 import {
-  hasEmptyPanelRenderer,
+  useNamespace,
   IBizCustomRender,
   useControlController,
-  useNamespace,
+  hasEmptyPanelRenderer,
+  useControlPopoverzIndex,
 } from '@ibiz-template/vue3-util';
 import {
-  defineComponent,
-  PropType,
   VNode,
+  watch,
+  nextTick,
+  PropType,
   renderSlot,
+  defineComponent,
   VNodeArrayChildren,
 } from 'vue';
+import { recursiveIterate } from '@ibiz-template/core';
 import { IDEGridColumn, IDETreeGrid } from '@ibiz/model-core';
 import { IControlProvider, TreeGridController } from '@ibiz-template/runtime';
 import { useRowEditPopover } from '../grid/row-edit-popover/use-row-edit-popover';
 import {
   IGridProps,
   useAppGridBase,
-  useAppGridPagination,
-  useGridHeaderStyle,
   useITableEvent,
+  useGridHeaderStyle,
+  useAppGridPagination,
 } from '../grid/grid';
 import { renderChildColumn } from '../grid/grid/grid';
 
@@ -70,9 +74,11 @@ export const TreeGridControl = defineComponent({
     loadDefault: { type: Boolean, default: true },
   },
   setup(props, { slots }) {
-    const c = useControlController<TreeGridController>(
+    const c: TreeGridController = useControlController<TreeGridController>(
       (...args) => new TreeGridController(...args),
     );
+    useControlPopoverzIndex(c);
+
     // 继承表格部件样式
     const ns = useNamespace(`control-grid`);
     const ns2 = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
@@ -81,19 +87,22 @@ export const TreeGridControl = defineComponent({
       tableRef,
       onRowClick,
       onDbRowClick,
-      onSelectionChange,
       onSortChange,
+      onSelectionChange,
       handleRowClassName,
+      handleHeaderCellClassName,
     } = useITableEvent(c);
     const { onPageChange, onPageRefresh, onPageSizeChange } =
       useAppGridPagination(c);
+
     const {
       tableData,
-      renderColumns,
       defaultSort,
+      renderColumns,
       summaryMethod,
       headerDragend,
     } = useAppGridBase(c, props as IGridProps, tableRef);
+
     const { renderPopover } = useRowEditPopover(tableRef, c);
 
     const { headerCssVars } = useGridHeaderStyle(tableRef, ns);
@@ -135,6 +144,66 @@ export const TreeGridControl = defineComponent({
       return null;
     };
 
+    /**
+     * @description 处理默认选中
+     * - 预加载完成后执行
+     * @returns {*}  {void}
+     */
+    const handleDefaultSelect = (): void => {
+      const { expandRowKeys, selectedData, singleSelect } = c.state;
+      const table = tableRef.value;
+      if (!table || !selectedData.length) return;
+      const treeData = table.store.states.treeData.value;
+      const expandKeys = Object.keys(treeData).filter(
+        key => treeData[key].loaded,
+      );
+      // 如果elemnet表格维护的树展开和expandRowKeys相同，说明已经预加载完成了，这时在设置默认选中
+      if (
+        expandRowKeys.length === expandKeys.length &&
+        expandRowKeys
+          .sort()
+          .every((item, index) => item === expandKeys.sort()[index])
+      ) {
+        const selection: IData[] = [];
+        const selectKeys = selectedData.map(selected => selected.srfkey);
+        recursiveIterate({ children: table.store.states.data.value }, item => {
+          if (selectKeys.includes(item.srfkey)) selection.push(item);
+        });
+        nextTick(() => {
+          if (singleSelect) {
+            table.setCurrentRow(selection[0]);
+          } else {
+            table.store.states.selection.value = selection;
+          }
+        });
+      }
+    };
+
+    /**
+     * @description 处理节点默认展开
+     * @param {IData[]} nodes
+     * @returns {*}
+     */
+    const handleDefaultExpand = (nodes: IData[]) => {
+      if (!tableRef.value || !c.state.expandRowKeys.length) return;
+      c.state.expandRowKeys.forEach(key => {
+        const node = nodes.find(item => item.srfkey === key);
+        if (node)
+          nextTick(() => {
+            tableRef.value!.store.loadOrToggle(node);
+          });
+      });
+      handleDefaultSelect();
+    };
+
+    watch(
+      () => tableRef.value,
+      () => {
+        // 初始默认展开
+        handleDefaultExpand(c.state.treeGirdData);
+      },
+    );
+
     //  触发节点加载数据
     const loadData = async (
       item: IData,
@@ -149,6 +218,8 @@ export const TreeGridControl = defineComponent({
       );
       item.children = items;
       callback(items);
+      // 默认展开子节点
+      handleDefaultExpand(items);
     };
 
     // 绘制批操作工具栏
@@ -203,111 +274,124 @@ export const TreeGridControl = defineComponent({
       ns2,
       tableRef,
       tableData,
-      renderColumns,
-      renderColumn,
       defaultSort,
-      onDbRowClick,
+      renderColumns,
+      headerCssVars,
+      loadData,
       onRowClick,
-      onSelectionChange,
+      renderColumn,
+      onDbRowClick,
       onSortChange,
       onPageChange,
-      onPageSizeChange,
-      onPageRefresh,
-      handleRowClassName,
       renderNoData,
-      loadData,
+      onPageRefresh,
       summaryMethod,
       headerDragend,
       renderPopover,
+      onPageSizeChange,
+      onSelectionChange,
+      handleRowClassName,
       renderBatchToolBar,
-      headerCssVars,
+      handleHeaderCellClassName,
     };
   },
   render() {
     const state = this.c.state;
     const { hideHeader, enablePagingBar } = this.c.model;
     return (
-      <iBizControlBase
-        class={[
-          this.ns.b(),
-          this.ns2.b(),
-          this.ns.is('show-header', !hideHeader),
-          this.ns.is('enable-page', enablePagingBar),
-          this.ns.is('enable-group', this.c.model.enableGroup),
-          this.ns.is('enable-customized', this.c.model.enableCustomized),
-        ]}
-        controller={this.c}
-        style={this.headerCssVars}
-      >
-        {this.c.state.isLoaded && (
-          <el-table
-            ref={'tableRef'}
-            class={this.ns.e('table')}
-            default-sort={this.defaultSort}
-            border
-            show-header={!hideHeader}
-            show-summary={this.c.enableAgg}
-            summary-method={this.summaryMethod}
-            highlight-current-row={state.singleSelect}
-            row-class-name={this.handleRowClassName}
-            row-key={'srfkey'}
-            data={
-              this.c.state.showTreeGrid ? state.treeGirdData : this.tableData
-            }
-            onRowClick={this.onRowClick}
-            onRowDblclick={this.onDbRowClick}
-            onSelectionChange={this.onSelectionChange}
-            onSortChange={this.onSortChange}
-            onHeaderDragend={this.headerDragend}
-            tooltip-effect={'light'}
-            tree-props={{ children: 'children', hasChildren: 'hasChildren' }}
-            load={this.loadData}
-            lazy
-          >
-            {{
-              empty: this.renderNoData,
-              default: (): VNodeArrayChildren => {
-                return [
-                  !state.singleSelect && (
-                    <el-table-column
-                      class-name={this.ns.e('selection')}
-                      type='selection'
-                      width='55'
-                    ></el-table-column>
-                  ),
-                  state.isCreated &&
-                    this.renderColumns.map((model, index) => {
-                      return this.renderColumn(model, index);
-                    }),
-                ];
-              },
-              append: () => {
-                return this.renderPopover();
-              },
-            }}
-          </el-table>
-        )}
-        {enablePagingBar && (
-          <iBizPagination
-            total={state.total}
-            curPage={state.curPage}
-            size={state.size}
-            totalPages={state.totalPages}
-            onChange={this.onPageChange}
-            onPageSizeChange={this.onPageSizeChange}
-            onPageRefresh={this.onPageRefresh}
-          ></iBizPagination>
-        )}
-        {this.c.model.enableCustomized && !hideHeader && (
-          <div class={this.ns.b('setting-box')}>
-            <iBizGridSetting
-              columnStates={state.columnStates}
-              controller={this.c}
-            ></iBizGridSetting>
-          </div>
-        )}
-        {this.renderBatchToolBar()}
-      </iBizControlBase>
+      <iBizControlNavigation controller={this.c}>
+        <iBizControlBase
+          class={[
+            this.ns.b(),
+            this.ns2.b(),
+            this.ns.is('show-header', !hideHeader),
+            this.ns.is('enable-page', enablePagingBar),
+            this.ns.is('enable-group', this.c.model.enableGroup),
+            this.ns.is('enable-customized', this.c.model.enableCustomized),
+          ]}
+          controller={this.c}
+          style={this.headerCssVars}
+        >
+          {this.c.state.isLoaded && (
+            <el-table
+              lazy
+              border
+              ref={'tableRef'}
+              row-key={'srfkey'}
+              load={this.loadData}
+              tooltip-effect={'light'}
+              show-header={!hideHeader}
+              class={this.ns.e('table')}
+              key={this.c.state.tableKey}
+              onRowClick={this.onRowClick}
+              default-sort={this.defaultSort}
+              show-summary={this.c.enableAgg}
+              onSortChange={this.onSortChange}
+              onRowDblclick={this.onDbRowClick}
+              summary-method={this.summaryMethod}
+              onHeaderDragend={this.headerDragend}
+              row-class-name={this.handleRowClassName}
+              onSelectionChange={this.onSelectionChange}
+              highlight-current-row={state.singleSelect}
+              onExpandChange={(row: IData, expanded: boolean) =>
+                this.c.expandChange(row, expanded)
+              }
+              header-cell-class-name={this.handleHeaderCellClassName}
+              tree-props={{ children: 'children', hasChildren: 'hasChildren' }}
+              data={
+                this.c.state.showTreeGrid ? state.treeGirdData : this.tableData
+              }
+              {...this.$attrs}
+            >
+              {{
+                empty: this.renderNoData,
+                default: (): VNodeArrayChildren => {
+                  return [
+                    !state.singleSelect && (
+                      <el-table-column
+                        width='55'
+                        type='selection'
+                        reserve-selection={true}
+                        class-name={this.ns.e('selection')}
+                      ></el-table-column>
+                    ),
+                    state.isCreated &&
+                      this.renderColumns.map((model, index) => {
+                        return this.renderColumn(model, index);
+                      }),
+                  ];
+                },
+                append: () => {
+                  return this.renderPopover();
+                },
+              }}
+            </el-table>
+          )}
+          {enablePagingBar && (
+            <iBizPagination
+              total={state.total}
+              curPage={state.curPage}
+              size={state.size}
+              totalPages={state.totalPages}
+              onChange={this.onPageChange}
+              onPageSizeChange={this.onPageSizeChange}
+              onPageRefresh={this.onPageRefresh}
+              popperClass={`${
+                this.c.model.sysCss?.cssName || 'default'
+              }--popper`}
+            ></iBizPagination>
+          )}
+          {this.c.model.enableCustomized && !hideHeader && (
+            <div class={this.ns.b('setting-box')}>
+              <iBizGridSetting
+                columnStates={state.columnStates}
+                controller={this.c}
+              ></iBizGridSetting>
+            </div>
+          )}
+          {this.renderBatchToolBar()}
+        </iBizControlBase>
+      </iBizControlNavigation>
     );
   },
 });

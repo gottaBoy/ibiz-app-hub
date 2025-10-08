@@ -17,11 +17,11 @@ import { clone, isNil } from 'ramda';
 import { isNilOrEmpty } from 'qx-util';
 import { OpenAppViewCommand } from '../../../../../command';
 import {
+  IModalData,
   CodeListItem,
   IApiGridFieldColumnController,
-  IModalData,
 } from '../../../../../interface';
-import { parseUserParams } from '../../../../../model';
+import { getAllUIActionItems, parseUserParams } from '../../../../../model';
 import { UIActionUtil } from '../../../../../ui-action';
 import { convertNavData, getWFContext } from '../../../../../utils';
 import {
@@ -169,22 +169,22 @@ export class GridFieldColumnController
   initActionStates(row: GridRowState): void {
     // 属性列界面行为按钮状态
     const { deuiactionGroup } = this.model;
-    if (deuiactionGroup && deuiactionGroup.uiactionGroupDetails) {
-      const containerState = new ButtonContainerState();
-      deuiactionGroup.uiactionGroupDetails.forEach(detail => {
-        const actionid = detail.uiactionId;
-        if (actionid) {
-          const buttonState = new UIActionButtonState(
-            detail.id!,
-            this.grid.context.srfappid!,
-            actionid,
-            detail,
-          );
-          containerState.addState(detail.id!, buttonState);
-        }
-      });
-      row.uiActionGroupStates[this.model.codeName!] = containerState;
-    }
+    if (!deuiactionGroup?.uiactionGroupDetails?.length) return;
+    const containerState = new ButtonContainerState();
+    const actions = getAllUIActionItems(deuiactionGroup.uiactionGroupDetails);
+    actions.forEach(detail => {
+      const actionid = detail.uiactionId;
+      if (actionid) {
+        const buttonState = new UIActionButtonState(
+          detail.id!,
+          this.grid.context.srfappid!,
+          actionid,
+          detail,
+        );
+        containerState.addState(detail.id!, buttonState);
+      }
+    });
+    row.uiActionGroupStates[this.model.codeName!] = containerState;
   }
 
   /**

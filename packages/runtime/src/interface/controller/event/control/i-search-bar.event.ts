@@ -37,7 +37,7 @@ export interface ISearchBarEvent extends IControlEvent {
   };
 
   /**
-   * @description 分页切换事件   *
+   * @description 分页切换事件
    * @type {{
    *     event: EventBase;
    *     emitArgs: IData;

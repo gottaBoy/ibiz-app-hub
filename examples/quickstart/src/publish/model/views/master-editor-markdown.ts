@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'editor_markdown',
   deviewId: '4698926e0260f9cb97aa00562e65fb2e',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -65,6 +66,16 @@ export default {
         appDataEntityId: 'web.master',
         id: 'update',
       },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
+      },
       deformPages: [
         {
           layout: {
@@ -73,28 +84,470 @@ export default {
           },
           deformDetails: [
             {
-              dataType: 25,
-              enableCond: 3,
-              labelPos: 'NONE',
-              noPrivDisplayMode: 1,
-              editor: {
-                mode: 'EDIT',
-                showMaxLength: true,
-                editorType: 'MARKDOWN',
-                valueType: 'SIMPLE',
-                editable: true,
-                id: 'formitem',
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
               },
-              allowEmpty: true,
-              emptyCaption: true,
-              codeName: 'formitem',
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    mode: 'EDIT',
+                    showMaxLength: true,
+                    editorType: 'MARKDOWN',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem',
+                  },
+                  allowEmpty: true,
+                  emptyCaption: true,
+                  codeName: 'formitem',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem',
+                },
+              ],
+              caption: 'Markdown编辑框',
+              codeName: 'grouppanel1',
               detailStyle: 'DEFAULT',
-              detailType: 'FORMITEM',
+              detailType: 'GROUPPANEL',
               layoutPos: {
                 colMD: 24,
                 layout: 'TABLE_24COL',
               },
-              id: 'formitem',
+              showCaption: true,
+              id: 'grouppanel1',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    mode: 'EDIT',
+                    showMaxLength: true,
+                    editorParams: {
+                      customtheme: 'dark',
+                    },
+                    editorType: 'MARKDOWN',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem1',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem1',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用customtheme参数指定Markdown编辑框的主题，可选值有light和dark，值为light时为亮色主题，值为dark时为暗色主题。当前Markdown编辑框为暗色主题',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem1',
+                  },
+                  codeName: 'rawitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem1',
+                },
+              ],
+              caption: 'Markdown主题',
+              codeName: 'grouppanel2',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel2',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    mode: 'EDIT',
+                    showMaxLength: true,
+                    editorParams: {
+                      uploadparams: '{"username":"%srfusername%"}',
+                    },
+                    editorType: 'MARKDOWN',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem3',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem3',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem3',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用uploadparams参数指定图片上传的参数，用于计算上传路径。当前Markdown编辑框图片上传的参数为{"username":"%srfusername%"}',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem3',
+                  },
+                  codeName: 'rawitem3',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem3',
+                },
+              ],
+              caption: '上传参数',
+              codeName: 'grouppanel4',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel4',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    mode: 'EDIT',
+                    showMaxLength: true,
+                    editorParams: {
+                      exportparams: '{"username":"%srfusername%"}',
+                    },
+                    editorType: 'MARKDOWN',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem4',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem4',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem4',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用exportparams参数指定图片下载的参数，用于计算下载路径。当前Markdown编辑框图片下载的参数为{"username":"%srfusername%"}',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem4',
+                  },
+                  codeName: 'rawitem4',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem4',
+                },
+              ],
+              caption: '下载参数',
+              codeName: 'grouppanel5',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel5',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    mode: 'EDIT',
+                    showMaxLength: true,
+                    editorParams: {
+                      osscat: 'cat',
+                    },
+                    editorType: 'MARKDOWN',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem5',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem5',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem5',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用osscat参数指定图片上传下载的OSS参数，用于计算上传路径和下载路径。当前Markdown编辑框图片上传下载的OSS参数为cat',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem5',
+                  },
+                  codeName: 'rawitem5',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem5',
+                },
+              ],
+              caption: 'OSS参数',
+              codeName: 'grouppanel6',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel6',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  createDV: 'Markdown内容',
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    mode: 'EDIT',
+                    showMaxLength: true,
+                    editorParams: {
+                      readonly: 'true',
+                    },
+                    editorType: 'MARKDOWN',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    readOnly: true,
+                    id: 'formitem2',
+                  },
+                  updateDV: 'Markdown内容',
+                  allowEmpty: true,
+                  codeName: 'formitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem2',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用readonly参数控制编辑器是否为只读态。当前编辑器为只读态',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem2',
+                  },
+                  codeName: 'rawitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem2',
+                },
+              ],
+              caption: '只读态',
+              codeName: 'grouppanel3',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel3',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    mode: 'EDIT',
+                    showMaxLength: true,
+                    editorParams: {
+                      appentitytag: 'web.master',
+                      datafieldtag: 'id',
+                    },
+                    editorType: 'MARKDOWN',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem6',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem6',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem6',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用appentitytag参数和datafieldtag参数约束编辑器在应用启用下载授权时手动指定当前文件所属实体及关联数据属性',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem6',
+                  },
+                  codeName: 'rawitem6',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem6',
+                },
+              ],
+              caption: '下载启用鉴权',
+              codeName: 'grouppanel7',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel7',
             },
             {
               dataType: 25,

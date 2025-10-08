@@ -18,6 +18,9 @@ import './form.scss';
 export const FormControl = defineComponent({
   name: 'IBizFormControl',
   props: {
+    /**
+     * @description 表单控制器
+     */
     controller: {
       type: Object as PropType<FormController>,
       required: true,

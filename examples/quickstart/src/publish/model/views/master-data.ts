@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'data',
   deviewId: 'dcd5a5551986a3bc7d23fba436822664',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -24,47 +25,52 @@ export default {
       dedrtabPages: [
         {
           caption: '常规',
-          appViewId: 'web.master_card_base',
+          appViewId: 'web.master_card_base_exp',
           id: 'base',
         },
         {
-          caption: '看板模式',
-          appViewId: 'web.master_card_kanbanview',
-          id: 'kanban',
+          caption: '快速新建',
+          appViewId: 'web.master_card_fast_new',
+          id: 'fast_new',
+        },
+        {
+          caption: '拖拽编辑',
+          appViewId: 'web.master_card_draggable_edit',
+          id: 'draggable_edit',
         },
         {
           caption: '布局',
-          appViewId: 'web.master_card_layout',
+          appViewId: 'web.master_card_layout_exp',
           id: 'layout',
         },
         {
-          caption: '逻辑',
-          appViewId: 'web.master_card_panellogic',
-          id: 'logic',
+          caption: '排序',
+          appViewId: 'web.master_card_sort_exp',
+          id: 'sort',
+        },
+        {
+          caption: '动态逻辑',
+          appViewId: 'web.master_card_dyna_logic_exp',
+          id: 'dyna_logic',
         },
         {
           caption: '分组',
-          appViewId: 'web.master_card_group',
+          appViewId: 'web.master_card_group_exp',
           id: 'group',
         },
         {
           caption: '内置工具栏',
-          appViewId: 'web.master_doing_custom_view',
+          appViewId: 'web.master_card_built_in_toolbar_exp',
           id: 'toolbar',
-        },
-        {
-          caption: '批操作工具栏',
-          appViewId: 'web.master_doing_custom_view',
-          id: 'batchtoolbar',
         },
         {
           caption: '值显示',
           appViewId: 'web.master_card_format',
-          id: 'value_display',
+          id: 'value_format',
         },
         {
           caption: '内置导航',
-          appViewId: 'web.region_card_nav',
+          appViewId: 'web.master_card_navexp_exp',
           id: 'built_in_nav',
         },
         {
@@ -73,8 +79,28 @@ export default {
           id: 'css_and_icon',
         },
         {
+          caption: '加载模式',
+          appViewId: 'web.master_card_load_mode_exp',
+          id: 'load_mode',
+        },
+        {
+          caption: '卡片样式',
+          appViewId: 'web.master_card_style_exp',
+          id: 'card_style',
+        },
+        {
+          caption: '显示模式',
+          appViewId: 'web.master_card_showmode_exp',
+          id: 'showmode',
+        },
+        {
+          caption: '刷新模式',
+          appViewId: 'web.master_card_refreshmode_exp',
+          id: 'refreshmode',
+        },
+        {
           caption: '事件及调用',
-          appViewId: 'web.master_card_logic',
+          appViewId: 'web.master_card_event_call',
           id: 'event_and_call',
         },
       ],

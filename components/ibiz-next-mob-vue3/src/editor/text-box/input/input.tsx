@@ -9,6 +9,14 @@ import {
 import './input.scss';
 import { TextBoxEditorController } from '../text-box-editor.controller';
 
+/**
+ * 移动端文本框
+ *
+ * @description 使用van-field组件，用于数据录入，通过键盘输入字符。支持编辑器类型包含：`移动端文本框`、`移动端多行文本`、`移动端密码框`
+ * @primary
+ * @ignoreprops overflowMode
+ * @ignoreemits infoTextChange
+ */
 export const IBizInput = defineComponent({
   name: 'IBizInput',
   props: getInputProps<TextBoxEditorController>(),
@@ -19,10 +27,20 @@ export const IBizInput = defineComponent({
     const editorModel = c.model;
     const inputRef = ref();
 
+    // 是否显示密码
+    const showPassword = ref(false);
+
+    // 是否显示切换明文、暗文密码图标
+    let showSwitchIcon = false;
+
     // 文本域默认行数，仅在 textarea 类型下有效
     const rows = ref(2);
     if (editorModel.editorType === 'TEXTAREA_10') {
       rows.value = 10;
+    }
+
+    if (c.editorParams.showswitchicon) {
+      showSwitchIcon = c.editorParams.showswitchicon === 'true';
     }
 
     // 类型
@@ -126,6 +144,11 @@ export const IBizInput = defineComponent({
       emit('change', '');
     };
 
+    // 切换明文密码的显示隐藏
+    const switchPwd = () => {
+      showPassword.value = !showPassword.value && showSwitchIcon;
+    };
+
     return {
       c,
       ns,
@@ -138,6 +161,8 @@ export const IBizInput = defineComponent({
       onFocus,
       onClear,
       inputRef,
+      showPassword,
+      switchPwd,
     };
   },
   render() {
@@ -159,13 +184,27 @@ export const IBizInput = defineComponent({
           return <i class={this.ns.e('unit')}>{unitName}</i>;
         };
       }
+      if (this.type === 'password') {
+        slots['right-icon'] = () => {
+          return this.showPassword ? (
+            <ion-icon
+              name='eye-off-outline'
+              onClick={this.switchPwd}
+            ></ion-icon>
+          ) : (
+            <ion-icon name='eye-outline' onClick={this.switchPwd}></ion-icon>
+          );
+        };
+      }
 
       content = (
         <van-field
           ref='inputRef'
           modelValue={this.currentVal}
           placeholder={this.controller.placeHolder}
-          type={this.type}
+          type={
+            this.type === 'password' && this.showPassword ? 'text' : this.type
+          }
           rows={this.rows}
           onInput={this.handleChange}
           onKeyup={this.handleKeyUp}

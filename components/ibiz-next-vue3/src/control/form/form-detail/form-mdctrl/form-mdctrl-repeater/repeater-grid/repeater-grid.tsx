@@ -1,18 +1,22 @@
 import {
-  defineComponent,
   h,
-  reactive,
-  resolveComponent,
+  ref,
   toRaw,
   watch,
+  reactive,
+  onUnmounted,
+  defineComponent,
+  resolveComponent,
 } from 'vue';
+import Sortable from 'sortablejs';
 import {
+  EventBase,
   ControlVO,
   EditFormController,
-  EventBase,
-  FormMDCtrlRepeaterController,
   IEditFormController,
+  FormMDCtrlRepeaterController,
 } from '@ibiz-template/runtime';
+import { createUUID } from 'qx-util';
 import { useCtx, useNamespace } from '@ibiz-template/vue3-util';
 import { recursiveIterate, showTitle } from '@ibiz-template/core';
 import { IDEFormDetail, IDEFormItem } from '@ibiz/model-core';
@@ -33,6 +37,9 @@ export const RepeaterGrid: ReturnType<typeof defineComponent> = defineComponent(
     setup(props, { emit }) {
       const ns = useNamespace('repeater-grid');
       const formItems: IDEFormItem[] = [];
+      const tableRef = ref();
+      const tableKey = ref(createUUID());
+
       // 遍历所有的项，如果有逻辑的话加入
       recursiveIterate(
         props.controller.repeatedForm,
@@ -115,6 +122,35 @@ export const RepeaterGrid: ReturnType<typeof defineComponent> = defineComponent(
         { immediate: true, deep: true },
       );
 
+      let sortable: Sortable | undefined;
+
+      const rowDrop = () => {
+        const wrapper = tableRef.value?.$el?.querySelector(
+          '.el-table__body-wrapper tbody',
+        );
+        if (!wrapper || !props.controller.enableSort) return;
+        sortable = Sortable.create(wrapper, {
+          animation: 150,
+          handle: `.${ns.e('drag-icon')}`,
+          ghostClass: `${ns.e('sortable-ghost')}`,
+          onEnd({ newIndex, oldIndex }) {
+            props.controller.dragChange(oldIndex!, newIndex!);
+            tableKey.value = createUUID();
+          },
+        });
+      };
+
+      watch(
+        () => tableRef.value,
+        () => {
+          if (!props.controller.enableSort) return;
+          // eslint-disable-next-line no-unused-expressions
+          tableRef.value ? rowDrop() : sortable?.destroy();
+        },
+      );
+
+      onUnmounted(() => sortable?.destroy());
+
       const renderRemoveBtn = (index: number) => {
         if (!props.controller.enableDelete) {
           return null;
@@ -157,7 +193,14 @@ export const RepeaterGrid: ReturnType<typeof defineComponent> = defineComponent(
         );
       };
 
-      return { ns, formItems, formControllers, renderRemoveBtn };
+      return {
+        ns,
+        tableRef,
+        tableKey,
+        formItems,
+        formControllers,
+        renderRemoveBtn,
+      };
     },
     render() {
       return (
@@ -173,14 +216,41 @@ export const RepeaterGrid: ReturnType<typeof defineComponent> = defineComponent(
             </el-button>
           )}
           <el-table
-            class={this.ns.e('table')}
+            ref='tableRef'
+            key={this.tableKey}
             show-header={true}
+            class={this.ns.e('table')}
             data={this.controller.value}
             cell-class-name={({ columnIndex }: IData) => {
-              // 索引单元格样式
-              return columnIndex === 0 ? this.ns.b('index') : '';
+              const shouldShowIndex = this.controller.enableSort
+                ? columnIndex === 1
+                : columnIndex === 0;
+              return shouldShowIndex ? this.ns.b('index') : '';
             }}
           >
+            {this.controller.enableSort && (
+              <el-table-column width={26} type='default'>
+                {{
+                  default: () => (
+                    <svg
+                      viewBox='0 0 16 16'
+                      xmlns='http://www.w3.org/2000/svg'
+                      height='1em'
+                      width='1em'
+                      class={this.ns.e('drag-icon')}
+                      preserveAspectRatio='xMidYMid meet'
+                      focusable='false'
+                    >
+                      <g stroke-width='1' fill-rule='evenodd'>
+                        <g transform='translate(5 1)' fill-rule='nonzero'>
+                          <path d='M1 2a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM1 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z'></path>
+                        </g>
+                      </g>
+                    </svg>
+                  ),
+                }}
+              </el-table-column>
+            )}
             <el-table-column type='index' width={66} align='center'>
               {{
                 default: (opts: IData) => {

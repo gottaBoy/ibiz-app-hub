@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'treeview_cssandicon',
   deviewId: '751d35c9d06854ef8d5f3d8cda692243',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -58,6 +59,10 @@ export default {
           appDataEntityId: 'web.master',
           sysCss: {
             cssName: 'tree-node-red',
+          },
+          sysImage: {
+            cssClass: 'fa fa-cube',
+            glyph: 'xf1b2@FontAwesome',
           },
           treeNodeType: 'DE',
           name: '名称',

@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'counter_exp_grid',
   deviewId: 'ebad658febff3f171b8f142fdc283c1d',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -66,7 +67,6 @@ export default {
       id: 'opendata',
     },
   ],
-  appViewMsgGroupId: 'counter_exp_grid',
   appViewRefs: [
     {
       realOpenMode: 'POPUPMODAL',
@@ -90,6 +90,7 @@ export default {
       columnEnableLink: 2,
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
+      orderValueAppDEFieldId: 'px',
       degridColumns: [
         {
           clconvertMode: 'NONE',
@@ -138,10 +139,34 @@ export default {
           id: 'region_id',
         },
         {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
           appDEFieldId: 'name',
           valueType: 'SIMPLE',
           dataType: 25,
           id: 'srfmajortext',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'wf_status',
         },
       ],
       degridEditItems: [
@@ -163,6 +188,7 @@ export default {
       pagingMode: 1,
       pagingSize: 20,
       sortMode: 'REMOTE',
+      hasWFDataItems: true,
       enableCustomized: true,
       enablePagingBar: true,
       navViewPos: 'NONE',
@@ -241,8 +267,6 @@ export default {
     },
     {
       groupMode: 'SINGLE',
-      quickSearchMode: 1,
-      enableQuickSearch: true,
       controlType: 'SEARCHBAR',
       appDataEntityId: 'web.master',
       controlParam: {
@@ -278,7 +302,7 @@ export default {
   viewStyle: 'DEFAULT',
   viewType: 'DEGRIDVIEW',
   enableDP: true,
-  showCaptionBar: true,
+  showCaptionBar: false,
   modelId: '085059f14d47a22ecd1a67f977e7c8df',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERcounter_exp_grid',

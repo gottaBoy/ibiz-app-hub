@@ -291,9 +291,12 @@ export class AppSwitchController extends PanelItemController<IPanelRawItem> {
       await ibiz.hub.getAppAsync(tempKey);
     }
     const targetAppModel = ibiz.hub.getAppSourceModel(tempKey);
-
-    // 设置目标应用应用标题
-    if (targetAppModel.getDefaultPSAppIndexView) {
+    const defaultApp = ibiz.hub.getApp();
+    // 切换为主应用时优先获取环境参数中AppTitle
+    if (defaultApp.model.appId === tempKey && window.Environment.AppTitle) {
+      ibiz.env.AppTitle = window.Environment.AppTitle;
+    } else if (targetAppModel.getDefaultPSAppIndexView) {
+      // 设置目标应用应用标题
       const view = targetAppModel.getDefaultPSAppIndexView as IModel;
       if (targetAppModel.caption) {
         ibiz.env.AppTitle = targetAppModel.caption;

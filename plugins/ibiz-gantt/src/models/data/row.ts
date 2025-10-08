@@ -55,6 +55,7 @@ export default class RowItem {
   options: Required<DataOptions> = {
     isExpand: false,
     expandLabel: '',
+    draggableLabel: '',
     startLabel: Variables.default.startKey,
     endLabel: Variables.default.endKey,
     dataId: Variables.default.idKey,
@@ -69,6 +70,7 @@ export default class RowItem {
   private __isExpand: boolean = false;
   private __isChecked: boolean = false;
   private __isLeaf: boolean = false;
+  private __isDraggable: boolean = false;
 
   private __oldStart?: XDate = undefined;
   private __oldEnd?: XDate = undefined;
@@ -92,6 +94,13 @@ export default class RowItem {
    */
   get isChecked() {
     return this.__isChecked;
+  }
+
+  /**
+   * 是否拖拽
+   */
+  get isDraggable() {
+    return this.__isDraggable;
   }
 
   /**
@@ -288,6 +297,12 @@ export default class RowItem {
     this.__isExpand = this.options.expandLabel
       ? data[this.options.expandLabel]
       : this.options.isExpand;
+
+    // 初始化时允许拖拽则显示拖拽图标
+    this.__isDraggable = this.options.draggableLabel
+      ? data[this.options.draggableLabel]
+      : this.isDraggable;
+
     this.__data = data;
     this.__isLeaf = data[this.options.leaf];
     // 开始及结束时间自动补全
@@ -536,6 +551,18 @@ export default class RowItem {
           return true;
         }
       }
+    }
+    return false;
+  }
+
+  /**
+   * 当前滑块是否会显示
+   */
+  isShowSlider(): boolean {
+    const { startDate, endDate } = this.getStartOrEnd();
+    if (startDate || endDate) {
+      const compareVal = this.start.compareTo(this.end);
+      return compareVal === 'e' || compareVal === 'l';
     }
     return false;
   }

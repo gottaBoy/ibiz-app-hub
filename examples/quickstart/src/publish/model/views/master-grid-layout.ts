@@ -1,6 +1,7 @@
 export default {
   deviewCodeName: 'grid_layout',
   deviewId: '86577bad423b812b3840f10ea2761cd1',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -164,6 +165,7 @@ export default {
         frozenLastColumn: 1,
         groupMode: 'NONE',
         groupStyle: 'DEFAULT',
+        orderValueAppDEFieldId: 'px',
         degridColumns: [
           {
             clconvertMode: 'NONE',
@@ -257,27 +259,6 @@ export default {
             id: 'quantity',
           },
           {
-            clconvertMode: 'FRONT',
-            dataItemName: 'create_man',
-            excelCaption: '创建人',
-            appCodeListId: 'web.sysoperator',
-            appDEFieldId: 'create_man',
-            valueType: 'SIMPLE',
-            aggMode: 'NONE',
-            align: 'LEFT',
-            capLanguageRes: {
-              lanResTag: 'DEF.LNAME.MASTER.CREATE_MAN',
-            },
-            caption: '创建人',
-            codeName: 'create_man',
-            columnType: 'DEFGRIDCOLUMN',
-            noPrivDisplayMode: 1,
-            width: 150,
-            widthUnit: 'PX',
-            enableSort: true,
-            id: 'create_man',
-          },
-          {
             clconvertMode: 'NONE',
             dataItemName: 'create_time',
             excelCaption: '创建时间',
@@ -297,27 +278,6 @@ export default {
             widthUnit: 'PX',
             enableSort: true,
             id: 'create_time',
-          },
-          {
-            clconvertMode: 'FRONT',
-            dataItemName: 'update_man',
-            excelCaption: '更新人',
-            appCodeListId: 'web.sysoperator',
-            appDEFieldId: 'update_man',
-            valueType: 'SIMPLE',
-            aggMode: 'NONE',
-            align: 'LEFT',
-            capLanguageRes: {
-              lanResTag: 'DEF.LNAME.UPDATE_MAN',
-            },
-            caption: '更新人',
-            codeName: 'update_man',
-            columnType: 'DEFGRIDCOLUMN',
-            noPrivDisplayMode: 1,
-            width: 150,
-            widthUnit: 'PX',
-            enableSort: true,
-            id: 'update_man',
           },
           {
             clconvertMode: 'NONE',
@@ -374,23 +334,11 @@ export default {
             id: 'quantity',
           },
           {
-            appDEFieldId: 'create_man',
-            valueType: 'SIMPLE',
-            dataType: 25,
-            id: 'create_man',
-          },
-          {
             format: 'YYYY-MM-DD HH:mm:ss',
             appDEFieldId: 'create_time',
             valueType: 'SIMPLE',
             dataType: 5,
             id: 'create_time',
-          },
-          {
-            appDEFieldId: 'update_man',
-            valueType: 'SIMPLE',
-            dataType: 25,
-            id: 'update_man',
           },
           {
             format: 'YYYY-MM-DD HH:mm:ss',
@@ -418,10 +366,34 @@ export default {
             id: 'region_id',
           },
           {
+            appDEFieldId: 'category_type',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'srfdatatype',
+          },
+          {
+            appDEFieldId: 'category_type',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'category_type',
+          },
+          {
+            appDEFieldId: 'category_id',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'category_id',
+          },
+          {
             appDEFieldId: 'name',
             valueType: 'SIMPLE',
             dataType: 25,
             id: 'srfmajortext',
+          },
+          {
+            appDEFieldId: 'wf_status',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'wf_status',
           },
         ],
         degridEditItems: [
@@ -443,6 +415,7 @@ export default {
         pagingMode: 1,
         pagingSize: 10,
         sortMode: 'REMOTE',
+        hasWFDataItems: true,
         enableCustomized: true,
         enablePagingBar: true,
         navViewPos: 'NONE',
@@ -476,6 +449,7 @@ export default {
         columnEnableLink: 2,
         groupMode: 'NONE',
         groupStyle: 'DEFAULT',
+        orderValueAppDEFieldId: 'px',
         degridColumns: [
           {
             clconvertMode: 'NONE',
@@ -628,10 +602,34 @@ export default {
             id: 'region_id',
           },
           {
+            appDEFieldId: 'category_type',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'srfdatatype',
+          },
+          {
+            appDEFieldId: 'category_type',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'category_type',
+          },
+          {
+            appDEFieldId: 'category_id',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'category_id',
+          },
+          {
             appDEFieldId: 'name',
             valueType: 'SIMPLE',
             dataType: 25,
             id: 'srfmajortext',
+          },
+          {
+            appDEFieldId: 'wf_status',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'wf_status',
           },
         ],
         degridEditItems: [
@@ -653,6 +651,7 @@ export default {
         pagingMode: 1,
         pagingSize: 10,
         sortMode: 'REMOTE',
+        hasWFDataItems: true,
         enableCustomized: true,
         enablePagingBar: true,
         navViewPos: 'NONE',
@@ -686,6 +685,7 @@ export default {
         columnEnableLink: 2,
         groupMode: 'NONE',
         groupStyle: 'DEFAULT',
+        orderValueAppDEFieldId: 'px',
         degridColumns: [
           {
             clconvertMode: 'NONE',
@@ -782,10 +782,34 @@ export default {
             id: 'region_id',
           },
           {
+            appDEFieldId: 'category_type',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'srfdatatype',
+          },
+          {
+            appDEFieldId: 'category_type',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'category_type',
+          },
+          {
+            appDEFieldId: 'category_id',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'category_id',
+          },
+          {
             appDEFieldId: 'name',
             valueType: 'SIMPLE',
             dataType: 25,
             id: 'srfmajortext',
+          },
+          {
+            appDEFieldId: 'wf_status',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'wf_status',
           },
         ],
         degridEditItems: [
@@ -807,6 +831,7 @@ export default {
         pagingMode: 1,
         pagingSize: 10,
         sortMode: 'REMOTE',
+        hasWFDataItems: true,
         enableCustomized: true,
         enablePagingBar: true,
         navViewPos: 'NONE',

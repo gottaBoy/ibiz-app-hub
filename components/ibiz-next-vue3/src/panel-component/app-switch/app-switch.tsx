@@ -10,8 +10,8 @@ import './app-switch.scss';
 /**
  * 应用切换器
  * @primary
- * @description 应用切换器是前端导航核心组件，通过可视化列表实现多应用快速跳转，使用该能力需在首页视图配置应用选择模式为`默认`。
- * @panelitemparams {name:sourcetype,parameterType:'UTIL' | 'REFAPP',defaultvalue:REFAPP,description:应用源类型，其中UTIL表示微应用数据来源于功能组件服务、REFAPP表示微应用数据来源于引用子应用集（主应用和引用子应用的所有首页）}
+ * @description 应用切换器是前端导航核心组件，通过可视化列表实现多应用快速跳转，当应用存在子应用时，使用该能力需在首页视图配置应用选择模式为`默认`。
+ * @panelitemparams {name:sourcetype,parameterType:'UTIL' | 'REFAPP',defaultvalue:'REFAPP',description:应用源类型，其中UTIL表示微应用数据来源于功能组件服务、REFAPP表示微应用数据来源于引用子应用集（主应用和引用子应用的所有首页）}
  * @primary
  */
 export const AppSwitch = defineComponent({

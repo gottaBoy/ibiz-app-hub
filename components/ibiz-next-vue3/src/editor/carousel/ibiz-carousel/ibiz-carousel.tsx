@@ -16,102 +16,126 @@ import { CarouselEditorController } from '../carousel-editor.controller';
  * @ignoreprops autoFocus | overflowMode | controlParams
  * @ignoreemits change | blur | focus | enter | infoTextChange
  */
-export const IBizCarousel = defineComponent({
-  name: 'IBizCarousel',
-  props: getEditorProps<CarouselEditorController>(),
-  emits: getEditorEmits(),
-  setup(props) {
-    const ns = useNamespace('carousel');
-    const c = props.controller;
+export const IBizCarousel: ReturnType<typeof defineComponent> = defineComponent(
+  {
+    name: 'IBizCarousel',
+    props: getEditorProps<CarouselEditorController>(),
+    emits: getEditorEmits(),
+    setup(props) {
+      const ns = useNamespace('carousel');
+      const c = props.controller;
 
-    const editorModel = c!.model;
+      const editorModel = c!.model;
 
-    const carouselData: Ref<
-      {
-        id: string;
-        name: string;
-        imgUrl?: string;
-      }[]
-    > = ref([]);
+      const carouselData: Ref<
+        {
+          id: string;
+          name: string;
+          imgUrl?: string;
+        }[]
+      > = ref([]);
 
-    const isAuto = ref(true);
+      const isAuto = ref(true);
 
-    const timeSpan = ref(3000);
+      const timeSpan = ref(3000);
 
-    // 下载文件路径
-    const downloadUrl: Ref<string> = ref('');
+      // 值响应式变更
+      // json: [{id:string ,name:string },{id:string ,name:string }]
+      watch(
+        () => props.value,
+        newVal => {
+          if (typeof newVal === 'string') {
+            carouselData.value = !newVal ? [] : JSON.parse(newVal);
+          }
+        },
+        { immediate: true },
+      );
 
-    // 值响应式变更
-    // json: [{id:string ,name:string },{id:string ,name:string }]
-    watch(
-      () => props.value,
-      newVal => {
-        if (typeof newVal === 'string') {
-          carouselData.value = !newVal ? [] : JSON.parse(newVal);
+      /**
+       * @description 获取下载路径,若业务数据中存在folder，则以业务数据中folder作为目录
+       * @param {IData} data
+       * @param {IData} file
+       * @returns {*}  {string}
+       */
+      const getDownloadUrl = (data: IData, file: IData): string => {
+        const editorParams = { ...c.editorParams };
+        if (editorParams.exportparams) {
+          editorParams.exportParams = JSON.parse(editorParams.exportparams);
         }
-      },
-      { immediate: true },
-    );
-
-    // data响应式变更基础路径
-    watch(
-      () => props.data,
-      newVal => {
-        if (newVal) {
-          const urls = ibiz.util.file.calcFileUpDownUrl(
-            c.context,
-            c.params,
-            newVal,
-            c.editorParams,
-          );
-          downloadUrl.value = urls.downloadUrl;
+        if (file && file.folder) {
+          editorParams.osscat = file.folder;
         }
-      },
-      { immediate: true, deep: true },
-    );
+        const urls = ibiz.util.file.calcFileUpDownUrl(
+          c.context,
+          c.params,
+          data,
+          editorParams,
+        );
+        return urls.downloadUrl;
+      };
 
-    watch(
-      carouselData,
-      newVal => {
-        // 变更后且下载基础路径存在时解析
-        if (newVal?.length && downloadUrl.value) {
-          newVal.forEach((carousel: IData) => {
-            carousel.imgUrl =
-              carousel.imgUrl ||
-              downloadUrl.value.replace('%fileId%', carousel.id);
-          });
-        }
-      },
-      { immediate: true },
-    );
+      watch(
+        carouselData,
+        newVal => {
+          // 变更后且下载基础路径存在时解析
+          if (newVal?.length) {
+            newVal.forEach((carousel: IData) => {
+              const downloadUrl = getDownloadUrl(props.data, carousel);
+              carousel.imgUrl =
+                carousel.imgUrl || downloadUrl.replace('%fileId%', carousel.id);
+              if (ibiz.config.common.enableDownloadTicket) {
+                ibiz.util.file
+                  .getDownloadTicket(
+                    c.context,
+                    c.params,
+                    props.data,
+                    {
+                      fileId: carousel.id,
+                    },
+                    c.downloadTicketParams,
+                  )
+                  .then(downloadTicket => {
+                    if (downloadTicket && downloadTicket.ticket) {
+                      carousel.imgUrl = downloadUrl.replace(
+                        '%fileId%',
+                        downloadTicket.ticket,
+                      );
+                    }
+                  });
+              }
+            });
+          }
+        },
+        { immediate: true },
+      );
 
-    return {
-      ns,
-      c,
-      editorModel,
-      downloadUrl,
-      carouselData,
-      isAuto,
-      timeSpan,
-    };
+      return {
+        ns,
+        c,
+        editorModel,
+        carouselData,
+        isAuto,
+        timeSpan,
+      };
+    },
+    render() {
+      return (
+        <div
+          class={[
+            this.ns.b(),
+            this.disabled ? this.ns.m('disabled') : '',
+            this.readonly ? this.ns.m('readonly') : '',
+            this.ns.e(this.editorModel.editorType),
+          ]}
+        >
+          <iBizCarouselComponent
+            carouselData={this.carouselData}
+            isAuto={this.isAuto}
+            timeSpan={this.timeSpan}
+            {...this.$attrs}
+          />
+        </div>
+      );
+    },
   },
-  render() {
-    return (
-      <div
-        class={[
-          this.ns.b(),
-          this.disabled ? this.ns.m('disabled') : '',
-          this.readonly ? this.ns.m('readonly') : '',
-          this.ns.e(this.editorModel.editorType),
-        ]}
-      >
-        <iBizCarouselComponent
-          carouselData={this.carouselData}
-          isAuto={this.isAuto}
-          timeSpan={this.timeSpan}
-          {...this.$attrs}
-        />
-      </div>
-    );
-  },
-});
+);

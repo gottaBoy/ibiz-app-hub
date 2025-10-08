@@ -75,5 +75,6 @@ export type {
   IApiGanttState,
   IApiGanttStyle,
   IApiGanttNodeData,
+  IApiGanttNodeLinkData,
 } from './i-api-gantt.state';
 export type { IApiViewPanelState } from './i-api-view-panel.state';

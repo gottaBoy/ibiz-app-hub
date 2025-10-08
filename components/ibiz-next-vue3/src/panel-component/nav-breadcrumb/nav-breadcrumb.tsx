@@ -3,6 +3,8 @@ import { useNamespace } from '@ibiz-template/vue3-util';
 import { IPanelRawItem } from '@ibiz/model-core';
 import { useRoute, useRouter } from 'vue-router';
 import { NavBreadcrumbController } from './nav-breadcrumb.controller';
+import { BreadcrumbMsg } from './nav-breadcrumb.state';
+import { getAppIndexViewName } from './nav-breadcrumb.util';
 import './nav-breadcrumb.scss';
 
 export interface dropdownAction {
@@ -14,8 +16,8 @@ export interface dropdownAction {
  * 面包屑导航
  * @primary
  * @description 首页下的面包屑组件，使用el-breadcrumb绘制，根据打开视图层级绘制面包屑。
- * @panelitemparams {name:navmode,parameterType:router|menu|store,defaultvalue:router,description:导航模式}
- * @panelitemparams {name:separator,parameterType:string,defaultvalue:/,description:面包屑分隔符}
+ * @panelitemparams {name:navmode,parameterType:'router' | 'menu' | 'store',defaultvalue:'router',description:导航模式}
+ * @panelitemparams {name:separator,parameterType:string,defaultvalue:'/',description:面包屑分隔符}
  * @panelitemparams {name:showhome,parameterType:boolean,defaultvalue:true,description:是否显示应用标题}
  */
 export const NavBreadcrumb = defineComponent({
@@ -55,15 +57,21 @@ export const NavBreadcrumb = defineComponent({
     const items = computed(() => {
       const { breadcrumbItems } = c.state;
       let result = breadcrumbItems.filter(x => x.caption);
+      const indexViewName = getAppIndexViewName(c.panel.context);
       if (!c.showHome) {
-        result = result.filter(
-          x => x.viewName !== ibiz.hub.defaultAppIndexViewName,
-        );
+        result = result.filter(x => x.viewName !== indexViewName);
       }
       return result;
     });
 
-    return { ns, c, items };
+    const onClick = (event: MouseEvent, item: BreadcrumbMsg) => {
+      if (item.type === 'menuItem') {
+        event.stopPropagation();
+        c.openMenuItemView(item, event);
+      }
+    };
+
+    return { ns, c, items, onClick };
   },
   render() {
     return (
@@ -81,7 +89,11 @@ export const NavBreadcrumb = defineComponent({
               label += ` - ${item.dataInfo}`;
             }
             return (
-              <el-breadcrumb-item to={item.fullPath}>
+              <el-breadcrumb-item
+                class={this.ns.is('link', item.type === 'menuItem')}
+                to={item.fullPath}
+                onClick={(event: MouseEvent) => this.onClick(event, item)}
+              >
                 {label}
               </el-breadcrumb-item>
             );

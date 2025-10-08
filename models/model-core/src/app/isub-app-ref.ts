@@ -113,4 +113,30 @@ export interface ISubAppRef extends IModelObject {
    * 来源  getServiceId
    */
   serviceId?: string;
+
+  /**
+   * 系统引用类型
+   * @description 值模式 [系统引用类型] {SUBSYS：平台子系统、 DEVSYS：开发系统组件、 EXTENSION_DEVSYS：开发系统组件（扩展）、 EXTENSION_DEVSYS_PSMODELTOOL：开发系统组件（模型工具）、 EXTENSION_DEVSYS_WORKFLOW：开发系统组件（工作流）、 MERGENCE_DEVSYS：开发系统组件（合并）、 DEVSYSCLOUD：开发系统云服务、 CLOUDHUBSUBAPP：Cloud集成子应用、 ETLEXTRACT：ETL展开逻辑、 ETLTRANSFORM：ETL转换逻辑、 ETLLOAD：ETL加载逻辑、 ETLSOURCE：ETL数据源（模型同步）、 ETLMODEL：ETL模型（模型同步）、 USER：用户自定义、 USER2：用户自定义2、 USER3：用户自定义3、 USER4：用户自定义4 }
+   * @type {( string | 'SUBSYS' | 'DEVSYS' | 'EXTENSION_DEVSYS' | 'EXTENSION_DEVSYS_PSMODELTOOL' | 'EXTENSION_DEVSYS_WORKFLOW' | 'MERGENCE_DEVSYS' | 'DEVSYSCLOUD' | 'CLOUDHUBSUBAPP' | 'ETLEXTRACT' | 'ETLTRANSFORM' | 'ETLLOAD' | 'ETLSOURCE' | 'ETLMODEL' | 'USER' | 'USER2' | 'USER3' | 'USER4')}
+   * 来源  getSysRefType
+   */
+  sysRefType?:
+    | string
+    | 'SUBSYS'
+    | 'DEVSYS'
+    | 'EXTENSION_DEVSYS'
+    | 'EXTENSION_DEVSYS_PSMODELTOOL'
+    | 'EXTENSION_DEVSYS_WORKFLOW'
+    | 'MERGENCE_DEVSYS'
+    | 'DEVSYSCLOUD'
+    | 'CLOUDHUBSUBAPP'
+    | 'ETLEXTRACT'
+    | 'ETLTRANSFORM'
+    | 'ETLLOAD'
+    | 'ETLSOURCE'
+    | 'ETLMODEL'
+    | 'USER'
+    | 'USER2'
+    | 'USER3'
+    | 'USER4';
 }

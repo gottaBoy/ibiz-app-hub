@@ -1,28 +1,34 @@
 import {
-  IControl,
-  IDEGrid,
   IDER1N,
   IExpBar,
   IDEList,
+  IDEGrid,
+  IControl,
   IDEDataView,
   INavigatable,
 } from '@ibiz/model-core';
-import { RuntimeError, RuntimeModelError } from '@ibiz-template/core';
 import {
-  IExpBarControlState,
-  IExpBarControlEvent,
-  IExpBarControlController,
-  IMDControlController,
-  IToolbarController,
+  IBizParams,
+  IBizContext,
+  RuntimeError,
+  RuntimeModelError,
+} from '@ibiz-template/core';
+import {
   LoadEvent,
   EventBase,
   INavViewMsg,
+  IToolbarController,
+  IExpBarControlState,
+  IExpBarControlEvent,
+  IMDControlController,
+  IExpBarControlController,
   IViewLayoutPanelController,
 } from '../../../interface';
 import { calcDeCodeNameById } from '../../../model';
 import { calcNavParams } from '../../../utils';
 import { ControlController } from '../../common';
 import { ControllerEvent, hasSubRoute } from '../../utils';
+import { CTX } from '../../ctx';
 
 type XDataControlModel = IDEGrid | IDEList | IDEDataView;
 
@@ -103,6 +109,30 @@ export class ExpBarControlController<
    * @memberof ExpBarControlController
    */
   navStack: IData[] = [];
+
+  constructor(model: T, context: IContext, params: IParams, ctx: CTX) {
+    super(
+      model,
+      IBizContext.create({}, context),
+      new IBizParams({}, params),
+      ctx,
+    );
+    // 更新搜索栏的模型
+    if (this.model.enableSearch) {
+      const modelData = this.view.model.viewLayoutPanel?.controls?.find(
+        item => item.id === 'searchbar',
+      );
+      if (modelData && modelData.controlParam) {
+        const { SEARCHPHSEPARATOR } = this.model.controlParam?.ctrlParams || {};
+        if (SEARCHPHSEPARATOR) {
+          modelData.controlParam.ctrlParams = {
+            ...(modelData.controlParam.ctrlParams || {}),
+            SEARCHPHSEPARATOR,
+          };
+        }
+      }
+    }
+  }
 
   protected initState(): void {
     super.initState();
@@ -353,20 +383,27 @@ export class ExpBarControlController<
    */
   protected navByFirstItem(): void {
     const data = this.xDataController.state.items[0];
-    if (!data) {
-      // 导航视图传空让他导航占位绘制空界面
-      this.state.srfnav = '';
-      this._evt.emit('onNavViewChange', {
-        navViewMsg: {
-          key: '',
-          isCache: this.isCache,
-        },
-      });
-      return;
-    }
+    if (!data) return this.clearNavigation();
     // 默认选中并激活第一项
     this.xDataController.setActive(data);
     this.xDataController.setSelection([data]);
+  }
+
+  /**
+   * @description 清空导航
+   * @protected
+   * @memberof ExpBarControlController
+   */
+  protected clearNavigation(): void {
+    this.navStack = [];
+    this.xDataController.setSelection([]);
+    this.state.srfnav = '';
+    this._evt.emit('onNavViewChange', {
+      navViewMsg: {
+        key: '',
+        isCache: this.isCache,
+      },
+    });
   }
 
   /**
@@ -376,25 +413,17 @@ export class ExpBarControlController<
    */
   navDataByStack(): void {
     const { items } = this.xDataController.state;
-    const preNav = this.navStack.find(nav =>
-      items.find(item => nav[this.navKeyName] === item[this.navKeyName]),
-    );
-    const navData = preNav
-      ? items.find(item => preNav[this.navKeyName] === item[this.navKeyName])
-      : items[0];
+    const navData =
+      this.navStack
+        .map(nav =>
+          items.find(item => nav[this.navKeyName] === item[this.navKeyName]),
+        )
+        .find(item => item !== undefined) || items[0];
     if (navData) {
       this.xDataController.setActive(navData);
       this.xDataController.setSelection([navData]);
     } else {
-      this.navStack = [];
-      this.xDataController.setSelection([]);
-      this.state.srfnav = '';
-      this._evt.emit('onNavViewChange', {
-        navViewMsg: {
-          key: '',
-          isCache: this.isCache,
-        },
-      });
+      this.clearNavigation();
     }
   }
 

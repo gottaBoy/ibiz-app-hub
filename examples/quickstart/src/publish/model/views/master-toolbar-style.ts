@@ -1,6 +1,7 @@
 export default {
   deviewCodeName: 'toolbar_style',
   deviewId: 'c2dda65ef30e3c939e55e30449528316',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',

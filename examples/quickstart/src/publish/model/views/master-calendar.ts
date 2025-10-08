@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'calendar',
   deviewId: '7066cbb17a782b9424b40cd3bcbd9120',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -28,29 +29,24 @@ export default {
           id: 'base',
         },
         {
-          caption: '多数据',
+          caption: '多数据源',
           appViewId: 'web.master_calendar_multiple_data',
           id: 'multiple_data',
         },
         {
-          caption: '项布局',
+          caption: '布局面板',
           appViewId: 'web.master_calendar_layout',
           id: 'layout',
         },
         {
-          caption: '分组',
-          appViewId: 'web.master_claendar_group',
-          id: 'group',
+          caption: '上下文菜单',
+          appViewId: 'web.master_calendar_contextmenu',
+          id: 'contextmenu',
         },
         {
-          caption: '逻辑',
-          appViewId: 'web.master_calendar_logic',
-          id: 'logic',
-        },
-        {
-          caption: '内置工具栏',
-          appViewId: 'web.master_calendar_toolbar',
-          id: 'toolbar',
+          caption: '设置默认值',
+          appViewId: 'web.master_default_date_tab_exp_view',
+          id: 'defaultdate',
         },
         {
           caption: '内置导航',
@@ -58,9 +54,19 @@ export default {
           id: 'built_in_nav',
         },
         {
-          caption: '界面样式及图标',
-          appViewId: 'web.master_calendar_style_icon',
-          id: 'css',
+          caption: '显示模式',
+          appViewId: 'web.master_calendar_showmode',
+          id: 'showmode',
+        },
+        {
+          caption: '刷新模式',
+          appViewId: 'web.master_calendar_refreshmode',
+          id: 'mdctrlrefreshmode',
+        },
+        {
+          caption: '事件及调用',
+          appViewId: 'web.master_calendar_event_call',
+          id: 'event_and_call',
         },
       ],
       dataRelationTag: 'calendar_DR',

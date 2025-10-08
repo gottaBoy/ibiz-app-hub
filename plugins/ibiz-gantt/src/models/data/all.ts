@@ -49,6 +49,7 @@ export default class AllData {
   options: DataOptions = {
     isExpand: false,
     expandLabel: '',
+    draggableLabel: '',
     startLabel: Variables.default.startKey,
     endLabel: Variables.default.endKey,
     dataId: Variables.default.idKey,

@@ -26,8 +26,8 @@ export interface IApiSearchBarState extends IApiControlState {
   visible: boolean;
 
   /**
-   * @description 快速搜索项集合，快速搜索项会以`,`符合拼接到quickSearchPlaceHolder中
-   * @type {IQuickSearchItem[]}
+   * @description 快速搜索项集合
+   * @type {IApiQuickSearchItem[]}
    * @default []
    * @memberof IApiSearchBarState
    */

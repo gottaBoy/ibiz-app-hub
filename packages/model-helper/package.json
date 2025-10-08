@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/model-helper",
-  "version": "0.7.41-alpha.16",
+  "version": "0.7.41-alpha.21",
   "description": "模型辅助库",
   "main": "out/index.js",
   "types": "out/index.d.ts",

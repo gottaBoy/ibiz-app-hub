@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'data_picker_link',
   deviewId: 'cec732bb60be3e997faaf797d4e05b43',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -60,7 +61,7 @@ export default {
         id: 'loaddraft',
       },
       getControlAction: {
-        appDEMethodId: 'get_sample_date',
+        appDEMethodId: 'get_sample_data',
         appDataEntityId: 'web.master',
         id: 'load',
       },
@@ -73,6 +74,16 @@ export default {
         appDEMethodId: 'update',
         appDataEntityId: 'web.master',
         id: 'update',
+      },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
       },
       deformPages: [
         {
@@ -198,6 +209,92 @@ export default {
               },
               showCaption: true,
               id: 'grouppanel1',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  createDV:
+                    '这是一个超长的数据链接文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本',
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    linkAppViewId: 'web.region_info_view',
+                    enableLinkView: true,
+                    singleSelect: true,
+                    forceSelection: true,
+                    valueItemName: 'formitem1',
+                    editorParams: {
+                      EDITABLE: 'FALSE',
+                      LINKVIEW: 'TRUE',
+                      AC: 'FALSE',
+                      overflowmode: 'ellipsis',
+                      TRIGGER: 'FALSE',
+                      PICKUPVIEW: 'FALSE',
+                    },
+                    editorType: 'PICKEREX_LINKONLY',
+                    editorItems: [
+                      {
+                        id: 'formitem1',
+                      },
+                    ],
+                    valueType: 'SIMPLE',
+                    id: 'formitem2',
+                  },
+                  updateDV:
+                    '这是一个超长的数据链接文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本',
+                  allowEmpty: true,
+                  codeName: 'formitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem2',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用overflowmode参数指定数据链接的换行模式，可选值有auto和ellipsis。当参数为auto时，若内容超出宽度则会换行显示；当参数为ellipsis时，若内容超出宽度则会显示省略号。当前为ellipsis不换行模式，超出宽度会显示省略号',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem1',
+                  },
+                  codeName: 'rawitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem1',
+                },
+              ],
+              caption: '换行模式',
+              codeName: 'grouppanel2',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel2',
             },
             {
               dataType: 25,

@@ -6,3 +6,4 @@ export { FileUploader } from './util/file-uploader';
 export { MaterialResourceParser } from './util/material-resource-parser';
 export { ChatSuggestionParser } from './util/chat-suggestion-parser';
 export { isWithinBounds, limitDraggable } from './util/drag-util';
+export { generateHashWithText } from './util/text-hash-util';

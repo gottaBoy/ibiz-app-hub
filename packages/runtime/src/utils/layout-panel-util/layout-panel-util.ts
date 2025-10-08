@@ -3,8 +3,10 @@ import {
   IViewLayoutPanel,
   IAppIndexView,
   IAppDETabExplorerView,
+  IDEMultiEditViewPanel,
 } from '@ibiz/model-core';
 import { clone } from 'ramda';
+import { getControl } from '../../model';
 
 /**
  * 布局面板工具类
@@ -104,6 +106,8 @@ export class LayoutPanelUtil {
         return this.calcIndexViewLayoutTag(viewModel);
       case 'DETABEXPVIEW':
         return this.calcTabExpViewLayoutTag(viewModel);
+      case 'DEMEDITVIEW9':
+        return this.calcDEMedViewLayoutTag(viewModel);
       default:
         return `${viewType}_${viewStyle}`;
     }
@@ -162,5 +166,24 @@ export class LayoutPanelUtil {
       key += '_NO_NAV';
     }
     return key;
+  }
+
+  /**
+   * @description 特殊计算多编辑视图布局面板标识，上分页特殊处理
+   * @protected
+   * @param {IAppView} viewModel
+   * @returns {*}  {string}
+   * @memberof LayoutPanelUtil
+   */
+  protected calcDEMedViewLayoutTag(viewModel: IAppView): string {
+    const { viewType, viewStyle } = viewModel;
+    const meditPanel: IDEMultiEditViewPanel | undefined = getControl(
+      viewModel,
+      'meditviewpanel',
+    );
+    if (meditPanel && meditPanel.panelStyle === 'TAB_TOP') {
+      return `${viewType}_TOP`;
+    }
+    return `${viewType}_${viewStyle}`;
   }
 }

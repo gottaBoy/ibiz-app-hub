@@ -1,20 +1,21 @@
 import {
-  hasEmptyPanelRenderer,
+  useNamespace,
   IBizCustomRender,
   useControlController,
-  useNamespace,
+  hasEmptyPanelRenderer,
+  useControlPopoverzIndex,
 } from '@ibiz-template/vue3-util';
 import {
-  computed,
-  defineComponent,
   h,
-  PropType,
   ref,
-  resolveComponent,
   VNode,
+  computed,
+  PropType,
   renderSlot,
-  VNodeArrayChildren,
   watchEffect,
+  defineComponent,
+  resolveComponent,
+  VNodeArrayChildren,
 } from 'vue';
 import { IDETreeColumn, IDETreeGridEx } from '@ibiz/model-core';
 import {
@@ -22,10 +23,10 @@ import {
   ITreeNodeData,
   TreeGridExController,
 } from '@ibiz-template/runtime';
-import './tree-grid-ex.scss';
 import { RuntimeError } from '@ibiz-template/core';
 import { createUUID } from 'qx-util';
 import { useRowEditPopover } from './use-row-edit-popover';
+import './tree-grid-ex.scss';
 
 export const TreeGridExControl = defineComponent({
   name: 'IBizTreeGridExControl',
@@ -52,6 +53,8 @@ export const TreeGridExControl = defineComponent({
     const c = useControlController<TreeGridExController>(
       (...args) => new TreeGridExController(...args),
     );
+
+    useControlPopoverzIndex(c);
 
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
 
@@ -316,38 +319,40 @@ export const TreeGridExControl = defineComponent({
       );
     };
     return (
-      <iBizControlBase controller={this.c} class={[this.ns.b()]}>
-        {this.c.state.isLoaded && (
-          <el-table
-            ref={'tableRef'}
-            key={this.tableRefreshKey}
-            class={this.ns.e('table')}
-            border
-            row-key='id'
-            data={this.elTableData}
-            tree-props={{ children: 'children', hasChildren: 'hasChildren' }}
-            lazy
-            onRowClick={this.onRowClick}
-            onExpandChange={this.onExpandChange}
-            row-class-name={this.handleRowClassName}
-            load={this.loadData}
-          >
-            {{
-              empty: this.renderNoData,
-              default: (): VNodeArrayChildren => {
-                return [
-                  this.renderColumns.map((model, index) => {
-                    return renderColumn(model, index);
-                  }),
-                ];
-              },
-              append: () => {
-                return this.renderPopover();
-              },
-            }}
-          </el-table>
-        )}
-      </iBizControlBase>
+      <iBizControlNavigation controller={this.c}>
+        <iBizControlBase controller={this.c} class={[this.ns.b()]}>
+          {this.c.state.isLoaded && (
+            <el-table
+              ref={'tableRef'}
+              key={this.tableRefreshKey}
+              class={this.ns.e('table')}
+              border
+              row-key='id'
+              data={this.elTableData}
+              tree-props={{ children: 'children', hasChildren: 'hasChildren' }}
+              lazy
+              onRowClick={this.onRowClick}
+              onExpandChange={this.onExpandChange}
+              row-class-name={this.handleRowClassName}
+              load={this.loadData}
+            >
+              {{
+                empty: this.renderNoData,
+                default: (): VNodeArrayChildren => {
+                  return [
+                    this.renderColumns.map((model, index) => {
+                      return renderColumn(model, index);
+                    }),
+                  ];
+                },
+                append: () => {
+                  return this.renderPopover();
+                },
+              }}
+            </el-table>
+          )}
+        </iBizControlBase>
+      </iBizControlNavigation>
     );
   },
 });

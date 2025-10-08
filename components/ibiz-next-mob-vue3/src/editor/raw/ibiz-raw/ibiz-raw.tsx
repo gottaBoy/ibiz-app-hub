@@ -7,6 +7,15 @@ import {
 import { RawEditorController } from '../raw-editor.controller';
 import './ibiz-raw.scss';
 
+/**
+ * 直接内容
+ * @primary
+ * @description 用于绘制配置的直接内容，如HTML内容、视频内容、图片内容等。支持编辑器类型包含：`直接内容`
+ * @editorparams {name:contenttype,parameterType:string,defaultvalue:TEXT,description:内容类型}
+ * @editorparams {name:template,parameterType:string,description:配置的handlerBars模版，用于将组件输入参数中的value值解析并转换为HTML内容，实现动态内容的渲染}
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizRaw = defineComponent({
   name: 'IBizRaw',
   props: getRawProps<RawEditorController>(),

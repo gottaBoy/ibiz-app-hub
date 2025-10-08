@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'list_batchtoolbar',
   deviewId: '210ad6b4cdd4f84ff8f16959e152846e',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -66,7 +67,6 @@ export default {
       id: 'opendata',
     },
   ],
-  appViewMsgGroupId: 'list_batchtoolbar',
   appViewRefs: [
     {
       realOpenMode: 'POPUPMODAL',
@@ -145,6 +145,7 @@ export default {
         name: 'list_itempanel',
         id: 'web.master.a35ceca249417528718',
       },
+      orderValueAppDEFieldId: 'px',
       delistDataItems: [
         {
           appDEFieldId: 'name',
@@ -166,9 +167,31 @@ export default {
           dataType: 25,
           id: 'region_id',
         },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          frontCodeListId: 'web.wfstates',
+          dataType: 25,
+          id: 'wf_status',
+        },
       ],
       pagingMode: 1,
       pagingSize: 10,
+      hasWFDataItems: true,
       enablePagingBar: true,
       showHeader: true,
       navViewPos: 'NONE',

@@ -11,14 +11,6 @@ import { IApiMDControlGroupState } from './i-api-md-control.state';
  */
 export interface IApiKanbanState extends IApiDataViewControlState {
   /**
-   * @description 是否正在更新
-   * @type {boolean}
-   * @default false
-   * @memberof IApiKanbanState
-   */
-  updating: boolean;
-
-  /**
    * @description 是否正在批操作
    * @type {boolean}
    * @default false

@@ -1,9 +1,10 @@
 export default {
-  tabLayout: 'TOP',
+  tabLayout: 'FLOW',
   loadDefault: true,
   showDataInfoBar: true,
   deviewCodeName: 'view_message',
   deviewId: 'e26bd27208e6d15e2853cb747bb8e018',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -36,6 +37,11 @@ export default {
           caption: '关闭模式',
           appViewId: 'web.master_view_message_close_mode',
           id: 'close_mode',
+        },
+        {
+          caption: '动态内容',
+          appViewId: 'web.master_view_message_dynamic',
+          id: 'dynamic',
         },
       ],
       dataRelationTag: 'view_message_DR',

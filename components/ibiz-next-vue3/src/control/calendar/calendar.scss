@@ -42,6 +42,19 @@ $control-calendar-item: (
   }
 }
 
+.#{bem('control-calendar', 'user')} {
+  .#{bem('control-calendar', 'nav-icon')} {
+    top: 9px;
+  }
+}
+.#{bem('control-calendar', 'day')},
+.#{bem('control-calendar', 'week')} {
+  .#{bem('control-calendar', 'nav-icon')} {
+    top: 28px;
+    right: 10px;
+  }
+}
+
 @include b(control-calendar-content) {
   display: flex;
   flex-direction: column;
@@ -106,7 +119,8 @@ $control-calendar-item: (
 
       &.is-end-time {
         width: calc(100% - getCssVar(spacing, super-tight));
-        border-radius: 0 getCssVar(spacing, extra-tight) getCssVar(spacing, extra-tight) 0;
+        border-radius: 0 getCssVar(spacing, extra-tight)
+          getCssVar(spacing, extra-tight) 0;
       }
 
       &.is-active {
@@ -114,11 +128,19 @@ $control-calendar-item: (
         border-left: none;
 
         &.is-begin-time {
-          border-left: solid 0.5px var(#{getCssVarName(control-calendar,item-active-border-color)}, #{getCssVar(control-calendar, border-color)});
+          border-left: solid 0.5px
+            var(
+              #{getCssVarName(control-calendar, item-active-border-color)},
+              #{getCssVar(control-calendar, border-color)}
+            );
         }
 
         &.is-end-time {
-          border-right: solid 0.5px var(#{getCssVarName(control-calendar,item-active-border-color)}, #{getCssVar(control-calendar, border-color)});
+          border-right: solid 0.5px
+            var(
+              #{getCssVarName(control-calendar, item-active-border-color)},
+              #{getCssVar(control-calendar, border-color)}
+            );
         }
       }
 
@@ -153,7 +175,10 @@ $control-calendar-item: (
   @include set-component-css-var(control-calendar-item, $control-calendar-item);
 
   #{getCssVarName(color, text, 2)}: getCssVar(control-calendar-item, color);
-  #{getCssVarName(editor, default, text, color)}: getCssVar(control-calendar-item, color);
+  #{getCssVarName(editor, default, text, color)}: getCssVar(
+    control-calendar-item,
+    color
+  );
   height: 100%;
   padding: getCssVar(control-calendar, item-padding);
   margin-bottom: getCssVar(control-calendar, margin);
@@ -172,7 +197,11 @@ $control-calendar-item: (
 
   @include when(active) {
     background-color: getCssVar(control-calendar, active-bg-color);
-    border: solid 0.5px var(#{getCssVarName(control-calendar,item-active-border-color)}, #{getCssVar(control-calendar, border-color)});
+    border: solid 0.5px
+      var(
+        #{getCssVarName(control-calendar, item-active-border-color)},
+        #{getCssVar(control-calendar, border-color)}
+      );
   }
 }
 
@@ -214,29 +243,29 @@ $control-calendar-item: (
   width: 100%;
 
   @include e('item') {
-      display: flex;
-      align-items: center;
-      padding: 0 getCssVar('spacing', 'tight');
-      line-height: 1em;
-      cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0 getCssVar('spacing', 'tight');
+    line-height: 1em;
+    cursor: pointer;
 
-      @include m('tip') {
-        display: inline-block;
-        width: 1.5em;
-        height: 0.9em;
-        margin-right: getCssVar('spacing', 'extra-tight');
-        border-radius: getCssVar(border, radius, extra, small);
-      }
+    @include m('tip') {
+      display: inline-block;
+      width: 1.5em;
+      height: 0.9em;
+      margin-right: getCssVar('spacing', 'extra-tight');
+      border-radius: getCssVar(border, radius, extra, small);
+    }
 
-      @include m('text') {
-        display: inline-block;
-        width: auto;
-        max-width: 100px;
-        overflow: hidden;
-        text-align: left;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+    @include m('text') {
+      display: inline-block;
+      width: auto;
+      max-width: 100px;
+      overflow: hidden;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 }
 

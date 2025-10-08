@@ -31,6 +31,10 @@ export class DRTabController
   extends ControlController<IDEDRTab, IDRTabState, IDRTabEvent>
   implements IDRTabController
 {
+  setActive(_name: string): void {
+    throw new Error('Method not implemented.');
+  }
+
   /**
    * 计数器对象
    *

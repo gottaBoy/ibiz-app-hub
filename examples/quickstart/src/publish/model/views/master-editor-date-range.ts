@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'editor_date_range',
   deviewId: '5306d0115b3531a41cc9513a771f81ec',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -65,6 +66,16 @@ export default {
         appDataEntityId: 'web.master',
         id: 'update',
       },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
+      },
       deformPages: [
         {
           layout: {
@@ -81,12 +92,11 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
-                  itemWidth: 350,
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
                     editorType: 'DATERANGE',
-                    editorWidth: 350,
+                    placeHolder: '请选择时间;请选择时间',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'formitem',
@@ -97,14 +107,13 @@ export default {
                   detailStyle: 'DEFAULT',
                   detailType: 'FORMITEM',
                   layoutPos: {
-                    colLG: 12,
-                    colMD: 12,
+                    colMD: 24,
                     layout: 'TABLE_24COL',
                   },
                   id: 'formitem',
                 },
               ],
-              caption: '时间范围选择',
+              caption: '时间范围选择器',
               codeName: 'group1',
               detailStyle: 'DEFAULT',
               detailType: 'GROUPPANEL',
@@ -124,7 +133,6 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
-                  itemWidth: 300,
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
@@ -132,7 +140,7 @@ export default {
                       TIMEFMT: 'YYYY-MM-DD',
                     },
                     editorType: 'DATERANGE_NOTIME',
-                    editorWidth: 300,
+                    placeHolder: '请选择时间;请选择时间',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'formitem1',
@@ -140,17 +148,12 @@ export default {
                   allowEmpty: true,
                   caption: '时间范围选择器（YYYY-MM-DD）',
                   codeName: 'formitem1',
-                  contentWidth: 500,
                   detailStyle: 'DEFAULT',
                   detailType: 'FORMITEM',
                   layoutPos: {
-                    colLG: 12,
-                    colMD: 12,
+                    colMD: 24,
                     layout: 'TABLE_24COL',
-                    width: 500,
-                    widthMode: 'PX',
                   },
-                  width: 500,
                   id: 'formitem1',
                 },
               ],
@@ -164,6 +167,285 @@ export default {
               },
               showCaption: true,
               id: 'grouppanel1',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      rangeseparator: '到',
+                    },
+                    editorType: 'DATERANGE',
+                    placeHolder: '请选择时间;请选择时间',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem2',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem2',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用rangeseparator参数指定时间范围选择器选择范围时的分隔符。当前时间范围选择器选择范围时的分隔符为到',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem1',
+                  },
+                  codeName: 'rawitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem1',
+                },
+              ],
+              caption: '选择范围时的分隔符',
+              codeName: 'grouppanel2',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel2',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      unlinkpanels: 'true',
+                    },
+                    editorType: 'DATERANGE',
+                    placeHolder: '请选择时间;请选择时间',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem3',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem3',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem3',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用unlinkpanels参数控制时间范围选择器是否取消两个日期面板之间的联动。当前时间范围选择器已取消两个日期面板之间的联动',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem2',
+                  },
+                  codeName: 'rawitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem2',
+                },
+              ],
+              caption: '取消两个日期面板之间的联动',
+              codeName: 'grouppanel3',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel3',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      valueseparator: '@',
+                    },
+                    editorType: 'DATERANGE',
+                    placeHolder: '请选择时间;请选择时间',
+                    valueSeparator: '@',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem4',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem4',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem4',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用valueseparator参数指定时间范围选择器的值分隔符。当前时间范围选择器的值分隔符为@',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem3',
+                  },
+                  codeName: 'rawitem3',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem3',
+                },
+              ],
+              caption: '值分隔符',
+              codeName: 'grouppanel4',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel4',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  createDV: '2025-07-10 18:48:04,2025-07-11 18:48:04',
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      readonly: 'true',
+                    },
+                    editorType: 'DATERANGE',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    readOnly: true,
+                    id: 'formitem5',
+                  },
+                  updateDV: '2025-07-10 18:48:04,2025-07-11 18:48:04v',
+                  allowEmpty: true,
+                  codeName: 'formitem5',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem5',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用readonly参数控制编辑器是否为只读态。当前编辑器为只读态',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem4',
+                  },
+                  codeName: 'rawitem4',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem4',
+                },
+              ],
+              caption: '只读态',
+              codeName: 'grouppanel5',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel5',
             },
             {
               dataType: 25,

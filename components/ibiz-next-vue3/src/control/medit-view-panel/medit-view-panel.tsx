@@ -117,44 +117,58 @@ export const MEditViewPanelControl = defineComponent({
       return (
         <el-tabs
           class={this.ns.b('tabs')}
+          addable={true}
           v-model={this.c.state.activeTab}
           onTabChange={this.onTabChange}
+          onTabAdd={() => this.c.handleAdd()}
         >
-          {this.c.state.panelUiItems.map(item => {
-            return (
-              <el-tab-pane key={item.id + item.srfmajortext} name={item.id}>
-                {{
-                  label: () => {
-                    return (
-                      <div class={this.ns.b('tab-label')}>
-                        <span>{item.srfmajortext}</span>
-                        <ion-icon
-                          name='close-outline'
-                          onClick={(event: MouseEvent) =>
-                            this.handleTabDelete(item, event)
-                          }
-                        ></ion-icon>
-                      </div>
-                    );
-                  },
-                  default: () => {
-                    return (
-                      this.c.state.activeTab === item.id &&
-                      h(viewShell, {
-                        context: item.context,
-                        params: item.params,
-                        viewId: this.c.model.embeddedAppViewId,
-                        onDataChange: (args: DataChangeEvent) =>
-                          this.c.onViewDataChange(args, item.id),
-                        onCreated: (event: EventBase) =>
-                          this.c.onViewCreated(event, item.id),
-                      })
-                    );
-                  },
-                }}
-              </el-tab-pane>
-            );
-          })}
+          {{
+            addIcon: () => {
+              return (
+                <el-button>
+                  <ion-icon name='add'></ion-icon>
+                  {ibiz.i18n.t('app.add')}
+                </el-button>
+              );
+            },
+            default: () => {
+              return this.c.state.panelUiItems.map(item => {
+                return (
+                  <el-tab-pane key={item.id + item.srfmajortext} name={item.id}>
+                    {{
+                      label: () => {
+                        return (
+                          <div class={this.ns.b('tab-label')}>
+                            <span>{item.srfmajortext}</span>
+                            <ion-icon
+                              name='close-outline'
+                              onClick={(event: MouseEvent) =>
+                                this.handleTabDelete(item, event)
+                              }
+                            ></ion-icon>
+                          </div>
+                        );
+                      },
+                      default: () => {
+                        return (
+                          this.c.state.activeTab === item.id &&
+                          h(viewShell, {
+                            context: item.context,
+                            params: item.params,
+                            viewId: this.c.model.embeddedAppViewId,
+                            onDataChange: (args: DataChangeEvent) =>
+                              this.c.onViewDataChange(args, item.id),
+                            onCreated: (event: EventBase) =>
+                              this.c.onViewCreated(event, item.id),
+                          })
+                        );
+                      },
+                    }}
+                  </el-tab-pane>
+                );
+              });
+            },
+          }}
         </el-tabs>
       );
     };

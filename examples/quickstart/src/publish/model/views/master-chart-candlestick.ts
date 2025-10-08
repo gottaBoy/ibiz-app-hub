@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Chart_candlestick',
   deviewId: 'ffeea7c9e475f932bb1b804778bdaf7f',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -10,55 +11,370 @@ export default {
   caption: '图表_k线图',
   codeName: 'master_chart_candlestick',
   appDataEntityId: 'web.master',
-  appViewEngines: [
-    {
-      engineCat: 'VIEW',
-      engineType: 'ChartView',
-      id: 'engine',
+  viewLayoutPanel: {
+    layoutBodyOnly: true,
+    viewProxyMode: true,
+    layoutMode: 'FLEX',
+    layout: {
+      layout: 'FLEX',
     },
-  ],
-  appViewMsgGroupId: 'chart_candlestick',
-  controls: [
-    {
-      searchButtonStyle: 'DEFAULT',
-      deformPages: [
-        {
-          layout: {
-            columnCount: 24,
-            layout: 'TABLE_24COL',
+    rootPanelItems: [
+      {
+        actionGroupExtractMode: 'ITEM',
+        panelItems: [
+          {
+            actionGroupExtractMode: 'ITEM',
+            panelItems: [
+              {
+                actionGroupExtractMode: 'ITEM',
+                panelItems: [
+                  {
+                    caption: '页面标题',
+                    itemStyle: 'DEFAULT',
+                    itemType: 'CTRLPOS',
+                    layoutPos: {
+                      shrink: 1,
+                      layout: 'FLEX',
+                    },
+                    showCaption: true,
+                    id: 'captionbar',
+                  },
+                ],
+                layout: {
+                  align: 'center',
+                  layout: 'FLEX',
+                },
+                dataRegionType: 'INHERIT',
+                caption: '容器',
+                itemStyle: 'DEFAULT',
+                itemType: 'CONTAINER',
+                layoutPos: {
+                  shrink: 1,
+                  heightMode: 'FULL',
+                  layout: 'FLEX',
+                },
+                id: 'view_captionbar',
+              },
+            ],
+            layout: {
+              layout: 'FLEX',
+            },
+            dataRegionType: 'INHERIT',
+            caption: '容器',
+            itemStyle: 'DEFAULT',
+            itemType: 'CONTAINER',
+            layoutPos: {
+              shrink: 1,
+              heightMode: 'FULL',
+              layout: 'FLEX',
+            },
+            id: 'view_header_left',
           },
-          caption: '常规条件',
-          codeName: 'formpage1',
-          detailStyle: 'DEFAULT',
-          detailType: 'FORMPAGE',
-          id: 'formpage1',
+          {
+            actionGroupExtractMode: 'ITEM',
+            panelItems: [
+              {
+                actionGroupExtractMode: 'ITEM',
+                panelItems: [
+                  {
+                    caption: '工具栏',
+                    itemStyle: 'DEFAULT',
+                    itemType: 'CTRLPOS',
+                    layoutPos: {
+                      shrink: 1,
+                      layout: 'FLEX',
+                    },
+                    showCaption: true,
+                    id: 'toolbar',
+                  },
+                ],
+                layout: {
+                  align: 'center',
+                  layout: 'FLEX',
+                },
+                dataRegionType: 'INHERIT',
+                caption: '容器',
+                itemStyle: 'DEFAULT',
+                itemType: 'CONTAINER',
+                layoutPos: {
+                  shrink: 1,
+                  heightMode: 'FULL',
+                  layout: 'FLEX',
+                },
+                id: 'view_toolbar',
+              },
+            ],
+            layout: {
+              layout: 'FLEX',
+            },
+            dataRegionType: 'INHERIT',
+            caption: '容器',
+            itemStyle: 'DEFAULT',
+            itemType: 'CONTAINER',
+            layoutPos: {
+              shrink: 1,
+              heightMode: 'FULL',
+              layout: 'FLEX',
+            },
+            id: 'view_header_right',
+          },
+        ],
+        predefinedType: 'VIEWHEADER',
+        layout: {
+          align: 'space-between',
+          dir: 'row',
+          layout: 'FLEX',
+          valign: 'center',
         },
-      ],
-      layout: {
-        columnCount: 24,
-        layout: 'TABLE_24COL',
+        dataRegionType: 'INHERIT',
+        caption: '容器',
+        itemStyle: 'DEFAULT',
+        itemType: 'CONTAINER',
+        layoutPos: {
+          shrink: 0,
+          layout: 'FLEX',
+        },
+        id: 'view_header',
       },
-      tabHeaderPos: 'TOP',
-      noTabHeader: true,
-      autoLoad: true,
-      showBusyIndicator: true,
-      codeName: 'usr05152387_search_form',
-      controlType: 'SEARCHFORM',
-      logicName: '图表_k线图_搜索表单',
-      appDataEntityId: 'web.master',
-      controlParam: {
-        id: 'searchform',
+      {
+        actionGroupExtractMode: 'ITEM',
+        panelItems: [
+          {
+            caption: '搜索表单',
+            itemStyle: 'DEFAULT',
+            itemType: 'CTRLPOS',
+            layoutPos: {
+              shrink: 1,
+              layout: 'FLEX',
+            },
+            showCaption: true,
+            id: 'searchform',
+          },
+        ],
+        layout: {
+          dir: 'column',
+          layout: 'FLEX',
+        },
+        dataRegionType: 'INHERIT',
+        itemStyle: 'DEFAULT',
+        itemType: 'CONTAINER',
+        layoutPos: {
+          shrink: 0,
+          layout: 'FLEX',
+        },
+        id: 'view_searchform',
       },
-      modelId: '11cca194bfc736c3886ca5c37f39f34c',
-      modelType: 'PSDEFORM_SEARCHFORM',
-      name: 'searchform',
-      id: 'web.master.usr05152387_search_form',
-    },
-    {
-      coordinateSystem: 'XY',
-      chartCoordinateSystems: [
-        {
-          chartGrid: {
+      {
+        actionGroupExtractMode: 'ITEM',
+        panelItems: [
+          {
+            actionGroupExtractMode: 'ITEM',
+            panelItems: [
+              {
+                caption: '图表',
+                itemStyle: 'DEFAULT',
+                itemType: 'CTRLPOS',
+                layoutPos: {
+                  shrink: 1,
+                  heightMode: 'FULL',
+                  layout: 'FLEX',
+                },
+                showCaption: true,
+                id: 'chart',
+              },
+            ],
+            predefinedType: 'CONTAINER_MULTIDATA_RAW',
+            layout: {
+              layout: 'FLEX',
+            },
+            dataRegionType: 'MULTIDATA_RAW',
+            dataSourceType: 'CUSTOM',
+            scriptCode:
+              '[\n    {\n        "id": "527ef77e0a07a6cd90353bcf2db966a7",\n        "create_man": "948ca5f6546ad9097512fda0374c279a",\n        "create_time": "2025-07-11 18:08:17",\n        "update_man": "948ca5f6546ad9097512fda0374c279a",\n        "update_time": "2025-07-11 18:08:17",\n        "wf_status": "0",\n        "wf_user_id": "948ca5f6546ad9097512fda0374c279a",\n        "category_name": "演示类型7",\n        "category_type": "TYPE7",\n        "category_id": "TYPE7",\n        "enable": 1,\n        open: 105,\n        close: 80,\n        lowest: 50,\n        highest: 130,\n\n    },\n    {\n        "id": "sample",\n        "name": "演示数据",\n        "update_man": "948ca5f6546ad9097512fda0374c279a",\n        "update_time": "2025-06-06 11:10:37",\n        "type": "演示类型0",\n        "categories": "e2",\n        "date": "2025-11-08",\n        "quantity": "23",\n        "icon": "fa fa-warning",\n        "status": 0,\n        "start_time": "2025-05-05 00:00:00",\n        "end_time": "2025-05-26 23:59:59",\n        "px": 3,\n        "category_id": "83b5cd124b3ce2483f7f5396a874e945",\n        "enable": 1,\n        open: 100,\n        close: 80,\n        lowest: 150,\n        highest: 160,\n    },\n    {\n        "id": "sample1",\n        "name": "演示数据12",\n        "create_man": "948ca5f6546ad9097512fda0374c279a",\n        "create_time": "2025-05-15 17:30:57",\n        "update_man": "anonymous_user",\n        "update_time": "2025-07-09 17:47:37",\n        "type": "演示类型2",\n        "categories": "1",\n        "description": "演示说明1",\n        "quantity": "9000",\n        "icon": "fa fa-eye",\n        "status": 1,\n        "start_time": "2025-06-11 00:00:00",\n        "end_time": "2025-06-12 00:00:00",\n        "px": 1,\n        "enable": 1,\n        open: 100,\n        close: 80,\n        lowest: 60,\n        highest: 140,\n    },\n    {\n        "id": "sample2",\n        "name": "演示数据2",\n        "create_man": "948ca5f6546ad9097512fda0374c279a",\n        "create_time": "2025-05-15 17:48:21",\n        "update_man": "948ca5f6546ad9097512fda0374c279a",\n        "update_time": "2025-07-09 14:12:31",\n        "region_id": "130100",\n        "region_name": "石家庄",\n        "type": "演示类型2",\n        "categories": "2",\n        "description": "演示说明2",\n        "quantity": "4000",\n        "icon": "fa fa-arrow-circle-o-right",\n        "status": 1,\n        "start_time": "2025-05-24 00:00:00",\n        "end_time": "2025-06-12 23:59:59",\n        "px": 2,\n        "enable": 1,\n        open: 100,\n        close: 80,\n        lowest: 50,\n        highest: 130,\n    },\n    {\n        "id": "sample3",\n        "name": "演示数据3",\n        "create_man": "948ca5f6546ad9097512fda0374c279a",\n        "create_time": "2025-05-15 17:44:31",\n        "update_man": "948ca5f6546ad9097512fda0374c279a",\n        "update_time": "2025-07-09 14:07:00",\n        "type": "演示类型3",\n        "description": "演示说明3",\n        "quantity": "5000",\n        "icon": "fa fa-wifi",\n        "status": 1,\n        "start_time": "2025-05-05 00:00:00",\n        "end_time": "2025-05-19 23:59:59",\n        "px": 4,\n        "enable": 1,\n        open: 90,\n        close: 80,\n        lowest: 50,\n        highest: 168,\n    },\n    {\n        "id": "sample4",\n        "name": "演示数据4",\n        "create_man": "948ca5f6546ad9097512fda0374c279a",\n        "create_time": "2025-05-14 12:39:55",\n        "update_man": "anonymous_user",\n        "update_time": "2025-06-16 18:53:45",\n        "type": "演示类型4",\n        "description": "演示说明4",\n        "quantity": "3000",\n        "icon": "fa fa-reorder",\n        "status": 1,\n        "px": 5,\n        "enable": 1,\n        open: 80,\n        close: 80,\n        lowest: 50,\n        highest: 120,\n    },\n    {\n        "id": "sample5",\n        "name": "演示数据5",\n        "create_man": "948ca5f6546ad9097512fda0374c279a",\n        "create_time": "2025-05-16 15:49:10",\n        "update_man": "948ca5f6546ad9097512fda0374c279a",\n        "update_time": "2025-05-16 19:32:41",\n        "type": "演示类型5",\n        "description": "演示说明5",\n        "quantity": "2000",\n        "status": 1,\n        "px": 6,\n        "enable": 1,\n        open: 140,\n        close: 80,\n        lowest: 50,\n        highest: 160,\n    },\n    {\n        "id": "sample6",\n        "name": "演示数据6",\n        "create_man": "948ca5f6546ad9097512fda0374c279a",\n        "create_time": "2025-05-07 21:25:56",\n        "update_man": "948ca5f6546ad9097512fda0374c279a",\n        "update_time": "2025-07-09 14:38:31",\n        "region_id": "110000",\n        "type": "演示类型6",\n        "description": "演示说明6",\n        "date": "2025-05-15",\n        "quantity": "1000",\n        "icon": "fa fa-bug",\n        "status": 1,\n        "px": 7,\n        "category_id": "83b5cd124b3ce2483f7f5396a874e945",\n        "enable": 1,\n        open: 50,\n        close: 80,\n        lowest: 50,\n        highest: 130,\n    },\n    {\n        "id": "sample7",\n        "name": "演示数据7",\n        "create_man": "948ca5f6546ad9097512fda0374c279a",\n        "create_time": "2025-05-16 15:47:05",\n        "update_man": "948ca5f6546ad9097512fda0374c279a",\n        "update_time": "2025-07-09 14:48:08",\n        "type": "演示类型7",\n        "description": "演示说明7",\n        "quantity": "1000",\n        "status": 0,\n        "px": 8,\n        "enable": 1,\n        open: 120,\n        close: 90,\n        lowest: 150,\n        highest: 160,\n    },\n    {\n        "id": "sample8",\n        "name": "演示数据8",\n        "create_man": "948ca5f6546ad9097512fda0374c279a",\n        "create_time": "2025-05-08 17:47:50",\n        "update_man": "948ca5f6546ad9097512fda0374c279a",\n        "update_time": "2025-06-11 14:10:58",\n        "region_id": "130000",\n        "region_name": "河北省",\n        "type": "演示类型8",\n        "categories": "e1",\n        "description": "演示说明8",\n        "date": "2025-05-22",\n        "quantity": "2000",\n        "icon": "fa fa-th-large",\n        "status": 1,\n        "px": 9,\n        "category_id": "f9438a232ef5a5f4f9b9d97ba2e05aae",\n        "enable": 1,\n        open: 100,\n        close: 180,\n        lowest: 50,\n        highest: 150,\n    }\n]',
+            caption: '多项数据容器',
+            itemStyle: 'DEFAULT',
+            itemType: 'CONTAINER',
+            layoutPos: {
+              shrink: 1,
+              layout: 'FLEX',
+            },
+            id: 'container_multidata_raw',
+          },
+        ],
+        predefinedType: 'VIEWCONTENT',
+        layout: {
+          layout: 'FLEX',
+        },
+        dataRegionType: 'INHERIT',
+        caption: '容器',
+        itemStyle: 'DEFAULT',
+        itemType: 'CONTAINER',
+        layoutPos: {
+          grow: 1,
+          shrink: 1,
+          layout: 'FLEX',
+        },
+        id: 'view_content',
+      },
+    ],
+    layoutPanel: true,
+    appViewEngines: [
+      {
+        engineCat: 'VIEW',
+        engineType: 'ChartView',
+        id: 'engine',
+      },
+    ],
+    controls: [
+      {
+        searchButtonStyle: 'DEFAULT',
+        deformPages: [
+          {
+            layout: {
+              columnCount: 24,
+              layout: 'TABLE_24COL',
+            },
+            caption: '常规条件',
+            codeName: 'formpage1',
+            detailStyle: 'DEFAULT',
+            detailType: 'FORMPAGE',
+            id: 'formpage1',
+          },
+        ],
+        layout: {
+          columnCount: 24,
+          layout: 'TABLE_24COL',
+        },
+        tabHeaderPos: 'TOP',
+        noTabHeader: true,
+        autoLoad: true,
+        showBusyIndicator: true,
+        codeName: 'usr05152387_search_form',
+        controlType: 'SEARCHFORM',
+        logicName: '图表_k线图_搜索表单',
+        appDataEntityId: 'web.master',
+        controlParam: {
+          id: 'searchform',
+        },
+        modelId: '11cca194bfc736c3886ca5c37f39f34c',
+        modelType: 'PSDEFORM_SEARCHFORM',
+        name: 'searchform',
+        id: 'web.master.usr05152387_search_form',
+      },
+      {
+        coordinateSystem: 'XY',
+        chartCoordinateSystems: [
+          {
+            chartGrid: {
+              chartGridXAxis0Id: '0',
+              chartGridYAxis0Id: '0',
+              chartCoordinateSystemId: '0',
+              type: 'grid',
+              name: '[candlestick_0]直角坐标系[0]',
+              id: '0',
+            },
+            echartsType: 'cartesian2d',
+            type: 'XY',
+            name: '[candlestick_0]直角坐标系[0]',
+            id: '0',
+          },
+        ],
+        dechartDataGrid: {
+          id: '0',
+        },
+        dechartLegend: {
+          legendPos: 'BOTTOM',
+          showLegend: true,
+          id: '0',
+        },
+        dechartSerieses: [
+          {
+            caption: 'k线图',
+            catalogField: 'TYPE',
+            echartsType: 'candlestick',
+            chartCoordinateSystemId: '0',
+            chartDataSetId: '0',
+            chartSeriesEncode: {
+              chartXAxisId: '0',
+              chartYAxisId: '0',
+              x: ['TYPE'],
+              y: ['QUANTITY'],
+              type: 'XY',
+              name: '坐标系编码',
+              id: '0',
+            },
+            seriesLayoutBy: 'column',
+            seriesType: 'candlestick',
+            valueField: 'QUANTITY',
+            enableChartDataSet: true,
+            navViewParamJO: {
+              highestfield: 'highest',
+              openfield: 'open',
+              closefield: 'close',
+              lowestfield: 'lowest',
+            },
+            navigateParams: [
+              {
+                key: 'lowestfield',
+                value: 'lowest',
+                rawValue: true,
+                id: 'lowestfield',
+              },
+              {
+                key: 'openfield',
+                value: 'open',
+                rawValue: true,
+                id: 'openfield',
+              },
+              {
+                key: 'closefield',
+                value: 'close',
+                rawValue: true,
+                id: 'closefield',
+              },
+              {
+                key: 'highestfield',
+                value: 'highest',
+                rawValue: true,
+                id: 'highestfield',
+              },
+            ],
+            id: 'candlestick_0',
+          },
+        ],
+        dechartTitle: {
+          title: 'k线图',
+          titlePos: 'LEFT',
+          id: '0',
+        },
+        chartDataSetGroups: [
+          {
+            appDEDataSetId: 'fetch_default',
+            appDataEntityId: 'web.master',
+            name: 'DEFAULT',
+            id: '0',
+          },
+        ],
+        chartDataSets: [
+          {
+            chartDataSetFields: [
+              {
+                groupField: true,
+                name: 'TYPE',
+                id: '0',
+              },
+              {
+                index: 1,
+                name: 'QUANTITY',
+                id: '1',
+              },
+            ],
+            name: 'candlestick_0-DEFAULT',
+            id: '0',
+          },
+        ],
+        chartGrids: [
+          {
             chartGridXAxis0Id: '0',
             chartGridYAxis0Id: '0',
             chartCoordinateSystemId: '0',
@@ -66,161 +382,84 @@ export default {
             name: '[candlestick_0]直角坐标系[0]',
             id: '0',
           },
-          echartsType: 'cartesian2d',
-          type: 'XY',
-          name: '[candlestick_0]直角坐标系[0]',
-          id: '0',
-        },
-      ],
-      dechartDataGrid: {
-        id: '0',
-      },
-      dechartLegend: {
-        legendPos: 'BOTTOM',
-        showLegend: true,
-        id: '0',
-      },
-      dechartSerieses: [
-        {
-          catalogField: 'TYPE',
-          echartsType: 'candlestick',
-          chartCoordinateSystemId: '0',
-          chartDataSetId: '0',
-          chartSeriesEncode: {
-            chartXAxisId: '0',
-            chartYAxisId: '0',
-            x: ['TYPE'],
-            y: ['QUANTITY'],
-            itemId: 'NAME',
-            itemName: 'NAME',
-            type: 'XY',
-            name: '坐标系编码',
+        ],
+        chartXAxises: [
+          {
+            echartsPos: 'xAxis',
+            echartsType: 'category',
+            position: 'bottom',
+            type: 'category',
+            name: 'axis_xAxis_0',
             id: '0',
           },
-          seriesField: 'NAME',
-          seriesLayoutBy: 'column',
-          seriesType: 'candlestick',
-          valueField: 'QUANTITY',
-          enableChartDataSet: true,
-          id: 'candlestick_0',
-        },
-      ],
-      dechartTitle: {
-        title: 'k线图',
-        titlePos: 'LEFT',
-        id: '0',
-      },
-      chartDataSetGroups: [
-        {
-          appDEDataSetId: 'fetch_default',
+        ],
+        chartYAxises: [
+          {
+            echartsPos: 'yAxis',
+            echartsType: 'value',
+            position: 'left',
+            type: 'numeric',
+            name: 'axis_yAxis_0',
+            id: '0',
+          },
+        ],
+        navViewPos: 'NONE',
+        fetchControlAction: {
+          appDEMethodId: 'fetch_default',
           appDataEntityId: 'web.master',
-          name: 'DEFAULT',
-          id: '0',
+          id: 'fetch',
         },
-      ],
-      chartDataSets: [
-        {
-          chartDataSetFields: [
-            {
-              groupField: true,
-              name: 'TYPE',
-              id: '0',
-            },
-            {
-              groupField: true,
-              index: 1,
-              name: 'NAME',
-              id: '1',
-            },
-            {
-              index: 2,
-              name: 'QUANTITY',
-              id: '2',
-            },
-          ],
-          name: 'candlestick_0-DEFAULT',
-          id: '0',
-        },
-      ],
-      chartGrids: [
-        {
-          chartGridXAxis0Id: '0',
-          chartGridYAxis0Id: '0',
-          chartCoordinateSystemId: '0',
-          type: 'grid',
-          name: '[candlestick_0]直角坐标系[0]',
-          id: '0',
-        },
-      ],
-      chartXAxises: [
-        {
-          echartsPos: 'xAxis',
-          echartsType: 'category',
-          position: 'bottom',
-          type: 'category',
-          name: 'axis_xAxis_0',
-          id: '0',
-        },
-      ],
-      chartYAxises: [
-        {
-          echartsPos: 'yAxis',
-          echartsType: 'value',
-          position: 'left',
-          type: 'numeric',
-          name: 'axis_yAxis_0',
-          id: '0',
-        },
-      ],
-      navViewPos: 'NONE',
-      fetchControlAction: {
-        appDEMethodId: 'fetch_default',
+        readOnly: true,
+        autoLoad: true,
+        showBusyIndicator: true,
+        codeName: 'mastermaster_chart_candlestick_chart',
+        controlType: 'CHART',
+        height: 400,
+        logicName: 'Chart10',
         appDataEntityId: 'web.master',
-        id: 'fetch',
+        controlParam: {
+          id: 'chart',
+        },
+        modelId: '5cd35de37afa4232f23e7ec048afea47',
+        modelType: 'PSDECHART',
+        userParam: {
+          'EC.color':
+            '["#5470c6","#91cc75","#fac858","#ee6666","#73c0de","#3ba272","#fc8452","#9a60b4","#ea7ccc","#5470c6","#91cc75"]',
+        },
+        name: 'chart',
+        id: 'web.master.mastermaster_chart_candlestick_chart',
       },
-      readOnly: true,
-      autoLoad: true,
-      showBusyIndicator: true,
-      codeName: 'mastermaster_chart_candlestick_chart',
-      controlType: 'CHART',
-      height: 300,
-      logicName: 'Chart10',
-      appDataEntityId: 'web.master',
-      controlParam: {
-        id: 'chart',
+      {
+        groupMode: 'SINGLE',
+        controlType: 'SEARCHBAR',
+        appDataEntityId: 'web.master',
+        controlParam: {
+          id: 'searchbar',
+        },
+        id: 'searchbar',
       },
-      modelId: '5cd35de37afa4232f23e7ec048afea47',
-      modelType: 'PSDECHART',
-      userParam: {
-        'EC.color':
-          '["#5470c6","#91cc75","#fac858","#ee6666","#73c0de","#3ba272","#fc8452","#9a60b4","#ea7ccc","#5470c6","#91cc75"]',
+      {
+        capLanguageRes: {
+          lanResTag: 'DE.LNAME.MASTER',
+        },
+        caption: '图表_k线图',
+        codeName: 'chart_candlestick_captionbar',
+        controlType: 'CAPTIONBAR',
+        appDataEntityId: 'web.master',
+        controlParam: {},
+        name: 'captionbar',
+        id: 'chart_candlestick_captionbar',
       },
-      name: 'chart',
-      id: 'web.master.mastermaster_chart_candlestick_chart',
-    },
-    {
-      capLanguageRes: {
-        lanResTag: 'DE.LNAME.MASTER',
-      },
-      caption: '图表_k线图',
-      codeName: 'chart_candlestick_captionbar',
-      controlType: 'CAPTIONBAR',
-      appDataEntityId: 'web.master',
-      controlParam: {},
-      name: 'captionbar',
-      id: 'chart_candlestick_captionbar',
-    },
-  ],
-  viewLayoutPanel: {
-    layoutBodyOnly: true,
-    useDefaultLayout: true,
-    layoutPanel: true,
-    codeName: 'layoutpanel',
-    controlStyle: 'APPDECHARTVIEW',
+    ],
+    codeName: 'a45b85e6b62b8c78bf6',
     controlType: 'VIEWLAYOUTPANEL',
+    logicName: 'Chart_candlestick图表视图布局面板',
     appDataEntityId: 'web.master',
     controlParam: {},
-    id: 'layoutpanel',
+    modelId: '8b2a60a38541fe34dd7834578c2469e7',
+    modelType: 'PSSYSVIEWLAYOUTPANEL',
+    name: 'layoutpanel',
+    id: 'a45b85e6b62b8c78bf6',
   },
   title: '图表_k线图',
   viewStyle: 'DEFAULT',

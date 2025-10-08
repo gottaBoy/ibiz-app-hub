@@ -12,10 +12,8 @@ import { IPanelRawItem, IRawItemParam } from '@ibiz/model-core';
  */
 export class PanelVideoPlayerController extends PanelItemController<IPanelRawItem> {
   /**
-   * 视频播放器额外参数
-   *
-   * @author zk
-   * @date 2023-12-08 03:12:09
+   * @description 视频播放器额外参数
+   * @exposedoc
    * @memberof PanelVideoPlayerController
    */
   public rawItemParams = {};

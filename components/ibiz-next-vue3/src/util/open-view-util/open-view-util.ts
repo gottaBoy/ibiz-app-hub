@@ -280,6 +280,6 @@ export class OpenViewUtil implements IOpenViewUtil {
       context,
       params,
     );
-    window.open(`${UrlHelper.routeBase}${path}`, '_blank', 'popup');
+    window.open(`${UrlHelper.routeBase}${path}`, '_blank');
   }
 }

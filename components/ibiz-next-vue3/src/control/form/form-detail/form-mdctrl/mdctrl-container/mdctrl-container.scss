@@ -14,6 +14,16 @@ $mdctrl-container-item: (
     flex-grow: 1;
   }
 
+  @include e('left') {
+    flex-shrink: 0;
+  }
+
+  @include e('right') {
+    flex-shrink: 0;
+    width: 60px;
+    margin-left: getCssVar('spacing', 'tight');
+  }
+
   @include e('icon-drag') {
     display: flex;
     align-items: center;

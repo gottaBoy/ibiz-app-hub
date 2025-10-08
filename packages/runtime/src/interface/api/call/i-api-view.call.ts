@@ -66,4 +66,15 @@ export interface IApiViewCall {
   Reset: {
     args: undefined;
   };
+
+  /**
+   * @description 取消变更，'UNDO' | 'REDO' 暂未支持
+   * @type {({
+   *     args: { targetState:  'INIT' | 'UNDO' | 'REDO' };
+   *   })} 目标状态，初始化状态|撤销上一步操作|重做下一步操作
+   * @memberof IApiViewCall
+   */
+  CancelChanges: {
+    args: { targetState: 'INIT' | 'UNDO' | 'REDO' };
+  };
 }

@@ -22,7 +22,7 @@ export default {
     {
       codeName: 'update_time',
       logicName: '更新时间',
-      predefinedType: 'NONE',
+      predefinedType: 'UPDATEDATE',
       stdDataType: 5,
       valueFormat: 'YYYY-MM-DD HH:mm:ss',
       name: 'UPDATE_TIME',
@@ -31,7 +31,7 @@ export default {
     {
       codeName: 'update_man',
       logicName: '更新人',
-      predefinedType: 'NONE',
+      predefinedType: 'UPDATEMAN',
       stdDataType: 25,
       stringLength: 100,
       name: 'UPDATE_MAN',
@@ -40,7 +40,7 @@ export default {
     {
       codeName: 'create_time',
       logicName: '建立时间',
-      predefinedType: 'NONE',
+      predefinedType: 'CREATEDATE',
       stdDataType: 5,
       valueFormat: 'YYYY-MM-DD HH:mm:ss',
       name: 'CREATE_TIME',
@@ -49,7 +49,7 @@ export default {
     {
       codeName: 'create_man',
       logicName: '建立人',
-      predefinedType: 'NONE',
+      predefinedType: 'CREATEMAN',
       stdDataType: 25,
       stringLength: 100,
       name: 'CREATE_MAN',
@@ -58,7 +58,7 @@ export default {
     {
       codeName: 'owner_id',
       logicName: '所属数据标识',
-      predefinedType: 'NONE',
+      predefinedType: 'PARENTID',
       stdDataType: 25,
       stringLength: 100,
       name: 'OWNER_ID',
@@ -67,7 +67,7 @@ export default {
     {
       codeName: 'owner_type',
       logicName: '所属数据对象',
-      predefinedType: 'NONE',
+      predefinedType: 'PARENTTYPE',
       stdDataType: 25,
       stringLength: 100,
       name: 'OWNER_TYPE',
@@ -76,7 +76,7 @@ export default {
     {
       codeName: 'owner_subtype',
       logicName: '所属对象子类型',
-      predefinedType: 'NONE',
+      predefinedType: 'PARENTSUBTYPE',
       stdDataType: 25,
       stringLength: 100,
       name: 'OWNER_SUBTYPE',
@@ -94,7 +94,7 @@ export default {
     {
       codeName: 'parent_version_id',
       logicName: '父对象版本标识',
-      predefinedType: 'NONE',
+      predefinedType: 'PARENTVERSIONID',
       stdDataType: 25,
       stringLength: 100,
       name: 'PARENT_VERSION_ID',

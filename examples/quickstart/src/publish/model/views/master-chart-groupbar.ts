@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Chart_groupbar',
   deviewId: '6163aefc9922bc344c7b16e3f3d0c218',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -76,20 +77,21 @@ export default {
         id: '0',
       },
       dechartLegend: {
-        legendPos: 'BOTTOM',
+        legendPos: 'RIGHT',
         showLegend: true,
         id: '0',
       },
       dechartSerieses: [
         {
-          catalogField: 'TYPE',
+          catalogField: 'STATUS',
+          catalogCodeListId: 'web.mock__cl_status',
           echartsType: 'bar',
           chartCoordinateSystemId: '0',
           chartDataSetId: '0',
           chartSeriesEncode: {
             chartXAxisId: '0',
             chartYAxisId: '0',
-            x: ['TYPE'],
+            x: ['STATUS'],
             y: ['QUANTITY'],
             itemId: 'NAME',
             itemName: 'NAME',
@@ -122,8 +124,9 @@ export default {
         {
           chartDataSetFields: [
             {
+              codeListId: 'web.mock__cl_status',
               groupField: true,
-              name: 'TYPE',
+              name: 'STATUS',
               id: '0',
             },
             {
@@ -183,7 +186,7 @@ export default {
       showBusyIndicator: true,
       codeName: 'mastermaster_chart_groupbar_chart',
       controlType: 'CHART',
-      height: 300,
+      height: 400,
       logicName: 'Chart6',
       appDataEntityId: 'web.master',
       controlParam: {
@@ -197,6 +200,15 @@ export default {
       },
       name: 'chart',
       id: 'web.master.mastermaster_chart_groupbar_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

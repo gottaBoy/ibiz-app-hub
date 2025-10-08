@@ -26,6 +26,8 @@ import { IApiGridColumnMapping } from '../common';
  * @ctrlparams {name:defaultexpandall,title:默认全部展开,parameterType:boolean,defaultvalue:false,description:树形表格时是否默认全部展开}
  * @ctrlparams {"name":"triggermode","title":"编辑器值变更模式","parameterType":"'blur' | 'input'","defaultvalue":"'blur'","description":"该配置项用于指定编辑器触发 `emit` 事件的模式。若值为 'input'，则在输入框值变更时触发 change 事件；若值为 'blur'，则在输入框失去焦点时触发 change 事件"}
  * @ctrlparams {"name":"mdctrlrefreshmode","title":"刷新模式","defaultvalue":"'cache'","parameterType":"'nocache' | 'cache'","description":"多数据部件刷新模式，当值为 'cache'，部件刷新时保留选中数据；当值为 'nocache'，部件刷新时清空选中数据","effectPlatform":"web"}
+ * @ctrlparams {"name":"grouprowmode","title":"分组行模式","defaultvalue":"'DEFAULT'","parameterType":"'DEFAULT'|'NEWROW'","description":"表格分组行模式，当值为 DEFAULT 时,表示分组行由业务数据第一行出，NEWROW 表示分组行独出一行","effectPlatform":"web"}
+ * @ctrlparams {"name":"unionkeys","title":"表格联合主键","parameterType":"string","description":"表格联合主键，参数以|分割，用于解决同一条数据关联多个版本呈现问题","effectPlatform":"web"}
  * @childrenparams {"name":"DEFGRIDCOLUMN","title":"表格属性列","interface":"IApiGridFieldColumnController"}
  * @childrenparams {"name":"DEFGRIDCOLUMN_EDIT","title":"表格编辑列","interface":"IApiGridFieldEditColumnController"}
  * @childrenparams {"name":"GROUPGRIDCOLUMN","title":"表格分组列","interface":"IApiGridGroupColumnController"}
@@ -44,13 +46,6 @@ export interface IApiGridController<
    * @memberof IApiGridController
    */
   columns: { [key: string]: IApiGridColumnController };
-
-  /**
-   * @description 新建行
-   * @returns {*}  {Promise<void>}
-   * @memberof IApiGridController
-   */
-  newRow(): Promise<void>;
 
   /**
    * @description 保存单条数据
@@ -144,8 +139,8 @@ export interface IApiGridController<
   findRowState(data: IApiData): IApiGridRowState | undefined;
 
   /**
-   * @description 切换折叠(分组表格使用)
-   * @param {{ tag: string; expand: boolean }} [params] tag:表示切换分组的标识，无值则全局切换，expand:表示是否展开
+   * @description 切换折叠(分组表格使用),其中tag表示操作指定表格分组行标识，若不传则操作当前表格的所有分组展开状态，expand表示是否展开，若不传则以当前分组状态为基准切换
+   * @param {{ tag: string; expand: boolean }} [params]
    * @memberof IApiGridController
    */
   changeCollapse(params?: { tag?: string; expand?: boolean }): void;

@@ -18,14 +18,4 @@ export interface IApiLoginViewCall extends IApiViewCall {
   Login: {
     args: { data: IApiData[]; params: { panelDataParent: string } };
   };
-  /**
-   * @description 取消变更
-   * @type {{
-   *     args: undefined
-   *   }}
-   * @memberof IApiLoginViewCall
-   */
-  CancelChanges: {
-    args: undefined;
-  };
 }

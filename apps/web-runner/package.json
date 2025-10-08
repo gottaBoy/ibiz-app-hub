@@ -2,7 +2,7 @@
   "name": "@ibiz-template/next",
   "private": true,
   "type": "module",
-  "version": "0.7.41-alpha.16",
+  "version": "0.7.41-alpha.21",
   "description": "web-runner",
   "author": "iBiz",
   "license": "MIT",
@@ -63,7 +63,7 @@
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
-    "@ibiz-template/cli": "^0.3.21",
+    "@ibiz-template/cli": "^0.3.23",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.10.5",
     "@types/nprogress": "^0.2.3",

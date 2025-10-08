@@ -8,6 +8,14 @@ import {
 import './span-link.scss';
 import { SpanEditorController } from '../span-editor.controller';
 
+/**
+ * 标签（数据链接）
+ *
+ * @description 直接呈现文本内容，可配置数据链接视图用于视图跳转。支持编辑器类型包含：`标签（数据链接）`
+ * @primary
+ * @ignoreprops autoFocus | overflowMode
+ * @ignoreemits change | blur | focus | enter | infoTextChange
+ */
 export const IBizSpanLink = defineComponent({
   name: 'IBizSpanLink',
   props: getSpanProps<SpanEditorController>(),

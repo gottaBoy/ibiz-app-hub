@@ -9,6 +9,20 @@ import './ibiz-number-range-picker.scss';
 import { toNumber } from 'lodash-es';
 import { NumberRangeEditorController } from '../number-range-editor.controller';
 
+/**
+ * 移动端数值范围编辑框
+ * @primary
+ * @description 使用van-field组件，用于指定数值范围的场景。支持编辑器类型包含：`移动端数值范围编辑框`
+ * @editorparams {name:maxValue,parameterType:string,defaultvalue:Infinity,description:最大值}
+ * @editorparams {name:minValue,parameterType:string,defaultvalue:-Infinity,description:最小值}
+ * @editorparams {name:valueSeparator,parameterType:string,defaultvalue:'-',description:值分割符}
+ * @editorparams {name:rangeSeparator,parameterType:string,defaultvalue:'~',description:选择范围的分隔符}
+ * @editorparams {name:startPlaceHolder,parameterType:string,defaultvalue:'',description:选择范围开始占位提示，van-field组件的placeholder属性}
+ * @editorparams {name:endPlaceHolder,parameterType:string,defaultvalue:'',description:选择范围结束占位提示，van-field组件的placeholder属性}
+ * @editorparams {name:precision,parameterType:number,defaultvalue:0,description:数值精度}
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizNumberRangePicker = defineComponent({
   name: 'IBizNumberRangePicker',
   props: getNumberRangeProps<NumberRangeEditorController>(),

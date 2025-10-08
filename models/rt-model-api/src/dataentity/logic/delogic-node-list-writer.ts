@@ -32,6 +32,9 @@ export class DELogicNodeListWriter extends ModelListWriterBase {
       case 'DEBUGPARAM':
         c.fillDSL('dataentity.logic.DEDebugParamLogic', src, dst);
         return;
+      case 'DECISION':
+        c.fillDSL('dataentity.logic.DEDecisionLogic', src, dst);
+        return;
       case 'DEDATAQUERY':
         c.fillDSL('dataentity.logic.DEDEDataQueryLogic', src, dst);
         return;
@@ -43,6 +46,9 @@ export class DELogicNodeListWriter extends ModelListWriterBase {
         return;
       case 'END':
         c.fillDSL('dataentity.logic.DEEndLogic', src, dst);
+        return;
+      case 'MEMO':
+        c.fillDSL('dataentity.logic.DEMemoLogic', src, dst);
         return;
       case 'PREPAREPARAM':
         c.fillDSL('dataentity.logic.DEPrepareParamLogic', src, dst);

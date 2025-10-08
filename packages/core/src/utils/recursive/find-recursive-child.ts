@@ -22,6 +22,23 @@ function getChildField(parent: IData, fields: string[]): IData[] | undefined {
   }
 }
 
+/**
+ * @description 获取子属性对象
+ * @param {IData} parent
+ * @param {string[]} fields
+ * @returns {*}  {(IData[] | undefined)}
+ */
+function getChildFieldObj(
+  parent: IData,
+  fields: string[],
+): IData[] | undefined {
+  for (const field of fields) {
+    if (parent[field]) {
+      return parent[field];
+    }
+  }
+}
+
 function _recursiveIterate(
   parent: IData,
   callback: (item: any, _parent?: any) => boolean | void,
@@ -79,6 +96,54 @@ export function recursiveIterate(
 ): void {
   try {
     _recursiveIterate(parent, callback, opts);
+  } catch (error) {
+    if (error !== BreakError) {
+      throw error;
+    }
+  }
+}
+
+/**
+ * @description 递归执行，处理对象结构
+ * @export
+ * @param {IData} parent
+ * @param {((item: any, _parent?: any) => boolean | void)} callback
+ * @param {Partial<typeof IterateOpts>} [opts]
+ */
+export function _recursiveExecute(
+  parent: IData,
+  callback: (item: any, _parent?: any) => boolean | void,
+  opts?: Partial<typeof IterateOpts>,
+): void {
+  const { childrenFields } = mergeDeepRight(IterateOpts, opts || {});
+  const children = getChildFieldObj(parent, childrenFields);
+  if (children) {
+    for (const child of Object.values(children)) {
+      const isBreak = callback(child, parent);
+      // 如果回调返回true则退出
+      if (isBreak) {
+        throw BreakError;
+      }
+      // 递归孙的成员
+      _recursiveExecute(child, callback, opts);
+    }
+  }
+}
+
+/**
+ * @description 递归执行，处理对象结构
+ * @export
+ * @param {IData} parent
+ * @param {((item: any, _parent: any) => boolean | void)} callback
+ * @param {Partial<typeof IterateOpts>} [opts]
+ */
+export function recursiveExecute(
+  parent: IData,
+  callback: (item: any, _parent: any) => boolean | void,
+  opts?: Partial<typeof IterateOpts>,
+): void {
+  try {
+    _recursiveExecute(parent, callback, opts);
   } catch (error) {
     if (error !== BreakError) {
       throw error;

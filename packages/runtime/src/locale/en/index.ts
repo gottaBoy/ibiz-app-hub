@@ -43,6 +43,13 @@ export const en = {
             'Error in calculating target position and movement type',
           unclassified: 'Unclassified',
           today: 'Today',
+          adjustmentsGroup:
+            'The current control does not allow adjustments to the grouping!',
+          noAllowReorder: 'Current control does not allow reordering!',
+          sortingProperties: 'Sorting attribute not configured',
+          invalidSortType: 'Sorting property is not a numeric type',
+          logicOpendata: 'Missing {itemType}_opendata view logic',
+          logicNewdata: 'Missing {itemType}_newdata view logic',
         },
         editor: {
           editorNoConfigured:
@@ -67,7 +74,6 @@ export const en = {
           noConfigured: 'No application functionality configured',
         },
         calendar: {
-          missingViewLogic: 'Missing {itemType}_opendata view logic',
           noFoundModel: 'Calendar item model not found',
         },
         chart: {
@@ -86,6 +92,10 @@ export const en = {
           classificationNotString:
             'The configured classification attribute value is not an string',
           errorJson: 'JSON parsing error',
+          value: 'Value',
+          percent: 'Percent',
+          serieGroup: 'Serie group',
+          catalogField: 'Catalog field',
         },
         dataView: {
           noBehaviourGroup:
@@ -175,13 +185,8 @@ export const en = {
             'No interface behavior is configured for the action column interface behavior group',
         },
         kanban: {
-          sortingProperties: 'Sorting properties are not configured',
           sortDirection: 'Sort direction is not configured',
           groupedOn: 'Kanban components must be grouped on',
-          adjustmentsGroup:
-            'The current Kanban does not allow adjustments to the grouping!',
-          noAllowReorder: 'Current Kanban does not allow reordering!',
-          invalidSortType: 'Sorting property is not a numeric type',
         },
         meditViewPanel: {
           DraftNew: 'Draft - New',
@@ -412,7 +417,7 @@ export const en = {
         'Getting view routing parameter variables is not implemented',
     },
     hub: {
-      failedParse: 'View parameter modalOption failed to parse: {error}',
+      failedParse: 'View parameter {paramsName} failed to parse: {error}',
       noExist: 'View [{id}] does not exist',
     },
     logicScheduler: {
@@ -787,6 +792,7 @@ export const en = {
       },
       fileUtil: {
         fileUploadFailed: 'File upload failed',
+        getDownloadTicketFailed: 'Get download credentials exception',
       },
       handlebars: {
         noInitHandlebars: 'handlebars not init',

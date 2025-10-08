@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'grid_column_plugin',
   deviewId: '2f2d247e4084ca815ce42b04ce8de08c',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -90,6 +91,7 @@ export default {
       columnEnableLink: 2,
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
+      orderValueAppDEFieldId: 'px',
       degridColumns: [
         {
           clconvertMode: 'NONE',
@@ -190,10 +192,34 @@ export default {
           id: 'region_id',
         },
         {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
           appDEFieldId: 'name',
           valueType: 'SIMPLE',
           dataType: 25,
           id: 'srfmajortext',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'wf_status',
         },
       ],
       degridEditItems: [
@@ -215,6 +241,7 @@ export default {
       pagingMode: 1,
       pagingSize: 20,
       sortMode: 'REMOTE',
+      hasWFDataItems: true,
       enableCustomized: true,
       enablePagingBar: true,
       navViewPos: 'NONE',
@@ -330,7 +357,7 @@ export default {
   viewStyle: 'DEFAULT',
   viewType: 'DEGRIDVIEW',
   enableDP: true,
-  showCaptionBar: false,
+  showCaptionBar: true,
   modelId: 'db618e6407c9e2bfd02e325895241e3f',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERgrid_column_plugin',

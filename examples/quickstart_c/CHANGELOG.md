@@ -10,6 +10,7 @@
 ### Fixed
 
 - 修复项目应用无appUtils资源时启动报错的问题
+- 修复列表导航栏和表格导航栏绘制异常
 
 ### PackageUpgrade
 

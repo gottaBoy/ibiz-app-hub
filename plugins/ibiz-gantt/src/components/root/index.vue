@@ -164,7 +164,7 @@ const { initData } = useData();
 initData(data, props);
 
 const { initLinks } = useLinks();
-initLinks(props.links);
+initLinks(props.links, props);
 // #endregion
 
 // #region 监听 gantt 尺寸变化，表头和宽度需要重新渲染
@@ -257,6 +257,7 @@ defineExpose(exports);
   .xg-mid-separate-line {
     width: 3px;
     height: 100%;
+    min-height: 100%;
     max-height: 100%;
     display: inline-block;
     position: relative;

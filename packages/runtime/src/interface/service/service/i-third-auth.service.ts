@@ -33,10 +33,12 @@ export interface IThirdAuthService {
    * @date 2024-11-18 14:11:19
    * @param {('DINGTALK' | 'WXWORK' | 'OAUTH'  |string)} type 授权类型：钉钉 | 企业微信 | OAUTH | 自定义
    * @param {('EMBED' | 'THIRD')} mode 授权模式：嵌入 | 第三方（网页扫码）
+   * @param {IData} [params] 授权参数
    * @return {*}  {Promise<IThirdAuthResult>}
    */
   auth(
     type: 'DINGTALK' | 'WXWORK' | 'OAUTH' | string,
     mode: 'EMBED' | 'THIRD',
+    params?: IData,
   ): Promise<IThirdAuthResult>;
 }

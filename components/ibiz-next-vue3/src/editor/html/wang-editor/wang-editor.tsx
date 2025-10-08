@@ -52,6 +52,8 @@ type InsertFnType = (_url: string, _alt: string, _href: string) => void;
  * @editorparams {"name":"osscat","parameterType":"string","description":"用于计算上传和下载路径的OSS参数"}
  * @editorparams {name:ac,parameterType:boolean,defaultvalue:false,description:是否启用ac自填模式}
  * @editorparams {"name":"readonly","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否为只读态"}
+ * @editorparams {"name":"appentitytag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所属实体。该参数值会作为验证下载权限的依据。配置格式为（应用代码名称.实体代码名称），示例：web.master"}
+ * @editorparams {"name":"datafieldtag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所关联的数据属性。完成配置后，将自动从容器数据（涵盖表单数据、表格行数据、面板数据）、上下文环境以及视图参数中获取该属性的实际值，将其作为验证下载权限的依据"}
  * @ignoreprops autoFocus | overflowMode
  * @ignoreemits enter | infoTextChange
  */
@@ -91,9 +93,6 @@ const IBizHtml = defineComponent({
 
     // 上传文件路径
     const uploadUrl: Ref<string> = ref('');
-
-    // 下载文件路径
-    const downloadUrl: Ref<string> = ref('');
 
     // 允许编辑
     const enableEdit = ref(true);
@@ -145,6 +144,29 @@ const IBizHtml = defineComponent({
       readonlyState.value = true;
     }
 
+    /**
+     * @description 获取下载路径,若业务数据中存在folder，则以业务数据中folder作为目录
+     * @param {IData} data
+     * @param {IData} file
+     * @returns {*}  {string}
+     */
+    const getDownloadUrl = (data: IData, file: IData): string => {
+      const editorParams = { ...c.editorParams };
+      if (editorParams.exportparams) {
+        editorParams.exportParams = JSON.parse(editorParams.exportparams);
+      }
+      if (file && file.folder) {
+        editorParams.osscat = file.folder;
+      }
+      const urls = ibiz.util.file.calcFileUpDownUrl(
+        c.context,
+        c.params,
+        data,
+        editorParams,
+      );
+      return urls.downloadUrl;
+    };
+
     // data响应式变更基础路径
     watch(
       () => props.data,
@@ -154,9 +176,6 @@ const IBizHtml = defineComponent({
           if (editorParams.uploadparams) {
             editorParams.uploadParams = JSON.parse(editorParams.uploadparams);
           }
-          if (editorParams.exportparams) {
-            editorParams.exportParams = JSON.parse(editorParams.exportparams);
-          }
           const urls = ibiz.util.file.calcFileUpDownUrl(
             c.context,
             c.params,
@@ -164,7 +183,6 @@ const IBizHtml = defineComponent({
             editorParams,
           );
           uploadUrl.value = urls.uploadUrl;
-          downloadUrl.value = urls.downloadUrl;
         }
       },
       { immediate: true, deep: true },
@@ -253,6 +271,10 @@ const IBizHtml = defineComponent({
 
           // 单个文件上传成功之后
           onSuccess(file: File, res: IData) {
+            // 启用传入下载凭证成功后设置下载票据
+            if (ibiz.config.common.enableDownloadTicket && res.ticket) {
+              ibiz.util.file.setDownloadTicket(res.id, res.ticket);
+            }
             console.log(`${file.name} 上传成功`, res);
           },
 
@@ -268,10 +290,25 @@ const IBizHtml = defineComponent({
 
           // 自定义插入图片
           async customInsert(res: IData, insertFn: InsertFnType) {
-            const url = downloadUrl.value.replace('%fileId%', res.id);
+            const downloadUrl = getDownloadUrl(props.data, res);
+            let url = downloadUrl.replace('%fileId%', res.id);
             const alt = res.filename;
             // 从 res 中找到 url alt href ，然后插入图片
-            insertFn(url, alt, '');
+            if (ibiz.config.common.enableDownloadTicket) {
+              const downloadTicket = await ibiz.util.file.getDownloadTicket(
+                c.context,
+                c.params,
+                props.data,
+                { fileId: res.id },
+                c.downloadTicketParams,
+              );
+              if (downloadTicket && downloadTicket.ticket) {
+                url = downloadUrl.replace('%fileId%', downloadTicket.ticket);
+                insertFn(url, alt, '');
+              }
+            } else {
+              insertFn(url, alt, '');
+            }
           },
         },
         // 插入链接

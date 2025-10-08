@@ -1,9 +1,9 @@
 import { IChartExpBar, IDEChart, INavigatable } from '@ibiz/model-core';
 import {
+  INavViewMsg,
   IChartExpBarState,
   IChartExpBarEvent,
   IChartExpBarController,
-  INavViewMsg,
 } from '../../../interface';
 import { ExpBarControlController } from './exp-bar.controller';
 import { ChartController } from '../chart';
@@ -26,6 +26,26 @@ export class ChartExpBarController
   implements IChartExpBarController
 {
   /**
+   * @description 获取默认激活数据
+   * @returns {*}  {(IData | undefined)}
+   * @memberof ChartExpBarController
+   */
+  getDefaultActiveData(): IData | undefined {
+    const activeSeriesGenerator = (
+      this.xDataController as ChartController
+    ).generator.seriesGenerators.find(generator => {
+      return generator.chartDataArr.length > 0 && generator.model.navAppViewId;
+    });
+    if (activeSeriesGenerator && activeSeriesGenerator.groupData) {
+      const firstGroupName = Object.keys(activeSeriesGenerator.groupData)[0];
+      const { chartData } = activeSeriesGenerator.groupData[firstGroupName]
+        .values()
+        .next().value;
+      return chartData;
+    }
+  }
+
+  /**
    * 导航页面首次打开且没有回显时，
    * 默认取第一条数据进行导航
    * 对于不同的导航，第一条可导航的数据可能定义不同，可以重写改方法。
@@ -34,28 +54,36 @@ export class ChartExpBarController
    * @protected
    */
   protected navByFirstItem(): void {
-    const data = this.xDataController.state.items[0];
-    if (!data) {
-      // 导航视图传空让他导航占位绘制空界面
-      this.state.srfnav = '';
-      this._evt.emit('onNavViewChange', {
-        navViewMsg: {
-          key: '',
-          isCache: this.isCache,
-        },
-      });
-      return;
-    }
-    // 默认选中并激活第一项(这里的第一项是我们自己封装的chartData)
-    const activeSeriesGenerator = (
-      this.xDataController as ChartController
-    ).generator.seriesGenerators.find(generator => {
-      return generator.chartDataArr.length > 0 && generator.model.navAppViewId;
+    const data = this.getDefaultActiveData();
+    if (!data) return this.clearNavigation();
+    this.xDataController.setActive(data);
+    this.xDataController.setSelection([data]);
+  }
+
+  /**
+   * @description 根据栈数据导航数据
+   * @memberof ChartExpBarController
+   */
+  navDataByStack(): void {
+    // 根据栈数据查找最近的一次导航数据
+    const preNav = this.navStack.find(nav => {
+      return (
+        this.xDataController as ChartController
+      ).generator.seriesGenerators.find(generator =>
+        generator.chartDataArr.find(
+          item =>
+            item._seriesModelId === nav._seriesModelId &&
+            item._catalog === nav._catalog &&
+            item._groupName === nav._groupName,
+        ),
+      );
     });
-    if (activeSeriesGenerator) {
-      const iterator = activeSeriesGenerator.groupData!.$default_group.values();
-      const { chartData } = iterator.next().value;
-      this.xDataController.setActive(chartData);
+    const navData = preNav || this.getDefaultActiveData();
+    if (navData) {
+      this.xDataController.setActive(navData);
+      this.xDataController.setSelection([navData]);
+    } else {
+      this.clearNavigation();
     }
   }
 
@@ -102,6 +130,7 @@ export class ChartExpBarController
           params,
           tempParams,
         );
+        if (data.navParams) Object.assign(tempParams2, data.navParams);
         return {
           context: Object.assign(tempContext.clone(), tempContext2),
           params: tempParams2,

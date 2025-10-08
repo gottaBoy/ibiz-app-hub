@@ -2,26 +2,28 @@
 /* eslint-disable no-lonely-if */
 /* eslint-disable no-else-return */
 import {
-  IPortalMessage,
   RuntimeError,
-  RuntimeModelError,
+  IPortalMessage,
   recursiveIterate,
+  RuntimeModelError,
 } from '@ibiz-template/core';
 import {
-  IDETBUIActionItem,
-  IDEToolbarItem,
   IDETree,
-  IDETreeDataSetNode,
   IDETreeNode,
+  IDEToolbarItem,
+  IDETBUIActionItem,
+  IDETreeDataSetNode,
 } from '@ibiz/model-core';
 import { isNil } from 'ramda';
 import { isBoolean } from 'qx-util';
 import {
   ITreeState,
   ITreeEvent,
+  ITreeNodeData,
+  IUILogicParams,
+  IUIActionResult,
   ITreeController,
   MDCtrlLoadParams,
-  ITreeNodeData,
   IApiNewTreeNodeParams,
 } from '../../../interface';
 import { UIActionUtil } from '../../../ui-action';
@@ -29,16 +31,17 @@ import { MDControlController } from '../../common';
 import { ContextMenuController } from '../context-menu';
 import { LoadMoreInfoItem, TreeService } from './tree.service';
 import {
-  calcDeCodeNameById,
-  getChildNodeRSs,
   getTreeNode,
+  getChildNodeRSs,
   getUIActionById,
+  calcDeCodeNameById,
 } from '../../../model';
 import { ControllerEvent } from '../../utils';
 import { AppCounter, CounterService, Srfuf } from '../../../service';
 import { convertNavData } from '../../../utils';
 import { OpenAppViewCommand } from '../../../command';
 import { PresetIdentifier } from '../../../constant';
+import { ViewLogicScheduler } from '../../../logic-scheduler';
 
 export type DropNodeRS = {
   minorEntityId: string;
@@ -128,6 +131,13 @@ export class TreeController<
    */
   counter?: AppCounter;
 
+  /**
+   * @description 视图逻辑触发器
+   * @type {ViewLogicScheduler}
+   * @memberof TreeController
+   */
+  viewScheduler?: ViewLogicScheduler;
+
   protected initState(): void {
     super.initState();
     // 根节点初始化
@@ -145,11 +155,11 @@ export class TreeController<
     this.state.expandedKeys = [...this.state.defaultExpandedKeys];
 
     this.initDropNodeRss();
+    this.initViewScheduler();
     this.initNodeClickTBUIActionItem();
     await this.initQuickSearch();
     await this.initService();
     await this.initCounter();
-
     // 初始化上下文菜单控制器
     this.model.detreeNodes!.forEach(node => {
       if (node.decontextMenu?.detoolbarItems?.length) {
@@ -166,6 +176,27 @@ export class TreeController<
     await Promise.all(
       Object.values(this.contextMenus).map(menu => menu.created()),
     );
+  }
+
+  /**
+   * @description 初始化部件视图逻辑
+   * @protected
+   * @memberof TreeController
+   */
+  protected initViewScheduler(): void {
+    const viewLogics = this.model.appViewLogics || [];
+    if (viewLogics.length !== 0) {
+      this.viewScheduler = ibiz.scheduler.createViewScheduler(viewLogics);
+      this.viewScheduler.defaultParamsCb = (): IUILogicParams => {
+        return this.getEventArgs();
+      };
+      if (this.viewScheduler.hasViewEventTrigger) {
+        // 监听视图事件触发视图事件触发器
+        this.evt.onAll((_eventName, event) => {
+          this.viewScheduler!.triggerViewEvent(event);
+        });
+      }
+    }
   }
 
   /**
@@ -467,9 +498,9 @@ export class TreeController<
       },
       { childrenFields: ['_children'] },
     );
-
     // 重新计算展开节点标识
     this.state.expandedKeys = this.calcExpandedKeys(nodes);
+    this.calcSelectDataBySelectKey();
   }
 
   /**
@@ -594,6 +625,7 @@ export class TreeController<
    * @param {boolean} isExpand true为展开，false为折叠
    */
   onExpandChange(nodeData: ITreeNodeData, isExpand: boolean): void {
+    nodeData.srfcollapsestate = isExpand ? 1 : 0;
     const hasKey = this.state.expandedKeys.includes(nodeData._id);
     if (isExpand && !hasKey) {
       this.state.expandedKeys.push(nodeData._id);
@@ -1126,18 +1158,20 @@ export class TreeController<
   }
 
   /**
-   * 删除每一项
-   * @return {*}
-   * @author: zhujiamin
-   * @Date: 2024-02-27 09:47:52
+   * @description 处理项删除
+   * @param {IData} item
+   * @param {IContext} context
+   * @param {IParams} params
+   * @returns {*}  {Promise<boolean>}
+   * @memberof TreeController
    */
   async handleItemRemove(
-    item: IData,
+    item: ITreeNodeData,
     context: IContext,
     params: IParams,
   ): Promise<boolean> {
     let needRefresh = false;
-    const treeNode = this.getNodeModel(item._nodeId!);
+    const treeNode = this.getNodeModel(item._nodeId);
     if (!treeNode) {
       throw new RuntimeError(
         ibiz.i18n.t('runtime.controller.control.tree.noFoundTreeNode'),
@@ -1146,7 +1180,7 @@ export class TreeController<
     const nodeAppDataEntityId = treeNode.appDataEntityId;
     if (nodeAppDataEntityId) {
       const deName = calcDeCodeNameById(nodeAppDataEntityId);
-      if (item.srfuf !== Srfuf.CREATE) {
+      if ((item as IData).srfuf !== Srfuf.CREATE) {
         const tempContext = context.clone();
         tempContext[deName] = item.srfkey;
         // 删除后台的数据
@@ -1154,7 +1188,7 @@ export class TreeController<
           nodeAppDataEntityId,
           tempContext,
           params,
-          (treeNode as IData).removeAppDEActionId,
+          (treeNode as IDETreeDataSetNode).removeAppDEActionId,
         );
         needRefresh = true;
       }
@@ -1205,12 +1239,11 @@ export class TreeController<
   }
 
   /**
-   * @description 展开收缩节点
-   * @param {string} tag
-   * @param {boolean} [expand]
+   * @description 切换折叠，其中tag表示操作指定树节点标识，若不传则操作当前树的第一层节点展开状态，expand表示是否展开，若不传则基于节点展开状态取反
+   * @param {{ tag?: string; expand?: boolean }} [params={}]
    * @memberof TreeController
    */
-  changeCollapse(params: IData = {}): void {
+  changeCollapse(params: { tag?: string; expand?: boolean } = {}): void {
     const { tag, expand } = params;
     if (tag) {
       const expandedKeysSet = new Set(this.state.expandedKeys);
@@ -1354,5 +1387,96 @@ export class TreeController<
       }
     });
     return targetNodes;
+  }
+
+  /**
+   * @description 打开编辑数据视图
+   * @param {ITreeNodeData} node
+   * @param {MouseEvent} [event]
+   * @returns {*}  {Promise<IUIActionResult>}
+   * @memberof TreeController
+   */
+  async openData(
+    item: ITreeNodeData,
+    event?: MouseEvent,
+  ): Promise<IUIActionResult> {
+    const nodeModel = this.getNodeModel(item._nodeId);
+    if (!nodeModel) {
+      throw new RuntimeError(
+        ibiz.i18n.t('runtime.controller.control.tree.noFoundTreeNode'),
+      );
+    }
+    const { context, params, data } = this.parseTreeNodeData(item);
+    const { appDataEntityId } = nodeModel as IDETreeDataSetNode;
+    const deName = calcDeCodeNameById(appDataEntityId!);
+    context[deName!.toLowerCase()] = item.srfkey;
+    context.srfnavctrlid = this.ctrlId;
+    const result = await this.viewScheduler?.triggerCustom(
+      `${nodeModel.id!.toLowerCase()}_opendata`,
+      {
+        data,
+        event,
+        params,
+        context,
+        view: this.view,
+        ctrl: this,
+      },
+    );
+
+    if (result === -1)
+      throw new RuntimeModelError(
+        nodeModel,
+        ibiz.i18n.t('runtime.controller.common.md.logicOpendata', {
+          itemType: nodeModel.id!.toLowerCase(),
+        }),
+      );
+
+    return {
+      cancel: result ? !result.ok : true,
+    };
+  }
+
+  /**
+   * @description 打开新建编辑视图
+   * @param {ITreeNodeData} node
+   * @param {MouseEvent} [event]
+   * @returns {*}  {Promise<IUIActionResult>}
+   * @memberof TreeController
+   */
+  async newData(
+    item: ITreeNodeData,
+    event?: MouseEvent,
+  ): Promise<IUIActionResult> {
+    const nodeModel = this.getNodeModel(item._nodeId);
+    if (!nodeModel) {
+      throw new RuntimeError(
+        ibiz.i18n.t('runtime.controller.control.tree.noFoundTreeNode'),
+      );
+    }
+    const { context, params, data } = this.parseTreeNodeData(item);
+    context.srfnavctrlid = this.ctrlId;
+    const result = await this.viewScheduler?.triggerCustom(
+      `${item._nodeId.toLowerCase()}_newdata`,
+      {
+        data,
+        event,
+        params,
+        context,
+        view: this.view,
+        ctrl: this,
+      },
+    );
+
+    if (result === -1)
+      throw new RuntimeModelError(
+        nodeModel,
+        ibiz.i18n.t('runtime.controller.common.md.logicNewdata', {
+          itemType: nodeModel.id!.toLowerCase(),
+        }),
+      );
+
+    return {
+      cancel: result ? !result.ok : true,
+    };
   }
 }

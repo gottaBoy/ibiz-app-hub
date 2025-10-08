@@ -14,6 +14,21 @@ import { base64ToBlob, CoreConst, getAppCookie } from '@ibiz-template/core';
 import { HtmlEditorController } from '../html-editor.controller';
 import './quill-editor.scss';
 
+/**
+ * 移动端HTML编辑框
+ * @primary
+ * @description  基于Quill深度定制可扩展的富文本编辑器，集成文件/图片上传、实时预览及样式配置功能，提供完整的富媒体编辑解决方案。支持编辑器类型包含：`移动端HTML编辑框`
+ * @editorparams {name:uploadParams,parameterType:IData,defaultvalue:{},description:上传参数}
+ * @editorparams {name:exportParams,parameterType:IData,defaultvalue:{},description:下载参数}
+ * @editorparams {name:SHOWTOOLBAR,parameterType:boolean,defaultvalue:true,description:显示工具栏}
+ * @editorparams {name:VALUEMODE,parameterType:'text' | 'html',defaultvalue:html,description:值模式，暂时只支持html模式}
+ * @editorparams {name:IMAGEMODE,parameterType:'base64' | 'file',defaultvalue:'file',description:图片模式}
+ * @editorparams {name:MODULES,parameterType:IData,description:quill配置}
+ * @editorparams {name:DEFAULTHEIGHT,parameterType:number,defaultvalue:200,description:收缩时的高度}
+ * @editorparams {name:SHOWCOLLAPSE,parameterType:boolean,defaultvalue:true,description:是否显示伸缩按钮}
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const IBizQuill: any = defineComponent({
   name: 'IBizQuill',

@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'editor_code',
   deviewId: '468492e1c09ff193a2995c40a702af8c',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -65,6 +66,16 @@ export default {
         appDataEntityId: 'web.master',
         id: 'update',
       },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
+      },
       deformPages: [
         {
           layout: {
@@ -73,27 +84,418 @@ export default {
           },
           deformDetails: [
             {
-              dataType: 25,
-              enableCond: 3,
-              labelPos: 'NONE',
-              noPrivDisplayMode: 1,
-              editor: {
-                showMaxLength: true,
-                editorType: 'CODE',
-                valueType: 'SIMPLE',
-                editable: true,
-                id: 'formitem',
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
               },
-              allowEmpty: true,
-              emptyCaption: true,
-              codeName: 'formitem',
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    showMaxLength: true,
+                    editorType: 'CODE',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem',
+                  },
+                  allowEmpty: true,
+                  emptyCaption: true,
+                  codeName: 'formitem',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem',
+                },
+              ],
+              caption: '代码编辑框',
+              codeName: 'grouppanel1',
               detailStyle: 'DEFAULT',
-              detailType: 'FORMITEM',
+              detailType: 'GROUPPANEL',
               layoutPos: {
                 colMD: 24,
                 layout: 'TABLE_24COL',
               },
-              id: 'formitem',
+              showCaption: true,
+              id: 'grouppanel1',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    showMaxLength: true,
+                    editorParams: {
+                      language: 'json',
+                    },
+                    editorType: 'CODE',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem1',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem1',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：通过language参数指定代码编辑框的语言类型。当前代码编辑框的语言类型为json',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem1',
+                  },
+                  codeName: 'rawitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem1',
+                },
+              ],
+              caption: '语言类型',
+              codeName: 'grouppanel2',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel2',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  createDV: " '代码编辑框内容'",
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    showMaxLength: true,
+                    editorParams: {
+                      enableedit: 'false',
+                    },
+                    editorType: 'CODE',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem2',
+                  },
+                  updateDV: " '代码编辑框内容'",
+                  allowEmpty: true,
+                  codeName: 'formitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem2',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用enableedit参数控制代码编辑框是否可以编辑。当前代码编辑框不可以编辑',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem2',
+                  },
+                  codeName: 'rawitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem2',
+                },
+              ],
+              caption: '编辑状态',
+              codeName: 'grouppanel3',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel3',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    showMaxLength: true,
+                    editorParams: {
+                      enablefullscreen: 'true',
+                    },
+                    editorType: 'CODE',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem3',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem3',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem3',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用enablefullscreen参数控制代码编辑框是否可以全屏显示。当前代码编辑框可以全屏显示',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem3',
+                  },
+                  codeName: 'rawitem3',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem3',
+                },
+              ],
+              caption: '全屏',
+              codeName: 'grouppanel4',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel4',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  createDV: " '代码编辑框内容'",
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    showMaxLength: true,
+                    editorParams: {
+                      readonly: 'true',
+                    },
+                    editorType: 'CODE',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    readOnly: true,
+                    id: 'formitem4',
+                  },
+                  updateDV: " '代码编辑框内容'",
+                  allowEmpty: true,
+                  codeName: 'formitem4',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem4',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用readonly参数控制编辑器是否为只读态。当前编辑器为只读态',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem5',
+                  },
+                  codeName: 'rawitem5',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem5',
+                },
+              ],
+              caption: '只读态',
+              codeName: 'grouppanel5',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel5',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    appDEACModeId: 'aichat',
+                    appDEDataSetId: 'fetch_default',
+                    appDataEntityId: 'web.master',
+                    enableAC: true,
+                    showMaxLength: true,
+                    editorParams: {
+                      srfaiappendcurcontent: 'AI聊天附加内容',
+                      ac: 'true',
+                      srfaiappendcurdata: 'true',
+                    },
+                    editorType: 'CODE',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem5',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem5',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem5',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用聊天补全类型的自填模式控制是否开启代码编辑框的AI聊天自填模式。当前代码编辑框已开启AI聊天自填模式',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem4',
+                  },
+                  codeName: 'rawitem4',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem4',
+                },
+              ],
+              caption: 'AI聊天',
+              codeName: 'grouppanel6',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              defdgroupLogics: [
+                {
+                  logicCat: 'PANELVISIBLE',
+                  relatedDetailNames: ['formitem5'],
+                  groupOP: 'AND',
+                  defdlogics: [
+                    {
+                      condOP: 'ISNOTNULL',
+                      defdname: 'formitem5',
+                      logicType: 'SINGLE',
+                      name: 'formitem5值不为空(NotNil)',
+                      id: 'formitem5值不为空(notnil)',
+                    },
+                  ],
+                  logicType: 'GROUP',
+                },
+              ],
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel6',
             },
             {
               dataType: 25,

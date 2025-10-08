@@ -12,20 +12,14 @@ export interface IPickupMDViewState
   extends IMDViewState,
     IApiPickupMDViewState {
   /**
-   * 是否单选
-   *
-   * @author zk
-   * @date 2023-08-21 05:08:36
+   * @description 是否单选
    * @type {boolean}
    * @memberof IPickupMDViewState
    */
   singleSelect: boolean;
 
   /**
-   * 选择数据
-   *
-   * @author zk
-   * @date 2023-11-13 05:11:46
+   * @description 选择数据
    * @type {IData[]}
    * @memberof IPickupMDViewState
    */

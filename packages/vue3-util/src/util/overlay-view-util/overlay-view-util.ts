@@ -5,14 +5,18 @@ import {
   IModalData,
   IModalOptions,
   IPopoverOptions,
+  IViewShellHooks,
 } from '@ibiz-template/runtime';
 import { h, resolveComponent, VNode } from 'vue';
 
-export function createOverlayView(props?: IParams): (modal: IModal) => VNode {
-  return (modal: IModal) => {
+export function createOverlayView(
+  props?: IParams,
+): (modal: IModal, viewShellHooks?: IViewShellHooks) => VNode {
+  return (modal: IModal, viewShellHooks?: IViewShellHooks) => {
     const viewShell = resolveComponent('IBizViewShell');
     return h(viewShell, {
       ...props,
+      viewShellHooks,
       modal,
     });
   };

@@ -93,6 +93,13 @@ export interface IDataEntity {
   srfordervalue: number;
 
   /**
+   * @description 联合主键（存在联合主键属性集合才有值）
+   * @type {(string)}
+   * @memberof IDataEntity
+   */
+  srfunionkey: string;
+
+  /**
    * 是否是新建数据，0为新建
    *
    * @author lxm

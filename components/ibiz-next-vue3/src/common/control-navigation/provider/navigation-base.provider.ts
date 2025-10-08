@@ -28,7 +28,7 @@ export class NavgationBaseProvider {
    *
    * @memberof NavgationBaseProvider
    */
-  keyName = 'srfkey';
+  keyName: string = 'srfkey';
 
   /**
    * 模型
@@ -105,6 +105,28 @@ export class NavgationBaseProvider {
   }
 
   /**
+   * @description 清空导航
+   * @protected
+   * @memberof NavgationBaseProvider
+   */
+  protected clearNavigation(): void {
+    this.navStack = [];
+    this.controller.setSelection([]);
+    this.navViewMsg.value = undefined;
+  }
+
+  /**
+   * @description 设置导航数据
+   * @protected
+   * @param {IData} data
+   * @memberof NavgationBaseProvider
+   */
+  protected setNavData(data: IData): void {
+    this.controller.setNavData(data);
+    this.controller.setSelection([data]);
+  }
+
+  /**
    * 通过栈数据导航
    *
    * @memberof NavgationBaseProvider
@@ -115,16 +137,11 @@ export class NavgationBaseProvider {
       this.navStack
         .map(key => items.find(item => item[this.keyName] === key))
         .find(item => item !== undefined) || items[0];
-    setTimeout(() => {
-      if (navData) {
-        this.controller.setNavData(navData);
-        this.controller.setSelection([navData]);
-      } else {
-        this.navStack = [];
-        this.controller.setSelection([]);
-        this.navViewMsg.value = undefined;
-      }
-    });
+    if (navData) {
+      this.setNavData(navData);
+    } else {
+      this.clearNavigation();
+    }
   }
 
   /**

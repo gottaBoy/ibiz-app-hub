@@ -30,7 +30,7 @@ export class NavPosController
   implements IPanelItemNavPosController
 {
   /**
-   * 导航占位状态
+   * @description 导航占位状态
    * @exposedoc
    * @type {NavPosState}
    * @memberof NavPosController

@@ -1,5 +1,69 @@
+import { IApiData } from '@ibiz-template/core';
 import { IApiTreeGridExState } from './i-api-tree-grid-ex.state';
 import { IApiTreeNodeData } from './i-api-tree.state';
+
+/**
+ * @description 甘特图节点连接数据
+ * @export
+ * @interface IApiGanttStyle
+ */
+export interface IApiGanttNodeLinkData {
+  /**
+   * @description 节点数据的唯一标识（创建的时候自动生成）
+   * @type {string}
+   * @memberof IApiGanttNodeLinkData
+   */
+  _uuid: string;
+
+  /**
+   * @description 起始点唯一标识（前端生成）
+   * @type {(string)}
+   * @memberof IApiGanttNodeLinkData
+   */
+  _from: string;
+
+  /**
+   * @description 结束点唯一标识（前端生成）
+   * @type {(string)}
+   * @memberof IApiGanttNodeLinkData
+   */
+  _to: string;
+
+  /**
+   * @description 实体数据（服务返回）
+   * @type {IApiData}
+   * @memberof IApiGanttNodeLinkData
+   */
+  _deData: IApiData;
+
+  /**
+   * @description 起始点节点数据（前端生成的数据）
+   * @type {IApiGanttNodeData}
+   * @memberof IApiGanttNodeLinkData
+   */
+  _fromData: IApiGanttNodeData;
+
+  /**
+   * @description 结束点节点数据（前端生成的数据）
+   * @type {IApiGanttNodeData}
+   * @memberof IApiGanttNodeLinkData
+   */
+  _toData: IApiGanttNodeData;
+
+  /**
+   * @description 起始点的值（服务返回的主键）
+   * @type {string}
+   * @memberof IApiTreeNodeData
+   */
+  _fromValue: string;
+
+  /**
+   * @description 结束点的值（服务返回的主键）
+   * @type {string}
+   * @memberof IApiTreeNodeData
+   */
+  _toValue: string;
+}
 
 /**
  * @description 甘特图部件状态
@@ -9,6 +73,14 @@ import { IApiTreeNodeData } from './i-api-tree.state';
  * @extends {IApiTreeGridExState}
  */
 export interface IApiGanttState extends IApiTreeGridExState {
+  /**
+   * @description 甘特图节点数据
+   * @type {IApiGanttNodeData[]}
+   * @default []
+   * @memberof IApiTreeState
+   */
+  items: IApiGanttNodeData[];
+
   /**
    * @description 甘特图样式
    * @type {IGanttStyle}
@@ -24,6 +96,21 @@ export interface IApiGanttState extends IApiTreeGridExState {
    * @memberof IApiGanttState
    */
   sliderDraggable: boolean;
+
+  /**
+   * @description 甘特图将根据当前时间单位呈现右侧甘特页面样式
+   * @type {('month' | 'week' | 'day' | 'hour')}
+   * @default 'day'
+   * @memberof IGanttState
+   */
+  unit: 'month' | 'week' | 'day' | 'hour';
+
+  /**
+   * @description 甘特图节点连接数据集合
+   * @type {IApiGanttNodeLinkData[]}
+   * @memberof IGanttState
+   */
+  links: IApiGanttNodeLinkData[];
 }
 
 /**

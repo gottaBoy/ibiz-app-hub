@@ -70,8 +70,6 @@ export class IndexBlankPlaceholderController extends PanelItemController<IPanelC
         const appView = await ibiz.hub.config.view.get(appViewId!);
         const { openMode = 'INDEXVIEWTAB' } = appView;
         this.state.visible = !openMode.startsWith('INDEXVIEWTAB');
-      } else {
-        this.state.visible = true;
       }
     });
   }

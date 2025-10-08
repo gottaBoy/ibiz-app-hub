@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'form_layout',
   deviewId: '06a64fd15ae48779b6ee07fc8ec9ff07',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -60,7 +61,7 @@ export default {
         id: 'loaddraft',
       },
       getControlAction: {
-        appDEMethodId: 'get_sample_date',
+        appDEMethodId: 'get_sample_data',
         appDataEntityId: 'web.master',
         id: 'load',
       },
@@ -73,6 +74,16 @@ export default {
         appDEMethodId: 'update',
         appDataEntityId: 'web.master',
         id: 'update',
+      },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
       },
       deformPages: [
         {

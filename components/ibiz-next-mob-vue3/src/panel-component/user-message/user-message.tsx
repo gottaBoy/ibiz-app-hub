@@ -24,6 +24,11 @@ import { MobUserMessageController } from './user-message.controller';
 import './user-message.scss';
 import { InternalMessageDefaultProvider } from './common';
 
+/**
+ * 用户消息
+ * @primary
+ * @description 用户消息组件，用于显示网站内关于用户的通知消息。
+ */
 export const MobUserMessage = defineComponent({
   name: 'MobUserMessage',
   props: getRawProps<MobUserMessageController>(),

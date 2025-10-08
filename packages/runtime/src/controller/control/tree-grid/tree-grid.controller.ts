@@ -1,10 +1,11 @@
 import { IDEGridFieldColumn, IDETreeGrid } from '@ibiz/model-core';
 import { RuntimeModelError } from '@ibiz-template/core';
+import { createUUID } from 'qx-util';
 import {
-  ITreeGridController,
   ITreeGridEvent,
   ITreeGridState,
   MDCtrlLoadParams,
+  ITreeGridController,
 } from '../../../interface';
 import { GridController } from '../grid';
 import { ControlVO } from '../../../service';
@@ -33,6 +34,7 @@ export class TreeGridController<
     super.initState();
     this.state.showTreeGrid = true;
     this.state.treeGirdData = [];
+    this.state.tableKey = '';
   }
 
   /**
@@ -45,7 +47,6 @@ export class TreeGridController<
    */
   protected async onCreated(): Promise<void> {
     await super.onCreated();
-
     this.initTreeGridField();
   }
 
@@ -59,33 +60,47 @@ export class TreeGridController<
       this.model.degridColumns?.find((item: IDEGridFieldColumn) => {
         return item.treeColumnMode === 4 || item.treeColumnMode === 12;
       });
-    const treeGridValue: IDEGridFieldColumn | undefined =
-      this.model.degridColumns?.find((item: IDEGridFieldColumn) => {
-        return item.treeColumnMode === 2 || item.treeColumnMode === 3;
-      });
-    if (!treeGridParent) {
-      throw new RuntimeModelError(
-        this.model,
-        ibiz.i18n.t('runtime.controller.control.treeGrid.columnsSchema'),
-      );
-    }
-    if (!treeGridValue) {
+    if (!treeGridParent)
       throw new RuntimeModelError(
         this.model,
         ibiz.i18n.t('runtime.controller.control.treeGrid.columnMode'),
       );
-    }
+    const treeGridValue: IDEGridFieldColumn | undefined =
+      this.model.degridColumns?.find((item: IDEGridFieldColumn) => {
+        return item.treeColumnMode === 2 || item.treeColumnMode === 3;
+      });
+    if (!treeGridValue)
+      throw new RuntimeModelError(
+        this.model,
+        ibiz.i18n.t('runtime.controller.control.treeGrid.columnsSchema'),
+      );
     this.treeGridValueField = treeGridValue.appDEFieldId!.toLowerCase();
     this.treeGridParentField = treeGridParent.appDEFieldId!.toLowerCase();
+  }
+
+  /**
+   * @description  处理刷新模式
+   * @protected
+   * @param {MDCtrlLoadParams} args
+   * @memberof TreeGridController
+   */
+  protected handleRefreshMode(args: MDCtrlLoadParams): void {
+    super.handleRefreshMode(args);
+    // 缓存模式时需排除没有的数据
+    if (this.refreshMode === 'cache')
+      this.state.expandRowKeys = this.state.expandRowKeys.filter(key =>
+        this.state.items.some(item => item.srfkey === key),
+      );
+    // 树表格是懒加载的必须强制更新组件
+    this.state.tableKey = createUUID();
   }
 
   async afterLoad(
     args: MDCtrlLoadParams,
     items: ControlVO[],
   ): Promise<ControlVO[]> {
-    await super.afterLoad(args, items);
     this.calcTreeGridData(this.state.items);
-
+    await super.afterLoad(args, items);
     return items;
   }
 
@@ -119,14 +134,10 @@ export class TreeGridController<
     const ids: string[] = [];
     treeGirdItems.forEach(item => {
       const id = item[this.treeGridValueField!];
-      if (id) {
-        ids.push(id);
-      }
+      if (id) ids.push(id);
     });
     treeGirdItems.forEach(item => {
-      if (!ids.includes(item[this.treeGridParentField!])) {
-        rootNodes.push(item);
-      }
+      if (!ids.includes(item[this.treeGridParentField!])) rootNodes.push(item);
     });
 
     this.state.treeGirdData = rootNodes;
@@ -142,12 +153,11 @@ export class TreeGridController<
   }
 
   /**
-   * 切换行展开
-   * @author: zzq
-   * @date 2024-08-23 17:12:58
-   * @return {*}  {void}
+   * @description 切换折叠,其中tag表示操作指定表格分组行标识，若不传则操作当前表格的所有分组展开状态，expand表示是否展开，若不传则以当前分组状态为基准切换
+   * @param {{ tag?: string; expand?: boolean }} [params={}]
+   * @memberof TreeGridController
    */
-  changeCollapse(params: IData = {}): void {
+  changeCollapse(params: { tag?: string; expand?: boolean } = {}): void {
     const { tag, expand } = params;
     // 存在分组id则展开/收缩分组
     if (tag) {

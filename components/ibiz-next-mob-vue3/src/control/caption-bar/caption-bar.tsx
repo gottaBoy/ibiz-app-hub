@@ -7,12 +7,25 @@ import './caption-bar.scss';
 export const CaptionBarControl = defineComponent({
   name: 'IBizCaptionBarControl',
   props: {
+    /**
+     * @description 标题栏模型数据
+     */
     modelData: {
       type: Object as PropType<ICaptionBar>,
       required: true,
     },
+    /**
+     * @description 应用上下文对象
+     */
     context: { type: Object as PropType<IContext>, required: true },
+    /**
+     * @description 视图参数对象
+     * @default {}
+     */
     params: { type: Object as PropType<IParams>, default: () => ({}) },
+    /**
+     * @description 部件适配器
+     */
     provider: { type: Object as PropType<IControlProvider> },
   },
   setup() {

@@ -17,11 +17,13 @@ export class ThirdAuthService implements IThirdAuthService {
    * @date 2024-11-18 14:11:58
    * @param {('DINGTALK' | 'WXWORK' | 'OAUTH'  |string)} type 授权类型：钉钉 | 企业微信 | OAUTH | 自定义
    * @param {('EMBED' | 'THIRD')} mode
+   * @param {IData} [params]
    * @return {*}  {Promise<IThirdAuthResult>}
    */
   async auth(
     type: 'DINGTALK' | 'WXWORK' | 'OAUTH' | string,
     mode: 'EMBED' | 'THIRD',
+    params?: IData,
   ): Promise<IThirdAuthResult> {
     switch (type) {
       case 'DINGTALK':
@@ -33,7 +35,7 @@ export class ThirdAuthService implements IThirdAuthService {
           ? this.wxWorkEmbedAuth()
           : this.wxWorkThirddAuth();
       case 'OAUTH':
-        return this.oauthThirdAuth();
+        return this.oauthThirdAuth(params);
       default:
         throw new RuntimeError(
           ibiz.i18n.t('runtime.service.thirdAuth.noSupported', { type }),
@@ -278,10 +280,13 @@ export class ThirdAuthService implements IThirdAuthService {
    *
    * @author tony001
    * @date 2024-12-22 11:12:56
+   * @param {IData} [params={}]
    * @return {*}  {Promise<IThirdAuthResult>}
    */
-  async oauthThirdAuth(): Promise<IThirdAuthResult> {
-    if (!ibiz.env.oauthOpenAccessId) {
+  async oauthThirdAuth(params: IData = {}): Promise<IThirdAuthResult> {
+    const oauthOpenAccessId =
+      params.oauthopenaccessid || ibiz.env.oauthOpenAccessId;
+    if (!oauthOpenAccessId) {
       throw new RuntimeError(
         ibiz.i18n.t('runtime.service.thirdAuth.oauthOpenAccessIdError'),
       );
@@ -291,7 +296,7 @@ export class ThirdAuthService implements IThirdAuthService {
     // 拼接重定向地址
     const redirectUri = `${baseUrl}oauth.html`;
     const res = await ibiz.net.get(
-      `/uaa/open/oauth2-${ibiz.env.oauthOpenAccessId}/authorize`,
+      `/uaa/open/oauth2-${oauthOpenAccessId}/authorize`,
       { redirect_uri: redirectUri },
     );
     if (res.ok && res.data) {
@@ -299,7 +304,7 @@ export class ThirdAuthService implements IThirdAuthService {
       const lastAccessParams: IData = {
         srfdcsystem: ibiz.env.dcSystem,
         baseurl: `${ibiz.env.baseUrl}/${ibiz.env.appId}`,
-        oauthopenaccessid: ibiz.env.oauthOpenAccessId,
+        oauthopenaccessid: oauthOpenAccessId,
         srfredirect_uri: encodeURIComponent(window.location.href),
       };
       if (

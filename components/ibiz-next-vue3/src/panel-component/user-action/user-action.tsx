@@ -12,8 +12,8 @@ import './user-action.scss';
 /**
  * 用户操作
  * @primary
- * @description 首页中用户操作行为按钮，点击后执行对应的应用功能。存在三种类型，分别为设置（Setting）、帮助（Helper）、自定义（Custom）。
- * @panelitemparams {name:noprivmode,parameterType:PARENT|SELF,defaultvalue:PARENT,description:无权限模式，为PARENT时会通过父容器进行显示隐藏}
+ * @description 首页中用户操作行为按钮，需在菜单上配置标识为设置（setting）、帮助（helper）、自定义（custom）的三种隐藏菜单项，点击按钮将会执行对应的菜单项应用功能。
+ * @panelitemparams {name:noprivmode,parameterType:'PARENT' | 'SELF',defaultvalue:'PARENT',description:无权限模式，为PARENT时会通过父容器进行显示隐藏}
  * @export
  * @class UserAction
  */

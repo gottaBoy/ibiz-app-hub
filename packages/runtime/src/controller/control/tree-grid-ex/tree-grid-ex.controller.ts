@@ -1,33 +1,32 @@
 import {
   IDETreeColumn,
-  IDETreeDataSetNode,
   IDETreeGridEx,
+  IDETreeDataSetNode,
 } from '@ibiz/model-core';
 import {
   RuntimeError,
-  RuntimeModelError,
   awaitTimeout,
   recursiveIterate,
+  RuntimeModelError,
 } from '@ibiz-template/core';
 import { clone } from 'ramda';
 import {
-  ITreeGridExController,
+  ITreeNodeData,
   ITreeGridExState,
   ITreeGridExEvent,
-  ITreeGridExColumnProvider,
-  ITreeGridExRowState,
-  ITreeNodeData,
   MDCtrlLoadParams,
+  ITreeGridExRowState,
   IButtonContainerState,
-  IUIActionResult,
+  ITreeGridExController,
+  ITreeGridExColumnProvider,
 } from '../../../interface';
 import { getTreeGridExColumnProvider } from '../../../register';
 import { TreeGridExService } from './tree-grid-ex.service';
 import { TreeController } from '../tree/tree.controller';
 import {
   TreeGridExColumnController,
-  TreeGridExFieldColumnController,
   TreeGridExUAColumnController,
+  TreeGridExFieldColumnController,
 } from './tree-grid-ex-column';
 import { TreeGridExRowState } from './tree-grid-ex-row.state';
 import { Srfuf } from '../../../service';
@@ -688,6 +687,8 @@ export class TreeGridExController<
     if (!nodeData) {
       return;
     }
+    // 设置导航数据
+    this.setNavData(nodeData);
     // 节点有配置常用操作的上下文菜单时，触发界面行为，后续逻辑都不走
     const clickActionItem =
       this.contextMenuInfos[nodeData._nodeId]?.clickTBUIActionItem;
@@ -732,39 +733,5 @@ export class TreeGridExController<
     }
     // 执行opendata逻辑事件
     await this.openData(nodeData, event);
-  }
-
-  async openData(item: IData, event: MouseEvent): Promise<IUIActionResult> {
-    // 添加选中数据的主键
-    const context = this.context.clone();
-    const deName =
-      item.deData?.srfdecodename?.toLowerCase() ||
-      calcDeCodeNameById(this.model.appDataEntityId!);
-    context[deName!.toLowerCase()] = item._deData.srfkey;
-
-    const result = await this.scheduler?.triggerCustom(
-      `${item._nodeId}_opendata`,
-      {
-        context,
-        params: this.params,
-        data: [item._deData],
-        event,
-        view: this.view,
-        ctrl: this,
-      },
-    );
-
-    if (result === -1) {
-      throw new RuntimeModelError(
-        this.model,
-        ibiz.i18n.t('runtime.controller.control.calendar.missingViewLogic', {
-          itemType: item.itemType!.toLowerCase(),
-        }),
-      );
-    } else {
-      return {
-        cancel: result ? result.ok : true,
-      };
-    }
   }
 }

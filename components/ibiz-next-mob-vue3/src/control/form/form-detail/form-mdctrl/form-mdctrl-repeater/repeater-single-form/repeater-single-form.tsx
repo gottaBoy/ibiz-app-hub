@@ -19,6 +19,9 @@ export const RepeaterSingleForm = defineComponent({
       type: FormMDCtrlRepeaterController,
       required: true,
     },
+    simpleDataIndex: {
+      type: Number,
+    },
   },
   emits: {
     change: (_value: IData) => true,
@@ -58,6 +61,7 @@ export const RepeaterSingleForm = defineComponent({
         context={this.controller.context}
         params={this.controller.params}
         modelData={this.controller.repeatedForm}
+        simpleDataIndex={this.simpleDataIndex}
         isSimple={true}
         data={this.data}
         onFormDataChange={this.onFormDataChange}

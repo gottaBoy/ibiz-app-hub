@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'searchbar',
   deviewId: '2de2f3b34b0328ff50f0bd0c2c69aaa5',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -26,6 +27,36 @@ export default {
           caption: '基础',
           appViewId: 'web.master_searchbar_base',
           id: 'base',
+        },
+        {
+          caption: '高级',
+          appViewId: 'web.master_searchbar_hight',
+          id: 'hight',
+        },
+        {
+          caption: '计数器',
+          appViewId: 'web.master_searchbar_count',
+          id: 'count',
+        },
+        {
+          caption: '计数器禁用',
+          appViewId: 'web.master_searchbar_counter_disabled',
+          id: 'disable_counter',
+        },
+        {
+          caption: '启用缓存',
+          appViewId: 'web.master_searchbar_storage',
+          id: 'storage',
+        },
+        {
+          caption: '输入提示分隔符',
+          appViewId: 'web.master_searchbar_ph',
+          id: 'separator',
+        },
+        {
+          caption: '事件及调用',
+          appViewId: 'web.master_search_logic',
+          id: 'event',
         },
       ],
       dataRelationTag: 'searchbar_DR',

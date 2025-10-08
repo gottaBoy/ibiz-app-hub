@@ -1,26 +1,30 @@
-import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import {
-  ConcreteComponent,
-  defineComponent,
-  getCurrentInstance,
+  useNamespace,
+  useControlController,
+  useControlPopoverzIndex,
+} from '@ibiz-template/vue3-util';
+import {
   h,
-  isReactive,
-  PropType,
-  reactive,
   Ref,
   ref,
-  resolveComponent,
   VNode,
+  PropType,
+  reactive,
+  isReactive,
+  defineComponent,
+  resolveComponent,
+  ConcreteComponent,
+  getCurrentInstance,
 } from 'vue';
 import {
   IDashboard,
-  IDBContainerPortletPart,
-  IDBPortletPart,
   IModelObject,
+  IDBPortletPart,
+  IDBContainerPortletPart,
 } from '@ibiz/model-core';
-import './dashboard.scss';
 import { DashboardController, IControlProvider } from '@ibiz-template/runtime';
 import { uniqueId } from 'lodash-es';
+import './dashboard.scss';
 
 // 刷新标记
 const refreshTagObj: IData = {};
@@ -112,6 +116,8 @@ export const DashboardControl = defineComponent({
     const c = useControlController(
       (...args) => new DashboardController(...args),
     );
+
+    useControlPopoverzIndex(c);
 
     const vue = getCurrentInstance()!.proxy!;
 

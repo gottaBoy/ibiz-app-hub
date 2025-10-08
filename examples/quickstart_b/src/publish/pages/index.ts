@@ -37,10 +37,6 @@ export async function getAppViewComponent(
             './master/master-child-appb-view-5/master-child-appb-view-5.vue'
           ),
       );
-    case 'about_appb':
-      return defineAsyncComponent(
-        () => import('./about/about-appb/about-appb.vue'),
-      );
     case 'master_child_appb_view':
       return defineAsyncComponent(
         () =>

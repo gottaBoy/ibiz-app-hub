@@ -5,7 +5,6 @@ import { showTitle } from '@ibiz-template/core';
 import { IUIEvent, calendarWeekEmits, calendarWeekProps } from '../interface';
 import { useCalendarWeek } from './use-calendar-week';
 import './calendar-week.scss';
-import { closeIcon, handlePopClose } from '../util';
 
 export const CalendarWeek = defineComponent({
   name: 'CalendarWeek',
@@ -40,7 +39,10 @@ export const CalendarWeek = defineComponent({
       onHeaderEventScroll,
       initHeaderEventScroll,
       eventContextmenu,
-    } = useCalendarWeek(props, emit);
+      contentMousemove,
+      eventMouseenter,
+      eventMouseleave,
+    } = useCalendarWeek(props, emit, ns);
 
     watch(
       () => props.selectedData,
@@ -106,6 +108,28 @@ export const CalendarWeek = defineComponent({
     };
 
     /**
+     * 绘制事件项popover内容
+     * @param {IUIEvent} _event 事件项数据
+     */
+    const renderPopoverContent = (_event: IUIEvent) => {
+      // 适配弹框内详情不要背景色
+      const _tempEvent = { ..._event, color: '', bkColor: '' };
+      return (
+        <div class={[ns.em('event-popover', 'body')]}>
+          <div class={[ns.em('event-popover', 'scroll')]}>
+            {slots?.event ? (
+              slots.event?.({ data: _tempEvent })
+            ) : (
+              <div class={[ns.em('event-popover', 'content')]}>{`${
+                _event.text || ''
+              } ${_event.timeRange || ''}`}</div>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    /**
      * 绘制事件项
      * @param {string} location 绘制位置
      * @param {IParams} eventBoxStyle 事件容器中style样式
@@ -133,6 +157,7 @@ export const CalendarWeek = defineComponent({
       // 如果配置了显示详情，则内容区不用显示快捷提示，提示由气泡展示
       if (props.showDetail) title = '';
 
+      const component = renderPopoverContent(event);
       return (
         <div
           key={index}
@@ -152,6 +177,10 @@ export const CalendarWeek = defineComponent({
               handleEventDblClick(event, 'head');
             }}
             onContextmenu={(e: MouseEvent) => eventContextmenu(event, e)}
+            onMouseenter={(_e: MouseEvent) =>
+              eventMouseenter(_e, component, location)
+            }
+            onMouseleave={eventMouseleave}
             style={eventContentStyle}
             title={title}
           >
@@ -183,57 +212,6 @@ export const CalendarWeek = defineComponent({
             )}
           </button>
         </div>
-      );
-    };
-
-    /**
-     * 绘制事件项popover
-     * @param {Element} content 内容
-     * @param {IUIEvent} event 事件项
-     */
-    const renderPopover = (
-      content: Element,
-      event: IUIEvent,
-      placement?: string,
-    ) => {
-      if (!props.showDetail) {
-        return content;
-      }
-
-      // 适配弹框内详情不要背景色
-      const _tempEvent = { ...event, color: '', bkColor: '' };
-      return (
-        <el-popover
-          show-after={100}
-          offset={4}
-          width='auto'
-          popper-class={[ns.e('event-popover')]}
-          placement={placement || 'right-start'}
-        >
-          {{
-            reference: () => content,
-            default: () => {
-              return (
-                <div class={[ns.em('event-popover', 'body')]}>
-                  <div
-                    class={[ns.em('event-popover', 'close')]}
-                    onClick={el => handlePopClose(el)}
-                    v-html={closeIcon}
-                  ></div>
-                  <div class={[ns.em('event-popover', 'scroll')]}>
-                    {slots?.event ? (
-                      slots.event?.({ data: _tempEvent })
-                    ) : (
-                      <div class={[ns.em('event-popover', 'content')]}>{`${
-                        event.text || ''
-                      } ${event.timeRange || ''}`}</div>
-                    )}
-                  </div>
-                </div>
-              );
-            },
-          }}
-        </el-popover>
       );
     };
 
@@ -291,7 +269,7 @@ export const CalendarWeek = defineComponent({
                       };
                       if (!event.isShow) return '';
 
-                      const tempContent = renderEventItem(
+                      return renderEventItem(
                         'header',
                         eventBoxStyle,
                         eventContentStyle,
@@ -299,11 +277,6 @@ export const CalendarWeek = defineComponent({
                         index,
                         'head-event',
                         'header',
-                      );
-                      return renderPopover(
-                        tempContent as unknown as Element,
-                        event,
-                        'bottom',
                       );
                     })}
                   </div>
@@ -330,7 +303,7 @@ export const CalendarWeek = defineComponent({
      */
     const renderContent = () => {
       return (
-        <div class={[ns.e('scroll-area')]}>
+        <div class={[ns.e('scroll-area')]} onMousemove={contentMousemove}>
           <div class={ns.e('time-pane')}>
             <div class={ns.em('time-pane', 'time-labels')}>
               {drawData.value.map((timescale: string) => (
@@ -377,7 +350,7 @@ export const CalendarWeek = defineComponent({
                         background: event.bkColorFade,
                         'border-left': `3px solid ${event.bkColor}`,
                       };
-                      const tempContent = renderEventItem(
+                      return renderEventItem(
                         'content',
                         eventBoxStyle,
                         eventContentStyle,
@@ -385,10 +358,6 @@ export const CalendarWeek = defineComponent({
                         index,
                         '',
                         'time-pane',
-                      );
-                      return renderPopover(
-                        tempContent as unknown as Element,
-                        event,
                       );
                     })}
                   </div>

@@ -356,7 +356,7 @@ export class MDCtrlController
     this.state.groups = groups;
   }
 
-  changeCollapse(params?: IData): void {
+  changeCollapse(params: { tag?: string; expand?: boolean } = {}): void {
     throw new Error('Method not implemented.');
   }
 

@@ -5,6 +5,7 @@ import {
   IPickupViewState,
   IPickupViewEvent,
   ViewEngineBase,
+  IApiMobPickupViewCall,
 } from '@ibiz-template/runtime';
 import { IAppDEMobPickupView } from '@ibiz/model-core';
 
@@ -56,6 +57,10 @@ export class MobPickupViewEngine extends ViewEngineBase {
       this.view.slotProps.pickupviewpanel = {};
     }
     this.view.slotProps.pickupviewpanel.singleSelect = true;
+    if (this.view.params.selecteddata) {
+      this.selectedData = JSON.parse(this.view.params.selecteddata);
+      delete this.view.params.selecteddata;
+    }
   }
 
   /**
@@ -72,6 +77,18 @@ export class MobPickupViewEngine extends ViewEngineBase {
     this.pickupViewPanel.evt.on('onDataActive', event => {
       this.pickupViewPanelDataActive(event.data);
     });
+    this.setSelectedData(this.selectedData);
+  }
+
+  /**
+   * @description 设置选中数据
+   * @protected
+   * @param {IData[]} items
+   * @memberof PickupViewEngine
+   */
+  protected setSelectedData(items: IData[]): void {
+    this.selectedData = items;
+    this.pickupViewPanel.setSelectedData(items);
   }
 
   /**
@@ -87,8 +104,11 @@ export class MobPickupViewEngine extends ViewEngineBase {
     this.view.closeView({ ok: true, data: this.selectedData });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  async call(key: string, args: any): Promise<IData | null | undefined> {
+  async call(
+    key: keyof IApiMobPickupViewCall,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    args: any,
+  ): Promise<IData | null | undefined> {
     if (key === SysUIActionTag.CANCEL) {
       this.cancel();
       return null;

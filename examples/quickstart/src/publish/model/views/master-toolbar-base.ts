@@ -1,6 +1,7 @@
 export default {
   deviewCodeName: 'toolbar_base',
   deviewId: 'ce379ea52e3e1b885b659a7cc41c6a18',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -164,6 +165,51 @@ export default {
     layoutPanel: true,
     controls: [
       {
+        detoolbarItems: [
+          {
+            actionLevel: 100,
+            noPrivDisplayMode: 2,
+            uiactionId: 'gridview_newaction',
+            valid: true,
+            capLanguageRes: {
+              lanResTag: 'TBB.TEXT.*.NEW',
+            },
+            caption: '新建',
+            itemType: 'DEUIACTION',
+            sysImage: {
+              cssClass: 'fa fa-file-text-o',
+              glyph: 'xf0f6@FontAwesome',
+            },
+            tooltip: '新建',
+            tooltipLanguageRes: {
+              lanResTag: 'TBB.TOOLTIP.*.NEW',
+            },
+            showCaption: true,
+            showIcon: true,
+            id: 'deuiaction1',
+          },
+          {
+            spanMode: true,
+            itemType: 'SEPERATOR',
+            id: 'seperator1',
+          },
+          {
+            actionLevel: 100,
+            noPrivDisplayMode: 2,
+            uiactionId: 'gridview_refreshaction',
+            valid: true,
+            caption: '刷新',
+            itemType: 'DEUIACTION',
+            sysImage: {
+              cssClass: 'fa fa-refresh',
+              glyph: 'xf021@FontAwesome',
+            },
+            tooltip: '刷新',
+            showCaption: true,
+            showIcon: true,
+            id: 'deuiaction2',
+          },
+        ],
         codeName: 'toolbar_base_toolbar',
         controlType: 'TOOLBAR',
         logicName: '工具栏_基础',

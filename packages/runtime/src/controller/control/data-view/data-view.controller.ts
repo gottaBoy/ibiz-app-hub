@@ -1,10 +1,17 @@
-import { RuntimeModelError, isElementSame } from '@ibiz-template/core';
+/* eslint-disable no-nested-ternary */
+import {
+  clone,
+  DataTypes,
+  isElementSame,
+  RuntimeModelError,
+} from '@ibiz-template/core';
 import { IDEDataView, IUIActionGroupDetail } from '@ibiz/model-core';
-import { clone, isNil } from 'ramda';
+import { isNil } from 'ramda';
 import { createUUID, isBoolean } from 'qx-util';
 import {
   ISortItem,
   CodeListItem,
+  IDragChangeInfo,
   MDCtrlLoadParams,
   IApiMDGroupParams,
   IMDControlGroupState,
@@ -16,13 +23,17 @@ import { ControlVO } from '../../../service';
 import { UIActionUtil } from '../../../ui-action';
 import { MDControlController } from '../../common';
 import {
-  formatDate,
   ControllerEvent,
   UIActionButtonState,
   ButtonContainerState,
 } from '../../utils';
 import { DataViewControlService } from './data-view.service';
-import { getParentTextAppDEFieldId } from '../../../model';
+import {
+  calcDeCodeNameById,
+  getAllUIActionItems,
+  getParentTextAppDEFieldId,
+} from '../../../model';
+import { formatDateByScale } from '../../../utils';
 
 export class DataViewControlController<
     T extends IDEDataView = IDEDataView,
@@ -98,6 +109,7 @@ export class DataViewControlController<
     this.state.size = this.model.pagingSize || 20;
     this.state.singleSelect = this.model.singleSelect === true;
     this.state.sortItems = [];
+    this.state.updating = false;
     this.state.collapseKeys = [];
     const { enablePagingBar } = this.model;
     this.state.enablePagingBar = enablePagingBar;
@@ -142,12 +154,13 @@ export class DataViewControlController<
    */
   async initGroupActionStates(): Promise<void> {
     const { groupUIActionGroup } = this.model;
-    if (!groupUIActionGroup?.uiactionGroupDetails?.length) {
-      return;
-    }
+    if (!groupUIActionGroup?.uiactionGroupDetails?.length) return;
     this.state.groups.forEach(async group => {
       const containerState = new ButtonContainerState();
-      groupUIActionGroup.uiactionGroupDetails!.forEach(detail => {
+      const actions = getAllUIActionItems(
+        groupUIActionGroup.uiactionGroupDetails,
+      );
+      actions.forEach(detail => {
         const actionid = detail.uiactionId;
         if (actionid) {
           const buttonState = new UIActionButtonState(
@@ -177,9 +190,7 @@ export class DataViewControlController<
    */
   async onRowClick(_data: IData): Promise<void> {
     const data = this.state.items.find(item => item.srfkey === _data.srfkey);
-    if (!data) {
-      return;
-    }
+    if (!data) return;
     super.onRowClick(data);
     const { groupAppDEFieldId } = this.model;
     if (groupAppDEFieldId) {
@@ -298,6 +309,8 @@ export class DataViewControlController<
 
   async afterLoad(args: MDCtrlLoadParams, items: IData[]): Promise<IData[]> {
     super.afterLoad(args, items);
+    // 每次加载回来先本地排序，把数据的排序属性规范一下
+    this.sortItems(this.state.items);
     await this.initGroupCodeListItems();
     await this.handleDataGroup();
     await this.initGroupActionStates();
@@ -333,11 +346,12 @@ export class DataViewControlController<
    * @memberof DataViewControlController
    */
   async calcOptItemState(items: IData[]): Promise<void> {
-    const actions = this.getOptItemModel();
-    if (actions.length)
+    const details = this.getOptItemModel();
+    if (details.length)
       await Promise.all(
         items.map(async item => {
           const containerState = new ButtonContainerState();
+          const actions = getAllUIActionItems(details);
           actions.forEach((action: IData) => {
             const actionid = action.uiactionId;
             if (actionid) {
@@ -480,7 +494,7 @@ export class DataViewControlController<
         // 如果有外键值文本属性，则根据外键值文本属性分组
         let groupVal = item[textDEFieldId];
         // 特殊处理日期格式化
-        if (dateFormat) groupVal = formatDate(groupVal, dateFormat);
+        if (dateFormat) groupVal = formatDateByScale(groupVal, dateFormat);
         // 分组无值默认归为未分类
         if (isNil(groupVal)) {
           unclassified.children.push(item);
@@ -690,11 +704,11 @@ export class DataViewControlController<
   }
 
   /**
-   * @description 切换分组折叠
-   * @param {IData} [params={}]
+   * @description 切换折叠，其中tag表示操作指定分组标识，若不传则操作当前卡片的所有分组展开状态，expand表示是否展开，若不传则基于当前分组状态取反
+   * @param {{ tag?: string; expand?: boolean }} [params={}]
    * @memberof DataViewControlController
    */
-  changeCollapse(params: IData = {}): void {
+  changeCollapse(params: { tag?: string; expand?: boolean } = {}): void {
     const { tag, expand } = params;
     if (tag) {
       const collapseKeysSet = new Set(this.state.collapseKeys);
@@ -709,6 +723,265 @@ export class DataViewControlController<
       this.state.collapseKeys = [];
     } else {
       this.state.collapseKeys = this.state.groups.map(x => x.key.toString());
+    }
+  }
+
+  /**
+   * @description 本地排序items(用于拖拽数据完成后的前端数据排序)
+   * @param {IData[]} items
+   * @returns {*}  {void}
+   * @memberof DataViewControlController
+   */
+  sortItems(items: IData[]): void {
+    const { minorSortAppDEFieldId, minorSortDir } = this.model;
+    if (!minorSortAppDEFieldId || !minorSortDir) return;
+    const sortField = this.dataEntity?.appDEFields?.find(
+      _item => _item.codeName === minorSortAppDEFieldId,
+    );
+    if (!sortField || !DataTypes.isNumber(sortField.stdDataType!)) {
+      ibiz.log.warn(
+        ibiz.i18n.t('runtime.controller.common.md.invalidSortType'),
+      );
+      return;
+    }
+    const isAsc = minorSortDir === 'ASC';
+    // 格式化排序属性的值
+    items.forEach(item => {
+      const sortValue = item[minorSortAppDEFieldId];
+      if (isNil(sortValue)) item[minorSortAppDEFieldId] = 0;
+    });
+    // 排序
+    items.sort((a, b) =>
+      isAsc
+        ? a[minorSortAppDEFieldId] - b[minorSortAppDEFieldId]
+        : b[minorSortAppDEFieldId] - a[minorSortAppDEFieldId],
+    );
+  }
+
+  /**
+   * @description 计算移动数据参数
+   * @protected
+   * @param {number} fromIndex 变更前的索引位置
+   * @param {number} toIndex 变更后的索引位置
+   * @param {IData} draggedItem 拖拽数据项
+   * @param {IData[]} targetArray 数据集
+   * @param {boolean} isCrossGroup 是否切换分组
+   * @returns {*}  {IData}
+   * @memberof DataViewControlController
+   */
+  protected computeMoveDataParam(
+    fromIndex: number,
+    toIndex: number,
+    draggedItem: IData,
+    targetArray: IData[],
+    isCrossGroup: boolean,
+  ): IData {
+    let moveData = {};
+    const { minorSortAppDEFieldId } = this.model;
+    if (!minorSortAppDEFieldId) return moveData;
+    const targetItem = targetArray[toIndex];
+    if (!targetItem) {
+      let tempArray: IData[] = [];
+      if (targetArray.length > 0) {
+        tempArray = targetArray;
+      }
+      if (tempArray.length > 0) {
+        const maxItem = tempArray.reduce((prev, curr) => {
+          const sortCondition =
+            prev[minorSortAppDEFieldId] > curr[minorSortAppDEFieldId];
+          if (
+            sortCondition &&
+            prev[this.dataEntity.keyAppDEFieldId!] !== draggedItem.srfkey
+          ) {
+            return prev;
+          }
+          if (
+            !sortCondition &&
+            curr[this.dataEntity.keyAppDEFieldId!] !== draggedItem.srfkey
+          ) {
+            return curr;
+          }
+          return prev;
+        });
+        if (
+          maxItem &&
+          maxItem[this.dataEntity.keyAppDEFieldId!] !== draggedItem.srfkey
+        ) {
+          moveData = {
+            srftargetkey: maxItem.srfkey,
+            srfmovetype: 'MOVEAFTER',
+          };
+        }
+      }
+    } else {
+      moveData = {
+        srftargetkey: targetItem.srfkey,
+        srfmovetype:
+          toIndex < targetArray.length - 1
+            ? 'MOVEBEFORE'
+            : isCrossGroup
+              ? 'MOVEBEFORE'
+              : 'MOVEAFTER',
+      };
+    }
+    return moveData;
+  }
+
+  /**
+   * @description 移动并排序数据
+   * @param {ControlVO} draggedItem
+   * @param {IData} moveMeta
+   * @returns {*}  {Promise<void>}
+   * @memberof DataViewControlController
+   */
+  async moveOrderItem(draggedItem: ControlVO, moveMeta: IData): Promise<void> {
+    try {
+      this.state.updating = true;
+      const { minorSortAppDEFieldId } = this.model;
+      if (!minorSortAppDEFieldId)
+        return ibiz.log.error(
+          ibiz.i18n.t('runtime.controller.common.md.sortingProperties'),
+        );
+      const deName = calcDeCodeNameById(this.model.appDataEntityId!);
+      const tempContext = this.context.clone();
+      tempContext[deName] = draggedItem.srfkey;
+      if (!moveMeta.srftargetkey || !moveMeta.srfmovetype)
+        return ibiz.log.error(
+          ibiz.i18n.t('runtime.controller.common.md.computeMoveMetaError'),
+        );
+      const res = await this.service.moveOrderItem(
+        tempContext,
+        draggedItem,
+        moveMeta,
+      );
+      if (res.ok) {
+        // 通知实体数据变更
+        this.emitDEDataChange('update', res.data);
+        res.data.forEach(_item => {
+          const item = this.state.items.find(x => x.srfkey === _item.srfkey);
+          if (item) item[minorSortAppDEFieldId] = _item[minorSortAppDEFieldId];
+        });
+        await this.afterLoad({}, this.state.items);
+      }
+    } finally {
+      this.state.updating = false;
+    }
+  }
+
+  /**
+   * @description 批量更新修改项
+   * @param {ControlVO[]} changedItems
+   * @returns {*}  {Promise<void>}
+   * @memberof DataViewControlController
+   */
+  async updateChangedItems(changedItems: ControlVO[]): Promise<void> {
+    try {
+      this.state.updating = true;
+      await Promise.all(
+        changedItems.map(async item => {
+          // 往上下文添加主键
+          const deName = calcDeCodeNameById(this.model.appDataEntityId!);
+          const tempContext = this.context.clone();
+          tempContext[deName] = item.srfkey;
+          // 调用接口修改数据
+          const res = await this.service.update(tempContext, item);
+          // 更新完之后更新state里的数据。
+          if (res.ok) {
+            // 通知实体数据变更
+            this.emitDEDataChange('update', res.data);
+            const index = this.state.items.findIndex(
+              x => x.srfkey === item.srfkey,
+            );
+            this.state.items.splice(index, 1, res.data);
+          }
+        }),
+      );
+    } finally {
+      this.state.updating = false;
+      await this.afterLoad({}, this.state.items);
+    }
+  }
+
+  /**
+   * @description 拖拽变更
+   * @param {IDragChangeInfo} info
+   * @returns {*}  {Promise<void>}
+   * @memberof DataViewControlController
+   */
+  async onDragChange(info: IDragChangeInfo): Promise<void> {
+    const { from, to, fromIndex, toIndex } = info;
+    if (!this.enableEditGroup && from !== to)
+      return ibiz.message.warning(
+        ibiz.i18n.t('runtime.controller.common.md.adjustmentsGroup'),
+      );
+    if (!this.enableEditOrder && from === to)
+      return ibiz.message.warning(
+        ibiz.i18n.t('runtime.controller.common.md.noAllowReorder'),
+      );
+
+    const { groupAppDEFieldId, moveControlAction, minorSortAppDEFieldId } =
+      this.model;
+    const fromGroup = this.state.groups.find(x => x.key === from);
+    const toGroup = this.state.groups.find(x => x.key === to);
+    const draggedItem = clone(
+      fromGroup?.children[fromIndex] || this.state.items[fromIndex],
+    );
+
+    // 分组变更
+    if (from !== to && groupAppDEFieldId) draggedItem[groupAppDEFieldId] = to;
+
+    // 仅变更分组
+    if (!this.enableEditOrder) {
+      await this.updateChangedItems([draggedItem] as ControlVO[]);
+    } else {
+      // 排序变更
+      if (!minorSortAppDEFieldId)
+        throw new RuntimeModelError(
+          this.model,
+          ibiz.i18n.t('runtime.controller.common.md.sortingProperties'),
+        );
+      const moveAction = moveControlAction?.appDEMethodId;
+      if (!moveAction)
+        throw new RuntimeModelError(
+          this.model,
+          ibiz.i18n.t('runtime.controller.common.md.noMoveDataCconfig'),
+        );
+      // 存在移动数据行为，先变更分组再变更排序
+      if (from !== to) {
+        await this.updateChangedItems([draggedItem] as ControlVO[]);
+      }
+      const originArr = toGroup?.children || this.state.items;
+      const params = this.computeMoveDataParam(
+        fromIndex,
+        toIndex,
+        draggedItem,
+        originArr,
+        info.from !== info.to,
+      );
+      await this.moveOrderItem(draggedItem as ControlVO, params);
+    }
+  }
+
+  /**
+   * @description 新建行
+   * @param {MDCtrlLoadParams} [args={}]
+   * @returns {*}  {Promise<void>}
+   * @memberof DataViewControlController
+   */
+  async newRow(args: MDCtrlLoadParams = {}): Promise<void> {
+    try {
+      const res = await this.service.getDraft(this.context, this.params);
+      if (res.ok && res.data) {
+        // 加载完后续处理
+        this.state.items.unshift(res.data);
+        await this.afterLoad(args, this.state.items);
+        this.actionNotification('GETDRAFTSUCCESS', { data: res.data });
+      }
+    } catch (error) {
+      this.actionNotification('GETDRAFTERROR', {
+        error: error as Error,
+      });
+      throw error;
     }
   }
 }

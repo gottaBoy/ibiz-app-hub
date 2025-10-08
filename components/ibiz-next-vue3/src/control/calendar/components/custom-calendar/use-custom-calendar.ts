@@ -357,3 +357,31 @@ export const useCustomCalendar = (
     selectLegend,
   };
 };
+
+/**
+ * 计算一周范围
+ *
+ * @export
+ * @param {Date} date
+ * @return {*}  {string[]}
+ */
+export function calcCurrentWeekRange(date: Date): string[] {
+  let monday;
+  let sunday;
+  const day = date.getDay();
+  if (day === 0) {
+    // 今天星期天
+    monday = dayjs(new Date(date.getTime() - 6 * 86400000)).format(
+      'YYYY-MM-DD',
+    );
+    sunday = dayjs(date).format('YYYY-MM-DD');
+  } else {
+    monday = dayjs(new Date(date.getTime() - (day - 1) * 86400000)).format(
+      'YYYY-MM-DD',
+    );
+    sunday = dayjs(new Date(date.getTime() + (7 - day) * 86400000)).format(
+      'YYYY-MM-DD',
+    );
+  }
+  return [monday, sunday];
+}

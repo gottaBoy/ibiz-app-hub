@@ -27,7 +27,7 @@ import { ViewEngineBase } from './view-base.engine';
  * @extends {ViewEngineBase}
  */
 export class MDViewEngine extends ViewEngineBase {
-  declare protected view: ViewController<
+  protected declare view: ViewController<
     IAppDEMultiDataView,
     IMDViewState,
     IMDViewEvent
@@ -284,6 +284,10 @@ export class MDViewEngine extends ViewEngineBase {
     if (key === ViewCallTag.GET_ALL_DATA) {
       return this.xdataControl.state.items;
     }
+    if (key === ViewCallTag.SET_SELECTED_DATA) {
+      this.setSelectedData(args.data);
+      return null;
+    }
     return super.call(key, args);
   }
 
@@ -333,7 +337,7 @@ export class MDViewEngine extends ViewEngineBase {
         ibiz.i18n.t('runtime.engine.logicOpendata'),
       );
     } else {
-      if (result.ok && result.data && result.data.length > 0) {
+      if (result && result.ok && result.data && result.data.length > 0) {
         this.view.evt.emit('onDataChange', {
           data: result.data,
           actionType: 'EDIT',
@@ -358,6 +362,7 @@ export class MDViewEngine extends ViewEngineBase {
     data: IData[];
     event?: MouseEvent;
     copyMode?: boolean;
+    params?: IParams;
   }): Promise<IUIActionResult> {
     const { data, event, copyMode } = args;
     const openAppViewLogic =
@@ -374,6 +379,9 @@ export class MDViewEngine extends ViewEngineBase {
     const params = clone(this.view.params);
     if (copyMode) {
       params.srfcopymode = copyMode;
+    }
+    if (args.params) {
+      Object.assign(params, { ...args.params });
     }
 
     const result = await this.view.scheduler?.triggerCustom('newdata', {
@@ -441,6 +449,16 @@ export class MDViewEngine extends ViewEngineBase {
    */
   protected async reLoad(): Promise<void> {
     await this.xdataControl.load({ isInitialLoad: true });
+  }
+
+  /**
+   * @description 设置选中数据
+   * @protected
+   * @param {IData[]} items
+   * @memberof MDViewEngine
+   */
+  protected setSelectedData(items: IData[]): void {
+    this.xdataControl.setSelectedData(items);
   }
 
   /**

@@ -1,32 +1,71 @@
+/* eslint-disable no-nested-ternary */
 import { IDEList, IUIActionGroupDetail } from '@ibiz/model-core';
 import { createUUID, isBoolean } from 'qx-util';
-import { clone, isNil } from 'ramda';
-import { isElementSame } from '@ibiz-template/core';
+import { isNil } from 'ramda';
+import {
+  clone,
+  DataTypes,
+  isElementSame,
+  RuntimeModelError,
+} from '@ibiz-template/core';
 import dayjs from 'dayjs';
 import {
   IListState,
   IListEvent,
   CodeListItem,
   IListController,
+  IDragChangeInfo,
   MDCtrlLoadParams,
   IApiMDGroupParams,
   IMDControlGroupState,
 } from '../../../interface';
 import { MDControlController } from '../../common';
 import { ListService } from './list.service';
-import {
-  formatDate,
-  ButtonContainerState,
-  UIActionButtonState,
-} from '../../utils';
+import { UIActionButtonState, ButtonContainerState } from '../../utils';
 import { UIActionUtil } from '../../../ui-action';
-import { getParentTextAppDEFieldId } from '../../../model';
+import {
+  calcDeCodeNameById,
+  getAllUIActionItems,
+  getParentTextAppDEFieldId,
+} from '../../../model';
+import { ControlVO } from '../../../service';
+import { formatDateByScale } from '../../../utils';
 
 export class ListController
   extends MDControlController<IDEList, IListState, IListEvent>
   implements IListController
 {
   declare service: ListService;
+
+  /**
+   * @description 是否允许新建
+   * @readonly
+   * @type {boolean}
+   * @memberof ListController
+   */
+  get enableNew(): boolean {
+    return this.model.enableRowNew === true;
+  }
+
+  /**
+   * @description 是否允许调整顺序
+   * @readonly
+   * @type {boolean}
+   * @memberof ListController
+   */
+  get enableEditOrder(): boolean {
+    return this.model.enableRowEditOrder === true;
+  }
+
+  /**
+   * @description 是否支持调整分组
+   * @readonly
+   * @type {boolean}
+   * @memberof ListController
+   */
+  get enableEditGroup(): boolean {
+    return this.model.enableRowEditGroup === true;
+  }
 
   protected initState(): void {
     super.initState();
@@ -36,6 +75,10 @@ export class ListController
     const { enablePagingBar } = this.model;
     this.state.enablePagingBar = enablePagingBar;
     this.state.uaState = {};
+    this.state.readonly = !!(
+      this.context.srfreadonly === true || this.context.srfreadonly === 'true'
+    );
+    this.state.draggable = this.enableEditOrder || this.enableEditGroup;
   }
 
   protected async onCreated(): Promise<void> {
@@ -52,12 +95,13 @@ export class ListController
    */
   async initGroupActionStates(): Promise<void> {
     const { groupUIActionGroup } = this.model;
-    if (!groupUIActionGroup?.uiactionGroupDetails?.length) {
-      return;
-    }
+    if (!groupUIActionGroup?.uiactionGroupDetails?.length) return;
     this.state.groups.forEach(async group => {
       const containerState = new ButtonContainerState();
-      groupUIActionGroup.uiactionGroupDetails!.forEach(detail => {
+      const actions = getAllUIActionItems(
+        groupUIActionGroup.uiactionGroupDetails,
+      );
+      actions.forEach(detail => {
         const actionid = detail.uiactionId;
         if (actionid) {
           const buttonState = new UIActionButtonState(
@@ -184,6 +228,8 @@ export class ListController
 
   async afterLoad(args: MDCtrlLoadParams, items: IData[]): Promise<IData[]> {
     super.afterLoad(args, items);
+    // 每次加载回来先本地排序，把数据的排序属性规范一下
+    this.sortItems(this.state.items);
     await this.handleDataGroup();
     await this.initGroupActionStates();
     await this.calcOptItemState(items);
@@ -194,7 +240,7 @@ export class ListController
   /**
    * @description 获取操作项行为集合模型
    * @returns {*}  {IUIActionGroupDetail[]}
-   * @memberof DataViewControlController
+   * @memberof ListController
    */
   getOptItemModel(): IUIActionGroupDetail[] {
     const actions: IUIActionGroupDetail[] = [];
@@ -215,15 +261,16 @@ export class ListController
    * @description 计算操作项状态
    * @param {IData[]} items
    * @returns {*}  {Promise<void>}
-   * @memberof DataViewControlController
+   * @memberof ListController
    */
   async calcOptItemState(items: IData[]): Promise<void> {
-    const actions = this.getOptItemModel();
-    if (actions.length)
+    const details = this.getOptItemModel();
+    if (details.length)
       await Promise.all(
         items.map(async item => {
           const containerState = new ButtonContainerState();
-          actions.forEach((action: IData) => {
+          const actions = getAllUIActionItems(details);
+          actions.forEach(action => {
             const actionid = action.uiactionId;
             if (actionid) {
               const buttonState = new UIActionButtonState(
@@ -282,6 +329,10 @@ export class ListController
    */
   setData(items: IData[]): void {
     this.state.items = items;
+    // 将已选中的数据过滤下
+    this.state.selectedData = this.state.selectedData.filter(selected =>
+      items.some(item => item.srfkey === selected.srfkey),
+    );
   }
 
   /**
@@ -331,7 +382,7 @@ export class ListController
   /**
    * 处理数据分组
    *
-   * @memberof DataViewControlController
+   * @memberof ListController
    */
   protected async handleDataGroup(): Promise<void> {
     const { groupMode } = this.model;
@@ -351,7 +402,7 @@ export class ListController
   /**
    * 处理自动分组
    *
-   * @memberof DataViewControlController
+   * @memberof ListController
    */
   protected async handleAutoGroup(): Promise<void> {
     const { groupAppDEFieldId, groupCodeListId } = this.model;
@@ -380,11 +431,11 @@ export class ListController
       items.forEach((item: IData) => {
         let groupVal = item[textDEFieldId];
         // 特殊处理日期格式化
-        if (dateFormat) groupVal = formatDate(groupVal, dateFormat);
+        if (dateFormat) groupVal = formatDateByScale(groupVal, dateFormat);
 
         // 当分组样式为 STYLE2 且 groupVal 是有效的日期时，默认以天为单位格式化分组值
         if (this.model.groupStyle === 'STYLE2' && dayjs(groupVal).isValid()) {
-          groupVal = formatDate(groupVal, 'day');
+          groupVal = formatDateByScale(groupVal, 'day');
 
           // 如果分组标题时间与当前时间相同，则以 今天 显示分组标题
           if (dayjs(groupVal).isSame(dayjs(), 'day'))
@@ -417,7 +468,7 @@ export class ListController
   /**
    * 处理代码表分组
    *
-   * @memberof DataViewControlController
+   * @memberof ListController
    */
   protected async handleCodeListGroup(): Promise<void> {
     const { groupAppDEFieldId, groupCodeListId } = this.model;
@@ -457,11 +508,11 @@ export class ListController
   }
 
   /**
-   * @description 切换分组折叠
-   * @param {IData} [params={}]
+   * @description 切换折叠，其中tag表示操作指定列表分组标识，若不传则操作当前列表的所有分组展开状态，expand表示是否展开，若不传则基于当前分组状态取反
+   * @param {{ tag?: string; expand?: boolean }} [params={}]
    * @memberof ListController
    */
-  changeCollapse(params: IData = {}): void {
+  changeCollapse(params: { tag?: string; expand?: boolean } = {}): void {
     const { tag, expand } = params;
     if (tag) {
       const expandedKeysSet = new Set(this.state.expandedKeys);
@@ -476,6 +527,353 @@ export class ListController
       this.state.expandedKeys = this.state.groups.map(x => x.key.toString());
     } else {
       this.state.expandedKeys = [];
+    }
+  }
+
+  /**
+   * @description 点击新建
+   * @param {MouseEvent} event
+   * @param {(string | number)} [group]
+   * @memberof ListController
+   */
+  onClickNew(event: MouseEvent, group?: string | number): void {
+    const params = { ...this.params };
+    if (group) Object.assign(params, { srfgroup: group });
+    UIActionUtil.execAndResolved(
+      'new',
+      {
+        context: this.context,
+        params,
+        data: [],
+        view: this.view,
+        ctrl: this,
+        event,
+      },
+      this.view.model.appId,
+    );
+  }
+
+  /**
+   * @description 本地排序items(用于拖拽数据完成后的前端数据排序)
+   * @param {IData[]} items
+   * @returns {*}  {void}
+   * @memberof ListController
+   */
+  sortItems(items: IData[]): void {
+    const { minorSortAppDEFieldId, minorSortDir } = this.model;
+    if (!minorSortAppDEFieldId || !minorSortDir) return;
+    const sortField = this.dataEntity?.appDEFields?.find(
+      _item => _item.codeName === minorSortAppDEFieldId,
+    );
+    if (!sortField || !DataTypes.isNumber(sortField.stdDataType!)) {
+      ibiz.log.warn(
+        ibiz.i18n.t('runtime.controller.common.md.invalidSortType'),
+      );
+      return;
+    }
+    const isAsc = minorSortDir === 'ASC';
+    // 格式化排序属性的值
+    items.forEach(item => {
+      const sortValue = item[minorSortAppDEFieldId];
+      if (isNil(sortValue)) item[minorSortAppDEFieldId] = 0;
+    });
+    // 排序
+    items.sort((a, b) =>
+      isAsc
+        ? a[minorSortAppDEFieldId] - b[minorSortAppDEFieldId]
+        : b[minorSortAppDEFieldId] - a[minorSortAppDEFieldId],
+    );
+  }
+
+  /**
+   * @description 计算移动数据参数
+   * @protected
+   * @param {number} fromIndex 变更前的索引位置
+   * @param {number} toIndex 变更后的索引位置
+   * @param {IData} draggedItem 拖拽数据项
+   * @param {IData[]} targetArray 数据集
+   * @param {boolean} isCrossGroup 是否切换分组
+   * @returns {*}  {IData}
+   * @memberof ListController
+   */
+  protected computeMoveDataParam(
+    fromIndex: number,
+    toIndex: number,
+    draggedItem: IData,
+    targetArray: IData[],
+    isCrossGroup: boolean,
+  ): IData {
+    let moveData = {};
+    const { minorSortAppDEFieldId } = this.model;
+    if (!minorSortAppDEFieldId) return moveData;
+    const targetItem = targetArray[toIndex];
+    if (!targetItem) {
+      let tempArray: IData[] = [];
+      if (targetArray.length > 0) {
+        tempArray = targetArray;
+      }
+      if (tempArray.length > 0) {
+        const maxItem = tempArray.reduce((prev, curr) => {
+          const sortCondition =
+            prev[minorSortAppDEFieldId] > curr[minorSortAppDEFieldId];
+          if (
+            sortCondition &&
+            prev[this.dataEntity.keyAppDEFieldId!] !== draggedItem.srfkey
+          ) {
+            return prev;
+          }
+          if (
+            !sortCondition &&
+            curr[this.dataEntity.keyAppDEFieldId!] !== draggedItem.srfkey
+          ) {
+            return curr;
+          }
+          return prev;
+        });
+        if (
+          maxItem &&
+          maxItem[this.dataEntity.keyAppDEFieldId!] !== draggedItem.srfkey
+        ) {
+          moveData = {
+            srftargetkey: maxItem.srfkey,
+            srfmovetype: 'MOVEAFTER',
+          };
+        }
+      }
+    } else {
+      moveData = {
+        srftargetkey: targetItem.srfkey,
+        srfmovetype:
+          toIndex < targetArray.length - 1
+            ? 'MOVEBEFORE'
+            : isCrossGroup
+              ? 'MOVEBEFORE'
+              : 'MOVEAFTER',
+      };
+    }
+    return moveData;
+  }
+
+  /**
+   * @description 移动并排序数据
+   * @param {ControlVO} draggedItem
+   * @param {IData} moveMeta
+   * @returns {*}  {Promise<void>}
+   * @memberof ListController
+   */
+  async moveOrderItem(draggedItem: ControlVO, moveMeta: IData): Promise<void> {
+    try {
+      this.state.updating = true;
+      const { minorSortAppDEFieldId } = this.model;
+      if (!minorSortAppDEFieldId)
+        return ibiz.log.error(
+          ibiz.i18n.t('runtime.controller.common.md.sortingProperties'),
+        );
+      const deName = calcDeCodeNameById(this.model.appDataEntityId!);
+      const tempContext = this.context.clone();
+      tempContext[deName] = draggedItem.srfkey;
+      if (!moveMeta.srftargetkey || !moveMeta.srfmovetype)
+        return ibiz.log.error(
+          ibiz.i18n.t('runtime.controller.common.md.computeMoveMetaError'),
+        );
+      const res = await this.service.moveOrderItem(
+        tempContext,
+        draggedItem,
+        moveMeta,
+      );
+      if (res.ok) {
+        // 通知实体数据变更
+        this.emitDEDataChange('update', res.data);
+        res.data.forEach(_item => {
+          const item = this.state.items.find(x => x.srfkey === _item.srfkey);
+          if (item) item[minorSortAppDEFieldId] = _item[minorSortAppDEFieldId];
+        });
+        await this.afterLoad({}, this.state.items);
+      }
+    } finally {
+      this.state.updating = false;
+    }
+  }
+
+  /**
+   * @description 批量更新修改项
+   * @param {ControlVO[]} changedItems
+   * @returns {*}  {Promise<void>}
+   * @memberof ListController
+   */
+  async updateChangedItems(changedItems: ControlVO[]): Promise<void> {
+    try {
+      this.state.updating = true;
+      await Promise.all(
+        changedItems.map(async item => {
+          // 往上下文添加主键
+          const deName = calcDeCodeNameById(this.model.appDataEntityId!);
+          const tempContext = this.context.clone();
+          tempContext[deName] = item.srfkey;
+          // 调用接口修改数据
+          const res = await this.service.update(tempContext, item);
+          // 更新完之后更新state里的数据。
+          if (res.ok) {
+            // 通知实体数据变更
+            this.emitDEDataChange('update', res.data);
+            const index = this.state.items.findIndex(
+              x => x.srfkey === item.srfkey,
+            );
+            this.state.items.splice(index, 1, res.data);
+          }
+        }),
+      );
+    } finally {
+      this.state.updating = false;
+      await this.afterLoad({}, this.state.items);
+    }
+  }
+
+  /**
+   * @description 拖拽变更
+   * @param {IDragChangeInfo} info
+   * @returns {*}  {Promise<void>}
+   * @memberof ListController
+   */
+  async onDragChange(info: IDragChangeInfo): Promise<void> {
+    const { from, to, fromIndex, toIndex } = info;
+    if (!this.enableEditGroup && from !== to)
+      return ibiz.message.warning(
+        ibiz.i18n.t('runtime.controller.common.md.adjustmentsGroup'),
+      );
+    if (!this.enableEditOrder && from === to)
+      return ibiz.message.warning(
+        ibiz.i18n.t('runtime.controller.common.md.noAllowReorder'),
+      );
+
+    const { groupAppDEFieldId, moveControlAction, minorSortAppDEFieldId } =
+      this.model;
+    const fromGroup = this.state.groups.find(x => x.key === from);
+    const toGroup = this.state.groups.find(x => x.key === to);
+    const draggedItem = clone(
+      fromGroup?.children[fromIndex] || this.state.items[fromIndex],
+    );
+
+    // 分组变更
+    if (from !== to && groupAppDEFieldId) draggedItem[groupAppDEFieldId] = to;
+
+    // 仅变更分组
+    if (!this.enableEditOrder) {
+      await this.updateChangedItems([draggedItem] as ControlVO[]);
+    } else {
+      // 排序变更
+      if (!minorSortAppDEFieldId)
+        throw new RuntimeModelError(
+          this.model,
+          ibiz.i18n.t('runtime.controller.common.md.sortingProperties'),
+        );
+      const moveAction = moveControlAction?.appDEMethodId;
+      if (!moveAction)
+        throw new RuntimeModelError(
+          this.model,
+          ibiz.i18n.t('runtime.controller.common.md.noMoveDataCconfig'),
+        );
+      // 存在移动数据行为，先变更分组再变更排序
+      if (from !== to) {
+        await this.updateChangedItems([draggedItem] as ControlVO[]);
+      }
+      const originArr = toGroup?.children || this.state.items;
+      const params = this.computeMoveDataParam(
+        fromIndex,
+        toIndex,
+        draggedItem,
+        originArr,
+        info.from !== info.to,
+      );
+      await this.moveOrderItem(draggedItem as ControlVO, params);
+    }
+  }
+
+  /**
+   * @description 新建行
+   * @param {MDCtrlLoadParams} [args={}]
+   * @returns {*}  {Promise<void>}
+   * @memberof ListController
+   */
+  async newRow(args: MDCtrlLoadParams = {}): Promise<void> {
+    try {
+      const res = await this.service.getDraft(this.context, this.params);
+      if (res.ok && res.data) {
+        // 加载完后续处理
+        this.state.items.unshift(res.data);
+        await this.afterLoad(args, this.state.items);
+        this.actionNotification('GETDRAFTSUCCESS', { data: res.data });
+      }
+    } catch (error) {
+      this.actionNotification('GETDRAFTERROR', {
+        error: error as Error,
+      });
+      throw error;
+    }
+  }
+
+  /**
+   * @description 行单击
+   * @param {IData} _data
+   * @returns {*}  {Promise<void>}
+   * @memberof ListController
+   */
+  async onRowClick(_data: IData): Promise<void> {
+    const data = this.state.items.find(item => item.srfkey === _data.srfkey);
+    if (!data) return;
+    super.onRowClick(data);
+    const { groupAppDEFieldId } = this.model;
+    if (groupAppDEFieldId) {
+      // 根据selectedData填充分组的选中数据
+      this.state.groups.forEach(group => {
+        group.selectedData = [];
+      });
+      this.state.selectedData.forEach(select => {
+        const groupVal = select[groupAppDEFieldId];
+        const selectGroup = this.state.groups.find(
+          group => group.key === groupVal,
+        );
+        if (selectGroup) {
+          selectGroup.selectedData!.push(select);
+        }
+      });
+      // 根据分组选中的数据更新分组的按钮状态
+      if (this.state.singleSelect) {
+        // 单选情况下只有点击的分组的按钮会激活
+        this.state.groups.forEach(group => {
+          let tempData = data;
+          if (group.selectedData!.indexOf(tempData) !== -1) {
+            if (tempData && tempData instanceof ControlVO) {
+              tempData = tempData.getOrigin();
+            }
+            if (tempData) {
+              group.groupActionGroupState?.update(
+                this.context,
+                tempData,
+                this.model.appDataEntityId!,
+              );
+            }
+          } else {
+            group.groupActionGroupState?.update(
+              this.context,
+              undefined,
+              this.model.appDataEntityId!,
+            );
+          }
+        });
+      } else {
+        // 多选情况下可能有多组分组按钮会激活
+        const actionGroup = this.state.groups.find(group => {
+          return group.children.indexOf(data) !== -1;
+        });
+        if (actionGroup) {
+          actionGroup.groupActionGroupState?.update(
+            this.context,
+            actionGroup.selectedData![0],
+            this.model.appDataEntityId!,
+          );
+        }
+      }
     }
   }
 }

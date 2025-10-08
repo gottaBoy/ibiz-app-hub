@@ -2,6 +2,7 @@ import { IBizContext, IPortalMessage, RuntimeError } from '@ibiz-template/core';
 import { IAppCounter } from '@ibiz/model-core';
 import { notNilEmpty, QXEvent } from 'qx-util';
 import { clone } from 'ramda';
+import { toNumber } from 'lodash-es';
 import { Application } from '../../../application';
 import { IDataEntity } from '../../../interface';
 import { calcDeCodeNameById } from '../../../model';
@@ -211,7 +212,8 @@ export class AppCounter {
    * @return {*}  {number}
    */
   getCounter(tag: string): number {
-    return this.data[tag.toLowerCase()] || 0;
+    const value = this.data[tag.toLowerCase()] || 0;
+    return toNumber(value);
   }
 
   /**

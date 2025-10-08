@@ -4,13 +4,24 @@ import { computed, defineComponent, PropType, VNode } from 'vue';
 import { PanelTabPanelController } from './panel-tab-panel.controller';
 import './panel-tab-panel.scss';
 
+/**
+ * 分页部件
+ * @primary
+ * @description 可显示多个分页，每个分页有自己的内容。
+ */
 export const PanelTabPanel = defineComponent({
   name: 'IBizPanelTabPanel',
   props: {
+    /**
+     * @description 分页部件模型数据
+     */
     modelData: {
       type: Object as PropType<IPanelTabPanel>,
       required: true,
     },
+    /**
+     * @description 分页部件控制器
+     */
     controller: {
       type: PanelTabPanelController,
       required: true,

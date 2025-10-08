@@ -15,6 +15,31 @@ import { MDControlService, CalendarItemData } from '../../../service';
  */
 export class CalendarService extends MDControlService<ISysCalendar> {
   /**
+   * @description 删除单条数据
+   * @param {string} appDataEntityId 实体标识
+   * @param {IContext} context 上下文
+   * @param {IParams} [params={}] 视图参数
+   * @param {string} [removeAppDEActionId='remove'] 删除实体行为标识
+   * @returns {*}  {Promise<IHttpResponse>}
+   * @memberof CalendarService
+   */
+  async removeItem(
+    appDataEntityId: string,
+    context: IContext,
+    params: IParams = {},
+    removeAppDEActionId: string = 'remove',
+  ): Promise<IHttpResponse> {
+    const res = await this.app.deService.exec(
+      appDataEntityId,
+      removeAppDEActionId,
+      context,
+      undefined,
+      params,
+    );
+    return res;
+  }
+
+  /**
    * 执行查询多条数据的方法
    *
    * @author zk

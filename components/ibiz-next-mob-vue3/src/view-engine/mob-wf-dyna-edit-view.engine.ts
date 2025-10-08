@@ -11,6 +11,7 @@ import {
   IAppDEService,
   IToolbarController,
   getWFSubmitViewId,
+  IApiMobWFDynaEditViewCall,
 } from '@ibiz-template/runtime';
 import { IAppDEMobWFDynaEditView, IDEEditForm } from '@ibiz/model-core';
 import { createUUID } from 'qx-util';
@@ -297,8 +298,11 @@ export class MobWFDynaEditViewEngine extends MobEditViewEngine {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  async call(key: string, args: any): Promise<IData | null | undefined> {
+  async call(
+    key: keyof IApiMobWFDynaEditViewCall,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    args: any,
+  ): Promise<IData | null | undefined> {
     if (key === 'WFAction') {
       this.onLinkClick(args.id);
       return null;

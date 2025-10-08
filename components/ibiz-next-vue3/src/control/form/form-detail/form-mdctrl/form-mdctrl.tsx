@@ -21,6 +21,7 @@ export const FormMDCtrl = defineComponent({
     useController(props.controller);
 
     const c = props.controller;
+    const zIndex = props.controller.form.state.zIndex;
     const hasCaption = c.model.showCaption && !!c.model.caption;
     const hasHeader = hasCaption || c.model.uiactionGroup;
 
@@ -34,7 +35,15 @@ export const FormMDCtrl = defineComponent({
       await props.controller.onActionClick(detail, event);
     };
 
-    return { c, ns, hasCaption, hasHeader, isDesignPreview, onActionClick };
+    return {
+      c,
+      ns,
+      zIndex,
+      hasHeader,
+      hasCaption,
+      isDesignPreview,
+      onActionClick,
+    };
   },
   render() {
     if (this.isDesignPreview) {
@@ -82,6 +91,7 @@ export const FormMDCtrl = defineComponent({
             </div>
             {model.uiactionGroup && (
               <iBizActionToolbar
+                zIndex={this.zIndex}
                 class={this.ns.e('toolbar')}
                 action-details={model.uiactionGroup.uiactionGroupDetails}
                 actions-state={this.controller.state.actionGroupState}

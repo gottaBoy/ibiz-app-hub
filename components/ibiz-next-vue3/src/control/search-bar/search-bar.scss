@@ -14,6 +14,10 @@ $control-searchbar: (
 
   height: 100%;
 
+  @include e(counter) {
+    margin-left: getCssVar(spacing, tight);
+  }
+
   @include b(control-searchbar-quick-search) {
     width: getCssVar('control-searchbar', 'quick-search-width');
     margin-left: getCssVar(spacing, base-tight);

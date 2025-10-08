@@ -153,6 +153,7 @@ export const FormTabPanel = defineComponent({
                         (!value && value !== 0) ||
                         (c.model.counterMode === 1 && value <= 0)
                       }
+                      max={99}
                     >
                       {renderItemText(c)}
                     </el-badge>

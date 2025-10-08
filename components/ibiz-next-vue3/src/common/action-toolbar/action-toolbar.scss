@@ -47,6 +47,18 @@ $action-toolbar: (
     }
   }
 
+  @include e(group-item) {
+    > span {
+      width: 100%;
+    }
+    @include m(caption) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+  }
+
   @include e('separator'){
     height: auto;
   }

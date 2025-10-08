@@ -32,6 +32,9 @@ export class DEUILogicNodeListWriter extends ModelListWriterBase {
       case 'DEBUGPARAM':
         c.fillDSL('dataentity.logic.DEUIDebugParamLogic', src, dst);
         return;
+      case 'DECISION':
+        c.fillDSL('dataentity.logic.DEUIDecisionLogic', src, dst);
+        return;
       case 'DEDATASET':
         c.fillDSL('dataentity.logic.DEUIDEDataSetLogic', src, dst);
         return;
@@ -43,6 +46,9 @@ export class DEUILogicNodeListWriter extends ModelListWriterBase {
         return;
       case 'END':
         c.fillDSL('dataentity.logic.DEUIEndLogic', src, dst);
+        return;
+      case 'MEMO':
+        c.fillDSL('dataentity.logic.DEUIMemoLogic', src, dst);
         return;
       case 'MSGBOX':
         c.fillDSL('dataentity.logic.DEUIMsgBoxLogic', src, dst);

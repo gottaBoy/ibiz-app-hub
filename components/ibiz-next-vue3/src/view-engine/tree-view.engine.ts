@@ -3,9 +3,12 @@ import {
   ITreeViewEvent,
   ITreeViewState,
   MDViewEngine,
-  ITreeController,
   SysUIActionTag,
   IApiTreeViewCall,
+  IUIActionResult,
+  TreeController,
+  ITreeNodeData,
+  ITreeController,
 } from '@ibiz-template/runtime';
 import { RuntimeError } from '@ibiz-template/core';
 import { IAppDETreeView } from '@ibiz/model-core';
@@ -17,15 +20,15 @@ export class TreeViewEngine extends MDViewEngine {
     ITreeViewEvent
   >;
 
-  get tree(): ITreeController {
-    return this.view.getController('tree') as ITreeController;
-  }
-
   async onCreated(): Promise<void> {
     await super.onCreated();
     if (!this.view.slotProps.tree) {
       this.view.slotProps.tree = {};
     }
+  }
+
+  get tree(): ITreeController {
+    return this.view.getController('tree') as ITreeController;
   }
 
   async call(
@@ -34,20 +37,26 @@ export class TreeViewEngine extends MDViewEngine {
     args: any,
   ): Promise<IData | null | undefined> {
     if (key === SysUIActionTag.REFRESH_ALL) {
-      await this.tree.refresh();
+      await (this.xdataControl as TreeController).refresh();
       return null;
     }
     // 有数据刷新子节点，没数据刷新所有
     if (key === SysUIActionTag.REFRESH) {
       if (args?.data?.[0]) {
-        await this.tree.refreshNodeChildren(args.data[0], false);
+        await (this.xdataControl as TreeController).refreshNodeChildren(
+          args.data[0],
+          false,
+        );
       } else {
-        await this.tree.refresh();
+        await (this.xdataControl as TreeController).refresh();
       }
       return null;
     }
     if (key === SysUIActionTag.REFRESH_PARENT) {
-      await this.tree.refreshNodeChildren(args.data[0], true);
+      await (this.xdataControl as TreeController).refreshNodeChildren(
+        args.data[0],
+        true,
+      );
       return null;
     }
     if (key === SysUIActionTag.EXPAND) {
@@ -60,7 +69,10 @@ export class TreeViewEngine extends MDViewEngine {
       if (!tag) {
         throw new RuntimeError(ibiz.i18n.t('viewEngine.noExpandTag'));
       }
-      this.tree.changeCollapse({ tag, expand: true });
+      (this.xdataControl as TreeController).changeCollapse({
+        tag,
+        expand: true,
+      });
       return null;
     }
     if (key === SysUIActionTag.COLLAPSE) {
@@ -73,17 +85,46 @@ export class TreeViewEngine extends MDViewEngine {
       if (!tag) {
         throw new RuntimeError(ibiz.i18n.t('viewEngine.noCollapseTag'));
       }
-      this.tree.changeCollapse({ tag, expand: false });
+      (this.xdataControl as TreeController).changeCollapse({
+        tag,
+        expand: false,
+      });
       return null;
     }
     if (key === SysUIActionTag.EXPANDALL) {
-      this.tree.changeCollapse({ expand: true });
+      (this.xdataControl as TreeController).changeCollapse({ expand: true });
       return null;
     }
     if (key === SysUIActionTag.COLLAPSEALL) {
-      this.tree.changeCollapse({ expand: false });
+      (this.xdataControl as TreeController).changeCollapse({ expand: false });
       return null;
     }
     return super.call(key, args);
+  }
+
+  protected async openData(args: {
+    data: IData[];
+    event?: MouseEvent;
+    context?: IContext;
+    params?: IParams;
+  }): Promise<IUIActionResult> {
+    const { data, event } = args;
+    const result = await (this.xdataControl as TreeController).openData(
+      data[0] as ITreeNodeData,
+      event,
+    );
+    return result;
+  }
+
+  protected async newData(args: {
+    data: IData[];
+    event?: MouseEvent;
+  }): Promise<IUIActionResult> {
+    const { data, event } = args;
+    const result = await (this.xdataControl as TreeController).newData(
+      data[0] as ITreeNodeData,
+      event,
+    );
+    return result;
   }
 }

@@ -10,6 +10,20 @@ export default {
   caption: '评论',
   codeName: 'comment_list_view',
   appDataEntityId: 'web.comment',
+  appViewNavContexts: [
+    {
+      rawValue: true,
+      key: 'ARTICLE_PAGE',
+      name: 'ARTICLE_PAGE',
+      id: 'article_page',
+    },
+    {
+      rawValue: true,
+      key: 'SPACE',
+      name: 'SPACE',
+      id: 'space',
+    },
+  ],
   appViewNavParams: [
     {
       key: 'n_owner_type_eq',
@@ -329,6 +343,45 @@ export default {
                           id: 'time',
                         },
                         {
+                          rawItem: {
+                            caption: '置顶',
+                            halign: 'LEFT',
+                            renderMode: 'TEXT',
+                            valign: 'MIDDLE',
+                            wrapMode: 'NOWRAP',
+                            contentType: 'RAW',
+                            predefinedType: 'STATIC_TEXT',
+                            id: 'top_text',
+                          },
+                          caption: '置顶',
+                          itemStyle: 'DEFAULT',
+                          itemType: 'RAWITEM',
+                          layoutPos: {
+                            shrink: 1,
+                            layout: 'FLEX',
+                            spacingLeft: 'OUTERSMALL',
+                          },
+                          panelItemGroupLogics: [
+                            {
+                              logicCat: 'PANELVISIBLE',
+                              relatedItemNames: ['is_top'],
+                              groupOP: 'AND',
+                              panelItemLogics: [
+                                {
+                                  condOp: 'EQ',
+                                  dstModelField: 'IS_TOP',
+                                  value: '1',
+                                  logicType: 'SINGLE',
+                                  id: '逻辑项',
+                                },
+                              ],
+                              logicType: 'GROUP',
+                            },
+                          ],
+                          showCaption: true,
+                          id: 'top_text',
+                        },
+                        {
                           editor: {
                             editorType: 'HIDDEN',
                             predefinedType: 'FIELD_TEXT_DYNAMIC',
@@ -366,6 +419,24 @@ export default {
                           },
                           id: 'pid',
                         },
+                        {
+                          editor: {
+                            editorType: 'HIDDEN',
+                            valueType: 'SIMPLE',
+                            editable: true,
+                            id: 'is_top',
+                          },
+                          viewFieldName: 'IS_TOP',
+                          allowEmpty: true,
+                          hidden: true,
+                          caption: '文本(动态)',
+                          itemType: 'FIELD',
+                          layoutPos: {
+                            shrink: 1,
+                            layout: 'FLEX',
+                          },
+                          id: 'is_top',
+                        },
                       ],
                       layout: {
                         align: 'flex-start',
@@ -381,42 +452,91 @@ export default {
                         shrink: 1,
                         layout: 'FLEX',
                       },
+                      sysCss: {
+                        cssName: 'top_style',
+                      },
                       id: 'container1',
                     },
                     {
                       actionGroupExtractMode: 'ITEM',
                       panelItems: [
                         {
-                          actionType: 'UIACTION',
-                          buttonStyle: 'STYLE2',
-                          buttonType: 'PANELBUTTON',
-                          uiactionId: 'del_comment@comment',
-                          renderMode: 'BUTTON',
-                          tooltip: '删除',
-                          uiactionTarget: 'SINGLEKEY',
-                          caption: '删除',
+                          actionGroupExtractMode: 'ITEMS',
+                          buttonListType: 'UIACTIONGROUP',
+                          uiactionGroup: {
+                            uiactionGroupDetails: [
+                              {
+                                actionLevel: 100,
+                                afterItemType: 'NONE',
+                                beforeItemType: 'NONE',
+                                buttonStyle: 'DEFAULT',
+                                caption: '置顶',
+                                detailType: 'DEUIACTION',
+                                uiactionId: 'top@comment',
+                                visibleScriptCode: 'data.is_top!=1',
+                                showCaption: true,
+                                showIcon: true,
+                                sysImage: {
+                                  rawContent:
+                                    '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1747741120326" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4339" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16"><path d="M576 452.266667v422.4h-85.333333v-422.4l-89.6 89.6L341.333333 477.866667l192-192 192 192-59.733333 59.733333-89.6-85.333333z m213.333333-217.6h-512v-85.333334h512v85.333334z" fill="#444444" p-id="4340"></path></svg>',
+                                },
+                                id: 'uc30563d',
+                              },
+                              {
+                                actionLevel: 100,
+                                afterItemType: 'NONE',
+                                beforeItemType: 'NONE',
+                                buttonStyle: 'DEFAULT',
+                                caption: '取消置顶',
+                                detailType: 'DEUIACTION',
+                                uiactionId: 'no_top@comment',
+                                visibleScriptCode: 'data.is_top==1',
+                                showCaption: true,
+                                showIcon: true,
+                                sysImage: {
+                                  rawContent:
+                                    '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1747741189924" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8698" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16"><path d="M228.43 433.23l70.893 63.016-47.261 39.385-78.77-63.016 55.139-39.384z m141.785-118.153L512 196.923l330.83 267.815-78.768 63.016-196.924-165.416v141.785L456.862 393.846v-23.63l-15.754 7.876-70.893-63.015z m196.923 441.108V1024H456.862V653.785l110.276 102.4zM39.385 86.646V0h945.23v86.646H39.385zM102.4 252.062l63.015-70.893 748.308 716.8-63.015 70.893-748.308-716.8z" p-id="8699"></path></svg>',
+                                },
+                                id: 'u5dfad67',
+                              },
+                              {
+                                actionLevel: 100,
+                                afterItemType: 'NONE',
+                                beforeItemType: 'NONE',
+                                buttonStyle: 'DEFAULT',
+                                caption: '删除评论',
+                                detailType: 'DEUIACTION',
+                                uiactionId: 'del_comment@comment',
+                                visibleScriptCode:
+                                  'data.create_man === context.srfuserid',
+                                showCaption: true,
+                                showIcon: true,
+                                sysImage: {
+                                  cssClass: 'fa fa-trash-o',
+                                  glyph: 'xf014@FontAwesome',
+                                },
+                                id: 'u1862eae',
+                              },
+                            ],
+                            appDataEntityId: 'web.comment',
+                            uniqueTag: 'comment__Usr0519465800',
+                            name: '评论列表行为组',
+                            id: 'usr0519465800',
+                          },
                           itemStyle: 'STYLE2',
-                          itemType: 'BUTTON',
-                          controlLogics: [
-                            {
-                              itemName: 'BUTTON_CALLUILOGIC',
-                              logicTag: 'list_itempanel',
-                              logicType: 'SCRIPT',
-                              scriptCode:
-                                'data.create_man === context.srfuserid',
-                              triggerType: 'ITEMVISIBLE',
-                              id: 'trash',
-                            },
-                          ],
+                          itemType: 'BUTTONLIST',
                           layoutPos: {
                             shrink: 1,
                             layout: 'FLEX',
                           },
-                          sysImage: {
-                            cssClass: 'fa fa-trash',
-                            glyph: 'xf1f8@FontAwesome',
+                          sysCss: {
+                            cssName: 'comment_btn_style',
                           },
-                          id: 'button_calluilogic',
+                          sysImage: {
+                            cssClass: 'fa fa-ellipsis-v',
+                            glyph: 'xf142@FontAwesome',
+                          },
+                          id: 'top',
                         },
                         {
                           actionType: 'UIACTION',
@@ -540,7 +660,7 @@ export default {
                         contentType: 'HTML',
                         editorParams: {
                           contenttype: 'HTML',
-                          ICONCODELISTID: 'web.mock__cl_status',
+                          ICONCODELISTID: 'web.sysoperator',
                           LINKVIEWID: 'plmweb.recent_custom_redirect_view',
                           SCRIPTCODE:
                             'data.content?.replace(/@{[^,]*,"name":"(.*?)"}/g,"<span class=\'comment-tag\'>@$1</span>").replace(/@{[^,]*,name=(.*?)}/g,"<span class=\'comment-tag\'>@$1</span>").replaceAll(/\\#\\{(\\".+?\\":\\".+?\\")(,\\"icon\\":\\"((.|[\\t\\r\\f\\n\\s])+?)\\")*\\}/g, (x, value, icon) => {const item = JSON.parse("{" + value + "}"); if (icon) { icon = icon.slice(8).slice(1, -1).trim(); } return controller.parseCommentTag({icon, ...item});}).replaceAll(/\\{\\"\\emoji\\":\\"(.+?)\\"\\}/g,(x, emoji) => {const tempVal = decodeURIComponent(atob(emoji)); return `<span class="emoji-tag">${tempVal}</span>`})',
@@ -618,7 +738,7 @@ export default {
                             contentType: 'HTML',
                             editorParams: {
                               contenttype: 'HTML',
-                              ICONCODELISTID: 'web.mock__cl_status',
+                              ICONCODELISTID: 'web.sysoperator',
                               SCRIPTCODE:
                                 'data.content?.replace(/@{[^,]*,"name":"(.*?)"}/g,"<span class=\'comment-tag\'>@$1</span>").replace(/@{[^,]*,name=(.*?)}/g,"<span class=\'comment-tag\'>@$1</span>").replaceAll(/\\#\\{(\\".+?\\":\\".+?\\")(,\\"icon\\":\\"((.|[\\t\\r\\f\\n\\s])+?)\\")*\\}/g, (x, value, icon) => {const item = JSON.parse("{" + value + "}"); if (icon) { icon = icon.slice(8).slice(1, -1).trim(); } return controller.parseCommentTag({icon, ...item});}).replaceAll(/\\{\\"\\emoji\\":\\"(.+?)\\"\\}/g,(x, emoji) => {const tempVal = decodeURIComponent(atob(emoji)); return `<span class="emoji-tag">${tempVal}</span>`})',
                             },
@@ -718,8 +838,6 @@ export default {
           name: 'list_itempanel',
           id: 'web.comment.usr0103471499',
         },
-        minorSortDir: 'ASC',
-        minorSortAppDEFieldId: 'create_time',
         delistDataItems: [
           {
             appDEFieldId: 'pcreate_man',
@@ -728,10 +846,15 @@ export default {
             id: 'pcreate_man',
           },
           {
-            appDEFieldId: 'create_time',
-            dataType: 5,
-            format: 'YYYY-MM-DD HH:mm:ss',
-            id: 'create_time',
+            appDEFieldId: 'create_man',
+            frontCodeListId: 'web.sysoperator',
+            dataType: 25,
+            id: 'create_man',
+          },
+          {
+            appDEFieldId: 'content',
+            dataType: 21,
+            id: 'content',
           },
           {
             appDEFieldId: 'pcontent',
@@ -739,10 +862,9 @@ export default {
             id: 'pcontent',
           },
           {
-            appDEFieldId: 'create_man',
-            frontCodeListId: 'web.sysoperator',
+            appDEFieldId: 'id',
             dataType: 25,
-            id: 'create_man',
+            id: 'id',
           },
           {
             appDEFieldId: 'pid',
@@ -750,14 +872,10 @@ export default {
             id: 'pid',
           },
           {
-            appDEFieldId: 'id',
-            dataType: 25,
-            id: 'id',
-          },
-          {
-            appDEFieldId: 'content',
-            dataType: 21,
-            id: 'content',
+            appDEFieldId: 'create_time',
+            dataType: 5,
+            format: 'YYYY-MM-DD HH:mm:ss',
+            id: 'create_time',
           },
           {
             appDEFieldId: 'id',
@@ -771,6 +889,7 @@ export default {
           },
         ],
         pagingSize: 1000,
+        noSort: true,
         showHeader: true,
         singleSelect: true,
         navViewPos: 'NONE',

@@ -3,6 +3,7 @@ import { useNamespace } from '@ibiz-template/vue3-util';
 import './form-page.scss';
 import { IDEForm } from '@ibiz/model-core';
 import { FormController, FormPageController } from '@ibiz-template/runtime';
+import { JSX } from 'vue/jsx-runtime';
 
 export const FormPage = defineComponent({
   name: 'IBizFormPage',

@@ -77,4 +77,11 @@ export interface IApiPopoverOptions<O = unknown> {
    * @memberof IApiPopoverOptions
    */
   modalClass?: string;
+
+  /**
+   * @description 指示 飘窗 的内容将附加在哪一个网页元素上，默认附加到body
+   * @type {HTMLElement}
+   * @memberof IApiPopoverOptions
+   */
+  appendTo?: HTMLElement;
 }

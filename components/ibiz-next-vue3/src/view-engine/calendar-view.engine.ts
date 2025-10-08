@@ -4,6 +4,7 @@ import {
   ICalendarViewState,
   MDViewEngine,
   EventBase,
+  IUIActionResult,
 } from '@ibiz-template/runtime';
 import { IAppDECalendarView } from '@ibiz/model-core';
 
@@ -26,5 +27,25 @@ export class CalendarViewEngine extends MDViewEngine {
       this.view.slotProps.calendar = {};
     }
     this.view.slotProps.calendar.mdctrlActiveMode = model.mdctrlActiveMode!;
+  }
+
+  protected async openData(args: {
+    data: IData[];
+    event?: MouseEvent;
+    context?: IContext;
+    params?: IParams;
+  }): Promise<IUIActionResult> {
+    const { data, event } = args;
+    const result = await (this.xdataControl as IData).openData(data[0], event);
+    return result;
+  }
+
+  protected async newData(args: {
+    data: IData[];
+    event?: MouseEvent;
+  }): Promise<IUIActionResult> {
+    const { data, event } = args;
+    const result = await (this.xdataControl as IData).newData(data[0], event);
+    return result;
   }
 }

@@ -1,21 +1,21 @@
 /* eslint-disable prefer-object-spread */
 import {
-  defineComponent,
-  ref,
-  resolveComponent,
-  watch,
   h,
+  ref,
+  watch,
   computed,
+  defineComponent,
+  resolveComponent,
 } from 'vue';
 import {
-  getDataPickerProps,
+  useNamespace,
   getEditorEmits,
   useFocusAndBlur,
-  useNamespace,
+  getDataPickerProps,
 } from '@ibiz-template/vue3-util';
-import './ibiz-picker-embed-view.scss';
 import { EventBase } from '@ibiz-template/runtime';
 import { PickerEditorController } from '../picker-editor.controller';
+import './ibiz-picker-embed-view.scss';
 
 /**
  * 数据选择（嵌入选择视图）
@@ -52,20 +52,14 @@ export const IBizPickerEmbedView = defineComponent({
     watch(
       () => props.data,
       newVal => {
-        const { context: _context, params: _params } = c.handlePublicParams(
-          newVal,
-          c.context,
-          c.params,
-        );
-        const newContext = Object.assign(c.context.clone(), _context);
-        const newParams = Object.assign({ ...c.params }, _params);
-        if (
-          JSON.stringify(context.value) !== JSON.stringify(newContext) ||
-          JSON.stringify(params.value) !== JSON.stringify(newParams)
-        ) {
+        const { context: tempContext, params: tempParams } =
+          c.handlePublicParams(newVal, c.context, c.params);
+        const newContext = Object.assign(c.context.clone(), tempContext);
+        const newParams = Object.assign({ ...c.params }, tempParams);
+        if (JSON.stringify(context.value) !== JSON.stringify(newContext))
           context.value = newContext;
+        if (JSON.stringify(params.value) !== JSON.stringify(newParams))
           params.value = newParams;
-        }
       },
       {
         deep: true,
@@ -167,11 +161,11 @@ export const IBizPickerEmbedView = defineComponent({
       context,
       params,
       editorRef,
-      singleSelect,
-      checkStrictly,
       isShowText,
-      selectedData,
       cloneParams,
+      singleSelect,
+      selectedData,
+      checkStrictly,
       onSelectionChange,
     };
   },

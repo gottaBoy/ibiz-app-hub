@@ -1,4 +1,5 @@
 import { ILanguageRes } from '../../res/ilanguage-res';
+import { IUIActionGroup } from '../../view/iuiaction-group';
 import { IUIActionGroupDetail } from '../../view/iuiaction-group-detail';
 
 /**
@@ -66,11 +67,19 @@ export interface IDEUIActionGroupDetail extends IUIActionGroupDetail {
 
   /**
    * 成员类型
-   * @description 值模式 [云平台工具栏项类型（界面行为组成员）] {DEUIACTION：实体界面行为 }
+   * @description 值模式 [云平台工具栏项类型（界面行为组成员）] {DEUIACTION：实体界面行为、DEUIACTIONGROUP:实体界面行为分组 }
    * @type {( string | 'DEUIACTION')}
    * 来源  getDetailType
    */
-  detailType?: string | 'DEUIACTION';
+  detailType?: string | 'DEUIACTION' | 'DEUIACTIONGROUP';
+
+  /**
+   * 引用界面行为对象
+   *
+   * @type {IUIActionGroup}
+   * 来源  getRefPSUIActionGroup
+   */
+  refUIActionGroup?: IUIActionGroup;
 
   /**
    * 提示语言资源对象

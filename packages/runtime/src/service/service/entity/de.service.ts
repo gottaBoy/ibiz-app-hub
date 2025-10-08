@@ -20,6 +20,7 @@ import { FileService } from '../file/file.service';
 import { findAppDEMethod } from '../../../model';
 import {
   IAppDEService,
+  IAppService,
   IDataEntity,
   IDeMethodProcesser,
 } from '../../../interface';
@@ -63,6 +64,13 @@ export class DEService implements IAppDEService {
    * @type {FileService}
    */
   readonly file: FileService;
+
+  /**
+   * @description 应用服务
+   * @type {IAppService}
+   * @memberof DEService
+   */
+  readonly app: IAppService;
 
   /**
    * 请求方法实例
@@ -119,7 +127,21 @@ export class DEService implements IAppDEService {
     );
     this.wf = new WorkFlowService(model);
     this.file = new FileService(model);
+    this.app = ibiz.hub.getApp(model.appId);
     this.methodProcesser = new DeMethodProcesser(srfSessionId);
+  }
+
+  /**
+   * @description 根据上下文计算当前请求路径
+   * @protected
+   * @param {IContext} context
+   * @returns {*}  {string} 拼接结果说明: /祖父实体/祖父实体主键/爷爷实体/爷爷实体主键/父实体/父实体主键/当前实体
+   * @memberof DEService
+   */
+  protected calcPath(context: IContext): string {
+    const curPath = `/${this.model.deapicodeName2}`;
+    const resPath = calcResPath(context, this.model);
+    return resPath + curPath;
   }
 
   /**
@@ -315,6 +337,29 @@ export class DEService implements IAppDEService {
     params2?: IParams,
   ): Promise<IHttpResponse<IData>> {
     return this.exec('FetchTempDefault', context, params, params2);
+  }
+
+  /**
+   * @description 创建下载凭证
+   * @param {IContext} context
+   * @param {{ srfossfileid: string }} params
+   * @returns {*}  {Promise<IHttpResponse<IData>>}
+   * @memberof DEService
+   */
+  async createDownloadTicket(
+    context: IContext,
+    params: { srfossfileid: string },
+  ): Promise<IHttpResponse<IData>> {
+    let path = this.calcPath(context);
+    const srfkey = context[this.model.codeName!.toLowerCase()];
+    if (srfkey) {
+      path = `${path}/createdownloadticket/${srfkey}`;
+    }
+    const res = await this.app.net.get(path, params);
+    if (!res.data) {
+      ibiz.log.error(ibiz.i18n.t('runtime.deAction.responseDataError'), res);
+    }
+    return res;
   }
 
   /**

@@ -49,7 +49,10 @@ export class AppViewConfigService implements IAppViewConfigService {
    * @return {*}  {IData}
    * @memberof AppViewConfigService
    */
-  protected getCustomOption(model: IAppView): { modalOption: IData } {
+  protected getCustomOption(model: IAppView): {
+    modalOption: IData;
+    waterMarkOption: IData;
+  } {
     const { appViewParams, userParam } = model;
     // 解析ModalOption参数
     let optionProperty = appViewParams?.find(
@@ -67,10 +70,40 @@ export class AppViewConfigService implements IAppViewConfigService {
       try {
         modalOption = JSON.parse(optionProperty);
       } catch (error) {
-        ibiz.log.error(ibiz.i18n.t('runtime.hub.failedParse', { error }));
+        ibiz.log.error(
+          ibiz.i18n.t('runtime.hub.failedParse', {
+            error,
+            paramsName: 'modalOption',
+          }),
+        );
       }
     }
-    return { modalOption };
+
+    // 解析waterMarkOption参数
+    let waterMarkProperty = appViewParams?.find(
+      item => item.id === 'watermarkoption',
+    )?.value;
+
+    // 应用功能视图没有viewParams，从userParam中获取waterMarkOption
+    if (!waterMarkProperty && userParam) {
+      // 解析waterMarkOption参数
+      waterMarkProperty = userParam.waterMarkOption;
+    }
+
+    let waterMarkOption = {};
+    if (waterMarkProperty) {
+      try {
+        waterMarkOption = JSON.parse(waterMarkProperty);
+      } catch (error) {
+        ibiz.log.error(
+          ibiz.i18n.t('runtime.hub.failedParse', {
+            error,
+            paramsName: 'waterMarkOption',
+          }),
+        );
+      }
+    }
+    return { modalOption, waterMarkOption };
   }
 
   has(key: string): boolean {

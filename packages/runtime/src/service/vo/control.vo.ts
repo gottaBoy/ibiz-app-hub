@@ -120,6 +120,14 @@ export class ControlVO {
   declare srfmajorfield: string;
 
   /**
+   * @description 数据的状态（新建与否）
+   * @protected
+   * @type {(Srfuf | undefined)}
+   * @memberof ControlVO
+   */
+  protected $srfuf: Srfuf | undefined;
+
+  /**
    * Creates an instance of ControlVO.
    * @author lxm
    * @date 2022-09-05 15:09:10
@@ -213,13 +221,17 @@ export class ControlVO {
       });
     }
 
-    // srfuf纯计算属性，不可修改
+    // 设置数据状态（新建与否）
+    if (Object.prototype.hasOwnProperty.call(this.$origin, 'srfuf')) {
+      this.$srfuf = this.$origin.srfuf;
+    }
+    this.$srfuf = this.srfkey === this.tempsrfkey ? Srfuf.UPDATE : Srfuf.CREATE;
     Object.defineProperty(this, 'srfuf', {
       get() {
-        if (Object.prototype.hasOwnProperty.call(this.$origin, 'srfuf')) {
-          return this.$origin.srfuf;
-        }
-        return this.srfkey === this.tempsrfkey ? Srfuf.UPDATE : Srfuf.CREATE;
+        return this.$srfuf;
+      },
+      set(val) {
+        this.$srfuf = val;
       },
       enumerable: false,
       configurable: true,
@@ -351,6 +363,7 @@ export class ControlVO {
   clone(): ControlVO {
     const cloneOrigin = clone(this.$origin);
     const newVal = new ControlVO(cloneOrigin, new Map([...this.$dataUIMap]));
+    newVal.srfuf = this.srfuf;
     Object.keys(this).forEach(key => {
       newVal[key] = this[key];
     });

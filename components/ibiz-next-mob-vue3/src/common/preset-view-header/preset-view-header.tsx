@@ -30,6 +30,9 @@ export const IBizPresetViewHeader = defineComponent({
     };
   },
   render() {
+    if (!ibiz.config.view.mobShowViewHeader) {
+      return;
+    }
     return (
       this.view.model.showCaptionBar && (
         <div class={[this.ns.b(), this.ns2.b()]}>

@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'editor_span',
   deviewId: '0a80596cb06e0ccf42827a98167c1649',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -65,6 +66,16 @@ export default {
         appDataEntityId: 'web.master',
         id: 'update',
       },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
+      },
       deformPages: [
         {
           layout: {
@@ -118,6 +129,373 @@ export default {
               id: 'group1',
             },
             {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    editorParams: {
+                      valuetype: 'SIMPLES',
+                      textseparator: '@',
+                    },
+                    editorType: 'SPAN',
+                    textSeparator: '@',
+                    valueType: 'SIMPLES',
+                    editable: true,
+                    id: 'formitem1',
+                  },
+                  allowEmpty: true,
+                  caption: '文本分隔符',
+                  codeName: 'formitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem1',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      "说明：使用textseparator参数指定文本的分隔符，当前值为['文本1','文本2','文本3']，文本分隔符为@",
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem2',
+                  },
+                  codeName: 'rawitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem2',
+                },
+              ],
+              caption: '文本分隔符',
+              codeName: 'grouppanel1',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel1',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  createDV:
+                    '这是一个超长的文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本',
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    editorParams: {
+                      overflowmode: 'ellipsis',
+                    },
+                    editorType: 'SPAN',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem2',
+                  },
+                  updateDV:
+                    '这是一个超长的文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本',
+                  allowEmpty: true,
+                  caption: '文本换行模式',
+                  codeName: 'formitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem2',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用overflowmode参数指定文本的换行模式，可选值有auto和ellipsis。当参数为auto时，若内容超出宽度则会换行显示；当参数为ellipsis时，若内容超出宽度则会显示省略号。当前为ellipsis不换行模式，内容超出宽度会显示省略号',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem1',
+                  },
+                  codeName: 'rawitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem1',
+                },
+              ],
+              caption: '文本换行模式',
+              codeName: 'grouppanel2',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel2',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    editorParams: {
+                      valuetype: 'SIMPLES',
+                    },
+                    editorType: 'SPAN',
+                    valueType: 'SIMPLES',
+                    editable: true,
+                    id: 'formitem4',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem4',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem4',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      "说明：使用valuetype指定编辑器的值类型。当前编辑器的值类型为SIMPLES，值为['文本1','文本2','文本3']",
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem4',
+                  },
+                  codeName: 'rawitem4',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem4',
+                },
+              ],
+              caption: '值类型为SIMPLES',
+              codeName: 'grouppanel4',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel4',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    editorParams: {
+                      valuetype: 'OBJECT',
+                      objectnamefield: 'name',
+                    },
+                    editorType: 'SPAN',
+                    objectNameField: 'name',
+                    valueType: 'OBJECT',
+                    editable: true,
+                    id: 'formitem5',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem5',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem5',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      "说明：使用valuetype指定编辑器的值类型，使用objectnamefield参数指定显示的对象属性。当前编辑器的值类型为OBJECT，值为{id: 'text',name:'文本'}，显示的对象属性为name",
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem5',
+                  },
+                  codeName: 'rawitem5',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem5',
+                },
+              ],
+              caption: '值类型为OBJECT',
+              codeName: 'grouppanel5',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel5',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    editorParams: {
+                      valuetype: 'OBJECTS',
+                      objectnamefield: 'name',
+                    },
+                    editorType: 'SPAN',
+                    objectNameField: 'name',
+                    valueType: 'OBJECTS',
+                    editable: true,
+                    id: 'formitem6',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem6',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem6',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      "说明：使用valuetype指定编辑器的值类型，使用objectnamefield参数指定显示的对象属性。当前编辑器的值类型为OBJECTS，值为[{id: 'text1',name:'文本1'},{id: 'text2',name:'文本2'},{id: 'text3',name:'文本3'}]，显示的对象属性为name",
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem6',
+                  },
+                  codeName: 'rawitem6',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem6',
+                },
+              ],
+              caption: '值类型为OBJECTS',
+              codeName: 'grouppanel6',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel6',
+            },
+            {
               dataType: 25,
               enableCond: 3,
               labelPos: 'LEFT',
@@ -165,6 +543,17 @@ export default {
       controlType: 'FORM',
       logicName: '编辑器_标签_表单',
       appDataEntityId: 'web.master',
+      controlLogics: [
+        {
+          eventNames: 'onLoadDraftSuccess',
+          logicTag: 'form',
+          logicType: 'SCRIPT',
+          scriptCode:
+            "ctrl.setDataValue('formitem1', ['文本1','文本2','文本3'], true)\r\nctrl.setDataValue('formitem4', ['文本1','文本2','文本3'], true)\r\nctrl.setDataValue('formitem5', {id: 'text',name:'文本'}, true)\r\nctrl.setDataValue('formitem6', [{id: 'text1',name:'文本1'},{id: 'text2',name:'文本2'},{id: 'text3',name:'文本3'}], true)",
+          triggerType: 'CTRLEVENT',
+          id: 'logic',
+        },
+      ],
       controlParam: {
         id: 'form',
       },

@@ -12,6 +12,7 @@ declare interface Rgba {
 declare interface DataOptions {
   isExpand: boolean;
   expandLabel: string;
+  draggableLabel: string;
   startLabel: string;
   endLabel: string;
   dataId: string;
@@ -20,6 +21,13 @@ declare interface DataOptions {
   unit: HeaderDateUnit;
   enableDateCompletion: boolean;
   isSliderDrag: boolean;
+}
+
+declare interface linkOptions {
+  fromField: string;
+  toField: string;
+  idField: string;
+  relationTypeField: string;
 }
 
 declare interface DraggableOptions {
@@ -33,6 +41,11 @@ declare interface DraggableOptions {
    * @param current 仅可以调整当前层级内容（默认）
    */
   level?: 'all' | 'current';
+
+  /**
+   * 是否可拖拽状态字段键
+   */
+  draggableStateKey?: string;
 }
 
 declare interface DateRange {

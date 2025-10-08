@@ -7,3 +7,4 @@ export * from './code-list/code-list';
 export * from './control-loading-placeholder/control-loading-placeholder';
 export * from './badge/badge';
 export * from './custom-render/custom-render';
+export * from './signature-pad/signature-pad';

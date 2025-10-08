@@ -1,6 +1,7 @@
 export default {
   deviewCodeName: 'panel_format',
   deviewId: '331cb97ebb3372f3eebd7e549abb4392',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -46,9 +47,40 @@ export default {
                     layoutPos: {
                       shrink: 1,
                       layout: 'FLEX',
-                      spacingBottom: 'OUTERLARGE',
+                      spacingBottom: 'OUTERSMALL',
                     },
                     id: 'name',
+                  },
+                  {
+                    rawItem: {
+                      caption:
+                        '说明：配置了值格式化【名称：@】，设置了值“数量”，预期结果为“名称：数量”。格式编码参考：https://github.com/13601313270/vue-format',
+                      halign: 'LEFT',
+                      renderMode: 'PARAGRAPH',
+                      valign: 'MIDDLE',
+                      wrapMode: 'NOWRAP',
+                      contentType: 'RAW',
+                      cssStyle:
+                        'display:inline-block;\npadding: 8px 4px;\nline-height: 32px;',
+                      sysCss: {
+                        cssName: 'description-text',
+                      },
+                      predefinedType: 'STATIC_LABEL',
+                      id: 'static_label',
+                    },
+                    caption: '标签',
+                    itemStyle: 'DEFAULT',
+                    itemType: 'RAWITEM',
+                    layoutPos: {
+                      shrink: 1,
+                      layout: 'FLEX',
+                      spacingBottom: 'OUTERMEDIUM',
+                    },
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    showCaption: true,
+                    id: 'static_label',
                   },
                   {
                     editor: {
@@ -71,8 +103,40 @@ export default {
                     layoutPos: {
                       shrink: 1,
                       layout: 'FLEX',
+                      spacingBottom: 'OUTERSMALL',
                     },
                     id: 'quantity',
+                  },
+                  {
+                    rawItem: {
+                      caption:
+                        '说明：配置了值格式化【数量（显示千分位）: #,###】，设置了值为100000，预期结果为“数量（显示千分位）：100,000”。格式编码参考：https://github.com/13601313270/vue-format',
+                      halign: 'LEFT',
+                      renderMode: 'PARAGRAPH',
+                      valign: 'MIDDLE',
+                      wrapMode: 'NOWRAP',
+                      contentType: 'RAW',
+                      cssStyle:
+                        'display:inline-block;\npadding: 8px 4px;\nline-height: 32px;',
+                      sysCss: {
+                        cssName: 'description-text',
+                      },
+                      predefinedType: 'STATIC_LABEL',
+                      id: 'static_label1',
+                    },
+                    caption: '标签',
+                    itemStyle: 'DEFAULT',
+                    itemType: 'RAWITEM',
+                    layoutPos: {
+                      shrink: 1,
+                      layout: 'FLEX',
+                      spacingBottom: 'OUTERMEDIUM',
+                    },
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    showCaption: true,
+                    id: 'static_label1',
                   },
                 ],
                 layout: {
@@ -94,9 +158,8 @@ export default {
               layout: 'FLEX',
             },
             dataRegionType: 'SINGLEDATA',
-            dataSourceType: 'DEACTION',
-            appDEMethodId: 'get_sample_date',
-            appDataEntityId: 'web.master',
+            dataSourceType: 'CUSTOM',
+            scriptCode: '{\nname:"数量",\nquantity:100000,\n}',
             caption: '单项数据容器',
             itemStyle: 'DEFAULT',
             itemType: 'CONTAINER',

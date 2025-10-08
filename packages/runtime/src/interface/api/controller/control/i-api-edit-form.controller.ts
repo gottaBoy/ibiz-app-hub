@@ -32,7 +32,7 @@ export interface IApiFormSaveParams extends IApiDataAbilityParams {
  * @description 编辑表单由输入框、单选框、下拉选择、进度条、标签等数据编辑控件及数据预览控件构成，主要功能包括高效收集用户输入数据、实时验证数据合法性、结构化提交至后端，同时支持数据回显与动态交互，保障用户体验与数据准确性。
  * @export
  * @ctrlparams {name:emptyhiddenunit,title:无值是否隐藏,parameterType:boolean,defaultvalue:false,description:表单项无值时，其对应的值单位（如'天'、'%'等）是否隐藏,effectPlatform:web}
- * @ctrlparams {name:emptyshowmode,title:无值显示模式,parameterType:DEFAULT | PLACEHOLDER,defaultvalue:DEFAULT,description:表单项无值时的显示模式，默认为DEFAULT，无值时显示自定义的无值显示文本，值为PLACEHOLDER时显示空白占位符,effectPlatform:web}
+ * @ctrlparams {name:emptyshowmode,title:无值显示模式,parameterType:'DEFAULT' | 'PLACEHOLDER',defaultvalue:'DEFAULT',description:表单项无值时的显示模式，默认为DEFAULT，无值时显示自定义的无值显示文本，值为PLACEHOLDER时显示空白占位符,effectPlatform:web}
  * @ctrlparams {"name":"editmode","title":"编辑模式","parameterType":"'default' | 'hover'","defaultvalue":"'default'","description":"编辑模式。当值为 'hover'时，表单项显示时只显示值，不显示编辑器的外观，如输入框，下拉框等不显示边框，鼠标悬浮时才正常显示；值为 'default' 或者无值时，界面正常显示编辑器外观","effectPlatform":"web"}
  * @ctrlparams {"name":"triggermode","title":"编辑器值变更模式","parameterType":"'blur' | 'input'","defaultvalue":"'blur'","description":"该配置项用于指定编辑器触发 `emit` 事件的模式。若值为 'input'，则在输入框值变更时触发 change 事件；若值为 'blur'，则在输入框失去焦点时触发 change 事件"}
  * @ctrlparams {"name":ignoreupdateitem,"title":忽略表单项更新响应数据关联处理,"parameterType":boolean,defaultvalue:true,"description":该配置项用于指定是否忽略表单项更新响应数据关联处理(是否忽略dto返回数据)}
@@ -107,4 +107,12 @@ export interface IApiEditFormController<
    * @memberof IApiEditFormController
    */
   updateFormItem(formItemUpdateId: string): Promise<void>;
+
+  /**
+   * @description 取消变更，'UNDO' \| 'REDO'暂未支持
+   * @param {('INIT' | 'UNDO' | 'REDO')} [targetState] 目标状态，初始化状态|撤销上一步操作|重做下一步操作
+   * @returns {*}  {Promise<void>}
+   * @memberof IApiEditFormController
+   */
+  cancelChanges(targetState?: 'INIT' | 'UNDO' | 'REDO'): Promise<void>;
 }

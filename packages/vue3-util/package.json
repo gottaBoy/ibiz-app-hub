@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/vue3-util",
-  "version": "0.7.41-alpha.16",
+  "version": "0.7.41-alpha.21",
   "description": "通用组件库(vue3)",
   "main": "lib/index.cjs",
   "types": "es/index.d.ts",

@@ -11,33 +11,29 @@ import { INavViewMsg, PanelItemState } from '@ibiz-template/runtime';
  */
 export class NavPosIndexState extends PanelItemState {
   /**
-   * 当前导航视图标识
-   * @author lxm
-   * @date 2023-05-25 06:24:48
+   * @description 当前导航视图标识
+   * @exposedoc
    * @type {string}
    */
   currentKey: string = '';
 
   /**
-   * 缓存的视图标识
-   * @author lxm
-   * @date 2023-05-25 06:25:21
+   * @description 缓存的视图标识
+   * @exposedoc
    * @type {string[]}
    */
   cacheKeys: string[] = ['RouterShell'];
 
   /**
-   * 导航视图详细信息
-   * @author lxm
-   * @date 2023-05-25 07:07:05
+   * @description 导航视图详细信息
+   * @exposedoc
    * @type {INavViewMsg[]}
    */
   navViewMsgs: { [p: string]: INavViewMsg } = {};
 
   /**
-   * 导航的视图的操作顺序
-   * @author lxm
-   * @date 2023-05-25 06:25:34
+   * @description 导航的视图的操作顺序
+   * @exposedoc
    * @type {string[]}
    */
   operateSort: string[] = [];

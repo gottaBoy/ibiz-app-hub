@@ -7,6 +7,7 @@ import {
   IBizRouterView,
   IBizViewShell,
   IBizBadge,
+  IBizSignaturePad,
 } from '@ibiz-template/vue3-util';
 import { IBizActionToolbar } from './action-toolbar/action-toolbar';
 import { IBizCol } from './col/col';
@@ -108,6 +109,7 @@ export const IBizCommonComponents = {
     v.component(IBizControlNavigation.name, IBizControlNavigation);
     v.component(IBizGanttSetting.name, IBizGanttSetting);
     v.component(IBizNavSplit.name, IBizNavSplit);
+    v.component(IBizSignaturePad.name, IBizSignaturePad);
   },
 };
 

@@ -103,4 +103,18 @@ export interface IBackendSearchBarGroup {
    * @memberof IBackendSearchBarGroup
    */
   ownerType?: 'SYSTEM' | 'PERSONAL';
+
+  /**
+   * @description 计数器id
+   * @type {string}
+   * @memberof IBackendSearchBarGroup
+   */
+  counterId?: string;
+
+  /**
+   * @description 计数器显示模式 {0：默认、 1：0 值时隐藏 }
+   * @type {number}
+   * @memberof IBackendSearchBarGroup
+   */
+  counterMode?: number;
 }

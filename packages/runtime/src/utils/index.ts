@@ -33,3 +33,8 @@ export { Html2Canvas } from './html2canvas/html2canvas';
 export { VoiceUtil } from './voice-util/voice-util';
 export { EncyptionUtil } from './encryption-uitl/encryption-uitl';
 export * from './dr-ctrl-util';
+export * from './date-util';
+export { ChangeTracker } from './change-tracker/change-tracker';
+export { ViewShellHooks } from './view-shell-hooks/view-shell-hooks';
+export { WaterMarkUtil } from './water-mark-util/water-mark-util';
+export * from './map-util/map-util';

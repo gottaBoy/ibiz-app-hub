@@ -20,9 +20,9 @@ $control-list-group-style2: (
   color: getCssVar(control-list, text-color);
   cursor: pointer;
   background-color: getCssVar(control-list, item-bg-color);
-  
+
   @include e(right) {
-    padding: 0 getCssVar(spacing, extra,tight);
+    padding: 0 getCssVar(spacing, extra, tight);
     @include m(actions) {
       display: flex;
       justify-content: center;
@@ -33,7 +33,7 @@ $control-list-group-style2: (
         &.is-has-caption {
           margin: 0;
         }
-      } 
+      }
     }
   }
 
@@ -45,6 +45,15 @@ $control-list-group-style2: (
       flex: 1;
     }
   }
+
+  @include e(new) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: getCssVar(spacing, tight);
+    color: getCssVar(color, text, 3);
+    border: 2px dashed getCssVar(color, border);
+  }
 }
 
 @include b(control-list) {
@@ -54,6 +63,11 @@ $control-list-group-style2: (
   position: relative;
   height: 100%;
 
+  @include e(drag-icon) {
+    cursor: move;
+    visibility: hidden;
+  }
+  
   @include e(nav-icon) {
     position: absolute;
     top: 18px;
@@ -106,7 +120,7 @@ $control-list-group-style2: (
   @include b(control-list-content) {
     flex-grow: 1;
   }
-  
+
   @include e(batchtoolbar) {
     margin: getCssVar(spacing, tight) 0;
   }
@@ -154,6 +168,9 @@ $control-list-group-style2: (
 
   &:hover {
     background-color: getCssVar(control-list, hover-bg-color);
+    .#{bem(control-list, drag-icon)} {
+      visibility: visible;
+    }
   }
 
   @include when(active) {
@@ -162,7 +179,10 @@ $control-list-group-style2: (
 }
 
 @include b('control-list-group-style2') {
-  @include set-component-css-var(control-list-group-style2, $control-list-group-style2);
+  @include set-component-css-var(
+    control-list-group-style2,
+    $control-list-group-style2
+  );
 
   @include e('header') {
     display: flex;
@@ -174,7 +194,7 @@ $control-list-group-style2: (
       font-size: getCssVar('font-size', 'regular');
       color: getCssVar(control-list-group-style2, color);
     }
-    
+
     &::before,
     &::after {
       display: block;

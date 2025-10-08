@@ -5,6 +5,9 @@
     :modal="props.modal"
     :model-data="model"
   >
+    <template #wizardpanel="slotProps">
+      <i-biz-wizard-panel-control v-bind="slotProps" />
+    </template>
   </i-biz-view>
 </template>
 <script setup lang="ts">

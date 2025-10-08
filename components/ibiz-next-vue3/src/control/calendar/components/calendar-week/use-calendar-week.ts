@@ -2,8 +2,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable no-shadow */
 /* eslint-disable no-use-before-define */
-import { computed, ref, watch, nextTick } from 'vue';
-import type { SetupContext } from 'vue';
+import { computed, ref, watch, nextTick, onBeforeUnmount } from 'vue';
+import type { SetupContext, VNode } from 'vue';
+import { Namespace } from '@ibiz-template/core';
+import { IOverlayPopoverContainer } from '@ibiz-template/runtime';
 import {
   CalendarWeekEmits,
   CalendarWeekProps,
@@ -13,7 +15,9 @@ import {
 } from '../interface';
 import {
   checkDateRangeIncludes,
+  createFollowElement,
   fade,
+  followMouseMove,
   getCurWeekDates,
   handleBkColor,
   handleEmit,
@@ -21,11 +25,14 @@ import {
   isDateInCurWeek,
   isTimeGreaterThan,
   isToday,
+  openPopover,
+  removeFollowElement,
 } from '../util';
 
 export const useCalendarWeek = (
   props: CalendarWeekProps,
   emit: SetupContext<CalendarWeekEmits>['emit'],
+  _ns: Namespace,
 ) => {
   const drawData = ref<string[]>([]);
   const curTimeTimer = ref();
@@ -806,6 +813,63 @@ export const useCalendarWeek = (
     },
   );
 
+  // 处理事件气泡显示与隐藏
+  const followElement: HTMLElement = createFollowElement();
+  let overlay: IOverlayPopoverContainer | null = null;
+  let eventLocation: string = '';
+
+  /**
+   * 日历内容区鼠标移动
+   *
+   * @param {MouseEvent} _event
+   */
+  const contentMousemove = (_event: MouseEvent) => {
+    if (eventLocation === 'content' && overlay && followElement)
+      followMouseMove(_event, followElement);
+  };
+
+  /**
+   * 事件项上鼠标移入
+   *
+   * @param {MouseEvent} _event
+   * @param {VNode} _component
+   * @param {string} _location
+   */
+  const eventMouseenter = (
+    _event: MouseEvent,
+    _component: VNode,
+    _location: string,
+  ) => {
+    if (!props.showDetail || overlay) {
+      return;
+    }
+    const isContent = _location === 'content';
+    eventLocation = _location;
+    overlay = openPopover(
+      _component,
+      isContent ? followElement : (_event.target as HTMLElement),
+      {
+        placement: isContent ? 'right-start' : 'bottom',
+        modalClass: _ns.e('event-popover'),
+      },
+    );
+  };
+
+  /**
+   * 事件项上鼠标移出
+   *
+   * @return {*}
+   */
+  const eventMouseleave = (_e: MouseEvent): void => {
+    overlay?.dismiss();
+    overlay = null;
+    eventLocation = '';
+  };
+
+  onBeforeUnmount(() => {
+    removeFollowElement(followElement!);
+  });
+
   return {
     drawData,
     curTimeTimer,
@@ -836,5 +900,8 @@ export const useCalendarWeek = (
     onHeaderEventScroll,
     initHeaderEventScroll,
     eventContextmenu,
+    contentMousemove,
+    eventMouseenter,
+    eventMouseleave,
   };
 };

@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'panel',
   deviewId: 'a3d63e14ace78a76399dd3ff4a1bfad1',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -23,9 +24,79 @@ export default {
     {
       dedrtabPages: [
         {
-          caption: '常规',
-          appViewId: 'web.master_panel_base',
-          id: 'base',
+          caption: '文本项',
+          appViewId: 'web.master_panel_text',
+          id: 'text',
+        },
+        {
+          caption: '多媒体',
+          appViewId: 'web.master_panel_media',
+          id: 'media',
+        },
+        {
+          caption: '属性输入&呈现',
+          appViewId: 'web.master_panel_attr',
+          id: 'attr',
+        },
+        {
+          caption: '按钮和按钮组',
+          appViewId: 'web.master_panel_button',
+          id: 'button',
+        },
+        {
+          caption: '计数器',
+          appViewId: 'web.master_panel_counter_exp',
+          id: 'counter',
+        },
+        {
+          caption: '常规容器',
+          appViewId: 'web.master_panel_container',
+          id: 'container',
+        },
+        {
+          caption: '数据容器',
+          appViewId: 'web.master_panel_data_container',
+          id: 'data_container',
+        },
+        {
+          caption: '导航占位',
+          appViewId: 'web.master_panel_nav_pos',
+          id: 'nav_pos',
+        },
+        {
+          caption: '面板部件占位',
+          appViewId: 'web.master_panel_panel_ctrl_pos',
+          id: 'panel_ctrl_pos',
+        },
+        {
+          caption: '面板项绘制器',
+          appViewId: 'web.master_panel_item_render',
+          id: 'panel_item_render',
+        },
+        {
+          caption: '直接内容',
+          appViewId: 'web.master_panel_panel_rawitem',
+          id: 'panel_rawitem',
+        },
+        {
+          caption: '传送占位',
+          appViewId: 'web.master_teleport_placeholder_tabexpview',
+          id: 'teleport_placeholder',
+        },
+        {
+          caption: '搜索表单按钮',
+          appViewId: 'web.master_panel_searchbuttons',
+          id: 'searchform_buttons',
+        },
+        {
+          caption: '快捷操作',
+          appViewId: 'web.master_short_cut_gridview',
+          id: 'short_cut',
+        },
+        {
+          caption: '视图消息',
+          appViewId: 'web.master_panel_view_message',
+          id: 'view_message',
         },
         {
           caption: '逻辑',

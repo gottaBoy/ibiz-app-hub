@@ -1,3 +1,5 @@
+import { JSX } from 'vue/jsx-runtime';
+
 export const SearchSvg = (): JSX.Element => (
   <svg
     viewBox='0 0 16 16'

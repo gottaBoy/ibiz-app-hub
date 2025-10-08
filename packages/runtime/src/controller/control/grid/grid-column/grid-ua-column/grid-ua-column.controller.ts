@@ -6,6 +6,7 @@ import { ButtonContainerState, UIActionButtonState } from '../../../../utils';
 import { GridColumnController } from '../../grid/grid-column.controller';
 import { GridRowState } from '../../grid/grid-row.state';
 import { IApiGridUAColumnController } from '../../../../../interface';
+import { getAllUIActionItems } from '../../../../../model';
 
 /**
  * @description 表格操作列控制器
@@ -41,7 +42,8 @@ export class GridUAColumnController
       return;
     }
     const containerState = new ButtonContainerState();
-    deuiactionGroup.uiactionGroupDetails.forEach(detail => {
+    const actions = getAllUIActionItems(deuiactionGroup.uiactionGroupDetails);
+    actions.forEach(detail => {
       const actionid = detail.uiactionId;
       if (actionid) {
         const buttonState = new UIActionButtonState(

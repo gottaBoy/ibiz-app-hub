@@ -7,6 +7,8 @@ export interface BreadcrumbMsg {
   dataInfo?: string;
   isEmbed?: boolean;
   isModal?: boolean;
+  type: 'menuItem' | 'default';
+  menuTag?: string;
 }
 
 /**
@@ -26,4 +28,11 @@ export class NavBreadcrumbState extends PanelItemState {
    * @memberof NavBreadcrumbState
    */
   breadcrumbItems: BreadcrumbMsg[] = [];
+
+  /**
+   * @description 菜单标识
+   * @type {string}
+   * @memberof NavBreadcrumbState
+   */
+  menuTag: string = '';
 }

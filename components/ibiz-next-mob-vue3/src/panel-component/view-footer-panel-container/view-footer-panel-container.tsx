@@ -6,13 +6,24 @@ import { IPanelContainer } from '@ibiz/model-core';
 import { PropType, defineComponent, computed } from 'vue';
 import './view-footer-panel-container.scss';
 
+/**
+ * 面板容器（视图底部）
+ * @primary
+ * @description 用于绘制视图底部内容。
+ */
 export const ViewFooterPanelContainer = defineComponent({
   name: 'IBizViewFooterPanelContainer',
   props: {
+    /**
+     * @description 容器模型数据
+     */
     modelData: {
       type: Object as PropType<IPanelContainer>,
       required: true,
     },
+    /**
+     * @description 容器控制器
+     */
     controller: {
       type: PanelContainerController,
       required: true,

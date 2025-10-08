@@ -19,6 +19,15 @@ import { CoreConst, getAppCookie } from '@ibiz-template/core';
 import { MarkDownEditorController } from '../markdown-editor.controller';
 import './ibiz-markdown-editor.scss';
 
+/**
+ * 移动端Markdown编辑框
+ * @primary
+ * @description 基于cherry-markdown深度定制可扩展的Markdown编辑器，用于Markdown文档编辑。支持编辑器类型包含：`移动端Markdown编辑框`
+ * @editorparams {name:uploadparams,parameterType:IData,defaultvalue:{},description:上传参数}
+ * @editorparams {name:exportparams,parameterType:IData,defaultvalue:{},description:下载参数}
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const IBizMarkDown: any = defineComponent({
   name: 'IBizMarkDown',

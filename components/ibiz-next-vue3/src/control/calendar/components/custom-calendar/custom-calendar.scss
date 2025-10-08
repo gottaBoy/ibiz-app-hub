@@ -201,6 +201,23 @@
       min-width: 120px;
     }
   }
+  @include e(calendar-user){
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  @include e(calendar-user-header){
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 getCssVar(spacing-base);
+    @include m('right'){ 
+      .el-date-editor.el-date-editor--week.el-input{
+        width: 250px
+      }
+    }
+  }
 
   .el-date-editor.el-input,
   .el-date-editor.el-input__wrapper {

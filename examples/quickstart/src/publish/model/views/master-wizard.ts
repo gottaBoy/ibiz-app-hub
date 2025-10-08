@@ -4,11 +4,12 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'wizard',
   deviewId: '1c939bfde0efb7bfd9829b49f616d658',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
-  caption: '向导',
+  caption: '向导面板',
   codeName: 'master_wizard',
   appDataEntityId: 'web.master',
   appViewEngines: [
@@ -23,19 +24,39 @@ export default {
     {
       dedrtabPages: [
         {
-          caption: '常规',
+          caption: '常规向导',
           appViewId: 'web.master_wizard_base',
           id: 'base',
         },
         {
-          caption: '逻辑',
+          caption: '状态向导',
+          appViewId: 'web.master_wizard_state',
+          id: 'state',
+        },
+        {
+          caption: '自定义跳转表单',
+          appViewId: 'web.master_wizard_srfnextform',
+          id: 'custom',
+        },
+        {
+          caption: '启用逻辑',
           appViewId: 'web.master_wizard_view_logic',
           id: 'logic',
+        },
+        {
+          caption: '步骤栏',
+          appViewId: 'web.master_wizard_step_bar_tab_exp_view',
+          id: 'stepbar',
         },
         {
           caption: '界面样式及图标',
           appViewId: 'web.master_wizard_view_style',
           id: 'css',
+        },
+        {
+          caption: '事件及调用',
+          appViewId: 'web.master_wizard_event_tab_exp_view',
+          id: 'eventandcall',
         },
       ],
       dataRelationTag: 'wizard_DR',
@@ -61,7 +82,7 @@ export default {
       capLanguageRes: {
         lanResTag: 'DE.LNAME.MASTER',
       },
-      caption: '向导',
+      caption: '向导面板',
       codeName: 'wizard_captionbar',
       controlType: 'CAPTIONBAR',
       appDataEntityId: 'web.master',

@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'html_view',
   deviewId: 'bdc9065c83027bbb681cfcc25dcef5d8',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',

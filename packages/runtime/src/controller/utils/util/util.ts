@@ -2,7 +2,6 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-restricted-globals */
 import { isNil } from 'ramda';
-import dayjs from 'dayjs';
 import { ControlVO } from '../../../service';
 
 /**
@@ -188,108 +187,4 @@ export function formatSeparator(
   calcChildrenFormat(items);
 
   return hideSeparator;
-}
-
-/**
- * @description 格式化日期
- * @export
- * @param {string} val
- * @param {('year' | 'quarter' | 'month' | 'week' | 'day')} format
- * @returns {*}  {string}
- */
-export function formatDate(
-  val: string,
-  format: 'year' | 'quarter' | 'month' | 'week' | 'day',
-): string {
-  let value = val;
-  const date = new Date(val);
-  if (!val || isNaN(date.getTime())) return value;
-  const year = dayjs(date).year();
-  switch (format) {
-    case 'year':
-      value = `${year}`;
-      break;
-    case 'quarter':
-      value = `${year} ${dayjs(date).quarter()}${ibiz.i18n.t('runtime.controller.utils.util.quarter')}`;
-      break;
-    case 'month':
-      value = `${year} ${dayjs(date).month() + 1}${ibiz.i18n.t('runtime.controller.utils.util.month')}`;
-      break;
-    case 'week':
-      value = `${year} ${dayjs(date).week()}${ibiz.i18n.t('runtime.controller.utils.util.week')}`;
-      break;
-    case 'day':
-      value = dayjs(date).format('YYYY-MM-DD');
-      break;
-    default:
-      break;
-  }
-  return value;
-}
-
-/**
- * @description 获取某年的总周数
- * @param {number} year 年份
- * @returns {*}  {number}
- */
-export function getWeeksInYear(year: number): number {
-  const lastDayOfYear = dayjs(`${year}-12-31`);
-  const week = lastDayOfYear.isoWeek();
-  return week === 1 ? 52 : week;
-}
-
-/**
- * @description 生成年周数组
- * @export
- * @param {string} minYearWeek 最小年周
- * @param {string} maxYearWeek 最大年周
- * @param {number} [paddingWeeks=0] 前后范围
- * @returns {*}  {string[]}
- */
-export function generateYearWeekRange(
-  minYearWeek: string,
-  maxYearWeek: string,
-  paddingWeeks = 0,
-): string[] {
-  // 1. 解析最小和最大年周
-  const [minYear, minWeek] = minYearWeek.split('-').map(Number);
-  const [maxYear, maxWeek] = maxYearWeek.split('-').map(Number);
-
-  // 2. 计算起始年周（minYearWeek - paddingWeeks）
-  let startYear = minYear;
-  let startWeek = minWeek - paddingWeeks;
-  while (startWeek < 1) {
-    startYear--;
-    startWeek += getWeeksInYear(startYear);
-  }
-
-  // 3. 计算结束年周（maxYearWeek + paddingWeeks）
-  let endYear = maxYear;
-  let endWeek = maxWeek + paddingWeeks;
-  const maxWeeksInEndYear = getWeeksInYear(endYear);
-  if (endWeek > maxWeeksInEndYear) {
-    endWeek -= maxWeeksInEndYear;
-    endYear++;
-  }
-
-  // 4. 生成从 startYear-startWeek 到 endYear-endWeek 的所有年周
-  const yearWeeks = [];
-  let currentYear = startYear;
-  let currentWeek = startWeek;
-
-  while (
-    currentYear < endYear ||
-    (currentYear === endYear && currentWeek <= endWeek)
-  ) {
-    yearWeeks.push(`${currentYear}-${currentWeek}`);
-
-    currentWeek++;
-    const weeksInCurrentYear = getWeeksInYear(currentYear);
-    if (currentWeek > weeksInCurrentYear) {
-      currentYear++;
-      currentWeek = 1;
-    }
-  }
-
-  return yearWeeks;
 }

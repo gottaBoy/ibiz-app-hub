@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'action_plugin',
   deviewId: '3439d6bc2d7695c2d684ab49beb0b119',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -61,7 +62,7 @@ export default {
         id: 'loaddraftfrom',
       },
       getDraftControlAction: {
-        appDEMethodId: 'de_action_plugin',
+        appDEMethodId: 'get_draft',
         appDataEntityId: 'web.master',
         id: 'loaddraft',
       },
@@ -79,6 +80,16 @@ export default {
         appDEMethodId: 'update',
         appDataEntityId: 'web.master',
         id: 'update',
+      },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
       },
       deformPages: [
         {
@@ -256,7 +267,7 @@ export default {
   viewStyle: 'DEFAULT',
   viewType: 'DEEDITVIEW',
   enableDP: true,
-  showCaptionBar: false,
+  showCaptionBar: true,
   modelId: '7223a0f4183e79f9243da3c8987591f3',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERaction_plugin',

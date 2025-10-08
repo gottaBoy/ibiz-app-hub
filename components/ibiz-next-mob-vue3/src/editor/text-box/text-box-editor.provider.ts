@@ -24,6 +24,9 @@ export class TextBoxEditorProvider implements IEditorProvider {
     if (editorType === 'NUMBER') {
       this.formEditor = 'IBizInputNumber';
       this.gridEditor = 'IBizInputNumber';
+    } else if (editorType === 'SIGNATURE') {
+      this.formEditor = 'IBizSignature';
+      this.gridEditor = 'IBizSignature';
     }
   }
 

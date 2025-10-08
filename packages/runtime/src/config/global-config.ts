@@ -5,11 +5,15 @@ import {
   IGlobalCodeListConfig,
   IGlobalViewConfig,
   IGlobalPickerEditorConfig,
+  IGlobalUploadEditorConfig,
   IGlobalFormConfig,
   IGlobalSearchFormConfig,
   IGlobalTreeConfig,
   IGlobalCommonConfig,
   IApiGlobalKanbanConfig,
+  IGlobalFlowDrtabConfig,
+  IApiGlobalWaterMarkConfig,
+  IGlobalMobConfig,
 } from '../interface';
 
 /**
@@ -28,7 +32,9 @@ export class GlobalConfig implements IGlobalConfig {
     expCacheMode: 'TABEXPPANEL:',
     disableHomeTabs: false,
     mobShowPresetBack: true,
+    mobShowViewHeader: true,
     timeoutDuration: 5 * 60 * 1000,
+    onlyShowDataInfo: false,
   };
 
   // 全局表格配置
@@ -73,6 +79,11 @@ export class GlobalConfig implements IGlobalConfig {
     overflowMode: 'auto',
   };
 
+  // 全局上传类编辑器配置
+  uploadEditor: IGlobalUploadEditorConfig = {
+    infoMap: '',
+  };
+
   // 全局搜索表单配置
   searchform: IGlobalSearchFormConfig = {
     enableStoredFilters: true,
@@ -88,6 +99,14 @@ export class GlobalConfig implements IGlobalConfig {
     emptyText: '-',
     emptyShowMode: 'DEFAULT',
     searchPhSeparator: '、',
+    enableDownloadTicket: false,
+  };
+
+  // 全局分页流布局配置
+  drtab: IGlobalFlowDrtabConfig = {
+    enableNavbar: false,
+    navbarPos: 'TOPRIGHT',
+    navbarWidth: 200,
   };
 
   // 多数据部件默认排序配置
@@ -101,4 +120,36 @@ export class GlobalConfig implements IGlobalConfig {
 
   // 提示框信息绘制模式
   tooltiprendermode: 'none' | 'md' | 'html' = 'md';
+
+  // 应用水印参数
+  watermark: IApiGlobalWaterMarkConfig = {
+    enable: false,
+    text: '',
+    fontSize: 14,
+    fontFamily: 'Microsoft YaHei',
+    fontWeight: 400,
+    fontStyle: 'normal',
+    color: 'rgba(0,0,0,0.5)',
+    opacity: 0.3,
+    rotate: -30,
+    gap: [90, 90],
+    offset: [0, 0],
+    tileSize: { width: 0, height: 0 },
+    zIndex: 9999,
+    useShadowDom: true,
+    protect: true,
+    allowSelect: false,
+    strictProtect: false,
+    ensureRelative: true,
+  };
+
+  /**
+   * @description 全局移动端配置
+   * @type {IGlobalMobConfig}
+   * @memberof GlobalConfig
+   */
+  mob: IGlobalMobConfig = {
+    mobShowAppTitle: true,
+    mobHomeRouteMode: 'default',
+  };
 }

@@ -9,13 +9,24 @@ import { SysUIActionTag } from '@ibiz-template/runtime';
 import { useRoute } from 'vue-router';
 import './view-content-panel-container.scss';
 
+/**
+ * 面板容器（视图内容区）
+ * @primary
+ * @description 用于视图内容区的绘制。
+ */
 export const ViewContentPanelContainer: Component = defineComponent({
   name: 'IBizViewContentPanelContainer',
   props: {
+    /**
+     * @description 容器模型数据
+     */
     modelData: {
       type: Object as PropType<IPanelContainer>,
       required: true,
     },
+    /**
+     * @description 容器控制器
+     */
     controller: {
       type: PanelContainerController,
       required: true,

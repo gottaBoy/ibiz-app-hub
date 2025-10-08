@@ -18,6 +18,13 @@ export class PickupGridViewEngine extends GridViewEngine {
   >;
 
   /**
+   * @description 选中数据
+   * @type {IData[]}
+   * @memberof PickupGridViewEngine
+   */
+  selectData: IData[] = [];
+
+  /**
    * 表格控制器
    *
    * @author zk
@@ -37,6 +44,22 @@ export class PickupGridViewEngine extends GridViewEngine {
     }
     this.view.slotProps.grid.singleSelect = this.view.state.singleSelect;
     this.view.slotProps.grid.mdctrlActiveMode = model.gridRowActiveMode!;
+    this.initSelectData();
+  }
+
+  /**
+   * @description 初始化选中数据
+   * @protected
+   * @memberof PickupGridViewEngine
+   */
+  protected initSelectData(): void {
+    if (this.view.params.selecteddata) {
+      this.selectData = JSON.parse(this.view.params.selecteddata);
+      delete this.view.params.selecteddata;
+    }
+    if (this.view.state.selectedData) {
+      this.selectData = [...this.view.state.selectedData];
+    }
   }
 
   async onMounted(): Promise<void> {
@@ -47,6 +70,7 @@ export class PickupGridViewEngine extends GridViewEngine {
     this.xdataControl.evt.on('onActive', async event => {
       this.view.evt.emit('onDataActive', { ...event });
     });
+    this.setSelectedData(this.selectData);
   }
 
   async call(

@@ -8,6 +8,15 @@ import './ibiz-input-number.scss';
 import { floor } from 'lodash-es';
 import { TextBoxEditorController } from '../text-box-editor.controller';
 
+/**
+ * 移动端数值框
+ *
+ * @description 使用van-field组件，用于仅允许输入标准的数字值的场景。支持编辑器类型包含：`移动端数值框`
+ * @primary
+ * @editorparams {name:precision,parameterType:number,description:设置数值精度，van-field组件的precision属性}
+ * @ignoreprops overflowMode
+ * @ignoreemits infoTextChange | enter
+ */
 export const IBizInputNumber = defineComponent({
   name: 'IBizInputNumber',
   props: getInputNumberProps<TextBoxEditorController>(),

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   CoreConst,
+  IApiContext,
   IHttpResponse,
   RuntimeError,
   downloadFileFromBlob,
@@ -8,7 +9,9 @@ import {
 } from '@ibiz-template/core';
 import qs from 'qs';
 import { convertNavData } from '../nav-params/nav-params';
-import { IApiFileUtil } from '../../interface';
+import { IApiDownloadTicket, IApiFileUtil } from '../../interface';
+import { DownloadTicketUtil } from './download-ticket/download-ticket-util';
+import { DownloadTicket } from './download-ticket/download-ticket';
 
 /**
  * @description 文件工具类
@@ -17,6 +20,13 @@ import { IApiFileUtil } from '../../interface';
  * @implements {IApiFileUtil}
  */
 export class FileUtil implements IApiFileUtil {
+  /**
+   * @description 下载凭证工具
+   * @protected
+   * @memberof FileUtil
+   */
+  protected downloadTicketUtil = new DownloadTicketUtil();
+
   /**
    * @description 自定义文件上传请求头数据
    * @protected
@@ -35,9 +45,24 @@ export class FileUtil implements IApiFileUtil {
   }
 
   /**
+   * @description 获取是否启用下载凭证
+   * @protected
+   * @param {boolean} [enableDownloadTicket]
+   * @returns {*}  {boolean}
+   * @memberof FileUtil
+   */
+  protected getEnableDownloadTicket(enableDownloadTicket?: boolean): boolean {
+    let tempEnableDownloadTicket = ibiz.config.common.enableDownloadTicket;
+    if (enableDownloadTicket) {
+      tempEnableDownloadTicket = enableDownloadTicket;
+    }
+    return tempEnableDownloadTicket;
+  }
+
+  /**
    * @description 获取文件上传请求头数据
    * @returns {*}  {Record<string, string>}
-   * @memberof IApiFileUtil
+   * @memberof IFileUtil
    */
   getUploadHeaders(): Record<string, string> {
     const uploadHeaders: Record<string, string> = {};
@@ -131,15 +156,102 @@ export class FileUtil implements IApiFileUtil {
   }
 
   /**
+   * @description 获取下载凭证
+   * @param {IApiContext} context
+   * @param {IParams} params
+   * @param {IData} data
+   * @param {({ fileId: string } & IData)} file
+   * @param {{ appEntityTag?: string; dataFieldTag?: string }} [downloadTicketParams]
+   * @returns {*}  {(Promise<IApiDownloadTicket | undefined>)}
+   * @memberof FileUtil
+   */
+  async getDownloadTicket(
+    context: IApiContext,
+    params: IParams,
+    data: IData,
+    file: { fileId: string } & IData,
+    downloadTicketParams: { appEntityTag?: string; dataFieldTag?: string } = {},
+  ): Promise<IApiDownloadTicket | undefined> {
+    return this.downloadTicketUtil.getDownloadTicket(
+      file.fileId,
+      context,
+      params,
+      data,
+      downloadTicketParams,
+    );
+  }
+
+  /**
+   * @description 设置下载票据
+   * @param {string} fileId
+   * @param {IData} downloadTicket
+   * @memberof FileUtil
+   */
+  public setDownloadTicket(fileId: string, downloadTicket: IData): void {
+    this.downloadTicketUtil.setDownloadTicket(
+      fileId,
+      new DownloadTicket(downloadTicket),
+    );
+  }
+
+  /**
    * @description 请求url获取文件流，并用JS触发文件下载
    * @param {string} url
    * @param {string} [name]
+   * @param {({
+   *       context: IContext;
+   *       params: IParams;
+   *       data: IData;
+   *       file: { fileId: string } & IData;
+   *       extraParams?: IData;
+   *       downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
+   *     })} [downloadParams]
+   * @param {boolean} [enableDownloadTicket]
    * @returns {*}  {Promise<void>}
    * @memberof FileUtil
    */
-  async fileDownload(url: string, name?: string): Promise<void> {
+  async fileDownload(
+    url: string,
+    name?: string,
+    downloadParams?: {
+      context: IContext;
+      params: IParams;
+      data: IData;
+      file: { fileId: string } & IData;
+      extraParams?: IData;
+      downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
+    },
+    enableDownloadTicket?: boolean,
+  ): Promise<void> {
+    const tempEnableDownloadTicket =
+      this.getEnableDownloadTicket(enableDownloadTicket);
+    let tempDownloadUrl: string = url;
+    // 应用启用传入下载凭证且外部传入下载参数才去计算凭证
+    if (tempEnableDownloadTicket && downloadParams) {
+      const { context, params, data, file, extraParams, downloadTicketParams } =
+        downloadParams;
+      const { downloadUrl } = this.calcFileUpDownUrl(
+        context,
+        params,
+        data,
+        extraParams,
+      );
+      const downloadTicket = await this.getDownloadTicket(
+        context,
+        params,
+        data,
+        file,
+        downloadTicketParams,
+      );
+      if (!downloadTicket) {
+        throw new RuntimeError(
+          'runtime.utils.fileUtil.getDownloadTicketFailed',
+        );
+      }
+      tempDownloadUrl = downloadUrl.replace('%fileId%', downloadTicket.ticket);
+    }
     // 发送get请求
-    const response = await ibiz.net.request(url, {
+    const response = await ibiz.net.request(tempDownloadUrl, {
       method: 'get',
       responseType: 'blob',
       baseURL: '', // 已经有baseURL了，这里无需再写
@@ -186,7 +298,12 @@ export class FileUtil implements IApiFileUtil {
         ibiz.i18n.t('runtime.utils.fileUtil.fileUploadFailed'),
       );
     }
-    return res.data;
+    const result = res.data;
+    // 启用传入下载凭证成功后设置下载票据
+    if (ibiz.config.common.enableDownloadTicket && result.ticket) {
+      ibiz.util.file.setDownloadTicket(result.id, result.ticket);
+    }
+    return result;
   }
 
   /**
@@ -290,5 +407,81 @@ export class FileUtil implements IApiFileUtil {
       // 方法结束后销毁 input 元素
       document.body.removeChild(inputElement);
     });
+  }
+
+  /**
+   * @description 通用请求文件方法，可自定义 responseType（默认获取Blob类型的文件流，responseType 的配置决定了请求服务时返回的文件数据格式）
+   * @param {string} url
+   * @param {XMLHttpRequestResponseType} [responseType]
+   * @param {({
+   *       context: IContext;
+   *       params: IParams;
+   *       data: IData;
+   *       file: { fileId: string } & IData;
+   *       extraParams?: IData;
+   *       downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
+   *     })} [downloadParams]
+   * @param {boolean} [enableDownloadTicket]
+   * @returns {*}  {Promise<IData>}
+   * @memberof FileUtil
+   */
+  async requestFile(
+    url: string,
+    responseType?: XMLHttpRequestResponseType,
+    downloadParams?: {
+      context: IContext;
+      params: IParams;
+      data: IData;
+      file: { fileId: string } & IData;
+      extraParams?: IData;
+      downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
+    },
+    enableDownloadTicket?: boolean,
+  ): Promise<IData> {
+    let tempDownloadUrl: string = url;
+    const tempEnableDownloadTicket =
+      this.getEnableDownloadTicket(enableDownloadTicket);
+    // 如果启用了下载凭证，并且传入了下载参数，则拼接带凭证的下载地址
+    if (tempEnableDownloadTicket && downloadParams) {
+      const { context, params, data, file, extraParams, downloadTicketParams } =
+        downloadParams;
+      const { downloadUrl } = ibiz.util.file.calcFileUpDownUrl(
+        context,
+        params,
+        data,
+        extraParams,
+      );
+      const downloadTicket = await ibiz.util.file.getDownloadTicket(
+        context,
+        params,
+        data,
+        file,
+        downloadTicketParams,
+      );
+
+      if (!downloadTicket) {
+        throw new RuntimeError(
+          'runtime.utils.fileUtil.getDownloadTicketFailed',
+        );
+      }
+      tempDownloadUrl = downloadUrl.replace('%fileId%', downloadTicket.ticket);
+    }
+
+    // 发送请求
+    const response = await ibiz.net.request(tempDownloadUrl, {
+      method: 'get',
+      responseType: responseType || 'blob',
+      baseURL: '', // 已经有 baseURL，不需要再写
+    });
+
+    if (response.status !== 200) {
+      throw new RuntimeError(ibiz.i18n.t('runtime.platform.failedDownload'));
+    }
+
+    if (!response.data) {
+      throw new RuntimeError(ibiz.i18n.t('runtime.platform.fileStreamData'));
+    }
+
+    return response.data;
   }
 }

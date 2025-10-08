@@ -23,43 +23,35 @@ export class NavPosIndexController extends PanelItemController<IPanelRawItem> {
   declare state: NavPosIndexState;
 
   /**
-   * 导航视图的modal
-   * @author lxm
-   * @date 2023-05-12 09:47:52
+   * @description 导航视图的modal
+   * @exposedoc
    * @type {{ [key: string]: IModal }}
    */
   viewModals: { [key: string]: IModal } = {};
 
   /**
-   * router对象
-   * @author lxm
-   * @date 2023-05-25 08:02:43
+   * @description router对象
    * @type {Router}
    */
   router?: Router;
 
   /**
-   * 是否关闭后自动跳转上一个页面
-   * @author lxm
-   * @date 2023-05-25 08:43:49
+   * @description 是否关闭后自动跳转上一个页面
+   * @exposedoc
    * @type {boolean}
    */
   autoGoLast: boolean = true;
 
   /**
-   * 自定义补充参数
-   *
-   * @author tony001
-   * @date 2025-01-21 16:01:25
+   * @description 自定义补充参数
+   * @exposedoc
    * @type {IData}
    */
   rawItemParams: IData = {};
 
   /**
-   * 无缓存
-   *
-   * @author tony001
-   * @date 2025-01-21 16:01:25
+   * @description 无缓存
+   * @exposedoc
    * @type {boolean}
    */
   noCache: boolean = false;
@@ -79,9 +71,8 @@ export class NavPosIndexController extends PanelItemController<IPanelRawItem> {
   }
 
   /**
-   * 当前视图的路由层级，非路由模式不存在。
-   * @author lxm
-   * @date 2023-05-09 12:46:26
+   * @description 当前视图的路由层级，非路由模式不存在。
+   * @exposedoc
    * @readonly
    */
   get routeDepth(): number | undefined {
@@ -89,9 +80,8 @@ export class NavPosIndexController extends PanelItemController<IPanelRawItem> {
   }
 
   /**
-   * 应用菜单控制器
-   * @author lxm
-   * @date 2023-05-10 08:41:42
+   * @description 应用菜单控制器
+   * @exposedoc
    * @readonly
    * @type {(IAppMenuController | undefined)}
    */
@@ -100,9 +90,8 @@ export class NavPosIndexController extends PanelItemController<IPanelRawItem> {
   }
 
   /**
-   * 改变显示视图
-   * @author lxm
-   * @date 2023-05-25 01:28:49
+   * @description 改变显示视图
+   * @exposedoc
    * @param {string} key
    */
   changeView(key: string): void {
@@ -183,9 +172,8 @@ export class NavPosIndexController extends PanelItemController<IPanelRawItem> {
   }
 
   /**
-   * 删除单个缓存
-   * @author lxm
-   * @date 2023-05-09 02:19:09
+   * @description 删除单个缓存
+   * @exposedoc
    * @param {string} key
    */
   removeCache(key: string): void {
@@ -208,9 +196,8 @@ export class NavPosIndexController extends PanelItemController<IPanelRawItem> {
   }
 
   /**
-   * 清空缓存
-   * @author lxm
-   * @date 2023-05-09 02:19:55
+   * @description 清空缓存
+   * @exposedoc
    */
   clearCache(): void {
     this.state.cacheKeys = [];
@@ -218,10 +205,8 @@ export class NavPosIndexController extends PanelItemController<IPanelRawItem> {
   }
 
   /**
-   * 关闭视图
-   * 走modal的dismiss,会走一遍视图内部的校验，不通过则不会关闭
-   * @author lxm
-   * @date 2023-05-25 03:10:23
+   * @description 关闭视图
+   * @exposedoc
    * @param {string} keys
    */
   async closeViewByKeys(keys: string[]): Promise<void> {
@@ -258,7 +243,8 @@ export class NavPosIndexController extends PanelItemController<IPanelRawItem> {
   }
 
   /**
-   * 返回上一个页面或上一层空白路由
+   * @description 返回上一个页面或上一层空白路由
+   * @exposedoc
    * @author lxm
    * @date 2023-05-25 06:46:27
    * @protected

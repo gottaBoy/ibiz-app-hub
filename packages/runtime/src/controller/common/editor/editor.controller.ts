@@ -175,6 +175,36 @@ export class EditorController<T extends IEditor = IEditor>
   }
 
   /**
+   * @description 获取下载凭证参数
+   * @readonly
+   * @type {{
+   *     appEntityTag?: string;
+   *     dataFieldTag?: string;
+   *   }}
+   * @memberof EditorController
+   */
+  get downloadTicketParams(): {
+    appEntityTag?: string;
+    dataFieldTag?: string;
+  } {
+    const downloadTicketParams = {};
+    if (!this.model.editorParams) {
+      return downloadTicketParams;
+    }
+    if (this.model.editorParams.appentitytag) {
+      Object.assign(downloadTicketParams, {
+        appEntityTag: this.model.editorParams.appentitytag,
+      });
+    }
+    if (this.model.editorParams.datafieldtag) {
+      Object.assign(downloadTicketParams, {
+        dataFieldTag: this.model.editorParams.datafieldtag,
+      });
+    }
+    return downloadTicketParams;
+  }
+
+  /**
    * @description 当前视图
    * @readonly
    * @type {IViewController}

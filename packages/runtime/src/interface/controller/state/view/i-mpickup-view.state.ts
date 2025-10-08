@@ -1,4 +1,5 @@
 import { IApiMPickupViewState } from '../../../api';
+import { IPickupViewState } from './i-pickup-view.state';
 import { IViewState } from './i-view.state';
 
 /**
@@ -8,14 +9,7 @@ import { IViewState } from './i-view.state';
  * @extends {IViewState}
  * @extends {IApiMPickupViewState}
  */
-export interface IMPickupViewState extends IViewState, IApiMPickupViewState {
-  /**
-   * 选中数据
-   *
-   * @author zk
-   * @date 2023-05-25 05:05:10
-   * @type {IData[]}
-   * @memberof IMPickupViewState
-   */
-  selectData: IData[];
-}
+export interface IMPickupViewState
+  extends IViewState,
+    IPickupViewState,
+    IApiMPickupViewState {}

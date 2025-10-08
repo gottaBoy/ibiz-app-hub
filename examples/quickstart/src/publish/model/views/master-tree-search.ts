@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Tree_search',
   deviewId: '478fb0860033e2531957608d1e26d221',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -55,6 +56,7 @@ export default {
           treeNodeType: 'STATIC',
           hasDETreeNodeRSs: true,
           enableQuickSearch: true,
+          expanded: true,
           name: '主数据',
           id: 'node',
         },
@@ -67,6 +69,7 @@ export default {
           appDataEntityId: 'web.master',
           treeNodeType: 'DE',
           enableQuickSearch: true,
+          expanded: true,
           name: '名称',
           id: 'node_1',
         },

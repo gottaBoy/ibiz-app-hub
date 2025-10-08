@@ -5,6 +5,7 @@ import {
   IHttpResponse,
 } from '@ibiz-template/core';
 import { IAppDataEntity } from '@ibiz/model-core';
+import { IApiAppService } from '../app';
 
 /**
  * @description 实体数据服务接口
@@ -25,6 +26,13 @@ export interface IApiAppDEService {
    * @memberof IApiAppDEService
    */
   readonly model: IAppDataEntity;
+
+  /**
+   * @description 应用服务
+   * @type {IApiAppService}
+   * @memberof IApiAppDEService
+   */
+  readonly app: IApiAppService;
 
   /**
    * @description 执行实体服务方法
@@ -210,5 +218,17 @@ export interface IApiAppDEService {
     context: IApiContext,
     params?: IApiData | IApiData[],
     params2?: IApiParams,
+  ): Promise<IHttpResponse>;
+
+  /**
+   * @description 创建下载凭证
+   * @param {IApiContext} context
+   * @param {{ srfossfileid: string }} [params] 文件标识
+   * @returns {*}  {Promise<IHttpResponse>}
+   * @memberof IApiAppDEService
+   */
+  createDownloadTicket(
+    context: IApiContext,
+    params: { srfossfileid: string },
   ): Promise<IHttpResponse>;
 }

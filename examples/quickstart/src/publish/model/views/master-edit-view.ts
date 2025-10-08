@@ -7,7 +7,8 @@ export default {
   openMode: 'POPUPMODAL',
   deviewCodeName: 'EditView',
   deviewId: 'bea2837d6993e60eddcb6d86c361fd66',
-  accUserMode: 2,
+  appWFId: 'workflow',
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
@@ -122,6 +123,41 @@ export default {
         {
           actionLevel: 100,
           noPrivDisplayMode: 2,
+          uiactionId: 'editview_saveandstartwfaction',
+          valid: true,
+          caption: '开始事件',
+          itemType: 'DEUIACTION',
+          tooltip: '开始事件',
+          showCaption: true,
+          showIcon: true,
+          id: 'tbitem13_saveandstart',
+        },
+        {
+          actionLevel: 100,
+          noPrivDisplayMode: 2,
+          uiactionId: 'editview_viewwfstepactoraction',
+          uiactionTarget: 'SINGLEKEY',
+          valid: true,
+          capLanguageRes: {
+            lanResTag: 'TBB.TEXT.*.VIEWWFSTEP',
+          },
+          caption: '当前流程步骤',
+          itemType: 'DEUIACTION',
+          sysImage: {
+            cssClass: 'sx-tb-stepactor',
+          },
+          tooltip: '当前流程步骤',
+          showCaption: true,
+          showIcon: true,
+          id: 'tbitem14',
+        },
+        {
+          itemType: 'SEPERATOR',
+          id: 'tbitem20',
+        },
+        {
+          actionLevel: 100,
+          noPrivDisplayMode: 2,
           uiactionId: 'editview_newaction',
           valid: true,
           capLanguageRes: {
@@ -167,6 +203,29 @@ export default {
           showCaption: true,
           showIcon: true,
           id: 'tbitem1',
+        },
+        {
+          actionLevel: 100,
+          noPrivDisplayMode: 2,
+          uiactionId: 'editview_printaction',
+          uiactionTarget: 'SINGLEKEY',
+          valid: true,
+          capLanguageRes: {
+            lanResTag: 'TBB.TEXT.*.PRINT',
+          },
+          caption: '打印',
+          itemType: 'DEUIACTION',
+          sysImage: {
+            cssClass: 'fa fa-print',
+            glyph: 'xf02f@FontAwesome',
+          },
+          tooltip: '打印',
+          tooltipLanguageRes: {
+            lanResTag: 'TBB.TOOLTIP.*.PRINT',
+          },
+          showCaption: true,
+          showIcon: true,
+          id: 'tbitem8',
         },
         {
           itemType: 'SEPERATOR',
@@ -305,6 +364,16 @@ export default {
         appDEMethodId: 'update',
         appDataEntityId: 'web.master',
         id: 'update',
+      },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
       },
       deformPages: [
         {
@@ -596,6 +665,37 @@ export default {
                   },
                   showCaption: true,
                   id: 'px',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'LEFT',
+                  labelWidth: 130,
+                  noPrivDisplayMode: 1,
+                  appDEFieldId: 'files',
+                  editor: {
+                    editorParams: {
+                      FILEEXTS: '',
+                      MAXFILESIZE: '',
+                      MINFILECNT: '',
+                      MAXFILECNT: '',
+                    },
+                    editorType: 'FILEUPLOADER',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'files',
+                  },
+                  allowEmpty: true,
+                  caption: '文件',
+                  codeName: 'files',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  showCaption: true,
+                  id: 'files',
                 },
               ],
               capLanguageRes: {

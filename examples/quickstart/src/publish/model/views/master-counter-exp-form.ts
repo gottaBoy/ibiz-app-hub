@@ -1,10 +1,10 @@
 export default {
   enableDirtyChecking: true,
-  showDataInfoBar: true,
   xdataControlName: 'form',
   loadDefault: true,
   deviewCodeName: 'counter_exp_form',
   deviewId: '3abc0360bc09f4f02a2f4d7b21d1ad38',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -19,7 +19,6 @@ export default {
       id: 'engine',
     },
   ],
-  appViewMsgGroupId: 'counter_exp_form',
   controls: [
     {
       xdataControlName: 'form',
@@ -64,6 +63,16 @@ export default {
         appDEMethodId: 'update',
         appDataEntityId: 'web.master',
         id: 'update',
+      },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
       },
       deformPages: [
         {
@@ -176,16 +185,6 @@ export default {
       id: 'web.master.main64',
     },
     {
-      codeName: 'counter_exp_form_datainfobar',
-      controlType: 'DATAINFOBAR',
-      appDataEntityId: 'web.master',
-      controlParam: {
-        id: 'datainfobar',
-      },
-      name: 'datainfobar',
-      id: 'counter_exp_form_datainfobar',
-    },
-    {
       capLanguageRes: {
         lanResTag: 'DE.LNAME.MASTER',
       },
@@ -213,7 +212,7 @@ export default {
   viewStyle: 'DEFAULT',
   viewType: 'DEEDITVIEW',
   enableDP: true,
-  showCaptionBar: true,
+  showCaptionBar: false,
   modelId: '3c09f070f3137559cf504ebd15ebb1b8',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERcounter_exp_form',

@@ -1,0 +1,12 @@
+export default {
+  id: 'web.master_calendar_logic_event',
+  codeName: 'master_calendar_logic_event',
+  openMode: 'INDEXVIEWTAB',
+  viewType: 'DECALENDARVIEW',
+  width: 0,
+  height: 0,
+  appDataEntityId: 'web.master',
+  redirectView: false,
+  modalOption: {},
+  appId: '',
+};

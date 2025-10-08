@@ -25,6 +25,7 @@ export class SubAppRefWriter extends ModelObjectWriter {
     _.w(d, 'refParam', s);
     _.w(d, 'refParam2', s);
     _.w(d, 'serviceId', s);
+    _.w(d, 'sysRefType', s);
 
     super.onFillDSL(c, s, d);
   }

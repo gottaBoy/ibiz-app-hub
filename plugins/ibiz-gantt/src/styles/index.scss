@@ -24,10 +24,17 @@
   // 主要颜色
   --gantt-color-white: var(--gantt-white, #fff);
   --gantt-color-black: var(--gantt-black, black);
-  --gantt-color-primary: var(--gantt-warning, #557da5);
+  --gantt-color-primary: var(--gantt-primary, #557da5);
 
   // 警示色
   --gantt-color-warning: var(--gantt-warning, #eca710);
+  --gantt-color-danger: var(--gantt-danger, #fa664b);
+  --gantt-color-danger-hover: var(--gantt-danger-hover, #f9391f);
+
+  // 链接线颜色
+  --gantt-color-linking: var(--gantt-linking, #557da5);
+  --gantt-color-link-path: var(--gantt-link-path, #b7b7b7);
+  --gantt-color-link-path-hover: var(--gantt-link-path-hover, #557da5);
 
 
   // 暗色主题

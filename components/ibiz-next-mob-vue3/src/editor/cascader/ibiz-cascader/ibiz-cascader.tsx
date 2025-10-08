@@ -11,6 +11,15 @@ import { CascaderEditorController } from '../cascader-editor.controller';
 import { IBizCommonRightIcon } from '../../common/right-icon/right-icon';
 import { usePopstateListener } from '../../../util';
 
+/**
+ * 移动端级联选择器
+ * @primary
+ * @description 使用van-cascader组件，用于选择具有级联关系的数据。支持编辑器类型包含：`移动端级联选择器`
+ * @editorparams {name:editorStyle,title:编辑器样式,parameterType:string,defaultvalue:default,description:值为default时，加载下级数据时，从节点的value属性获取值，否则从节点的data属性里的value上获取值}
+ * @editorparams {name:separator,title:分割符,parameterType:string,defaultvalue:'/',description:用于拼接选择的值}
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizCascader = defineComponent({
   name: 'IBizCascader',
   props: getCascaderProps<CascaderEditorController>(),

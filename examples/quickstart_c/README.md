@@ -56,7 +56,16 @@ iBiz前端全代码项目基于iBiz平台产出的模型，采用了模板技术
 $ pnpm install
 ```
 
-### 3. 启动
+### 3. 发布代码
+
+当模型更新后，通常需要发布代码查看最新效果，调整pub:code命令参数，其中m表示模型路径，o表示输出目录，app表示应用名称，tv表示模板版本，local-mode表示启用本地模式。
+
+```bash
+# "pub:code": "generate -m /root/workspace/ibizlab-plm/model -o ./ --app plmweb -tv 0.7.41-alpha.8 --local-mode",
+$ pnpm pub:code
+```
+
+### 4. 启动
 
 在工作空间下，执行启动命令。
 
@@ -66,17 +75,7 @@ $ pnpm run dev
 
 启动后，访问开发项目。
 
-### 3. 预览
-
-在工作空间下，执行预览命令。
-
-```bash
-$ pnpm run preview
-```
-
-启动后，预览开发项目。
-
-### 4. 打包
+### 5. 打包
 
 在工作空间下，执行打包命令。
 
@@ -85,6 +84,16 @@ $ pnpm run build
 ```
 
 打包完成，生成最终交付产物。
+
+### 6. 预览
+
+在工作空间下，执行预览命令。
+
+```bash
+$ pnpm run preview
+```
+
+启动后，预览开发项目。
 
 ## 成果物结构
 

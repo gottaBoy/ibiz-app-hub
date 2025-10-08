@@ -3,7 +3,8 @@ export default {
   loadDefault: true,
   showDataInfoBar: true,
   deviewCodeName: 'tab_ctrl_federation',
-  deviewId: '39c46c8f5d51f8cbdf748b10d22454ad',
+  deviewId: 'a33f81b51e2506201c55372c60e02438',
+  appWFId: 'workflow',
   accUserMode: 2,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -41,7 +42,7 @@ export default {
       controlParam: {
         id: 'tabexppanel',
       },
-      modelId: 'ef1f838cb555cb487db00f21a24887d5',
+      modelId: '7cd3d0fb4f467ca1ded699c2077b9f7c',
       modelType: 'PSDEDRTAB',
       name: 'tabexppanel',
       id: 'data_relation6',
@@ -75,7 +76,7 @@ export default {
   viewType: 'DETABEXPVIEW',
   enableDP: true,
   showCaptionBar: false,
-  modelId: '0ffc108d201e4a233655b57541360eb6',
+  modelId: 'a214ca4898553ce0d8c856c45010e06c',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERtab_ctrl_federation',
   id: 'web.master_tab_ctrl_federation',

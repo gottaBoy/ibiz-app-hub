@@ -71,6 +71,9 @@ export const initStore = (emit: any) => {
   }) as LinkingItem;
   provide('linking', linking);
 
+  const showLink = ref(true);
+  provide('showLink', showLink);
+
   const moveLineLeft = ref(0);
   provide('moveLineLeft', moveLineLeft);
 
@@ -154,6 +157,11 @@ export const useStore = () => {
      * 鼠标创建的连接中的连线数据
      */
     linking: inject('linking') as LinkingItem,
+
+    /**
+     * 显示连线
+     */
+    showLink: inject('showLink') as Ref<boolean>,
 
     /**
      * 移动线的left值

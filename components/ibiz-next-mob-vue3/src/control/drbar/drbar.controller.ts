@@ -31,6 +31,10 @@ export class DRBarController
   extends ControlController<IDEDRBar, IDRBarState, IDRBarEvent>
   implements IDRBarController
 {
+  setActive(_name: string): void {
+    throw new Error('Method not implemented.');
+  }
+
   /**
    * 计数器对象
    * @author lxm
@@ -57,7 +61,9 @@ export class DRBarController
    * @Date: 2024-01-25 16:03:00
    */
   get viewNavPos(): IPanelItemController | undefined {
-    return this.view.layoutPanel?.panelItems.view_nav_pos;
+    return this.view.layoutPanel?.panelItems.view_nav_pos as
+      | IPanelItemController
+      | undefined;
   }
 
   /**

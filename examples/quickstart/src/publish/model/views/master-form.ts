@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'form',
   deviewId: '0b3d9dc7cc8909b14e53de252fde4691',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -33,19 +34,29 @@ export default {
           id: 'info',
         },
         {
-          caption: '编辑表单_hover',
-          appViewId: 'web.master_form_hover',
+          caption: '编辑模式',
+          appViewId: 'web.master_editform_hover_tab_exp_view',
           id: 'hover',
         },
         {
-          caption: '编辑表单_多数据部件',
-          appViewId: 'web.master_form_mctrl',
+          caption: '多数据部件',
+          appViewId: 'web.master_editform_mdctrl_exp',
           id: 'mctrl',
         },
         {
           caption: '布局',
           appViewId: 'web.master_form_layout',
           id: 'layout',
+        },
+        {
+          caption: '分组关闭模式',
+          appViewId: 'web.master_editform_group_close_mode',
+          id: 'group_close_mode',
+        },
+        {
+          caption: '分组折叠',
+          appViewId: 'web.master_editform_group_collapse',
+          id: 'group_collapse',
         },
         {
           caption: '逻辑',
@@ -66,6 +77,31 @@ export default {
           caption: '值显示',
           appViewId: 'web.master_form_value_display',
           id: 'value_display',
+        },
+        {
+          caption: '锚点',
+          appViewId: 'web.master_anchor_tab_exp_view',
+          id: 'anchor',
+        },
+        {
+          caption: '自动保存',
+          appViewId: 'web.master_editform_autosave',
+          id: 'autosave',
+        },
+        {
+          caption: '取消变更',
+          appViewId: 'web.master_cancel_change',
+          id: 'cancel_change',
+        },
+        {
+          caption: '事件及调用',
+          appViewId: 'web.master_form_event_tab_exp_view',
+          id: 'event',
+        },
+        {
+          caption: '校验模式',
+          appViewId: 'web.master_form_validatemode',
+          id: 'validatemode',
         },
       ],
       dataRelationTag: 'form_DR',

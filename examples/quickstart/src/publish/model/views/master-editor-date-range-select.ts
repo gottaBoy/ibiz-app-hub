@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'editor_date_range_select',
   deviewId: '4e767484cf6ffc9dd427a593f537a4ef',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -65,6 +66,16 @@ export default {
         appDataEntityId: 'web.master',
         id: 'update',
       },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
+      },
       deformPages: [
         {
           layout: {
@@ -84,7 +95,9 @@ export default {
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
+                    editorStyle: 'SWITCHUNIT',
                     editorType: 'DATERANGE',
+                    sysPFPluginId: 'switchunit',
                     valueType: 'SIMPLE',
                     editable: true,
                     id: 'formitem',
@@ -95,8 +108,7 @@ export default {
                   detailStyle: 'DEFAULT',
                   detailType: 'FORMITEM',
                   layoutPos: {
-                    colLG: 6,
-                    colMD: 6,
+                    colMD: 24,
                     layout: 'TABLE_24COL',
                   },
                   id: 'formitem',
@@ -112,6 +124,216 @@ export default {
               },
               showCaption: true,
               id: 'group1',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      switchunit: 'false',
+                    },
+                    editorStyle: 'SWITCHUNIT',
+                    editorType: 'DATERANGE',
+                    sysPFPluginId: 'switchunit',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem1',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem1',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用switchunit参数控制编辑器是否显示时间单位选择组件。当前编辑器不会显示时间单位选择组件',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem1',
+                  },
+                  codeName: 'rawitem1',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem1',
+                },
+              ],
+              caption: '时间单位切换',
+              codeName: 'grouppanel1',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel1',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      defaultunit: 'WEEK',
+                    },
+                    editorStyle: 'SWITCHUNIT',
+                    editorType: 'DATERANGE',
+                    sysPFPluginId: 'switchunit',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem2',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem2',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用defaultunit指定编辑器默认时间单位，可选值有DAY、WEEK、MONTH、QUARTER、YEAR，DAY代表天，WEEK代表周，MONTH代表月，QUARTER代表季度，YEAR代表年。当前编辑器默认时间单位是周',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem2',
+                  },
+                  codeName: 'rawitem2',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem2',
+                },
+              ],
+              caption: '默认时间单位',
+              codeName: 'grouppanel2',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel2',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      emitmode: 'TIME',
+                    },
+                    editorStyle: 'SWITCHUNIT',
+                    editorType: 'DATERANGE',
+                    sysPFPluginId: 'switchunit',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem3',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem3',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem3',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用emitmode参数指定编辑器的抛值模式。当前编辑器的emitmode参数为TIME',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem3',
+                  },
+                  codeName: 'rawitem3',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem3',
+                },
+              ],
+              caption: '值模式',
+              codeName: 'grouppanel3',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel3',
             },
             {
               dataType: 25,

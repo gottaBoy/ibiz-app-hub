@@ -4,9 +4,17 @@ import { createUUID } from 'qx-util';
 import { PanelVideoPlayerController } from './panel-video-player.controller';
 import './panel-video-player.scss';
 
+/**
+ * 视频播放器
+ * @primary
+ * @description  可配置视频地址播放视频。
+ */
 export const PanelVideoPlayer = defineComponent({
   name: 'IBizPanelVideoPlayer',
   props: {
+    /**
+     * @description 视频控制器
+     */
     controller: {
       type: PanelVideoPlayerController,
       required: true,

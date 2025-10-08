@@ -2,7 +2,7 @@ export default {
   id: 'web.master_grid_toolbar',
   codeName: 'master_grid_toolbar',
   openMode: 'INDEXVIEWTAB',
-  viewType: 'DEGRIDVIEW',
+  viewType: 'DETABEXPVIEW',
   width: 0,
   height: 0,
   appDataEntityId: 'web.master',

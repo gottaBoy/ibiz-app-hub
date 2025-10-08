@@ -3,7 +3,7 @@ export default {
   codeName: 'category_edit_view',
   openMode: 'POPUPMODAL',
   viewType: 'DEEDITVIEW',
-  width: 800,
+  width: 1300,
   height: 600,
   appDataEntityId: 'web.category',
   redirectView: false,

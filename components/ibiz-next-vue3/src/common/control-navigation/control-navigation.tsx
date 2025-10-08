@@ -147,14 +147,12 @@ export const IBizControlNavigation = defineComponent({
     });
 
     const renderNavView = () => {
-      if (navViewMsg.value) {
-        if (!navViewMsg.value.viewId) return;
-        return h(resolveComponent('IBizViewShell'), {
-          ...navViewMsg.value,
-          isEmbedCtrlNav: isEmbedCtrlNav.value,
-          class: ns.e('nav-view'),
-        });
-      }
+      if (!navViewMsg.value?.viewId) return;
+      return h(resolveComponent('IBizViewShell'), {
+        ...navViewMsg.value,
+        isEmbedCtrlNav: isEmbedCtrlNav.value,
+        class: ns.e('nav-view'),
+      });
     };
 
     return {

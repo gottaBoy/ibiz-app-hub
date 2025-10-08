@@ -1,4 +1,5 @@
-import { isString } from 'lodash';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { isObject, isString } from 'lodash';
 import { computed, type ExtractPropTypes, watch, type Ref } from 'vue';
 import type rootProps from '@/components/root/rootProps';
 import Variables from '@/constants/vars';
@@ -6,10 +7,12 @@ import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
 import useGanttHeader from './useGanttHeader';
 import { GanttHeader } from '@/models/param';
+import useLinks from './useLinks';
 
 export default () => {
   const store = useStore();
   const { setGanttHeaders } = useGanttHeader();
+  const { updateLinks } = useLinks();
 
   function initData(
     data: Ref<any[]>,
@@ -19,6 +22,8 @@ export default () => {
       dataId: props.dataId,
       isExpand: !props.showExpand || props.expandAll,
       expandLabel: props.expandKey,
+      draggableLabel:
+        (isObject(props.draggable) && props.draggable.draggableStateKey) || '',
       startLabel: props.startKey,
       endLabel: props.endKey,
       children: props.children,
@@ -44,6 +49,15 @@ export default () => {
         store.$data.update(val.value, options);
 
         setGanttHeaders();
+        updateLinks(props.links);
+      },
+      { deep: true },
+    );
+
+    watch(
+      () => props.links,
+      () => {
+        updateLinks(props.links);
       },
       { deep: true },
     );
@@ -52,7 +66,7 @@ export default () => {
       () => props.showExpand,
       () => {
         store.$data.updateExpand(true);
-        store.$links.update(store.$data.flatData);
+        updateLinks(props.links);
       },
     );
 
@@ -60,7 +74,7 @@ export default () => {
       () => props.expandAll,
       val => {
         store.$data.updateExpand(!props.showExpand || val);
-        store.$links.update(store.$data.flatData);
+        updateLinks(props.links);
       },
     );
 

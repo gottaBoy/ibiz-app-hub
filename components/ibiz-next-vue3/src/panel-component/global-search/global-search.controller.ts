@@ -9,8 +9,13 @@ import {
   PanelItemController,
 } from '@ibiz-template/runtime';
 import { notNilEmpty, createUUID } from 'qx-util';
-import { IPanelRawItem, IAppFunc, IAppMenuItem } from '@ibiz/model-core';
-import { IHttpResponse, recursiveIterate } from '@ibiz-template/core';
+import {
+  IPanelRawItem,
+  IAppFunc,
+  IAppMenuItem,
+  IAppMenu,
+} from '@ibiz/model-core';
+import { IHttpResponse } from '@ibiz-template/core';
 import { GlobalSearchState, ISearchItem } from './global-search.state';
 
 /**
@@ -42,11 +47,11 @@ export class GlobalSearchController extends PanelItemController<IPanelRawItem> {
   /**
    * @description 自定义参数
    * @exposedoc
-   * @protected
+   * @public
    * @type {IData}
    * @memberof GlobalSearchController
    */
-  protected rawItemParams: IData = {};
+  public rawItemParams: IData = {};
 
   /**
    * @description 搜索历史缓存标识
@@ -142,34 +147,57 @@ export class GlobalSearchController extends PanelItemController<IPanelRawItem> {
   }
 
   /**
-   * 初始化全局搜索项
-   *
-   * @protected
+   * @description 获取全局搜索应用功能
+   * @param {IAppMenuItem[]} appMenuItems
+   * @returns {*}  {Promise<IAppFunc[]>}
    * @memberof GlobalSearchController
    */
-  protected async initGlobalSearchItem(): Promise<void> {
-    const appMenu = getControl(this.panel.view.model, 'appmenu');
-    if (!appMenu) return;
-    const appFuncs: IAppFunc[] = [];
-    recursiveIterate(
-      appMenu,
-      (menuItem: IAppMenuItem) => {
+  async getSearchFunc(appMenuItems: IAppMenuItem[]): Promise<IAppFunc[]> {
+    const result: IAppFunc[] = [];
+    const promises = appMenuItems.map(async menuItem => {
+      try {
+        if (menuItem.appMenuItems) {
+          const subFuncs = await this.getSearchFunc(menuItem.appMenuItems);
+          result.push(...subFuncs);
+          return;
+        }
         if (menuItem.appFuncId) {
-          const app = ibiz.hub.getApp(menuItem.appId);
+          let app = ibiz.hub.getApp(menuItem.appId);
+          if (!app) {
+            app = await ibiz.hub.getAppAsync(menuItem.appId);
+          }
           const appFunc = app.getAppFunc(menuItem.appFuncId);
           if (
             appFunc &&
             appFunc.appFuncType === 'SEARCH' &&
             appFunc.appDEACModeId &&
             appFunc.appDataEntityId
-          )
-            appFuncs.push(appFunc);
+          ) {
+            result.push(appFunc);
+          }
         }
-      },
-      {
-        childrenFields: ['appMenuItems'],
-      },
+      } catch (err) {
+        console.error(`计算菜单应用功能异常: ${menuItem.appFuncId}`, err);
+      }
+    });
+    await Promise.all(promises);
+    return result;
+  }
+
+  /**
+   * 初始化全局搜索项
+   *
+   * @protected
+   * @memberof GlobalSearchController
+   */
+  protected async initGlobalSearchItem(): Promise<void> {
+    const appMenu: IAppMenu | undefined = getControl(
+      this.panel.view.model,
+      'appmenu',
     );
+    if (!appMenu) return;
+    const appMenuItems = appMenu.appMenuItems || [];
+    const appFuncs: IAppFunc[] = await this.getSearchFunc(appMenuItems);
     await Promise.all(
       appFuncs.map(async func => {
         const deACMode = await getDeACMode(

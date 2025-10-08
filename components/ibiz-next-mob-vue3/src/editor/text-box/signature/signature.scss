@@ -1,0 +1,159 @@
+/* stylelint-disable length-zero-no-unit */
+$signature: (
+  'min-height': 120px,
+);
+$signature-overlay: (
+  // 适配浏览器安全距离
+  'padding-bottom': 0px
+);
+
+@include b('signature') {
+  @include set-component-css-var('signature', $signature);
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: getCssVar('signature', 'min-height');
+  overflow: hidden;
+  border: none;
+  border-radius: getCssVar('border-radius', 'large');
+
+  @include e('modal') {
+    position: absolute;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    @include m('background') {
+      width: 100%;
+      height: 100%;
+      background-color: getCssVar('color', 'black');
+      opacity: 0.1;
+    }
+    @include m('caption') {
+      position: absolute;
+      color: getCssVar('color', 'text', 2);
+    }
+    @include m('toolbar') {
+      position: absolute;
+      top: getCssVar('spacing', 'tight');
+      right: getCssVar('spacing', 'tight');
+
+      .van-button {
+        width: getCssVar('spacing', 'loose');
+        height: auto;
+        height: getCssVar('spacing', 'loose');
+        background-color: var(--van-uploader-delete-background);
+        border: var(--van-uploader-delete-background);
+        opacity: 0.6;
+
+        & + .van-button {
+          margin-left: getCssVar('spacing', 'loose');
+        }
+      }
+    }
+  }
+
+  @include e('content') {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+  }
+
+  // 只读逻辑，所有按钮不显示
+  @include e('readonly') {
+    .#{bem('signature__modal--toolbar')} {
+      display: none;
+    }
+  }
+}
+
+@include b('signature-overlay') {
+  @include set-component-css-var('signature-overlay', $signature-overlay);
+
+  position: absolute;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  background-color: getCssVar(color, bg, 1);
+  opacity: 0;
+
+  @include when('full-screen') {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    width: 100vw;
+    height: 100vh;
+    opacity: 1;
+
+    @include e('container') {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc(100vh - #{getCssVar('signature-overlay', 'padding-bottom')});
+      height: 100vw;
+      transform: rotate(90deg) translateY(-100%);
+      transform-origin: top left;
+    }
+    @include e('header') {
+      position: absolute;
+      z-index: 6;
+      padding: getCssVar('spacing', 'extra-tight');
+      text-align: left;
+    }
+
+    @include e('footer') {
+      position: absolute;
+      right: getCssVar('spacing', 'tight');
+      bottom: getCssVar('spacing', 'base');
+      z-index: 6;
+
+      .van-button {
+        height: auto;
+        padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'loose');
+        font-size: getCssVar('font-size', 'header-6');
+
+        & + .van-button {
+          margin-left: getCssVar('spacing', 'loose');
+        }
+      }
+    }
+
+    @include e('pad') {
+      $some-value: 100vw;
+      $some-value2: 100vh;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - #{getCssVar('signature-overlay', 'padding-bottom')});
+      transform: rotate(-90deg) translateX(-100%);
+      transform-origin: top left;
+    }
+  }
+
+  // 只读逻辑，所有按钮不显示
+  @include when('readonly') {
+    .#{bem('signature-overlay__header')},
+    .#{bem('signature-overlay__footer')} {
+      display: none;
+    }
+
+    .#{bem('signature-pad')} {
+      pointer-events: none;
+    }
+  }
+
+  // 禁用逻辑，不能再签名，按钮禁用
+  @include when('disabled') {
+    .#{bem('signature-pad')} {
+      pointer-events: none;
+    }
+  }
+}

@@ -12,13 +12,25 @@ import { useRoute, useRouter } from 'vue-router';
 import { NavPosIndexController } from './nav-pos-index.controller';
 import './nav-pos-index.scss';
 
+/**
+ * 首页导航占位
+ * @primary
+ * @description 首页中视图导航组件，存储导航视图信息与缓存。
+ * @panelitemparams {name:expcache,parameterType:string,defaultvalue:-,description:当值为NO_CACHE时禁用缓存，即每次导航切换时都是重新绘制新的视图，否则使用keepAlive包裹绘制的导航视图}
+ */
 export const NavPosIndex = defineComponent({
   name: 'IBizNavPosIndex',
   props: {
+    /**
+     * @description 首页导航占位模型数据
+     */
     modelData: {
       type: Object as PropType<IPanelRawItem>,
       required: true,
     },
+    /**
+     * @description 首页导航占位控制器
+     */
     controller: {
       type: NavPosIndexController,
       required: true,

@@ -52,6 +52,16 @@ $control-multieditviewpanel: (
           }
         }
       }
+
+      .el-tabs__new-tab {
+        display: flex;
+        align-items: center;
+        width: auto;
+        height: var(--el-tabs-header-height);
+        margin: 0;
+        border: 0;
+        border-bottom: 2px solid var(--el-border-color-light);
+      }
     }
   }
 

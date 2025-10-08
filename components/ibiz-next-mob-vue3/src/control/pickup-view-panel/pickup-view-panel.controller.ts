@@ -1,3 +1,4 @@
+import { IApiData } from '@ibiz-template/core';
 import {
   ControlController,
   convertNavData,
@@ -26,6 +27,10 @@ export class PickupViewPanelController
   >
   implements IPickupViewPanelController
 {
+  setSelectedData(_items: IApiData[]): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
   /**
    * 嵌入视图控制器
    *

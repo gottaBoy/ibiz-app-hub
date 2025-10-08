@@ -206,4 +206,19 @@ export interface IApiMDControlController<
    * @memberof IApiMDControlController
    */
   execGroup(arg: IApiMDGroupParams[], params?: IApiParams): Promise<void>;
+
+  /**
+   * @description 设置选中数据
+   * @param {IApiData[]} items
+   * @memberof IApiMDControlController
+   */
+  setSelectedData(items: IApiData[]): void;
+
+  /**
+   * @description 新建行
+   * @param {IApiMDCtrlLoadParams} [args]
+   * @returns {*}  {Promise<void>}
+   * @memberof IApiMDControlController
+   */
+  newRow(args?: IApiMDCtrlLoadParams): Promise<void>;
 }

@@ -11,6 +11,7 @@ import {
 import {
   ChatSuggestionParser,
   createUUID,
+  generateHashWithText,
   IndexedDBUtil,
   MaterialResourceParser,
 } from '../../utils';
@@ -108,6 +109,13 @@ export class AiChatController {
   readonly topic: ITopic | undefined = undefined;
 
   /**
+   * @description 聊天sessionid
+   * @type {string}
+   * @memberof AiChatController
+   */
+  chatSessionid: string = '';
+
+  /**
    * 聊天窗触发提问回调
    *
    * @author tony001
@@ -131,6 +139,11 @@ export class AiChatController {
     this.appDataEntityId = opts.appDataEntityId;
     this.topicId = opts.topicId;
     this.topic = opts.topic;
+    if (this.topicId) {
+      this.chatSessionid = generateHashWithText(this.topicId);
+    } else {
+      this.chatSessionid = generateHashWithText(createUUID());
+    }
     this.fecthHistory();
   }
 
@@ -167,6 +180,7 @@ export class AiChatController {
     const result = await this.opts.history(this.context, this.params, {
       appDataEntityId: this.appDataEntityId,
       appendCurData: this.opts.appendCurData,
+      sessionid: this.chatSessionid,
     });
     // 存在附加内容，在请求历史记录后，需要附加当前编辑内容作为用户消息
     if (result && this.opts.appendCurContent) {
@@ -276,7 +290,7 @@ export class AiChatController {
       this.opts
         .recommendPrompt(this.context, this.params, {
           appDataEntityId: this.appDataEntityId,
-          message: { messages: [data] },
+          message: { messages: [data], sessionid: this.chatSessionid },
         })
         .then(suggestions => {
           if (suggestions && (suggestions as any).content) {
@@ -382,6 +396,7 @@ export class AiChatController {
         this.messages.value
           .filter(item => item.type !== 'ERROR')
           .map(item => item._origin),
+        this.chatSessionid,
       );
       if (this.opts.action) {
         this.opts.action('question', input);
@@ -463,6 +478,7 @@ export class AiChatController {
           this.messages.value
             .filter(item => item.type !== 'ERROR')
             .map(item => item._origin),
+          this.chatSessionid,
         );
       } else if (i === this.messages.value.length - 1) {
         this.messages.value.pop();
@@ -475,6 +491,7 @@ export class AiChatController {
           this.messages.value
             .filter(item => item.type !== 'ERROR')
             .map(item => item._origin),
+          this.chatSessionid,
         );
       } else {
         const lastques = this.messages.value[i - 1].content;
@@ -526,6 +543,7 @@ export class AiChatController {
     this.opts.history(this.context, this.params, {
       appDataEntityId: this.appDataEntityId,
       appendCurData: this.opts.appendCurData,
+      sessionid: this.chatSessionid,
     });
   }
 

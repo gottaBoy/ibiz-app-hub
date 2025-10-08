@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'map',
   deviewId: '5a6593f9a8dd2c7005d1d04501d1b76d',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -23,7 +24,7 @@ export default {
     {
       dedrtabPages: [
         {
-          caption: '常规',
+          caption: '基础',
           appViewId: 'web.master_map_base',
           id: 'base',
         },
@@ -33,9 +34,49 @@ export default {
           id: 'built_in_nav',
         },
         {
-          caption: '地图_自定义',
-          appViewId: 'web.master_map_user',
-          id: 'user',
+          caption: '地图样式',
+          appViewId: 'web.master_map_mapstyle',
+          id: 'style',
+        },
+        {
+          caption: '自定义条件',
+          appViewId: 'web.master_map_custom_cond',
+          id: 'cond',
+        },
+        {
+          caption: '提示框样式',
+          appViewId: 'web.master_map_tooltip_style',
+          id: 'tooltip',
+        },
+        {
+          caption: '事件及调用',
+          appViewId: 'web.master_map_event_and_call',
+          id: 'event_and_call',
+        },
+        {
+          caption: '禁止下钻',
+          appViewId: 'web.master_map_drilldown',
+          id: 'drill',
+        },
+        {
+          caption: '指定区域',
+          appViewId: 'web.master_map_area_deafult',
+          id: 'area',
+        },
+        {
+          caption: '自定义动画',
+          appViewId: 'web.master_map_animation',
+          id: 'animation',
+        },
+        {
+          caption: '基础路径',
+          appViewId: 'web.master_map_baseurl',
+          id: 'baseurl',
+        },
+        {
+          caption: '全屏功能',
+          appViewId: 'web.master_map_fullscreen',
+          id: 'fullscreen',
         },
       ],
       dataRelationTag: 'map_DR',

@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'treeview',
   deviewId: 'c17f084b1e2f8cdef24f0ad7dfc5a878',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -28,8 +29,8 @@ export default {
           id: 'base',
         },
         {
-          caption: '数据源',
-          appViewId: 'web.master_tree_datasource',
+          caption: '实体节点',
+          appViewId: 'web.master_tree_entitynode',
           id: 'data_source',
         },
         {
@@ -39,13 +40,13 @@ export default {
         },
         {
           caption: '导航传参',
-          appViewId: 'web.master_treeview_navparams',
+          appViewId: 'web.master_treeview_navparams_tabexpview',
           id: 'pass_parameters',
         },
         {
-          caption: '右键菜单',
-          appViewId: 'web.master_tree_contextmenu',
-          id: 'right_click',
+          caption: '上下文菜单',
+          appViewId: 'web.master_tree_view_contextmenu',
+          id: 'context',
         },
         {
           caption: '拖拽',
@@ -53,18 +54,8 @@ export default {
           id: 'drag_and_drop',
         },
         {
-          caption: '树表格',
-          appViewId: 'web.region_tree_grid_view',
-          id: 'tree_table',
-        },
-        {
-          caption: '甘特图',
-          appViewId: 'web.master_gantt_view',
-          id: 'gantt',
-        },
-        {
           caption: '内置导航',
-          appViewId: 'web.master_treeview_nav',
+          appViewId: 'web.master_tree_nax_tabexpview',
           id: 'built_in_nav',
         },
         {
@@ -73,8 +64,69 @@ export default {
           id: 'css_and_icon',
         },
         {
+          caption: '树选择',
+          appViewId: 'web.master_tree_select',
+          id: 'tree_select',
+        },
+        {
+          caption: '加载更多模式',
+          appViewId: 'web.master_tree_loadmore',
+          id: 'tree_loadmore',
+        },
+        {
+          caption: '节点新建与编辑',
+          appViewId: 'web.master_tree_node_newedit',
+          id: 'tree_newedit',
+        },
+        {
+          caption: '树节点关系搜索模式',
+          appViewId: 'web.master_tree_noderssearch',
+          id: 'tree_noderssearch',
+        },
+        {
+          caption: '绘制器',
+          appViewId: 'web.master_tree_render',
+          id: 'tree_render',
+        },
+        {
+          caption: '树级联选择',
+          appViewId: 'web.master_tree_cascadeselectedit',
+          id: 'tree_cascadeselect',
+        },
+        {
+          caption: '上下文菜单触发器显示模式',
+          appViewId: 'web.master_tree_menushowmode',
+          id: 'tree_menushowmode',
+        },
+        {
+          caption: '阻止右键点击弹出上下文菜单',
+          appViewId: 'web.master_tree_contextmenurightclickinvoke',
+          id: 'tree_contextmenurightclickinvoke',
+        },
+        {
+          caption: '刷新模式',
+          appViewId: 'web.master_tree_refreshmode',
+          name: 'Tree_refreshmode',
+          id: 'tree_refreshmode',
+        },
+        {
+          caption: '计数器',
+          appViewId: 'web.master_tree_counter',
+          id: 'counter',
+        },
+        {
+          caption: '计数器禁用',
+          appViewId: 'web.master_tree_counter_disabled',
+          id: 'counter_disabled',
+        },
+        {
+          caption: '节点数据源',
+          appViewId: 'web.master_tree_datasource_exp',
+          id: 'node_datasource',
+        },
+        {
           caption: '事件及调用',
-          appViewId: 'web.master_doing_custom_view',
+          appViewId: 'web.master_tree_eventcall',
           id: 'event_and_call',
         },
       ],

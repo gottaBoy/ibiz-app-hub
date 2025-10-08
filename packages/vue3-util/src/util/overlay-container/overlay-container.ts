@@ -4,6 +4,7 @@ import { QXEvent } from 'qx-util';
 import { IOverlayContainer } from '@ibiz-template/runtime';
 import { App, Component, h, VNode } from 'vue';
 import { RuntimeError } from '@ibiz-template/core';
+import { isElement } from 'lodash-es';
 
 /**
  * 全局弹出承载组件
@@ -13,7 +14,9 @@ import { RuntimeError } from '@ibiz-template/core';
  * @export
  * @class OverlayContainer
  */
-export class OverlayContainer<O> implements IOverlayContainer {
+export class OverlayContainer<O extends IData = IData>
+  implements IOverlayContainer
+{
   protected vm?: App;
 
   /**
@@ -82,13 +85,17 @@ export class OverlayContainer<O> implements IOverlayContainer {
     const self = this;
     const { render, opts } = this;
     const container = document.createElement('div');
-    document.body.appendChild(container);
+    let appendTo: HTMLElement = document.body;
+    if (isElement(opts?.appendTo)) {
+      appendTo = opts?.appendTo;
+    }
+    appendTo.appendChild(container);
     const vm = OverlayContainer.createVueApp({
       mounted() {
         self.modal = this.$refs.root;
       },
       unmounted() {
-        document.body.removeChild(container);
+        appendTo.removeChild(container);
         self.evt.emit('dismiss', self.result);
       },
       render() {

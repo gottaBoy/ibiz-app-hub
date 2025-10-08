@@ -18,6 +18,7 @@ import {
   routerCallback,
 } from '@ibiz-template/vue3-util';
 import { Router } from 'vue-router';
+import { isNil } from 'ramda';
 import { FloatingUIConfig } from '../app-popover/app-popover-component';
 
 /**
@@ -60,12 +61,16 @@ export class OpenViewUtil implements IOpenViewUtil {
     opts: IData = {},
   ): Promise<IModalData> {
     const appView = await ibiz.hub.config.view.get(appViewId!);
-    const { path } = await generateRoutePath(
-      appView,
-      this.router.currentRoute.value,
-      context,
-      params,
-    );
+    const route = this.router.currentRoute.value;
+    const { path } = await generateRoutePath(appView, route, context, params);
+    // 配置mobHomeRouteMode为replace，视图位于home视图下，且界面行为中未配置modaloption.replace时，设置replace为true
+    if (
+      route.meta.home &&
+      isNil(opts.replace) &&
+      ibiz.config.mob.mobHomeRouteMode === 'replace'
+    ) {
+      opts.replace = true;
+    }
     return routerCallback.open(this.router, path, opts);
   }
 

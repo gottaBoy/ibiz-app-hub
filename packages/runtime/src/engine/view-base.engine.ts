@@ -322,6 +322,10 @@ export class ViewEngineBase implements IViewEngine {
       await searchForm.reset();
       return null;
     }
+    if (key === SysUIActionTag.CANCEL_CHANGES) {
+      await this.cancelChanges({ targetState: 'INIT' });
+      return null;
+    }
     return undefined;
   }
 
@@ -368,6 +372,24 @@ export class ViewEngineBase implements IViewEngine {
     }${items.join('/')}`;
     const result = ibiz.util.text.copy(path);
     return { ok: result };
+  }
+
+  /**
+   * @description 取消变更，'UNDO' | 'REDO'暂未支持
+   * @param {({
+   *       targetState: 'INIT' | 'UNDO' | 'REDO';
+   *     })} [args={ targetState: 'INIT' }] 目标状态，初始化状态|撤销上一步操作|重做下一步操作
+   * @returns {*}  {Promise<void>}
+   * @memberof ViewEngineBase
+   */
+  async cancelChanges(
+    args: {
+      targetState: 'INIT' | 'UNDO' | 'REDO';
+    } = { targetState: 'INIT' },
+  ): Promise<void> {
+    const sessionId = this.view.context.srfsessionid;
+    const app = ibiz.hub.getApp(this.view.context.srfappid);
+    app.deService.cancelUIDomainDChanges(sessionId, args.targetState);
   }
 
   /**

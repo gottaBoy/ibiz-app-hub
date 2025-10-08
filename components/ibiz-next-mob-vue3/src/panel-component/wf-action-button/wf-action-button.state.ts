@@ -11,10 +11,8 @@ import { PanelItemState } from '@ibiz-template/runtime';
  */
 export class WFActionButtonState extends PanelItemState {
   /**
-   * 工作流按钮数组
-   *
-   * @author zk
-   * @date 2023-11-09 11:11:49
+   * @description 工作流按钮数组
+   * @exposedoc
    * @type {IData[]}
    * @memberof WFActionButtonState
    */

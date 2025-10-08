@@ -20,8 +20,8 @@ export class PanelAppTitleController extends PanelItemController<IPanelRawItem> 
   }
 
   /**
-   * 面板控制器
-   *
+   * @description 面板控制器
+   * @exposedoc
    * @type {ViewLayoutPanelController}
    * @memberof PanelAppTitleController
    */
@@ -29,6 +29,7 @@ export class PanelAppTitleController extends PanelItemController<IPanelRawItem> 
 
   /**
    * @description 自定义补充参数
+   * @exposedoc
    * @type {IData}
    * @memberof PanelAppTitleController
    */

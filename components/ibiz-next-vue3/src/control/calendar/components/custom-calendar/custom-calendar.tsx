@@ -1,11 +1,11 @@
-import { defineComponent, SetupContext, onMounted } from 'vue';
+import { defineComponent, SetupContext } from 'vue';
 import dayjs from 'dayjs';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { showTitle } from '@ibiz-template/core';
 import CalendarDaily from '../calendar-daily';
 import CalendarWeek from '../calendar-week';
 import CalendarUser from '../calendar-user';
-import { useCustomCalendar } from './use-custom-calendar';
+import { useCustomCalendar, calcCurrentWeekRange } from './use-custom-calendar';
 import './custom-calendar.scss';
 import {
   CustomCalendarEmits,
@@ -42,10 +42,6 @@ export const CustomCalendar = defineComponent({
       emit as SetupContext<CustomCalendarEmits>['emit'],
       'custom-calendar',
     );
-
-    onMounted(() => {
-      pickDay(dayjs(new Date()));
-    });
 
     /**
      * 绘制周
@@ -170,7 +166,9 @@ export const CustomCalendar = defineComponent({
                   <el-date-picker
                     v-model={realSelectedDay.value}
                     type='date'
-                    placeholder='选择日期'
+                    placeholder={ibiz.i18n.t(
+                      'control.calendar.calendardaily.selectdate',
+                    )}
                     shortcuts={shortcuts}
                   />
                 </div>
@@ -205,14 +203,39 @@ export const CustomCalendar = defineComponent({
      * @return {*}
      */
     const renderUser = () => {
+      const weekRange = calcCurrentWeekRange(new Date(realSelectedDay.value));
       return (
-        <CalendarUser
-          selected-day={realSelectedDay.value}
-          events={events.value}
-          onEventClick={(value: IParams) => handleEVentClick(value)}
-          onEventDblClick={(value: IParams) => handleEVentDblClick(value)}
-          v-slots={slots}
-        ></CalendarUser>
+        <div class={[ns.e('calendar-user')]}>
+          <div class={[ns.e('calendar-user-header')]}>
+            <div class={ns.em('calendar-user-header', 'left')}>
+              {weekRange
+                .map(_date => {
+                  return dayjs(new Date(_date)).format('YYYY-MM-DD');
+                })
+                .join(' ~ ')}
+            </div>
+            <div class={ns.em('calendar-user-header', 'right')}>
+              <el-date-picker
+                type='week'
+                clearable={false}
+                popper-class={ns.em('calendar-user-header', 'date-picker')}
+                v-model={realSelectedDay.value}
+                class={ns.em('calendar-user-header', 'date-range')}
+                placeholder={ibiz.i18n.t(
+                  'control.calendar.calendarUser.selectWeekRange',
+                )}
+                format={ibiz.i18n.t('control.calendar.calendarUser.weekFormat')}
+              ></el-date-picker>
+            </div>
+          </div>
+          <CalendarUser
+            selected-day={realSelectedDay.value}
+            events={events.value}
+            onEventClick={(value: IParams) => handleEVentClick(value)}
+            onEventDblClick={(value: IParams) => handleEVentDblClick(value)}
+            v-slots={slots}
+          ></CalendarUser>
+        </div>
       );
     };
 

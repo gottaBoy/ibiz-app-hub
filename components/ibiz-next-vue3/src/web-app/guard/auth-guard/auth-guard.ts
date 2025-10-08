@@ -152,6 +152,7 @@ export class AuthGuard {
     // 非匿名用户能访问的视图直接抛出401
     if (viewModel.accUserMode !== 3) {
       this.throw401();
+      return;
     }
 
     // 匿名用户登录

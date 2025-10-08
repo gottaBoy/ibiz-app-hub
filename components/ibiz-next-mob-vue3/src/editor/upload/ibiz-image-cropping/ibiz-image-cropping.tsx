@@ -10,6 +10,20 @@ import { showImagePreview } from 'vant';
 import { useVanUpload } from '../use/use-van-upload';
 import { UploadEditorController } from '../upload-editor.controller';
 
+/**
+ * 图片裁剪上传（扩展）
+ * @primary
+ * @description 使用van-uploader组件和van-popup组件，用于对指定的图片进行裁剪，并根据裁剪内容生成新的图片后将其进行上传。基于`移动端图片控件（单项）`编辑器扩展，编辑器样式代码名称为：CROPPING
+ * @editorparams {name:multiple,parameterType:boolean,description:是否支持多选文件}
+ * @editorparams {name:accept,parameterType:string,description:允许上传的文件类型}
+ * @editorparams {name:STOPPROPAGATION,parameterType:boolean,description:是否阻止默认点击}
+ * @editorparams {name:cropWidth,parameterType:number,description:裁剪宽度}
+ * @editorparams {name:cropHeight,parameterType:number,description:裁剪高度}
+ * @editorparams {name:uploadParams,parameterType:IData,description:上传参数}
+ * @editorparams {name:exportParams,parameterType:IData,description:下载参数}
+ * @ignoreprops autoFocus | overflowMode
+ * @ignoreemits blur | focus | enter | infoTextChange
+ */
 export const IBizImageCropping = defineComponent({
   name: 'IBizImageCropping',
   props: getUploadProps<UploadEditorController>(),

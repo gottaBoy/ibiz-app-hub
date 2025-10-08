@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'card_cssandicon',
   deviewId: 'd07dad6dc7bebf0a7b280b997651feb3',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -66,7 +67,6 @@ export default {
       id: 'opendata',
     },
   ],
-  appViewMsgGroupId: 'card_cssandicon',
   appViewRefs: [
     {
       realOpenMode: 'POPUPMODAL',
@@ -85,6 +85,8 @@ export default {
   ],
   controls: [
     {
+      cardHeight: 100,
+      cardWidth: 550,
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
       itemLayoutPanel: {
@@ -164,7 +166,7 @@ export default {
         ],
         codeName: 'usr0516444424',
         controlType: 'PANEL',
-        logicName: '卡片_界面样式及图标_卡片视图_卡片面板',
+        logicName: 'card_cssandicon',
         appDataEntityId: 'web.master',
         controlParam: {},
         sysCss: {
@@ -175,6 +177,7 @@ export default {
         name: 'itemlayoutpanel',
         id: 'web.master.usr0516444424',
       },
+      orderValueAppDEFieldId: 'px',
       dedataViewDataItems: [
         {
           appDEFieldId: 'id',
@@ -191,8 +194,30 @@ export default {
           dataType: 25,
           id: 'region_id',
         },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
+          frontCodeListId: 'web.wfstates',
+          appDEFieldId: 'wf_status',
+          dataType: 25,
+          id: 'wf_status',
+        },
       ],
       pagingSize: 1000,
+      hasWFDataItems: true,
       appendDEItems: true,
       navViewPos: 'NONE',
       createControlAction: {
@@ -271,7 +296,7 @@ export default {
   viewStyle: 'DEFAULT',
   viewType: 'DEDATAVIEW',
   enableDP: true,
-  showCaptionBar: true,
+  showCaptionBar: false,
   modelId: '559860eeb2cb99433a87ae6bfa7fb162',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERcard_cssandicon',

@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'report_view',
   deviewId: '2ae385c088612f9b2cd2bc1b05f0734e',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -66,6 +67,15 @@ export default {
       modelType: 'PSDEREPORTPANEL',
       name: 'reportpanel',
       id: 'web.master.report_view_report',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

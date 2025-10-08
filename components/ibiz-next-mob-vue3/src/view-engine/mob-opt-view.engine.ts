@@ -4,6 +4,7 @@ import {
   IOptViewState,
   IOptViewEvent,
   ViewCallTag,
+  IApiMobOptViewCall,
 } from '@ibiz-template/runtime';
 import { IAppDEEditView } from '@ibiz/model-core';
 import { MobEditViewEngine } from './mob-edit-view.engine';
@@ -23,7 +24,7 @@ export class MobOptViewEngine extends MobEditViewEngine {
   >;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  async call(key: string, args: any): Promise<any> {
+  async call(key: keyof IApiMobOptViewCall, args: any): Promise<any> {
     if (key === SysUIActionTag.CANCEL) {
       this.cancel();
       return null;

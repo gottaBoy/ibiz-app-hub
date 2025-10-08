@@ -15,6 +15,8 @@ import {
   UIActionUtil,
   SysUIActionTag,
   IApiViewController,
+  IControlController,
+  ViewController,
 } from '@ibiz-template/runtime';
 import { createUUID } from 'qx-util';
 import {
@@ -523,8 +525,8 @@ export class AppUtil implements IAppUtil {
             const result = await UIActionUtil.exec(
               source.id,
               {
-                view,
-                ctrl,
+                view: view as ViewController,
+                ctrl: ctrl as IControlController,
                 context: IBizContext.create(context),
                 params,
                 data: [data],
@@ -539,13 +541,15 @@ export class AppUtil implements IAppUtil {
             } else if (result.refresh) {
               switch (result.refreshMode) {
                 case 1:
-                  view.callUIAction(SysUIActionTag.REFRESH);
+                  (view as ViewController).callUIAction(SysUIActionTag.REFRESH);
                   break;
                 case 2:
                   view.parentView?.callUIAction(SysUIActionTag.REFRESH);
                   break;
                 case 3:
-                  view.getTopView()?.callUIAction(SysUIActionTag.REFRESH);
+                  (view as ViewController)
+                    .getTopView()
+                    ?.callUIAction(SysUIActionTag.REFRESH);
                   break;
                 default:
               }

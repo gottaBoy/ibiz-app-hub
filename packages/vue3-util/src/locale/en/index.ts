@@ -7,6 +7,7 @@ export const en = {
       noFoundViewModel: 'View model not found',
       noSupportLoadingDynamic:
         '{codeName}No entity, do not support loading dynamic models at this time',
+      invalidPointCoordinates: 'Invalid point coordinates: ({x}, {y})',
     },
     control: {
       unsupportedPanel: 'Unsupported panel items: {id} - {itemType}',

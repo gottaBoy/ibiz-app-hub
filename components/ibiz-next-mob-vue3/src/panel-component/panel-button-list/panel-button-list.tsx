@@ -5,13 +5,24 @@ import { defineComponent, PropType } from 'vue';
 import { PanelButtonListController } from './panel-button-list.controller';
 import './panel-button-list.scss';
 
+/**
+ * 按钮组
+ * @primary
+ * @description 绘制按钮组组件，并在接收到抛出的点击事件后调用控制器的方法执行按钮对应的行为。
+ */
 export const PanelButtonList = defineComponent({
   name: 'IBizPanelButtonList',
   props: {
+    /**
+     * @description 按钮组模型数据
+     */
     modelData: {
       type: Object as PropType<IPanelButtonList>,
       required: true,
     },
+    /**
+     * @description 按钮组控制器
+     */
     controller: {
       type: PanelButtonListController,
       required: true,

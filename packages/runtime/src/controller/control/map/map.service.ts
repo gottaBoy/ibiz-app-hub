@@ -41,9 +41,10 @@ export class MapService extends MDControlService<ISysMap> {
           const _params = { ...params };
 
           if (customCond) {
-            const customParams = ScriptFactory.execSingleLine(
-              customCond,
-            ) as IData;
+            const customParams = ScriptFactory.execSingleLine(customCond, {
+              context,
+              params,
+            }) as IData;
             if (customParams) {
               const { navigateContexts, navigateParams } =
                 parseUserParams(customParams);
@@ -56,7 +57,7 @@ export class MapService extends MDControlService<ISysMap> {
               if (navigateParams) {
                 Object.assign(
                   _params,
-                  convertNavData(navigateContexts, params, context),
+                  convertNavData(navigateParams, params, context),
                 );
               }
             }

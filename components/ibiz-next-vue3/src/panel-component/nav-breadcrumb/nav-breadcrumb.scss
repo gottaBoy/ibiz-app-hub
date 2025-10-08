@@ -30,4 +30,14 @@ $nav-breadcrumb: (
       pointer-events: none;
     }
   }
+
+  .el-breadcrumb__item.is-link {
+    .el-breadcrumb__inner {
+      font-weight: bold;
+      color: var(--el-text-color-primary);
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--el-transition-color);
+    }
+  }
 }

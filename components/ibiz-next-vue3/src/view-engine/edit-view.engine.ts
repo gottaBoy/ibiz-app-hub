@@ -336,6 +336,23 @@ export class EditViewEngine extends DEMainViewEngine {
   }
 
   /**
+   * @description 取消变更
+   * @param {({
+   *       targetState: 'INIT' | 'UNDO' | 'REDO';
+   *     })} [_args={ targetState: 'INIT' }] 目标状态，初始化状态|撤销上一步操作|重做下一步操作
+   * @returns {*}  {Promise<void>}
+   * @memberof EditViewEngine
+   */
+  async cancelChanges(
+    _args: {
+      targetState: 'INIT' | 'UNDO' | 'REDO';
+    } = { targetState: 'INIT' },
+  ): Promise<void> {
+    await super.cancelChanges(_args);
+    await this.form.cancelChanges(_args.targetState);
+  }
+
+  /**
    * 工作流启动
    *
    * @author lxm

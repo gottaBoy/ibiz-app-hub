@@ -69,35 +69,38 @@ const MapControl = defineComponent({
   },
   render() {
     const { state } = this.c;
-    if (!state.isCreated || !state.isLoaded) return;
+    if (!state.isCreated) return;
+    let content;
+    if (state.isLoaded) {
+      content =
+        this.mapStyle === 'USER' ? (
+          <iBizMapChartUser
+            areaData={state.areaData}
+            pointData={state.pointData}
+            options={this.mapOpts}
+            class={this.ns.e('map')}
+            controller={this.c}
+          ></iBizMapChartUser>
+        ) : (
+          <iBizMapChart
+            controller={this.c}
+            areaData={state.areaData}
+            pointData={state.pointData}
+            options={this.mapOpts}
+            class={this.ns.e('map')}
+            onPointClick={(e: IMapData) => {
+              this.c.onPointClick(e);
+            }}
+            onAreaClick={(e: IMapData) => {
+              this.c.onAreaClick(e, '', '');
+            }}
+          ></iBizMapChart>
+        );
+    }
     return (
       <iBizControlNavigation controller={this.c}>
         <iBizControlBase controller={this.c}>
-          {this.mapStyle === 'USER' ? (
-            <iBizMapChartUser
-              areaData={state.areaData}
-              pointData={state.pointData}
-              options={this.mapOpts}
-              class={this.ns.e('map')}
-              controller={this.c}
-            ></iBizMapChartUser>
-          ) : (
-            <iBizMapChart
-              areaData={state.areaData}
-              pointData={state.pointData}
-              options={this.mapOpts}
-              class={this.ns.e('map')}
-              onMapChange={(e: IData) => {
-                this.c.onMapChange(e.areaCode);
-              }}
-              onPointClick={(e: IMapData) => {
-                this.c.onPointClick(e);
-              }}
-              onAreaClick={(e: IMapData) => {
-                this.c.onAreaClick(e);
-              }}
-            ></iBizMapChart>
-          )}
+          {content}
           {this.c.state.enableNavView && this.c.state.showNavIcon ? (
             !this.c.state.showNavView ? (
               <ion-icon

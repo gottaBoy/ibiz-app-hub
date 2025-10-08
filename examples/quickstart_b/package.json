@@ -1,7 +1,7 @@
 {
-  "name": "@ibiz-template/full-code-quickstart_b",
+  "name": "@ibiz-template/full-code-template",
   "private": true,
-  "version": "0.7.41-alpha.3",
+  "version": "0.7.41-alpha.11",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,10 +9,10 @@
     "preview": "pnpm run build && vite preview",
     "lint": "eslint 'src/**/*.tsx' 'src/**/*.ts' 'src/**/*.vue'",
     "lint:style": "stylelint 'src/**/*.scss'",
-    "pub": "ibizlab pub -m /root/workspace/plm-community-plugin/plmcom-core/src/main/resources/model/cn/ibizlab/plmcom -t ./template -o ./src/publish --app plmcomweb && npm run prettier && npm run postpub",
-    "postpub": "cp -r ./src/publish/app/* ./public/static/app && rm -rf ./src/publish/app/*",
-    "compute-pkg": "ibiz-temp compute-pkg -m /root/workspace/plm-community-plugin/plmcom-core/src/main/resources/model/cn/ibizlab/plmcom --app plmcomweb",
-    "download-pkg": "ibiz-temp download-pkg",
+    "pub:temp": "publish -p .",
+    "pub:code": "generate -m /root/workspace/quickstart_b/model -o ./ --app web -tv 0.7.41-alpha.11 --local-mode",
+    "compute:pkg": "ibiz-temp compute-pkg -m /root/workspace/quickstart_b/model --app web",
+    "download:pkg": "ibiz-temp download-pkg",
     "prettier": "prettier --ignore-path '' 'src/publish/**/*.(ts|vue|tsx)' -w",
     "clear": "rm -rf src/publish"
   },
@@ -22,7 +22,6 @@
     "@ibiz-template-plugin/ai-chat": "workspace:*",
     "@ibiz-template-plugin/bi-report": "workspace:*",
     "@ibiz-template-plugin/data-view": "workspace:*",
-    "@ibiz-template/cli": "^0.3.13",
     "@ibiz-template/core": "workspace:*",
     "@ibiz-template/devtool": "workspace:*",
     "@ibiz-template/model-helper": "workspace:*",
@@ -60,7 +59,9 @@
   "devDependencies": {
     "@commitlint/cli": "^17.8.0",
     "@commitlint/config-conventional": "^17.8.0",
-    "@ibizlab/cli": "^0.2.26",
+    "@ibiz-template/cli": "^0.3.28",
+    "@ibiz-template/full-code-generator": "^0.0.5",
+    "@ibizlab/cli": "^0.2.29",
     "@types/lodash-es": "^4.17.10",
     "@types/node": "^20.8.7",
     "@types/nprogress": "^0.2.2",

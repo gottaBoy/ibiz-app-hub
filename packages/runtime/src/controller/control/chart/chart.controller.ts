@@ -287,35 +287,26 @@ export class ChartController
     const serie = this.generator.seriesGenerators[0];
     // 单序列，构建表格数据，第一列为分组属性，第二列为值属性的值，第三列为百分比
     const { catalogField, valueField, groupData } = serie;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const fields = (serie as any).chartGenerator.entity.appDEFields;
-    // 获取到分类和值属性的title,构建表头
-    const cataTitle = fields.find((field: IData) => {
-      return field.id === catalogField;
-    });
-    const valueTitle = fields.find((field: IData) => {
-      return field.id === valueField;
-    });
 
     const tempGridHeader = [
       {
         id: catalogField,
-        name: cataTitle?.logicName,
+        name: ibiz.i18n.t('runtime.controller.control.chart.catalogField'),
       },
       {
         id: valueField,
-        name: valueTitle?.logicName,
+        name: ibiz.i18n.t('runtime.controller.control.chart.value'),
       },
       {
         id: 'srfpercent',
-        name: '百分比',
+        name: ibiz.i18n.t('runtime.controller.control.chart.percent'),
       },
     ];
 
-    this.state.gridHeaders = tempGridHeader;
     const tempData: IData[] = [];
     const total = this.computeTotal(valueField);
     if (groupData && groupData.$default_group) {
+      // 普通单序列
       const group = groupData.$default_group;
       for (const [key, value] of group) {
         const tempValue = Number.isNaN(Number(value.value))
@@ -334,7 +325,35 @@ export class ChartController
         };
         tempData.push(tempItem);
       }
+    } else if (groupData) {
+      tempGridHeader.unshift({
+        id: 'srfSerieGroup',
+        name: ibiz.i18n.t('runtime.controller.control.chart.serieGroup'),
+      });
+      // 根据名称模拟的多序列
+      Object.keys(groupData).forEach((key: string) => {
+        const group = groupData[key];
+        for (const [_key, value] of group) {
+          const tempValue = Number.isNaN(Number(value.value))
+            ? 0
+            : Number(value.value);
+          let percent: string = '';
+          if (total === 0 || Number.isNaN(Number(value.value))) {
+            percent = '0%';
+          } else {
+            percent = `${Math.round((tempValue / total) * 100)}%`;
+          }
+          const tempItem = {
+            srfSerieGroup: key,
+            [catalogField]: _key,
+            [valueField]: tempValue,
+            srfpercent: percent,
+          };
+          tempData.push(tempItem);
+        }
+      });
     }
+    this.state.gridHeaders = tempGridHeader;
     this.state.gridData = tempData;
   }
 
@@ -351,31 +370,33 @@ export class ChartController
     // 多序列,表格第一列使用分组属性的值，后续其他列通过其他序列计算后动态组装,
     const tempHeaders: IData[] = [];
     const tempData: IData[] = [];
-
+    tempHeaders.push({
+      id: 'srfGroupName',
+      name: ibiz.i18n.t('runtime.controller.control.chart.serieGroup'),
+    });
     this.generator.seriesGenerators.forEach((serie: IData) => {
-      const { catalogField, valueField, groupData } = serie;
+      const { catalogField, valueField, groupData, seriesName } = serie;
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const fields = (serie as any).chartGenerator.entity.appDEFields;
       const _index = tempHeaders.findIndex((item: IData) => {
         return item.id === catalogField;
       });
       if (_index < 0) {
-        const cataTitle = fields.find((field: IData) => {
-          return field.id === catalogField.toLowerCase();
-        });
         tempHeaders.push({
           id: catalogField,
-          name: cataTitle?.logicName,
+          name: ibiz.i18n.t('runtime.controller.control.chart.catalogField'),
         });
       }
 
-      const valueTitle = fields.find((field: IData) => {
-        return field.id === valueField.toLowerCase();
+      const temp = tempHeaders.find(item => {
+        return item.id === valueField;
       });
-      tempHeaders.push({
-        id: valueField,
-        name: valueTitle?.logicName,
-      });
+      if (!temp) {
+        tempHeaders.push({
+          id: valueField,
+          name: ibiz.i18n.t('runtime.controller.control.chart.value'),
+        });
+      }
 
       if (groupData && groupData.$default_group) {
         const group = groupData.$default_group;
@@ -384,10 +405,13 @@ export class ChartController
             ? 0
             : Number(value.value);
           const index = tempData.findIndex((item: IData) => {
-            return item[catalogField] === key;
+            return (
+              item[catalogField] === key && item.srfGroupName === seriesName
+            );
           });
           if (index < 0) {
             const tempItem = {
+              srfGroupName: seriesName,
               [catalogField]: key,
               [valueField]: tempValue,
             };
@@ -401,6 +425,38 @@ export class ChartController
     });
     this.state.gridHeaders = tempHeaders;
     this.state.gridData = tempData;
+  }
+
+  public spanMethod(data: {
+    row: IData;
+    column: IData;
+    rowIndex: number;
+    columnIndex: number;
+  }): number[] {
+    const { row, column, rowIndex, columnIndex } = data;
+    if (column.property === 'srfGroupName') {
+      // 只有第一列或有值时才和并
+      const allow = columnIndex === 0 || row.srfGroupName;
+      // 第二行开始合并
+      if (
+        rowIndex > 0 &&
+        allow &&
+        row.srfGroupName === this.state.gridData[rowIndex - 1]?.srfGroupName
+      ) {
+        return [0, 0];
+      }
+      // 第一行计算出合并长度
+      let rowspan = 1;
+      for (let i = rowIndex + 1; i < this.state.gridData.length; i++) {
+        if (allow && this.state.gridData[i].srfGroupName === row.srfGroupName) {
+          rowspan += 1;
+        } else {
+          break;
+        }
+      }
+      return [rowspan, 1];
+    }
+    return [1, 1];
   }
 
   /**

@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 import {
-  IDETreeNodeUAColumn,
-  IDETreeUAColumn,
   IUIActionGroup,
+  IDETreeUAColumn,
+  IDETreeNodeUAColumn,
   IUIActionGroupDetail,
 } from '@ibiz/model-core';
 import { ButtonContainerState, UIActionButtonState } from '../../../../utils';
@@ -10,6 +10,7 @@ import { TreeGridExColumnController } from '../tree-grid-ex-column/tree-grid-ex-
 import { ITreeGridExRowState } from '../../../../../interface';
 import { TreeGridExNotifyState } from '../../../../constant';
 import { TreeGridExRowState } from '../../tree-grid-ex-row.state';
+import { getAllUIActionItems } from '../../../../../model';
 
 /**
  * 树表格（增强）操作列控制器
@@ -105,7 +106,8 @@ export class TreeGridExUAColumnController extends TreeGridExColumnController<IDE
       return;
     }
     const containerState = new ButtonContainerState();
-    deuiactionGroup.uiactionGroupDetails.forEach(detail => {
+    const actions = getAllUIActionItems(deuiactionGroup.uiactionGroupDetails);
+    actions.forEach(detail => {
       const actionid = detail.uiactionId;
       if (actionid) {
         const buttonState = new UIActionButtonState(

@@ -1,0 +1,31 @@
+export default {
+  caption: '应用欢迎视图',
+  codeName: 'app_welcome_view',
+  controls: [
+    {
+      caption: '应用欢迎视图',
+      codeName: 'captionbar',
+      controlType: 'CAPTIONBAR',
+      controlParam: {},
+      id: 'captionbar',
+    },
+  ],
+  viewLayoutPanel: {
+    layoutBodyOnly: true,
+    useDefaultLayout: true,
+    layoutPanel: true,
+    codeName: 'layoutpanel',
+    controlStyle: 'APPWELCOMEVIEW',
+    controlType: 'VIEWLAYOUTPANEL',
+    controlParam: {},
+    id: 'layoutpanel',
+  },
+  title: '应用欢迎视图',
+  viewStyle: 'DEFAULT',
+  viewType: 'APPWELCOMEVIEW',
+  showCaptionBar: true,
+  modelId: 'c55282664900390cd4403495f082a5f2',
+  modelType: 'PSAPPUTILVIEW',
+  name: 'AppWelcomeView',
+  id: 'web.app_welcome_view',
+};

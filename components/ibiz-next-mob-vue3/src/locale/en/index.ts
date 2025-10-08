@@ -64,6 +64,17 @@ export default {
     formItemContainer: {
       more: 'More',
     },
+    mpicker: {
+      simpleErr:
+        'The value of the SIMPLE type address bar {props.value} does not meet the requirements of a JSON string',
+    },
+    signature: {
+      undo: 'Undo',
+      rewrite: 'Rewrite',
+      confirm: 'Confirm',
+      addSignature: 'Click here to add signature',
+      signaturePrompt: 'Please write horizontally in the blank area',
+    },
   },
   // 部件
   control: {
@@ -214,6 +225,10 @@ export default {
       'Switching languages requires refreshing the page, are you sure to switch?',
   },
   mobApp: {
+    authGuard: {
+      loginFailed: 'Anonymous user login failed',
+      noPermission: 'No permission to access!',
+    },
     unauthorizedHandler: {
       noFoundEnvParams: 'Unable to find environment parameter casLoginUrl',
       prohibitAccessPrompt: 'Access to the current account is prohibited',

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-restricted-syntax */
@@ -21,6 +22,7 @@ import {
   getCurrentInstance,
   ref,
   Ref,
+  nextTick,
 } from 'vue';
 import {
   IDEGantt,
@@ -99,6 +101,8 @@ export const GanttControl = defineComponent({
 
     // 滑块模态
     let overlay: null | IOverlayPopoverContainer = null;
+    // 滑块链接线模态
+    let linkOverlay: null | IOverlayPopoverContainer = null;
 
     // 滑块移动
     const sliderMove = ref(false);
@@ -107,6 +111,7 @@ export const GanttControl = defineComponent({
     const iBizIcon = resolveComponent('IBizIcon');
 
     let forbidClick: boolean = false;
+    let forbidOperation: boolean = false;
 
     const selection: IGanttNodeData[] = [];
 
@@ -209,6 +214,28 @@ export const GanttControl = defineComponent({
       return ibiz.i18n.getLang().toLowerCase();
     });
 
+    // 监听选中数据，操作甘特来处理界面回显选中效果。
+    watch(
+      [() => ganttRef.value, (): IGanttNodeData[] => c.state.selectedData],
+      ([table, newVal]) => {
+        if (forbidOperation || !table) return;
+        nextTick(() => {
+          if (c.state.singleSelect) {
+            // 单选，选中效果回显。
+            if (newVal[0]) {
+              ganttRef.value?.setSelected(newVal[0]);
+            } else {
+              ganttRef.value?.setSelected();
+            }
+          } else {
+            selection.length = 0;
+            selection.push(...newVal);
+            newVal.forEach(item => ganttRef.value?.setChecked(item, true));
+          }
+        });
+      },
+    );
+
     /**
      * 查找对应节点的布局面板
      *
@@ -219,11 +246,112 @@ export const GanttControl = defineComponent({
       let layoutPanel: IPanel | undefined;
       const nodeModel = c.getNodeModel(id);
       nodeModel?.controlRenders?.forEach(renderItem => {
-        if (renderItem.renderType === 'LAYOUTPANEL') {
+        if (
+          renderItem.renderType === 'LAYOUTPANEL' &&
+          (renderItem.id || '').split('_')[0] !== 'nodelinkrender'
+        ) {
           layoutPanel = renderItem.layoutPanel;
         }
       });
       return layoutPanel;
+    };
+
+    /**
+     * 查找对应节点链接的布局面板
+     *
+     * @param {string} id
+     * @return {*}  {(IPanel | undefined)}
+     */
+    const findNodeLinkLayoutPanel = (id: string): IPanel | undefined => {
+      let layoutPanel: IPanel | undefined;
+      const nodeModel = c.getNodeModel(id);
+      nodeModel?.controlRenders?.find(renderItem => {
+        if (
+          renderItem.renderType === 'LAYOUTPANEL' &&
+          (renderItem.id || '').split('_')[0] === 'nodelinkrender'
+        ) {
+          layoutPanel = renderItem.layoutPanel;
+          return true;
+        }
+        return false;
+      });
+      return layoutPanel;
+    };
+
+    let fullscreen = false;
+    const oldAllPopover: HTMLElement[] = [];
+
+    /**
+     * 获取所有需要处理的弹窗元素
+     *
+     * @return {*}  {IData}
+     */
+    const getAllPopover = (): IData => {
+      const allPopover = {};
+      // 编辑器气泡父元素
+      const elPopover = document.querySelector('.el-popover')?.parentElement;
+      if (elPopover) Object.assign(allPopover, { elPopover });
+
+      return allPopover;
+    };
+
+    /**
+     * 将弹窗元素添加到目标容器中
+     *
+     * @param {HTMLElement[]} _popover
+     * @param {HTMLElement} _target
+     * @return {*}
+     */
+    const popoverAppendTarget = (
+      _popover: HTMLElement[],
+      _target: HTMLElement,
+    ): void => {
+      _popover.forEach(
+        _element =>
+          _element.parentElement !== _target && _target?.append(_element),
+      );
+    };
+
+    /**
+     * 将弹窗元素移动到甘特图容器中
+     *
+     * @return {*}
+     */
+    const popoverAppendGantt = (): void => {
+      const targetContainer = ganttRef.value?.getElementRefs().rootRef.value;
+      const allPopoverNode = Object.values(getAllPopover()).filter(_element => {
+        // 父元素必须为body节点才移动，元素内部气泡不应该移动
+        return _element && _element.parentElement === document.body;
+      });
+      oldAllPopover.push(...allPopoverNode);
+      popoverAppendTarget(allPopoverNode, targetContainer);
+    };
+
+    /**
+     * 将弹窗元素移回body中
+     *
+     * @return {*}
+     */
+    const popoverAppendBody = (): void => {
+      const allPopoverNode = oldAllPopover.filter(_element => !!_element);
+      oldAllPopover.length = 0;
+      popoverAppendTarget(allPopoverNode, document.body);
+    };
+
+    /**
+     * 处理全屏状态变化的回调函数
+     *
+     * @param {boolean} _state
+     * @return {*}
+     */
+    const handleFullscreenChange = (_state: boolean): void => {
+      fullscreen = _state;
+
+      if (_state) {
+        popoverAppendGantt();
+      } else {
+        popoverAppendBody();
+      }
     };
 
     /**
@@ -233,6 +361,7 @@ export const GanttControl = defineComponent({
      * @param {IGanttNodeData} item 当前数据
      */
     const onCheck = (state: boolean, item: IGanttNodeData) => {
+      forbidOperation = true;
       if (state) {
         selection.push(item);
       } else {
@@ -244,6 +373,9 @@ export const GanttControl = defineComponent({
         }
       }
       c.setSelection(selection);
+      setTimeout(() => {
+        forbidOperation = false;
+      }, 200);
     };
 
     /**
@@ -257,11 +389,13 @@ export const GanttControl = defineComponent({
         sliderMove.value = false;
         return;
       }
+      forbidOperation = true;
 
       c.onTreeNodeClick(nodeData, evt);
       forbidClick = true;
       setTimeout(() => {
         forbidClick = false;
+        forbidOperation = false;
       }, 200);
     };
 
@@ -660,6 +794,8 @@ export const GanttControl = defineComponent({
       if (overlay) {
         return;
       }
+      const appendTo =
+        fullscreen && ganttRef.value?.getElementRefs().rootRef.value;
       const panel = findNodeLayoutPanel(row._nodeId);
       const component = panel
         ? renderNodePanel(panel, row._deData!)
@@ -675,6 +811,7 @@ export const GanttControl = defineComponent({
           noArrow: true,
           placement: 'bottom',
           modalClass: ns.e('slider-popover'),
+          appendTo,
         },
       );
       overlay?.present((evt.target as IParams).children[0] as HTMLElement);
@@ -802,6 +939,64 @@ export const GanttControl = defineComponent({
       }
     };
 
+    /**
+     * 打开链接 popover
+     *
+     * @param {IGanttNodeData} item
+     * @param {MouseEvent} evt
+     * @return {*}
+     */
+    const openLinkPathPopover = async (
+      row: IGanttNodeData,
+      panelData: IData,
+      evt: MouseEvent,
+    ): Promise<void> => {
+      const panel = findNodeLinkLayoutPanel(row._nodeId);
+      if (linkOverlay || !panel) {
+        return;
+      }
+      const appendTo =
+        fullscreen && ganttRef.value?.getElementRefs().rootRef.value;
+      const component = renderNodePanel(panel, panelData);
+      linkOverlay = ibiz.overlay.createPopover(
+        (modal: IModal): VNode => {
+          return h(component, { modal });
+        },
+        undefined,
+        {
+          width: 'auto',
+          height: 'auto',
+          noArrow: true,
+          autoClose: true,
+          modalClass: ns.e('link-path-popover'),
+          appendTo,
+        },
+      );
+      linkOverlay?.present(evt.currentTarget as HTMLElement);
+
+      await linkOverlay.onWillDismiss();
+      linkOverlay = null;
+    };
+
+    /**
+     * 处理点击链接线
+     *
+     * @param {IData} [_link]
+     * @param {MouseEvent} [_event]
+     */
+    const handleClickLink = (_link?: IData, _event?: MouseEvent): void => {
+      if (_link && _event) {
+        const curLink = c.state.links.find(_item => _item._uuid === _link.id);
+        if (curLink) {
+          openLinkPathPopover(
+            curLink._fromData as IGanttNodeData,
+            curLink._deData,
+            _event,
+          );
+        }
+      }
+    };
+
     return {
       c,
       ns,
@@ -825,6 +1020,8 @@ export const GanttControl = defineComponent({
       allowDrag,
       handleDrop,
       onHeaderDragend,
+      handleClickLink,
+      handleFullscreenChange,
     };
   },
   render() {
@@ -841,6 +1038,7 @@ export const GanttControl = defineComponent({
           ref='ganttRef'
           data-id='_id'
           data={this.data}
+          links={this.c.state.links}
           row-height={46}
           expand-all={false}
           headerDrag={true}
@@ -849,8 +1047,18 @@ export const GanttControl = defineComponent({
           children='_children'
           leaf='_leaf'
           expand-key='_defaultExpand'
+          link-props={{
+            fromKey: '_from',
+            toKey: '_to',
+            linkKey: '_uuid',
+          }}
           locale={this.locale}
-          draggable={{ level: 'all', draggable: true }}
+          unit={this.c.state.unit}
+          draggable={{
+            level: 'all',
+            draggable: false,
+            draggableStateKey: '_draggable',
+          }}
           allow-drop={this.allowDrop}
           allow-drag={this.allowDrag}
           onNodeDrop={this.handleDrop}
@@ -862,6 +1070,8 @@ export const GanttControl = defineComponent({
           onRowChecked={this.onCheck}
           onHeaderDragend={this.onHeaderDragend}
           onMoveSlider={this.onSliderMove}
+          onClickLink={this.handleClickLink}
+          onFullscreenChange={this.handleFullscreenChange}
           primaryColor={this.ganttStyle.primaryColor}
           headerStyle={{
             textColor: this.ganttStyle.textColor,

@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'list',
   deviewId: '348fa69ac8c1fdacba1ca3ac1668db95',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -24,33 +25,38 @@ export default {
       dedrtabPages: [
         {
           caption: '常规',
-          appViewId: 'web.master_list_base',
+          appViewId: 'web.master_list_base_exp',
           id: 'base',
         },
         {
-          caption: '布局',
-          appViewId: 'web.master_list_layout',
-          id: 'layout',
+          caption: '快速新建',
+          appViewId: 'web.master_list_fast_new',
+          id: 'fast_new',
         },
         {
-          caption: '逻辑',
-          appViewId: 'web.master_list_panellogic',
-          id: 'logic',
+          caption: '拖拽编辑',
+          appViewId: 'web.master_list_draggable_edit',
+          id: 'draggable_edit',
+        },
+        {
+          caption: '排序',
+          appViewId: 'web.master_list_sort_exp',
+          id: 'sort',
+        },
+        {
+          caption: '动态逻辑',
+          appViewId: 'web.master_list_dyna_logic_exp',
+          id: 'dyna_logic',
         },
         {
           caption: '分组',
-          appViewId: 'web.master_list_group',
+          appViewId: 'web.master_list_group_exp',
           id: 'group',
         },
         {
-          caption: '快速操作工具栏',
-          appViewId: 'web.master_list_quicktoolbar',
-          id: 'quicktoolbar',
-        },
-        {
-          caption: '批操作工具栏',
-          appViewId: 'web.master_list_batchtoolbar',
-          id: 'batchtoolbar',
+          caption: '内置工具栏',
+          appViewId: 'web.master_list_built_in_toobar_exp',
+          id: 'nav_toolbat',
         },
         {
           caption: '值显示',
@@ -59,7 +65,7 @@ export default {
         },
         {
           caption: '内置导航',
-          appViewId: 'web.master_list_nav',
+          appViewId: 'web.master_list_nav_exp',
           id: 'built_in_nav',
         },
         {
@@ -68,8 +74,33 @@ export default {
           id: 'css_and_icon',
         },
         {
+          caption: '部件样式',
+          appViewId: 'web.master_list_ctrlstyle_exp',
+          id: 'ctrlstyle',
+        },
+        {
+          caption: '加载模式',
+          appViewId: 'web.master_list_load_mode',
+          id: 'load_more',
+        },
+        {
+          caption: '显示模式',
+          appViewId: 'web.master_list_showmode_exp',
+          id: 'showmode',
+        },
+        {
+          caption: '刷新模式',
+          appViewId: 'web.master_list_refreshmode_exp',
+          id: 'refreshmode',
+        },
+        {
+          caption: '默认展开所有',
+          appViewId: 'web.master_list_defaultexpandall',
+          id: 'defaultexpandall',
+        },
+        {
           caption: '事件及调用',
-          appViewId: 'web.master_list_logic',
+          appViewId: 'web.master_list_event_call_exp',
           id: 'event_and_call',
         },
       ],

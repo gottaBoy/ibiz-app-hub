@@ -69,13 +69,17 @@ export default () => {
    */
   function EmitAddLink(
     link: LinkProps,
-    data: { from: any; to: any },
-    cb: (link: LinkProps) => void,
+    data: { from: any; to: any; relationType: any },
+    cb: (_link: LinkProps) => void,
   ) {
     rootEmit.value?.(
       'add-link',
       link,
-      { from: toRowData(data.from), to: toRowData(data.to) },
+      {
+        from: toRowData(data.from),
+        to: toRowData(data.to),
+        relationType: data.relationType,
+      },
       cb,
     );
   }
@@ -83,8 +87,8 @@ export default () => {
   /**
    * 点击连线事件
    */
-  function EmitClickLink(link: LinkProps | null) {
-    rootEmit.value?.('click-link', link ? toRowData(link) : null);
+  function EmitClickLink(link: LinkProps | null, _event?: MouseEvent) {
+    rootEmit.value?.('click-link', link ? toRowData(link) : null, _event);
   }
 
   /**
@@ -127,6 +131,13 @@ export default () => {
     rootEmit.value?.('virtual-table-change', inView);
   }
 
+  /**
+   * 甘特图全屏改变事件
+   */
+  function EmitFullscreenChange(fullScreen: boolean) {
+    rootEmit.value?.('fullscreen-change', fullScreen);
+  }
+
   return {
     EmitRowClick,
     EmitRowDblClick,
@@ -140,5 +151,6 @@ export default () => {
     EmitNodeDrop,
     EmitVirtualTableChange,
     EmitHeaderDragend,
+    EmitFullscreenChange,
   };
 };

@@ -30,7 +30,7 @@ export default {
     {
       codeName: 'CreateMan',
       logicName: '建立人',
-      predefinedType: 'NONE',
+      predefinedType: 'CREATEMAN',
       stdDataType: 25,
       stringLength: 60,
       name: 'CREATEMAN',
@@ -39,7 +39,7 @@ export default {
     {
       codeName: 'CreateDate',
       logicName: '建立时间',
-      predefinedType: 'NONE',
+      predefinedType: 'CREATEDATE',
       stdDataType: 5,
       valueFormat: 'YYYY-MM-DD HH:mm:ss',
       name: 'CREATEDATE',
@@ -48,7 +48,7 @@ export default {
     {
       codeName: 'UpdateMan',
       logicName: '更新人',
-      predefinedType: 'NONE',
+      predefinedType: 'UPDATEMAN',
       stdDataType: 25,
       stringLength: 60,
       name: 'UPDATEMAN',
@@ -57,7 +57,7 @@ export default {
     {
       codeName: 'UpdateDate',
       logicName: '更新时间',
-      predefinedType: 'NONE',
+      predefinedType: 'UPDATEDATE',
       stdDataType: 5,
       valueFormat: 'YYYY-MM-DD HH:mm:ss',
       name: 'UPDATEDATE',

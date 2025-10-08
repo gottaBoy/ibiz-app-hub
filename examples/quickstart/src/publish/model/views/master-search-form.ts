@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'search_form',
   deviewId: 'a27eceff290518f2edc1638686cbcf5e',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -33,6 +34,11 @@ export default {
           id: 'btncss',
         },
         {
+          caption: '无保存条件',
+          appViewId: 'web.master_usr9345_grid_view',
+          id: 'no_save',
+        },
+        {
           caption: '过滤',
           appViewId: 'web.master_searchform_filter',
           id: 'filter',
@@ -46,6 +52,11 @@ export default {
           caption: '高级搜索',
           appViewId: 'web.master_searchform_advanced',
           id: 'advanced_search',
+        },
+        {
+          caption: '事件及调用',
+          appViewId: 'web.master_event_ability',
+          id: 'event',
         },
       ],
       dataRelationTag: 'search_form_DR',

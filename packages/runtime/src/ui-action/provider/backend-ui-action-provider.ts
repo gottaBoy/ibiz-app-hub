@@ -4,6 +4,7 @@ import { isArray } from 'qx-util';
 import { OpenAppViewCommand } from '../../command';
 import { IUILogicParams, IUIActionResult, IModalData } from '../../interface';
 import { UIActionProviderBase } from './ui-action-provider-base';
+import { calcDeCodeNameById } from '../../model';
 
 /**
  * 后台调用界面行为适配器
@@ -76,7 +77,19 @@ export class BackendUIActionProvider extends UIActionProviderBase {
     const isMultiData = ['MULTIKEY', 'MULTIDATA'].includes(
       action.actionTarget!,
     );
-
+    // 修正多数据类型界面行为上下文，修复请求接口报错
+    if (isMultiData) {
+      const deName = action.appDataEntityId
+        ? calcDeCodeNameById(action.appDataEntityId)
+        : undefined;
+      if (
+        deName &&
+        resultContext[deName] &&
+        resultContext[deName].indexOf(',') !== -1
+      ) {
+        resultContext[deName] = resultContext[deName].split(',').join(';');
+      }
+    }
     const res = await app.deService.exec(
       entityName!,
       methodName,

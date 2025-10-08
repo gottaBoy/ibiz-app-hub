@@ -103,6 +103,47 @@ export class DRTabController
   }
 
   /**
+   * 是否启用锚点栏
+   *
+   * @readonly
+   * @type {boolean}
+   * @memberof DRTabController
+   */
+  get enableAnchor(): boolean {
+    if (this.controlParams.enablenavbar) {
+      return this.controlParams.enablenavbar === 'true';
+    }
+    return (ibiz.config as IData).drtab.enableNavbar;
+  }
+
+  /**
+   * 导航栏位置
+   *
+   * @readonly
+   * @type {string}
+   * @memberof DRTabController
+   */
+  get navbarpos(): string {
+    return (
+      (this.controlParams.navbarpos as string)?.toLowerCase() ||
+      ((ibiz.config as IData).drtab.navbarPos as string).toLowerCase()
+    );
+  }
+
+  /**
+   * 导航栏宽度
+   *
+   * @readonly
+   * @type {string}
+   * @memberof DRTabController
+   */
+  get navbarwidth(): string | number {
+    return (
+      this.controlParams.navbarwidth || (ibiz.config as IData).drtab.navbarWidth
+    );
+  }
+
+  /**
    * Router 对象
    *
    * @type {Router}
@@ -282,6 +323,7 @@ export class DRTabController
         }
         await this.calcDrTabPagesState();
         this.handleFormChange();
+        this.doDefaultSelect();
       });
       this.form.evt.on('onLoadDraftSuccess', () => {
         this.handleFormChange();
@@ -293,6 +335,31 @@ export class DRTabController
     this.initDRTabPages();
     if (!this.form) {
       await this.calcDrTabPagesState();
+    }
+
+    // 表单已经加载完成执行默认选中，否则加载完成事件里执行
+    if (this.form && this.form.state.isLoaded) {
+      this.doDefaultSelect();
+    }
+  }
+
+  /**
+   * @description 处理第一次的默认选中
+   * @memberof DRTabController
+   */
+  doDefaultSelect(): void {
+    const viewForm = this.view.layoutPanel?.panelItems.view_form;
+    if (viewForm) {
+      viewForm.state.visible = false;
+      viewForm.state.keepAlive = false;
+    }
+
+    // 显示编辑项且激活表单时显示表单
+    if (
+      !this.state.hideEditItem &&
+      this.state.activeName === this.model.uniqueTag
+    ) {
+      this.setVisible('form');
     }
   }
 

@@ -12,6 +12,18 @@ import { DateRangeEditorController } from '../date-range-editor.controller';
 import { usePopstateListener } from '../../../util';
 import { IBizDateRangeCalendar } from '../../../common/date-range-picker/date-range-picker';
 
+/**
+ * 移动端时间范围选择器
+ * @primary
+ * @description  基于rolldate的轻量时间范围选择器，类型为CALENDAR时，使用van-calendar组件，默认支持年月日的时间范围选择。支持编辑器类型包含: `移动端时间范围选择器`、`移动端时间范围选择器（YYYY-MM-DD）`
+ * @editorparams {name:SHOWMODE,parameterType:'DEFAULT' | 'CALENDAR',defaultvalue:'DEFALUIT',description:显示模式，值为CALENDAR时，使用日历组件来选择日期范围，值为DEFAULT时，绘制两个时间选择器来绘制日期范围}
+ * @editorparams {name:rangeSeparator,parameterType:string,defaultvalue:'~',description:选择范围时的分隔符}
+ * @editorparams {name:valueSeparator,parameterType:string,defaultvalue:'',description:值分割符}
+ * @editorparams {name:startPlaceHolder,parameterType:string,defaultvalue:'',description:选择范围开始占位提示}
+ * @editorparams {name:endPlaceHolder,parameterType:string,defaultvalue:'',description:选择范围结束占位提示}
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizDateRangePicker = defineComponent({
   name: 'IBizDateRangePicker',
   props: getDateRangeProps<DateRangeEditorController>(),

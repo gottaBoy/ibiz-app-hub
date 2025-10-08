@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'ui_action',
   deviewId: 'b4938c96f30f51ed13ce8404628cc06f',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -23,24 +24,54 @@ export default {
     {
       dedrtabPages: [
         {
-          caption: '常规',
-          appViewId: 'web.master_ui_action_base',
-          id: 'base',
+          caption: '数据目标',
+          appViewId: 'web.master_ui_action_datatarget',
+          id: 'datatarget',
+        },
+        {
+          caption: '前台界面行为',
+          appViewId: 'web.master_ui_action_front',
+          id: 'front',
+        },
+        {
+          caption: '后台界面行为',
+          appViewId: 'web.master_ui_action_backend',
+          id: 'backend',
+        },
+        {
+          caption: '自定义界面行为',
+          appViewId: 'web.master_ui_action_custom',
+          id: 'custom',
+        },
+        {
+          caption: '刷新引用视图',
+          appViewId: 'web.master_ui_action_refresh',
+          id: 'refresh',
+        },
+        {
+          caption: '关闭编辑或弹出视图',
+          appViewId: 'web.master_ui_action_closeview',
+          id: 'closeview',
+        },
+        {
+          caption: '后续界面行为',
+          appViewId: 'web.master_ui_action_next',
+          id: 'next',
+        },
+        {
+          caption: '附加界面逻辑',
+          appViewId: 'web.master_ui_action_uilogic',
+          id: 'uilogic',
+        },
+        {
+          caption: '行为参数',
+          appViewId: 'web.master_ui_action_params',
+          id: 'params',
         },
         {
           caption: '样式及图标',
           appViewId: 'web.master_ui_action_cssandicon',
           id: 'css',
-        },
-        {
-          caption: '行为参数',
-          appViewId: 'web.master_ui_action_parameter',
-          id: 'parameter',
-        },
-        {
-          caption: '逻辑',
-          appViewId: 'web.master_ui_action_logic',
-          id: 'logic',
         },
       ],
       dataRelationTag: 'ui_action_DR',

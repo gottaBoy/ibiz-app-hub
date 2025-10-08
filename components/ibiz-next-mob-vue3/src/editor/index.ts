@@ -2,7 +2,12 @@ import { registerEditorProvider } from '@ibiz-template/runtime';
 import { App, defineAsyncComponent } from 'vue';
 import { NotSupportedEditor } from './not-supported-editor/not-supported-editor';
 import { IBizSpan, SpanEditorProvider } from './span';
-import { IBizInput, IBizInputNumber, TextBoxEditorProvider } from './text-box';
+import {
+  IBizInput,
+  IBizInputNumber,
+  IBizSignature,
+  TextBoxEditorProvider,
+} from './text-box';
 import {
   IBizDropdown,
   IBizEmojiPicker,
@@ -48,6 +53,7 @@ export const IBizEditor = {
     v.component(NotSupportedEditor.name, NotSupportedEditor);
     v.component(IBizInput.name, IBizInput);
     v.component(IBizInputNumber.name, IBizInputNumber);
+    v.component(IBizSignature.name, IBizSignature);
     v.component(IBizSpan.name, IBizSpan);
     v.component(IBizSwitch.name, IBizSwitch);
     v.component(IBizRadio.name, IBizRadio);
@@ -113,6 +119,12 @@ export const IBizEditor = {
     registerEditorProvider('PASSWORD', () => textBoxEditorProvider);
     registerEditorProvider('TEXTAREA', () => textBoxEditorProvider);
     registerEditorProvider('NUMBER', () => new TextBoxEditorProvider('NUMBER'));
+
+    // 电子签名
+    registerEditorProvider(
+      'MOBTEXT_SIGNATURE',
+      () => new TextBoxEditorProvider('SIGNATURE'),
+    );
 
     // 下拉列表框
     registerEditorProvider(

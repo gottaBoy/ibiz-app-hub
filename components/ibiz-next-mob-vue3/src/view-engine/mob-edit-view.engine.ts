@@ -15,6 +15,7 @@ import {
   IModalData,
   ViewCallTag,
   FormSaveParams,
+  IApiMobEditViewCall,
 } from '@ibiz-template/runtime';
 import { IAppDEEditView } from '@ibiz/model-core';
 
@@ -161,8 +162,11 @@ export class MobEditViewEngine extends ViewEngineBase {
     // this.view.evt.emit('refreshed', [data]);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  async call(key: string, args: any): Promise<IData | null | undefined> {
+  async call(
+    key: keyof IApiMobEditViewCall,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    args: any,
+  ): Promise<IData | null | undefined> {
     if (key === SysUIActionTag.SAVE) {
       await this.form.save();
       return null;
@@ -177,18 +181,23 @@ export class MobEditViewEngine extends ViewEngineBase {
     }
     if (key === SysUIActionTag.SAVE_AND_NEW) {
       this.saveAndNew();
+      return null;
     }
     if (key === SysUIActionTag.REFRESH) {
       await this.refresh();
+      return null;
     }
     if (key === SysUIActionTag.SAVE_AND_START) {
       await this.wfStart();
+      return null;
     }
     if (key === SysUIActionTag.VIEW_WF_STEP) {
       await this.wfSubmit();
+      return null;
     }
     if (key === ViewCallTag.WF_WITHDRAW) {
       await this.wfWithdraw();
+      return null;
     }
     return super.call(key, args);
   }

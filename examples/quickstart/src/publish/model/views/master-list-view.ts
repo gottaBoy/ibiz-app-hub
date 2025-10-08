@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'list_view',
   deviewId: '82fb2259b93814648bf4f3d34250e1f2',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -361,6 +362,7 @@ export default {
         name: 'list_itempanel',
         id: 'web.master.usr0513991360',
       },
+      orderValueAppDEFieldId: 'px',
       delistDataItems: [
         {
           appDEFieldId: 'id',
@@ -377,8 +379,30 @@ export default {
           dataType: 25,
           id: 'region_id',
         },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          frontCodeListId: 'web.wfstates',
+          dataType: 25,
+          id: 'wf_status',
+        },
       ],
       pagingSize: 1000,
+      hasWFDataItems: true,
       showHeader: true,
       navViewPos: 'NONE',
       createControlAction: {
@@ -459,7 +483,7 @@ export default {
   viewStyle: 'DEFAULT',
   viewType: 'DELISTVIEW',
   enableDP: true,
-  showCaptionBar: false,
+  showCaptionBar: true,
   modelId: '003455869229aface87b2d91f196dcc5',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERlist_view',

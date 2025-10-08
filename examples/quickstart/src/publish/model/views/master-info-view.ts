@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'info_view',
   deviewId: '9201be3c503b0ac777613dad138f150b',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -51,6 +52,16 @@ export default {
         id: 'update',
       },
       infoFormMode: true,
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
+      },
       deformPages: [
         {
           layout: {

@@ -6,6 +6,7 @@ import {
   IBizInput,
   IBizInputNumber,
   IBizInputIP,
+  IBizSignature,
   TextBoxEditorProvider,
 } from './text-box';
 import {
@@ -76,6 +77,7 @@ export const IBizEditor = {
     v.component(IBizInput.name, IBizInput);
     v.component(IBizInputNumber.name, IBizInputNumber);
     v.component(IBizInputIP.name, IBizInputIP);
+    v.component(IBizSignature.name, IBizSignature);
     v.component(IBizDropdown.name, IBizDropdown);
     v.component(IBizEmojiPicker.name, IBizEmojiPicker);
     v.component(IBizTreePicker.name, IBizTreePicker);
@@ -152,6 +154,11 @@ export const IBizEditor = {
     );
     registerEditorProvider('MOBTEXTAREA', () => textBoxEditorProvider);
     registerEditorProvider('MOBPASSWORD', () => textBoxEditorProvider);
+    // 电子签名
+    registerEditorProvider(
+      'TEXTBOX_SIGNATURE',
+      () => new TextBoxEditorProvider('SIGNATURE'),
+    );
     // 下拉列表框
     registerEditorProvider(
       'DROPDOWNLIST',

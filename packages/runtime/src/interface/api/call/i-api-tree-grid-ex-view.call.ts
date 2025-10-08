@@ -38,14 +38,4 @@ export interface IApiTreeGridExViewCall extends IApiTreeViewCall {
   Save: {
     args: undefined;
   };
-  /**
-   * @description 刷新视图
-   * @type {{
-   *     args: undefined;
-   *   }}
-   * @memberof IApiTreeGridExViewCall
-   */
-  Refresh: {
-    args: undefined;
-  };
 }

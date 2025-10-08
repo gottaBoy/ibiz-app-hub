@@ -41,6 +41,8 @@ export abstract class TreeNodeData implements ITreeNodeData {
 
   _defaultExpand: boolean = false;
 
+  _draggable: boolean = false;
+
   _context?: IParams;
 
   _params?: IParams;
@@ -52,6 +54,8 @@ export abstract class TreeNodeData implements ITreeNodeData {
   _textHtml?: string;
 
   _disableSelect?: boolean;
+
+  srfcollapsestate: -1 | 0 | 1 = -1;
 
   constructor(
     model: IDETreeNode,
@@ -69,6 +73,12 @@ export abstract class TreeNodeData implements ITreeNodeData {
     this._nodeType = model.treeNodeType!;
     this._disableSelect = model.disableSelect === true;
     this._changedOnly = model.enableRowEditChangedOnly === true;
+    // 节点勾选了拖动、拖入、排序时允许拖拽
+    this._draggable = !!(
+      model?.allowDrag ||
+      model?.allowDrop ||
+      model?.allowOrder
+    );
 
     // 所有节点都要继承父的上下文，如果父存在则复制父的资源上下文，否则返回空对象。
     if (this._parent) {
@@ -89,6 +99,20 @@ export abstract class TreeNodeData implements ITreeNodeData {
     Object.defineProperty(this, 'srfnodeid', {
       get() {
         return this._id;
+      },
+      enumerable: true,
+      configurable: true,
+    });
+
+    let srfcollapsestate = opts.defaultExpand === true ? 1 : 0;
+
+    Object.defineProperty(this, 'srfcollapsestate', {
+      get() {
+        if (this._leaf) return -1;
+        return srfcollapsestate;
+      },
+      set(state: 0 | 1) {
+        if (!this._leaf) srfcollapsestate = state;
       },
       enumerable: true,
       configurable: true,

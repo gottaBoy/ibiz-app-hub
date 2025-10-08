@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'tree_exp',
   deviewId: 'a73a5748f824d554426c432da82663fa',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',

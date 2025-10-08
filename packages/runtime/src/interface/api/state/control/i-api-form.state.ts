@@ -63,4 +63,10 @@ export interface IApiFormState extends IApiControlState {
    * @memberof IApiFormState
    */
   simpleDataIndex: number;
+
+  /**
+   * @description 多数据部件表单模式下当前表单索引
+   * @memberof IApiFormState
+   */
+  mdCtrlFormIndex: number;
 }

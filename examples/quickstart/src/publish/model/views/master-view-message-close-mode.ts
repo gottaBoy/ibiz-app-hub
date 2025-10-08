@@ -1,6 +1,7 @@
 export default {
   deviewCodeName: 'view_message_close_mode',
   deviewId: '4e4ae62904e47931728c5a979f5151e3',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',

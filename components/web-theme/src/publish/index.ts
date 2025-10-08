@@ -54,6 +54,7 @@ import DEGANTTVIEW from './view-layout-model-repository/view-layout-model-reposi
 import DEINDEXVIEW from './view-layout-model-repository/view-layout-model-repository-de-index-view-layout';
 import DETABSEARCHVIEW from './view-layout-model-repository/view-layout-model-repository-de-tab-search-view-view-layout';
 import DETABEXPVIEW_FLOW from './view-layout-model-repository/view-layout-model-repository-de-tab-exp-view-layout-flow';
+import DEMEDITVIEW9_TOP from './view-layout-model-repository/view-layout-model-repository-dem-edit-view-9-layout-top';
 
 // 部件布局面板
 import GridExpBar from './control-layout/control-layout-model-repository-grid-exp-bar-layout';
@@ -64,6 +65,7 @@ import ChartExpBar from './control-layout/control-layout-model-repository-chart-
 import SearchForm from './control-layout/control-layout-model-repository-search-form-layout';
 import Tree from './control-layout/control-layout-model-repository-tree-layout';
 import DataView from './control-layout/control-layout-model-repository-data-view-layout';
+import CalendarExpBar from './control-layout/control-layout-model-repository-calendar-exp-bar-layout';
 
 /**
  * 安装视图默认布局
@@ -207,6 +209,8 @@ export function install(callBack: (key: string, model: any) => void): void {
   callBack('DETABSEARCHVIEW_DEFAULT', DETABSEARCHVIEW);
   // 实体分页导航视图（流式布局）
   callBack('DETABEXPVIEW_FLOW', DETABEXPVIEW_FLOW);
+  // 实体多表单编辑视图（部件视图）（上分页）
+  callBack('DEMEDITVIEW9_TOP', DEMEDITVIEW9_TOP);
 
   // 部件布局面板
   // 表格导航
@@ -225,4 +229,6 @@ export function install(callBack: (key: string, model: any) => void): void {
   callBack('TREEVIEW_DEFAULT', Tree);
   // 数据视图
   callBack('DATAVIEW_DEFAULT', DataView);
+    // 日历导航
+  callBack('CALENDAREXPBAR_DEFAULT', CalendarExpBar);
 }

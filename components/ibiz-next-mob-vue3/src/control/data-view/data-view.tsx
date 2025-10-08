@@ -15,11 +15,32 @@ import './data-view.scss';
 export const DataViewControl = defineComponent({
   name: 'IBizDataViewControl',
   props: {
+    /**
+     * @description 数据视图（卡片）模型数据
+     */
     modelData: { type: Object as PropType<IDEDataView>, required: true },
+    /**
+     * @description 应用上下文对象
+     */
     context: { type: Object as PropType<IContext>, required: true },
+    /**
+     * @description 视图参数对象
+     * @default {}
+     */
     params: { type: Object as PropType<IParams>, default: () => ({}) },
+    /**
+     * @description 部件适配器
+     */
     provider: { type: Object as PropType<IControlProvider> },
+    /**
+     * @description 是否单选
+     * @default true
+     */
     singleSelect: { type: Boolean, default: true },
+    /**
+     * @description 是否默认加载数据
+     * @default true
+     */
     loadDefault: { type: Boolean, default: true },
   },
   setup(props) {
@@ -70,10 +91,8 @@ export const DataViewControl = defineComponent({
       return (
         <iBizActionToolbar
           class={ns.bem('item-content', 'bottom', 'actions')}
-          action-details={
-            c.getOptItemModel()!.deuiactionGroup?.uiactionGroupDetails
-          }
-          actions-state={c.getOptItemAction(item)}
+          action-details={c.getOptItemModel()}
+          actions-state={c.state.uaState[item.srfkey]}
           onActionClick={(detail: IUIActionGroupDetail, event: MouseEvent) =>
             c.onActionClick(detail, item, event)
           }

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { registerMap as register, EChartsType, init } from 'echarts';
 import { ComputedRef, onMounted, onUnmounted, ref } from 'vue';
+import { MapController } from '@ibiz-template/runtime';
 import { MapOptions } from './map-chart.util';
 import { getJsonUrl } from './map-json';
 
@@ -15,6 +16,7 @@ import { getJsonUrl } from './map-json';
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function useMapManager(
+  controller: MapController,
   opts: ComputedRef<MapOptions>,
   calcEchartsOpts: (name: string) => IData,
   emit: (name: string, e: IData) => void,
@@ -69,9 +71,8 @@ export function useMapManager(
 
   const changeMap = async (name: string | number, isInit: boolean = false) => {
     if (!isInit) {
-      emit('mapChange', {
-        areaCode: opts.value.strAreaCode ? `${name}` : Number(name),
-      });
+      const areaCode = opts.value.strAreaCode ? `${name}` : Number(name);
+      await controller.onMapChange(areaCode);
     }
     const strName = `${name}`;
 

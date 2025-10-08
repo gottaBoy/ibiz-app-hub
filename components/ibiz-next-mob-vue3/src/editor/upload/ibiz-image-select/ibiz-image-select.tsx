@@ -10,6 +10,16 @@ import { showImagePreview } from 'vant';
 import { UploadEditorController } from '../upload-editor.controller';
 import { useVanUpload } from '../use/use-van-upload';
 
+/**
+ * 移动端图片控件（单项、直接内容）
+ * @primary
+ * @description 使用van-uploader组件，用于选择图片并可以进行预览。支持编辑器类型包含：`移动端图片控件（单项、直接内容）`
+ * @editorparams {name:STOPPROPAGATION,parameterType:boolean,description:是否阻止默认点击}
+ * @editorparams {name:uploadParams,parameterType:IData,description:上传参数}
+ * @editorparams {name:exportParams,parameterType:IData,description:下载参数}
+ * @ignoreprops autoFocus | overflowMode
+ * @ignoreemits blur | focus | enter | infoTextChange
+ */
 export const IBizImageSelect = defineComponent({
   name: 'IBizImageSelect',
   props: getUploadProps<UploadEditorController>(),

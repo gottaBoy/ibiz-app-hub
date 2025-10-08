@@ -1,0 +1,10 @@
+@include b(toolbar-item-plugin) {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  > ion-icon {
+    margin-right: 4px;
+    font-size: 20px;
+  }
+}

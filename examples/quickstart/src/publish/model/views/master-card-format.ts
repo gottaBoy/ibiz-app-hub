@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'card_format',
   deviewId: '5c7b675f28aeb62df763984371c9f498',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -85,6 +86,8 @@ export default {
   ],
   controls: [
     {
+      cardHeight: 75,
+      cardWidth: 220,
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
       itemLayoutPanel: {
@@ -133,7 +136,7 @@ export default {
                   editable: true,
                   id: 'quantity',
                 },
-                valueFormat: '千分位数量：#,###',
+                valueFormat: '数量（显示千分位）：#,###',
                 viewFieldName: 'quantity',
                 allowEmpty: true,
                 caption: '文本(动态)',
@@ -170,6 +173,7 @@ export default {
         name: 'itemlayoutpanel',
         id: 'web.master.usr0516557712',
       },
+      orderValueAppDEFieldId: 'px',
       dedataViewDataItems: [
         {
           appDEFieldId: 'id',
@@ -186,9 +190,31 @@ export default {
           dataType: 25,
           id: 'region_id',
         },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
+          frontCodeListId: 'web.wfstates',
+          appDEFieldId: 'wf_status',
+          dataType: 25,
+          id: 'wf_status',
+        },
       ],
       pagingMode: 1,
       pagingSize: 10,
+      hasWFDataItems: true,
       appendDEItems: true,
       enablePagingBar: true,
       navViewPos: 'NONE',

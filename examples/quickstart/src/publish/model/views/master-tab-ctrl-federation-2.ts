@@ -3,7 +3,8 @@ export default {
   loadDefault: true,
   showDataInfoBar: true,
   deviewCodeName: 'tab_ctrl_federation2',
-  deviewId: '21fa9d811823403849dbb02b85b08274',
+  deviewId: 'cd8bdd6cde1b134d0a4b26a900c89a82',
+  appWFId: 'workflow',
   accUserMode: 2,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -26,11 +27,6 @@ export default {
           appViewId: 'web.master_grid_base',
           id: 'pitem1',
         },
-        {
-          caption: '主应用分页1',
-          appViewId: 'web.master_list_base',
-          id: 'pitem2',
-        },
       ],
       dataRelationTag: 'DataRelation7',
       editItemCapLanguageRes: {
@@ -46,7 +42,7 @@ export default {
       controlParam: {
         id: 'tabexppanel',
       },
-      modelId: '6d8a7e4b6d6927dceac4532aa68fce07',
+      modelId: '9d8e03979ea690a0cdb9ad772f928f6c',
       modelType: 'PSDEDRTAB',
       name: 'tabexppanel',
       id: 'data_relation7',
@@ -80,7 +76,7 @@ export default {
   viewType: 'DETABEXPVIEW',
   enableDP: true,
   showCaptionBar: false,
-  modelId: 'ef8e1eb7bb95c31e3a303766d69cb725',
+  modelId: 'ca568794a04bd038c36ac71bcb4f6539',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERtab_ctrl_federation2',
   id: 'web.master_tab_ctrl_federation2',

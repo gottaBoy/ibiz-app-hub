@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'kanban_view',
   deviewId: 'caba86568c652ea0b84749fe2e3d68df',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -396,6 +397,7 @@ export default {
         },
         minorSortDir: 'ASC',
         minorSortAppDEFieldId: 'px',
+        orderValueAppDEFieldId: 'px',
         dedataViewDataItems: [
           {
             appDEFieldId: 'id',
@@ -412,8 +414,30 @@ export default {
             dataType: 25,
             id: 'region_id',
           },
+          {
+            appDEFieldId: 'category_type',
+            dataType: 25,
+            id: 'srfdatatype',
+          },
+          {
+            appDEFieldId: 'category_type',
+            dataType: 25,
+            id: 'category_type',
+          },
+          {
+            appDEFieldId: 'category_id',
+            dataType: 25,
+            id: 'category_id',
+          },
+          {
+            frontCodeListId: 'web.wfstates',
+            appDEFieldId: 'wf_status',
+            dataType: 25,
+            id: 'wf_status',
+          },
         ],
         pagingSize: 1000,
+        hasWFDataItems: true,
         appendDEItems: true,
         enableCardEdit: true,
         enableCardEditGroup: true,
@@ -435,11 +459,6 @@ export default {
           appDEMethodId: 'get',
           appDataEntityId: 'web.master',
           id: 'load',
-        },
-        moveControlAction: {
-          appDEMethodId: 'update',
-          appDataEntityId: 'web.master',
-          id: 'move',
         },
         removeControlAction: {
           appDEMethodId: 'remove',

@@ -9,7 +9,7 @@ import './panel-static-carousel.scss';
  * @description 使用el-carousel组件，静态轮播组件，可配置静态图片用于轮播展示。
  * @panelitemparams {name:autoplay,parameterType:string,defaultvalue:-,description:为1时自动播放，为0时不自动播放}
  * @panelitemparams {name:timespan,parameterType:number,defaultvalue:3000,description:轮播间隔，单位ms}
- * @panelitemparams {name:showMode,parameterType:`DEFAULT | CARD`,defaultvalue:DEFAULT,description:为CARD时展示卡片样式}
+ * @panelitemparams {name:showMode,parameterType:'DEFAULT' | 'CARD',defaultvalue:'DEFAULT',description:为CARD时展示卡片样式}
  * @primary
  */
 export const PanelStaticCarousel = defineComponent({

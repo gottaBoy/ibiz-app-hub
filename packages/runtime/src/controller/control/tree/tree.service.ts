@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { IHttpResponse, ModelError } from '@ibiz-template/core';
 import {
   IDETree,
@@ -571,14 +572,8 @@ export class TreeService<
     }
     let result: IData[] = [];
     if (params) {
-      if (dataName) {
-        const data = params[dataName];
-        if (data) {
-          result = Array.isArray(data) ? data : [data];
-        }
-      } else {
-        result = [params];
-      }
+      const data = dataName ? params[dataName] : params;
+      result = data ? (Array.isArray(data) ? data : [data]) : [];
     }
     return result;
   }

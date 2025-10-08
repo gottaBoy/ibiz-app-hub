@@ -1,7 +1,7 @@
 export default {
   deviewCodeName: 'welcome',
   deviewId: 'b8118508c1d7bb5b546de52230bdfc5b',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.ABOUT',
   },

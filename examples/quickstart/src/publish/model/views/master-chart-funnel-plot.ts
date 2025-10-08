@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Chart_funnelPlot',
   deviewId: 'dc2486dd86908a780d425463b14ab2aa',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -17,7 +18,6 @@ export default {
       id: 'engine',
     },
   ],
-  appViewMsgGroupId: 'chart_funnelplot',
   controls: [
     {
       searchButtonStyle: 'DEFAULT',
@@ -135,7 +135,7 @@ export default {
       showBusyIndicator: true,
       codeName: 'master_chart_funnel_plot_chart',
       controlType: 'CHART',
-      height: 300,
+      height: 400,
       logicName: 'Chart8',
       appDataEntityId: 'web.master',
       controlParam: {
@@ -149,6 +149,15 @@ export default {
       },
       name: 'chart',
       id: 'web.master.master_chart_funnel_plot_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

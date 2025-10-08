@@ -1,5 +1,13 @@
 /* eslint-disable no-nested-ternary */
-import { defineComponent, PropType, ref, computed } from 'vue';
+import {
+  ref,
+  Ref,
+  PropType,
+  computed,
+  onMounted,
+  defineComponent,
+  onBeforeUnmount,
+} from 'vue';
 import { useUIStore, useNamespace } from '@ibiz-template/vue3-util';
 import { IUIActionGroupDetail } from '@ibiz/model-core';
 import {
@@ -9,7 +17,7 @@ import {
   IKanbanGroupState,
 } from '@ibiz-template/runtime';
 import draggable from 'vuedraggable';
-import { showTitle } from '@ibiz-template/core';
+import { NOOP, listenJSEvent, showTitle } from '@ibiz-template/core';
 import './swimlane-kanban.scss';
 
 /**
@@ -30,6 +38,7 @@ export const SwimlaneKanban = defineComponent({
     const ns = useNamespace('swimlane-kanban');
     const c = props.controller;
     const { zIndex } = useUIStore();
+    const isFull: Ref<boolean> = ref(false);
     /**
      * popper样式
      */
@@ -44,6 +53,20 @@ export const SwimlaneKanban = defineComponent({
      * dropdownKey展开key
      */
     const dropdownKey = ref();
+
+    const swimlaneKanban = ref();
+
+    let cleanup = NOOP;
+
+    onMounted(() => {
+      cleanup = listenJSEvent(window, 'resize', () => {
+        isFull.value = c.getFullscreen();
+      });
+    });
+
+    onBeforeUnmount(() => {
+      if (cleanup !== NOOP) cleanup();
+    });
 
     /**
      * 是否禁止拖拽
@@ -95,6 +118,14 @@ export const SwimlaneKanban = defineComponent({
     let cacheInfo: Partial<IDragChangeInfo> | null = null;
 
     /**
+     * @description 全屏
+     */
+    const onFullScreen = () => {
+      const container = swimlaneKanban.value;
+      isFull.value = c.onFullScreen(container);
+    };
+
+    /**
      * @description 拖拽改变
      * @param {IData} evt
      * @param {string | number} groupKey
@@ -114,6 +145,7 @@ export const SwimlaneKanban = defineComponent({
           fromLane: laneKey,
           toLane: laneKey,
         });
+      // 分组变更时会先触发added后触发removed，因此需提前缓存added的参数
       if (evt.added)
         cacheInfo = {
           to: groupKey,
@@ -364,14 +396,32 @@ export const SwimlaneKanban = defineComponent({
                     {ibiz.i18n.t('control.kanban.lane')}
                   </div>
                 </div>
-                {c.enableGroupHidden && (
-                  <div class={ns.em('cell', 'right')}>
+                <div class={ns.em('cell', 'right')}>
+                  {c.enableGroupHidden && (
                     <iBizKanbanSetting
                       buttonStyle={{ circle: true, type: 'text' }}
                       controller={props.controller}
                     />
-                  </div>
-                )}
+                  )}
+                  {c.enableFullScreen && (
+                    <el-button
+                      type='text'
+                      circle={true}
+                      onClick={onFullScreen}
+                      title={
+                        isFull.value
+                          ? ibiz.i18n.t('app.cancelFullscreen')
+                          : ibiz.i18n.t('app.fullscreen')
+                      }
+                    >
+                      <ion-icon
+                        name={
+                          isFull.value ? 'contract-outline' : 'expand-outline'
+                        }
+                      ></ion-icon>
+                    </el-button>
+                  )}
+                </div>
               </div>
             </div>
             {c.state.groups.map(group => {
@@ -423,6 +473,7 @@ export const SwimlaneKanban = defineComponent({
           {actionModel.length ? (
             <div class={ns.em('default-item', 'footer')}>
               <iBizActionToolbar
+                zIndex={c.state.zIndex}
                 class={ns.em('default-item', 'actions')}
                 action-details={actionModel}
                 actions-state={c.state.uaState[item.srfkey]}
@@ -553,6 +604,7 @@ export const SwimlaneKanban = defineComponent({
                     itemKey='srfkey'
                     disabled={disabled.value}
                     modelValue={group.children}
+                    handle={`.${ns.e('drag-icon')}`}
                     class={ns.em('cell', 'draggable')}
                     group={getGroupKey(group.key, lane.key)}
                     onChange={(evt: IData) =>
@@ -580,9 +632,33 @@ export const SwimlaneKanban = defineComponent({
                             onClick={() => c.onRowClick(element)}
                             onDblclick={() => c.onDbRowClick(element)}
                           >
-                            {c.model.itemLayoutPanel
-                              ? renderPanelItemLayout(lane, element)
-                              : renderDefaultItem(lane, element, group)}
+                            <div class={ns.em('card', 'content')}>
+                              {c.state.draggable &&
+                                !c.state.readonly &&
+                                c.draggableMode !== 0 && (
+                                  <svg
+                                    viewBox='0 0 16 16'
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    height='1em'
+                                    width='1em'
+                                    class={ns.e('drag-icon')}
+                                    preserveAspectRatio='xMidYMid meet'
+                                    focusable='false'
+                                  >
+                                    <g stroke-width='1' fill-rule='evenodd'>
+                                      <g
+                                        transform='translate(5 1)'
+                                        fill-rule='nonzero'
+                                      >
+                                        <path d='M1 2a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM1 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z'></path>
+                                      </g>
+                                    </g>
+                                  </svg>
+                                )}
+                              {c.model.itemLayoutPanel
+                                ? renderPanelItemLayout(lane, element)
+                                : renderDefaultItem(lane, element, group)}
+                            </div>
                           </el-card>
                         );
                       },
@@ -652,11 +728,12 @@ export const SwimlaneKanban = defineComponent({
         </div>
       );
     };
-    return { ns, width, renderHeader, renderBody };
+    return { ns, swimlaneKanban, width, renderHeader, renderBody };
   },
   render() {
     return (
       <div
+        ref='swimlaneKanban'
         class={[
           this.ns.b(),
           this.ns.e(this.controller.model.groupStyle?.toLowerCase()),

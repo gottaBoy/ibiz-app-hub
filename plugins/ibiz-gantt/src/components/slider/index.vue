@@ -16,6 +16,21 @@
     @click.stop
     @pointerup="onPointerUp"
   >
+    <!-- 创建开始连线的按钮 -->
+    <div
+      v-if="props.allowLink"
+      ref="startAnchorRef"
+      :class="[
+        'xg-slider-anchor',
+        'start-anchor',
+        {
+          'xg-slider-anchor__show': $param.hoverItem?.uuid === props.data?.uuid
+        }
+      ]"
+      :style="{ borderColor: bgColor }"
+      @pointerdown="onStartAnchorDown"
+    ></div>
+
     <div class="xg-slider-block">
       <!-- 滑块主体 -->
       <slot
@@ -100,19 +115,19 @@
       </div>
     </div>
 
-    <!-- 创建连线的按钮 -->
+    <!-- 创建结束连线的按钮 -->
     <div
       v-if="props.allowLink"
-      ref="outAnchorRef"
+      ref="endAnchorRef"
       :class="[
         'xg-slider-anchor',
-        'out-anchor',
+        'end-anchor',
         {
           'xg-slider-anchor__show': $param.hoverItem?.uuid === props.data?.uuid
         }
       ]"
       :style="{ borderColor: bgColor }"
-      @pointerdown="onOutAnchorDown"
+      @pointerdown="onEndAnchorDown"
     ></div>
   </div>
 </template>
@@ -137,6 +152,8 @@ import useSlotsBox from '@/composables/useSlotsBox';
 import useDragBackdrop from '@/composables/useDragBackdrop';
 import dayjs from 'dayjs';
 import { XDate } from '@/models/param/date';
+import { Relation, RelationType } from '@/models/data/links';
+import { LinkProps } from '@/typings/link';
 
 export default defineComponent({
   name: Variables.name.slider
@@ -331,12 +348,17 @@ const hanldeDragBackdrop = (args?: any) => {
   updateDragBackdrop({sliderLeft: sliderLeft.value, sliderWidth: sliderWidth.value, isDrag: true, startDate: props.data!.start, endDate: props.data!.end, ...args});
 }
 
+const onMoveBefore = () => {
+  setShowLink(false);
+}
+
 const onMoveAfter = () => {
   hanldeDragBackdrop();
 }
 
 const onMoveEnd = () => {
   hanldeDragBackdrop({isDrag: false});
+  setShowLink(true);
 }
 
 // 移动过的对象数组
@@ -413,6 +435,8 @@ const setStart = (x: number, type: string) => {
     return props.setStart(toCustomOptions({ x, type, startDate, endDate}), setEventStartOrEventEnd, setStartOrEnd);
   }
 
+  onMoveBefore();
+
   let _unit = ganttHeader.unit as DateUnit;
 
   isDrag.value = true;
@@ -454,6 +478,8 @@ const setEnd = (x: number, type: string) => {
   if (props.setEnd) {
     return props.setEnd(toCustomOptions({ x, type, startDate, endDate }), setEventStartOrEventEnd, setStartOrEnd);
   }
+
+  onMoveBefore();
 
   let _unit = ganttHeader.unit as DateUnit;
 
@@ -547,60 +573,110 @@ onDrag(resizeRightRef, {
 // #endregion
 
 // #region outAnchor
-function onOutAnchorDown(e: PointerEvent) {
+let startAnchorMove = false;
+let endAnchorMove = false;
+function onStartAnchorDown(e: PointerEvent) {
   handleDisableMove();
+  startAnchorMove = true;
+}
+function onEndAnchorDown(e: PointerEvent) {
+  handleDisableMove();
+  endAnchorMove = true;
 }
 
-const { setLinking, linking, $links } = useLinks();
+const { setLinking, linking, $links, setShowLink } = useLinks();
 const { ganttBodyRef } = useElement();
 const { rowHeight } = useStyle();
-const outAnchorRef = ref(null) as Ref<HTMLElement | null>;
-const startPos = { x: 0, y: 0 };
-onDrag(outAnchorRef, {
+
+const startAnchorRef  = ref(null) as Ref<HTMLElement | null>;
+const startAnchorPos = { x: 0, y: 0 };
+onDrag(startAnchorRef, {
   reset: true,
-  disabled: () => !outAnchorRef.value && !props.allowLink,
+  disabled: () => !startAnchorRef.value && !props.allowLink && !startAnchorMove,
 
   onStart: pos => {
-    startPos.x = (ganttBodyRef.value?.getBoundingClientRect().x ?? 0) - pos.x;
-    startPos.y = (ganttBodyRef.value?.getBoundingClientRect().y ?? 0) - pos.y;
+    startAnchorPos.x = (ganttBodyRef.value?.getBoundingClientRect().x ?? 0) - pos.x;
+    startAnchorPos.y = (ganttBodyRef.value?.getBoundingClientRect().y ?? 0) - pos.y;
 
     const _sp = {
-      x: sliderLeft.value + sliderWidth.value + 10,
+      x: sliderLeft.value - 11,
       y: ((props.data?.flatIndex ?? 0) + 0.5) * rowHeight.value
     };
     setLinking({
       isLinking: true,
       startRow: props.data,
       startPos: _sp,
-      endPos: _sp
+      endPos: _sp,
+      relation: Relation.START,
     });
   },
 
   onMove: (x, pos) => {
-    setLinking({ endPos: { x: pos.x - startPos.x, y: pos.y - startPos.y } });
+    setLinking({ endPos: { x: pos.x - startAnchorPos.x, y: pos.y - startAnchorPos.y } });
   },
 
   onFinally: () => {
+    startAnchorMove = false;
+    setLinking({ isLinking: false });
+  }
+});
+
+const endAnchorRef = ref(null) as Ref<HTMLElement | null>;
+const endAnchorPos = { x: 0, y: 0 };
+onDrag(endAnchorRef, {
+  reset: true,
+  disabled: () => !endAnchorRef.value && !props.allowLink && !endAnchorMove,
+
+  onStart: pos => {
+    endAnchorPos.x = (ganttBodyRef.value?.getBoundingClientRect().x ?? 0) - pos.x;
+    endAnchorPos.y = (ganttBodyRef.value?.getBoundingClientRect().y ?? 0) - pos.y;
+
+    const _sp = {
+      x: sliderLeft.value + sliderWidth.value + 11,
+      y: ((props.data?.flatIndex ?? 0) + 0.5) * rowHeight.value
+    };
+    setLinking({
+      isLinking: true,
+      startRow: props.data,
+      startPos: _sp,
+      endPos: _sp,
+      relation: Relation.END,
+    });
+  },
+
+  onMove: (x, pos) => {
+    setLinking({ endPos: { x: pos.x - endAnchorPos.x, y: pos.y - endAnchorPos.y } });
+  },
+
+  onFinally: () => {
+    endAnchorMove = false;
     setLinking({ isLinking: false });
   }
 });
 
 // 最后抛出添加连线事件
 const { EmitAddLink } = useEvent();
-function onPointerUp() {
+function onPointerUp(_event: MouseEvent) {
   if (!props.allowLink) return;
-
+  // 判断鼠标释放位置在元素的左边还是右边
+  const element = _event.currentTarget as any;
+  const elementWidth = element?.offsetWidth;
+  const rect = element?.getBoundingClientRect();
+  const pointerX = _event.clientX - rect.left;
+  const centerX = elementWidth / 2;
+  const endRelation = pointerX < centerX ? Relation.START : Relation.END;
+  const relationType = linking.relation && endRelation ? `${linking.relation}${endRelation}` as RelationType : RelationType.ES;
   if (linking.startRow) {
-    const link = $links.createLink(linking.startRow, props.data!);
+    const link = $links.createLink(linking.startRow, props.data!, relationType);
     if (link) {
       EmitAddLink(
         link,
-        { from: linking.startRow.data, to: props.data!.data },
-        _link => $links.addLink(_link, linking.startRow!, props.data!)
+        { from: linking.startRow.data, to: props.data!.data,relationType},
+        (_link: LinkProps) => $links.addLink(_link, linking.startRow!, props.data!)
       );
     }
 
-    setLinking({ startRow: null, endRow: null });
+    setLinking({ startRow: null, endRow: null, relation: null });
   }
 }
 // #endregion
@@ -728,22 +804,27 @@ const classNames = computed(() => {
         }
       }
     }
+
+    .xg-slider-anchor {
+      opacity: 1;
+    }
   }
 
   .xg-slider-anchor {
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background-color: var(--gantt-color-white);
+    background-color: var(--gantt-color-primary);
     border: 2px solid var(--gantt-color-black);
     position: absolute;
-    top: calc(50% - 4px);
+    top: 50%;
     cursor: pointer;
     opacity: 0;
     transition: transform 0.2s, opacity 0.2s;
+    transform: translateY(-50%);
 
     &:hover {
-      transform: scale(1.5);
+      transform: translateY(-50%) scale(1.2);
     }
   }
 
@@ -751,8 +832,12 @@ const classNames = computed(() => {
     opacity: 1;
   }
 
-  .out-anchor {
-    right: -12px;
+  .start-anchor {
+    left: -11px;
+  }
+
+  .end-anchor {
+    right: -11px;
   }
 }
 

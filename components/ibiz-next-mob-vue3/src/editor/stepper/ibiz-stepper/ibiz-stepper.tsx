@@ -8,6 +8,18 @@ import { toNumber } from 'lodash-es';
 import { StepperEditorController } from '../stepper-editor.controller';
 import './ibiz-stepper.scss';
 
+/**
+ * 移动端步进器
+ *
+ * @description 使用van-stepper组件，用于在一定范围内调整数字的场景。支持编辑器类型包含：`移动端步进器`
+ * @primary
+ * @editorparams {name:stepValue,parameterType:number,defaultvalue:1,description:设置递增或递减的步长，van-stepper组件的step属性}
+ * @editorparams {name:precision,parameterType:number,defaultvalue:0,description:设置数值精度，van-stepper组件的decimal-length属性}
+ * @editorparams {name:maxValue,parameterType:number,defaultvalue:Infinity,description:设置步进器允许的最大值，van-stepper组件的max属性}
+ * @editorparams {name:minValue,parameterType:number,defaultvalue:-Infinity,description:设置步进器允许的最小值，van-stepper组件的min属性}
+ * @ignoreprops autoFocus | overflowMode
+ * @ignoreemits enter | infoTextChange
+ */
 export const IBizStepper = defineComponent({
   name: 'IBizStepper',
   props: getStepperProps<StepperEditorController>(),

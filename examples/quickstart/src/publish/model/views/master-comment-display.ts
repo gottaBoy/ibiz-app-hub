@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'comment_display',
   deviewId: 'c290337dc6cc78c952f4b4b571c08dd1',
+  appWFId: 'workflow',
   accUserMode: 2,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -21,6 +22,9 @@ export default {
       id: 'master',
     },
   ],
+  sysCss: {
+    cssName: 'main-info-common-view9',
+  },
   viewLayoutPanel: {
     layoutBodyOnly: true,
     viewProxyMode: true,
@@ -406,7 +410,7 @@ export default {
           shrink: 0,
           layout: 'FLEX',
         },
-        id: 'container_grid',
+        id: 'container_view_bottom',
       },
     ],
     layoutPanel: true,
@@ -443,7 +447,7 @@ export default {
           id: 'loaddraftfrom',
         },
         getDraftControlAction: {
-          appDEMethodId: 'get_sample_date',
+          appDEMethodId: 'get_sample_data',
           appDataEntityId: 'web.master',
           id: 'loaddraft',
         },
@@ -461,6 +465,16 @@ export default {
           appDEMethodId: 'update',
           appDataEntityId: 'web.master',
           id: 'update',
+        },
+        wfstartControlAction: {
+          appDEMethodId: 'wfstart',
+          appDataEntityId: 'web.master',
+          id: 'wfstart',
+        },
+        wfsubmitControlAction: {
+          appDEMethodId: 'wfsubmit',
+          appDataEntityId: 'web.master',
+          id: 'wfsubmit',
         },
         deformPages: [
           {

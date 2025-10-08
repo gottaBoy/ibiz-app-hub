@@ -1,0 +1,31 @@
+export default {
+  caption: '应用流程跟踪视图',
+  codeName: 'app_wf_step_trace_view',
+  controls: [
+    {
+      caption: '应用流程跟踪视图',
+      codeName: 'captionbar',
+      controlType: 'CAPTIONBAR',
+      controlParam: {},
+      id: 'captionbar',
+    },
+  ],
+  viewLayoutPanel: {
+    layoutBodyOnly: true,
+    useDefaultLayout: true,
+    layoutPanel: true,
+    codeName: 'layoutpanel',
+    controlStyle: 'APPWFSTEPTRACEVIEW',
+    controlType: 'VIEWLAYOUTPANEL',
+    controlParam: {},
+    id: 'layoutpanel',
+  },
+  title: '应用流程跟踪视图',
+  viewStyle: 'DEFAULT',
+  viewType: 'APPWFSTEPTRACEVIEW',
+  showCaptionBar: true,
+  modelId: '816e0e4687a5ecaad0c30a49c446553e',
+  modelType: 'PSAPPUTILVIEW',
+  name: 'AppWFStepTraceView',
+  id: 'web.app_wf_step_trace_view',
+};

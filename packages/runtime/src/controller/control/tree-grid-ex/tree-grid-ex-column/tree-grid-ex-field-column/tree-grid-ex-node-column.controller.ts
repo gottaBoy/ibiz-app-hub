@@ -1,10 +1,10 @@
 import {
-  IAppCodeList,
   IDETreeNode,
+  IAppCodeList,
   IDETreeNodeDataItem,
   IDETreeNodeEditItem,
-  IDETreeNodeFieldColumn,
   IUIActionGroupDetail,
+  IDETreeNodeFieldColumn,
 } from '@ibiz/model-core';
 import {
   DataTypes,
@@ -14,18 +14,18 @@ import {
 import { clone } from 'ramda';
 import dayjs from 'dayjs';
 import {
-  CodeListItem,
-  IEditorContainerController,
-  IEditorController,
-  IEditorProvider,
   IModalData,
+  CodeListItem,
+  IEditorProvider,
+  IEditorController,
   ITreeGridExRowState,
+  IEditorContainerController,
 } from '../../../../../interface';
 import { TreeGridExFieldColumnController } from './tree-grid-ex-field-column.controller';
 import { getEditorProvider } from '../../../../../register';
 import { convertNavData, getWFContext } from '../../../../../utils';
 import { OpenAppViewCommand } from '../../../../../command';
-import { parseUserParams } from '../../../../../model';
+import { getAllUIActionItems, parseUserParams } from '../../../../../model';
 import { UIActionUtil } from '../../../../../ui-action';
 import {
   ButtonContainerState,
@@ -261,22 +261,22 @@ export class TreeGridExNodeColumnController
   initActionStates(row: ITreeGridExRowState): void {
     // 属性列界面行为按钮状态
     const { deuiactionGroup } = this.nodeColumn;
-    if (deuiactionGroup && deuiactionGroup.uiactionGroupDetails) {
-      const containerState = new ButtonContainerState();
-      deuiactionGroup.uiactionGroupDetails.forEach(detail => {
-        const actionid = detail.uiactionId;
-        if (actionid) {
-          const buttonState = new UIActionButtonState(
-            detail.id!,
-            this.context.srfappid!,
-            actionid,
-            detail,
-          );
-          containerState.addState(detail.id!, buttonState);
-        }
-      });
-      row.columnActionsStates[this.name!] = containerState;
-    }
+    if (!deuiactionGroup?.uiactionGroupDetails?.length) return;
+    const containerState = new ButtonContainerState();
+    const actions = getAllUIActionItems(deuiactionGroup.uiactionGroupDetails);
+    actions.forEach(detail => {
+      const actionid = detail.uiactionId;
+      if (actionid) {
+        const buttonState = new UIActionButtonState(
+          detail.id!,
+          this.context.srfappid!,
+          actionid,
+          detail,
+        );
+        containerState.addState(detail.id!, buttonState);
+      }
+    });
+    row.columnActionsStates[this.name!] = containerState;
   }
 
   /**

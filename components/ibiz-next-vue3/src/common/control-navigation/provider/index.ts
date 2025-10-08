@@ -17,7 +17,8 @@ export function getNavigationProvider(
   const { controlType } = controller.model;
   if (controlType === 'CALENDAR')
     return new CalendarNavigationProvider(controller);
-  if (controlType === 'TREEVIEW') return new TreeNavigationProvider(controller);
+  if (controlType === 'TREEVIEW' || controlType === 'TREEGRIDEX')
+    return new TreeNavigationProvider(controller);
   if (controlType === 'MAP') return new MapNavigationProvider(controller);
   return new NavgationBaseProvider(controller);
 }

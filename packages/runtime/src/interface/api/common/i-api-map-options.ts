@@ -1,3 +1,5 @@
+import { IApiData } from '@ibiz-template/core';
+
 /**
  * @description 地图默认参数
  * @export
@@ -20,10 +22,10 @@ export interface IAPiMapOptions {
 
   /**
    * @description 热力图配置
-   * @type {IData}
+   * @type {IApiData}
    * @memberof IAPiMapOptions
    */
-  visualMap: IData;
+  visualMap: IApiData;
 
   /**
    * @description 区块颜色
@@ -65,4 +67,20 @@ export interface IAPiMapOptions {
    * @memberof IAPiMapOptions
    */
   defaultAreaCode: string | number;
+
+  /**
+   * @description 距离顶部像素值
+   * @type {number}
+   * @default 20
+   * @memberof IAPiMapOptions
+   */
+  top: number;
+
+  /**
+   * @description 距离底部像素值
+   * @type {number}
+   * @default 20
+   * @memberof IAPiMapOptions
+   */
+  bottom: number;
 }

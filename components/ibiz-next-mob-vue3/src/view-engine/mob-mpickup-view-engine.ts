@@ -5,6 +5,7 @@ import {
   SysUIActionTag,
   IListController,
   IPanelItemController,
+  IApiMobMPickupViewCall,
 } from '@ibiz-template/runtime';
 //   todo 缺失 IAppDEMobMPickupView
 import { IAppDEMobPickupView } from '@ibiz/model-core';
@@ -109,8 +110,11 @@ export class MobMPickupViewEngine extends MobPickupViewEngine {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  async call(key: string, args: any): Promise<IData | null | undefined> {
+  async call(
+    key: keyof IApiMobMPickupViewCall,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    args: any,
+  ): Promise<IData | null | undefined> {
     if (key === SysUIActionTag.CANCEL) {
       this.cancel();
       return null;
@@ -137,30 +141,11 @@ export class MobMPickupViewEngine extends MobPickupViewEngine {
   /**
    * 选择面板激活数据
    *
-   * @param {IData[]} data
    * @memberof MobMPickupViewEngine
    */
-  public pickupViewPanelDataActive(data: IData[]): void {
-    const allData = this.simpleList.getAllData();
-    const items = [...allData, ...data];
-    // 去重items
-    const uniqueItems = this.handleUniqueItems(items);
-    this.simpleList.setData(uniqueItems);
-  }
-
-  /**
-   * 去重数组
-   *
-   * @protected
-   * @param {IData[]} arr
-   * @return {*}  {IData[]}
-   * @memberof MobMPickupViewEngine
-   */
-  protected handleUniqueItems(arr: IData[]): IData[] {
-    const res = new Map();
-    return arr.filter(
-      (item: IData) => !res.has(item.srfkey) && res.set(item.srfkey, 1),
-    );
+  public async pickupViewPanelDataActive(): Promise<void> {
+    const selectedData = await this.pickupViewPanel.getSelectedData();
+    await this.handlePushSimpleListItems(selectedData);
   }
 
   /**
@@ -209,10 +194,33 @@ export class MobMPickupViewEngine extends MobPickupViewEngine {
    * @param {IData[]} data
    * @memberof MobMPickupViewEngine
    */
-  public handlePushSimpleListItems(data: IData[]): void {
-    const allData = this.simpleList.getAllData();
-    const items = this.calcDuplicateData(allData, data);
-    this.simpleList.setData(items);
+  public async handlePushSimpleListItems(data: IData[]): Promise<void> {
+    // 每次添加的都是多数据部件当前页数据，因此需先将原来简单列表的当前页数据过滤掉
+    const items = await this.pickupViewPanel.getAllData();
+    // 过滤出非当前页数据
+    const selectItems = this.simpleList
+      .getAllData()
+      .filter(selected => !items.some(item => item.srfkey === selected.srfkey));
+    // 将多数据部件当前页数据加入简单列表选中
+    selectItems.push(...data);
+    // 去重items
+    const uniqueItems = this.handleUniqueItems(selectItems);
+    this.setSelectedData(uniqueItems);
+  }
+
+  /**
+   * 去重数组
+   *
+   * @protected
+   * @param {IData[]} arr
+   * @return {*}  {IData[]}
+   * @memberof MobMPickupViewEngine
+   */
+  protected handleUniqueItems(arr: IData[]): IData[] {
+    const res = new Map();
+    return arr.filter(
+      (item: IData) => !res.has(item.srfkey) && res.set(item.srfkey, 1),
+    );
   }
 
   /**
@@ -235,7 +243,7 @@ export class MobMPickupViewEngine extends MobPickupViewEngine {
    * @memberof MobMPickupViewEngine
    */
   public removeAll(): void {
-    this.simpleList.setData([]);
+    this.setSelectedData([]);
   }
 
   /**
@@ -267,6 +275,17 @@ export class MobMPickupViewEngine extends MobPickupViewEngine {
         items.splice(index, 1);
       }
     });
+    this.setSelectedData(items);
+  }
+
+  /**
+   * @description 设置选中数据
+   * @protected
+   * @param {IData[]} items
+   * @memberof MPickupViewEngine
+   */
+  protected setSelectedData(items: IData[]): void {
+    super.setSelectedData(items);
     this.simpleList.setData(items);
   }
 

@@ -1,0 +1,10 @@
+@include b('signature-pad') {
+    width: 100%;
+    height: 100%;
+
+    @include e('container') {
+        width: 100%;
+        height: 100%;
+        background-color: getCssVar(color, bg, 1);
+    }
+}

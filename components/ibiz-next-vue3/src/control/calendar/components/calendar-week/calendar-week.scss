@@ -121,7 +121,6 @@
       width: 100%;
       height: 100%;
       min-height: 22px;
-      padding-left: 4px;
       cursor: pointer;
       background-color: getCssVar(color, primary);
       border: none;
@@ -260,13 +259,17 @@
 
   // 面板项popper
   @include e(event-popover) {
-    position: relative;
     width: auto;
     height: auto;
     padding: 0;
 
-    &.el-popover.el-popper {
-      padding: 8px;
+    &.#{bem('popover')} {
+      position: absolute;
+      z-index: 110;
+      padding: getCssVar(spacing, tight);
+      background: getCssVar(color, bg, 1);
+      border: none;
+      box-shadow: getCssVar('shadow', 'elevated');
     }
 
     // 当配置了 showdetail 参数，只有配置了布局面板时才会显示气泡
@@ -295,37 +298,6 @@
           background-color: transparent;
           border-color: transparent;
         }
-      }
-    }
-    @include m(close) {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      display: none;
-      cursor: pointer;
-
-      &:hover {
-        .el-icon {
-          background: getCssVar(color, primary);
-          border-radius: 50%;
-
-          svg {
-            fill: getCssVar(color, white);
-          }
-        }
-      }
-    }
-
-    .el-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 24px;
-      min-height: 24px;
-      font-size: 20px;
-
-      svg {
-        fill: var(--el-text-color-secondary);
       }
     }
   }

@@ -3,7 +3,7 @@ import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { showTitle } from '@ibiz-template/core';
 import { IUIEvent, calendarDailyEmits, calendarDailyProps } from '../interface';
-import { closeIcon, handlePopClose, isToday } from '../util';
+import { isToday } from '../util';
 import { useCalendarDaily } from './use-calendar-daily';
 import './calendar-daily.scss';
 
@@ -29,7 +29,10 @@ export const CalendarDaily = defineComponent({
       handleCurTime,
       initDrawData,
       eventContextmenu,
-    } = useCalendarDaily(props, emit);
+      contentMousemove,
+      eventMouseenter,
+      eventMouseleave,
+    } = useCalendarDaily(props, emit, ns);
 
     watch(
       () => props.selectedData,
@@ -62,6 +65,28 @@ export const CalendarDaily = defineComponent({
     });
 
     /**
+     * 绘制事件项popover内容
+     * @param {IUIEvent} _event 事件项数据
+     */
+    const renderPopoverContent = (_event: IUIEvent) => {
+      // 适配弹框内详情不要背景色
+      const _tempEvent = { ..._event, color: '', bkColor: '' };
+      return (
+        <div class={[ns.em('event-popover', 'body')]}>
+          <div class={[ns.em('event-popover', 'scroll')]}>
+            {slots?.event ? (
+              slots.event?.({ data: _tempEvent })
+            ) : (
+              <div class={[ns.em('event-popover', 'content')]}>{`${
+                _event.text || ''
+              } ${_event.timeRange || ''}`}</div>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    /**
      * 绘制事件项
      * @param {string} location 绘制位置
      * @param {IParams} eventBoxStyle 事件容器中style样式
@@ -88,6 +113,8 @@ export const CalendarDaily = defineComponent({
       title = showTitle(title) || '';
       // 如果配置了显示详情，则内容区不用显示快捷提示，提示由气泡展示
       if (props.showDetail) title = '';
+
+      const component = renderPopoverContent(event);
       return (
         <div
           key={index}
@@ -107,6 +134,10 @@ export const CalendarDaily = defineComponent({
               handleEventDblClick(event, 'head');
             }}
             onContextmenu={(e: MouseEvent) => eventContextmenu(event, e)}
+            onMouseenter={(_e: MouseEvent) =>
+              eventMouseenter(_e, component, location)
+            }
+            onMouseleave={eventMouseleave}
             style={eventContentStyle}
             title={title}
           >
@@ -142,56 +173,6 @@ export const CalendarDaily = defineComponent({
     };
 
     /**
-     * 绘制事件项popover
-     * @param {Element} content 内容
-     * @param {IUIEvent} event 事件项
-     */
-    const renderPopover = (
-      content: Element,
-      event: IUIEvent,
-      placement?: string,
-    ) => {
-      if (!props.showDetail) {
-        return content;
-      }
-      // 适配弹框内详情不要背景色
-      const _tempEvent = { ...event, color: '', bkColor: '' };
-      return (
-        <el-popover
-          show-after={100}
-          offset={4}
-          width='auto'
-          popper-class={[ns.e('event-popover')]}
-          placement={placement || 'right-start'}
-        >
-          {{
-            reference: () => content,
-            default: () => {
-              return (
-                <div class={[ns.em('event-popover', 'body')]}>
-                  <div
-                    class={[ns.em('event-popover', 'close')]}
-                    onClick={el => handlePopClose(el)}
-                    v-html={closeIcon}
-                  ></div>
-                  <div class={[ns.em('event-popover', 'scroll')]}>
-                    {slots?.event ? (
-                      slots.event?.({ data: _tempEvent })
-                    ) : (
-                      <div class={[ns.em('event-popover', 'content')]}>{`${
-                        event.text || ''
-                      } ${event.timeRange || ''}`}</div>
-                    )}
-                  </div>
-                </div>
-              );
-            },
-          }}
-        </el-popover>
-      );
-    };
-
-    /**
      * 绘制头部
      */
     const renderHeader = () => {
@@ -214,7 +195,7 @@ export const CalendarDaily = defineComponent({
                     const eventContentStyle = {
                       background: event.bkColorFade,
                     };
-                    const tempContent = renderEventItem(
+                    return renderEventItem(
                       'header',
                       eventBoxStyle,
                       eventContentStyle,
@@ -222,11 +203,6 @@ export const CalendarDaily = defineComponent({
                       index,
                       'head-event',
                       'allday-info',
-                    );
-                    return renderPopover(
-                      tempContent as unknown as Element,
-                      event,
-                      'bottom',
                     );
                   })
                 ) : (
@@ -252,7 +228,7 @@ export const CalendarDaily = defineComponent({
      */
     const renderContent = () => {
       return (
-        <div class={[ns.e('scroll-area')]}>
+        <div class={[ns.e('scroll-area')]} onMousemove={contentMousemove}>
           <div class={ns.e('time-pane')}>
             <div class={ns.em('time-pane', 'time-labels')}>
               {drawData.value.map((timescale: string) => (
@@ -295,7 +271,7 @@ export const CalendarDaily = defineComponent({
                       background: event.bkColorFade,
                       'border-left': `3px solid ${event.bkColor}`,
                     };
-                    const tempContent = renderEventItem(
+                    return renderEventItem(
                       'content',
                       eventBoxStyle,
                       eventContentStyle,
@@ -303,10 +279,6 @@ export const CalendarDaily = defineComponent({
                       index,
                       '',
                       'time-pane',
-                    );
-                    return renderPopover(
-                      tempContent as unknown as Element,
-                      event,
                     );
                   })}
                 </div>

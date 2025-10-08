@@ -1,6 +1,6 @@
 <template>
   <Icon
-    v-if="$styleBox.draggable.draggable !== false"
+    v-if="$styleBox.draggable.draggable !== false || data.isDraggable"
     name="drag"
     class="drag-icon"
   />

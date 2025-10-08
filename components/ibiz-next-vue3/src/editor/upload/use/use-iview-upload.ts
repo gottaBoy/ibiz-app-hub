@@ -22,7 +22,6 @@ export function useIViewUpload(
   c: UploadEditorController,
 ): {
   uploadUrl: Ref<string>;
-  downloadUrl: Ref<string>;
   headers: Ref<IData>;
   files: Ref<
     {
@@ -56,9 +55,6 @@ export function useIViewUpload(
   // 上传文件路径
   const uploadUrl: Ref<string> = ref('');
 
-  // 下载文件路径
-  const downloadUrl: Ref<string> = ref('');
-
   // 文件上传缓存对象
   const uploadCache: IData = {
     count: 0,
@@ -77,6 +73,29 @@ export function useIViewUpload(
     { immediate: true },
   );
 
+  /**
+   * @description 获取下载路径,若业务数据中存在folder，则以业务数据中folder作为目录
+   * @param {IData} data
+   * @param {IData} file
+   * @returns {*}  {string}
+   */
+  const getDownloadUrl = (data: IData, file: IData): string => {
+    const editorParams = { ...c.editorParams };
+    if (editorParams.exportparams) {
+      editorParams.exportParams = JSON.parse(editorParams.exportparams);
+    }
+    if (file && file.folder) {
+      editorParams.osscat = file.folder;
+    }
+    const urls = ibiz.util.file.calcFileUpDownUrl(
+      c.context,
+      c.params,
+      data,
+      editorParams,
+    );
+    return urls.downloadUrl;
+  };
+
   // data响应式变更基础路径
   watch(
     () => props.data,
@@ -86,9 +105,6 @@ export function useIViewUpload(
         if (editorParams.uploadparams) {
           editorParams.uploadParams = JSON.parse(editorParams.uploadparams);
         }
-        if (editorParams.exportparams) {
-          editorParams.exportParams = JSON.parse(editorParams.exportparams);
-        }
         const urls = ibiz.util.file.calcFileUpDownUrl(
           c.context,
           c.params,
@@ -96,7 +112,6 @@ export function useIViewUpload(
           editorParams,
         );
         uploadUrl.value = urls.uploadUrl;
-        downloadUrl.value = urls.downloadUrl;
       }
     },
     { immediate: true, deep: true },
@@ -155,26 +170,33 @@ export function useIViewUpload(
     files,
     newVal => {
       // 变更后且下载基础路径存在时解析
-      if (newVal?.length && downloadUrl.value) {
+      if (newVal?.length) {
         newVal.forEach((file: IData) => {
-          file.url = file.url || downloadUrl.value.replace('%fileId%', file.id);
-          if (file.name.split('.').pop() === 'svg') {
-            calcSvgPreview(file);
-          }
-        });
-      }
-    },
-    { immediate: true },
-  );
-
-  watch(
-    downloadUrl,
-    newVal => {
-      // 变更后且下载基础路径存在时解析
-      if (newVal && files.value.length) {
-        files.value.forEach((file: IData) => {
-          file.url = downloadUrl.value.replace('%fileId%', file.id);
-          if (file.name.split('.').pop() === 'svg') {
+          const downloadUrl = getDownloadUrl(props.data, file);
+          file.url = file.url || downloadUrl.replace('%fileId%', file.id);
+          if (ibiz.config.common.enableDownloadTicket) {
+            ibiz.util.file
+              .getDownloadTicket(
+                c.context,
+                c.params,
+                props.data,
+                {
+                  fileId: file.id,
+                },
+                c.downloadTicketParams,
+              )
+              .then(downloadTicket => {
+                if (downloadTicket && downloadTicket.ticket) {
+                  file.url = downloadUrl.replace(
+                    '%fileId%',
+                    downloadTicket.ticket,
+                  );
+                  if (file.name.split('.').pop() === 'svg') {
+                    calcSvgPreview(file);
+                  }
+                }
+              });
+          } else if (file.name.split('.').pop() === 'svg') {
             calcSvgPreview(file);
           }
         });
@@ -193,7 +215,14 @@ export function useIViewUpload(
     const _files = [...files.value, ...uploadCache.cacheFiles];
     const value: string | null =
       _files.length > 0
-        ? JSON.stringify(_files.map(file => ({ name: file.name, id: file.id })))
+        ? JSON.stringify(
+            _files.map(file => ({
+              name: file.name,
+              id: file.id,
+              folder: file.folder,
+              ...c.transformInfoMap(file, c.infoMap, true),
+            })),
+          )
         : null;
     uploadCache.cacheFiles = [];
     valueChange(value);
@@ -222,9 +251,17 @@ export function useIViewUpload(
     if (!response) {
       return;
     }
+
+    // 启用传入下载凭证
+    if (ibiz.config.common.enableDownloadTicket && response.ticket) {
+      ibiz.util.file.setDownloadTicket(response.id, response.ticket);
+    }
+
     uploadCache.cacheFiles.push({
       name: response.filename,
       id: response.fileid,
+      folder: response.folder,
+      ...c.transformInfoMap(response, c.infoMap),
     });
     if (response.name.split('.').pop() === 'svg') {
       const blob = svgBlob.get(response.name);
@@ -264,8 +301,20 @@ export function useIViewUpload(
 
   // 下载文件
   const onDownload = (file: IData) => {
-    const url = file.url || downloadUrl.value.replace('%fileId%', file.id);
-    ibiz.util.file.fileDownload(url, file.name);
+    const downloadUrl = getDownloadUrl(props.data, file);
+    const url = file.url || downloadUrl.replace('%fileId%', file.id);
+    const editorParams = { ...c.editorParams };
+    if (editorParams.exportparams) {
+      editorParams.exportParams = JSON.parse(editorParams.exportparams);
+    }
+    ibiz.util.file.fileDownload(url, file.name, {
+      context: c.context,
+      params: c.params,
+      data: props.data,
+      file: { fileId: file.id, ...file },
+      extraParams: editorParams,
+      downloadTicketParams: c.downloadTicketParams,
+    });
   };
 
   // 允许上传文件的最大数量
@@ -275,7 +324,6 @@ export function useIViewUpload(
 
   return {
     uploadUrl,
-    downloadUrl,
     headers,
     files,
     limit,

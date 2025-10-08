@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/prefer-as-const */
 import {
-  TreeController,
   INavViewMsg,
   ITreeNodeData,
+  TreeController,
   MDControlController,
 } from '@ibiz-template/runtime';
 import { IDETree } from '@ibiz/model-core';
@@ -15,7 +16,7 @@ import { NavgationBaseProvider } from './navigation-base.provider';
  * @extends {NavgationBaseProvider}
  */
 export class TreeNavigationProvider extends NavgationBaseProvider {
-  keyName = '_id';
+  keyName: '_id' = '_id';
 
   declare controller: TreeController;
 
@@ -56,15 +57,12 @@ export class TreeNavigationProvider extends NavgationBaseProvider {
     });
     const navData =
       this.navStack
-        .map(key => items.find(item => item._id === key))
+        .map(key => items.find(item => item[this.keyName] === key))
         .find(item => item !== undefined) || defaultNav;
     if (navData) {
-      this.controller.setSelection([navData]);
-      this.controller.setNavData(navData);
+      this.setNavData(navData);
     } else {
-      this.navStack = [];
-      this.controller.setSelection([]);
-      this.navViewMsg.value = undefined;
+      this.clearNavigation();
     }
   }
 
@@ -84,14 +82,14 @@ export class TreeNavigationProvider extends NavgationBaseProvider {
         _params,
       );
       return {
-        key: item._id,
+        key: item[this.keyName],
         context,
         params,
         viewId: nodeModel.navAppViewId,
       };
     }
     return {
-      key: item._id,
+      key: item[this.keyName],
       context: _context,
       params: _params,
     };

@@ -12,6 +12,8 @@ import {
  * @class PortletPartState
  */
 export class PortletPartState implements IPortletState {
+  hightLight: boolean = false;
+
   visible: boolean = true;
 
   keepAlive: boolean = false;

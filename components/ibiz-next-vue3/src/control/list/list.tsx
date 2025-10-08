@@ -1,27 +1,33 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 import {
-  hasEmptyPanelRenderer,
+  useNamespace,
   IBizCustomRender,
   useControlController,
-  useNamespace,
+  hasEmptyPanelRenderer,
+  useControlPopoverzIndex,
 } from '@ibiz-template/vue3-util';
-import { defineComponent, PropType, computed, VNode, ref, watch } from 'vue';
+import { ref, VNode, watch, PropType, computed, defineComponent } from 'vue';
 import { IDEList, ILayoutPanel, IUIActionGroupDetail } from '@ibiz/model-core';
 import { isNil } from 'lodash-es';
 import { createUUID } from 'qx-util';
 import {
   ControlVO,
+  ListController,
+  IDragChangeInfo,
   IControlProvider,
   IMDControlGroupState,
-  ListController,
 } from '@ibiz-template/runtime';
-import './list.scss';
+import draggable from 'vuedraggable';
 import { showTitle } from '@ibiz-template/core';
 import { usePagination } from '../../util';
+import './list.scss';
 
 export const ListControl = defineComponent({
   name: 'IBizListControl',
+  components: {
+    draggable,
+  },
   props: {
     /**
      * @description 列表模型数据
@@ -65,6 +71,8 @@ export const ListControl = defineComponent({
   setup(props) {
     const c = useControlController((...args) => new ListController(...args));
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
+
+    useControlPopoverzIndex(c);
 
     const { onPageChange, onPageRefresh, onPageSizeChange } = usePagination(c);
 
@@ -116,6 +124,40 @@ export const ListControl = defineComponent({
         }
       },
     );
+
+    let cacheInfo: Partial<IDragChangeInfo> | null = null;
+
+    /**
+     * @description 拖拽变更
+     * @param {IData} evt
+     * @param {(string | number)} [groupKey]
+     */
+    const onDraggableChange = (evt: IData, groupKey?: string | number) => {
+      if (evt.moved) {
+        // 排序
+        c.onDragChange({
+          from: groupKey!,
+          to: groupKey!,
+          fromIndex: evt.moved.oldIndex,
+          toIndex: evt.moved.newIndex,
+        });
+      }
+      // 分组变更时会先触发added后触发removed，因此需提前缓存added的参数
+      if (evt.added) {
+        cacheInfo = {
+          to: groupKey,
+          toIndex: evt.added.newIndex,
+        };
+      }
+      if (evt.removed) {
+        if (cacheInfo) {
+          cacheInfo.from = groupKey;
+          cacheInfo.fromIndex = evt.removed.oldIndex;
+          c.onDragChange(cacheInfo as IDragChangeInfo);
+        }
+        cacheInfo = null;
+      }
+    };
 
     // 本地数据模式
     const initSimpleData = (): void => {
@@ -223,11 +265,31 @@ export const ListControl = defineComponent({
           class={ns.bem('item', 'right', 'actions')}
           action-details={c.getOptItemModel()}
           actions-state={c.state.uaState[item.srfkey]}
+          zIndex={c.state.zIndex}
           onActionClick={(
             detail: IUIActionGroupDetail,
             event: MouseEvent,
           ): Promise<void> => c.onActionClick(detail, item, event)}
         ></iBizActionToolbar>
+      );
+    };
+
+    /**
+     * @description 绘制新建项
+     * @param {IMDControlGroupState} [group]
+     * @returns {*}
+     */
+    const renderNewItem = (group?: IMDControlGroupState) => {
+      return (
+        <div
+          title={ibiz.i18n.t('app.newlyBuild')}
+          class={[ns.b('item'), ns.be('item', 'new')]}
+          onClick={(event: MouseEvent) => {
+            c.onClickNew(event, group?.key);
+          }}
+        >
+          <ion-icon name='add-outline'></ion-icon>
+        </div>
       );
     };
 
@@ -258,6 +320,7 @@ export const ListControl = defineComponent({
       if (c.model.groupUIActionGroup && group.groupActionGroupState) {
         return (
           <iBizActionToolbar
+            zIndex={c.state.zIndex}
             class={ns.be('group-content', 'header-actions')}
             action-details={c.model.groupUIActionGroup.uiactionGroupDetails}
             actions-state={group.groupActionGroupState}
@@ -308,6 +371,23 @@ export const ListControl = defineComponent({
           style={cardStyle}
           class={[ns.b('scroll-item'), ns.is('active', isSelected(item))]}
         >
+          {c.state.draggable && !c.state.readonly && (
+            <svg
+              viewBox='0 0 16 16'
+              xmlns='http://www.w3.org/2000/svg'
+              height='1em'
+              width='1em'
+              class={ns.e('drag-icon')}
+              preserveAspectRatio='xMidYMid meet'
+              focusable='false'
+            >
+              <g stroke-width='1' fill-rule='evenodd'>
+                <g transform='translate(5 1)' fill-rule='nonzero'>
+                  <path d='M1 2a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM1 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z'></path>
+                </g>
+              </g>
+            </svg>
+          )}
           {c.model.controlStyle === 'EXTVIEW2' && !c.state.singleSelect && (
             <el-checkbox
               size='large'
@@ -337,18 +417,39 @@ export const ListControl = defineComponent({
      *
      * @param {IData[]} items
      */
-    const renderListItems = (items: IData[]) => {
+    const renderListItems = (
+      items: IData[],
+      group?: IMDControlGroupState,
+      disabled: boolean = true,
+    ) => {
       const { navAppViewId } = c.model;
-      return items.map(item => {
-        if (navAppViewId && c.state.showRowDetail)
-          return (
-            <div class={ns.b('row-detail')}>
-              {renderItem(item)}
-              {item.__isExpand && renderRowDetail(item)}
-            </div>
-          );
-        return renderItem(item);
-      });
+      return (
+        <draggable
+          itemKey='srfkey'
+          modelValue={items}
+          group={c.model.id}
+          handle={`.${ns.e('drag-icon')}`}
+          class={[ns.e('layout-flex'), ns.em('layout-flex', 'draggable')]}
+          disabled={disabled || c.state.updating || c.state.readonly}
+          onChange={(evt: IData) => onDraggableChange(evt, group?.key)}
+        >
+          {{
+            item: ({ element }: { element: IData }) => {
+              if (navAppViewId && c.state.showRowDetail)
+                return (
+                  <div class={ns.b('row-detail')}>
+                    {renderItem(element)}
+                    {element.__isExpand && renderRowDetail(element)}
+                  </div>
+                );
+              return renderItem(element);
+            },
+            footer: () => {
+              if (c.enableNew && !c.state.readonly) return renderNewItem(group);
+            },
+          }}
+        </draggable>
+      );
     };
 
     /**
@@ -361,7 +462,7 @@ export const ListControl = defineComponent({
       return (
         <el-collapse-item
           class={ns.be('group-content', 'item')}
-          name={group.key}
+          name={group.key.toString()}
         >
           {{
             title: () => {
@@ -378,7 +479,7 @@ export const ListControl = defineComponent({
             },
             default: () =>
               group.children.length > 0 ? (
-                renderListItems(group.children)
+                renderListItems(group.children, group, !c.state.draggable)
               ) : (
                 <div class={ns.bem('group-content', 'item', 'empty')}>
                   {ibiz.i18n.t('app.noData')}
@@ -469,6 +570,8 @@ export const ListControl = defineComponent({
             isCollapse.value
               ? c.state.items.slice(0, c.state.size)
               : c.state.items,
+            undefined,
+            !c.enableEditOrder,
           )}
         </div>
       );

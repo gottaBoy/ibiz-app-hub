@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/prefer-as-const */
 import {
   INavViewMsg,
   ICalendarItemData,
   CalendarController,
+  compareDateEqualByScale,
 } from '@ibiz-template/runtime';
 import { ISysCalendar } from '@ibiz/model-core';
 import { NavgationBaseProvider } from './navigation-base.provider';
@@ -14,26 +16,40 @@ import { NavgationBaseProvider } from './navigation-base.provider';
  * @extends {NavgationBaseProvider}
  */
 export class CalendarNavigationProvider extends NavgationBaseProvider {
-  keyName = 'navId';
+  keyName: 'navId' = 'navId';
 
   declare controller: CalendarController;
 
   declare model: ISysCalendar;
 
+  /**
+   * @description 通过栈数据导航
+   * - 特殊处理仅使用开始时间绘制的日历
+   * @memberof CalendarNavigationProvider
+   */
   onNavDataByStack(): void {
-    const { items } = this.controller.state;
+    const { controlParams, state, model } = this.controller;
+    const calendarStyle = model.calendarStyle?.toLowerCase();
+    const items = state.items.filter(item => {
+      if (
+        (calendarStyle === 'month' && controlParams.showmode !== 'daterange') ||
+        calendarStyle === 'user'
+      )
+        return compareDateEqualByScale(
+          item.beginTime,
+          state.selectedDate,
+          calendarStyle === 'user' ? 'week' : 'month',
+        );
+      return true;
+    });
     const navData =
       this.navStack
-        .map(key => items.find(item => item.navId === key))
+        .map(key => items.find(item => item[this.keyName] === key))
         .find(item => item !== undefined) || items[0];
     if (navData) {
-      const date = new Date(navData.beginTime);
-      this.controller.setSelectDate(date);
-      this.controller.setNavData(navData);
+      this.setNavData(navData);
     } else {
-      this.navStack = [];
-      this.controller.setSelectDate(new Date());
-      this.navViewMsg.value = undefined;
+      this.clearNavigation();
     }
   }
 

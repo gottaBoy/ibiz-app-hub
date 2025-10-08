@@ -134,6 +134,20 @@ export interface IApiTreeNodeData {
    * @memberof IApiTreeNodeData
    */
   srfmajortext?: string;
+
+  /**
+   * @description 是否开启拖拽
+   * @type {boolean}
+   * @memberof IApiTreeNodeData
+   */
+  _draggable: boolean;
+
+  /**
+   * @description 树节点展开状态
+   * @type {(-1 | 0 | 1)} -1（无展开），0（收缩），1（展开）
+   * @memberof IApiTreeNodeData
+   */
+  srfcollapsestate: -1 | 0 | 1;
 }
 
 /**

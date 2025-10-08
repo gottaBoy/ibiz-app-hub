@@ -1,18 +1,21 @@
 import {
   ControlType,
-  findChildFormDetails,
-  FormController,
   ScriptFactory,
+  FormController,
+  findChildFormDetails,
 } from '@ibiz-template/runtime';
-import { useNamespace } from '@ibiz-template/vue3-util';
+import {
+  useNamespace,
+  useControlPopoverzIndex,
+} from '@ibiz-template/vue3-util';
 import { IDEFormDetail, IDESearchForm } from '@ibiz/model-core';
 import {
-  defineComponent,
   h,
+  VNode,
   PropType,
   renderSlot,
+  defineComponent,
   resolveComponent,
-  VNode,
 } from 'vue';
 import './form.scss';
 
@@ -31,6 +34,8 @@ export const FormControl = defineComponent({
     const ns = useNamespace('control-form');
 
     const c = props.controller;
+
+    useControlPopoverzIndex(c);
 
     /** 作用域插槽提供的参数 */
     const slotProps: IData = { form: c };

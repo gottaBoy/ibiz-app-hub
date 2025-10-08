@@ -1,4 +1,5 @@
 import {
+  IApiMobTabSearchViewCall,
   ISearchBarController,
   ISearchFormController,
   ITabExpPanelController,
@@ -177,8 +178,11 @@ export class MobTabSearchViewEngine extends MobTabExpViewEngine {
     this.searchBar.state.quickSearchPlaceHolder = caption || '';
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  async call(key: string, args: any): Promise<IData | null | undefined> {
+  async call(
+    key: keyof IApiMobTabSearchViewCall,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    args: any,
+  ): Promise<IData | null | undefined> {
     if (key === SysUIActionTag.SEARCH) {
       await this.searchForm.search();
       return null;

@@ -1,12 +1,12 @@
 import { IAppDEGridView, IDEPickupViewPanel } from '@ibiz/model-core';
 import { ViewCallTag } from '../../../constant';
 import {
-  IPickupViewPanelState,
-  IPickupViewPanelEvent,
-  IPickupViewPanelController,
   IViewController,
   IPickupGridViewState,
   IPickupGridViewEvent,
+  IPickupViewPanelState,
+  IPickupViewPanelEvent,
+  IPickupViewPanelController,
 } from '../../../interface';
 import { convertNavData } from '../../../utils';
 import { ControlController } from '../../common';
@@ -129,6 +129,16 @@ export class PickupViewPanelController
   async getSelectedData(): Promise<IData[]> {
     const items: IData[] = await this.embedView.call(ViewCallTag.GET_DATA);
     return items;
+  }
+
+  /**
+   * @description 设置选中数据
+   * @param {IData[]} items
+   * @returns {*}  {Promise<void>}
+   * @memberof PickupViewPanelController
+   */
+  async setSelectedData(items: IData[]): Promise<void> {
+    await this.embedView.call(ViewCallTag.SET_SELECTED_DATA, { data: items });
   }
 
   /**

@@ -4,6 +4,7 @@ import {
   IBizCustomRender,
   useControlController,
   hasEmptyPanelRenderer,
+  useControlPopoverzIndex,
 } from '@ibiz-template/vue3-util';
 import {
   ref,
@@ -32,6 +33,7 @@ import {
 } from '@ibiz-template/runtime';
 import { NOOP, listenJSEvent } from '@ibiz-template/core';
 import { SwimlaneKanban } from './swimlane-kanban/swimlane-kanban';
+import { usePagination } from '../../util';
 import './kanban.scss';
 
 export const KanbanControl = defineComponent({
@@ -80,13 +82,15 @@ export const KanbanControl = defineComponent({
     loadDefault: { type: Boolean, default: true },
   },
   setup(props) {
-    const c = useControlController((...args) => new KanbanController(...args));
+    const c: KanbanController = useControlController(
+      (...args) => new KanbanController(...args),
+    );
+    useControlPopoverzIndex(c);
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
     const kanban = ref();
     const isFull: Ref<boolean> = ref(false);
-    const disabled = computed(() => {
-      return !c.state.draggable || c.state.updating;
-    });
+
+    const { onPageChange, onPageRefresh, onPageSizeChange } = usePagination(c);
 
     // 本地数据模式
     const initSimpleData = (): void => {
@@ -202,9 +206,7 @@ export const KanbanControl = defineComponent({
 
     // 组件销毁前销毁监听
     onBeforeUnmount(() => {
-      if (cleanup !== NOOP) {
-        cleanup();
-      }
+      if (cleanup !== NOOP) cleanup();
     });
 
     // 绘制项布局面板
@@ -216,6 +218,7 @@ export const KanbanControl = defineComponent({
       return (
         <iBizControlShell
           data={item}
+          class={ns.e('panel-item')}
           modelData={modelData}
           context={context}
           params={params}
@@ -227,6 +230,7 @@ export const KanbanControl = defineComponent({
     const renderItemAction = (item: IData, group: IKanbanGroupState): VNode => {
       return (
         <iBizActionToolbar
+          zIndex={c.state.zIndex}
           class={ns.bem('item', 'bottom', 'actions')}
           action-details={c.getOptItemModel()}
           actions-state={c.state.uaState[item.srfkey]}
@@ -313,17 +317,23 @@ export const KanbanControl = defineComponent({
     // 绘制默认项
     const renderDefaultItem = (item: IData, group: IKanbanGroupState) => {
       const actionModel = c.getOptItemModel();
-      return [
-        <div class={ns.be('item', 'top')}>
-          <div class={ns.bem('item', 'top', 'title')}>{item.srfmajortext}</div>
-          <div class={ns.bem('item', 'top', 'description')}>{item.content}</div>
-        </div>,
-        actionModel.length ? (
-          <div class={ns.be('item', 'bottom')}>
-            {renderItemAction(item, group)}
+      return (
+        <div class={ns.e('default-item')}>
+          <div class={ns.be('item', 'top')}>
+            <div class={ns.bem('item', 'top', 'title')}>
+              {item.srfmajortext}
+            </div>
+            <div class={ns.bem('item', 'top', 'description')}>
+              {item.content}
+            </div>
           </div>
-        ) : null,
-      ];
+          {actionModel.length ? (
+            <div class={ns.be('item', 'bottom')}>
+              {renderItemAction(item, group)}
+            </div>
+          ) : null}
+        </div>
+      );
     };
 
     // 绘制卡片
@@ -361,9 +371,28 @@ export const KanbanControl = defineComponent({
             onDbRowClick(item, event)
           }
         >
-          {panel
-            ? renderPanelItemLayout(item, panel)
-            : renderDefaultItem(item, group)}
+          <div class={ns.be('item', 'content')}>
+            {c.state.draggable && !c.state.readonly && (
+              <svg
+                viewBox='0 0 16 16'
+                xmlns='http://www.w3.org/2000/svg'
+                height='1em'
+                width='1em'
+                class={ns.e('drag-icon')}
+                preserveAspectRatio='xMidYMid meet'
+                focusable='false'
+              >
+                <g stroke-width='1' fill-rule='evenodd'>
+                  <g transform='translate(5 1)' fill-rule='nonzero'>
+                    <path d='M1 2a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM1 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z'></path>
+                  </g>
+                </g>
+              </svg>
+            )}
+            {panel
+              ? renderPanelItemLayout(item, panel)
+              : renderDefaultItem(item, group)}
+          </div>
         </el-card>
       );
     };
@@ -398,7 +427,13 @@ export const KanbanControl = defineComponent({
     };
 
     let cacheInfo: Partial<IDragChangeInfo> | null = null;
-    const onChange = (evt: IData, groupKey: string | number) => {
+
+    /**
+     * @description 拖拽变更
+     * @param {IData} evt
+     * @param {(string | number)} groupKey
+     */
+    const onDraggableChange = (evt: IData, groupKey: string | number) => {
       if (evt.moved) {
         // 排序
         c.onDragChange({
@@ -408,6 +443,7 @@ export const KanbanControl = defineComponent({
           toIndex: evt.moved.newIndex,
         });
       }
+      // 分组变更时会先触发added后触发removed，因此需提前缓存added的参数
       if (evt.added) {
         cacheInfo = {
           to: groupKey,
@@ -471,6 +507,7 @@ export const KanbanControl = defineComponent({
               class={ns.be('group', 'header-actions')}
               trigger='click'
               teleported={false}
+              popper-class={ns.e('popover')}
             >
               {{
                 default: (): VNode => (
@@ -556,12 +593,15 @@ export const KanbanControl = defineComponent({
               ]}
             >
               <draggable
-                class={ns.be('group', 'draggable')}
-                modelValue={group.children}
-                group={c.model.id}
                 itemKey='srfkey'
-                disabled={disabled.value || c.state.readonly}
-                onChange={(evt: IData) => onChange(evt, group.key)}
+                group={c.model.id}
+                modelValue={group.children}
+                class={ns.be('group', 'draggable')}
+                handle={`.${ns.e('drag-icon')}`}
+                disabled={
+                  !c.state.draggable || c.state.updating || c.state.readonly
+                }
+                onChange={(evt: IData) => onDraggableChange(evt, group.key)}
               >
                 {{
                   item: ({ element }: { element: IData }) => {
@@ -611,8 +651,11 @@ export const KanbanControl = defineComponent({
       ns,
       isFull,
       kanban,
-      onFullScreen,
       renderGroup,
+      onFullScreen,
+      onPageChange,
+      onPageRefresh,
+      onPageSizeChange,
     };
   },
   render() {
@@ -627,42 +670,58 @@ export const KanbanControl = defineComponent({
           this.ns.m(this.modelData.groupLayout?.toLowerCase()),
           this.ns.is('full', this.isFull),
           this.ns.is('swimlane', !!swimlaneAppDEFieldId),
+          this.ns.is('enable-page', this.c.state.enablePagingBar),
         ]}
       >
-        {swimlaneAppDEFieldId ? (
-          <SwimlaneKanban controller={this.c} />
-        ) : (
-          [
-            <div class={this.ns.b('group-container')}>
-              {groups.length > 0 &&
-                groups.map(group => {
-                  if (group.hidden) return null;
-                  return this.renderGroup(group);
-                })}
-            </div>,
-            groups.length > 0 && (
-              <div class={this.ns.b('toolbar')}>
-                {this.c.enableGroupHidden && (
-                  <iBizKanbanSetting controller={this.c} />
-                )}
-                {this.c.enableFullScreen && (
-                  <el-button
-                    type='info'
-                    onClick={this.onFullScreen}
-                    title={
-                      this.isFull
-                        ? ibiz.i18n.t('app.cancelFullscreen')
-                        : ibiz.i18n.t('app.fullscreen')
-                    }
-                  >
-                    <ion-icon
-                      name={this.isFull ? 'contract-outline' : 'expand-outline'}
-                    ></ion-icon>
-                  </el-button>
-                )}
-              </div>
-            ),
-          ]
+        <div class={this.ns.e('content')}>
+          {swimlaneAppDEFieldId ? (
+            <SwimlaneKanban controller={this.c} />
+          ) : (
+            [
+              <div class={this.ns.b('group-container')}>
+                {groups.length > 0 &&
+                  groups.map(group => {
+                    if (group.hidden) return null;
+                    return this.renderGroup(group);
+                  })}
+              </div>,
+              groups.length > 0 && (
+                <div class={this.ns.b('toolbar')}>
+                  {this.c.enableGroupHidden && (
+                    <iBizKanbanSetting controller={this.c} />
+                  )}
+                  {this.c.enableFullScreen && (
+                    <el-button
+                      type='info'
+                      onClick={this.onFullScreen}
+                      title={
+                        this.isFull
+                          ? ibiz.i18n.t('app.cancelFullscreen')
+                          : ibiz.i18n.t('app.fullscreen')
+                      }
+                    >
+                      <ion-icon
+                        name={
+                          this.isFull ? 'contract-outline' : 'expand-outline'
+                        }
+                      ></ion-icon>
+                    </el-button>
+                  )}
+                </div>
+              ),
+            ]
+          )}
+        </div>
+        {this.c.state.enablePagingBar && (
+          <iBizPagination
+            size={this.c.state.size}
+            total={this.c.state.total}
+            curPage={this.c.state.curPage}
+            totalPages={this.c.state.totalPages}
+            onChange={this.onPageChange}
+            onPageRefresh={this.onPageRefresh}
+            onPageSizeChange={this.onPageSizeChange}
+          ></iBizPagination>
         )}
       </iBizControlBase>
     );

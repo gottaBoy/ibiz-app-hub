@@ -29,6 +29,10 @@ export class TextBoxEditorProvider implements IEditorProvider {
       this.formEditor = 'IBizInputIP';
       this.gridEditor = 'IBizInputIP';
     }
+    if (editorType === 'SIGNATURE') {
+      this.formEditor = 'IBizSignature';
+      this.gridEditor = 'IBizSignature';
+    }
   }
 
   async createController(

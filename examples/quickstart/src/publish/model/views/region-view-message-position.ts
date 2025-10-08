@@ -638,6 +638,7 @@ export default {
               appDEFieldId: 'name',
               editor: {
                 editorType: 'TEXTBOX',
+                placeHolder: '请输入名称',
                 valueType: 'SIMPLE',
                 editable: true,
                 id: 'n_name_like',
@@ -667,6 +668,7 @@ export default {
               appDEFieldId: 'code',
               editor: {
                 editorType: 'TEXTBOX',
+                placeHolder: '请输入编码',
                 valueType: 'SIMPLE',
                 editable: true,
                 id: 'n_code_like',
@@ -767,6 +769,7 @@ export default {
                 singleSelect: true,
                 appCodeListId: 'web.mock__cl_status',
                 editorType: 'DROPDOWNLIST',
+                placeHolder: '请选择状态',
                 valueType: 'SIMPLE',
                 editable: true,
                 id: 'n_status_eq',

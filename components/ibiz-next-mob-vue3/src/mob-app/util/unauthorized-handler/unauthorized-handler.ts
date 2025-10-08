@@ -24,6 +24,14 @@ export class UnauthorizedHandler implements IErrorHandler {
   }
 
   /**
+   * @description 是否存在403错误未处理
+   * @protected
+   * @type {boolean}
+   * @memberof UnauthorizedHandler
+   */
+  protected hasPermErrPending: boolean = false;
+
+  /**
    * cas登录处理
    *
    * @author lxm
@@ -95,6 +103,10 @@ export class UnauthorizedHandler implements IErrorHandler {
    */
   protected async normalLogin(): Promise<void> {
     const ru = window.location.hash.replace('#', '');
+    // 当前已经在登录页不再刷新界面
+    if (ru.startsWith('/login')) {
+      return;
+    }
     const targetUrl = `${UrlHelper.routeBase}/login?ru=${encodeURIComponent(
       ru,
     )}`;
@@ -105,22 +117,32 @@ export class UnauthorizedHandler implements IErrorHandler {
   }
 
   /**
-   * 处理403
-   * @author lxm
-   * @date 2023-12-06 10:19:12
+   * @description 处理403
    * @protected
-   * @return {*}  {Promise<void>}
+   * @param {HttpError} error
+   * @returns {*}  {Promise<void>}
+   * @memberof UnauthorizedHandler
    */
-  protected async handle403(): Promise<void> {
-    const result = await ibiz.modal.confirm({
-      title: ibiz.i18n.t('mobApp.unauthorizedHandler.prohibitAccessPrompt'),
-      desc: ibiz.i18n.t('mobApp.unauthorizedHandler.exitPrompt'),
-    });
-    if (result) {
-      const bol = await ibiz.auth.logout();
-      if (bol) {
-        window.location.reload();
+  protected async handle403(error: HttpError): Promise<void> {
+    if (error.tag === 'APPINIT') {
+      // 存在403错误用户未确认，再次触发403错误时不做处理
+      if (this.hasPermErrPending) {
+        return;
       }
+      this.hasPermErrPending = true;
+      const result = await ibiz.modal.confirm({
+        title: ibiz.i18n.t('mobApp.unauthorizedHandler.prohibitAccessPrompt'),
+        desc: ibiz.i18n.t('mobApp.unauthorizedHandler.exitPrompt'),
+      });
+      this.hasPermErrPending = false;
+      if (result) {
+        const bol = await ibiz.auth.logout();
+        if (bol) {
+          window.location.reload();
+        }
+      }
+    } else {
+      ibiz.mc.error.send(error as IData);
     }
   }
 
@@ -134,7 +156,20 @@ export class UnauthorizedHandler implements IErrorHandler {
   handle(error: unknown): boolean | undefined {
     if (error instanceof HttpError) {
       if (error.status === 401) {
-        if (ibiz.env.loginMode === LoginMode.CAS) {
+        // 若是匿名登录，则直接使用匿名账户登录。不用跳转登录页
+        const search = qs.parse(window.location.search.replace('?', ''));
+        if (
+          (search.isAnonymous || ibiz.env.enableAnonymous) &&
+          // 匿名登录获取视图模型发生异常，走普通登录，防止循环执行
+          error.tag !== 'APPINIT'
+        ) {
+          ibiz.auth.anonymousLogin().then(bol => {
+            if (bol) {
+              // 登录成功后直接刷新页面，避免界面初始化异常
+              window.location.reload();
+            }
+          });
+        } else if (ibiz.env.loginMode === LoginMode.CAS) {
           this.casLogin();
         } else if (ibiz.env.loginMode === LoginMode.OAUTH) {
           this.oauthLogin();
@@ -144,7 +179,7 @@ export class UnauthorizedHandler implements IErrorHandler {
         return true;
       }
       if (error.status === 403) {
-        this.handle403();
+        this.handle403(error);
         return true;
       }
     }

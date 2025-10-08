@@ -11,6 +11,8 @@ import { IApiModalData, IApiRedrawData } from '../../common';
  * 通用视图
  * @description 应用中基于特定业务场景的可视化界面单元，通过组合数据、交互逻辑与UI组件实现用户目标任务的完整功能界面。
  * @viewparams {"name":"srfrenewsession","title":"强制重新构建界面域","parameterType":"string","defaultvalue":"-","description":"特殊视图参数，值为'true'时，强制重新构建界面域"}
+ * @viewparams {"name":"modalOption","title":"模态、抽屉额外注入参数","parameterType":"Object","defaultvalue":"-","description":"定义视图通过模态或者抽屉方式打开，给模态和抽屉注入额外参数，相关参数可参考element plus官方文档"}
+ * @viewparams {"name":"waterMarkOption","title":"视图水印相关参数","parameterType":"Object","defaultvalue":"-","description":"定义水印相关参数，相关参数参见IApiGlobalWaterMarkConfig接口"}
  * @export
  * @interface IApiViewController
  * @extends {IApiController<T, S>}

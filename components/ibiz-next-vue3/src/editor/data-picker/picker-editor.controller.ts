@@ -1,23 +1,23 @@
 import { IHttpResponse, RuntimeModelError } from '@ibiz-template/core';
 import {
-  EditorController,
-  OpenAppViewCommand,
+  IModalData,
   getDeACMode,
   IViewConfig,
-  IModalData,
-  getAcItemProvider,
+  UIActionUtil,
   IAcItemProvider,
+  EditorController,
+  getAcItemProvider,
+  OpenAppViewCommand,
   UIActionButtonState,
   ButtonContainerState,
   IButtonContainerState,
-  UIActionUtil,
 } from '@ibiz-template/runtime';
 import {
-  IAppDEACMode,
-  IAppDEUIActionGroupDetail,
-  IDEACModeDataItem,
   IPicker,
+  IAppDEACMode,
+  IDEACModeDataItem,
   IUIActionGroupDetail,
+  IAppDEUIActionGroupDetail,
 } from '@ibiz/model-core';
 import { mergeDeepLeft } from 'ramda';
 
@@ -422,10 +422,14 @@ export class PickerEditorController extends EditorController<IPicker> {
       });
     }
     if (this.objectValueField) {
+      // 删除值回显时手动填充的前端字段srfkey和srfmajortext
+      const data = {
+        ...select,
+      };
+      delete data.srfkey;
+      delete data.srfmajortext;
       Object.assign(object, {
-        [this.objectValueField]: {
-          ...select,
-        },
+        [this.objectValueField]: data,
       });
     }
     if (select.srfnodeid) {
@@ -448,9 +452,6 @@ export class PickerEditorController extends EditorController<IPicker> {
     data: IData,
     event?: MouseEvent,
   ): Promise<void> {
-    if (event) {
-      event.stopPropagation();
-    }
     const actionId = detail.uiactionId;
     await UIActionUtil.execAndResolved(
       actionId!,

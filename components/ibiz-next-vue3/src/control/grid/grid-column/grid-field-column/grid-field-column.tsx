@@ -32,7 +32,7 @@ export const GridFieldColumn = defineComponent({
 
     const zIndex = props.controller.grid.state.zIndex;
 
-    const columnType = props.controller.model.userParam?.columnType;
+    const columnType = props.controller.model.userParam?.columntype;
 
     /**
      * 单元格点击事件

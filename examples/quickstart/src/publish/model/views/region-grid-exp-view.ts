@@ -49,8 +49,14 @@ export default {
   appViewMsgGroupId: 'grid_exp_view_group',
   controls: [
     {
+      sysImage: {
+        cssClass: 'fa fa-cube',
+        glyph: 'xf1b2@FontAwesome',
+      },
+      title: '区划',
       xdataControlName: 'gridexpbar_grid',
       enableCounter: true,
+      enableSearch: true,
       showTitleBar: true,
       autoLoad: true,
       showBusyIndicator: true,
@@ -77,6 +83,7 @@ export default {
               excelCaption: '编码',
               filterEditor: {
                 editorType: 'TEXTBOX',
+                placeHolder: '请输入编码',
                 valueType: 'SIMPLE',
                 editable: true,
                 id: 'n_code_like',
@@ -100,6 +107,7 @@ export default {
               excelCaption: '名称',
               filterEditor: {
                 editorType: 'TEXTBOX',
+                placeHolder: '请输入名称',
                 valueType: 'SIMPLE',
                 editable: true,
                 id: 'n_name_like',
@@ -460,6 +468,37 @@ export default {
           modelType: 'PSDEGRID',
           name: 'gridexpbar_grid',
           id: 'web.region.grid_exp_view_grid',
+        },
+        {
+          detoolbarItems: [
+            {
+              actionLevel: 100,
+              noPrivDisplayMode: 2,
+              uiactionId: 'gridview_refreshaction',
+              valid: true,
+              caption: '刷新',
+              itemType: 'DEUIACTION',
+              sysImage: {
+                cssClass: 'fa fa-refresh',
+                glyph: 'xf021@FontAwesome',
+              },
+              tooltip: '刷新',
+              showCaption: true,
+              showIcon: true,
+              id: 'deuiaction1',
+            },
+          ],
+          codeName: 'grid_exp_view_gridexpbar_toolbar',
+          controlType: 'TOOLBAR',
+          logicName: '表格导航栏工具栏',
+          appDataEntityId: 'web.region',
+          controlParam: {
+            id: 'gridexpbar_toolbar',
+          },
+          modelId: '9de45d3ce936ab235f997062e3344b88',
+          modelType: 'PSDETOOLBAR',
+          name: 'gridexpbar_toolbar',
+          id: 'grid_exp_view_gridexpbar_toolbar',
         },
       ],
       codeName: 'grid_exp_view_gridexpbar',

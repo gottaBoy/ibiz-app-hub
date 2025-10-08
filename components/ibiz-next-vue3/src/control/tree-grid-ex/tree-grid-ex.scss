@@ -127,7 +127,7 @@ $control-treegridex-footer: (
       }
 
       // 修复表头换行排序图标错位问题
-      .is-sortable.el-table__cell {
+      .el-table__cell {
         .cell {
           display: flex;
           align-items: center;

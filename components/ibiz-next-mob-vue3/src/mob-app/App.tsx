@@ -1,6 +1,12 @@
-import { routerCallback } from '@ibiz-template/vue3-util';
+import { AppHooks, routerCallback } from '@ibiz-template/vue3-util';
 import { Modal, ViewMode } from '@ibiz-template/runtime';
-import { defineComponent, onUnmounted, ref } from 'vue';
+import {
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  onUnmounted,
+  ref,
+} from 'vue';
 import { useViewStack } from '../util';
 import './App.scss';
 
@@ -19,6 +25,7 @@ export default defineComponent({
     onUnmounted(() => {
       off('onBeforeStackChange', onViewStackChange);
       ibiz.platform.destroyed();
+      AppHooks.destoryApp.call(null);
     });
 
     const viewModals = new Map<string, Modal>();
@@ -41,6 +48,24 @@ export default defineComponent({
       }
       return viewModals.get(key);
     };
+
+    // 水印销毁方法
+    let watermarkDestroy: void | null | (() => void);
+    onMounted(() => {
+      AppHooks.initedApp.tapPromise(async ({ context }) => {
+        watermarkDestroy?.();
+        // 挂载应用水印，默认将水印挂载到body下
+        watermarkDestroy = ibiz.util.watermark.mount(
+          ibiz.config.watermark,
+          undefined,
+          { ...context, ...ibiz.appData?.context } as IContext,
+        );
+      });
+    });
+
+    onBeforeUnmount(() => {
+      watermarkDestroy?.();
+    });
 
     return {
       viewStack,

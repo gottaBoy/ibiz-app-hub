@@ -4,12 +4,14 @@ export default {
   loadDefault: true,
   deviewCodeName: 'chart_exp_view2',
   deviewId: 'b577e5685eca572eda71f50fc7c6084c',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
   caption: '页面_图表导航视图',
   codeName: 'master_chart_exp_view2',
+  height: 500,
   appDataEntityId: 'web.master',
   appViewLogics: [
     {
@@ -39,11 +41,16 @@ export default {
       id: 'opendata',
     },
   ],
-  appViewMsgGroupId: 'chart_exp_view2',
   controls: [
     {
+      sysImage: {
+        cssClass: 'fa fa-cube',
+        glyph: 'xf1b2@FontAwesome',
+      },
+      title: '演示数据',
       xdataControlName: 'chartexpbar_chart',
       enableCounter: true,
+      enableSearch: true,
       showTitleBar: true,
       autoLoad: true,
       showBusyIndicator: true,
@@ -82,6 +89,7 @@ export default {
           },
           dechartSerieses: [
             {
+              caption: '柱状',
               catalogField: 'NAME',
               echartsType: 'bar',
               chartCoordinateSystemId: '0',
@@ -202,9 +210,6 @@ export default {
             },
           ],
           controlParam: {
-            ctrlParams: {
-              ENABLEDRILLDETAIL: '[]',
-            },
             id: 'chartexpbar_chart',
           },
           modelId: '3774628b5cc0b4121a1682558a946e55',
@@ -216,16 +221,45 @@ export default {
           name: 'chartexpbar_chart',
           id: 'web.master.chart_view_chart',
         },
+        {
+          detoolbarItems: [
+            {
+              actionLevel: 100,
+              noPrivDisplayMode: 2,
+              uiactionId: 'gridview_refreshaction',
+              valid: true,
+              caption: '刷新',
+              itemType: 'DEUIACTION',
+              sysImage: {
+                cssClass: 'fa fa-refresh',
+                glyph: 'xf021@FontAwesome',
+              },
+              tooltip: '刷新',
+              showCaption: true,
+              showIcon: true,
+              id: 'deuiaction1',
+            },
+          ],
+          codeName: 'chart_exp_view2_chartexpbar_toolbar',
+          controlType: 'TOOLBAR',
+          logicName: '图表导航栏_基础_工具栏',
+          appDataEntityId: 'web.master',
+          controlParam: {
+            id: 'chartexpbar_toolbar',
+          },
+          modelId: '769f7a10a22e14f32ae18222e260afaa',
+          modelType: 'PSDETOOLBAR',
+          name: 'chartexpbar_toolbar',
+          id: 'chart_exp_view2_chartexpbar_toolbar',
+        },
       ],
       codeName: 'chart_exp_view2_chartexpbar',
       controlType: 'CHARTEXPBAR',
       appDataEntityId: 'web.master',
       controlParam: {
-        ctrlParams: {
-          ENABLEDRILLDETAIL: '[]',
-        },
         id: 'chartexpbar',
       },
+      width: 750,
       modelId: '4ff8ba89f089e74b51143b2923125000_chartexpbar',
       modelType: 'PSEXPBAR',
       name: 'chartexpbar',
@@ -270,7 +304,7 @@ export default {
   viewStyle: 'DEFAULT',
   viewType: 'DECHARTEXPVIEW',
   enableDP: true,
-  showCaptionBar: true,
+  showCaptionBar: false,
   modelId: '4ff8ba89f089e74b51143b2923125000',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERchart_exp_view2',

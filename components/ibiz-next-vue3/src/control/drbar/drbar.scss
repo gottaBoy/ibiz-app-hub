@@ -33,4 +33,8 @@ $control-drbar-item: (
     height: 100%;
     overflow: hidden auto;
   }
+
+  .#{bem(badge)} {
+    text-align: center;
+  }
 }

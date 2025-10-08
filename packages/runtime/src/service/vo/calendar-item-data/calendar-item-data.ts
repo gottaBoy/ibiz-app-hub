@@ -109,4 +109,8 @@ export class CalendarItemData implements ICalendarItemData {
     const fieldName = this.model.tipsAppDEFieldId;
     return fieldName ? this.data[fieldName] : undefined;
   }
+
+  get srfkey(): string {
+    return this.data.srfkey;
+  }
 }

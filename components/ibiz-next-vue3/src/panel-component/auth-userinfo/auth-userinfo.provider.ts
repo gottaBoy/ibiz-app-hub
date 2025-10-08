@@ -4,6 +4,7 @@ import {
   PanelItemController,
 } from '@ibiz-template/runtime';
 import { IPanelItem } from '@ibiz/model-core';
+import { AuthUserinfoController } from './auth-userinfo.controller';
 
 /**
  * 用户信息适配器
@@ -21,8 +22,8 @@ export class AuthUserinfoProvider implements IPanelItemProvider {
     panelItem: IPanelItem,
     panel: PanelController,
     parent: PanelItemController | undefined,
-  ): Promise<PanelItemController> {
-    const c = new PanelItemController(panelItem, panel, parent);
+  ): Promise<AuthUserinfoController> {
+    const c = new AuthUserinfoController(panelItem, panel, parent);
     await c.init();
     return c;
   }

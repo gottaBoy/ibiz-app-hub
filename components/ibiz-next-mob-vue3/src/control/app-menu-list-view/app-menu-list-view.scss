@@ -16,6 +16,10 @@ $control-appmenu: (list-view-icon-size: getCssVar(font-size, header-4),
   --van-cell-horizontal-padding: #{rem(12px)};
   --van-cell-active-color: transparent;
   --van-cell-right-icon-color: var(--van-gray-6);
+  --van-cell-group-title-color: #{getCssVar(color, text, 2)};
+  --van-cell-group-title-padding: #{rem(8px)} #{rem(16px)};
+  --van-cell-group-title-font-size: #{getCssVar(font-size, regular)};
+  --van-cell-group-title-line-height: var(--van-cell-line-height);
 
   border-radius: getCssVar(border-radius, small);
 
@@ -46,5 +50,16 @@ $control-appmenu: (list-view-icon-size: getCssVar(font-size, header-4),
       align-items: center;
     }
 
+  }
+
+  .van-cell-group__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: getCssVar(color, bg, 0);
+  }
+
+  .van-hairline--top-bottom::after {
+    border: none;
   }
 }

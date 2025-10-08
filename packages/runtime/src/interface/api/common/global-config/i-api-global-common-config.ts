@@ -41,4 +41,11 @@ export interface IApiGlobalCommonConfig {
    * @memberof IApiGlobalCommonConfig
    */
   searchPhSeparator: string;
+
+  /**
+   * @description 是否启用传入下载凭证
+   * @type {boolean}
+   * @memberof IApiGlobalCommonConfig
+   */
+  enableDownloadTicket: boolean;
 }

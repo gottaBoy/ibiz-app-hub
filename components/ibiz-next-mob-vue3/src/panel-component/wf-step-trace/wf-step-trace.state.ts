@@ -9,10 +9,8 @@ import { PanelItemState } from '@ibiz-template/runtime';
  */
 export class WFStepTraceState extends PanelItemState {
   /**
-   * 流程跟踪数据
-   *
-   * @author zk
-   * @date 2023-07-04 01:07:30
+   * @description 流程跟踪数据
+   * @exposedoc
    * @type {IData}
    * @memberof WFStepTraceState
    */

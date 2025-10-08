@@ -47,6 +47,22 @@ export interface IPanelItem extends IControlItem, ILayoutItem {
   contentWidth?: number;
 
   /**
+   * 计数器标识
+   * @type {string}
+   * 来源  getCounterId
+   */
+  counterId?: string;
+
+  /**
+   * 计数器模式
+   * @description 值模式 [计数器显示模式] {0：默认、 1：0 值时隐藏 }
+   * @type {( number | 0 | 1)}
+   * @default 0
+   * 来源  getCounterMode
+   */
+  counterMode?: number | 0 | 1;
+
+  /**
    * 项直接样式
    * @type {string}
    * 来源  getCssStyle
@@ -104,6 +120,14 @@ export interface IPanelItem extends IControlItem, ILayoutItem {
    * 来源  getLabelPSSysCss
    */
   labelSysCss?: ISysCss;
+
+  /**
+   * 应用计数器引用
+   *
+   * @type {string}
+   * 来源  getPSAppCounterRef
+   */
+  appCounterRefId?: string;
 
   /**
    * 布局设置

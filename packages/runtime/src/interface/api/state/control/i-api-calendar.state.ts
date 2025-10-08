@@ -111,6 +111,13 @@ export interface IApiCalendarItemData {
    * @memberof iApiCalendatItemData
    */
   navId: string;
+
+  /**
+   * @description 数据主键
+   * @type {string}
+   * @memberof IApiCalendarItemData
+   */
+  srfkey: string;
 }
 
 /**

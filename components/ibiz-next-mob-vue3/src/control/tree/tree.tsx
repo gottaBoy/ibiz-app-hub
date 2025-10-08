@@ -32,11 +32,32 @@ export const TreeControl = defineComponent({
     'vs-tree': VsTreeComponent,
   },
   props: {
+    /**
+     * @description 树控件模型数据
+     */
     modelData: { type: Object as PropType<IDETree>, required: true },
+    /**
+     * @description 应用上下文对象
+     */
     context: { type: Object as PropType<IContext>, required: true },
+    /**
+     * @description 视图参数对象
+     * @default {}
+     */
     params: { type: Object as PropType<IParams>, default: () => ({}) },
+    /**
+     * @description 部件适配器
+     */
     provider: { type: Object as PropType<IControlProvider> },
+    /**
+     * @description 部件激活模式，值为0：无激活，值为1：单击激活，值为2：双击激活
+     * @default 2
+     */
     mdctrlActiveMode: { type: Number, default: 2 },
+    /**
+     * @description 是否单选
+     * @default true
+     */
     singleSelect: { type: Boolean, default: true },
   },
   setup() {
@@ -104,11 +125,11 @@ export const TreeControl = defineComponent({
         ? c.state.rootNodes
         : c.state.rootNodes.reduce<ITreeNodeData[]>((result, nodeData) => {
             if (nodeData._children) {
-              return result.concat(nodeData._children);
+              return result.concat(nodeData._children as ITreeNodeData[]);
             }
             return result;
           }, []);
-      return toElNodes(nodes);
+      return toElNodes(nodes as ITreeNodeData[]);
     });
 
     /**

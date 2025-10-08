@@ -4,13 +4,24 @@ import { defineComponent, PropType, computed, ref } from 'vue';
 import { WFActionButtonController } from './wf-action-button.controller';
 import './wf-action-button.scss';
 
+/**
+ * 工作流动态按钮
+ * @primary
+ * @description 用于绘制工作流工具栏里面的按钮。
+ */
 export const WFActionButton = defineComponent({
   name: 'IBizWFActionButton',
   props: {
+    /**
+     * @description 工作流动态按钮模型数据
+     */
     modelData: {
       type: Object as PropType<IPanelRawItem>,
       required: true,
     },
+    /**
+     * @description 工作流动态按钮控制器
+     */
     controller: {
       type: WFActionButtonController,
       required: true,

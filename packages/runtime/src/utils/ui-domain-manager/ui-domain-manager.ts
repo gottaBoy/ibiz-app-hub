@@ -27,8 +27,16 @@ export class UIDomainManager {
    * @param {string} [id] 可选，不传则自动生成
    * @return {*}  {UIDomain}
    */
-  create(id?: string): UIDomain {
-    const domain = new UIDomain(id);
+
+  /**
+   * @description 创建域
+   * @param {string} [id] 可选，不传则自动生成
+   * @param {string} [appDataEntityId] 可选，应用实体标识
+   * @returns {*}  {UIDomain}
+   * @memberof UIDomainManager
+   */
+  create(id?: string, appDataEntityId?: string): UIDomain {
+    const domain = new UIDomain(id, appDataEntityId);
     this.domainMap.set(domain.id, domain);
     return domain;
   }

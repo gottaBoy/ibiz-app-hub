@@ -1,0 +1,12 @@
+export default {
+  id: 'web.master_card_bottom_nav',
+  codeName: 'master_card_bottom_nav',
+  openMode: 'INDEXVIEWTAB',
+  viewType: 'DEDATAVIEW',
+  width: 0,
+  height: 0,
+  appDataEntityId: 'web.master',
+  redirectView: false,
+  modalOption: {},
+  appId: '',
+};

@@ -14,6 +14,10 @@
 
   height: 100%;
 
+  @include e(counter) {
+    margin-left: getCssVar(spacing, tight);
+  }
+
   @include b(search-groups-quick-group-item){
     position: relative;
     display: inline-block;

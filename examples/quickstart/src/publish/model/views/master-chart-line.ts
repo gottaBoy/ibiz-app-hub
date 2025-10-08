@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Chart_line',
   deviewId: '5cf22d839468d097cf75b9fc5364539b',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -17,7 +18,6 @@ export default {
       id: 'engine',
     },
   ],
-  appViewMsgGroupId: 'chart_line',
   controls: [
     {
       searchButtonStyle: 'DEFAULT',
@@ -76,20 +76,21 @@ export default {
         id: '0',
       },
       dechartLegend: {
-        legendPos: 'BOTTOM',
+        legendPos: 'RIGHT',
         showLegend: true,
         id: '0',
       },
       dechartSerieses: [
         {
-          catalogField: 'DATE',
+          caption: '折线',
+          catalogField: 'TYPE',
           echartsType: 'line',
           chartCoordinateSystemId: '0',
           chartDataSetId: '0',
           chartSeriesEncode: {
             chartXAxisId: '0',
             chartYAxisId: '0',
-            x: ['DATE'],
+            x: ['TYPE'],
             y: ['QUANTITY'],
             type: 'XY',
             name: '坐标系编码',
@@ -123,7 +124,7 @@ export default {
           chartDataSetFields: [
             {
               groupField: true,
-              name: 'DATE',
+              name: 'TYPE',
               id: '0',
             },
             {
@@ -177,7 +178,7 @@ export default {
       showBusyIndicator: true,
       codeName: 'master_chart_line_chart',
       controlType: 'CHART',
-      height: 300,
+      height: 400,
       logicName: 'Chart2',
       appDataEntityId: 'web.master',
       controlParam: {
@@ -191,6 +192,15 @@ export default {
       },
       name: 'chart',
       id: 'web.master.master_chart_line_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

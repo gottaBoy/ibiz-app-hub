@@ -40,4 +40,7 @@
   .van-field__clear{
     display: getCssVar(form-item-container,required-style);
   }
+  .van-field__right-icon{
+    font-size: getCssVar('form-size', 'header-4');
+  }
 }

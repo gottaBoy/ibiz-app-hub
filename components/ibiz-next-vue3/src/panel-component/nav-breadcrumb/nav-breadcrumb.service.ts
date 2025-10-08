@@ -1,6 +1,6 @@
 import { clone, isNil, reject } from 'ramda';
 import { BreadcrumbMsg } from './nav-breadcrumb.state';
-import { getIndexBreadcrumb } from './nav-breadcrumb.util';
+import { getAppIndexViewName, getIndexBreadcrumb } from './nav-breadcrumb.util';
 
 /**
  * @description 面包屑服务
@@ -74,7 +74,7 @@ export class NavBreadcrumbService {
    * @param {BreadcrumbMsg} item
    * @memberof NavBreadcrumbService
    */
-  updateOrAdd(item: BreadcrumbMsg): void {
+  update(item: BreadcrumbMsg): void {
     // 缓存模式先获取缓存数据
     if (!this.chache.length && this.navMode === 'store') {
       const result = localStorage.getItem('breadcrumb');
@@ -87,10 +87,8 @@ export class NavBreadcrumbService {
         (x.fullPath && x.fullPath === item.fullPath) ||
         x.viewName.toLowerCase() === item.viewName.toLowerCase(),
     );
-    if (index === -1) {
-      this.add(item);
-    } else {
-      Object.assign(this.chache[index], reject(isNil, (item as any)));
+    if (index !== -1) {
+      Object.assign(this.chache[index], reject(isNil, item));
       this.chache = this.chache.filter(x => !x.isEmbed && !x.isModal);
       if (this.navMode === 'store') {
         localStorage.setItem('breadcrumb', JSON.stringify(this.chache));
@@ -107,7 +105,8 @@ export class NavBreadcrumbService {
   getItem(data: IData): BreadcrumbMsg | undefined {
     // 首页视图特殊处理
     const { viewName = '', fullPath = '' } = data;
-    if (viewName === 'index') {
+    const indexViewName = getAppIndexViewName(this.context);
+    if (viewName === indexViewName) {
       return getIndexBreadcrumb(this.context);
     }
     const item = this.chache.find(

@@ -14,3 +14,4 @@ export * from './wang-editor-util/wang-editor-util';
 export { useFocusByEnter } from './keydown-util/keydown-util';
 export { calcAiToolbarItemsByAc } from './ai-util/ai-util';
 export { convertBtnType } from './button-util/button-util';
+export * from './icon/icon';

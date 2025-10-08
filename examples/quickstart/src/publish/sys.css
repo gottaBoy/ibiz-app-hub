@@ -2,6 +2,291 @@
     .button-center {
     align-self: center;
 }
+    .html-readonly-bg-white .ibiz-html .w-e-scroll {
+  background-color: var(--ibiz-color-bg-0);
+}
+.html-readonly-bg-white .ibiz-html.ibiz-html-editor-readonly .w-e-scroll {
+  background-color: var(--ibiz-color-bg-1);
+}
+.html-readonly-bg-white .ibiz-html.ibiz-html-editor-readonly .w-e-scroll > div {
+  background-color: var(--ibiz-color-bg-1);
+}
+
+    .pc-index-style .ibiz-panel-app-header--app_header2 {
+  overflow: auto;
+  background-color: var(--ibiz-color-primary);
+}
+.pc-index-style .ibiz-panel-app-header--app_header2 .ibiz-panel-app-title__logo svg {
+  height: 100%;
+  overflow: visible;
+}
+.pc-index-style .ibiz-panel-app-header--app_header2 .ibiz-panel-app-title__logo #app-caption {
+  font-size: 36px;
+  transform: translate(-36px, 9px);
+}
+.pc-index-style .ibiz-panel-app-header--app_header2 .el-button[data-id='gitee'] svg {
+  width: 24px;
+  height: 24px;
+}
+
+    .pc-index-style .ibiz-panel-app-header--app_header2 .ibiz-global-search .el-input__wrapper {
+  background-color: var(--ibiz-color-bg-5);
+  box-shadow: 0 0 0 1px var(--el-input-hover-border-color) inset;
+}
+.pc-index-style .ibiz-panel-app-header--app_header2 .ibiz-global-search .el-input__prefix {
+  color: var(--ibiz-color-text-0);
+}
+.pc-index-style .ibiz-panel-app-header--app_header2 .ibiz-global-search .el-input__inner {
+  color: var(--ibiz-color-text-0);
+}
+.pc-index-style .ibiz-panel-app-header--app_header2 .ibiz-global-search .el-input__inner::placeholder {
+  color: var(--ibiz-color-text-0);
+}
+
+    .pc_login_style .ibiz-panel-container-image{
+    min-height: 100%;
+    min-width: 100%;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.pc_login_style .ibiz-row .ibiz-row--flex:first-child{
+    width: 100%;
+    height: 100%;
+}
+.pc_login_style .ibiz-panel-container--container9{
+        margin: 3vw 0px 0px 3vw;
+}
+.pc_login_style .ibiz-panel-container--container9 .ibiz-panel-rawitem--static_text1 span{
+    font-size: 3vh;
+    font-weight: 600;
+}
+.pc_login_style .ibiz-panel-container--container1 {   
+    position: absolute;
+    right: 7vw;
+    height: 62vh;
+    overflow: hidden;
+    min-width: 400px;
+    width: 27vw;
+    border-radius: 1vw;
+    box-shadow: 1px 0px 2px 0px rgba(0, 0, 0, 0.2), -1px -1px 19px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 80px;
+    background: white;
+    margin-top: 8vh;
+}
+.pc_login_style .ibiz-panel-field--auth_userid {
+    height: 5vh;
+}
+.pc_login_style .ibiz-panel-field--auth_password{
+    height: 5vh;
+}
+
+    .pc_login_style .ibiz-panel-container--container5{
+    height: 100% !important;
+    padding: 0px 3vh 0vh 3vh !important;
+}
+.pc_login_style .ibiz-panel-container--container_4{
+    height: 15vh;
+    margin: 4vh 0px 0px 0px;
+}
+.pc_login_style .ibiz-panel-container--container_4 .ibiz-panel-rawitem--static_text2 span{
+    font-size: 3vh;
+    font-weight: 600;
+}
+.pc_login_style .ibiz-panel-container--container_4 .ibiz-panel-app-title__title{
+    font-size: 3vh;
+    color: #41c1f7;
+    font-weight: 600;
+}
+.pc_login_style .ibiz-panel-container--container3 .ibiz-panel-button .el-button{
+    margin-top: 3vh;
+    background-color: #42b1ff;
+    height: 4vh;
+    font-size: 1.8vh;
+}
+.pc_login_style .ibiz-spacing-bottom--innerlarge {
+    padding-bottom: 1vw;
+}
+.pc_login_style .el-input__inner{
+    font-size: 1.25vh;
+}
+.pc_login_style .el-checkbox__label{
+    font-size: 1vh;
+}
+    .pc_login_style .ibiz-panel-container--container_4>.ibiz-row{
+     overflow: hidden !important;
+}
+
+    .pc_login_style .ibiz-panel-container--container_switch{
+    position: absolute;
+    height: 50% !important;
+}
+.pc_login_style .ibiz-auth-wxmp-qrcode__qrcode{
+    width: 20vh;
+    height: 20vh;
+}
+.pc_login_style .ibiz-auth-wxmp-qrcode__caption{
+    display: none;
+}
+.pc_login_style .ibiz-panel-container--container_login_qr .ibiz-panel-rawitem--static_text3 span{
+    font-size: 2vh;
+    font-weight: 600;
+}
+.pc_login_style .ibiz-panel-container--container_login_qr .ibiz-panel-rawitem--static_text4 span{
+    color: #595959;
+    font-size: 1.5vh;
+}
+.pc_login_style .ibiz-panel-container--container_login_qr .ibiz-panel-rawitem--static_text5 p{
+    font-size: 1.5vh;
+}
+.pc_login_style .ibiz-panel-container--container_login_qr .ibiz-row--flex{
+    overflow: hidden !important;
+}
+    .pc_login_style .ibiz-panel-container--container_switch .ibiz-panel-button,
+.pc_login_style .ibiz-panel-container--container_switch button {
+    padding: 0 !important;
+    height: 100%;
+}
+
+.pc_login_style .ibiz-panel-container--container_switch .el-button.is-text:not(.is-disabled):focus,
+.pc_login_style .ibiz-panel-container--container_switch .el-button.is-text:not(.is-disabled):hover  {
+    background-color: unset !important;
+}
+
+.pc_login_style .ibiz-panel-container--container_switch .ibiz-icon {
+    width: 10vh;
+    height: 10vh;
+    max-width: 256px !important;
+    max-height: 256px !important;
+    min-width: 84px !important;
+    min-height: 84px !important;
+}
+
+.pc_login_style .ibiz-panel-container--container5 .ibiz-panel-container>.ibiz-row {
+    overflow: hidden !important;
+}
+    @media screen and (max-height: 830px) {
+    .pc_login_style .ibiz-panel-container--container_switch .ibiz-panel-button, 
+    .pc_login_style .ibiz-panel-container--container_switch button {
+        padding: 0 !important;
+        height: 84px;
+    }
+    .pc_login_style .ibiz-panel-container--container_switch .ibiz-icon {
+        width: 84px;
+        height: 84px;
+    }
+
+    .pc_login_style .ibiz-panel-container--container_4 {
+        height: 125px;
+        margin-top: 32px;
+    }
+
+    .pc_login_style .ibiz-panel-container--container_4 .ibiz-panel-rawitem--static_text2 span {
+        font-size: 25px;
+        font-weight: 600;
+    }
+
+}
+    @media screen and (max-height: 830px) {
+    .pc_login_style .ibiz-panel-container--container_4 .ibiz-panel-app-title__title {
+        font-size: 25px;
+        font-weight: 600;
+        color: #41c1f7;
+    }
+
+    .pc_login_style .ibiz-panel-container--container5 {
+        height: 100% !important;
+        padding: 0px 24.9px 0px 24.9px !important;
+    }
+    
+    .pc_login_style .ibiz-spacing-bottom--innerlarge {
+        padding-bottom: 14.4px;
+    }
+    
+    .pc_login_style .ibiz-panel-field--auth_userid,
+    .pc_login_style .ibiz-panel-field--auth_password {
+        height: 41.5px;
+    }
+
+    .pc_login_style .el-input__inner {
+        font-size: 10.375px;
+    }
+
+    .pc_login_style .el-checkbox__label {
+        font-size: 8.3px;
+    }
+
+    .pc_login_style .ibiz-panel-container--container3 .ibiz-panel-button .el-button {
+        margin-top: 24.9px;
+        background-color: #42b1ff;
+        height: 33.2px;
+        font-size: 14.9px;
+    }
+}
+    @media screen and (max-height: 830px) {
+    .pc_login_style .ibiz-auth-wxmp-qrcode__qrcode {
+        width: 164px;
+        height: 164px;
+    }
+
+    .pc_login_style .ibiz-panel-container--container_login_qr .ibiz-panel-rawitem--static_text3 span {
+        font-size: 16.4px;
+        font-weight: 600;
+    }
+
+    .pc_login_style .ibiz-panel-container--container_login_qr .ibiz-panel-rawitem--static_text4 span {
+        color: #595959;
+        font-size: 12.3px;
+    }
+
+    .pc_login_style .ibiz-panel-container--container_login_qr .ibiz-panel-rawitem--static_text5 p {
+        font-size: 12.3px;
+    }
+
+    .pc_login_style .ibiz-panel-container--container9 .ibiz-panel-rawitem--static_text1 span {
+        font-size: 25px;
+        font-weight: 600;
+    }
+}
+    .pc_login_style .ibiz-panel-app-login-view {
+    --ibiz-panel-app-login-view-header-url: none;
+    --ibiz-panel-app-login-view-avatar-url: none;
+    max-width: 100%;
+}
+.pc_login_style .ibiz-panel-rawitem--static_text6 .ibiz-rawitem{
+    font-size: 1.5vh;
+}
+.pc_login_style  .ibiz-panel-rawitem--static_text7 .ibiz-rawitem{
+    font-size: 1.5vh;
+}
+
+.pc_login_style .ibiz-auth-captcha {
+    height: 5vh;
+}
+
+.pc_login_style .ibiz-auth-sso__sign-btn {
+    width: 3vh;
+    height: 3vh;
+    min-width: 32px;
+    min-height: 32px;
+}
+
+.pc_login_style .ibiz-panel-container--container1 {   
+    min-height: 600px;
+}
+
+.pc_login_style .ibiz-panel-container-image {
+    overflow: auto;
+}
+
+@media screen and (max-height: 830px) {
+    .pc_login_style .ibiz-auth-captcha {
+        height: 41.5px;
+    }
+
+    .pc_login_style .ibiz-panel-container--container1 {
+        min-height: 500px;
+    }
+}
     .text-align-center{
       text-align:center
     }
@@ -12,6 +297,60 @@
 		  font-weight: bold;
 		}
   }
+}
+    /* 表单分组标题 */
+.main-info-common-view .ibiz-form-group--right_grouppanel .ibiz-form-group__caption {
+  font-size: 16px;
+  color: var(--ibiz-color-disabled-text);
+}
+/* 表单分页样式（padding、导航栏标题） */
+.main-info-common-view .ibiz-control-form > .ibiz-form-page .ibiz-form-tab-panel {
+  padding: 0 11px 0 13px;
+}
+.main-info-common-view .ibiz-control-form > .ibiz-form-page .ibiz-form-tab-panel.el-tabs .el-tabs__item {
+  font-size: 14px;
+}
+/* 两侧滚动条 */
+.main-info-common-view .ibiz-control-form {
+  height: 100%;
+}
+.main-info-common-view .ibiz-control-form > .ibiz-form-page {
+  height: 100%;
+}
+.main-info-common-view .ibiz-control-form > .ibiz-form-page > .ibiz-form-page-item {
+  height: 100%;
+}
+.main-info-common-view .ibiz-control-form > .ibiz-form-page > .ibiz-form-page-item > .ibiz-col--grid {
+  height: 100%;
+  overflow: auto scroll;
+}
+.main-info-common-view .ibiz-control-form > .ibiz-form-page > .ibiz-form-page-item > .ibiz-col--grid > .ibiz-form-group {
+  height: auto;
+}
+
+    .main-info-common-view .ibiz-grid-container--container_view_bottom > div {
+height: 100%;
+}
+.main-info-common-view .ibiz-grid-container--container_view_bottom > div:nth-child(2) {
+min-height: 48px;
+}
+.main-info-common-view .ibiz-single-data-container--container_attention>.el-row {
+position: static;
+}
+.main-info-common-view .ibiz-single-data-container--container_attention .ibiz-attention {
+width: calc(100% - 4px);
+min-height: 48px;
+padding-right: 32px;
+position: absolute;
+top: 0;
+}
+/* 时间范围宽度 */
+.main-info-common-view .ibiz-date-range-picker {
+max-width: 250px;
+}
+
+    .main_state_hover_style .el-popper.is-light .el-select-dropdown__item.hover, .main_state_hover_style .el-popper.is-light .el-select-dropdown__item:hover {
+    background-color: rgb(74 129 199 / 60%) !important;
 }
     .h2-title{
       .editor {
@@ -24,6 +363,53 @@
         }
       }
     }
+    .codelist-only-icon {
+    display: flex;
+    align-items: center;
+}
+.codelist-only-icon .ibiz-span .ibiz-code-list__item {
+    font-size: 0;
+}
+.codelist-only-icon .ibiz-span .ibiz-code-list__item svg {
+    font-size: var(--ibiz-form-item-font-size);
+}
+    .codelist-custom-item {
+    font-size: 18px;
+    --ibiz-width-icon-medium: 18px;
+}
+    .app-loading-x.default {
+    --app-loading-color: #fff !important;
+    --app-loading-bg-color: #fff !important;
+}
+.app-loading-x {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #fff !important;
+}
+
+.app-loading-x-container {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    color: #fff !important;
+    text-align: center;
+    transform: translateY(-50%);
+}
+    .dynamic-class {
+    --ibiz-editor-default-text-color: blue
+}
+    .imageitem .ibiz-image-upload__list-item{
+    width: 100%;
+    height: 100%;
+}
+    .map-item-tooltip {
+    padding: 8px 16px !important;
+}
     .mdctrl-red-label .ibiz-span {
   color: red;
 }
@@ -35,6 +421,9 @@
   height: 100%;
 }
 
+    .container-style {
+    background-color: #e7e8ea;
+}
     .toolbar {
     background-color: cadetblue;
 }
@@ -112,6 +501,105 @@
     line-height: 25px;
     color: #8CC537;
 }
+    /** 统一容器边距 */
+.app-portal-raw-container .ibiz-portlet-layout-content .ibiz-portlet-layout-content {
+  padding: 0;
+  overflow-y: hidden;
+  background-color: transparent;
+}
+.app-portal-raw-container > div > div > .ibiz-col {
+  flex: 1;
+  padding: var(--ibiz-spacing-tight);
+}
+.app-portal-raw-container .ibiz-portlet-rawitem {
+  padding: 0;
+}
+.app-portal-raw-container .ibiz-rawitem__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: var(--ibiz-spacing-base);
+}
+.app-portal-raw-container .ibiz-portlet-container--db_visitors_container {
+  background-color: var(--ibiz-color-primary);
+  border-radius: 2px;
+}
+    .app-portal-raw-container .ibiz-portlet-container--db_visitors_container {
+  background-color: var(--ibiz-color-primary);
+  border-radius: 2px;
+}
+.app-portal-raw-container .ibiz-portlet-container--db_pag_views_container {
+  background-color: #52c41a;
+  border-radius: 2px;
+}
+.app-portal-raw-container .ibiz-portlet-container--db_gross_revenue_container {
+  background-color: #fa8d16;
+  border-radius: 2px;
+}
+.app-portal-raw-container .ibiz-portlet-container--db_share_container {
+  background-color: #eb3096;
+  border-radius: 2px;
+}
+    .app-portal-raw-container .ibiz-rawitem__text {
+  line-height: 1.5715;
+  color: var(--ibiz-color-primary-text);
+}
+.app-portal-raw-container .ibiz-portlet-rawitem--db_visitors_value .ibiz-rawitem__text,
+.app-portal-raw-container .ibiz-portlet-rawitem--db_pag_views_value .ibiz-rawitem__text,
+.app-portal-raw-container .ibiz-portlet-rawitem--db_gross_revenue_value .ibiz-rawitem__text,
+.app-portal-raw-container .ibiz-portlet-rawitem--db_share_value .ibiz-rawitem__text {
+  font-size: 26px;
+}
+.app-portal-raw-container .ibiz-portlet-container--db_visitors_left_container,
+.app-portal-raw-container .ibiz-portlet-container--db_pag_views_left_container,
+.app-portal-raw-container .ibiz-portlet-container--db_gross_revenue_left_container,
+.app-portal-raw-container .ibiz-portlet-container--db_share_left_container {
+  padding: var(--ibiz-spacing-base);
+}
+    .quick-create-popper .ibiz-panel-rawitem--divider .el-divider {
+  margin: 0;
+}
+
+    .export-canvas-style .ibiz-bi-report-panel-content {
+  padding: 0;
+}
+.export-canvas-style .ibiz-bi-report-panel-content > .el-collapse {
+  padding: var(--ibiz-spacing-tight) var(--ibiz-spacing-base);
+}
+
+    /* 移入移出效果 */
+.ibiz-form-button--style2 .el-button,
+.ibiz-control-toolbar__item--style2 .el-button,
+.ibiz-panel-button--style2 .el-button {
+min-height: var(--ibiz-height-control-default);
+min-width: var(--ibiz-height-control-default);
+background: transparent;
+border: none;
+color: var(--ibiz-color-text-3);
+font-size: var(--ibiz-font-size-header-6);
+padding: 8px;
+}
+.ibiz-form-button--style2 .el-button:hover,
+.ibiz-control-toolbar__item--style2 .el-button:hover,
+.ibiz-panel-button--style2 .el-button:hover {
+background-color: var(--ibiz-color-primary-light-default);
+color: var(--ibiz-color-primary);
+}
+
+.ibiz-form-button--style2 .el-button.el-button {
+width: var(--ibiz-height-control-default) ;
+}
+
+/* 按钮间隔 */
+.ibiz-form-button--style2.ibiz-form-button--style2,
+.ibiz-control-toolbar__item--style2 .el-button,
+.ibiz-panel-button--style2.ibiz-panel-button--style2 {
+padding: var(--ibiz-spacing-tight) var(--ibiz-spacing-super-tight);
+}
+    .calendar-daterange-style .ibiz-control-calendar-item {
+    background-color: var(--ibiz-color-primary);
+    color: var(--ibiz-color-primary-text);
+}
     .tree-node-red .ibiz-control-treeview-node__label {
     color: red;
 }
@@ -126,6 +614,12 @@
     justify-content: center;
     border-radius: 5px;
     background-color: #ffdcaf;
+}
+    .el-step__title.is-process .step_title{
+    color: red !important;
+}
+.el-step__title.is-success .step_title{
+    color: blue !important;
 }
     .transition-time .ibiz-span{
   font-size: var(--ibiz-font-size-small);
@@ -145,6 +639,9 @@ width: 58px;
     border-top-left-radius: 5px;
     border-bottom-right-radius: 0px;
     border-top-right-radius: 0px;
+}
+    .white-font .ibiz-span {
+    color: white;
 }
     .rawitem .ibiz-rawitem .ibiz-rawitem__text {
     color: red;
@@ -174,7 +671,17 @@ width: 58px;
     background-color: #fcd0cb;
 }
 
- 
+ /* 在表单项及气泡项中垂直居中 */
+ .ibiz-form-item-container__editor:has(.red-span) {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--ibiz-form-item-container-line-height);
+}
+
+.el-select-dropdown__item:has(.red-span) {
+    display: flex;
+    align-items: center;
+}
 
     .green-span{
 width: 58px;
@@ -188,9 +695,47 @@ width: 58px;
     border-radius: 5px;
     background-color: #ccf2cc;
 }
+/* 在表单项及气泡项中垂直居中 */
+.ibiz-form-item-container__editor:has(.green-span) {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--ibiz-form-item-container-line-height);
+}
+.el-select-dropdown__item:has(.green-span) {
+    display: flex;
+    align-items: center;
+}
+
     .editor-css-noborder{
       background-color:rgba(162, 208, 245, 1);border-style:none
     }
+    .top_style .ibiz-panel-rawitem--top_text {
+    border-radius: 18px;
+    background-color: #ff75751a;
+    padding: 0px 8px 0px 8px;
+}
+
+.top_style .ibiz-panel-rawitem--top_text span {
+    color: #ff7575;
+}
+    .more_log_style .ibiz-control-toolbar__item {
+    position: absolute !important;
+    margin: -65px 0px 0px -65px !important;
+}
+
+.more_log_style .el-button {
+    --el-button-bg-color: none !important;
+    --el-button-text-color: rgb(70 107 144) !important;
+    --el-button-hover-text-color: none !important;
+    --el-button-hover-bg-color: none !important; 
+    --el-button-hover-border-color: none !important;
+    --el-button-active-text-color: node !important;
+    --el-button-active-bg-color: none !important;
+}
+    .custom-region-item {
+    padding: 8px 16px !important;
+    color: var(--ibiz-color-primary);
+}
     .blue-span{
 width: 58px;
     height: 24px;
@@ -261,11 +806,23 @@ width: 58px;
     }
     .gird-red-border{
 	background-color: rgba(6, 239, 41, 1) !important;
-	border-right: 1px solid rgba(251, 3, 3, 1) !important;
-	border-bottom: 1px solid rgba(251, 3, 3, 1) !important;
-  >.gird-red-border{
-	border: none !important;
-  }
+	border: 1px solid rgba(251, 3, 3, 1) !important;
+}
+    .discuss-comment-btn{
+    width: 100px;
+}
+.discuss-comment-btn .el-button{
+    min-height: var(--ibiz-height-control-default);
+    min-width: var(--ibiz-height-control-default);
+    background: transparent;
+    border: none;
+    color: var(--ibiz-color-text-3);
+    font-size: var(--ibiz-font-size-header-6);
+    padding: 8px;
+}
+.discuss-comment-btn .el-button:hover {
+  color: var(--ibiz-color-primary);
+  background-color: var(--ibiz-color-primary-light-default);
 }
     .comment-list-height-auto .ibiz-no-data {
   padding: 0;
@@ -305,4 +862,51 @@ width: 58px;
     opacity:0.5;
     padding:8px 0;
 }
+    .comment_btn_style button {
+    padding: 8px !important;
+    color: var(--ibiz-color-text-3) !important;
+}
+    .comment-tag{
+    padding: 3px 7px; 
+    background-color: var(--ibiz-color-fill-0); 
+    color: var(--ibiz-editor-default-text-color); 
+    border-radius: 14px; 
+    cursor: pointer; 
+    white-space: nowrap;
+}
+.comment-tag svg {
+    height: 1em;
+    width: 1em;
+    line-height: 40px;
+}
+    .description-text {
+    background-color: var(--ibiz-color-primary-light-default);
+    padding: var(--ibiz-form-rawitem-padding);
+    font-size: var(--ibiz-form-rawitem-font-size);
+    line-height: var(--ibiz-form-rawitem-line-height);
+}
+
+.description-text p {
+    margin: 0;
+    padding: 0;
+}
+     .slider > .ibiz-row > .ibiz-col{
+    border-radius: 5px;
+}
+
+    .slider-text-container > .ibiz-row > .ibiz-col:nth-child(2){
+    position: absolute;
+    left: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transform: translateX(-50%);
+}
+    .index-quick-search-style .ibiz-control-searchbar {
+  --ibiz-control-searchbar-quick-search-width: 100% !important;
+}
+.index-quick-search-style .ibiz-control-searchbar .el-input__wrapper {
+  height: 44px;
+}
+
 /***    END:系统样式表    ***/

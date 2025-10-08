@@ -34,6 +34,13 @@ export interface IApiMapState extends IApiMDControlState {
   areaData: IApiMapData[];
 
   /**
+   * @description 行政等级
+   * @type {number}
+   * @memberof IApiMapState
+   */
+  areaLevel: string;
+
+  /**
    * @description 区域编码是否是字符串
    * @type {boolean}
    * @default false
@@ -80,6 +87,13 @@ export interface IApiMapState extends IApiMDControlState {
    * @memberof IMapState
    */
   enabledDrillDown: boolean;
+
+  /**
+   * @description 是否允许全屏
+   * @type {boolean}
+   * @memberof IApiMapState
+   */
+  enabledFullScreen: boolean;
 }
 
 /**
@@ -164,4 +178,39 @@ export interface IApiMapData {
    * @memberof IApiMapData
    */
   _symbol?: string;
+
+  /**
+   * @description 弹框字体颜色
+   * @type {string}
+   * @memberof IApiMapData
+   */
+  _color?: string;
+
+  /**
+   * @description 弹框背景样式
+   * @type {string}
+   * @memberof IApiMapData
+   */
+  _bgcolor?: string;
+
+  /**
+   * @description 弹框边框颜色
+   * @type {string}
+   * @memberof IApiMapData
+   */
+  _borderColor?: string;
+
+  /**
+   * @description 弹框边框宽度
+   * @type {number}
+   * @memberof IApiMapData
+   */
+  _borderWidth?: number;
+
+  /**
+   * @description 弹框样式名称
+   * @type {string}
+   * @memberof IApiMapData
+   */
+  _className?: string;
 }

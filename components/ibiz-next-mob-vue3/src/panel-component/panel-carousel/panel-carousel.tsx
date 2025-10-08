@@ -3,13 +3,24 @@ import { defineComponent, PropType } from 'vue';
 import { PanelCarouselController } from './panel-carousel.controller';
 import './panel-carousel.scss';
 
+/**
+ * 轮播图
+ * @primary
+ * @description 可配置一组静态图片，用于轮播。
+ */
 export const PanelCarousel = defineComponent({
   name: 'IBizPanelCarousel',
   props: {
+    /**
+     * @description 轮播图控制器
+     */
     controller: {
       type: PanelCarouselController,
       required: true,
     },
+    /**
+     * @description 轮播图属性
+     */
     attrs: {
       type: Object as PropType<IData>,
       required: false,

@@ -154,6 +154,7 @@ export interface IChatOptions extends IChat {
     params: object,
     otherParams: object,
     question: IChatMessage[],
+    sessionid: string,
   ): Promise<boolean>;
 
   /**

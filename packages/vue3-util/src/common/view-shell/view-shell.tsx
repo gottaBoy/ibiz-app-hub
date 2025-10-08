@@ -11,6 +11,8 @@ import {
   RedrawViewEvent,
   IModal,
   CTX,
+  EventBase,
+  IViewShellHooks,
 } from '@ibiz-template/runtime';
 import {
   defineComponent,
@@ -38,6 +40,7 @@ export const IBizViewShell = defineComponent({
     viewId: { type: String },
     // 解决打开浮动容器（模态、抽屉、弹出框）ctx丢失问题
     ctx: { type: Object as PropType<CTX> },
+    viewShellHooks: { type: Object as PropType<IViewShellHooks> },
   },
   setup(props, { attrs }) {
     const ns = useNamespace('view-shell');
@@ -171,7 +174,7 @@ export const IBizViewShell = defineComponent({
               // 只要上下文中无 srfsessionid 则生成一个
               if (noSrfSessionId) {
                 // 生成一个界面域，界面域标识为当前控制器实例的标识
-                const domain = ibiz.uiDomainManager.create(id);
+                const domain = ibiz.uiDomainManager.create(id, appDataEntityId);
                 context.value.srfsessionid = domain.id;
               }
 
@@ -265,6 +268,13 @@ export const IBizViewShell = defineComponent({
       }
     };
 
+    // 视图创建完成
+    const onCreated = (event: EventBase): void => {
+      if (props.viewShellHooks) {
+        props.viewShellHooks.hooks.viewCreated.call(event);
+      }
+    };
+
     return {
       ns,
       errMsg,
@@ -273,6 +283,7 @@ export const IBizViewShell = defineComponent({
       hasAuthority,
       viewModelData,
       redrawView,
+      onCreated,
       curContext: context,
       curParams: params,
     };
@@ -288,6 +299,7 @@ export const IBizViewShell = defineComponent({
           ...this.$attrs,
           provider: this.provider,
           onRedrawView: this.redrawView,
+          onCreated: this.onCreated,
         },
         this.$slots,
       );

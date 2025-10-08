@@ -17,6 +17,9 @@ import {
   computed,
   renderSlot,
   Teleport,
+  onMounted,
+  onBeforeUnmount,
+  nextTick,
 } from 'vue';
 import './view.scss';
 import { useNamespace, useViewController, useViewOperation } from '../../use';
@@ -151,6 +154,29 @@ export const View = defineComponent({
       }
       return h(comp, ctrlProps);
     };
+
+    // 水印销毁方法
+    let watermarkDestroy: void | null | (() => void);
+    onMounted(() => {
+      nextTick(async () => {
+        const container = document.getElementById(c.id);
+        const appView: IData = await ibiz.hub.config.view.get(c.model.id!);
+        if (!container || !appView?.waterMarkOption) return;
+
+        // 挂载视图水印
+        watermarkDestroy = ibiz.util.watermark.mount(
+          appView.waterMarkOption,
+          container,
+          c.context,
+          c.params,
+          c.state.srfactiveviewdata || {},
+        );
+      });
+    });
+
+    onBeforeUnmount(() => {
+      watermarkDestroy?.();
+    });
 
     return {
       c,

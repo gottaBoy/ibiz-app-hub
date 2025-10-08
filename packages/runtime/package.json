@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/runtime",
-  "version": "0.7.41-alpha.16",
+  "version": "0.7.41-alpha.21",
   "description": "运行时逻辑库",
   "type": "module",
   "main": "out/index.js",

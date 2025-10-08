@@ -1,4 +1,5 @@
 import { computed, defineComponent, PropType, ref, Ref } from 'vue';
+import { JSX } from 'vue/jsx-runtime';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import {
   IPanelButtonList,

@@ -1,6 +1,7 @@
 export default {
   deviewCodeName: 'ui_action_cssandicon',
   deviewId: 'ae0acf387e80d14a3860dd02aab64900',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -17,6 +18,27 @@ export default {
       layout: 'FLEX',
     },
     rootPanelItems: [
+      {
+        rawItem: {
+          rawItemParams: [
+            {
+              key: 'position',
+              value: 'TOP',
+            },
+          ],
+          predefinedType: 'VIEWMSG_POS',
+          id: 'viewmsg_pos',
+        },
+        caption: '视图消息占位',
+        itemStyle: 'DEFAULT',
+        itemType: 'RAWITEM',
+        layoutPos: {
+          shrink: 1,
+          layout: 'FLEX',
+        },
+        showCaption: true,
+        id: 'viewmsg_pos',
+      },
       {
         actionGroupExtractMode: 'ITEM',
         panelItems: [

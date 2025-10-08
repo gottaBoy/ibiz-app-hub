@@ -30,10 +30,6 @@ export async function getAppViewComponent(
             './master/master-child-appc-view-2/master-child-appc-view-2.vue'
           ),
       );
-    case 'about_appc':
-      return defineAsyncComponent(
-        () => import('./about/about-appc/about-appc.vue'),
-      );
     case 'welcome_appc':
       return defineAsyncComponent(
         () => import('./about/welcome-appc/welcome-appc.vue'),

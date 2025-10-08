@@ -1,10 +1,10 @@
 import { RuntimeModelError } from '@ibiz-template/core';
 import {
   ViewController,
-  IMPickupViewState,
-  IMPickupViewEvent,
   SysUIActionTag,
   IListController,
+  IMPickupViewState,
+  IMPickupViewEvent,
   IApiMPickupViewCall,
 } from '@ibiz-template/runtime';
 import { IAppDEPickupView } from '@ibiz/model-core';
@@ -57,11 +57,6 @@ export class MPickupViewEngine extends PickupViewEngine {
 
     const { childNames } = this.view;
     childNames.push('simplelist');
-    // 设置回显selectedData
-    if (this.view.params.selecteddata) {
-      this.selectData = JSON.parse(this.view.params.selecteddata);
-      delete this.view.params.selecteddata;
-    }
     if (!this.view.slotProps.simplelist) {
       this.view.slotProps.simplelist = {};
     }
@@ -88,8 +83,7 @@ export class MPickupViewEngine extends PickupViewEngine {
     this.simpleList.evt.on('onActive', event => {
       this.simpleListActive(event.data);
     });
-    // 默认回显选中数据
-    this.simpleList.setData(this.selectData);
+    this.setSelectedData(this.selectData);
   }
 
   async call(
@@ -131,8 +125,8 @@ export class MPickupViewEngine extends PickupViewEngine {
    * @param {*} data
    * @memberof PickupViewEngine
    */
-  protected pickupViewPanelDataActive(data: IData[]): void {
-    this.handlePushSimpleListItems(data);
+  protected async pickupViewPanelDataActive(data: IData[]): Promise<void> {
+    await this.handlePushSimpleListItems(data);
   }
 
   /**
@@ -151,7 +145,7 @@ export class MPickupViewEngine extends PickupViewEngine {
         items.splice(index, 1);
       }
     });
-    this.simpleList.setData(items);
+    this.setSelectedData(items);
   }
 
   /**
@@ -163,23 +157,27 @@ export class MPickupViewEngine extends PickupViewEngine {
    */
   async addSelection(): Promise<void> {
     const selectItem = await this.pickupViewPanel.getSelectedData();
-    this.handlePushSimpleListItems(selectItem);
+    await this.handlePushSimpleListItems(selectItem);
   }
 
   /**
-   * 处理添加简单列表数据
-   *
-   * @author zk
-   * @date 2023-05-26 02:05:41
+   * @description 处理添加简单列表数据
+   * @protected
    * @param {IData[]} data
    * @memberof MPickupViewEngine
    */
-  protected handlePushSimpleListItems(data: IData[]): void {
-    const allData = this.simpleList.getAllData();
-    const items = [...allData, ...data];
+  protected async handlePushSimpleListItems(data: IData[]): Promise<void> {
+    // 每次添加的都是多数据部件当前页数据，因此需先将原来简单列表的当前页数据过滤掉
+    const items = await this.pickupViewPanel.getAllData();
+    // 过滤出非当前页数据
+    const selectItems = this.simpleList
+      .getAllData()
+      .filter(selected => !items.some(item => item.srfkey === selected.srfkey));
+    // 将多数据部件当前页数据加入简单列表选中
+    selectItems.push(...data);
     // 去重items
-    const uniqueItems = this.handleUniqueItems(items);
-    this.simpleList.setData(uniqueItems);
+    const uniqueItems = this.handleUniqueItems(selectItems);
+    this.setSelectedData(uniqueItems);
   }
 
   /**
@@ -207,7 +205,7 @@ export class MPickupViewEngine extends PickupViewEngine {
    */
   async addAll(): Promise<void> {
     const allItems = await this.pickupViewPanel.getAllData();
-    this.handlePushSimpleListItems(allItems);
+    await this.handlePushSimpleListItems(allItems);
   }
 
   /**
@@ -218,7 +216,7 @@ export class MPickupViewEngine extends PickupViewEngine {
    * @memberof MPickupViewEngine
    */
   removeAll(): void {
-    this.simpleList.setData([]);
+    this.setSelectedData([]);
   }
 
   /**
@@ -235,10 +233,19 @@ export class MPickupViewEngine extends PickupViewEngine {
       const index = items.findIndex(
         (item: IData) => _item.srfkey === item.srfkey,
       );
-      if (index !== -1) {
-        items.splice(index, 1);
-      }
+      if (index !== -1) items.splice(index, 1);
     });
+    this.setSelectedData(items);
+  }
+
+  /**
+   * @description 设置选中数据
+   * @protected
+   * @param {IData[]} items
+   * @memberof MPickupViewEngine
+   */
+  protected setSelectedData(items: IData[]): void {
+    super.setSelectedData(items);
     this.simpleList.setData(items);
   }
 

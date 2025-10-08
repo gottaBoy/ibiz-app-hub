@@ -16,6 +16,18 @@ $repeater-grid: (
     z-index: 2;
   }
 
+  @include e(drag-icon) {
+    cursor: move;
+  }
+
+  @include e(sortable-ghost) {
+    opacity: 0.5;
+  }
+
+  .el-table__row {
+    height: 57px;
+  }
+
   .el-table__row:hover {
     .#{bem(repeater-grid-index, text)}{
       &:last-child{

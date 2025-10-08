@@ -20,6 +20,8 @@ export const ActionBarPortlet = defineComponent({
       `portlet-${props.modelData.portletType?.toLowerCase()}`,
     );
 
+    const zIndex = props.controller.dashboard.state.zIndex;
+
     // 点击工具栏处理
     const onActionClick = async (
       detail: IUIActionGroupDetail,
@@ -28,7 +30,7 @@ export const ActionBarPortlet = defineComponent({
       await props.controller.onActionClick(detail, event);
     };
 
-    return { ns, onActionClick };
+    return { ns, zIndex, onActionClick };
   },
 
   render() {
@@ -42,6 +44,7 @@ export const ActionBarPortlet = defineComponent({
       <iBizPortletLayout controller={this.controller} class={classArr}>
         {this.modelData.uiactionGroup && (
           <iBizActionToolbar
+            zIndex={this.zIndex}
             action-details={this.modelData.uiactionGroup.uiactionGroupDetails}
             actions-state={this.controller.state.actionGroupState}
             onActionClick={this.onActionClick}

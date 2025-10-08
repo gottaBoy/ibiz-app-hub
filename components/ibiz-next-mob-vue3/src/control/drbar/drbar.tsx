@@ -17,12 +17,30 @@ import './drbar.scss';
 export const DRBarControl = defineComponent({
   name: 'IBizDrBarControl',
   props: {
+    /**
+     * @description 数据关系栏模型数据
+     */
     modelData: { type: Object as PropType<IDEDRBar>, required: true },
+    /**
+     * @description 应用上下文对象
+     */
     context: { type: Object as PropType<IContext>, required: true },
+    /**
+     * @description 视图参数对象
+     * @default {}
+     */
     params: { type: Object as PropType<IParams>, default: () => ({}) },
+    /**
+     * @description 部件适配器
+     */
     provider: { type: Object as PropType<IControlProvider> },
+    /**
+     * @description 导航数据
+     */
     srfnav: { type: String, required: false },
-    showMode: { type: String, default: 'vertical' },
+    /**
+     * @description 隐藏编辑项
+     */
     hideEditItem: { type: Boolean, default: undefined },
   },
   setup() {

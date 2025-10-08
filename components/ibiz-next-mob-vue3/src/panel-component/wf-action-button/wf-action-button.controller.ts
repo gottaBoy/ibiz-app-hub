@@ -20,18 +20,16 @@ export class WFActionButtonController extends PanelItemController<IPanelButton> 
   }
 
   /**
-   * 面板控制器
-   *
+   * @description 面板控制器
+   * @exposedoc
    * @type {ViewLayoutPanelController}
    * @memberof WFActionButtonController
    */
   declare panel: ViewLayoutPanelController;
 
   /**
-   * 工作流动态按钮
-   *
-   * @author zk
-   * @date 2023-11-12 06:11:28
+   * @description 工作流动态按钮
+   * @exposedoc
    * @readonly
    * @type {IData[]}
    * @memberof WFActionButtonController

@@ -3,40 +3,42 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   IDEGantt,
-  IDETreeDataSetNode,
   IDETreeNode,
   IDETreeNodeRS,
+  IDETreeDataSetNode,
 } from '@ibiz/model-core';
 import {
   awaitTimeout,
-  IPortalMessage,
   RuntimeError,
-  RuntimeModelError,
+  IPortalMessage,
+  recursiveIterate,
 } from '@ibiz-template/core';
 import {
-  IColumnState,
-  IGanttController,
-  IGanttEvent,
-  IGanttNodeData,
-  IGanttState,
   IGanttStyle,
-  IUIActionResult,
-  IUILogicParams,
+  IGanttState,
+  IGanttEvent,
+  IColumnState,
+  IGanttNodeData,
+  IGanttController,
   MDCtrlLoadParams,
   MDCtrlRemoveParams,
+  IGanttNodeLinkData,
 } from '../../../interface';
 import { GanttService } from './gantt.service';
 import { TreeGridExController, TreeGridExRowState } from '../tree-grid-ex';
-import { GanttDataSetNodeData, Srfuf } from '../../../service';
 import {
-  calcDeCodeNameById,
-  getChildNodeRSs,
+  Srfuf,
+  GanttDataSetNodeData,
+  GanttNodeLinkData,
+} from '../../../service';
+import {
   getRootNode,
+  getChildNodeRSs,
+  calcDeCodeNameById,
 } from '../../../model';
 import { TreeGridExNotifyState } from '../../constant';
 import { handleAllSettled } from '../../../utils';
 import { ControllerEvent, isValueChange } from '../../utils';
-import { ViewLogicScheduler } from '../../../logic-scheduler';
 
 /**
  * 甘特图控制器
@@ -54,14 +56,6 @@ export class GanttController
 {
   declare service: GanttService;
 
-  /**
-   * 视图逻辑触发器
-   *
-   * @type {ViewLogicScheduler}
-   * @memberof GanttController
-   */
-  viewScheduler?: ViewLogicScheduler;
-
   protected get _evt(): ControllerEvent<IGanttEvent> {
     return this.evt;
   }
@@ -78,6 +72,8 @@ export class GanttController
     this.state.ganttStyle = {};
     this.state.sliderDraggable = true;
     this.state.mustShowColumns = null;
+    this.state.unit = 'day';
+    this.state.links = [];
   }
 
   /**
@@ -98,6 +94,9 @@ export class GanttController
       this.state.mustShowColumns = JSON.parse(
         this.controlParams.mustshowcolumns,
       );
+    }
+    if (this.controlParams.unit) {
+      this.state.unit = this.controlParams.unit;
     }
   }
 
@@ -132,34 +131,6 @@ export class GanttController
     this.state.ganttStyle = style;
   }
 
-  protected async onCreated(): Promise<void> {
-    await super.onCreated();
-
-    this.initViewScheduler();
-  }
-
-  /**
-   * 初始化视图触发器
-   *
-   * @protected
-   * @memberof GanttController
-   */
-  protected initViewScheduler(): void {
-    const viewLogics = this.model.appViewLogics || [];
-    if (viewLogics.length !== 0) {
-      this.viewScheduler = ibiz.scheduler.createViewScheduler(viewLogics);
-      this.viewScheduler.defaultParamsCb = (): IUILogicParams => {
-        return this.getEventArgs();
-      };
-      if (this.viewScheduler.hasViewEventTrigger) {
-        // 监听视图事件触发视图事件触发器
-        this.evt.onAll((_eventName, event) => {
-          this.viewScheduler!.triggerViewEvent(event);
-        });
-      }
-    }
-  }
-
   /**
    * 设置激活数据
    *
@@ -170,27 +141,10 @@ export class GanttController
   async setActive(item: IGanttNodeData): Promise<void> {
     const nodeParams = this.parseTreeNodeData(item);
     if (item._nodeType === 'DE') {
-      await this.onNodeDataActive(nodeParams);
+      const res = await this.openData(item);
+      if (!res.cancel) this.refreshNodeChildren(item, true);
     }
     return this.evt.emit('onActive', { ...nodeParams, nodeData: item });
-  }
-
-  /**
-   * 节点数据激活
-   *
-   * @param {IGanttNodeData} item
-   * @return {*}  {Promise<void>}
-   * @memberof GanttController
-   */
-  async onNodeDataActive(nodeParams: {
-    data: IData[];
-    context: IContext;
-    params: IParams;
-  }): Promise<void> {
-    const res = await this.openData(nodeParams);
-    if (!res.cancel) {
-      this.refreshNodeChildren(nodeParams.data[0], true);
-    }
   }
 
   /**
@@ -341,54 +295,6 @@ export class GanttController
   }
 
   /**
-   * 打开编辑数据视图
-   *
-   * @param {IGanttNodeData} item
-   * @memberof GanttController
-   */
-  async openData({
-    data,
-    context,
-    params,
-  }: {
-    data: IData[];
-    context: IContext;
-    params: IParams;
-  }): Promise<IUIActionResult> {
-    const nodeData = data[0];
-    const nodeModel = this.getNodeModel(nodeData._nodeId)!;
-    const { appDataEntityId } = nodeModel as IDETreeDataSetNode;
-    const deName = calcDeCodeNameById(appDataEntityId!);
-    context[deName!.toLowerCase()] = nodeData._deData?.srfkey;
-    // 添加srfnavctrlid到上下文
-    context.srfnavctrlid = this.ctrlId;
-    const result = await this.viewScheduler?.triggerCustom(
-      `${nodeModel.id!.toLowerCase()}_opendata`,
-      {
-        context,
-        params,
-        data,
-        event: undefined,
-        view: this.view,
-        ctrl: this,
-      },
-    );
-
-    if (result === -1) {
-      throw new RuntimeModelError(
-        nodeModel,
-        ibiz.i18n.t('runtime.controller.control.calendar.missingViewLogic', {
-          itemType: nodeModel.id!.toLowerCase(),
-        }),
-      );
-    } else {
-      return {
-        cancel: result ? !result.ok : true,
-      };
-    }
-  }
-
-  /**
    * 设置行属性的值
    *
    * @param {TreeGridExRowState} row
@@ -495,7 +401,8 @@ export class GanttController
     }
 
     const nodeModel = this.getNodeModel(nodeData._nodeId)!;
-    const { appDataEntityId } = nodeModel as IDETreeDataSetNode;
+    const { appDataEntityId, updateAppDEActionId } =
+      nodeModel as IDETreeDataSetNode;
     const isCreate = nodeData._deData!.srfuf === Srfuf.CREATE;
 
     // 处理接口
@@ -507,10 +414,11 @@ export class GanttController
 
     let res;
 
+    const updateMethodName = updateAppDEActionId || 'update';
     try {
       res = await app.deService.exec(
         appDataEntityId!,
-        isCreate ? 'create' : 'update',
+        isCreate ? 'create' : updateMethodName,
         tempContext,
         nodeData._deData,
       );
@@ -579,13 +487,15 @@ export class GanttController
             const nodeModel = this.getNodeModel(item._nodeId);
             // 新建未保存的数据直接走后续删除处理逻辑
             if (nodeModel && item._deData!.srfuf !== Srfuf.CREATE) {
-              const { appDataEntityId } = nodeModel as IDETreeDataSetNode;
+              const { appDataEntityId, removeAppDEActionId } =
+                nodeModel as IDETreeDataSetNode;
               const deName = calcDeCodeNameById(appDataEntityId!);
               tempContext[deName] = item.srfkey;
+              const removeMethodName = removeAppDEActionId || 'remove';
               // 删除后台的数据
               await app.deService.exec(
                 appDataEntityId!,
-                'remove',
+                removeMethodName,
                 tempContext,
                 params,
               );
@@ -765,11 +675,11 @@ export class GanttController
   protected onDEDataChange(msg: IPortalMessage): void {}
 
   /**
-   * @description 切换折叠
-   * @param {IData} [params={}]
+   * @description 切换折叠，其中tag表示操作指定树节点标识，若不传则操作当前树的第一层节点展开状态，expand表示是否展开，若不传则基于节点展开状态取反
+   * @param {{ tag?: string; expand?: boolean }} [params={}]
    * @memberof GanttController
    */
-  changeCollapse(params: IData = {}): void {
+  changeCollapse(params: { tag?: string; expand?: boolean } = {}): void {
     const { tag, expand } = params;
     // 存在分组id则展开/收缩分组
     if (tag) {
@@ -891,5 +801,82 @@ export class GanttController
       });
     }
     return columnStates;
+  }
+
+  /**
+   * loadNodes加载完子数据之后的处理
+   * @param {IGanttNodeData[]} nodes 加载回来的子数据
+   * @return {*}  {Promise<void>}
+   */
+  async afterLoadNodes(nodes: IGanttNodeData[]): Promise<void> {
+    await super.afterLoadNodes(nodes);
+    await this.updateLinks();
+  }
+
+  /**
+   * @description 更新链接线数据
+   * @returns {*}  {Promise<void>}
+   * @memberof GanttController
+   */
+  async updateLinks(): Promise<void> {
+    const {
+      linkdatasourcetype,
+      linkappdataentityname,
+      linkappdedatasetname,
+      linknodedataname,
+      fromdataitemname,
+      todataitemname,
+    } = this.controlParams;
+    let result: IData[] = [];
+    const app = ibiz.hub.getApp(this.context.srfappid);
+    // 适配数据源模式
+    switch (linkdatasourcetype) {
+      case 'DEDATASET':
+        result = await this.service.getDEDatasByDEDataset({
+          appDataEntityId: `${app.id}.${linkappdataentityname}`,
+          appDEDataSetName: linkappdedatasetname,
+          context: this.context,
+          params: this.params,
+        });
+        break;
+      case 'NODEDATA':
+      default:
+        recursiveIterate(
+          { _children: this.state.rootNodes },
+          (node: IGanttNodeData) => {
+            if (node._deData?.[linknodedataname]?.length) {
+              result.push(...node._deData[linknodedataname]);
+            }
+          },
+          { childrenFields: ['_children'] },
+        );
+        break;
+    }
+    // 处理links数据
+    const _links: IGanttNodeLinkData[] = [];
+    result.forEach(data => {
+      let fromData: IGanttNodeData | undefined;
+      let toData: IGanttNodeData | undefined;
+      this.state.items.find(_ganttNode => {
+        if (data[fromdataitemname] === _ganttNode._value) fromData = _ganttNode;
+        if (data[todataitemname] === _ganttNode._value) toData = _ganttNode;
+        if (fromData && toData) return true;
+        return false;
+      });
+
+      // 起始节点或结束节点不存在时不显示链接线
+      if (fromData && toData) {
+        _links.push(
+          new GanttNodeLinkData({
+            fromDataItemName: fromdataitemname,
+            toDataItemName: todataitemname,
+            fromData,
+            toData,
+            data,
+          }),
+        );
+      }
+    });
+    this.state.links = _links;
   }
 }

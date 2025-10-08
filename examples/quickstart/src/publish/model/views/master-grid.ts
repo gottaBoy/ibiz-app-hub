@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'grid',
   deviewId: '359f56e3f825ee05782d8a7bf3dff989',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -38,18 +39,38 @@ export default {
           id: 'layout',
         },
         {
-          caption: '行编辑',
-          appViewId: 'web.master_grid_edit',
-          id: 'edit',
-        },
-        {
           caption: '排序',
           appViewId: 'web.master_grid_sort',
           id: 'sort',
         },
         {
+          caption: '操作列',
+          appViewId: 'web.master_grid_action_column',
+          id: 'action_column',
+        },
+        {
+          caption: '附件列',
+          appViewId: 'web.master_grid_attachment_column',
+          id: 'attachment_column',
+        },
+        {
+          caption: '列界面行为组',
+          appViewId: 'web.master_grid_column_uiaction_group',
+          id: 'uiaction_group',
+        },
+        {
+          caption: '行编辑',
+          appViewId: 'web.master_grid_edit',
+          id: 'edit',
+        },
+        {
+          caption: '动态逻辑',
+          appViewId: 'web.master_grid_row_logic',
+          id: 'row_logic',
+        },
+        {
           caption: '数据聚合',
-          appViewId: 'web.master_grid_aggregation',
+          appViewId: 'web.master_grid_agg',
           id: 'aggregation',
         },
         {
@@ -63,9 +84,9 @@ export default {
           id: 'toolbar',
         },
         {
-          caption: '操作列',
-          appViewId: 'web.master_grid_action_column',
-          id: 'action_column',
+          caption: '表格导出',
+          appViewId: 'web.master_grid_export',
+          id: 'grid_export',
         },
         {
           caption: '值显示',
@@ -74,13 +95,8 @@ export default {
         },
         {
           caption: '内置导航',
-          appViewId: 'web.master_grid_built_in_nav',
+          appViewId: 'web.master_grid_nav_inside',
           id: 'built_in_nav',
-        },
-        {
-          caption: '界面样式及图标',
-          appViewId: 'web.master_grid_css',
-          id: 'css',
         },
         {
           caption: '合并行或列',
@@ -88,14 +104,59 @@ export default {
           id: 'span',
         },
         {
-          caption: '透视表',
-          appViewId: 'web.master_pivottable',
-          id: 'pivottable',
+          caption: '列更新',
+          appViewId: 'web.master_grid_update',
+          id: 'update',
+        },
+        {
+          caption: '界面样式及图标',
+          appViewId: 'web.master_grid_css',
+          id: 'css',
         },
         {
           caption: '事件及调用',
           appViewId: 'web.master_grid_logic',
           id: 'event_and_call',
+        },
+        {
+          caption: '显示模式',
+          appViewId: 'web.master_grid_showmode',
+          id: 'showmode',
+        },
+        {
+          caption: '行展开',
+          appViewId: 'web.master_grid_expand',
+          id: 'expand',
+        },
+        {
+          caption: '百分比',
+          appViewId: 'web.master_grid_percent',
+          id: 'percent',
+        },
+        {
+          caption: '刷新模式',
+          appViewId: 'web.master_grid_refreshmode',
+          id: 'refresh',
+        },
+        {
+          caption: '换行模式',
+          appViewId: 'web.master_grid_wrap',
+          id: 'warp',
+        },
+        {
+          caption: '分组行模式',
+          appViewId: 'web.master_grid_grouprowmode_exp',
+          id: 'grouprowmode',
+        },
+        {
+          caption: '虚拟表格',
+          appViewId: 'web.master_virtualized_grid',
+          id: 'virtualized_grid',
+        },
+        {
+          caption: '透视表',
+          appViewId: 'web.master_pivottable',
+          id: 'pivottable',
         },
       ],
       dataRelationTag: 'grid_DR',

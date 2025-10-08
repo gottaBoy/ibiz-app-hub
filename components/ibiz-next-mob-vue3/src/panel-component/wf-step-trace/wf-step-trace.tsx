@@ -3,9 +3,17 @@ import { computed, defineComponent } from 'vue';
 import { WFStepTraceController } from './wf-step-trace.controller';
 import './wf-step-trace.scss';
 
+/**
+ * 流程跟踪组件
+ * @primary
+ * @description 根据流程跟踪数据循环绘制步骤条，每一条提供了4个步骤信息展示，包括处理完成时间(time)，处理环节(type)，处理人(authorNames)，提交路径(taskName)。
+ */
 export const WFStepTrace = defineComponent({
   name: 'IBizWFStepTrace',
   props: {
+    /**
+     * @description 流程跟踪组件控制器
+     */
     controller: {
       type: WFStepTraceController,
       required: true,

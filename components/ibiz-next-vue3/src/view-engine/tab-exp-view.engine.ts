@@ -233,7 +233,8 @@ export class TabExpViewEngine extends ViewEngineBase {
     // 只有上方显示分页的时候，且有分页导航面板时显示头部
     if (
       tabLayout === undefined ||
-      (tabLayout === 'TOP' && getControl(this.view.model, 'tabexppanel'))
+      (['TOP', 'TOP_DROPDOWNLIST'].includes(tabLayout) &&
+        getControl(this.view.model, 'tabexppanel'))
     ) {
       showHeader = true;
     }

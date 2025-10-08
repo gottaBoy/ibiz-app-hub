@@ -1,0 +1,113 @@
+export default {
+  deviewCodeName: 'panel_panel_item_render2',
+  deviewId: '0a228369d3e59aca88c3acf5c9a9f546',
+  appWFId: 'workflow',
+  accUserMode: 2,
+  capLanguageRes: {
+    lanResTag: 'DE.LNAME.MASTER',
+  },
+  caption: '面板_面板项绘制器_高级',
+  codeName: 'master_panel_panel_item_render2',
+  appDataEntityId: 'web.master',
+  viewLayoutPanel: {
+    layoutBodyOnly: true,
+    viewProxyMode: true,
+    layoutMode: 'FLEX',
+    layout: {
+      layout: 'FLEX',
+    },
+    rootPanelItems: [
+      {
+        actionGroupExtractMode: 'ITEM',
+        panelItems: [
+          {
+            rawItem: {
+              caption: '文本内容',
+              halign: 'LEFT',
+              renderMode: 'TEXT',
+              valign: 'MIDDLE',
+              wrapMode: 'NOWRAP',
+              contentType: 'RAW',
+              predefinedType: 'STATIC_TEXT',
+              id: 'static_text',
+            },
+            caption: '文本',
+            itemStyle: 'DEFAULT',
+            itemType: 'RAWITEM',
+            controlRenders: [
+              {
+                layoutPanelModel:
+                  "(function() { \r\nlet style = ''; \r\nif (data.name === '演示数据1') {\r\n\tstyle = `color:red`\r\n} else {\r\n\tstyle = `color:blue`\r\n}\r\nreturn `<div style=${style}>名称-数量：${data.name || ''}-${data.quantity || ''}</div>`; })()",
+                renderType: 'LAYOUTPANEL_MODEL',
+                id: 'logic',
+              },
+            ],
+            layoutPos: {
+              shrink: 1,
+              layout: 'FLEX',
+              spacingBottom: 'INNERMEDIUM',
+            },
+            showCaption: true,
+            id: 'static_text',
+          },
+        ],
+        predefinedType: 'CONTAINER_MULTIDATA',
+        layout: {
+          layout: 'FLEX',
+        },
+        dataRegionType: 'MULTIDATA',
+        dataSourceType: 'DEDATASET',
+        appDEMethodId: 'fetch_default',
+        appDataEntityId: 'web.master',
+        navigateParams: [
+          {
+            key: 'size',
+            value: '3',
+            rawValue: true,
+            id: 'size',
+          },
+        ],
+        caption: '多项数据容器',
+        itemStyle: 'DEFAULT',
+        itemType: 'CONTAINER',
+        layoutPos: {
+          shrink: 1,
+          layout: 'FLEX',
+        },
+        id: 'container_multidata',
+      },
+    ],
+    layoutPanel: true,
+    controls: [
+      {
+        capLanguageRes: {
+          lanResTag: 'DE.LNAME.MASTER',
+        },
+        caption: '面板_面板项绘制器_高级',
+        codeName: 'panel_panel_item_render2_captionbar',
+        controlType: 'CAPTIONBAR',
+        appDataEntityId: 'web.master',
+        controlParam: {},
+        name: 'captionbar',
+        id: 'panel_panel_item_render2_captionbar',
+      },
+    ],
+    codeName: 'layoutpanel',
+    controlType: 'VIEWLAYOUTPANEL',
+    logicName: 'panel_panel_item_render2',
+    appDataEntityId: 'web.master',
+    controlParam: {},
+    modelId: '421a8ddd18377ccaf275bb7751dc983c',
+    modelType: 'PSSYSVIEWLAYOUTPANEL',
+    id: 'layoutpanel',
+  },
+  title: '面板_面板项绘制器_高级',
+  viewStyle: 'DEFAULT',
+  viewType: 'DECUSTOMVIEW',
+  enableDP: true,
+  showCaptionBar: true,
+  modelId: '9a62b3fc440bdc054f8762c4ff4cbcf5',
+  modelType: 'PSAPPDEVIEW',
+  name: 'MASTERpanel_panel_item_render2',
+  id: 'web.master_panel_panel_item_render2',
+};

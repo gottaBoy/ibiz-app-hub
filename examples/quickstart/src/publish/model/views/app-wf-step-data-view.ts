@@ -1,0 +1,31 @@
+export default {
+  caption: '应用流程处理记录视图',
+  codeName: 'app_wf_step_data_view',
+  controls: [
+    {
+      caption: '应用流程处理记录视图',
+      codeName: 'captionbar',
+      controlType: 'CAPTIONBAR',
+      controlParam: {},
+      id: 'captionbar',
+    },
+  ],
+  viewLayoutPanel: {
+    layoutBodyOnly: true,
+    useDefaultLayout: true,
+    layoutPanel: true,
+    codeName: 'layoutpanel',
+    controlStyle: 'APPWFSTEPDATAVIEW',
+    controlType: 'VIEWLAYOUTPANEL',
+    controlParam: {},
+    id: 'layoutpanel',
+  },
+  title: '应用流程处理记录视图',
+  viewStyle: 'DEFAULT',
+  viewType: 'APPWFSTEPDATAVIEW',
+  showCaptionBar: true,
+  modelId: '9abc9f15994d3ab38ac53f6de761686e',
+  modelType: 'PSAPPUTILVIEW',
+  name: 'AppWFStepDataView',
+  id: 'web.app_wf_step_data_view',
+};

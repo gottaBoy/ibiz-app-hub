@@ -349,6 +349,7 @@ export default {
         today: 'Today',
         tomorrow: 'To Morrow',
         nextweek: 'Next Week',
+        selectdate: 'Select Date',
       },
       calendarmonth: {
         lastmonth: 'Last Month',
@@ -387,6 +388,8 @@ export default {
           saturday: 'Sat',
           sunday: 'Sun',
         },
+        selectWeekRange: 'Select week range',
+        weekFormat: 'ww [Week] of YYYY',
       },
     },
     chart: {
@@ -748,6 +751,13 @@ export default {
       expandAll: 'Expand all',
       collapseAll: 'Collapse all',
     },
+    signature: {
+      undo: 'Undo',
+      rewrite: 'Rewrite',
+      confirm: 'Confirm',
+      addSignature: 'Click here to add signature',
+      signaturePrompt: 'Please write horizontally in the blank area',
+    },
   },
   panelComponent: {
     authUserinfo: {
@@ -857,6 +867,10 @@ export default {
       clearTopic: 'Clear conversation',
       clearTopicDesc:
         'Are you sure to clear all conversation data except for the current activation item?',
+    },
+    appModal: {
+      prev: 'Previous record',
+      next: 'Next record',
     },
   },
   // runTime

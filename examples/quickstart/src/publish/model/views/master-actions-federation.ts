@@ -3,7 +3,8 @@ export default {
   xdataControlName: 'grid',
   loadDefault: true,
   deviewCodeName: 'actions_federation',
-  deviewId: '29CD1345-5B53-4865-86C7-33094DB3DB1A',
+  deviewId: '3f4335ba376f74e223f303ac5e612a33',
+  appWFId: 'workflow',
   accUserMode: 2,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -66,17 +67,17 @@ export default {
   ],
   appViewRefs: [
     {
+      realTitle: '主数据数据重定向视图',
+      refAppViewId: 'web.master_redirect_view',
+      name: 'EDITDATA',
+      id: 'editdata',
+    },
+    {
       realOpenMode: 'POPUPMODAL',
       realTitle: '主数据编辑视图',
       refAppViewId: 'web.master_edit_view',
       name: 'NEWDATA',
       id: 'newdata',
-    },
-    {
-      realTitle: '主数据数据重定向视图',
-      refAppViewId: 'web.master_redirect_view',
-      name: 'EDITDATA',
-      id: 'editdata',
     },
   ],
   controls: [
@@ -227,6 +228,33 @@ export default {
           id: 'tbitem10',
         },
         {
+          actionLevel: 100,
+          noPrivDisplayMode: 2,
+          uiactionId: 'gridview_printaction',
+          uiactionTarget: 'MULTIKEY',
+          valid: true,
+          capLanguageRes: {
+            lanResTag: 'TBB.TEXT.*.PRINT',
+          },
+          caption: '打印',
+          itemType: 'DEUIACTION',
+          sysImage: {
+            cssClass: 'fa fa-print',
+            glyph: 'xf02f@FontAwesome',
+          },
+          tooltip: '打印',
+          tooltipLanguageRes: {
+            lanResTag: 'TBB.TOOLTIP.*.PRINT',
+          },
+          showCaption: true,
+          showIcon: true,
+          id: 'tbitem11',
+        },
+        {
+          itemType: 'SEPERATOR',
+          id: 'tbitem12',
+        },
+        {
           itemType: 'SEPERATOR',
           id: 'tbitem15',
         },
@@ -328,6 +356,7 @@ export default {
       columnEnableLink: 2,
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
+      orderValueAppDEFieldId: 'px',
       degridColumns: [
         {
           clconvertMode: 'NONE',
@@ -414,7 +443,7 @@ export default {
                   cssClass: 'fa fa-edit',
                   glyph: 'xf044@FontAwesome',
                 },
-                id: 'ua85db25',
+                id: 'u3189d93',
               },
               {
                 actionLevel: 100,
@@ -436,7 +465,7 @@ export default {
                   cssClass: 'fa fa-edit',
                   glyph: 'xf044@FontAwesome',
                 },
-                id: 'ubaea67f',
+                id: 'u62d21a1',
               },
             ],
             appDataEntityId: 'web.master',
@@ -494,10 +523,34 @@ export default {
           id: 'region_id',
         },
         {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
           appDEFieldId: 'name',
           valueType: 'SIMPLE',
           dataType: 25,
           id: 'srfmajortext',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'wf_status',
         },
       ],
       degridEditItems: [
@@ -519,6 +572,7 @@ export default {
       pagingMode: 1,
       pagingSize: 20,
       sortMode: 'REMOTE',
+      hasWFDataItems: true,
       enableCustomized: true,
       enablePagingBar: true,
       navViewPos: 'NONE',
@@ -541,7 +595,7 @@ export default {
       controlParam: {
         id: 'grid',
       },
-      modelId: '2F66FEEB-6E6D-4C5A-BBAC-81DCA03D08CF',
+      modelId: '5c865e816fec0aa0197d09e444d7cc51',
       modelType: 'PSDEGRID',
       name: 'grid',
       id: 'web.master.actions_federation_grid',
@@ -576,7 +630,7 @@ export default {
       controlParam: {
         id: 'searchform',
       },
-      modelId: '4FA859E0-CB84-44E4-9CA7-0FF222628CEE',
+      modelId: '765ff0f82ae8d37b1441fdeaa211f3ca',
       modelType: 'PSDEFORM_SEARCHFORM',
       name: 'searchform',
       id: 'web.master.actions_federation_search_form',
@@ -621,7 +675,7 @@ export default {
   viewType: 'DEGRIDVIEW',
   enableDP: true,
   showCaptionBar: true,
-  modelId: '4d2f0c77a128e9e73f903a929967f05e',
+  modelId: '01f2debbbd3b10e5bfe52a25eee50c85',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERactions_federation',
   id: 'web.master_actions_federation',

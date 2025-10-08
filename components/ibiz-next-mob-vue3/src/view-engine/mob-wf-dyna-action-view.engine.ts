@@ -3,6 +3,7 @@ import {
   IWFDynaActionViewState,
   IWFDynaActionViewEvent,
   SysUIActionTag,
+  IApiMobWFDynaActionViewCall,
 } from '@ibiz-template/runtime';
 import { IAppDEMobWFDynaActionView } from '@ibiz/model-core';
 import { MobWFDynaEditViewEngine } from './mob-wf-dyna-edit-view.engine';
@@ -31,8 +32,11 @@ export class MobWFDynaActionViewEngine extends MobWFDynaEditViewEngine {
     return processForm;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  async call(key: string, args: any): Promise<IData | null | undefined> {
+  async call(
+    key: keyof IApiMobWFDynaActionViewCall,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    args: any,
+  ): Promise<IData | null | undefined> {
     if (key === SysUIActionTag.OK) {
       this.onOkButtonClick();
       return null;

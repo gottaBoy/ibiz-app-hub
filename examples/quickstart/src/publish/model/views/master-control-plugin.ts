@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'control_plugin',
   deviewId: '99fe12301597e429fdc47fa8a290192c',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -46,7 +47,7 @@ export default {
         id: 'loaddraftfrom',
       },
       getDraftControlAction: {
-        appDEMethodId: 'de_action_plugin',
+        appDEMethodId: 'get_draft',
         appDataEntityId: 'web.master',
         id: 'loaddraft',
       },
@@ -64,6 +65,16 @@ export default {
         appDEMethodId: 'update',
         appDataEntityId: 'web.master',
         id: 'update',
+      },
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
       },
       deformPages: [
         {

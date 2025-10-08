@@ -1,3 +1,4 @@
+import { IApiData } from '@ibiz-template/core';
 import { IApiMDControlState } from './i-api-md-control.state';
 
 /**
@@ -48,4 +49,11 @@ export interface IApiChartData {
    *
    */
   _catalog?: string;
+
+  /**
+   * @description 预置导航参数
+   * @type {IApiData}
+   * @memberof IApiChartData
+   */
+  navParams: IApiData;
 }

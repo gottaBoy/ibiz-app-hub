@@ -59,10 +59,8 @@ export class StringUtil {
       if (notNilEmpty(params)) {
         const strArr = str.match(this.paramsReg);
         strArr?.forEach(_key => {
-          const key = _key.slice(8, _key.length - 1);
-          if (params![key]) {
-            str = str.replace(`\${params.${key}}`, params![key]);
-          }
+          const key = _key.slice(9, _key.length - 1);
+          str = str.replace(`\${params.${key}}`, params![key] || '');
         });
       }
       if (notNilEmpty(data)) {

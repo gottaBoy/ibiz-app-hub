@@ -1,5 +1,6 @@
 import { IDEList } from '@ibiz/model-core';
-import { MDControlService, UIMapField } from '../../../service';
+import { IHttpResponse, clone } from '@ibiz-template/core';
+import { ControlVO, MDControlService, UIMapField } from '../../../service';
 
 /**
  * 列表部件服务
@@ -10,6 +11,29 @@ import { MDControlService, UIMapField } from '../../../service';
  * @extends {MDControlService<IDEList>}
  */
 export class ListService extends MDControlService<IDEList> {
+  /**
+   * @description 移动并排序数据
+   * @param {IContext} context
+   * @param {ControlVO} data
+   * @param {IData} args
+   * @returns {*}  {Promise<IHttpResponse<ControlVO[]>>}
+   * @memberof ListService
+   */
+  async moveOrderItem(
+    context: IContext,
+    data: ControlVO,
+    args: IData,
+  ): Promise<IHttpResponse<ControlVO[]>> {
+    const moveAction = this.model.moveControlAction!.appDEMethodId!;
+    const params = clone(data.getOrigin());
+    Object.assign(params, args);
+    let res = await this.exec(moveAction, context, params, {
+      srfupdateitem: true,
+    });
+    res = this.handleResponse(res);
+    return res as IHttpResponse<ControlVO[]>;
+  }
+
   /**
    * 初始化属性映射
    *

@@ -15,4 +15,4 @@ arrowParens: avoid
 # jsx 元素最后末尾的 > ，换行放置
 bracketSameLine: false
 # 设置换行符
-endOfLine: 'lf'
+endOfLine: 'auto'

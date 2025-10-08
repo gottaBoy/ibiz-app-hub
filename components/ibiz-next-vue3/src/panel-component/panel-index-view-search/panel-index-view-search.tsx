@@ -5,15 +5,17 @@ import {
   AppFuncCommand,
   CTX,
   IAppMenuController,
-  PanelItemController,
 } from '@ibiz-template/runtime';
 import { debounce } from 'lodash-es';
+import { PanelIndexViewSearchController } from './panel-index-view-search.controller';
 import './panel-index-view-search.scss';
 
 /**
  * 首页搜索
  * @primary
- * @description 输入搜索词点击搜索后，会执行绑定的菜单项应用功能，打开全局搜索界面。
+ * @description 用于快速查找应用数据，需在菜单上配置标识与本面板项一样的标识，默认标识为index_view_search，输入搜索词点击搜索后，会执行绑定的菜单项应用功能，打开对应的全局搜索界面。
+ * @panelitemparams {name:strictly,parameterType:boolean,defaultvalue:false,description:是否取消与首页菜单的关联，即菜单收缩时不会跟随改变，当首页搜索未配置在首页左侧时应启用}
+ * @panelitemparams {name:placeholder,parameterType:string,description:搜索框提示信息}
  */
 export const PanelIndexViewSearch = defineComponent({
   name: 'IBizPanelIndexViewSearch',
@@ -29,7 +31,7 @@ export const PanelIndexViewSearch = defineComponent({
      * @description 首页搜索控件控制器
      */
     controller: {
-      type: PanelItemController,
+      type: PanelIndexViewSearchController,
       required: true,
     },
   },
@@ -57,7 +59,16 @@ export const PanelIndexViewSearch = defineComponent({
     });
 
     const isCollapse = computed(() => {
+      const { strictly } = c.rawItemParams;
+      if (strictly && strictly === 'true') {
+        return false;
+      }
       return (c.panel.view.state as IData).isCollapse;
+    });
+
+    const curPlaceholder = computed(() => {
+      const { placeholder } = c.rawItemParams;
+      return placeholder || ibiz.i18n.t('component.indexSearch.placeholder');
     });
 
     // 类名控制
@@ -106,6 +117,7 @@ export const PanelIndexViewSearch = defineComponent({
       ns,
       classArr,
       isCollapse,
+      curPlaceholder,
       onInput,
       onSearch,
       c,
@@ -125,7 +137,7 @@ export const PanelIndexViewSearch = defineComponent({
           <el-input
             model-value={this.query}
             class={this.ns.b('search')}
-            placeholder={ibiz.i18n.t('component.indexSearch.placeholder')}
+            placeholder={this.curPlaceholder}
             onInput={this.onInput}
             onKeyup={this.onEnter}
           >

@@ -8,6 +8,7 @@
     "components/*",
     "plugins/*",
     "apps/*",
-    "examples/*"
+    "examples/*",
+    "extensions/*"
   ]
 }

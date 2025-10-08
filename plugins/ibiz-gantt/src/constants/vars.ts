@@ -49,6 +49,12 @@ export const Variables = {
     idKey: 'id',
     children: 'children',
     leaf: 'leaf',
+    linkProps: {
+      fromKey: 'from',
+      toKey: 'to',
+      linkKey: 'id',
+      relationTypeKey: 'relationType',
+    },
   },
 
   time: {

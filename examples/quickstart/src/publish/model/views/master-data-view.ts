@@ -4,11 +4,12 @@ export default {
   loadDefault: true,
   deviewCodeName: 'data_view',
   deviewId: '78773b9aea371dc7d23e90b12e7b756b',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
-  caption: '数据看板视图',
+  caption: '卡片视图',
   codeName: 'master_data_view',
   appDataEntityId: 'web.master',
   appViewEngines: [
@@ -136,6 +137,7 @@ export default {
     {
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
+      orderValueAppDEFieldId: 'px',
       dedataViewDataItems: [
         {
           appDEFieldId: 'id',
@@ -206,7 +208,7 @@ export default {
       capLanguageRes: {
         lanResTag: 'DE.LNAME.MASTER',
       },
-      caption: '数据看板视图',
+      caption: '卡片视图',
       codeName: 'data_view_captionbar',
       controlType: 'CAPTIONBAR',
       appDataEntityId: 'web.master',
@@ -226,7 +228,7 @@ export default {
     controlParam: {},
     id: 'layoutpanel',
   },
-  title: '数据看板视图',
+  title: '卡片视图',
   viewStyle: 'DEFAULT',
   viewType: 'DEDATAVIEW',
   enableDP: true,

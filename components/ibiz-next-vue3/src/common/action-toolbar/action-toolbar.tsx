@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, PropType, Ref, ref, VNode } from 'vue';
 import { useNamespace, usePopoverVisible } from '@ibiz-template/vue3-util';
 import { IButtonContainerState } from '@ibiz-template/runtime';
@@ -122,8 +124,8 @@ export const IBizActionToolbar = defineComponent({
       ns,
       dropdownRef,
       popoverIndex,
-      expandDetails,
       groupDetails,
+      expandDetails,
       groupButtonRef,
       popoverVisible,
       handleClick,
@@ -143,11 +145,76 @@ export const IBizActionToolbar = defineComponent({
       );
     };
 
+    // 绘制引用界面行为组
+    const renderActionGroup = (
+      detail: IAppDEUIActionGroupDetail,
+      isExpand = true,
+    ) => {
+      const actionGroup = detail.refUIActionGroup;
+      if (!actionGroup?.uiactionGroupDetails?.length) return null;
+      // 子项所有项都隐藏，父项也应该隐藏
+      const pvisible =
+        actionGroup.uiactionGroupDetails.findIndex(item => {
+          return this.actionsState[item.id!].visible === true;
+        }) !== -1;
+      if (!pvisible) return null;
+      return [
+        detail.addSeparator && renderDivider(isExpand),
+        <el-popover
+          teleported={false}
+          placement='right-start'
+          popper-class={this.ns.e('popover')}
+          popper-options={{
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, 4],
+                },
+              },
+            ],
+          }}
+          popper-style={`z-index:${this.popoverIndex + 1}`}
+        >
+          {{
+            reference: () => {
+              return (
+                <el-button
+                  text
+                  size='small'
+                  class={[
+                    ...this.calcActionItemClass(detail),
+                    this.ns.e('group-item'),
+                  ]}
+                >
+                  <div class={this.ns.em('group-item', 'caption')}>
+                    <span>{actionGroup.id}</span>
+                    <ion-icon
+                      class={this.ns.em('group-item', 'caption-icon')}
+                      name='chevron-forward-outline'
+                    ></ion-icon>
+                  </div>
+                </el-button>
+              );
+            },
+            default: () => {
+              return renderActions(
+                actionGroup.uiactionGroupDetails || [],
+                isExpand,
+              );
+            },
+          }}
+        </el-popover>,
+      ];
+    };
+
     const renderActions = (
       items: IAppDEUIActionGroupDetail[],
       isExpand = true,
-    ) => {
+    ): any => {
       return items.map(detail => {
+        if (detail.detailType === 'DEUIACTIONGROUP' && detail.refUIActionGroup)
+          return renderActionGroup(detail);
         if (this.actionsState[detail.id!]?.visible) {
           return [
             detail.addSeparator && renderDivider(isExpand),
@@ -195,17 +262,13 @@ export const IBizActionToolbar = defineComponent({
     };
 
     const renderGroup = () => {
-      if (this.groupDetails.length === 0) {
-        return null;
-      }
+      if (this.groupDetails.length === 0) return null;
       // 子项所有项都隐藏，父项也应该隐藏
       const pvisible =
         this.groupDetails.findIndex(item => {
           return this.actionsState[item.id!].visible === true;
         }) !== -1;
-      if (!pvisible) {
-        return null;
-      }
+      if (!pvisible) return null;
       // 当前项禁用或子项所有项都禁用，父项也应该禁用
       const pdisabled =
         this.groupDetails.findIndex(item => {
@@ -249,9 +312,7 @@ export const IBizActionToolbar = defineComponent({
       ];
     };
 
-    if (!this.actionsState?.visible) {
-      return;
-    }
+    if (!this.actionsState?.visible) return;
 
     if (this.mode === 'buttons') {
       // 按钮模式

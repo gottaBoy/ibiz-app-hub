@@ -30,10 +30,8 @@ export class PanelTabPanelController extends PanelItemController<IPanelTabPanel>
   }
 
   /**
-   * 分页点击切换处理
-   *
-   * @author tony001
-   * @date 2024-05-12 14:05:11
+   * @description 分页点击切换处理
+   * @exposedoc
    * @param {string} tabId
    */
   onTabChange(tabId: string): void {

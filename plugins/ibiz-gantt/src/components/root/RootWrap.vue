@@ -43,8 +43,11 @@ const emit = defineEmits<{
 initStore(emit);
 
 const rootWrapRef = ref(null) as any;
-const setSelected = (args: any) => {
-  return (rootWrapRef.value as any)?.setSelected(args);
+const setSelected = (...args: any) => {
+  return (rootWrapRef.value as any)?.setSelected(...args);
+};
+const setChecked = (...args: any) => {
+  return (rootWrapRef.value as any)?.setChecked(...args);
 };
 const jumpToDate = (args: any) => {
   return (rootWrapRef.value as any)?.jumpToDate(args);
@@ -59,12 +62,22 @@ const fullscreenChange = (args: any) => {
   return (rootWrapRef.value as any)?.fullscreenChange(args);
 };
 
+const getElementRefs = () => {
+  return (rootWrapRef.value as any)?.getElementRefs();
+}
+
 // ***** 对外方法 ***** //
 defineExpose({
   /**
    * 设置一个选择项。如果当前数据中找不到，返回 null
    */
   setSelected,
+
+  
+  /**
+   * 设置复选框选中。如果当前数据中找不到，返回 null
+   */
+  setChecked,
 
   /**
    * 跳转到指定日期（没有参数跳转到今天）。如果找不到日期，抛出 no-date-error 事件
@@ -85,5 +98,10 @@ defineExpose({
    * 全屏改变
    */
    fullscreenChange,
+
+   /**
+    * 获取甘特图内部的所有Ref引用
+    */
+   getElementRefs,
 });
 </script>

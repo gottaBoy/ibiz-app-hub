@@ -8,15 +8,52 @@ import './list.scss';
 export const ListControl = defineComponent({
   name: 'IBizListControl',
   props: {
+    /**
+     * @description 列表模型数据
+     */
     modelData: { type: Object as PropType<IDEList>, required: true },
+    /**
+     * @description 应用上下文对象
+     */
     context: { type: Object as PropType<IContext>, required: true },
+    /**
+     * @description 视图参数对象
+     * @default {}
+     */
     params: { type: Object as PropType<IParams>, default: () => ({}) },
+    /**
+     * @description 部件适配器
+     */
     provider: { type: Object as PropType<IControlProvider> },
+    /**
+     * @description 部件激活模式，值为0：无激活，值为1：单击激活，值为2：双击激活
+     * @default 1
+     */
     mdctrlActiveMode: { type: Number, default: 1 },
+    /**
+     * @description 是否单选
+     * @default true
+     */
     singleSelect: { type: Boolean, default: true },
+    /**
+     * @description 每行数量
+     * @default 2
+     */
     rowsCount: { type: Number, default: 2 },
+    /**
+     * @description 每列数量
+     * @default 5
+     */
     columnsCount: { type: Number, default: 5 },
+    /**
+     * @description 是否默认加载数据
+     * @default true
+     */
     loadDefault: { type: Boolean, default: true },
+    /**
+     * @description 模式，值为LIST：列表模式呈现加载数据，值为SELECT：呈现数据时显示勾选图标
+     * @default LIST
+     */
     mode: { type: String, default: 'LIST' },
   },
   setup(props) {

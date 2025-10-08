@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Chart_pie',
   deviewId: '43fa229a008e42cf791d507db48d4946',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -17,7 +18,6 @@ export default {
       id: 'engine',
     },
   ],
-  appViewMsgGroupId: 'chart_pie',
   controls: [
     {
       searchButtonStyle: 'DEFAULT',
@@ -68,6 +68,7 @@ export default {
         id: '0',
       },
       dechartLegend: {
+        legendPos: 'LEFT',
         showLegend: true,
         id: '0',
       },
@@ -93,7 +94,7 @@ export default {
         },
       ],
       dechartTitle: {
-        title: '图表_饼图_图表',
+        title: '饼图',
         id: '0',
       },
       chartDataSetGroups: [
@@ -133,7 +134,7 @@ export default {
       showBusyIndicator: true,
       codeName: 'master_chart_pie_chart',
       controlType: 'CHART',
-      height: 300,
+      height: 400,
       logicName: 'Chart3',
       appDataEntityId: 'web.master',
       controlParam: {
@@ -147,6 +148,15 @@ export default {
       },
       name: 'chart',
       id: 'web.master.master_chart_pie_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

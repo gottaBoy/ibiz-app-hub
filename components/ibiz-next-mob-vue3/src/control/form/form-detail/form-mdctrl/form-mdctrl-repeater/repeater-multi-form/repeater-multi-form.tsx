@@ -54,6 +54,7 @@ export const RepeaterMultiForm = defineComponent({
               <RepeaterSingleForm
                 key={index}
                 data={data}
+                simpleDataIndex={index}
                 controller={this.controller}
                 onChange={(value: IData) => {
                   this.onValueChange(value, index);

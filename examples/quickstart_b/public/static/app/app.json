@@ -1,7 +1,6 @@
 { "allPSAppViews": [
   { "id": "web.master_child_appb_view3", "priority": -1 },
   { "id": "web.master_child_appb_view5", "priority": -1 },
-  { "id": "web.about_appb", "priority": -1 },
   { "id": "web.master_child_appb_view", "priority": -1 },
   { "id": "web.welcome_appb", "priority": -1 },
   { "id": "web.master_child_appb_view2", "priority": -1 },

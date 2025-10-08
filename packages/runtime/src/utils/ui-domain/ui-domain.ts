@@ -21,6 +21,13 @@ export class UIDomain {
   readonly id: string;
 
   /**
+   * @description 界面域对应的应用实体标识
+   * @type {(string | undefined)}
+   * @memberof UIDomain
+   */
+  readonly appDataEntityId: string | undefined;
+
+  /**
    * 状态
    *
    * @author chitanda
@@ -81,17 +88,17 @@ export class UIDomain {
 
   /**
    * Creates an instance of UIDomain.
-   *
-   * @author chitanda
-   * @date 2024-03-04 13:03:29
    * @param {string} [id]
+   * @param {string} [appDataEntityId]
+   * @memberof UIDomain
    */
-  constructor(id?: string) {
+  constructor(id?: string, appDataEntityId?: string) {
     if (id) {
       this.id = id;
     } else {
       this.id = createUUID();
     }
+    this.appDataEntityId = appDataEntityId;
   }
 
   /**

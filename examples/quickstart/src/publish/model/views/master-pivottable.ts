@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'pivottable',
   deviewId: 'a7e750908e65a96cb1c47facc3d84ce6',
+  appWFId: 'workflow',
   accUserMode: 2,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -277,6 +278,7 @@ export default {
         gridStyle: 'USER',
         groupMode: 'NONE',
         groupStyle: 'DEFAULT',
+        orderValueAppDEFieldId: 'px',
         degridColumns: [
           {
             clconvertMode: 'NONE',
@@ -468,10 +470,34 @@ export default {
             id: 'region_id',
           },
           {
+            appDEFieldId: 'category_type',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'srfdatatype',
+          },
+          {
+            appDEFieldId: 'category_type',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'category_type',
+          },
+          {
+            appDEFieldId: 'category_id',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'category_id',
+          },
+          {
             appDEFieldId: 'name',
             valueType: 'SIMPLE',
             dataType: 25,
             id: 'srfmajortext',
+          },
+          {
+            appDEFieldId: 'wf_status',
+            valueType: 'SIMPLE',
+            dataType: 25,
+            id: 'wf_status',
           },
         ],
         degridEditItems: [
@@ -493,6 +519,7 @@ export default {
         pagingMode: 1,
         pagingSize: 20,
         sortMode: 'REMOTE',
+        hasWFDataItems: true,
         enableCustomized: true,
         enablePagingBar: true,
         navViewPos: 'NONE',

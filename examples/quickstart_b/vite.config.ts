@@ -148,9 +148,9 @@ export default defineConfig({
     },
   },
   plugins: [
-    eslint({
-      include: 'src/**/*.{ts,tsx,js,jsx}',
-    }),
+    // eslint({
+    //   include: 'src/**/*.{ts,tsx,js,jsx}',
+    // }),
     vue({
       template: {
         compilerOptions: {

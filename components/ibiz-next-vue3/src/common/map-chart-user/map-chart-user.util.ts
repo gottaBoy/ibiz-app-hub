@@ -43,9 +43,38 @@ export const defaultOpts = {
   jsonBaseUrl: `${ibiz.env.assetsUrl}/json/map`,
   /** 默认打开的区域编码 */
   defaultAreaCode: 100000 as string | number,
+  // 距离底部距离
+  bottom: 20,
+  // 距离顶部距离
+  top: 20,
 };
 
 export type MapOptions = typeof defaultOpts;
+
+/**
+ * @description 获取项样式
+ * @param {IData} item
+ * @returns {*}  {string}
+ */
+const getItemStyle = (item: IData): string => {
+  const itemStyle = [];
+  if (item._color) {
+    itemStyle.push(`color:${item._color}`);
+  }
+  if (item._bgcolor) {
+    itemStyle.push(`background:${item._bgcolor}`);
+  }
+  if (item._borderColor) {
+    itemStyle.push(`border-color:${item._borderColor}`);
+  }
+  if (item._borderWidth) {
+    itemStyle.push(`border-width:${item._borderWidth}px`);
+  }
+  if (item._borderWidth && item._borderColor) {
+    itemStyle.push(`border-style:solid`);
+  }
+  return itemStyle.join(';');
+};
 
 export const findData = (
   id: string,
@@ -119,9 +148,21 @@ export const getPointOption = (
         return;
       }
       const find = findData(params.data._id, 'point', pointData, areaData)!;
-      return `<div style="color:${find._color};background: ${
-        find._bgcolor
-      }" class="${find._className} ${ns.e('popper')}">${find?._tooltip}</div>`;
+      if (!find) {
+        return;
+      }
+      const { _deData: data } = find;
+      let text = data.srfmajortext;
+      if (find._value) {
+        text = `${data.srfmajortext}: ${find._value}`;
+      }
+      if (find._tooltip) {
+        text = find._tooltip;
+      }
+      const style = getItemStyle(find);
+      return `<div style="${style}" class="${find._className} ${ns.e(
+        'popper',
+      )}">${text}</div>`;
     },
     padding: 0,
   };
@@ -189,9 +230,22 @@ export const getAreaOption = (
         return;
       }
       const find = findData(params.data._id, 'area', pointData, areaData)!;
-      return `<div style="color:${find._color};background: ${
-        find._bgcolor
-      }" class="${find._className} ${ns.e('popper')}">${find?._tooltip}</div>`;
+      if (!find || (!find._tooltip && !find._value)) {
+        return;
+      }
+      const { _deData: data } = find;
+      let text = data.srfmajortext;
+      if (find._value) {
+        text = `${data.srfmajortext}: ${find._value}`;
+      }
+      if (find._tooltip) {
+        text = find._tooltip;
+      }
+      // 项样式作为弹框样式，弹框默认内容为主信息+值，可配置提示属性实体处理逻辑来调整提示框内容
+      const style = getItemStyle(find);
+      return `<div style="${style}" class="${find._className} ${ns.e(
+        'popper',
+      )}">${text}</div>`;
     },
     padding: 0,
   };

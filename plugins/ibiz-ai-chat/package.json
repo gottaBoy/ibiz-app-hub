@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template-plugin/ai-chat",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "description": "iBiz AI交互框插件",
   "main": "dist/index.es.js",
   "module": "dist/index.es.js",

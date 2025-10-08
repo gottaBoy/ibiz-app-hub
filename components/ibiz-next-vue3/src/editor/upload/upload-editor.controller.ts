@@ -43,6 +43,11 @@ export class UploadEditorController extends EditorController<IFileUploader> {
   public exportParams?: IParams;
 
   /**
+   * 上传文件信息的映射规则字符串，格式为"源键:目标键;源键2:目标键2"
+   */
+  public infoMap: string = '';
+
+  /**
    * 自适应预览
    * 只读状态下且配置了编辑器参数autoPreview ，加载完图片后自动调整大小达到预览态，且禁用图片hover工具栏
    *
@@ -53,6 +58,8 @@ export class UploadEditorController extends EditorController<IFileUploader> {
 
   protected async onInit(): Promise<void> {
     await super.onInit();
+    this.infoMap = ibiz.config.uploadEditor.infoMap;
+
     // 图片类型增加图片类型限制
     if (this.model.editorType?.includes('PICTURE')) {
       this.accept = 'image/*';
@@ -83,6 +90,7 @@ export class UploadEditorController extends EditorController<IFileUploader> {
         uploadparams,
         exportparams,
         autopreview,
+        infomap,
       } = this.editorParams;
       if (isDrag) {
         this.isDrag = Boolean(isDrag);
@@ -104,6 +112,9 @@ export class UploadEditorController extends EditorController<IFileUploader> {
       }
       if (size) {
         this.size = Number(size);
+      }
+      if (infomap) {
+        this.infoMap = infomap;
       }
       if (uploadParams) {
         try {
@@ -147,4 +158,43 @@ export class UploadEditorController extends EditorController<IFileUploader> {
       }
     }
   }
+
+  /**
+   * 根据配置的映射关系转换对象属性
+   * 将源对象的指定属性，按照映射规则映射到新对象的目标属性
+   *
+   * @param {IData} [_data={}] - 源数据对象，包含需要被映射的原始属性
+   * @param {string} [infoMap=''] - 映射规则字符串，格式为"源键:目标键;源键2:目标键2"
+   * @param {boolean} [isEmit=false] - 是否为抛值时处理，抛值时将源键替换为目标键
+   * @returns {IData} 转换后的新对象，仅包含映射规则中定义的属性
+   *
+   * @example
+   * // isEmit=false
+   * // 源对象：{ filesize:'10000', fileext:'.gif', folder:'file' };
+   * // 映射规则：'filesize:size;fileext:ext;folder:folder';
+   * // 转换结果: { size:'10000', ext:'.gif', folder:'file' }
+   *
+   * // isEmit=true
+   * // 源对象：{ filesize:'10000', fileext:'.gif', folder:'file' };
+   * // 映射规则：'filesize:size;fileext:ext;folder:folder';
+   * // 转换结果: { size:undefined, ext:undefined, folder:'file' }
+   */
+  transformInfoMap = (
+    _data: IData = {},
+    infoMap = '',
+    isEmit = false,
+  ): IData => {
+    const result = {};
+    const mappings = infoMap.split(';');
+    mappings.forEach(mapping => {
+      // eslint-disable-next-line prefer-const
+      let [sourceKey, targetKey] = mapping.split(':');
+      if (isEmit) sourceKey = targetKey;
+      if (sourceKey && targetKey) {
+        Object.assign(result, { [targetKey]: _data[sourceKey] });
+      }
+    });
+
+    return result;
+  };
 }

@@ -1,6 +1,7 @@
-import { ModelError } from '@ibiz-template/core';
-import { IDEForm } from '@ibiz/model-core';
-import { clone } from 'ramda';
+/* eslint-disable no-unused-expressions */
+import { ModelError, recursiveIterate } from '@ibiz-template/core';
+import { IDEEditFormItem, IDEForm } from '@ibiz/model-core';
+import { clone, isNil } from 'ramda';
 import {
   FormDetailEventName,
   IEditFormController,
@@ -8,6 +9,8 @@ import {
 } from '../../../../../interface';
 import { FormMDCtrlController } from './form-mdctrl.controller';
 import { EditFormController } from '../../edit-form';
+import { getDefaultValue } from '../../../../utils';
+import { FormNotifyState } from '../../../../constant';
 
 /**
  * @description 表单多数据部件(重复器)控制器
@@ -212,6 +215,8 @@ export class FormMDCtrlRepeaterController
    */
   create(index?: number): void {
     const item = {};
+    // 设置新建默认值
+    this.setDefaultValue(item, 'create');
     if (this.isSingleData) {
       this.setValue(item);
     } else {
@@ -259,9 +264,7 @@ export class FormMDCtrlRepeaterController
    * @memberof FormMDCtrlRepeaterController
    */
   dragChange(_draggedIndex: number, _targetIndex: number): void {
-    if (this.isSingleData) {
-      return;
-    }
+    if (this.isSingleData) return;
     const arrData = [...(this.value as IData[])];
     const movedItem = arrData.splice(_draggedIndex, 1)[0];
     arrData.splice(_targetIndex, 0, movedItem);
@@ -295,5 +298,60 @@ export class FormMDCtrlRepeaterController
     if (names.includes(this.name)) {
       await this.updateFormItem();
     }
+  }
+
+  /**
+   * @description 表单状态变更通知
+   * @param {FormNotifyState} state
+   * @returns {*}  {Promise<void>}
+   * @memberof FormMDCtrlRepeaterController
+   */
+  async formStateNotify(state: FormNotifyState): Promise<void> {
+    super.formStateNotify(state);
+    // 初始化完成之后设置更新默认值
+    if (state === FormNotifyState.LOAD && this.value) {
+      Array.isArray(this.value)
+        ? this.value.forEach((item: IData) =>
+            this.setDefaultValue(item, 'update'),
+          )
+        : this.setDefaultValue(this.value, 'update');
+    }
+  }
+
+  /**
+   * @description 设置默认值
+   * @param {IData} data
+   * @param {('create' | 'update')} type
+   * @memberof FormMDCtrlRepeaterController
+   */
+  setDefaultValue(data: IData, type: 'create' | 'update'): void {
+    // 递归所有的表单项，设置默认值
+    recursiveIterate(
+      this.model,
+      (item: IDEEditFormItem) => {
+        if (item.detailType === 'FORMITEM') {
+          const { createDVT, createDV, updateDVT, updateDV, valueFormat } =
+            item;
+          const valueType = type === 'create' ? createDVT : updateDVT;
+          const defaultValue = type === 'create' ? createDV : updateDV;
+          const name = item.id!.toLowerCase();
+          const defaultVal = getDefaultValue(
+            {
+              name,
+              valueType,
+              defaultValue,
+              valueFormat,
+            },
+            { data, context: this.context, params: this.params },
+          );
+          // 没有值的才赋值默认值
+          if (isNil(data[name]) && defaultVal !== undefined)
+            data[name] = defaultVal;
+        }
+      },
+      {
+        childrenFields: ['deformPages', 'deformTabPages', 'deformDetails'],
+      },
+    );
   }
 }

@@ -1,6 +1,7 @@
 export default {
   deviewCodeName: 'panel_logic',
   deviewId: '6ebc2c349479c61b6a8ea093f969ed3f',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -51,6 +52,7 @@ export default {
                               shrink: 1,
                               halignSelf: 'RIGHT',
                               layout: 'FLEX',
+                              spacingBottom: 'OUTERMEDIUM',
                               spacingRight: 'INNERSMALL',
                               width: 120,
                               widthMode: 'PX',
@@ -79,6 +81,7 @@ export default {
                             layoutPos: {
                               shrink: 1,
                               layout: 'FLEX',
+                              spacingBottom: 'OUTERMEDIUM',
                             },
                             panelItemGroupLogics: [
                               {
@@ -204,7 +207,7 @@ export default {
                 },
                 dataRegionType: 'SINGLEDATA',
                 dataSourceType: 'DEACTION',
-                appDEMethodId: 'get_sample_date',
+                appDEMethodId: 'get_sample_data',
                 appDataEntityId: 'web.master',
                 caption: '单项数据容器',
                 itemStyle: 'DEFAULT',
@@ -263,6 +266,7 @@ export default {
                               shrink: 1,
                               halignSelf: 'RIGHT',
                               layout: 'FLEX',
+                              spacingBottom: 'OUTERMEDIUM',
                               spacingRight: 'INNERSMALL',
                               width: 120,
                               widthMode: 'PX',
@@ -287,6 +291,7 @@ export default {
                             layoutPos: {
                               shrink: 1,
                               layout: 'FLEX',
+                              spacingBottom: 'OUTERMEDIUM',
                             },
                             panelItemGroupLogics: [
                               {
@@ -412,7 +417,7 @@ export default {
                 },
                 dataRegionType: 'SINGLEDATA',
                 dataSourceType: 'DEACTION',
-                appDEMethodId: 'get_sample_date',
+                appDEMethodId: 'get_sample_data',
                 appDataEntityId: 'web.master',
                 caption: '单项数据容器',
                 itemStyle: 'DEFAULT',
@@ -468,6 +473,7 @@ export default {
                           shrink: 1,
                           halignSelf: 'RIGHT',
                           layout: 'FLEX',
+                          spacingBottom: 'OUTERMEDIUM',
                           spacingRight: 'INNERSMALL',
                           width: 120,
                           widthMode: 'PX',
@@ -492,6 +498,7 @@ export default {
                         layoutPos: {
                           shrink: 1,
                           layout: 'FLEX',
+                          spacingBottom: 'OUTERMEDIUM',
                         },
                         panelItemGroupLogics: [
                           {
@@ -601,7 +608,7 @@ export default {
                 },
                 dataRegionType: 'SINGLEDATA',
                 dataSourceType: 'DEACTION',
-                appDEMethodId: 'get_sample_date',
+                appDEMethodId: 'get_sample_data',
                 appDataEntityId: 'web.master',
                 caption: '单项数据容器',
                 itemStyle: 'DEFAULT',
@@ -639,6 +646,10 @@ export default {
         layoutPos: {
           shrink: 1,
           layout: 'FLEX',
+          spacingBottom: 'INNERMEDIUM',
+          spacingLeft: 'INNERMEDIUM',
+          spacingRight: 'INNERMEDIUM',
+          spacingTop: 'INNERMEDIUM',
         },
         id: 'page_container',
       },

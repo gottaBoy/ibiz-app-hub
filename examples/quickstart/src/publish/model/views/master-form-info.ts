@@ -5,6 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'form_info',
   deviewId: '60413ad9512d824c2c24a5e0e7da6314',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -59,7 +60,7 @@ export default {
         id: 'loaddraft',
       },
       getControlAction: {
-        appDEMethodId: 'get_sample_date',
+        appDEMethodId: 'getmockdata',
         appDataEntityId: 'web.master',
         id: 'load',
       },
@@ -74,6 +75,16 @@ export default {
         id: 'update',
       },
       infoFormMode: true,
+      wfstartControlAction: {
+        appDEMethodId: 'wfstart',
+        appDataEntityId: 'web.master',
+        id: 'wfstart',
+      },
+      wfsubmitControlAction: {
+        appDEMethodId: 'wfsubmit',
+        appDataEntityId: 'web.master',
+        id: 'wfsubmit',
+      },
       deformPages: [
         {
           layout: {
@@ -207,8 +218,8 @@ export default {
                   detailStyle: 'DEFAULT',
                   detailType: 'FORMITEM',
                   layoutPos: {
-                    colLG: 12,
-                    colMD: 12,
+                    colLG: 8,
+                    colMD: 8,
                     layout: 'TABLE_24COL',
                   },
                   showCaption: true,
@@ -241,8 +252,8 @@ export default {
                   detailStyle: 'DEFAULT',
                   detailType: 'FORMITEM',
                   layoutPos: {
-                    colLG: 12,
-                    colMD: 12,
+                    colLG: 8,
+                    colMD: 8,
                     layout: 'TABLE_24COL',
                   },
                   showCaption: true,
@@ -257,7 +268,6 @@ export default {
                 colMD: 24,
                 layout: 'TABLE_24COL',
               },
-              showCaption: true,
               id: 'grouppanel1',
             },
             {

@@ -132,6 +132,14 @@ export class ViewController<
   protected intervalTimer: NodeJS.Timeout | undefined;
 
   /**
+   * @description 是否存在403错误未处理
+   * @protected
+   * @type {boolean}
+   * @memberof ViewController
+   */
+  protected hasPermErrPending: boolean = false;
+
+  /**
    * 超时周期
    * - 默认300秒
    * @readonly
@@ -544,7 +552,10 @@ export class ViewController<
       renewSessionValue === 'true'
     ) {
       // 生成一个界面域，界面域标识为当前控制器实例的标识
-      const domain = ibiz.uiDomainManager.create(this.id);
+      const domain = ibiz.uiDomainManager.create(
+        this.id,
+        this.model.appDataEntityId,
+      );
       this.context.srfsessionid = domain.id;
     }
     // 视图标识添加到上下文中
@@ -769,11 +780,22 @@ export class ViewController<
         this.error = data;
         this.state.hasError = true;
       } else if (data.status && data.status === 403) {
-        ibiz.confirm.warning({
-          title: ibiz.i18n.t('runtime.controller.common.view.forbiddenAccess'),
-          desc: ibiz.i18n.t('runtime.controller.common.view.logoutAccount'),
-          options: { showCancelButton: false },
-        });
+        // 存在403错误用户未确认，再次触发403错误时不做处理
+        if (this.hasPermErrPending) {
+          return;
+        }
+        this.hasPermErrPending = true;
+        ibiz.confirm
+          .warning({
+            title: ibiz.i18n.t(
+              'runtime.controller.common.view.forbiddenAccess',
+            ),
+            desc: ibiz.i18n.t('runtime.controller.common.view.logoutAccount'),
+            options: { showCancelButton: false },
+          })
+          .then(_result => {
+            this.hasPermErrPending = false;
+          });
       } else {
         ibiz.message.error(data.message);
       }

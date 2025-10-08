@@ -1,20 +1,24 @@
 import { IDBPortletPart, IUIActionGroupDetail } from '@ibiz/model-core';
 import { merge } from 'lodash-es';
 import {
-  IBizContext,
-  IBizParams,
-  listenJSEvent,
   Namespace,
+  IBizParams,
+  IBizContext,
+  listenJSEvent,
 } from '@ibiz-template/core';
 import {
+  IController,
+  DataChangeEvent,
+  IControlController,
   IPortletController,
   IDashboardController,
   IPortletContainerController,
-  DataChangeEvent,
-  IController,
-  IControlController,
 } from '../../../../../interface';
-import { calcLayoutHeightWidth, calcDynaClass } from '../../../../../model';
+import {
+  calcLayoutHeightWidth,
+  calcDynaClass,
+  getAllUIActionItems,
+} from '../../../../../model';
 import { ControlVO } from '../../../../../service';
 import { UIActionUtil } from '../../../../../ui-action';
 import { ButtonContainerState, UIActionButtonState } from '../../../../utils';
@@ -338,11 +342,10 @@ export class PortletPartController<T extends IDBPortletPart = IDBPortletPart>
   async initActionStates(): Promise<void> {
     // 操作列按钮状态控制
     const { uiactionGroup } = this.model;
-    if (!uiactionGroup?.uiactionGroupDetails?.length) {
-      return;
-    }
+    if (!uiactionGroup?.uiactionGroupDetails?.length) return;
     const containerState = new ButtonContainerState();
-    uiactionGroup.uiactionGroupDetails.forEach(detail => {
+    const actions = getAllUIActionItems(uiactionGroup.uiactionGroupDetails);
+    actions.forEach(detail => {
       const actionid = detail.uiactionId;
       if (actionid) {
         const buttonState = new UIActionButtonState(

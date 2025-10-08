@@ -20,10 +20,11 @@ import './global-search.scss';
 /**
  * 全局搜索
  * @primary
- * @description 全局搜索组件，监听快捷键Ctrl+K弹出搜索框，点击搜索时可查询应用信息。
- * @panelitemparams {name:historyCacheKey,parameterType:string,defaultvalue:global-search-history,description:搜索历史缓存标识}
+ * @description 全局搜索组件，监听快捷键Ctrl+K弹出搜索框，需在菜单上绑定应用功能预定义类型为GLOBAL_SEARCH的隐藏菜单项,应用功能类型为全局搜索，同时绑定应用实体与自填模式。输入值时会查询实体自填模式数据，同时点击下拉数据后会打开自填模式中的链接视图。每次查询后还会缓存为搜索历史记录。
+ * @panelitemparams {name:historyCacheKey,parameterType:string,defaultvalue:'global-search-history',description:搜索历史缓存标识}
  * @panelitemparams {name:maxhistory,parameterType:number,defaultvalue:7,description:最大历史记录，默认7条}
  * @panelitemparams {name:size,parameterType:number,defaultvalue:100,description:单次查询最大数量，默认100条}
+ * @panelitemparams {name:placeholder,parameterType:string,description:搜索框提示信息}
  * @export
  * @class GlobalSearch
  */
@@ -63,6 +64,13 @@ export const GlobalSearch = defineComponent({
       const showEmpty = histories.includes(query) && list.length === 0;
       return (
         (showSearch || showEmpty || showHistory || loading) && activated.value
+      );
+    });
+
+    const curPlaceholder = computed(() => {
+      const { placeholder } = c.rawItemParams;
+      return (
+        placeholder || ibiz.i18n.t('panelComponent.globalSearch.placeholder')
       );
     });
 
@@ -303,6 +311,7 @@ export const GlobalSearch = defineComponent({
       visible,
       editorRef,
       searchValue,
+      curPlaceholder,
       handleFocus,
       handleEnter,
       renderAction,
@@ -328,9 +337,7 @@ export const GlobalSearch = defineComponent({
                   clearable
                   ref='editorRef'
                   v-model={this.searchValue}
-                  placeholder={ibiz.i18n.t(
-                    'panelComponent.globalSearch.placeholder',
-                  )}
+                  placeholder={this.curPlaceholder}
                   class={[
                     this.ns.e('search'),
                     this.ns.is('search', this.visible),

@@ -21,7 +21,15 @@
     cursor: pointer;
   }
 
+  @include e(fullscreen) {
+    position: absolute;
+    top: getCssVar(spacing, tight);
+    right: getCssVar(spacing, tight);
+    z-index: 9;
+  }
+
   @include e(popper) {
-    padding: getCssVar(spacing, base);
+    padding: getCssVar(spacing, tight);
+    white-space: pre;
   }
 }

@@ -69,10 +69,6 @@ export class LoginViewEngine extends ViewEngineBase {
       await this.login(args);
       return null;
     }
-    if (key === SysUIActionTag.CANCEL_CHANGES) {
-      await this.cancelChanges();
-      return null;
-    }
     return super.call(key, args);
   }
 
@@ -128,7 +124,19 @@ export class LoginViewEngine extends ViewEngineBase {
     }
   }
 
-  async cancelChanges(): Promise<void> {
+  /**
+   * @description 取消变更
+   * @param {({
+   *       targetState: 'INIT' | 'UNDO' | 'REDO';
+   *     })} [_args={ targetState: 'INIT' }] 目标状态，初始化状态|撤销上一步操作|重做下一步操作
+   * @returns {*}  {Promise<void>}
+   * @memberof LoginViewEngine
+   */
+  async cancelChanges(
+    _args: {
+      targetState: 'INIT' | 'UNDO' | 'REDO';
+    } = { targetState: 'INIT' },
+  ): Promise<void> {
     if (this.view.layoutPanel) {
       Object.keys(this.view.layoutPanel.panelItems).forEach(key => {
         const controller = this.view.layoutPanel!.panelItems[
@@ -148,7 +156,7 @@ export class LoginViewEngine extends ViewEngineBase {
       event.key === 'Enter' &&
       this.view.layoutPanel
     ) {
-      const args = {
+      const args: IData = {
         data: [
           {
             username: this.view.layoutPanel.data.username,
@@ -157,6 +165,14 @@ export class LoginViewEngine extends ViewEngineBase {
           },
         ],
       };
+      const targetID = (event.target as HTMLElement).dataset.id;
+      if (targetID) {
+        const targetPanelItem =
+          this.view.layoutPanel.findPanelItemByName(targetID);
+        if (targetPanelItem) {
+          args.data = [targetPanelItem.data];
+        }
+      }
       await this.login(args);
     }
   };

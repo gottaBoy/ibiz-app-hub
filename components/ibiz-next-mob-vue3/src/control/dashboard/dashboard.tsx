@@ -76,12 +76,25 @@ function renderPortletByType(
 export const DashboardControl = defineComponent({
   name: 'IBizDashboardControl',
   props: {
+    /**
+     * @description 数据看板模型数据
+     */
     modelData: {
       type: Object as PropType<IDashboard>,
       required: true,
     },
+    /**
+     * @description 应用上下文对象
+     */
     context: { type: Object as PropType<IContext>, required: true },
+    /**
+     * @description 视图参数对象
+     * @default {}
+     */
     params: { type: Object as PropType<IParams>, default: () => ({}) },
+    /**
+     * @description 部件适配器
+     */
     provider: { type: Object as PropType<IControlProvider> },
   },
   setup() {

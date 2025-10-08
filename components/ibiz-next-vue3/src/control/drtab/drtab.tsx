@@ -51,7 +51,7 @@ export const DRTabControl = defineComponent({
     /**
      * @description 隐藏编辑项
      */
-    hideEditItem: { type: Boolean },
+    hideEditItem: { type: Boolean, default: undefined },
   },
   setup() {
     const c: DRTabController = useControlController(
@@ -250,6 +250,7 @@ export const DRTabControl = defineComponent({
           showHeader={this.tabPosition === 'flow'}
           counterData={this.counterData}
           activeTab={this.activeTab}
+          controller={this.c}
         ></FlowDrtab>
       );
     }
@@ -355,6 +356,7 @@ export const DRTabControl = defineComponent({
         ) : (
           <el-tabs
             v-model={this.c.state.activeName}
+            tabPosition={this.tabPosition}
             onTabChange={this.handleTabChange}
           >
             {this.visibleItems.map((tab: IDRTabPagesState) => {

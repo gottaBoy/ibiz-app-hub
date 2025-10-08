@@ -142,7 +142,7 @@ export function useCalcOrMode(
             const selects: Array<string | number> =
               valueType === 'SIMPLES'
                 ? (strVal as Array<string | number>)
-                : (strVal as string).split(valueSeparator);
+                : strVal.toString().split(valueSeparator);
             if (codeItemValueNumber) {
               for (let i = 0, len = selects.length; i < len; i++) {
                 selects[i] = Number(selects[i]);

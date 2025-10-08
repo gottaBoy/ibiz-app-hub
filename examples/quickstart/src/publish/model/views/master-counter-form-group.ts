@@ -1,6 +1,7 @@
 export default {
   deviewCodeName: 'counter_form_group',
   deviewId: '5eb4de48f9222a3f81a3a98f663bee06',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -79,6 +80,16 @@ export default {
           appDEMethodId: 'update',
           appDataEntityId: 'web.master',
           id: 'update',
+        },
+        wfstartControlAction: {
+          appDEMethodId: 'wfstart',
+          appDataEntityId: 'web.master',
+          id: 'wfstart',
+        },
+        wfsubmitControlAction: {
+          appDEMethodId: 'wfsubmit',
+          appDataEntityId: 'web.master',
+          id: 'wfsubmit',
         },
         deformPages: [
           {

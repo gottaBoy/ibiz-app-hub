@@ -23,6 +23,7 @@ import {
   Html2Canvas,
   VoiceUtil,
   EncyptionUtil,
+  WaterMarkUtil,
 } from '../../utils';
 
 /**
@@ -139,6 +140,12 @@ export class GlobalUtil implements IApiGlobalUtil {
    * @memberof GlobalUtil
    */
   readonly encryption = new EncyptionUtil();
+
+  /**
+   * @description 水印工具类
+   * @memberof GlobalUtil
+   */
+  readonly watermark = new WaterMarkUtil();
 
   constructor() {
     this.error.register(new DefaultErrorHandler());

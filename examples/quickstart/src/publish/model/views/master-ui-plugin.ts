@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'ui_plugin',
   deviewId: 'fcf57c134364ae0eff291a8252d9bed0',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -66,6 +67,11 @@ export default {
           caption: '自填列表项插件',
           appViewId: 'web.master_ac_item_plugin',
           id: 'ac_item_plugin',
+        },
+        {
+          caption: '实体属性表格插件',
+          appViewId: 'web.master_entity_field_grid',
+          id: 'entity_field_grid',
         },
       ],
       dataRelationTag: 'DataRelation3',

@@ -137,4 +137,18 @@ export interface IApiMDViewCall extends IApiViewCall {
   GetAllData: {
     args: undefined;
   };
+  /**
+   * @description 设置选中数据
+   * @type {{
+   *     args: {
+   *       data: IApiData[];
+   *     };
+   *   }}
+   * @memberof IApiMDViewCall
+   */
+  SetSelectedData: {
+    args: {
+      data: IApiData[];
+    };
+  };
 }

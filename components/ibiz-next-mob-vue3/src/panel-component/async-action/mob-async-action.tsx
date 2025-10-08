@@ -5,6 +5,11 @@ import { MobAsyncActionController } from './mob-async-action.controller';
 import { AsyncActionTab } from './async-action-tab/async-action-tab';
 import './mob-async-action.scss';
 
+/**
+ * 后台作业组件
+ * @primary
+ * @description 用于在一些需要后台异步操作（如上传导入文件）的场景下，对异步操作过程和结果进行通知。
+ */
 export const MobAsyncAction = defineComponent({
   name: 'MobAsyncAction',
   props: getRawProps<MobAsyncActionController>(),

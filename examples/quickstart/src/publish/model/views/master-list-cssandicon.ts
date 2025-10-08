@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'list_cssandicon',
   deviewId: 'b4992e174060ab26c2d2394fedd74e11',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -66,7 +67,6 @@ export default {
       id: 'opendata',
     },
   ],
-  appViewMsgGroupId: 'list_cssandicon',
   appViewRefs: [
     {
       realOpenMode: 'POPUPMODAL',
@@ -175,6 +175,7 @@ export default {
         name: 'list_itempanel',
         id: 'web.master.usr0516058530',
       },
+      orderValueAppDEFieldId: 'px',
       delistDataItems: [
         {
           appDEFieldId: 'icon',
@@ -201,9 +202,31 @@ export default {
           dataType: 25,
           id: 'region_id',
         },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          frontCodeListId: 'web.wfstates',
+          dataType: 25,
+          id: 'wf_status',
+        },
       ],
       pagingMode: 1,
       pagingSize: 10,
+      hasWFDataItems: true,
       enablePagingBar: true,
       showHeader: true,
       navViewPos: 'NONE',
@@ -283,7 +306,7 @@ export default {
   viewStyle: 'DEFAULT',
   viewType: 'DELISTVIEW',
   enableDP: true,
-  showCaptionBar: true,
+  showCaptionBar: false,
   modelId: '110e10588dc9aec2f6d8be27785fe1e6',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERlist_cssandicon',

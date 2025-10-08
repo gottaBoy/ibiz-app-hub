@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'map_view',
   deviewId: '7cdccf9e40a7c8e90609e684bc98f927',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -81,6 +82,8 @@ export default {
       legendPos: 'NONE',
       sysMapItems: [
         {
+          customCond:
+            "{'SRFNAVPARAM.n_parent_id_eq': context.srfareacode===100000?'86':`${context.srfareacode}`}",
           idAppDEFieldId: 'id',
           itemStyle: 'POINT',
           itemType: 'region',

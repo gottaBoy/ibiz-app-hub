@@ -4,7 +4,7 @@ export default {
   openMode: 'INDEXVIEWTAB',
   viewType: 'DECHARTEXPVIEW',
   width: 0,
-  height: 0,
+  height: 500,
   appDataEntityId: 'web.master',
   redirectView: false,
   modalOption: {},

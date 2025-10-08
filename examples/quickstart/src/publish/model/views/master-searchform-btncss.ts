@@ -1,6 +1,7 @@
 export default {
   deviewCodeName: 'searchform_btncss',
   deviewId: 'ca90a4ced36603d2bb086982b8cdb332',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -166,6 +167,7 @@ export default {
                 appDEFieldId: 'name',
                 editor: {
                   editorType: 'TEXTBOX',
+                  placeHolder: '请输入名称',
                   valueType: 'SIMPLE',
                   editable: true,
                   id: 'n_name_like',
@@ -179,8 +181,8 @@ export default {
                 detailStyle: 'DEFAULT',
                 detailType: 'FORMITEM',
                 layoutPos: {
-                  colLG: 12,
-                  colMD: 12,
+                  colLG: 8,
+                  colMD: 8,
                   layout: 'TABLE_24COL',
                 },
                 showCaption: true,
@@ -196,6 +198,9 @@ export default {
                 editor: {
                   singleSelect: true,
                   handlerType: 'PickupText',
+                  appDEACModeId: 'default',
+                  appDEDataSetId: 'fetch_default',
+                  appDataEntityId: 'web.master',
                   enableAC: true,
                   forceSelection: true,
                   showTrigger: true,
@@ -205,6 +210,7 @@ export default {
                     PICKUPVIEW: 'FALSE',
                   },
                   editorType: 'PICKEREX_TRIGGER',
+                  placeHolder: '请选择类型',
                   valueType: 'SIMPLE',
                   editable: true,
                   id: 'n_type_eq',
@@ -215,8 +221,8 @@ export default {
                 detailStyle: 'DEFAULT',
                 detailType: 'FORMITEM',
                 layoutPos: {
-                  colLG: 12,
-                  colMD: 12,
+                  colLG: 8,
+                  colMD: 8,
                   layout: 'TABLE_24COL',
                 },
                 showCaption: true,
@@ -280,6 +286,7 @@ export default {
                 appDEFieldId: 'name',
                 editor: {
                   editorType: 'TEXTBOX',
+                  placeHolder: '请输入名称',
                   valueType: 'SIMPLE',
                   editable: true,
                   id: 'n_name_like',
@@ -293,8 +300,8 @@ export default {
                 detailStyle: 'DEFAULT',
                 detailType: 'FORMITEM',
                 layoutPos: {
-                  colLG: 12,
-                  colMD: 12,
+                  colLG: 8,
+                  colMD: 8,
                   layout: 'TABLE_24COL',
                 },
                 showCaption: true,
@@ -310,6 +317,9 @@ export default {
                 editor: {
                   singleSelect: true,
                   handlerType: 'PickupText',
+                  appDEACModeId: 'default',
+                  appDEDataSetId: 'fetch_default',
+                  appDataEntityId: 'web.master',
                   enableAC: true,
                   forceSelection: true,
                   showTrigger: true,
@@ -319,6 +329,7 @@ export default {
                     PICKUPVIEW: 'FALSE',
                   },
                   editorType: 'PICKEREX_TRIGGER',
+                  placeHolder: '请选择类型',
                   valueType: 'SIMPLE',
                   editable: true,
                   id: 'n_type_eq',
@@ -329,8 +340,8 @@ export default {
                 detailStyle: 'DEFAULT',
                 detailType: 'FORMITEM',
                 layoutPos: {
-                  colLG: 12,
-                  colMD: 12,
+                  colLG: 8,
+                  colMD: 8,
                   layout: 'TABLE_24COL',
                 },
                 showCaption: true,
@@ -393,6 +404,7 @@ export default {
                 appDEFieldId: 'name',
                 editor: {
                   editorType: 'TEXTBOX',
+                  placeHolder: '请输入名称',
                   valueType: 'SIMPLE',
                   editable: true,
                   id: 'n_name_like',
@@ -406,8 +418,8 @@ export default {
                 detailStyle: 'DEFAULT',
                 detailType: 'FORMITEM',
                 layoutPos: {
-                  colLG: 12,
-                  colMD: 12,
+                  colLG: 8,
+                  colMD: 8,
                   layout: 'TABLE_24COL',
                 },
                 showCaption: true,
@@ -423,6 +435,9 @@ export default {
                 editor: {
                   singleSelect: true,
                   handlerType: 'PickupText',
+                  appDEACModeId: 'default',
+                  appDEDataSetId: 'fetch_default',
+                  appDataEntityId: 'web.master',
                   enableAC: true,
                   forceSelection: true,
                   showTrigger: true,
@@ -432,6 +447,7 @@ export default {
                     PICKUPVIEW: 'FALSE',
                   },
                   editorType: 'PICKEREX_TRIGGER',
+                  placeHolder: '请选择类型',
                   valueType: 'SIMPLE',
                   editable: true,
                   id: 'n_type_eq',
@@ -442,8 +458,8 @@ export default {
                 detailStyle: 'DEFAULT',
                 detailType: 'FORMITEM',
                 layoutPos: {
-                  colLG: 12,
-                  colMD: 12,
+                  colLG: 8,
+                  colMD: 8,
                   layout: 'TABLE_24COL',
                 },
                 showCaption: true,

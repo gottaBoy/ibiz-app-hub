@@ -65,7 +65,10 @@ export abstract class PlatformProviderBase implements IPlatformProvider {
     } else {
       tabTitle = this.sourceTitle;
     }
-    if (title) {
+    // 隐藏应用标题时，有视图标题就显示视图标题，没有时则显示应用标题
+    if (ibiz.env.isMob && !ibiz.config.mob.mobShowAppTitle) {
+      document.title = title || tabTitle;
+    } else if (title) {
       document.title = `${tabTitle} - ${title}`;
     } else {
       document.title = tabTitle;

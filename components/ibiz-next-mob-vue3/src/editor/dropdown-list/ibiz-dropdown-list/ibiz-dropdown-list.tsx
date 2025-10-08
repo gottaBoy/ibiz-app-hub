@@ -10,6 +10,13 @@ import { IBizCommonRightIcon } from '../../common/right-icon/right-icon';
 import { IBizDataMPicker } from '../../common/data-mpicker/ibiz-data-mpicker';
 import { usePopstateListener } from '../../../util';
 
+/**
+ * 移动端下拉列表（多选）
+ * @primary
+ * @description  使用van-field组件和van-popup组件，用于在弹出的选择列表中选择多条数据的场景。支持编辑器类型包含：`移动端下拉列表（多选）`
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizDropdownList = defineComponent({
   name: 'IBizDropdownList',
   props: getDropdownProps<DropDownListEditorController>(),

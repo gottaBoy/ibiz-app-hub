@@ -2,7 +2,7 @@ export default {
   id: 'web.master_calendar_nav',
   codeName: 'master_calendar_nav',
   openMode: 'INDEXVIEWTAB',
-  viewType: 'DECUSTOMVIEW',
+  viewType: 'DETABEXPVIEW',
   width: 0,
   height: 0,
   appDataEntityId: 'web.master',

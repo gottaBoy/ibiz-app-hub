@@ -6,6 +6,7 @@ import { FormNotifyState } from '../../../../constant';
 import { ButtonContainerState, UIActionButtonState } from '../../../../utils';
 import { FormDetailController } from '../form-detail/form-detail.controller';
 import { FormGroupPanelState } from './form-group-panel.state';
+import { getAllUIActionItems } from '../../../../../model';
 
 /**
  * 表单分组面板控制器
@@ -77,11 +78,10 @@ export class FormGroupPanelController<
   async initActionStates(): Promise<void> {
     // 操作列按钮状态控制
     const { uiactionGroup } = this.model;
-    if (!uiactionGroup?.uiactionGroupDetails?.length) {
-      return;
-    }
+    if (!uiactionGroup?.uiactionGroupDetails?.length) return;
     const containerState = new ButtonContainerState();
-    uiactionGroup.uiactionGroupDetails.forEach(detail => {
+    const actions = getAllUIActionItems(uiactionGroup.uiactionGroupDetails);
+    actions.forEach(detail => {
       const actionid = detail.uiactionId;
       if (actionid) {
         const buttonState = new UIActionButtonState(

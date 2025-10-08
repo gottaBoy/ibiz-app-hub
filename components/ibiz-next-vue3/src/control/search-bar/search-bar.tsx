@@ -3,7 +3,14 @@ import {
   useNamespace,
   useLocalCacheKey,
 } from '@ibiz-template/vue3-util';
-import { computed, defineComponent, PropType, ref } from 'vue';
+import {
+  computed,
+  defineComponent,
+  onUnmounted,
+  PropType,
+  Ref,
+  ref,
+} from 'vue';
 import { ISearchBar, ISearchBarGroup } from '@ibiz/model-core';
 import './search-bar.scss';
 import {
@@ -41,6 +48,22 @@ export const SearchBarControl = defineComponent({
     const c = useControlController(
       (...args) => new SearchBarController(...args),
     );
+
+    const counterData: Ref<IData> = ref({});
+
+    const fn = (counter: IData) => {
+      counterData.value = counter;
+    };
+
+    c.evt.on('onCreated', () => {
+      if (c.counter) {
+        c.counter.onChange(fn, true);
+      }
+    });
+
+    onUnmounted(() => {
+      c.counter?.offChange(fn);
+    });
 
     // 修复非路由情况搜索栏部件启用缓存时构建缓存key异常
     c.setStorageKeyFn(
@@ -167,6 +190,7 @@ export const SearchBarControl = defineComponent({
       ns,
       cssVars,
       filterButtonRef,
+      counterData,
       onClear,
       onSearch,
       onKeydown,
@@ -185,10 +209,17 @@ export const SearchBarControl = defineComponent({
       >
         {this.c.model.enableGroup &&
           (this.c.isBackendSearchGroup ? (
-            <iBizSearchGroups controller={this.c}></iBizSearchGroups>
+            <iBizSearchGroups
+              controller={this.c}
+              counterData={this.counterData}
+            ></iBizSearchGroups>
           ) : (
             <div class={this.ns.b('quick-group')}>
               {this.c.model.searchBarGroups?.map(groupItem => {
+                const visible = this.c.calcCountVisible(groupItem);
+                if (!visible) {
+                  return null;
+                }
                 return (
                   <span
                     class={[
@@ -201,6 +232,13 @@ export const SearchBarControl = defineComponent({
                     onClick={() => this.onGroupClick(groupItem)}
                   >
                     {groupItem.caption}
+                    {groupItem.counterId && (
+                      <iBizBadge
+                        class={this.ns.e('counter')}
+                        value={this.counterData[groupItem.counterId]}
+                        counterMode={groupItem.counterMode}
+                      />
+                    )}
                   </span>
                 );
               })}

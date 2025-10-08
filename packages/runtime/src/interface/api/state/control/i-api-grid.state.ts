@@ -193,6 +193,13 @@ export interface IApiStorageColumnStates {
  */
 export interface IApiGridState extends IApiMDControlState {
   /**
+   * @description 展开行的 keys 数组
+   * @type {string[]}
+   * @memberof IApiTreeGridState
+   */
+  expandRowKeys: string[];
+
+  /**
    * @description 表格行状态
    * @type {IApiGridRowState[]}
    * @default []
@@ -247,14 +254,6 @@ export interface IApiGridState extends IApiMDControlState {
    * @memberof IApiGridState
    */
   isAutoGrid: boolean;
-
-  /**
-   * @description 表格popover层级
-   * @type {number}
-   * @default -
-   * @memberof IApiGridState
-   */
-  zIndex?: number;
 
   /**
    * @description 隐藏表格头部

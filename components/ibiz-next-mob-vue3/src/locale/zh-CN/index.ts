@@ -200,6 +200,16 @@ export default {
     dateRangePicker: {
       selectRange: '请选择日期范围',
     },
+    mpicker: {
+      simpleErr: 'SIMPLE类型地址栏值格式{props.value}不符合JSON字符串要求',
+    },
+    signature: {
+      undo: '撤销',
+      rewrite: '重写',
+      confirm: '确认',
+      addSignature: '点击此处添加签名',
+      signaturePrompt: '请在空白区域内横向书写',
+    },
   },
   // 多语言
   locale: {
@@ -207,6 +217,10 @@ export default {
     switchLanguagePrompt: '切换语言需要刷新页面，确认切换?',
   },
   mobApp: {
+    authGuard: {
+      loginFailed: '匿名用户登录失败',
+      noPermission: '无权限访问！',
+    },
     unauthorizedHandler: {
       noFoundEnvParams: '找不到环境参数casLoginUrl',
       prohibitAccessPrompt: '当前账户被禁止访问',

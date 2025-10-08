@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'tree_exp_view',
   deviewId: '7071f6addf61ad2eccdf14e29ae7b618',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -48,8 +49,14 @@ export default {
   appViewMsgGroupId: 'tree_exp_view_group',
   controls: [
     {
+      sysImage: {
+        cssClass: 'fa fa-cube',
+        glyph: 'xf1b2@FontAwesome',
+      },
+      title: '区划',
       xdataControlName: 'treeexpbar_tree',
       enableCounter: true,
+      enableSearch: true,
       showTitleBar: true,
       autoLoad: true,
       showBusyIndicator: true,
@@ -109,6 +116,7 @@ export default {
               nodeType: 'ROOT',
               treeNodeType: 'STATIC',
               hasDETreeNodeRSs: true,
+              enableQuickSearch: true,
               expanded: true,
               rootNode: true,
               name: '默认根节点',
@@ -117,6 +125,7 @@ export default {
             {
               dataSourceType: 'DEDATASET',
               idAppDEFieldId: 'id',
+              leafFlagAppDEFieldId: 'leaf',
               appDEDataSetId: 'fetch_default',
               sortDir: 'ASC',
               sortAppDEFieldId: 'sort',
@@ -188,6 +197,37 @@ export default {
           name: 'treeexpbar_tree',
           id: 'web.master.tree_exp_view_tree_view',
         },
+        {
+          detoolbarItems: [
+            {
+              actionLevel: 100,
+              noPrivDisplayMode: 2,
+              uiactionId: 'gridview_refreshaction',
+              valid: true,
+              caption: '刷新',
+              itemType: 'DEUIACTION',
+              sysImage: {
+                cssClass: 'fa fa-refresh',
+                glyph: 'xf021@FontAwesome',
+              },
+              tooltip: '刷新',
+              showCaption: true,
+              showIcon: true,
+              id: 'deuiaction1',
+            },
+          ],
+          codeName: 'tree_exp_view_treeexpbar_toolbar',
+          controlType: 'TOOLBAR',
+          logicName: '树导航栏_基础_工具栏',
+          appDataEntityId: 'web.master',
+          controlParam: {
+            id: 'treeexpbar_toolbar',
+          },
+          modelId: 'b8bbd0db91309667368563bc62896735',
+          modelType: 'PSDETOOLBAR',
+          name: 'treeexpbar_toolbar',
+          id: 'tree_exp_view_treeexpbar_toolbar',
+        },
       ],
       codeName: 'tree_exp_view_treeexpbar',
       controlType: 'TREEEXPBAR',
@@ -195,6 +235,7 @@ export default {
       controlParam: {
         id: 'treeexpbar',
       },
+      width: 500,
       modelId: 'd4a42314d5b3f74edf93c6fea3dc717e_treeexpbar',
       modelType: 'PSEXPBAR',
       name: 'treeexpbar',

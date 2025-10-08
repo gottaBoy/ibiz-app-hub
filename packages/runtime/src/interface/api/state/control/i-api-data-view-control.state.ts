@@ -10,12 +10,21 @@ import { IApiMDControlState } from './i-api-md-control.state';
  */
 export interface IApiDataViewControlState extends IApiMDControlState {
   /**
+   * @description 是否正在更新
+   * @type {boolean}
+   * @default false
+   * @memberof IApiDataViewControlState
+   */
+  updating: boolean;
+
+  /**
    * @description 是否可拖拽
    * @type {boolean}
    * @default false
    * @memberof IApiKanbanState
    */
   draggable: boolean;
+
   /**
    * @description 是否只读
    * @type {boolean}
@@ -23,6 +32,7 @@ export interface IApiDataViewControlState extends IApiMDControlState {
    * @memberof IApiDataViewControlState
    */
   readonly: boolean;
+
   /**
    * @description 排序项集合
    * @type {IApiSortItem[]}

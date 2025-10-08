@@ -20,6 +20,10 @@ export enum ViewCallTag {
    */
   'GET_ALL_DATA' = 'GetAllData',
   /**
+   * 设置选中数据（多数据专用）
+   */
+  'SET_SELECTED_DATA' = 'SetSelectedData',
+  /**
    * 校验数据（编辑视图才用）
    */
   'VALIDATE' = 'Validate',

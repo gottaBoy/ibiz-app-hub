@@ -27,6 +27,14 @@ export interface IApiMDControlState extends IApiControlState {
   selectedData: IApiData[];
 
   /**
+   * @description 多数据部件选中数据主键集合(数据选择视图中使用)
+   * @type {string[]}
+   * @default []
+   * @memberof IApiMDControlState
+   */
+  selectedKeys: string[];
+
+  /**
    * @description 是否是单项选择
    * @type {boolean}
    * @default true

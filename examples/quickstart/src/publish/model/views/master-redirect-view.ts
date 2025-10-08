@@ -1,4 +1,5 @@
 export default {
+  getDataAppDEActionId: 'get',
   redirectAppViewRefs: [
     {
       realOpenMode: 'POPUPMODAL',
@@ -15,10 +16,12 @@ export default {
       id: 'editview',
     },
   ],
+  typeAppDEFieldId: 'category_type',
   enableWorkflow: true,
   funcViewMode: 'REDIRECTVIEW',
   deviewCodeName: 'RedirectView',
   deviewId: '3a73772c9c9969bf8b18d9d880dac4e0',
+  appWFId: 'workflow',
   accUserMode: 2,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',

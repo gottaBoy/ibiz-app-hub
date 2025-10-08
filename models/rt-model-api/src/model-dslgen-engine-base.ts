@@ -633,6 +633,7 @@ import { DEDEDataQueryLogicWriter } from './dataentity/logic/dededata-query-logi
 import { DEDEDataSetLogicWriter } from './dataentity/logic/dededata-set-logic-writer';
 import { DEDELogicLogicWriter } from './dataentity/logic/dedelogic-logic-writer';
 import { DEDebugParamLogicWriter } from './dataentity/logic/dedebug-param-logic-writer';
+import { DEDecisionLogicWriter } from './dataentity/logic/dedecision-logic-writer';
 import { DEEndLogicWriter } from './dataentity/logic/deend-logic-writer';
 import { DEFLogicWriter } from './dataentity/logic/deflogic-writer';
 import { DELogicWriter } from './dataentity/logic/delogic-writer';
@@ -641,6 +642,7 @@ import { DELogicLinkWriter } from './dataentity/logic/delogic-link-writer';
 import { DELogicLinkSingleCondWriter } from './dataentity/logic/delogic-link-single-cond-writer';
 import { DELogicNodeParamWriter } from './dataentity/logic/delogic-node-param-writer';
 import { DELogicParamWriter } from './dataentity/logic/delogic-param-writer';
+import { DEMemoLogicWriter } from './dataentity/logic/dememo-logic-writer';
 import { DEPrepareParamLogicWriter } from './dataentity/logic/deprepare-param-logic-writer';
 import { DERawCodeLogicWriter } from './dataentity/logic/deraw-code-logic-writer';
 import { DERenewParamLogicWriter } from './dataentity/logic/derenew-param-logic-writer';
@@ -659,6 +661,7 @@ import { DEUIDEActionLogicWriter } from './dataentity/logic/deuideaction-logic-w
 import { DEUIDEDataSetLogicWriter } from './dataentity/logic/deuidedata-set-logic-writer';
 import { DEUIDELogicLogicWriter } from './dataentity/logic/deuidelogic-logic-writer';
 import { DEUIDebugParamLogicWriter } from './dataentity/logic/deuidebug-param-logic-writer';
+import { DEUIDecisionLogicWriter } from './dataentity/logic/deuidecision-logic-writer';
 import { DEUIEndLogicWriter } from './dataentity/logic/deuiend-logic-writer';
 import { DEUILogicLinkGroupCondWriter } from './dataentity/logic/deuilogic-link-group-cond-writer';
 import { DEUILogicLinkWriter } from './dataentity/logic/deuilogic-link-writer';
@@ -666,6 +669,7 @@ import { DEUILogicLinkSingleCondWriter } from './dataentity/logic/deuilogic-link
 import { DEUILogicNodeWriter } from './dataentity/logic/deuilogic-node-writer';
 import { DEUILogicNodeParamWriter } from './dataentity/logic/deuilogic-node-param-writer';
 import { DEUILogicParamWriter } from './dataentity/logic/deuilogic-param-writer';
+import { DEUIMemoLogicWriter } from './dataentity/logic/deuimemo-logic-writer';
 import { DEUIMsgBoxLogicWriter } from './dataentity/logic/deuimsg-box-logic-writer';
 import { DEUIPFPluginLogicWriter } from './dataentity/logic/deuipfplugin-logic-writer';
 import { DEUIRawCodeLogicWriter } from './dataentity/logic/deuiraw-code-logic-writer';
@@ -2607,6 +2611,9 @@ export class ModelDSLGenEngineBase {
     if (model == 'dataentity.logic.DEDebugParamLogic') {
       return new DEDebugParamLogicWriter();
     }
+    if (model == 'dataentity.logic.DEDecisionLogic') {
+      return new DEDecisionLogicWriter();
+    }
     if (model == 'dataentity.logic.DEEndLogic') {
       return new DEEndLogicWriter();
     }
@@ -2630,6 +2637,9 @@ export class ModelDSLGenEngineBase {
     }
     if (model == 'dataentity.logic.DELogicParam') {
       return new DELogicParamWriter();
+    }
+    if (model == 'dataentity.logic.DEMemoLogic') {
+      return new DEMemoLogicWriter();
     }
     if (model == 'dataentity.logic.DEPrepareParamLogic') {
       return new DEPrepareParamLogicWriter();
@@ -2685,6 +2695,9 @@ export class ModelDSLGenEngineBase {
     if (model == 'dataentity.logic.DEUIDebugParamLogic') {
       return new DEUIDebugParamLogicWriter();
     }
+    if (model == 'dataentity.logic.DEUIDecisionLogic') {
+      return new DEUIDecisionLogicWriter();
+    }
     if (model == 'dataentity.logic.DEUIEndLogic') {
       return new DEUIEndLogicWriter();
     }
@@ -2705,6 +2718,9 @@ export class ModelDSLGenEngineBase {
     }
     if (model == 'dataentity.logic.DEUILogicParam') {
       return new DEUILogicParamWriter();
+    }
+    if (model == 'dataentity.logic.DEUIMemoLogic') {
+      return new DEUIMemoLogicWriter();
     }
     if (model == 'dataentity.logic.DEUIMsgBoxLogic') {
       return new DEUIMsgBoxLogicWriter();

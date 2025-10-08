@@ -3,10 +3,13 @@ $control-appmenu-portlet: (
   'border-color': getCssVar(color, primary),
   'bg-color': getCssVar('color', 'bg', 0),
   'padding': getCssVar(spacing, base-tight),
+  'content-padding': getCssVar(spacing, tight) getCssVar(spacing, base),
 );
 
 @include b(control-appmenu-portlet) {
   @include set-component-css-var('control-appmenu-portlet', $control-appmenu-portlet);
+
+  padding: getCssVar('control-appmenu-portlet', 'content-padding');
 
   @include e(content) {
     display: flex;

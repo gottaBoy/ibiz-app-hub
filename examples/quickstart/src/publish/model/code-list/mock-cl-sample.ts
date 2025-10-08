@@ -6,24 +6,24 @@ export default {
   codeItems: [
     {
       codeName: 'item_1',
-      text: '选项一',
+      text: '分类一',
       value: '1',
       id: 'item_1',
     },
     {
       codeName: 'item_2',
-      text: '选项二',
+      text: '分类二',
       value: '2',
       id: 'item_2',
     },
     {
       codeName: 'item_3',
-      text: '选项三',
+      text: '分类三',
       value: '3',
       id: 'item_3',
     },
   ],
   enableCache: true,
-  name: '静态代码表',
+  name: '所属分类静态代码表',
   id: 'web.mock__cl_sample',
 };

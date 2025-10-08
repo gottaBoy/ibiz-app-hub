@@ -1,11 +1,11 @@
 import {
+  SysUIActionTag,
   ViewEngineBase,
   ViewController,
-  IPickupViewPanelController,
-  SysUIActionTag,
   IPickupViewState,
   IPickupViewEvent,
   IApiPickupViewCall,
+  IPickupViewPanelController,
 } from '@ibiz-template/runtime';
 import { IAppDEPickupView } from '@ibiz/model-core';
 
@@ -53,6 +53,22 @@ export class PickupViewEngine extends ViewEngineBase {
     await super.onCreated();
     const { childNames } = this.view;
     childNames.push('pickupviewpanel');
+    this.initSelectData();
+  }
+
+  /**
+   * @description 初始化选中数据
+   * @protected
+   * @memberof PickupViewEngine
+   */
+  protected initSelectData(): void {
+    if (this.view.params.selecteddata) {
+      this.selectData = JSON.parse(this.view.params.selecteddata);
+      delete this.view.params.selecteddata;
+    }
+    if (this.view.state.selectedData) {
+      this.selectData = [...this.view.state.selectedData];
+    }
   }
 
   /**
@@ -70,6 +86,18 @@ export class PickupViewEngine extends ViewEngineBase {
     this.pickupViewPanel.evt.on('onDataActive', event => {
       this.pickupViewPanelDataActive(event.data);
     });
+    this.setSelectedData(this.selectData);
+  }
+
+  /**
+   * @description 设置选中数据
+   * @protected
+   * @param {IData[]} items
+   * @memberof PickupViewEngine
+   */
+  protected setSelectedData(items: IData[]): void {
+    this.selectData = items;
+    this.pickupViewPanel.setSelectedData(items);
   }
 
   /**

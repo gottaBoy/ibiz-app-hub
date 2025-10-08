@@ -5,9 +5,13 @@ import { IApiGlobalFormConfig } from './i-api-global-form-config';
 import { IApiGlobalGridConfig } from './i-api-global-grid-config';
 import { IApiGlobalKanbanConfig } from './i-api-global-kanban-config';
 import { IApiGlobalPickerEditorConfig } from './i-api-global-picker-editor-config';
+import { IApiGlobalUploadEditorConfig } from './i-api-global-upload-editor-config';
 import { IApiGlobalSearchFormConfig } from './i-api-global-search-form-config';
 import { IApiGlobalTreeConfig } from './i-api-global-tree-config';
 import { IApiGlobalViewConfig } from './i-api-global-view-config';
+import { IApiGlobalFlowDrtabConfig } from './i-api-global-flow-drtab-config';
+import { IApiGlobalWaterMarkConfig } from './i-api-global-water-mark-config';
+import { IApiGlobalMobConfig } from './i-api-global-mob-config';
 
 /**
  * 全局配置
@@ -74,6 +78,13 @@ export interface IApiGlobalConfig {
   pickerEditor: IApiGlobalPickerEditorConfig;
 
   /**
+   * @description 全局上传类编辑器配置
+   * @type {IApiGlobalUploadEditorConfig}
+   * @memberof IApiGlobalConfig
+   */
+  uploadEditor: IApiGlobalUploadEditorConfig;
+
+  /**
    * @description 全局搜索表单配置
    * @type {IApiGlobalSearchFormConfig}
    * @memberof IApiGlobalConfig
@@ -130,4 +141,25 @@ export interface IApiGlobalConfig {
    * @memberof IApiGlobalConfig
    */
   codeEditorTheme?: 'light' | 'dark';
+
+  /**
+   * @description drtab全局配置
+   * @type {IApiGlobalFlowDrtabConfig}
+   * @memberof IApiGlobalConfig
+   */
+  drtab: IApiGlobalFlowDrtabConfig;
+
+  /**
+   * @description 应用水印配置参数
+   * @type {IApiGlobalWaterMarkConfig}
+   * @memberof IApiGlobalConfig
+   */
+  watermark: IApiGlobalWaterMarkConfig;
+
+  /**
+   * @description 全局移动端配置
+   * @type {IApiGlobalMobConfig}
+   * @memberof IApiGlobalConfig
+   */
+  mob: IApiGlobalMobConfig;
 }

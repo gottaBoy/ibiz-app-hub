@@ -9,6 +9,17 @@ import { toNumber } from 'lodash-es';
 import { useVanUpload } from '../use/use-van-upload';
 import { UploadEditorController } from '../upload-editor.controller';
 
+/**
+ * 轮播图（扩展）
+ * @primary
+ * @description 使用van-swipe组件，用于对图片数组进行轮播，提供了自动轮播，设置轮播动画时长，显示项指示器以及支持手势滑动的功能。是预制类型，类型为：FIELD_CAROUSEL_PICTURE
+ * @editorparams {name:autoplay,parameterType:number,defaultvalue:3000,description:轮播间隔，van-swipe组件的autoplay属性}
+ * @editorparams {name:duration,parameterType:number,defaultvalue:500,description:动画时长，van-swipe组件的duration属性}
+ * @editorparams {name:showIndicators,parameterType:boolean,defaultvalue:true,description:是否显示指示器，van-swipe组件的show-indicators属性}
+ * @editorparams {name:touchable,parameterType:boolean,defaultvalue:true,description:是否可以通过手势滑动，van-swipe组件的touchable属性}
+ * @ignoreprops autoFocus | overflowMode
+ * @ignoreemits blur | focus | enter | change | infoTextChange
+ */
 export const IBizEditorCarousel = defineComponent({
   name: 'IBizEditorCarousel',
   props: getUploadProps<UploadEditorController>(),

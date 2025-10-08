@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  useUIStore,
   useNamespace,
   IBizCustomRender,
   useControlController,
   hasEmptyPanelRenderer,
+  useControlPopoverzIndex,
 } from '@ibiz-template/vue3-util';
 import {
   h,
@@ -103,7 +103,7 @@ export function renderFieldColumn(
   const panel = controlRenders.find(
     renderItem => renderItem.renderType === 'LAYOUTPANEL',
   )?.layoutPanel;
-  const columnType = c.model.userParam?.columnType;
+  const columnType = c.model.userParam?.columntype;
   if (panel) {
     content = (
       <iBizControlShell
@@ -255,11 +255,13 @@ export function renderColumn(
         },
         default: ({ row }: IData): VNode | null => {
           let elRow = row; // element表格数据
-          if (row.isGroupData) {
-            // 有第一条数据时，分组那一行绘制第一条数据
-            elRow = row.first;
-          }
-
+          if (elRow.isGroupRow)
+            return (
+              <div class='ibiz-grid-field-column'>
+                <span class='ibiz-grid-field-column__text'>{row.caption}</span>
+              </div>
+            );
+          if (row.isGroupData) elRow = row.first;
           const rowState = c.findRowState(elRow);
           if (rowState) {
             // 常规非业务单元格由表格绘制（性能优化）
@@ -386,13 +388,12 @@ export const GridControl = defineComponent({
     loadDefault: { type: Boolean, default: true },
   },
   setup(props, { slots }) {
-    const c = useControlController<GridController>(
+    const c: GridController = useControlController<GridController>(
       (...args) => new GridController(...args),
     );
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
 
-    const { zIndex } = useUIStore();
-    c.state.zIndex = zIndex.increment();
+    useControlPopoverzIndex(c);
 
     const { sysCss } = c.model;
     const sysCssName = sysCss?.cssName;
@@ -585,7 +586,6 @@ export const GridControl = defineComponent({
     };
 
     onUnmounted(() => {
-      zIndex.decrement();
       if (cleanup !== NOOP) cleanup();
       if (cleanClick !== NOOP) cleanClick();
       if (cleanEnter !== NOOP) cleanEnter();
@@ -678,33 +678,41 @@ export const GridControl = defineComponent({
             this.ns.is('single-select', state.singleSelect),
             this.ns.is('empty', state.items.length === 0),
             this.ns.is('enable-customized', this.c.model.enableCustomized),
+            this.ns.is(
+              'group-row-mode',
+              this.c.controlParams.grouprowmode === 'NEWROW',
+            ),
           ]}
           controller={this.c}
           style={this.headerCssVars}
         >
           {
             <el-table
-              ref={'tableRef'}
-              class={this.ns.e('table')}
-              default-sort={this.defaultSort}
               border
-              show-header={!this.c.state.hideHeader}
-              show-summary={this.c.enableAgg}
-              summary-method={this.summaryMethod}
-              highlight-current-row={state.singleSelect}
-              row-class-name={this.handleRowClassName}
-              header-cell-class-name={this.handleHeaderCellClassName}
-              row-key={'tempsrfkey'}
+              ref={'tableRef'}
               data={this.tableData}
-              default-expand-all={defaultExpandAll}
-              span-method={this.spanMethod}
-              onRowClick={this.onRowClick}
-              onRowDblclick={this.onDbRowClick}
-              onSelectionChange={this.onSelectionChange}
-              onSortChange={this.onSortChange}
-              onHeaderDragend={this.headerDragend}
+              row-key={'tempsrfkey'}
               tooltip-effect={'light'}
+              class={this.ns.e('table')}
               scrollbar-always-on={true}
+              onRowClick={this.onRowClick}
+              span-method={this.spanMethod}
+              default-sort={this.defaultSort}
+              show-summary={this.c.enableAgg}
+              onSortChange={this.onSortChange}
+              onRowDblclick={this.onDbRowClick}
+              summary-method={this.summaryMethod}
+              onHeaderDragend={this.headerDragend}
+              default-expand-all={defaultExpandAll}
+              show-header={!this.c.state.hideHeader}
+              row-class-name={this.handleRowClassName}
+              highlight-current-row={state.singleSelect}
+              expandRowKeys={this.c.state.expandRowKeys}
+              onSelectionChange={this.onSelectionChange}
+              header-cell-class-name={this.handleHeaderCellClassName}
+              onExpandChange={(row: IData, expanded: boolean) =>
+                this.c.expandChange(row, expanded)
+              }
               {...this.$attrs}
               {...renderAttrs(this.c.model, {
                 ...this.c.getEventArgs(),
@@ -717,10 +725,11 @@ export const GridControl = defineComponent({
                     this.c.enableRowEditOrder && this.renderDragIconColumn(),
                     !state.singleSelect && (
                       <el-table-column
-                        class-name={this.ns.e('selection')}
-                        type='selection'
                         width='55'
                         align='center'
+                        type='selection'
+                        reserve-selection={true}
+                        class-name={this.ns.e('selection')}
                       ></el-table-column>
                     ),
                     this.renderRowDetail(),

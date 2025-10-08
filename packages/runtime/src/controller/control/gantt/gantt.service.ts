@@ -1,4 +1,5 @@
 import {
+  IAppDEDataSet,
   IDETreeCodeListNode,
   IDETreeDataSetNode,
   IDETreeNode,
@@ -419,5 +420,47 @@ export class GanttService extends TreeService {
       return nodeDatas;
     }
     return [];
+  }
+
+  /**
+   * @description 通过实体数据集获取实体数据
+   * @param {{
+   *     appDataEntityId: string;
+   *     appDEDataSetId: string;
+   *     context: IContext;
+   *     params: IParams;
+   *   }} opts
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof GanttService
+   */
+  async getDEDatasByDEDataset(opts: {
+    appDataEntityId: string;
+    appDEDataSetName: string;
+    context: IContext;
+    params: IParams;
+  }): Promise<IData[]> {
+    const { appDataEntityId, appDEDataSetName, context, params } = opts;
+
+    const appDataEntity = await ibiz.hub.getAppDataEntity(
+      appDataEntityId!,
+      context.srfappid,
+    );
+    const dataSet = appDataEntity.appDEMethods?.find(appDEMethod => {
+      return (appDEMethod as IAppDEDataSet).dataSetName === appDEDataSetName;
+    });
+    const fetchAction = dataSet?.codeName;
+    let result: IData[] = [];
+    if (fetchAction && appDataEntityId) {
+      const response = await this.app.deService.exec(
+        appDataEntityId,
+        fetchAction,
+        context,
+        params,
+      );
+      if (response.ok && response.data) {
+        result = response.data as IData[];
+      }
+    }
+    return result;
   }
 }

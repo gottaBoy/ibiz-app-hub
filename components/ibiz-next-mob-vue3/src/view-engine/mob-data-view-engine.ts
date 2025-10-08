@@ -5,6 +5,7 @@ import {
   IDataViewEvent,
   SysUIActionTag,
   IMobMDCtrlController,
+  IApiMobDataViewCall,
 } from '@ibiz-template/runtime';
 import { IAppDEMobMDView } from '@ibiz/model-core';
 
@@ -36,8 +37,11 @@ export class MobDataViewEngine extends MDViewEngine {
     return this.view.getController('dataview') as IMobMDCtrlController;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  async call(key: string, args: any): Promise<IData | null | undefined> {
+  async call(
+    key: keyof IApiMobDataViewCall,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    args: any,
+  ): Promise<IData | null | undefined> {
     if (key === SysUIActionTag.LOAD_MORE) {
       await this.loadMore();
       return null;

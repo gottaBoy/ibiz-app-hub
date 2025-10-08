@@ -24,7 +24,10 @@ import './ibiz-image-cropping.scss';
  * @editorparams {"name":"uploadparams","parameterType":"string","description":"上传参数，图片上传时，用于计算上传路径"}
  * @editorparams {"name":"exportparams","parameterType":"string","description":"下载参数，图片下载时，用于计算下载路径"}
  * @editorparams {"name":"osscat","parameterType":"string","description":"用于计算上传和下载路径的OSS参数"}
+ * @editorparams {"name":"infomap","parameterType":"string","description":"上传文件信息的映射规则字符串，用于将上传成功后返回的文件数据转换为保存数据所需格式。格式为'源键:目标键;源键2:目标键2'。示例：映射规则（'filesize:size;fileext:ext'），源对象（{filesize:'10000', fileext:'.gif'}），转换结果（{size:'10000', ext:'.gif'}）"}
  * @editorparams {"name":"readonly","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否为只读态"}
+ * @editorparams {"name":"appentitytag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所属实体。该参数值会作为验证下载权限的依据。配置格式为（应用代码名称.实体代码名称），示例：web.master"}
+ * @editorparams {"name":"datafieldtag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所关联的数据属性。完成配置后，将自动从容器数据（涵盖表单数据、表格行数据、面板数据）、上下文环境以及视图参数中获取该属性的实际值，将其作为验证下载权限的依据"}
  * @ignoreprops autoFocus | overflowMode
  * @ignoreemits blur | focus | enter | infoTextChange
  */

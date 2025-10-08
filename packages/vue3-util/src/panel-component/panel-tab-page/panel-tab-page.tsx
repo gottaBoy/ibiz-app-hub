@@ -6,7 +6,7 @@ import { useNamespace } from '../../use';
 /**
  * 面板分页
  * @primary
- * @description 为分页容器下的分页子容器，此容器下才是面板成员
+ * @description 为分页面板下的分页子容器，此容器下才是面板成员。
  */
 export const PanelTabPage = defineComponent({
   name: 'IBizPanelTabPage',

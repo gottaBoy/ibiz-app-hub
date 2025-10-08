@@ -5,6 +5,7 @@ export default {
   funcViewMode: 'MDATAVIEW',
   deviewCodeName: 'GridView',
   deviewId: 'd4a9cc0960dac4bd51565e39cf76575b',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -102,6 +103,7 @@ export default {
               appDEFieldId: 'name',
               editor: {
                 editorType: 'TEXTBOX',
+                placeHolder: '请输入名称',
                 valueType: 'SIMPLE',
                 editable: true,
                 id: 'n_name_like',
@@ -375,6 +377,33 @@ export default {
         },
         {
           actionLevel: 100,
+          noPrivDisplayMode: 2,
+          uiactionId: 'gridview_printaction',
+          uiactionTarget: 'MULTIKEY',
+          valid: true,
+          capLanguageRes: {
+            lanResTag: 'TBB.TEXT.*.PRINT',
+          },
+          caption: '打印',
+          itemType: 'DEUIACTION',
+          sysImage: {
+            cssClass: 'fa fa-print',
+            glyph: 'xf02f@FontAwesome',
+          },
+          tooltip: '打印',
+          tooltipLanguageRes: {
+            lanResTag: 'TBB.TOOLTIP.*.PRINT',
+          },
+          showCaption: true,
+          showIcon: true,
+          id: 'tbitem7',
+        },
+        {
+          itemType: 'SEPERATOR',
+          id: 'tbitem18',
+        },
+        {
+          actionLevel: 100,
           detoolbarItems: [
             {
               actionLevel: 100,
@@ -421,6 +450,7 @@ export default {
       columnEnableLink: 2,
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
+      orderValueAppDEFieldId: 'px',
       degridColumns: [
         {
           clconvertMode: 'NONE',
@@ -596,10 +626,34 @@ export default {
           id: 'region_id',
         },
         {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
           appDEFieldId: 'name',
           valueType: 'SIMPLE',
           dataType: 25,
           id: 'srfmajortext',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'wf_status',
         },
       ],
       degridEditItems: [
@@ -621,6 +675,7 @@ export default {
       pagingMode: 1,
       pagingSize: 20,
       sortMode: 'REMOTE',
+      hasWFDataItems: true,
       enableCustomized: true,
       enablePagingBar: true,
       navViewPos: 'NONE',

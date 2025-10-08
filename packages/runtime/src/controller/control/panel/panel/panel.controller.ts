@@ -1,5 +1,9 @@
 /* eslint-disable no-param-reassign */
-import { recursiveIterate, RuntimeError } from '@ibiz-template/core';
+import {
+  recursiveExecute,
+  recursiveIterate,
+  RuntimeError,
+} from '@ibiz-template/core';
 import {
   IControlLogic,
   IPanel,
@@ -384,6 +388,21 @@ export class PanelController<
    * @memberof PanelController
    */
   findPanelItemByName(name: string): IPanelItemController | undefined {
-    return this.panelItems[name];
+    let result = this.panelItems[name];
+    if (!result) {
+      recursiveExecute(
+        this,
+        (item: IPanelItemController) => {
+          if (name === item.model.id) {
+            result = item;
+            return true;
+          }
+        },
+        {
+          childrenFields: ['panelItems'],
+        },
+      );
+    }
+    return result;
   }
 }

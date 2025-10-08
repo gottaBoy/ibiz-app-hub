@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'counter',
   deviewId: 'b472a61921a9b21c31ccad16c531a395',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -23,11 +24,6 @@ export default {
     {
       dedrtabPages: [
         {
-          caption: '菜单',
-          appViewId: 'web.master_doing_custom_view',
-          id: 'menu',
-        },
-        {
           caption: '树视图',
           counterId: 'tree',
           appViewId: 'web.master_counter_tree',
@@ -39,19 +35,34 @@ export default {
           id: 'tab_exp',
         },
         {
-          caption: '界面行为',
-          appViewId: 'web.master_doing_custom_view',
-          id: 'ui_action',
+          caption: '关系分页部件',
+          appViewId: 'web.master_counter_drtab',
+          id: 'drtab',
         },
         {
-          caption: '关系界面组',
-          appViewId: 'web.master_counter_dr',
-          id: 'dr',
+          caption: '关系数据栏',
+          appViewId: 'web.master_counter_drbar',
+          id: 'drbar',
         },
         {
-          caption: '表单内分组',
+          caption: '搜索栏',
+          appViewId: 'web.master_count_searchbar',
+          id: 'searchbar',
+        },
+        {
+          caption: '表单',
           appViewId: 'web.master_counter_form_group',
           id: 'form_group',
+        },
+        {
+          caption: '分页导航面板',
+          appViewId: 'web.master_counter_tabexppanel',
+          id: 'tabexppanel',
+        },
+        {
+          caption: '工具栏',
+          appViewId: 'web.master_counter_toolbar',
+          id: 'toolbar',
         },
       ],
       dataRelationTag: 'counter_DR',

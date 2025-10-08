@@ -1,13 +1,12 @@
 import {
   ViewController,
-  ViewEngineBase,
-  ICalendarExpBarController,
   ICalendarExpViewEvent,
   ICalendarExpViewState,
 } from '@ibiz-template/runtime';
 import { IAppDECalendarExplorerView } from '@ibiz/model-core';
+import { ExpViewEngine } from './exp-view.engine';
 
-export class CalendarExpViewEngine extends ViewEngineBase {
+export class CalendarExpViewEngine extends ExpViewEngine {
   /**
    * 日历导航视图控制器
    *
@@ -26,33 +25,12 @@ export class CalendarExpViewEngine extends ViewEngineBase {
   >;
 
   /**
-   * 树导航栏
-   *
+   * @description 导航栏部件名称
    * @readonly
+   * @type {string}
    * @memberof CalendarExpViewEngine
    */
-  get calendarExpBar(): ICalendarExpBarController {
-    return this.view.getController(
-      'calendarexpbar',
-    ) as ICalendarExpBarController;
-  }
-
-  async onCreated(): Promise<void> {
-    await super.onCreated();
-    const { childNames } = this.view;
-    childNames.push('calendarexpbar');
-    if (!this.view.slotProps.calendarexpbar) {
-      this.view.slotProps.calendarexpbar = {};
-    }
-    this.view.slotProps.calendarexpbar.srfnav = this.view.state.srfnav;
-  }
-
-  async onMounted(): Promise<void> {
-    await super.onMounted();
-    const { model } = this.view;
-    // 默认加载
-    if (!this.view.state.noLoadDefault && model.loadDefault) {
-      this.calendarExpBar.load();
-    }
+  get expBarName(): string {
+    return 'calendarexpbar';
   }
 }

@@ -11,17 +11,15 @@ import { PanelItemState, UIActionButtonState } from '@ibiz-template/runtime';
  */
 export class PanelButtonState extends PanelItemState {
   /**
-   * 加载中
-   * @author lxm
-   * @date 2023-07-21 10:11:21
+   * @description 加载中
+   * @exposedoc
    * @type {boolean}
    */
   loading: boolean = false;
 
   /**
-   * 界面行为状态
-   * @author lxm
-   * @date 2023-07-21 03:34:27
+   * @description 界面行为状态
+   * @exposedoc
    * @type {UIActionButtonState}
    */
   uiActionState!: UIActionButtonState;

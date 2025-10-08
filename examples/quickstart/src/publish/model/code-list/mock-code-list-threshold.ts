@@ -1,0 +1,16 @@
+export default {
+  beginValueAppDEFieldId: 'begin',
+  codeListTag: 'mock__CodeList_threshold',
+  codeListType: 'DYNAMIC',
+  codeName: 'mock__CodeList_threshold',
+  emptyText: '未定义',
+  endValueAppDEFieldId: 'end',
+  incBeginValueMode: 1,
+  incEndValueMode: 1,
+  appDEDataSetId: 'fetch_dynamic_codelist_data',
+  appDataEntityId: 'web.master',
+  enableCache: true,
+  thresholdGroup: true,
+  name: '代码表_阈值组模式',
+  id: 'web.mock__codelist_threshold',
+};

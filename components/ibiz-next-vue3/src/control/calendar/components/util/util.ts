@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { warn } from 'vue';
+import { h, warn } from 'vue';
 import dayjs from 'dayjs';
 import { clone } from 'ramda';
 
-import type { PropType } from 'vue';
+import type { PropType, VNode } from 'vue';
 import { isDate, isArray, isObject, fromPairs, get, set } from 'lodash-es';
+import { IModal, IOverlayPopoverContainer } from '@ibiz-template/runtime';
 import type {
   EpProp,
   EpPropFinalized,
@@ -522,6 +523,68 @@ const handleProps = <
     ]),
   );
 
+/**
+ * 打开popover
+ *
+ * @param {VNode} _component
+ * @param {HTMLElement} _evt
+ * @param {IData} _opts
+ */
+function openPopover(
+  _component: VNode,
+  _targetEvt: HTMLElement,
+  _opts: IData,
+): IOverlayPopoverContainer {
+  const overlay = ibiz.overlay.createPopover(
+    (modal: IModal): VNode => {
+      return h(_component, { modal });
+    },
+    undefined,
+    {
+      width: 'auto',
+      height: 'auto',
+      noArrow: true,
+      ..._opts,
+    },
+  );
+  overlay?.present(_targetEvt as HTMLElement);
+  return overlay;
+}
+
+/**
+ * _follow、_overlay跟随_event移动
+ *
+ * @param {MouseEvent} _event
+ * @param {HTMLElement} _follow
+ */
+function followMouseMove(_event: MouseEvent, _follow: HTMLElement): void {
+  // 设置元素位置
+  _follow.style.left = `${_event.clientX + 20}px`;
+  _follow.style.top = `${_event.clientY + 20}px`;
+}
+
+/**
+ * 创建跟随元素
+ *
+ * @return {*}  {HTMLElement}
+ */
+const createFollowElement = (): HTMLElement => {
+  const followEl = document.createElement('div');
+  (followEl as IData).style =
+    'position: fixed; height: 2px; width: 2px; z-index: -1;';
+  document.body?.appendChild(followEl);
+  return followEl;
+};
+
+/**
+ * 删除跟随元素
+ *
+ * @param {HTMLElement} followEl
+ */
+const removeFollowElement = (followEl: HTMLElement): void => {
+  document.body.removeChild(followEl);
+};
+
 export {
   epPropKey,
   closeIcon,
@@ -545,4 +608,8 @@ export {
   isDateInCurWeek,
   isTimeGreaterThan,
   checkDateRangeIncludes,
+  openPopover,
+  followMouseMove,
+  createFollowElement,
+  removeFollowElement,
 };

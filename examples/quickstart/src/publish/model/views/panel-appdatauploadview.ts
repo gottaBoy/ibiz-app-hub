@@ -1,0 +1,31 @@
+export default {
+  caption: '面板_应用数据导入视图',
+  codeName: 'panel_appdatauploadview',
+  controls: [
+    {
+      caption: '面板_应用数据导入视图',
+      codeName: 'captionbar',
+      controlType: 'CAPTIONBAR',
+      controlParam: {},
+      id: 'captionbar',
+    },
+  ],
+  viewLayoutPanel: {
+    layoutBodyOnly: true,
+    useDefaultLayout: true,
+    layoutPanel: true,
+    codeName: 'layoutpanel',
+    controlStyle: 'APPDATAUPLOADVIEW',
+    controlType: 'VIEWLAYOUTPANEL',
+    controlParam: {},
+    id: 'layoutpanel',
+  },
+  title: '面板_应用数据导入视图',
+  viewStyle: 'DEFAULT',
+  viewType: 'APPDATAUPLOADVIEW',
+  showCaptionBar: true,
+  modelId: '85a7ba7a9dae1d5cb7ef93bc5b4ecf7a',
+  modelType: 'PSAPPUTILVIEW',
+  name: 'panel_appdatauploadview',
+  id: 'web.panel_appdatauploadview',
+};

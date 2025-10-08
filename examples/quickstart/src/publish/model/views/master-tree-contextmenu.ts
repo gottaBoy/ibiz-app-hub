@@ -4,6 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Tree_contextmenu',
   deviewId: '39d6d1d55e0570070c1d7c74912a5599',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -23,19 +24,19 @@ export default {
     {
       detreeNodeRSs: [
         {
-          childDETreeNodeId: 'node',
-          parentDETreeNodeId: 'node_1',
-          parentValueLevel: 1,
-          searchMode: 3,
-          id: '主数据（node_1）-名称（node）',
-        },
-        {
           childDETreeNodeId: 'node_1',
           parentDETreeNodeId: 'root',
           parentValueLevel: 1,
           searchMode: 3,
           name: '默认根节点（ROOT）-主数据（node_1）',
           id: '默认根节点（root）-主数据（node_1）',
+        },
+        {
+          childDETreeNodeId: 'node',
+          parentDETreeNodeId: 'node_1',
+          parentValueLevel: 1,
+          searchMode: 3,
+          id: '主数据（node_1）-名称（node）',
         },
       ],
       detreeNodes: [
@@ -57,6 +58,51 @@ export default {
           appDataEntityId: 'web.master',
           decontextMenu: {
             detoolbarItems: [
+              {
+                actionLevel: 100,
+                noPrivDisplayMode: 2,
+                uiactionId: 'gridview_newaction',
+                valid: true,
+                capLanguageRes: {
+                  lanResTag: 'TBB.TEXT.*.NEW',
+                },
+                caption: '新建',
+                itemType: 'DEUIACTION',
+                sysImage: {
+                  cssClass: 'fa fa-file-text-o',
+                  glyph: 'xf0f6@FontAwesome',
+                },
+                tooltip: '新建',
+                tooltipLanguageRes: {
+                  lanResTag: 'TBB.TOOLTIP.*.NEW',
+                },
+                showCaption: true,
+                showIcon: true,
+                id: 'deuiaction1',
+              },
+              {
+                actionLevel: 100,
+                noPrivDisplayMode: 2,
+                uiactionId: 'gridview_editaction',
+                uiactionTarget: 'SINGLEKEY',
+                valid: true,
+                capLanguageRes: {
+                  lanResTag: 'TBB.TEXT.*.EDIT',
+                },
+                caption: '编辑',
+                itemType: 'DEUIACTION',
+                sysImage: {
+                  cssClass: 'fa fa-edit',
+                  glyph: 'xf044@FontAwesome',
+                },
+                tooltip: '编辑',
+                tooltipLanguageRes: {
+                  lanResTag: 'TBB.TOOLTIP.*.EDIT',
+                },
+                showCaption: true,
+                showIcon: true,
+                id: 'deuiaction3',
+              },
               {
                 actionLevel: 100,
                 noPrivDisplayMode: 2,
@@ -93,7 +139,22 @@ export default {
             name: 'node_cm',
             id: 'tree_contextmenu_node_cm',
           },
+          detreeNodeRVs: [
+            {
+              refAppViewId: 'web.master_edit_view',
+              id: 'newdata',
+            },
+            {
+              refAppViewId: 'web.master_edit_view',
+              id: 'editdata',
+            },
+          ],
           treeNodeType: 'DE',
+          enableEditData: true,
+          enableNewData: true,
+          enableRemoveData: true,
+          enableViewData: true,
+          expanded: true,
           name: '名称',
           id: 'node',
         },
@@ -102,6 +163,7 @@ export default {
           nodeType: 'node_1',
           treeNodeType: 'STATIC',
           hasDETreeNodeRSs: true,
+          expanded: true,
           name: '主数据',
           id: 'node_1',
         },
@@ -134,9 +196,102 @@ export default {
       },
       autoLoad: true,
       showBusyIndicator: true,
+      appViewLogics: [
+        {
+          logicTrigger: 'CUSTOM',
+          logicType: 'APPUILOGIC',
+          builtinAppUILogic: {
+            actionAfterWizard: 'DEFAULT',
+            newDataAppView: {
+              openMode: 'POPUPMODAL',
+              refAppViewId: 'web.master_edit_view',
+            },
+            appUILogicRefViews: [
+              {
+                openMode: 'POPUPMODAL',
+                refAppViewId: 'web.master_edit_view',
+              },
+            ],
+            builtinLogic: true,
+            logicType: 'PREDEFINED',
+            viewLogicType: 'APP_NEWDATA',
+            id: '新建数据',
+          },
+          builtinLogic: true,
+          id: 'node_newdata',
+        },
+        {
+          logicTrigger: 'CUSTOM',
+          logicType: 'APPUILOGIC',
+          builtinAppUILogic: {
+            openDataAppView: {
+              openMode: 'POPUPMODAL',
+              refAppViewId: 'web.master_edit_view',
+            },
+            editMode: true,
+            appUILogicRefViews: [
+              {
+                openMode: 'POPUPMODAL',
+                refAppViewId: 'web.master_edit_view',
+              },
+            ],
+            builtinLogic: true,
+            logicType: 'PREDEFINED',
+            viewLogicType: 'APP_OPENDATA',
+            id: '打开数据',
+          },
+          builtinLogic: true,
+          id: 'node_opendata',
+        },
+      ],
       controls: [
         {
           detoolbarItems: [
+            {
+              actionLevel: 100,
+              noPrivDisplayMode: 2,
+              uiactionId: 'gridview_newaction',
+              valid: true,
+              capLanguageRes: {
+                lanResTag: 'TBB.TEXT.*.NEW',
+              },
+              caption: '新建',
+              itemType: 'DEUIACTION',
+              sysImage: {
+                cssClass: 'fa fa-file-text-o',
+                glyph: 'xf0f6@FontAwesome',
+              },
+              tooltip: '新建',
+              tooltipLanguageRes: {
+                lanResTag: 'TBB.TOOLTIP.*.NEW',
+              },
+              showCaption: true,
+              showIcon: true,
+              id: 'deuiaction1',
+            },
+            {
+              actionLevel: 100,
+              noPrivDisplayMode: 2,
+              uiactionId: 'gridview_editaction',
+              uiactionTarget: 'SINGLEKEY',
+              valid: true,
+              capLanguageRes: {
+                lanResTag: 'TBB.TEXT.*.EDIT',
+              },
+              caption: '编辑',
+              itemType: 'DEUIACTION',
+              sysImage: {
+                cssClass: 'fa fa-edit',
+                glyph: 'xf044@FontAwesome',
+              },
+              tooltip: '编辑',
+              tooltipLanguageRes: {
+                lanResTag: 'TBB.TOOLTIP.*.EDIT',
+              },
+              showCaption: true,
+              showIcon: true,
+              id: 'deuiaction3',
+            },
             {
               actionLevel: 100,
               noPrivDisplayMode: 2,

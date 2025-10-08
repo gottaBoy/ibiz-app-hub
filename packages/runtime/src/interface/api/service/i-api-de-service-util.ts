@@ -46,4 +46,28 @@ export interface IApiDEServiceUtil {
     params2?: IApiParams | undefined,
     header?: IApiData,
   ): Promise<IHttpResponse<IApiData>>;
+
+  /**
+   * @description 记录当前域变更
+   * @param {string} srfsessionid 域标识
+   * @param {('ADD' | 'RESET' | 'UNDO' | 'REDO')} actionType 添加数据 | 重置数据
+   * @returns {*}  {void}
+   * @memberof IApiDEServiceUtil
+   */
+  recordUIDomainChanges(
+    srfsessionid: string,
+    actionType: 'ADD' | 'RESET',
+  ): void;
+
+  /**
+   * @description 取消当前域变更，'UNDO' | 'REDO'暂未支持
+   * @param {string} srfsessionid 域标识
+   * @param {('INIT' | 'UNDO' | 'REDO')} targetState 目标状态，初始化状态|撤销上一步操作|重做下一步操作
+   * @returns {*}  {void}
+   * @memberof IApiDEServiceUtil
+   */
+  cancelUIDomainDChanges(
+    srfsessionid: string,
+    targetState: 'INIT' | 'UNDO' | 'REDO',
+  ): void;
 }

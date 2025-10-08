@@ -1,4 +1,5 @@
 window.Environment = {
+  appVersion: '0.0.50',
   // 是否为开发模式
   dev: false,
   // 日志输出级别, 支持: TRACE、DEBUG、INFO、WARN、ERROR、SILENT

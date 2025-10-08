@@ -1,30 +1,171 @@
-@include b('flow-drtab'){
+@include b('flow-drtab') {
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: getCssVar(color,bg,0);;
-    @include e('container'){
-        display: flex;
-        flex-direction: column;
-        gap: getCssVar(spacing,base);
+    overflow: hidden;
+    background-color: getCssVar(color, bg, 0);
+    ;
+
+    @include e('container') {
+        height: 100%;
+        overflow: auto;
     }
-    @include e('tab-item'){
-        background-color: getCssVar(color,bg,1);
-        border-radius: getCssVar(border-radius,medium);
-        @include m('label'){  
-            padding: getCssVar(spacing,base);
-            font-size: getCssVar(font-size,header-5);
-            border-bottom: 1px solid getCssVar(color,fill,1);
+
+    @include e('tab-item') {
+        background-color: getCssVar(color, bg, 1);
+        border-radius: getCssVar(border-radius, medium);
+
+        @include m('label') {
+            padding: getCssVar(spacing, base);
+            font-size: getCssVar(font-size, header-5);
+            border-bottom: 1px solid getCssVar(color, fill, 1);
         }
-        @include m('tab-view'){
-            padding:getCssVar(spacing,tight) 0;
+
+        @include m('tab-view') {
+            padding: getCssVar(spacing, tight) 0;
+        }
+
+        &+.#{bem(flow-drtab,tab-item)} {
+            margin-top: getCssVar(spacing, base);
+            ;
         }
     }
-    @include e('counter'){
-        font-size: getCssVar(font-size,regular);
+
+    @include e('counter') {
+        font-size: getCssVar(font-size, regular);
         text-align: center;
     }
-    .#{bem('flow-drtab')}{
+
+    .#{bem('flow-drtab')} {
         background-color: inherit;
+    }
+
+    @include when('enable-anchor') {
+        display: flex;
+        gap: getCssVar(spacing, base);        
+        @include e('container') {
+            flex: 1;
+        }
+
+        @include e('anchor-bar') {
+            display: flex;
+            min-width: 200px;
+            padding: getCssVar(spacing, base) 0;
+            font-size: getCssVar(font-size, regular);
+            background-color: getCssVar(color, bg, 1);
+            border-radius: getCssVar(border-radius-medium);
+
+
+            @include when('topleft') {
+                align-items: start;
+            }
+
+            @include when('bottomleft') {
+                align-items: end;
+            }
+
+            @include when('topright') {
+                flex-direction: row-reverse;
+                align-items: start;
+            }
+
+            @include when('bottomright') {
+                flex-direction: row-reverse;
+                align-items: end;
+            }
+
+            @include when('middleleft') {
+                align-items: center;
+            }
+
+            @include when(middleright) {
+                flex-direction: row-reverse;
+                align-items: center;
+            }
+        }
+
+        @include e('anchor-items') {
+            width: 100%;
+            max-height: 100%;
+            overflow: auto;
+        }
+
+        @include e('anchor-item') {
+            width: 100%;
+            height: 32px;
+            padding: 0 getCssVar(spacing, base);
+            overflow: hidden;
+            line-height: 32px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+
+            &:hover {
+                color: getCssVar('color', 'primary');
+            }
+
+            @include when('active') {
+                position: relative;
+                color: getCssVar('color', 'primary');
+
+                &::before {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 4px;
+                    height: 100%;
+                    content: '';
+                    background-color: getCssVar('color', 'primary');
+                    border-radius: 2px;
+                }
+            }
+        }
+
+        @include when('left') {
+            flex-direction: row;
+            overflow: auto;
+
+            >.#{bem(flow-drtab,container)}{
+                --navbarwidth: 200px;
+
+                flex: 1 0;
+                width: calc(100% - var(--navbarwidth) - (2 * getCssVar(spacing, base)));
+                overflow: unset;
+            }
+
+            @include e('anchor-bar') {
+                position: sticky;
+                top: 0;
+            }
+
+            @include e('anchor-items') {
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
+        }
+
+        @include when(right) {
+            flex-direction: row-reverse;
+            overflow: auto;
+
+            >.#{bem(flow-drtab,container)}{
+                --navbarwidth: 200px;
+
+                flex: 1 0;
+                width: calc(100% - var(--navbarwidth) - (2 * getCssVar(spacing, base)));
+                overflow: unset;
+            }
+
+            @include e('anchor-bar') {
+                position: sticky;
+                top: 0;
+            }
+
+            @include e('anchor-items') {
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
+        }
     }
 }

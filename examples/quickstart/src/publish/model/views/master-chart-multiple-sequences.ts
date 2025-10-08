@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'chart_multiple_sequences',
   deviewId: '4d6dcec42f3450e10fca40893ab8f8ef',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -17,7 +18,6 @@ export default {
       id: 'engine',
     },
   ],
-  appViewMsgGroupId: 'chart_multiple_sequences',
   controls: [
     {
       searchButtonStyle: 'DEFAULT',
@@ -82,6 +82,7 @@ export default {
       },
       dechartSerieses: [
         {
+          caption: '柱状',
           catalogField: 'DATE',
           echartsType: 'bar',
           chartCoordinateSystemId: '0',
@@ -91,20 +92,21 @@ export default {
             chartYAxisId: '0',
             x: ['DATE'],
             y: ['QUANTITY'],
-            itemId: 'NAME',
-            itemName: 'NAME',
             type: 'XY',
             name: '坐标系编码',
             id: '0',
           },
-          seriesField: 'NAME',
           seriesLayoutBy: 'column',
           seriesType: 'bar',
           valueField: 'QUANTITY',
           enableChartDataSet: true,
+          userParam: {
+            'EC.label': '{"show":1}',
+          },
           id: 'bar_0',
         },
         {
+          caption: '折线',
           catalogField: 'DATE',
           echartsType: 'line',
           chartCoordinateSystemId: '0',
@@ -123,6 +125,9 @@ export default {
           valueField: 'QUANTITY',
           enableChartDataSet: true,
           index: 1,
+          userParam: {
+            'EC.label': '{"show":0}',
+          },
           id: 'line_1',
         },
       ],
@@ -148,15 +153,9 @@ export default {
               id: '0',
             },
             {
-              groupField: true,
               index: 1,
-              name: 'NAME',
-              id: '1',
-            },
-            {
-              index: 2,
               name: 'QUANTITY',
-              id: '2',
+              id: '1',
             },
           ],
           name: 'bar_0-DEFAULT',
@@ -235,6 +234,15 @@ export default {
       },
       name: 'chart',
       id: 'web.master.chart_multiple_sequences_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

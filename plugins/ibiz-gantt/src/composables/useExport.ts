@@ -8,13 +8,21 @@ import useParam from './useParam';
 import useToday from './useToday';
 import { baseUnit } from '@/utils/date';
 import useElement from './useElement';
+import useRoot from './useRoot';
 
 export default () => {
   const { isInDateRange } = useToday();
-  const { EmitNoDateError, EmitNodeExpand, EmitNodeCollapse } = useEvent();
+  const {
+    EmitNoDateError,
+    EmitNodeExpand,
+    EmitNodeCollapse,
+    EmitFullscreenChange,
+  } = useEvent();
   const { ganttHeader } = useGanttHeader();
   const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
-  const { ganttRef } = useElement();
+  const { tableHeaderRef, ganttHeaderRef, ganttBodyRef, ganttRef } =
+    useElement();
+  const { rootRef } = useRoot();
 
   /**
    * 跳转到某个日期
@@ -147,11 +155,30 @@ export default () => {
   const { $data, flattenData } = useData();
   const { $param } = useParam();
 
+  /**
+   * 设置单选，单选选中状态为通用参数（$param的selectItem字段）维护
+   * @param data
+   * @returns
+   */
   function setSelected(data: any) {
+    if (!data) $param.selectItem = null;
+
     const find = $data.flatData.find(d => d.isSame(data));
     if (!find) return null;
 
     $param.selectItem = find;
+  }
+
+  /**
+   * 设置多选，多选选中状态为行数据（RowItem的isChecked字段）维护
+   *
+   * @param {*} data
+   * @return {*}
+   */
+  function setChecked(data: any, checked = false) {
+    const find = $data.flatData.find(d => d.isSame(data));
+    if (!find) return null;
+    find.setChecked(checked);
   }
 
   function setExpand(data: any) {
@@ -208,19 +235,33 @@ export default () => {
     if ($param.fullScreen) {
       exitFullScreen();
     } else {
-      const element: any = document.querySelector('.xg-root');
-      if (element) {
-        elementFullscreen(element);
-      }
+      // 直接使用rootRef.value作为全屏元素
+      elementFullscreen(rootRef.value);
     }
+
+    // 取反的原因为该方法是在设置fullScreen的值之前执行
+    EmitFullscreenChange(!$param.fullScreen);
   }
+
+  /**
+   * 获取甘特图内部的所有Ref引用
+   */
+  const getElementRefs = () => ({
+    tableHeaderRef,
+    ganttHeaderRef,
+    ganttBodyRef,
+    ganttRef,
+    rootRef,
+  });
 
   return {
     setExpand,
     setCollapse,
     setSelected,
+    setChecked,
     jumpToDate,
     fullscreenChange,
     handleFullscreenChange,
+    getElementRefs,
   };
 };

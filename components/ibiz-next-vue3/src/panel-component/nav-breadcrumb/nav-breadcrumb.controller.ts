@@ -1,5 +1,6 @@
 /* eslint-disable array-callback-return */
 import {
+  AppMenuController,
   IAppMenuController,
   PanelItemController,
 } from '@ibiz-template/runtime';
@@ -17,9 +18,12 @@ import { BreadcrumbMsg, NavBreadcrumbState } from './nav-breadcrumb.state';
 import { NavBreadcrumbService } from './nav-breadcrumb.service';
 import {
   getAppFuncByViewName,
+  getAppIndexViewName,
   getCurViewName,
   getIndexBreadcrumb,
+  getMenuItemByTag,
   getMenuItemsByAppFunc,
+  getMenuTag,
   getViewInfoByViewStack,
 } from './nav-breadcrumb.util';
 import { NavPosIndexController } from '../nav-pos-index';
@@ -136,25 +140,35 @@ export class NavBreadcrumbController extends PanelItemController<IPanelRawItem> 
     }
     if (this.navMode === 'store') {
       const { currentRoute } = router;
+      const routePath: IRoutePath = route2routePath(currentRoute.value);
       const fullPath = currentRoute.value.fullPath;
       const viewName = getCurViewName(router);
+      const menuTag = getMenuTag(routePath.pathNodes);
       // 缓存模式：点击面包屑时或者浏览器路由返回，会存在缓存数据，此时需将缓存数据项后续数据删除
       const chacheItem = this.service.getItem({ fullPath, viewName });
+      const indexViewName = getAppIndexViewName(this.panel.context);
       if (chacheItem) {
         // 首页特殊处理
-        if (chacheItem.viewName === ibiz.hub.defaultAppIndexViewName) {
+        if (chacheItem.viewName === indexViewName) {
           this.service.setChache([
             { ...getIndexBreadcrumb(this.panel.context), fullPath },
           ]);
           this.resetBreadcrumbs();
           return;
         }
+        this.service.update({ ...chacheItem, fullPath });
         const removeItems = this.service.removeAfter(fullPath);
         removeItems.forEach(item => {
           this.navPos?.removeCache(item.fullPath);
         });
         this.resetBreadcrumbs();
+      } else if (this.state.menuTag !== menuTag) {
+        // 菜单标识变更时重置缓存
+        this.setBreadcrumbByRouter(router);
+      } else {
+        this.service.add({ viewName, fullPath, type: 'default' });
       }
+      this.state.menuTag = menuTag;
     }
   }
 
@@ -182,8 +196,8 @@ export class NavBreadcrumbController extends PanelItemController<IPanelRawItem> 
       return;
     }
     // 路由模式：路由跳转时只存放视图codename，具体视图信息此时更新，且datainfo也是此时添加
-    // 缓存模式：视图更新时，判断是否存在缓存数据项，存在则更新，不存在则添加
-    this.service.updateOrAdd({ fullPath, ...info });
+    // 缓存模式：视图更新时，判断是否存在缓存数据项，存在则更新
+    this.service.update({ fullPath, type: 'default', ...info });
     this.resetBreadcrumbs();
   }
 
@@ -201,19 +215,30 @@ export class NavBreadcrumbController extends PanelItemController<IPanelRawItem> 
    * @param {Router} router
    * @memberof NavBreadcrumbController
    */
-  protected setBreadcrumbByRouter(router: Router): void {
+  protected async setBreadcrumbByRouter(router: Router): Promise<void> {
     const { currentRoute } = router;
     const routePath: IRoutePath = route2routePath(currentRoute.value);
-    const items = routePath.pathNodes.map(
-      (node: IRoutePathNode, index: number) => {
-        const { appContext, pathNodes } = routePath;
+    const { appContext = {}, pathNodes } = routePath;
+    const menuTag = getMenuTag(pathNodes);
+    let hasMenuItem = false;
+    const menuData = await getMenuItemByTag(
+      menuTag,
+      this.appmenu!,
+      this.panel.context,
+    );
+    const calcPathNodes = routePath.pathNodes.map(
+      async (node: IRoutePathNode, index: number) => {
+        if (this.appmenu && menuData && menuData.viewName === node.viewName) {
+          hasMenuItem = true;
+        }
         const fullPath = routePath2string({
           appContext,
           pathNodes: pathNodes.slice(0, index + 1),
         });
-        const result = {
+        const result: BreadcrumbMsg = {
           viewName: node.viewName,
           fullPath,
+          type: 'default',
         };
         const chacheItem = this.service.getItem({ viewName: node.viewName });
         if (chacheItem) {
@@ -222,13 +247,29 @@ export class NavBreadcrumbController extends PanelItemController<IPanelRawItem> 
           }
           Object.assign(result, chacheItem);
         }
-        const viewInfo = getViewInfoByViewStack(node.viewName);
+        const viewInfo = getViewInfoByViewStack(
+          node.viewName,
+          this.panel.context,
+        );
         if (viewInfo) {
           Object.assign(result, reject(isNil, viewInfo));
         }
         return result;
       },
     );
+    const items = await Promise.all(calcPathNodes);
+    // 路由模式下，存在菜单标识且不存在菜单视图时添加菜单项
+    if (!hasMenuItem && menuData) {
+      this.state.menuTag = menuData.tag;
+      const item: BreadcrumbMsg = {
+        viewName: menuData.viewName,
+        caption: menuData.menuItem.caption,
+        fullPath: '',
+        type: 'menuItem',
+        menuTag: menuData.tag,
+      };
+      items.splice(1, 0, item);
+    }
     this.service.setChache(items);
     this.resetBreadcrumbs();
   }
@@ -264,6 +305,7 @@ export class NavBreadcrumbController extends PanelItemController<IPanelRawItem> 
           return {
             caption: item.caption,
             fullPath: '',
+            type: 'default',
             viewName: item.id!,
           };
         });
@@ -312,14 +354,13 @@ export class NavBreadcrumbController extends PanelItemController<IPanelRawItem> 
     if (this.appmenu) {
       this.appmenu.evt.on('onClick', async (data: IData) => {
         const { eventArg } = data;
-        const menuItem = this.appmenu!.allAppMenuItems.find(
-          x => x.id === eventArg,
+        const menuData = await getMenuItemByTag(
+          eventArg,
+          this.appmenu!,
+          this.panel.context,
         );
-        if (menuItem) {
-          const app = ibiz.hub.getApp(this.panel.context.srfappid);
-          const appFunc = app.getAppFunc(menuItem.appFuncId!);
-          const viewName = appFunc!.appViewId?.split('.').pop() || '';
-          const viewConfig = await ibiz.hub.config.view.get(viewName);
+        if (menuData) {
+          const { viewName, appFunc, viewConfig } = menuData;
           // 非分页打开不处理
           if (
             appFunc!.openMode !== 'INDEXVIEWTAB' ||
@@ -330,13 +371,14 @@ export class NavBreadcrumbController extends PanelItemController<IPanelRawItem> 
             return;
           }
           const chacheItem = this.service.getItem({ viewName });
-          const items = [];
+          const items: BreadcrumbMsg[] = [];
           if (chacheItem) {
             items.push(chacheItem);
           } else {
             items.push({
               viewName,
               fullPath: '',
+              type: 'default',
             });
           }
           items.unshift(getIndexBreadcrumb(this.panel.context));
@@ -362,5 +404,17 @@ export class NavBreadcrumbController extends PanelItemController<IPanelRawItem> 
       }, {});
     }
     Object.assign(this.rawItemParams, params);
+  }
+
+  /**
+   * @description 打开菜单项视图
+   * @param {IData} item
+   * @param {MouseEvent} event
+   * @memberof NavBreadcrumbController
+   */
+  openMenuItemView(item: IData, event: MouseEvent): void {
+    if (this.appmenu) {
+      (this.appmenu as AppMenuController).onClickMenuItem(item.menuTag, event);
+    }
   }
 }

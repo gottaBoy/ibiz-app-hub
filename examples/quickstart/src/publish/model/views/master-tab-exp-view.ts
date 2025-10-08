@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'tab_exp_view',
   deviewId: '38f9339d019047d58889ef30d33cc897',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -34,7 +35,7 @@ export default {
         },
         {
           caption: '分页3-主数据',
-          appViewId: 'web.master_grid_view',
+          appViewId: 'web.master_main_grid',
           id: 'master',
         },
       ],

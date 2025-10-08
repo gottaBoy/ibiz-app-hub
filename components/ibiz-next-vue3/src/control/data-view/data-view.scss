@@ -39,6 +39,11 @@ $control-dataview-group-item-content: (
     cursor: pointer;
   }
 
+  @include e(drag-icon) {
+    cursor: move;
+    visibility: hidden;
+  }
+  
   // 内容区样式
   @include e(content) {
     flex-grow: 1;
@@ -122,6 +127,9 @@ $control-dataview-group-item-content: (
 
   &:hover {
     background-color: getCssVar(control-dataview, hover-bg-color);
+    .#{bem(control-dataview, drag-icon)} {
+      visibility: visible;
+    }
   }
 
   @include e(new) {
@@ -152,6 +160,7 @@ $control-dataview-group-item-content: (
 }
 
 @include b(control-dataview-item-content) {
+  flex-grow: 1;
   @include set-component-css-var(control-dataview, $control-dataview);
 
   @include e(top) {

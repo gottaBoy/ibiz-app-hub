@@ -19,11 +19,31 @@ export const CalendarControl = defineComponent({
     VueHashCalendar,
   },
   props: {
+    /**
+     * @description 日历模型数据
+     */
     modelData: { type: Object as PropType<ISysCalendar>, required: true },
+    /**
+     * @description 应用上下文对象
+     */
     context: { type: Object as PropType<IContext>, required: true },
+    /**
+     * @description 视图参数对象
+     * @default {}
+     */
     params: { type: Object as PropType<IParams>, default: () => ({}) },
+    /**
+     * @description 部件适配器
+     */
     provider: { type: Object as PropType<IControlProvider> },
+    /**
+     * @description 部件激活模式，值为0：无激活，值为1：单击激活，值为2：双击激活
+     */
     mdctrlActiveMode: { type: Number, default: undefined },
+    /**
+     * @description 是否默认加载数据
+     * @default false
+     */
     loadDefault: { type: Boolean, default: false },
   },
   setup() {

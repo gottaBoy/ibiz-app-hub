@@ -11,64 +11,50 @@ import { PanelItemState } from '@ibiz-template/runtime';
  */
 export class PanelAppTitleState extends PanelItemState {
   /**
-   * 应用标题
-   *
-   * @author chitanda
-   * @date 2023-07-20 17:07:22
+   * @description 应用标题
+   * @exposedoc
    * @type {string}
    */
   caption: string = '';
 
   /**
-   * 应用标题(收缩时)
-   *
-   * @author chitanda
-   * @date 2023-07-20 17:07:22
+   * @description  应用标题(收缩时)
+   * @exposedoc
    * @type {string}
    */
   caption2: string = '';
 
   /**
-   * 应用子标题
-   *
-   * @author chitanda
-   * @date 2023-07-20 17:07:22
+   * @description 应用子标题
+   * @exposedoc
    * @type {string}
    */
   subCaption?: string = '';
 
   /**
-   * 应用子标题(收缩时)
-   *
-   * @author chitanda
-   * @date 2023-07-20 17:07:22
+   * @description 应用子标题(收缩时)
+   * @exposedoc
    * @type {string}
    */
   subCaption2?: string = '';
 
   /**
-   * 应用 logo 图片地址
-   *
-   * @author chitanda
-   * @date 2023-07-20 17:07:11
+   * @description 应用 logo 图片地址
+   * @exposedoc
    * @type {string}
    */
   icon: string = '';
 
   /**
-   * 应用 logo 图片2地址(收缩时)
-   *
-   * @author chitanda
-   * @date 2023-07-20 17:07:11
+   * @description 应用 logo 图片2地址(收缩时)
+   * @exposedoc
    * @type {string}
    */
   icon2: string = '';
 
   /**
-   * 是否为 svg 图标
-   *
-   * @author chitanda
-   * @date 2023-07-20 17:07:26
+   * @description 是否为 svg 图标
+   * @exposedoc
    * @type {boolean}
    */
   isSvg: boolean = false;

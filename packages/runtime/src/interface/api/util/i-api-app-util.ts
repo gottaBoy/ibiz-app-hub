@@ -2,11 +2,9 @@ import {
   IApiContext,
   IApiData,
   IApiParams,
-  IChatMessage,
+  IApiChatMessage,
 } from '@ibiz-template/core';
-import { IAuthResult } from '../../service';
-import { IControlController, IViewController } from '../../controller';
-import { IApiViewController } from '..';
+import { IApiAuthResult, IApiControlController, IApiViewController } from '..';
 
 /**
  * Ai聊天参数
@@ -60,18 +58,18 @@ export interface IApiAiChatParam {
   /**
    * 当前上下文对应的视图控制器
    *
-   * @type {IViewController}
+   * @type {IApiViewController}
    * @memberof IApiAiChatParam
    */
-  view: IViewController;
+  view: IApiViewController;
 
   /**
    * 当前部件控制器
    *
-   * @type {IControlController}
+   * @type {IApiControlController}
    * @memberof IApiAiChatParam
    */
-  ctrl?: IControlController;
+  ctrl?: IApiControlController;
 }
 
 /**
@@ -127,13 +125,13 @@ export interface IApiAppUtil {
    * @param {string} oldPwd
    * @param {string} newPwd
    * @param {IApiData} [opts]
-   * @return {*}  {Promise<IAuthResult>}
+   * @return {*}  {Promise<IApiAuthResult>}
    */
   changePwd(
     oldPwd: string,
     newPwd: string,
     opts?: IApiData,
-  ): Promise<IAuthResult>;
+  ): Promise<IApiAuthResult>;
 
   /**
    * 切换组织
@@ -195,10 +193,10 @@ export interface IApiAppUtil {
    * 打开AI聊天
    *
    * @param {IApiAiChatParam} params
-   * @return {*}  {Promise<IChatMessage[]>}
+   * @return {*}  {Promise<IApiChatMessage[]>}
    * @memberof IApiAppUtil
    */
-  openAiChat(params: IApiAiChatParam): Promise<IChatMessage[]>;
+  openAiChat(params: IApiAiChatParam): Promise<IApiChatMessage[]>;
 
   /**
    * @description 视图缓存中心

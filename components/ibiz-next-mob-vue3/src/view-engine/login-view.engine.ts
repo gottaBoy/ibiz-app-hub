@@ -4,6 +4,7 @@ import {
   ViewEngineBase,
   IAppLoginViewState,
   IAppLoginViewEvent,
+  IApiLoginViewCall,
 } from '@ibiz-template/runtime';
 import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router';
 import { IPanelField, IAppView } from '@ibiz/model-core';
@@ -56,12 +57,17 @@ export class LoginViewEngine extends ViewEngineBase {
     super.onDestroyed();
   }
 
-  async call(key: string, args: IData = {}): Promise<IData | null | undefined> {
+  async call(
+    key: keyof IApiLoginViewCall,
+    args: IData = {},
+  ): Promise<IData | null | undefined> {
     if (key === SysUIActionTag.LOGIN) {
       await this.login(args);
+      return null;
     }
     if (key === SysUIActionTag.CANCEL_CHANGES) {
       await this.cancelChanges();
+      return null;
     }
     return super.call(key, args);
   }

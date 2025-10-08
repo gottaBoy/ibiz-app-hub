@@ -9,6 +9,35 @@ $modal: (
 @include b(modal) {
   @include set-component-css-var(modal, $modal);
 
+  @include e('record') {
+    @include m('prev') {
+      position: absolute;
+      top: 50%;
+      left: -6px;
+      transform: translate(-100%, -50%);
+    }
+    @include m('next') {
+      position: absolute;
+      top: 50%;
+      right: -6px;
+      font-size: getCssVar('font-size', 'regular' );
+      transform: translate(100%, -50%);
+    }
+
+    .el-button {
+      height: auto;
+      padding: getCssVar('spacing', 'loose') getCssVar('spacing', 'tight');
+      margin: 0;
+
+      --el-button-bg-color: #{getCssVar(color, bg, 0)};
+      --el-button-text-color: #{getCssVar(color, text, 2)};
+      --el-button-hover-bg-color: #{getCssVar(color, bg, 1)};
+      --el-button-hover-text-color: #{getCssVar(color, text, 3)};
+      --el-button-active-bg-color: #{getCssVar(color, bg, 0)};
+      --el-button-active-text-color: #{getCssVar(color, text, 2)};
+    }
+  }
+
   &.el-dialog {
     overflow: visible;
   }

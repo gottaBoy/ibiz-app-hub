@@ -38,6 +38,12 @@ export const zhCn = {
           computeMoveMetaError: '计算目标位置和移动类型发生错误',
           unclassified: '未分类',
           today: '今天',
+          adjustmentsGroup: '当前部件不允许调整分组！',
+          noAllowReorder: '当前部件不允许调整次序！',
+          sortingProperties: '未配置排序属性',
+          invalidSortType: '排序属性不是数值类型',
+          logicOpendata: '缺少{itemType}_opendata的视图逻辑',
+          logicNewdata: '缺少{itemType}_newdata的视图逻辑',
         },
         editor: {
           editorNoConfigured: '编辑器类型[{editorType}]，未配置代码表',
@@ -59,7 +65,6 @@ export const zhCn = {
           noConfigured: '没有配置应用功能',
         },
         calendar: {
-          missingViewLogic: '缺少{itemType}_opendata的视图逻辑',
           noFoundModel: '未找到日历项模型',
         },
         chart: {
@@ -74,6 +79,10 @@ export const zhCn = {
           classificationNotArray: '配置的分类属性值不是一个数组',
           classificationNotString: '配置的分类属性值不是一个字符串',
           errorJson: 'JSON解析错误',
+          value: '值',
+          percent: '百分比',
+          serieGroup: '分组',
+          catalogField: '分类',
         },
         dataView: {
           noBehaviourGroup: '操作项没有配置界面行为组',
@@ -142,12 +151,8 @@ export const zhCn = {
           interfaceBehavior: '操作列界面行为组没有配置界面行为',
         },
         kanban: {
-          sortingProperties: '排序属性没配置',
           sortDirection: '排序方向没配置',
           groupedOn: '看板部件必须开启分组',
-          adjustmentsGroup: '当前看板不允许调整分组！',
-          noAllowReorder: '当前看板不允许调整次序！',
-          invalidSortType: '排序属性不是数值类型',
         },
         meditViewPanel: {
           DraftNew: '草稿--新建',
@@ -340,7 +345,7 @@ export const zhCn = {
       noImplemented: '获取应用全局变量没有实现',
     },
     hub: {
-      failedParse: '视图参数modalOption 解析失败：{error}',
+      failedParse: '视图参数 {paramsName} 解析失败：{error}',
       noExist: '视图[{id}]不存在',
     },
     logicScheduler: {
@@ -638,6 +643,7 @@ export const zhCn = {
       },
       fileUtil: {
         fileUploadFailed: '文件上传失败',
+        getDownloadTicketFailed: '获取下载凭证异常',
       },
       handlebars: {
         noInitHandlebars: 'handlebars未初始化',

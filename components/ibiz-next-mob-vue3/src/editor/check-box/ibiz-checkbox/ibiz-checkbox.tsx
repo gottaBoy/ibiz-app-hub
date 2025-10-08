@@ -8,6 +8,15 @@ import {
 import { CheckBoxEditorController } from '../check-box-editor.controller';
 import './ibiz-checkbox.scss';
 
+/**
+ * 选项框
+ * @primary
+ * @description 使用van-checkbox组件，用于选中或取消选项场景。支持编辑器类型包含：`选项框`
+ * @editorparams {name:selectValue,title:选中时抛出的值,parameterType:number,defaultvalue:1,description:选中时抛出的值}
+ * @editorparams {name:nullValue,title:取消选中时抛出的值,parameterType:number,defaultvalue:0,description:取消选中时抛出的值}
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizCheckbox = defineComponent({
   name: 'IBizCheckbox',
   props: getCheckboxProps<CheckBoxEditorController>(),

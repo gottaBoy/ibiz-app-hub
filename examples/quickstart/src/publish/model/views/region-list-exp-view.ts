@@ -49,8 +49,14 @@ export default {
   appViewMsgGroupId: 'list_exp_view_group',
   controls: [
     {
+      sysImage: {
+        cssClass: 'fa fa-cube',
+        glyph: 'xf1b2@FontAwesome',
+      },
+      title: '基础',
       xdataControlName: 'listexpbar_list',
       enableCounter: true,
+      enableSearch: true,
       showTitleBar: true,
       autoLoad: true,
       showBusyIndicator: true,
@@ -366,6 +372,37 @@ export default {
           name: 'listexpbar_list',
           id: 'web.region.list_exp_view_list',
         },
+        {
+          detoolbarItems: [
+            {
+              actionLevel: 100,
+              noPrivDisplayMode: 2,
+              uiactionId: 'gridview_refreshaction',
+              valid: true,
+              caption: '刷新',
+              itemType: 'DEUIACTION',
+              sysImage: {
+                cssClass: 'fa fa-refresh',
+                glyph: 'xf021@FontAwesome',
+              },
+              tooltip: '刷新',
+              showCaption: true,
+              showIcon: true,
+              id: 'deuiaction1',
+            },
+          ],
+          codeName: 'list_exp_view_listexpbar_toolbar',
+          controlType: 'TOOLBAR',
+          logicName: '表格导航栏工具栏',
+          appDataEntityId: 'web.region',
+          controlParam: {
+            id: 'listexpbar_toolbar',
+          },
+          modelId: '9de45d3ce936ab235f997062e3344b88',
+          modelType: 'PSDETOOLBAR',
+          name: 'listexpbar_toolbar',
+          id: 'list_exp_view_listexpbar_toolbar',
+        },
       ],
       codeName: 'list_exp_view_listexpbar',
       controlType: 'LISTEXPBAR',
@@ -373,6 +410,7 @@ export default {
       controlParam: {
         id: 'listexpbar',
       },
+      width: 750,
       modelId: 'bebf4a0caa4a820193987a252c470499_listexpbar',
       modelType: 'PSEXPBAR',
       name: 'listexpbar',

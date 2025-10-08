@@ -1,7 +1,22 @@
 import { createUUID } from 'qx-util';
 import { onUnmounted, Ref, ref, watch } from 'vue';
 import { listenJSEvent } from '@ibiz-template/core';
+import { ControlController } from '@ibiz-template/runtime';
 import { useUIStore } from '../../util';
+
+/**
+ * @description 管理部件popover层级
+ * @export
+ * @param {ControlController} controller
+ */
+export function useControlPopoverzIndex(controller: ControlController): void {
+  const { zIndex } = useUIStore();
+  controller.state.zIndex = zIndex.increment();
+
+  onUnmounted(() => {
+    zIndex.decrement();
+  });
+}
 
 /**
  * 手动管理popover层级

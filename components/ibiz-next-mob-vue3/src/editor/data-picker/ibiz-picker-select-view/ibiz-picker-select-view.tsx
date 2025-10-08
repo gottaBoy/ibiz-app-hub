@@ -9,6 +9,14 @@ import './ibiz-picker-select-view.scss';
 import { clone } from 'ramda';
 import { PickerEditorController } from '../picker-editor.controller';
 
+/**
+ * 移动端数据选择（下拉视图）
+ * @primary
+ * @description  使用van-field组件和van-button组件，点击按钮后弹出一个模态来呈现配置的选择视图。支持编辑器类型包含：`移动端数据选择（下拉视图）`
+ * @editorparams {name:multiple,title:多选,description:是否多选,parameterType:boolean,default:true}
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizPickerSelectView = defineComponent({
   name: 'IBizPickerSelectView',
   props: getDataPickerProps<PickerEditorController>(),

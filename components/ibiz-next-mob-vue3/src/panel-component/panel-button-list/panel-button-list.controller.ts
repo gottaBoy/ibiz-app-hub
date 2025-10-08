@@ -29,9 +29,8 @@ export class PanelButtonListController extends PanelItemController<IPanelButtonL
   }
 
   /**
-   * 父容器数据对象数据
-   * @author lxm
-   * @date 2023-07-15 01:33:58
+   * @description 父容器数据对象数据
+   * @exposedoc
    * @readonly
    * @type {IData}
    */
@@ -152,8 +151,8 @@ export class PanelButtonListController extends PanelItemController<IPanelButtonL
   }
 
   /**
-   * 处理按钮点击
-   *
+   * @description 处理按钮点击
+   * @exposedoc
    * @param {string} id
    * @param {MouseEvent} [event]
    * @return {*}  {Promise<void>}

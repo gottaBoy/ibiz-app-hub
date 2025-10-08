@@ -50,4 +50,11 @@ export interface IModalOptions {
    * @type {boolean}
    */
   isRouteModal?: boolean;
+
+  /**
+   * @description 是否开启数据切换指示器
+   * @type {boolean}
+   * @memberof IModalOptions
+   */
+  openIndicator?: boolean;
 }

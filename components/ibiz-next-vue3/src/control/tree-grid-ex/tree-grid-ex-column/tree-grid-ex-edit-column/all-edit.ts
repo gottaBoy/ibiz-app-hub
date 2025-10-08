@@ -43,7 +43,10 @@ export function useAllEdit(
   });
 
   const onBlur = (): void => {
-    c.treeGrid.save(props.row.data);
+    // 失焦保存模式时，触发保存
+    if (c.treeGrid.editSaveMode === 'cell-blur') {
+      c.treeGrid.save(props.row.data);
+    }
   };
 
   const gridEditItemProps = reactive({

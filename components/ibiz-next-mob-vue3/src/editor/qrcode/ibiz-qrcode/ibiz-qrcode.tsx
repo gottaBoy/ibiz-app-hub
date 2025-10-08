@@ -8,6 +8,13 @@ import { isNil } from 'ramda';
 import { QrcodeEditorController } from '../qrcode-editor.controller';
 import './ibiz-qrcode.scss';
 
+/**
+ * 移动端二维码阅读器
+ * @primary
+ * @description 支持将指定的值转换为二维码图片。支持编辑器类型包含：`移动端二维码阅读器`
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter | change | focus | blur
+ */
 export const IBizQrcode = defineComponent({
   name: 'IBizQrcode',
   props: getRawProps<QrcodeEditorController>(),

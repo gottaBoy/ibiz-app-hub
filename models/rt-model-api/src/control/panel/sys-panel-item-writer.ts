@@ -15,6 +15,8 @@ export class SysPanelItemWriter extends ModelObjectWriter {
     _.w(d, 'caption', s);
     _.w(d, 'contentHeight', s, '', 0.0);
     _.w(d, 'contentWidth', s, '', 0.0);
+    _.w(d, 'counterId', s);
+    _.w(d, 'counterMode', s, '', 0);
     _.w(d, 'cssStyle', s);
     _.w(d, 'dynaClass', s);
     _.w(d, 'height', s, '', 0.0);
@@ -23,6 +25,7 @@ export class SysPanelItemWriter extends ModelObjectWriter {
     _.w(d, 'labelCssStyle', s);
     _.w(d, 'labelDynaClass', s);
     _.v(d, 'labelSysCss', c.s('res.SysCss[]', s, 'getLabelPSSysCss'));
+    _.x(d, 'appCounterRefId', s, 'getPSAppCounterRef');
     _.v(
       d,
       'controlAttributes',

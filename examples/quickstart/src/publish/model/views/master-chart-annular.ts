@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Chart_annular',
   deviewId: '544463f120088545ef60e215720825b2',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -17,7 +18,6 @@ export default {
       id: 'engine',
     },
   ],
-  appViewMsgGroupId: 'chart_annular',
   controls: [
     {
       searchButtonStyle: 'DEFAULT',
@@ -68,7 +68,7 @@ export default {
         id: '0',
       },
       dechartLegend: {
-        legendPos: 'BOTTOM',
+        legendPos: 'LEFT',
         showLegend: true,
         id: '0',
       },
@@ -100,7 +100,6 @@ export default {
       ],
       dechartTitle: {
         title: '环形图',
-        showTitle: true,
         id: '0',
       },
       chartDataSetGroups: [
@@ -140,7 +139,7 @@ export default {
       showBusyIndicator: true,
       codeName: 'master_chart_annular_chart',
       controlType: 'CHART',
-      height: 300,
+      height: 400,
       logicName: 'Chart4',
       appDataEntityId: 'web.master',
       controlParam: {
@@ -149,17 +148,21 @@ export default {
       modelId: '7c1245be58eb28bf378791684f62c4fc',
       modelType: 'PSDECHART',
       userParam: {
-        'EC.emphasis':
-          '{"show":true,"itemStyle":{"opacity":0.8,"borderWidth":6,"borderColor":""},"focus":"self","scale":true,"shadowBlur":10,"shadowOffsetX":0,"shadowColor":"rgba(0,0,0,0.5)"}',
-        'EC.title':
-          '{"text":"","left":"center","top":"center","textStyle":{"fontSize":"18px"}}',
-        'EC.legend':
-          '{"left":"center","bottom":0,"orient":"horizontal","icon":"circle","type":"plain"}',
+        'EC.legend': '{"type":"plain"}',
         'EC.color':
           '["#5470c6","#91cc75","#fac858","#ee6666","#73c0de","#3ba272","#fc8452","#9a60b4","#ea7ccc","#5470c6","#91cc75"]',
       },
       name: 'chart',
       id: 'web.master.master_chart_annular_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

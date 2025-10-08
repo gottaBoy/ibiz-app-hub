@@ -58,8 +58,17 @@ $mpicker: (
   }
 
   @include e(action-item) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: getCssVar(color, link);
-    text-align: center;
+    @include m(caption) {
+      margin-left: getCssVar(spacing, extra-tight);
+    }
+    @include when(disabled) {
+      color: getCssVar(color, disabled-text);
+      cursor: not-allowed;
+    }
   }
 
   @include e(empty) {

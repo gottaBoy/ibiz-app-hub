@@ -67,10 +67,13 @@ export const PanelContainer = defineComponent({
 
     // 动态tooltip
     if (attrs && attrs.dynamictooltip) {
+      const attributes = { ...attrs.dynamictooltip };
+      delete attributes.content;
       return (
         <el-tooltip
           placement='right'
           popper-class={this.ns.e('dynamic-tooltip')}
+          {...attributes}
         >
           {{
             default: () => {
@@ -95,7 +98,7 @@ export const PanelContainer = defineComponent({
               return (
                 <div
                   class={this.ns.e('dynamic-tooltip-content')}
-                  v-html={attrs.dynamictooltip}
+                  v-html={attrs.dynamictooltip.content}
                 ></div>
               );
             },

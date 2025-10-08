@@ -8,12 +8,34 @@ import './tree-exp-bar.scss';
 export const TreeExpBarControl = defineComponent({
   name: 'IBizTreeExpBarControl',
   props: {
+    /**
+     * @description 树导航栏模型数据
+     */
     modelData: { type: Object as PropType<ITreeExpBar>, required: true },
+    /**
+     * @description 应用上下文对象
+     */
     context: { type: Object as PropType<IContext>, required: true },
+    /**
+     * @description 视图参数对象
+     */
     params: { type: Object as PropType<IParams>, default: () => ({}) },
+    /**
+     * @description 部件适配器
+     */
     provider: { type: Object as PropType<IControlProvider> },
+    /**
+     * @description 导航数据
+     */
     srfnav: { type: String, required: false },
+    /**
+     * @description 是否不需要导航视图
+     */
     noNeedNavView: { type: Boolean, required: false },
+    /**
+     * @description 是否默认加载数据
+     * @default true
+     */
     loadDefault: { type: Boolean, default: true },
   },
   setup() {

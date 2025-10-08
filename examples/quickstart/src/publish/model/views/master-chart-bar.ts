@@ -3,6 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'Chart_bar',
   deviewId: 'd8bebe21ca2fa5f8fb7471eabde2d23b',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -17,7 +18,6 @@ export default {
       id: 'engine',
     },
   ],
-  appViewMsgGroupId: 'chart_bar',
   controls: [
     {
       searchButtonStyle: 'DEFAULT',
@@ -82,26 +82,28 @@ export default {
       },
       dechartSerieses: [
         {
-          catalogField: 'NAME',
+          caption: '柱状',
+          catalogField: 'TYPE',
           echartsType: 'bar',
           chartCoordinateSystemId: '0',
           chartDataSetId: '0',
           chartSeriesEncode: {
             chartXAxisId: '0',
             chartYAxisId: '0',
-            x: ['NAME'],
+            x: ['TYPE'],
             y: ['QUANTITY'],
-            itemId: 'NAME',
-            itemName: 'NAME',
             type: 'XY',
             name: '坐标系编码',
             id: '0',
           },
-          seriesField: 'NAME',
           seriesLayoutBy: 'column',
           seriesType: 'bar',
           valueField: 'QUANTITY',
           enableChartDataSet: true,
+          userParam: {
+            'EC.itemStyle': '{"borderWidth":60}',
+            'EC.lineStyle': '{"width":60}',
+          },
           id: 'bar_0',
         },
       ],
@@ -123,7 +125,7 @@ export default {
           chartDataSetFields: [
             {
               groupField: true,
-              name: 'NAME',
+              name: 'TYPE',
               id: '0',
             },
             {
@@ -177,7 +179,7 @@ export default {
       showBusyIndicator: true,
       codeName: 'master_chart_bar_chart',
       controlType: 'CHART',
-      height: 300,
+      height: 400,
       logicName: 'Chart5',
       appDataEntityId: 'web.master',
       controlParam: {
@@ -191,6 +193,15 @@ export default {
       },
       name: 'chart',
       id: 'web.master.master_chart_bar_chart',
+    },
+    {
+      groupMode: 'SINGLE',
+      controlType: 'SEARCHBAR',
+      appDataEntityId: 'web.master',
+      controlParam: {
+        id: 'searchbar',
+      },
+      id: 'searchbar',
     },
     {
       capLanguageRes: {

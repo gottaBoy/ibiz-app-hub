@@ -9,6 +9,13 @@ import { debounce, isEmpty } from 'lodash-es';
 import { PickerEditorController } from '../picker-editor.controller';
 import { usePopstateListener } from '../../../util';
 
+/**
+ * 移动端数据选择
+ * @primary
+ * @description  使用van-field组件和van-popup组件，用于在弹出列表中选择单项数据的场景。支持编辑器类型包含：`移动端数据选择`
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizPicker = defineComponent({
   name: 'IBizPicker',
   props: getDataPickerProps<PickerEditorController>(),

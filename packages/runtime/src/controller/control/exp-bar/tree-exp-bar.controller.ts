@@ -1,13 +1,13 @@
 import { RuntimeError, RuntimeModelError } from '@ibiz-template/core';
 import { IDETree, IDETreeNode, ITreeExpBar } from '@ibiz/model-core';
 import {
+  ITreeEvent,
+  INavViewMsg,
+  ITreeNodeData,
+  ITreeController,
   ITreeExpBarState,
   ITreeExpBarEvent,
   ITreeExpBarController,
-  ITreeController,
-  ITreeEvent,
-  ITreeNodeData,
-  INavViewMsg,
 } from '../../../interface';
 import { ExpBarControlController } from './exp-bar.controller';
 
@@ -162,17 +162,7 @@ export class TreeExpBarController
       // 需要导航视图的时候，返回第一个配置了导航视图的节点数据
       return this.navNodeModelIds.includes(node._nodeId);
     });
-    if (!data) {
-      // 导航视图传空让导航占位绘制空界面
-      this.state.srfnav = '';
-      this._evt.emit('onNavViewChange', {
-        navViewMsg: {
-          key: '',
-          isCache: this.isCache,
-        },
-      });
-      return;
-    }
+    if (!data) return this.clearNavigation();
     // 默认选中并激活第一项
     this.xDataController.setActive(data);
     this.xDataController.setSelection([data]);
@@ -214,15 +204,7 @@ export class TreeExpBarController
         this.xDataController.setActive(data);
         this.xDataController.setSelection([data]);
       } else {
-        this.navStack = [];
-        this.xDataController.setSelection([]);
-        this.state.srfnav = '';
-        this._evt.emit('onNavViewChange', {
-          navViewMsg: {
-            key: '',
-            isCache: this.isCache,
-          },
-        });
+        this.clearNavigation();
       }
     }
   }

@@ -9,7 +9,7 @@ import './top-side-menu.scss';
  * 头部菜单
  * @primary
  * @description 首页视图扩展菜单头部菜单
- * @panelitemparams {name:rendermode,parameterType:'BUTTON' | 'MENU',defaultvalue:BUTTON,description:菜单项绘制模式，其中BUTTON表示按照按钮形态绘制（按钮形态目前仅支持一层）、MENU表示按照菜单形态绘制}
+ * @panelitemparams {name:rendermode,parameterType:'BUTTON' | 'MENU',defaultvalue:'BUTTON',description:菜单项绘制模式，其中BUTTON表示按照按钮形态绘制、MENU表示按照菜单形态绘制}
  * @primary
  */
 export const TopSideMenu = defineComponent({

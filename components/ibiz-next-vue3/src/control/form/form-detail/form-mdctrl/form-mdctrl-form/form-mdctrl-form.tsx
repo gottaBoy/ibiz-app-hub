@@ -87,7 +87,7 @@ export const FormMDCtrlForm = defineComponent({
         onRemoveClick={(item: IData) => this.controller.remove(item.id)}
       >
         {{
-          item: ({ data }: { data: IData }) => {
+          item: ({ data, index }: { data: IData; index: number }) => {
             if (!formProvider) {
               return (
                 <div>
@@ -99,6 +99,7 @@ export const FormMDCtrlForm = defineComponent({
               class: this.ns.be('item', 'form'),
               key: data.id,
               modelData: model.contentControl!,
+              mdCtrlFormIndex: index,
               context: data.context,
               params: data.params,
               onCreated: (event: EventBase) => {

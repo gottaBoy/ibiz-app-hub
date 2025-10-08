@@ -61,6 +61,11 @@ $form-tab-panel: (
       padding: getCssVar(spacing, extra-tight);
       font-size: getCssVar(font-size,small);
       background-color: getCssVar(color, danger);
+
+      &.is-fixed {
+        top: getCssVar('spacing', 'super-tight');
+        right: 0;
+      }
     }
   }
   

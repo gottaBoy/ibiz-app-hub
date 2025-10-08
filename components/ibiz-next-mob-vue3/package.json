@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/mob-vue3-components",
-  "version": "0.0.55",
+  "version": "0.7.41-alpha.10",
   "description": "移动端组件库(vue3)",
   "main": "lib/index.cjs",
   "module": "es/index.mjs",
@@ -73,7 +73,7 @@
     "@ibiz-template/runtime": "^0.7.0",
     "@ibiz-template/theme": "^0.7.0",
     "@ibiz-template/vue3-util": "^0.7.0",
-    "@ibiz/model-core": "^0.1.68",
+    "@ibiz/model-core": "^0.1.81",
     "async-validator": "^4.2.5",
     "dayjs": "^1.11.9",
     "echarts": "^5.4.3",

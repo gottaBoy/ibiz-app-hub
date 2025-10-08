@@ -1,5 +1,6 @@
 import {
   IApiGanttNodeData,
+  IApiGanttNodeLinkData,
   IApiGanttState,
   IApiGanttStyle,
 } from '../../../api';
@@ -15,25 +16,25 @@ import { ITreeNodeData } from './i-tree.state';
  */
 export interface IGanttState extends ITreeGridExState, IApiGanttState {
   /**
-   * @description 树节点集合
-   * @type {IGanttState[]}
+   * @description 甘特图节点集合
+   * @type {IGanttNodeData[]}
    * @memberof IGanttState
    */
-  rootNodes: ITreeNodeData[];
+  rootNodes: IGanttNodeData[];
 
   /**
-   * @description 树节点集合
-   * @type {ITreeNodeData[]}
+   * @description 甘特图节点数据
+   * @type {IGanttNodeData[]}
    * @memberof IGanttState
    */
-  items: ITreeNodeData[];
+  items: IGanttNodeData[];
 
   /**
    * @description 选中节点集合
-   * @type {ITreeNodeData[]}
+   * @type {IGanttNodeData[]}
    * @memberof IGanttState
    */
-  selectedData: ITreeNodeData[];
+  selectedData: IGanttNodeData[];
 
   /**
    * @description 必须显示的列名称
@@ -84,3 +85,11 @@ export interface IGanttNodeData extends ITreeNodeData, IApiGanttNodeData {
    */
   _snDataItemValue: string;
 }
+
+/**
+ * @description 甘特图节点链接数据
+ * @export
+ * @interface IGanttNodeLinkData
+ * @extends {IApiGanttNodeLinkData}
+ */
+export interface IGanttNodeLinkData extends IApiGanttNodeLinkData {}

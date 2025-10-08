@@ -4,6 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'chart',
   deviewId: '3774628b5cc0b4121a1682558a946e55',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -23,79 +24,54 @@ export default {
     {
       dedrtabPages: [
         {
-          caption: '基础',
-          appViewId: 'web.master_chart_base',
-          id: 'base',
+          caption: '基础序列',
+          appViewId: 'web.master_base_chart_series',
+          id: 'base_series',
         },
         {
-          caption: '折线图',
-          appViewId: 'web.master_chart_line',
-          id: 'line',
+          caption: '水平模式图表',
+          appViewId: 'web.master_horizontal_chart',
+          id: 'horizontal',
         },
         {
-          caption: '饼图',
-          appViewId: 'web.master_chart_pie',
-          id: 'pie',
-        },
-        {
-          caption: '环形图',
-          appViewId: 'web.master_chart_annular',
-          id: 'doughnut',
-        },
-        {
-          caption: '柱状图',
-          appViewId: 'web.master_chart_bar',
-          id: 'bar',
-        },
-        {
-          caption: '分组柱状图',
-          appViewId: 'web.master_chart_groupbar',
-          id: 'grouped_bar',
-        },
-        {
-          caption: '堆叠柱状图',
-          appViewId: 'web.master_chart_stacked_column',
-          id: 'stacked_bar',
-        },
-        {
-          caption: '漏斗图',
-          appViewId: 'web.master_chart_funnel_plot',
-          id: 'funnel',
-        },
-        {
-          caption: '区域图',
-          appViewId: 'web.master_chart_regional',
-          id: 'area',
-        },
-        {
-          caption: 'K线图',
-          appViewId: 'web.master_chart_candlestick',
-          id: 'candlestick',
-        },
-        {
-          caption: '雷达图',
-          appViewId: 'web.master_chart_radar',
-          id: 'radar',
-        },
-        {
-          caption: '仪表图',
+          caption: '仪表盘',
           appViewId: 'web.master_chart_instrument',
           id: 'gauge',
         },
         {
-          caption: '散点图',
-          appViewId: 'web.master_chart_scatter',
-          id: 'scatter',
+          caption: '扩展参数',
+          appViewId: 'web.master_chart_extend',
+          id: 'extend',
         },
         {
-          caption: '地图',
-          appViewId: 'web.master_chart_map',
-          id: 'map',
+          caption: '图表分组',
+          appViewId: 'web.master_chart_group_mode_tab_exp_view',
+          id: 'group',
+        },
+        {
+          caption: '日期分组补全',
+          appViewId: 'web.master_completion_date_chart',
+          id: 'completiondate',
+        },
+        {
+          caption: '数据表格',
+          appViewId: 'web.master_chart_grid_tab_exp_view',
+          id: 'grid',
         },
         {
           caption: '多序列',
           appViewId: 'web.master_chart_multiple_sequences',
           id: 'multiple_sequences',
+        },
+        {
+          caption: '内置导航',
+          appViewId: 'web.master_chart_nav_exp',
+          id: 'nav',
+        },
+        {
+          caption: '事件及调用',
+          appViewId: 'web.master_chart_event_tab',
+          id: 'event',
         },
       ],
       dataRelationTag: 'chart_DR',

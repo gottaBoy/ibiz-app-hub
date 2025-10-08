@@ -6,6 +6,23 @@
    --ibiz-font-size-regular: 28px;
    --ibiz-editor-default-text-color:#FFFFFFFF; 
 }
+    .pc-index-style .ibiz-panel-app-header--app_header2 {
+  overflow: auto;
+  background-color: var(--ibiz-color-primary);
+}
+.pc-index-style .ibiz-panel-app-header--app_header2 .ibiz-panel-app-title__logo svg {
+  height: 100%;
+  overflow: visible;
+}
+.pc-index-style .ibiz-panel-app-header--app_header2 .ibiz-panel-app-title__logo #app-caption {
+  font-size: 36px;
+  transform: translate(-36px, 9px);
+}
+.pc-index-style .ibiz-panel-app-header--app_header2 .el-button[data-id='gitee'] svg {
+  width: 24px;
+  height: 24px;
+}
+
     .text-align-center{
       text-align:center
     }

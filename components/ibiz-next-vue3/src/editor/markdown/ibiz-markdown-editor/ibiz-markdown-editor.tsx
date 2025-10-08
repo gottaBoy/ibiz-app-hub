@@ -27,6 +27,11 @@ import './ibiz-markdown-editor.scss';
  * @primary
  * @editorparams {"name":"customtheme","parameterType":"'light' | 'dark'","description":"设置Markdown主题，未配置时跟随应用主题"}
  * @editorparams {"name":"readonly","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否为只读态"}
+ * @editorparams {"name":"uploadparams","parameterType":"string","description":"上传参数，图片或文件上传时，用于计算上传路径"}
+ * @editorparams {"name":"exportparams","parameterType":"string","description":"下载参数，图片或文件下载时，用于计算下载路径"}
+ * @editorparams {"name":"osscat","parameterType":"string","description":"用于计算上传和下载路径的OSS参数"}
+ * @editorparams {"name":"appentitytag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所属实体。该参数值会作为验证下载权限的依据。配置格式为（应用代码名称.实体代码名称），示例：web.master"}
+ * @editorparams {"name":"datafieldtag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所关联的数据属性。完成配置后，将自动从容器数据（涵盖表单数据、表格行数据、面板数据）、上下文环境以及视图参数中获取该属性的实际值，将其作为验证下载权限的依据"}
  * @ignoreprops autoFocus | overflowMode
  * @ignoreemits blur | focus | enter | infoTextChange
  */
@@ -52,9 +57,6 @@ const IBizMarkDown: any = defineComponent({
 
     // 上传文件路径
     const uploadUrl: Ref<string> = ref('');
-
-    // 下载文件路径
-    const downloadUrl: Ref<string> = ref('');
 
     // 自定义主题
     const customTheme =
@@ -84,14 +86,17 @@ const IBizMarkDown: any = defineComponent({
       () => props.data,
       newVal => {
         if (newVal && c) {
+          const editorParams = { ...c.editorParams };
+          if (editorParams.uploadparams) {
+            editorParams.uploadParams = JSON.parse(editorParams.uploadparams);
+          }
           const urls = ibiz.util.file.calcFileUpDownUrl(
             c.context,
             c.params,
             newVal,
-            c.editorParams,
+            editorParams,
           );
           uploadUrl.value = urls.uploadUrl;
-          downloadUrl.value = urls.downloadUrl;
         }
       },
       { immediate: true, deep: true },
@@ -100,6 +105,32 @@ const IBizMarkDown: any = defineComponent({
     // markdown Ref
     const markDownBox = ref();
 
+    /**
+     * @description 获取下载路径,若业务数据中存在folder，则以业务数据中folder作为目录
+     * @param {IData} data
+     * @param {IData} file
+     * @returns {*}  {string}
+     */
+    const getDownloadUrl = (data: IData, file: IData): string => {
+      if (!c) {
+        return '';
+      }
+      const editorParams = { ...c.editorParams };
+      if (editorParams.exportparams) {
+        editorParams.exportParams = JSON.parse(editorParams.exportparams);
+      }
+      if (file && file.folder) {
+        editorParams.osscat = file.folder;
+      }
+      const urls = ibiz.util.file.calcFileUpDownUrl(
+        c.context,
+        c.params,
+        data,
+        editorParams,
+      );
+      return urls.downloadUrl;
+    };
+
     // 自定义图片上传
     const fileUpload = async (file: Blob, callback: (_url: string) => void) => {
       const data = await ibiz.util.file.fileUpload(
@@ -107,8 +138,23 @@ const IBizMarkDown: any = defineComponent({
         file,
         headers.value,
       );
-      const url = downloadUrl.value.replace('%fileId%', data.fileid);
-      callback(url);
+      const downloadUrl = getDownloadUrl(props.data || {}, data.fileid);
+      let url = downloadUrl.replace('%fileId%', data.fileid);
+      if (ibiz.config.common.enableDownloadTicket && c) {
+        const downloadTicket = await ibiz.util.file.getDownloadTicket(
+          c.context,
+          c.params,
+          props.data || {},
+          { fileId: data.fileid },
+          c.downloadTicketParams,
+        );
+        if (downloadTicket && downloadTicket.ticket) {
+          url = downloadUrl.replace('%fileId%', downloadTicket.ticket);
+          callback(url);
+        }
+      } else {
+        callback(url);
+      }
     };
 
     // 获取渲染后html内容

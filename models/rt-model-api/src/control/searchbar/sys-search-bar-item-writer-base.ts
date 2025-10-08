@@ -13,6 +13,8 @@ export class SysSearchBarItemWriterBase extends ModelObjectWriter {
       c.s('res.LanguageRes[]', s, 'getCapPSLanguageRes'),
     );
     _.w(d, 'caption', s);
+    _.w(d, 'counterId', s);
+    _.w(d, 'counterMode', s, '', 0);
     _.w(d, 'cssStyle', s);
     _.w(d, 'data', s);
     _.w(d, 'dynaClass', s);
@@ -20,6 +22,7 @@ export class SysSearchBarItemWriterBase extends ModelObjectWriter {
     _.w(d, 'labelCssStyle', s);
     _.w(d, 'labelDynaClass', s);
     _.v(d, 'labelSysCss', c.s('res.SysCss[]', s, 'getLabelPSSysCss'));
+    _.x(d, 'appCounterRefId', s, 'getPSAppCounterRef');
     _.x(d, 'appDEFieldId', s, 'getPSAppDEField');
     _.v(
       d,

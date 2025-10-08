@@ -640,7 +640,7 @@ export default {
   title: '分类编辑视图',
   viewStyle: 'DEFAULT',
   viewType: 'DEEDITVIEW',
-  width: 800,
+  width: 1300,
   enableDP: true,
   showCaptionBar: true,
   modelId: 'fb4a6793c7b146f8c82f50fbe094d125',

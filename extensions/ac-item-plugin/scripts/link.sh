@@ -1,0 +1,1 @@
+pnpm link --global '@ibiz-plugin-template/ac-item-plugin'

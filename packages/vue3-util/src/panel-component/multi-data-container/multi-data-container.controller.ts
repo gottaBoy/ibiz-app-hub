@@ -143,16 +143,23 @@ export class MultiDataContainerController
    * @return {*}  {IData}
    */
   protected computeNavParams(): IData {
+    const parentData = this.dataParent.data || {};
     const { navigateContexts, navigateParams } = this.model;
     const context = this.panel.context.clone();
     Object.assign(
       context,
-      convertNavData(navigateContexts, this.panel.params, this.panel.context),
+      convertNavData(
+        navigateContexts,
+        parentData,
+        this.panel.context,
+        this.panel.params,
+      ),
     );
     const params = convertNavData(
       navigateParams,
-      this.panel.params,
+      parentData,
       this.panel.context,
+      this.panel.params,
     );
     Object.assign(params, this.panel.params);
     return { context, params };

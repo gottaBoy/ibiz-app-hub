@@ -9,8 +9,8 @@ import { IAppDEMethod } from './iapp-demethod';
 export interface IAppDEAction extends IAppDEMethod {
   /**
    * 行为模式
-   * @description 值模式 [实体行为模式] {CREATE：创建数据、 READ：读取数据、 UPDATE：更新数据、 DELETE：删除数据、 CUSTOM：自定义操作、 GETDRAFT：获取草稿、 GETDRAFTFROM：获取草稿（指定源数据）、 UNKNOWN：未知操作、 MOVEORDER：移动位置、 CHECKKEY：检查主键、 SAVE：保存数据、 USER：用户自定义、 USER2：用户自定义2、 USER3：用户自定义3、 USER4：用户自定义4 }
-   * @type {( string | 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'CUSTOM' | 'GETDRAFT' | 'GETDRAFTFROM' | 'UNKNOWN' | 'MOVEORDER' | 'CHECKKEY' | 'SAVE' | 'USER' | 'USER2' | 'USER3' | 'USER4')}
+   * @description 值模式 [实体行为模式] {CREATE：创建数据、 READ：读取数据、 UPDATE：更新数据、 DELETE：删除数据、 CUSTOM：自定义操作、 GETDRAFT：获取草稿、 GETDRAFTFROM：获取草稿（指定源数据）、 UNKNOWN：未知操作、 MOVEORDER：移动位置、 CHECKKEY：检查主键、 SAVE：保存数据、 COPY：拷贝数据、 USER：用户自定义、 USER2：用户自定义2、 USER3：用户自定义3、 USER4：用户自定义4 }
+   * @type {( string | 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'CUSTOM' | 'GETDRAFT' | 'GETDRAFTFROM' | 'UNKNOWN' | 'MOVEORDER' | 'CHECKKEY' | 'SAVE' | 'COPY' | 'USER' | 'USER2' | 'USER3' | 'USER4')}
    * 来源  getActionMode
    */
   actionMode?:
@@ -26,6 +26,7 @@ export interface IAppDEAction extends IAppDEMethod {
     | 'MOVEORDER'
     | 'CHECKKEY'
     | 'SAVE'
+    | 'COPY'
     | 'USER'
     | 'USER2'
     | 'USER3'

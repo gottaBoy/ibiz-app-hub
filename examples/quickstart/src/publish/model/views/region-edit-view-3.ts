@@ -23,7 +23,7 @@ export default {
     {
       rawValue: true,
       key: 'REGION',
-      value: '86',
+      value: '510000',
       name: 'REGION',
       id: 'region',
     },

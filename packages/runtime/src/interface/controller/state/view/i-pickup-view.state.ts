@@ -8,4 +8,11 @@ import { IViewState } from './i-view.state';
  * @extends {IViewState}
  * @extends {IApiPickupViewState}
  */
-export interface IPickupViewState extends IViewState, IApiPickupViewState {}
+export interface IPickupViewState extends IViewState, IApiPickupViewState {
+  /**
+   * @description 选中数据
+   * @type {IData[]}
+   * @memberof IPickupViewState
+   */
+  selectedData: IData[];
+}

@@ -6,7 +6,7 @@ import { PanelItemController } from '@ibiz-template/runtime';
 /**
  * 视图消息
  * @primary
- * @description 使用el-alert组件，用于高亮显示视图消息，支持滚动显示。
+ * @description 使用el-alert组件，用于高亮显示消息位置为BODY视图内容区的视图消息。
  * @param {*}
  * @return {*}
  */

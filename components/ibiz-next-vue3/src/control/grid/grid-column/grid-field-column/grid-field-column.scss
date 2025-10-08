@@ -34,6 +34,8 @@ $grid-field-column: (
   }
 
   @include m(ellipsis) {
+    overflow: hidden;
+
     // 内部所有的span都呈现成省略号
     .#{bem('grid-field-column-text-container')} {
       min-width: 0;

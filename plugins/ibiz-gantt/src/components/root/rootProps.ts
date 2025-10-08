@@ -21,6 +21,19 @@ export default {
   },
 
   /**
+   * 链接数据配置项
+   */
+  linkProps: {
+    type: Object as PropType<{
+      fromKey: string;
+      toKey: string;
+      relationTypeKey: string;
+      linkKey: string;
+    }>,
+    default: Variables.default.linkProps,
+  },
+
+  /**
    * 数据索引的label，默认 id。应当确保它是唯一的，如果不是，则会引起渲染错误。
    */
   dataId: {

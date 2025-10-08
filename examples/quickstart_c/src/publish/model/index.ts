@@ -40,10 +40,6 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-child-appc-view-2').then(
         m => m.default as unknown as IAppView,
       );
-    case 'about_appc':
-      return import('./views/about-appc').then(
-        m => m.default as unknown as IAppView,
-      );
     case 'welcome_appc':
       return import('./views/welcome-appc').then(
         m => m.default as unknown as IAppView,
@@ -69,6 +65,8 @@ export async function getAppModel(): Promise<IApplication> {
   ibiz.hub.defaultAppIndexViewName = 'admin_appc';
   return import('./app/app').then(m => {
     const app = m.default as IData;
+    // 设置应用原始模型到hub中
+    ibiz.hub.setAppSourceModel(app.appId, app);
     app.appUtils?.forEach((util: IData) => {
       util.appId = app.appId;
     });

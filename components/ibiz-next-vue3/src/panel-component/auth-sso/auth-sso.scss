@@ -20,5 +20,13 @@ $auth-sso: (
             width: 100%;
             height: 100%;
         }
+
+        @include b(icon) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
     }
 }

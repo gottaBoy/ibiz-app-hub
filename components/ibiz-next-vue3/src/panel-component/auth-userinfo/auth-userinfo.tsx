@@ -3,11 +3,14 @@ import { useRouter } from 'vue-router';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import './auth-userinfo.scss';
 import { IPanelRawItem } from '@ibiz/model-core';
-import { PanelItemController, CTX } from '@ibiz-template/runtime';
+import { CTX } from '@ibiz-template/runtime';
+import { AuthUserinfoController } from './auth-userinfo.controller';
 
 /**
  * 用户信息
  * @description 展示用户的基本信息，提供登出功能。
+ * @panelitemparams {name:strictly,parameterType:boolean,defaultvalue:false,description:是否取消与首页菜单的关联，即菜单收缩时不会跟随改变，当用户信息未配置在首页左侧时应启用}
+ * @panelitemparams {name:readonly,parameterType:boolean,defaultvalue:false,description:是否只读}
  * @primary
  */
 export const AuthUserinfo = defineComponent({
@@ -24,7 +27,7 @@ export const AuthUserinfo = defineComponent({
      * @description 用户信息控件控制器
      */
     controller: {
-      type: PanelItemController,
+      type: AuthUserinfoController,
       required: true,
     },
   },
@@ -51,7 +54,16 @@ export const AuthUserinfo = defineComponent({
     };
 
     const isCollapse = computed(() => {
+      const { strictly } = c.rawItemParams;
+      if (strictly && strictly === 'true') {
+        return false;
+      }
       return (c.panel.view.state as IData).isCollapse;
+    });
+
+    const isReadonly = computed(() => {
+      const { readonly } = c.rawItemParams;
+      return readonly === 'true';
     });
 
     return {
@@ -63,6 +75,7 @@ export const AuthUserinfo = defineComponent({
       router,
       menuAlign,
       isCollapse,
+      isReadonly,
     };
   },
   render() {
@@ -75,9 +88,10 @@ export const AuthUserinfo = defineComponent({
           this.ns.is('left', this.menuAlign === 'LEFT'),
           this.ns.is('top', this.menuAlign === 'TOP'),
           this.ns.is('collapse', this.isCollapse),
+          this.ns.is('readonly', this.isReadonly),
         ]}
       >
-        <el-dropdown>
+        <el-dropdown disabled={this.isReadonly}>
           {{
             default: (): VNode => (
               <div

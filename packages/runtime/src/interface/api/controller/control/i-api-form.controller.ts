@@ -85,8 +85,8 @@ export interface IApiFormController<
   refresh(): Promise<void>;
 
   /**
-   * @description 切换折叠
-   * @param {{ tag: string; expand: boolean }} [params] tag: 需切换状态表单分组标识,不传则全展开，expand: 是否展开，不传则以当前状态为基准切换
+   * @description 切换折叠，其中tag表示操作指定分组标识，若不传则操作当前表单的所有分组展开状态，expand表示是否展开，若不传则以当前分组状态为基准切换
+   * @param {{ tag: string; expand: boolean }} [params]
    * @memberof IApiFormController
    */
   changeCollapse(params?: { tag?: string; expand?: boolean }): void;
@@ -149,4 +149,11 @@ export interface IApiFormController<
    * @memberof IApiFormController
    */
   getSimpleDataIndex(): number;
+
+  /**
+   * @description 获取多数据部件表单模式下当前表单索引
+   * @returns {*}  {number}
+   * @memberof IApiFormController
+   */
+  getMdCtrlFormIndex(): number;
 }

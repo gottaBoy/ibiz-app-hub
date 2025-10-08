@@ -1,13 +1,12 @@
 import {
-  mergeInLeft,
   ModelError,
+  mergeInLeft,
   RuntimeModelError,
 } from '@ibiz-template/core';
 import {
   IControlProvider,
-  IFormMDCtrlMDController,
-  IGridController,
   IMDControlController,
+  IFormMDCtrlMDController,
 } from '../../../../../interface';
 import { getControlProvider } from '../../../../../register';
 import { FormMDCtrlController } from './form-mdctrl.controller';
@@ -137,8 +136,8 @@ export class FormMDCtrlMDController
    * @memberof FormMDCtrlMDController
    */
   create(): void {
-    if (this.model.contentType === 'GRID') {
-      (this.mdController as IGridController).newRow();
+    if (this.mdController) {
+      this.mdController.newRow();
     } else {
       throw new ModelError(
         this.model,

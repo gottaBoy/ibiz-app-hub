@@ -1,6 +1,7 @@
 export default {
   deviewCodeName: 'Tree_base',
   deviewId: '6aefa50fa45c5c3472a9b2249b066bd6',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -158,6 +159,14 @@ export default {
       {
         detreeNodeRSs: [
           {
+            childDETreeNodeId: 'node',
+            parentDETreeNodeId: 'root',
+            parentValueLevel: 1,
+            searchMode: 3,
+            name: '默认根节点（ROOT）-静态节点1（node）',
+            id: '默认根节点（root）-静态节点1（node）',
+          },
+          {
             childDETreeNodeId: 'node_2',
             parentDETreeNodeId: 'node',
             parentValueLevel: 1,
@@ -170,21 +179,6 @@ export default {
             parentValueLevel: 1,
             searchMode: 3,
             id: '静态节点2（node_1）-静态节点2-1（node_4）',
-          },
-          {
-            childDETreeNodeId: 'node',
-            parentDETreeNodeId: 'root',
-            parentValueLevel: 1,
-            searchMode: 3,
-            name: '默认根节点（ROOT）-静态节点1（node）',
-            id: '默认根节点（root）-静态节点1（node）',
-          },
-          {
-            childDETreeNodeId: 'node_3',
-            parentDETreeNodeId: 'node',
-            parentValueLevel: 1,
-            searchMode: 3,
-            id: '静态节点1（node）-静态节点1-2（node_3）',
           },
           {
             childDETreeNodeId: 'node_5',
@@ -200,6 +194,13 @@ export default {
             searchMode: 3,
             name: '默认根节点（ROOT）-静态节点2（node_1）',
             id: '默认根节点（root）-静态节点2（node_1）',
+          },
+          {
+            childDETreeNodeId: 'node_3',
+            parentDETreeNodeId: 'node',
+            parentValueLevel: 1,
+            searchMode: 3,
+            id: '静态节点1（node）-静态节点1-2（node_3）',
           },
         ],
         detreeNodes: [
@@ -217,6 +218,7 @@ export default {
             nodeType: 'node',
             treeNodeType: 'STATIC',
             hasDETreeNodeRSs: true,
+            expanded: true,
             name: '静态节点1',
             id: 'node',
           },
@@ -225,6 +227,7 @@ export default {
             nodeType: 'node_1',
             treeNodeType: 'STATIC',
             hasDETreeNodeRSs: true,
+            expanded: true,
             name: '静态节点2',
             id: 'node_1',
           },
@@ -300,19 +303,19 @@ export default {
       {
         detreeNodeRSs: [
           {
+            childDETreeNodeId: 'node_1',
+            parentDETreeNodeId: 'node_3',
+            parentValueLevel: 1,
+            searchMode: 3,
+            id: '地区代码表（node_3）-地区（node_1）',
+          },
+          {
             childDETreeNodeId: 'node_3',
             parentDETreeNodeId: 'root',
             parentValueLevel: 1,
             searchMode: 3,
             name: '默认根节点（ROOT）-地区代码表（node_3）',
             id: '默认根节点（root）-地区代码表（node_3）',
-          },
-          {
-            childDETreeNodeId: 'node_1',
-            parentDETreeNodeId: 'node_3',
-            parentValueLevel: 1,
-            searchMode: 3,
-            id: '地区代码表（node_3）-地区（node_1）',
           },
           {
             childDETreeNodeId: 'node',
@@ -417,7 +420,22 @@ export default {
       {
         detreeNodeRSs: [
           {
-            childDETreeNodeId: 'node_4',
+            childDETreeNodeId: 'node',
+            parentDETreeNodeId: 'node_3',
+            parentValueLevel: 1,
+            searchMode: 3,
+            id: '主数据（node_3）-名称（node）',
+          },
+          {
+            childDETreeNodeId: 'node_3',
+            parentDETreeNodeId: 'root',
+            parentValueLevel: 1,
+            searchMode: 3,
+            name: '默认根节点（ROOT）-主数据（node_3）',
+            id: '默认根节点（root）-主数据（node_3）',
+          },
+          {
+            childDETreeNodeId: 'node_2',
             parentAppDEFieldId: 'parent_id',
             parentDER1N: {
               pickupDEFName: 'PARENT_ID',
@@ -429,17 +447,10 @@ export default {
               name: 'DER1N_REGION_REGION_PARENT_ID',
               id: 'mock.region.der1n_region_region_parent_id',
             },
-            parentDETreeNodeId: 'node_4',
+            parentDETreeNodeId: 'node_2',
             parentValueLevel: 1,
             searchMode: 3,
-            id: '区划子数据（node_4）-区划子数据（node_4）',
-          },
-          {
-            childDETreeNodeId: 'node',
-            parentDETreeNodeId: 'node_3',
-            parentValueLevel: 1,
-            searchMode: 3,
-            id: '主数据（node_3）-名称（node）',
+            id: '区划数据（node_2）-区划数据（node_2）',
           },
           {
             childDETreeNodeId: 'node_2',
@@ -458,32 +469,6 @@ export default {
             parentValueLevel: 1,
             searchMode: 3,
             id: '明细数据（node_1）-明显名称（node_2）',
-          },
-          {
-            childDETreeNodeId: 'node_4',
-            parentAppDEFieldId: 'parent_id',
-            parentDER1N: {
-              pickupDEFName: 'PARENT_ID',
-              codeName: 'parent',
-              dertype: 'DER1N',
-              logicName: '上级区划',
-              orderValue: 100,
-              serviceCodeName: 'parent',
-              name: 'DER1N_REGION_REGION_PARENT_ID',
-              id: 'mock.region.der1n_region_region_parent_id',
-            },
-            parentDETreeNodeId: 'node_2',
-            parentValueLevel: 1,
-            searchMode: 3,
-            id: '区划数据（node_2）-区划子数据（node_4）',
-          },
-          {
-            childDETreeNodeId: 'node_3',
-            parentDETreeNodeId: 'root',
-            parentValueLevel: 1,
-            searchMode: 3,
-            name: '默认根节点（ROOT）-主数据（node_3）',
-            id: '默认根节点（root）-主数据（node_3）',
           },
           {
             childDETreeNodeId: 'node_1',
@@ -517,6 +502,7 @@ export default {
             id: 'node',
           },
           {
+            nodeValue: '86',
             text: '区划',
             nodeType: 'node_1',
             treeNodeType: 'STATIC',
@@ -528,7 +514,7 @@ export default {
             dataSourceType: 'DEDATASET',
             idAppDEFieldId: 'id',
             leafFlagAppDEFieldId: 'leaf',
-            appDEDataSetId: 'fetch_root',
+            appDEDataSetId: 'fetch_default',
             textAppDEFieldId: 'name',
             nodeType: 'node_2',
             appDataEntityId: 'web.region',
@@ -544,19 +530,6 @@ export default {
             hasDETreeNodeRSs: true,
             name: '主数据',
             id: 'node_3',
-          },
-          {
-            dataSourceType: 'DEDATASET',
-            idAppDEFieldId: 'id',
-            leafFlagAppDEFieldId: 'leaf',
-            appDEDataSetId: 'fetch_child',
-            textAppDEFieldId: 'name',
-            nodeType: 'node_4',
-            appDataEntityId: 'web.region',
-            treeNodeType: 'DE',
-            hasDETreeNodeRSs: true,
-            name: '区划子数据',
-            id: 'node_4',
           },
         ],
         outputIconDefault: true,

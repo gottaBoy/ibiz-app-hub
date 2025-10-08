@@ -218,6 +218,7 @@ export default {
                     viewFieldName: 'AUDITINFO',
                     allowEmpty: true,
                     caption: '文本框',
+                    cssStyle: 'font-size:14px !important;',
                     itemStyle: 'DEFAULT',
                     itemType: 'FIELD',
                     layoutPos: {
@@ -489,15 +490,9 @@ export default {
       minorSortAppDEFieldId: 'update_time',
       delistDataItems: [
         {
-          appDEFieldId: 'audit_type',
-          dataType: 25,
-          id: 'audittype',
-        },
-        {
-          appDEFieldId: 'update_time',
-          dataType: 5,
-          format: 'YYYY-MM-DD HH:mm:ss',
-          id: 'update_time',
+          appDEFieldId: 'audit_info',
+          dataType: 21,
+          id: 'auditinfo',
         },
         {
           appDEFieldId: 'object_type',
@@ -505,9 +500,9 @@ export default {
           id: 'objecttype',
         },
         {
-          appDEFieldId: 'op_person_name',
+          appDEFieldId: 'audit_type',
           dataType: 25,
-          id: 'oppersonname',
+          id: 'audittype',
         },
         {
           appDEFieldId: 'op_person_id',
@@ -515,9 +510,15 @@ export default {
           id: 'oppersonid',
         },
         {
-          appDEFieldId: 'audit_info',
-          dataType: 21,
-          id: 'auditinfo',
+          appDEFieldId: 'op_person_name',
+          dataType: 25,
+          id: 'oppersonname',
+        },
+        {
+          appDEFieldId: 'update_time',
+          dataType: 5,
+          format: 'YYYY-MM-DD HH:mm:ss',
+          id: 'update_time',
         },
         {
           appDEFieldId: 'id',

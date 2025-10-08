@@ -10,13 +10,24 @@ import { useRoute, useRouter } from 'vue-router';
 import { PanelAppTitleController } from './panel-app-title.controller';
 import './panel-app-title.scss';
 
+/**
+ * 应用标题
+ * @primary
+ * @description 用于绘制应用logo和应用标题，提供点击标题跳转首页的能力。
+ */
 export const PanelAppTitle = defineComponent({
   name: 'IBizPanelAppTitle',
   props: {
+    /**
+     * @description 应用标题模型数据
+     */
     modelData: {
       type: Object as PropType<IPanelField>,
       required: true,
     },
+    /**
+     * @description 应用标题控制器
+     */
     controller: {
       type: PanelAppTitleController,
       required: true,

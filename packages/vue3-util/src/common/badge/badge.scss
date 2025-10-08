@@ -1,16 +1,26 @@
 $badge: (
   bg-color: getCssVar(color, danger),
+  height: 18px,
+  border-radius: 10px,
 );
 
 
 @include b(badge) {
-  display: inline-block;
-  width: getCssVar('width-icon', 'large');
-  height: getCssVar('width-icon', 'large');
-  line-height: getCssVar('width-icon', 'large');
+  @include set-component-css-var('badge', $badge);
+  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: getCssVar(badge, height);
+  padding: getCssVar(spacing, extra-tight);
+  font-size: getCssVar(font-size, small);
+  line-height: normal;
   color: getCssVar(color, danger, text);
+  white-space: nowrap;
   background-color: getCssVar(badge, bg-color);
-  border-radius: getCssVar(border, radius, circle);
+  border: 1px solid transparent;
+  border-radius: getCssVar(badge, border-radius);
 
   @include m(danger){
     #{getCssVarName(badge, bg-color)}: getCssVar(color,danger);

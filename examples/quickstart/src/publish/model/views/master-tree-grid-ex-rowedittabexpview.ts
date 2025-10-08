@@ -1,0 +1,283 @@
+export default {
+  tabLayout: 'TOP',
+  loadDefault: true,
+  showDataInfoBar: true,
+  deviewCodeName: 'TreeGridEx_rowedittabexpview',
+  deviewId: '492c32ae7211c7617cf7b14a7c70a9ea',
+  appWFId: 'workflow',
+  accUserMode: 2,
+  capLanguageRes: {
+    lanResTag: 'DE.LNAME.MASTER',
+  },
+  caption: '树表格增强_行编辑分页导航视图',
+  codeName: 'master_tree_grid_ex_rowedittabexpview',
+  appDataEntityId: 'web.master',
+  viewLayoutPanel: {
+    layoutBodyOnly: true,
+    viewProxyMode: true,
+    layoutMode: 'FLEX',
+    layout: {
+      layout: 'FLEX',
+    },
+    rootPanelItems: [
+      {
+        actionGroupExtractMode: 'ITEM',
+        panelItems: [
+          {
+            actionGroupExtractMode: 'ITEM',
+            panelItems: [
+              {
+                caption: '分页导航',
+                itemStyle: 'DEFAULT',
+                itemType: 'CTRLPOS',
+                layoutPos: {
+                  shrink: 1,
+                  layout: 'FLEX',
+                },
+                showCaption: true,
+                id: 'tabexppanel',
+              },
+            ],
+            layout: {
+              layout: 'FLEX',
+            },
+            dataRegionType: 'INHERIT',
+            caption: '容器',
+            itemStyle: 'DEFAULT',
+            itemType: 'CONTAINER',
+            layoutPos: {
+              grow: 1,
+              shrink: 1,
+              layout: 'FLEX',
+            },
+            id: 'view_tabexppanel',
+          },
+          {
+            rawItem: {
+              predefinedType: 'TELEPORT_PLACEHOLDER',
+              id: 'tabtoolbar',
+            },
+            caption: '传送部件占位',
+            itemStyle: 'DEFAULT',
+            itemType: 'RAWITEM',
+            layoutPos: {
+              shrink: 1,
+              layout: 'FLEX',
+            },
+            showCaption: true,
+            id: 'tabtoolbar',
+          },
+        ],
+        predefinedType: 'VIEWHEADER',
+        layout: {
+          dir: 'row',
+          layout: 'FLEX',
+          valign: 'center',
+        },
+        dataRegionType: 'INHERIT',
+        caption: '容器',
+        itemStyle: 'DEFAULT',
+        itemType: 'CONTAINER',
+        layoutPos: {
+          shrink: 0,
+          layout: 'FLEX',
+        },
+        id: 'view_header',
+      },
+      {
+        actionGroupExtractMode: 'ITEM',
+        panelItems: [
+          {
+            actionGroupExtractMode: 'ITEM',
+            layout: {
+              layout: 'FLEX',
+            },
+            dataRegionType: 'INHERIT',
+            caption: '容器',
+            itemStyle: 'DEFAULT',
+            itemType: 'CONTAINER',
+            layoutPos: {
+              shrink: 0,
+              layout: 'FLEX',
+            },
+            id: 'view_tabexppanel_left',
+          },
+          {
+            actionGroupExtractMode: 'ITEM',
+            panelItems: [
+              {
+                actionGroupExtractMode: 'ITEM',
+                panelItems: [
+                  {
+                    rawItem: {
+                      predefinedType: 'NAV_POS',
+                      id: 'nav_pos',
+                    },
+                    caption: '导航区占位',
+                    itemStyle: 'DEFAULT',
+                    itemType: 'RAWITEM',
+                    layoutPos: {
+                      grow: 1,
+                      shrink: 1,
+                      layout: 'FLEX',
+                    },
+                    showCaption: true,
+                    id: 'nav_pos',
+                  },
+                ],
+                predefinedType: 'VIEWCONTENT',
+                layout: {
+                  layout: 'FLEX',
+                },
+                dataRegionType: 'INHERIT',
+                caption: '容器',
+                itemStyle: 'DEFAULT',
+                itemType: 'CONTAINER',
+                layoutPos: {
+                  grow: 1,
+                  shrink: 1,
+                  layout: 'FLEX',
+                },
+                id: 'view_content',
+              },
+              {
+                actionGroupExtractMode: 'ITEM',
+                layout: {
+                  layout: 'FLEX',
+                },
+                dataRegionType: 'INHERIT',
+                caption: '容器',
+                itemStyle: 'DEFAULT',
+                itemType: 'CONTAINER',
+                layoutPos: {
+                  shrink: 0,
+                  layout: 'FLEX',
+                },
+                id: 'view_tabexppanel_bottom',
+              },
+            ],
+            layout: {
+              layout: 'FLEX',
+            },
+            dataRegionType: 'INHERIT',
+            caption: '容器',
+            itemStyle: 'DEFAULT',
+            itemType: 'CONTAINER',
+            layoutPos: {
+              grow: 1,
+              shrink: 1,
+              layout: 'FLEX',
+            },
+            id: 'container1',
+          },
+          {
+            actionGroupExtractMode: 'ITEM',
+            layout: {
+              layout: 'FLEX',
+            },
+            dataRegionType: 'INHERIT',
+            caption: '容器',
+            itemStyle: 'DEFAULT',
+            itemType: 'CONTAINER',
+            layoutPos: {
+              shrink: 0,
+              layout: 'FLEX',
+            },
+            id: 'view_tabexppanel_right',
+          },
+        ],
+        layout: {
+          dir: 'row',
+          layout: 'FLEX',
+        },
+        dataRegionType: 'INHERIT',
+        caption: '容器',
+        itemStyle: 'DEFAULT',
+        itemType: 'CONTAINER',
+        layoutPos: {
+          grow: 1,
+          shrink: 1,
+          layout: 'FLEX',
+        },
+        id: 'container',
+      },
+    ],
+    layoutPanel: true,
+    appViewEngines: [
+      {
+        engineCat: 'VIEW',
+        engineType: 'TabExpView',
+        id: 'engine',
+      },
+    ],
+    controls: [
+      {
+        dedrtabPages: [
+          {
+            caption: '单元格编辑',
+            appViewId: 'web.master_tree_grid_ex_celledit',
+            id: 'cell',
+          },
+          {
+            caption: '单行编辑',
+            appViewId: 'web.master_tree_grid_ex_rowedit',
+            id: 'row',
+          },
+          {
+            caption: '全表格编辑',
+            appViewId: 'web.master_tree_grid_ex_alledit',
+            id: 'all',
+          },
+        ],
+        dataRelationTag: 'DataRelation90',
+        editItemCapLanguageRes: {
+          lanResTag: 'DE.LNAME.MASTER',
+        },
+        editItemCaption: '主数据',
+        uniqueTag: 'master_tree_grid_ex_rowedittabexpview__tabexppanel',
+        autoLoad: true,
+        showBusyIndicator: true,
+        codeName: 'data_relation90',
+        controlType: 'DRTAB',
+        appDataEntityId: 'web.master',
+        controlParam: {
+          id: 'tabexppanel',
+        },
+        modelId: '269255dd8a4939188d304f47daf8e9b6',
+        modelType: 'PSDEDRTAB',
+        name: 'tabexppanel',
+        id: 'data_relation90',
+      },
+      {
+        capLanguageRes: {
+          lanResTag: 'DE.LNAME.MASTER',
+        },
+        caption: '树表格增强_行编辑分页导航视图',
+        codeName: 'tree_grid_ex_rowedittabexpview_captionbar',
+        controlType: 'CAPTIONBAR',
+        appDataEntityId: 'web.master',
+        controlParam: {},
+        name: 'captionbar',
+        id: 'tree_grid_ex_rowedittabexpview_captionbar',
+      },
+    ],
+    codeName: 'a1740439c3680b8488b',
+    controlType: 'VIEWLAYOUTPANEL',
+    logicName: 'TreeGridEx_rowedittabexpview分页导航视图布局面板',
+    appDataEntityId: 'web.master',
+    controlParam: {},
+    modelId: 'ac10e8979b95496ffd7d319deb906e6e',
+    modelType: 'PSSYSVIEWLAYOUTPANEL',
+    name: 'layoutpanel',
+    id: 'a1740439c3680b8488b',
+  },
+  title: '树表格增强_行编辑分页导航视图',
+  viewStyle: 'DEFAULT',
+  viewType: 'DETABEXPVIEW',
+  enableDP: true,
+  showCaptionBar: false,
+  modelId: 'fe5d6f2a6dcba73cf92049c14bba974f',
+  modelType: 'PSAPPDEVIEW',
+  name: 'MASTERTreeGridEx_rowedittabexpview',
+  id: 'web.master_tree_grid_ex_rowedittabexpview',
+};

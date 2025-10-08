@@ -36,6 +36,11 @@ export class DEUIActionGroupDetailWriter extends ModelObjectWriter {
     _.w(d, 'enableScriptCode', s);
     _.x(d, 'sysPFPluginId', s, 'getPSSysPFPlugin');
     _.x(d, 'uiactionId', s, 'getPSUIAction');
+    _.v(
+      d,
+      'refUIActionGroup',
+      c.s('view.UIActionGroup[]', s, 'getRefPSUIActionGroup'),
+    );
     _.w(d, 'tooltip', s);
     _.v(
       d,

@@ -2,7 +2,7 @@ export default {
   id: 'web.master_grid_group',
   codeName: 'master_grid_group',
   openMode: 'INDEXVIEWTAB',
-  viewType: 'DECUSTOMVIEW',
+  viewType: 'DETABEXPVIEW',
   width: 0,
   height: 0,
   appDataEntityId: 'web.master',

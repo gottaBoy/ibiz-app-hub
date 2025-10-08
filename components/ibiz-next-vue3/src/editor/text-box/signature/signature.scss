@@ -1,0 +1,47 @@
+$signature: (
+  'min-height': 200px,
+);
+
+@include b('signature') {
+  @include set-component-css-var('signature', $signature);
+
+  width: 100%;
+  height: 100%;
+  min-height: getCssVar('signature', 'min-height');
+
+  @include e('pad') {
+
+    .#{bem('signature-pad__container')} {
+      background-color: getCssVar(color, bg, 0);
+    }
+  }
+  @include e('toolbar') {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: getCssVar('spacing', 'base');
+  }
+  @include m('readonly') {
+    pointer-events: none;
+  }
+  @include m('disabled') {
+    pointer-events: none;
+  }
+}
+
+@include b(form-item) {
+  @include b(signature) {
+    @include when(show-default) {
+      &:hover {
+        .#{bem('signature__toolbar')} {
+          display: flex;
+        }
+      }
+
+      .#{bem('signature__toolbar')} {
+        display: none;
+      }
+    }
+  }
+}

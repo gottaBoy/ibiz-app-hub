@@ -1,0 +1,12 @@
+export default {
+  id: 'web.master_chart_exp_cache_tab_exp_view',
+  codeName: 'master_chart_exp_cache_tab_exp_view',
+  openMode: 'INDEXVIEWTAB',
+  viewType: 'DETABEXPVIEW',
+  width: 0,
+  height: 700,
+  appDataEntityId: 'web.master',
+  redirectView: false,
+  modalOption: {},
+  appId: '',
+};

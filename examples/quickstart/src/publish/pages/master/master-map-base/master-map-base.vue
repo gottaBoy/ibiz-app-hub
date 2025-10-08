@@ -5,8 +5,8 @@
     :modal="props.modal"
     :model-data="model"
   >
-    <template #map="slotProps">
-      <i-biz-map-control v-bind="slotProps" />
+    <template #tabexppanel="slotProps">
+      <i-biz-dr-tab-control v-bind="slotProps" />
     </template>
   </i-biz-view>
 </template>

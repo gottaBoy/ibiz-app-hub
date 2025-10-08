@@ -1,6 +1,7 @@
 export default {
   deviewCodeName: 'counter_tab_exp',
   deviewId: '2d7720305fcfe688768ad4f4a06763bd',
+  appWFId: 'workflow',
   accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -76,6 +77,36 @@ export default {
         },
         showCaption: true,
         id: 'container_group1',
+      },
+      {
+        actionGroupExtractMode: 'ITEM',
+        panelItems: [
+          {
+            caption: '实体部件',
+            itemStyle: 'DEFAULT',
+            itemType: 'CTRLPOS',
+            layoutPos: {
+              shrink: 1,
+              layout: 'FLEX',
+            },
+            showCaption: true,
+            id: 'control',
+          },
+        ],
+        predefinedType: 'CONTAINER_GROUP',
+        layout: {
+          layout: 'FLEX',
+        },
+        dataRegionType: 'INHERIT',
+        caption: '流式布局',
+        itemStyle: 'DEFAULT',
+        itemType: 'CONTAINER',
+        layoutPos: {
+          shrink: 1,
+          layout: 'FLEX',
+        },
+        showCaption: true,
+        id: 'container_group2',
       },
     ],
     layoutPanel: true,
@@ -199,6 +230,15 @@ export default {
         modelType: 'PSDEDRBAR',
         name: 'drbar',
         id: 'counter_tab_exp_dr',
+      },
+      {
+        embeddedAppDEViewId: 'web.master_count_flowdrtab',
+        codeName: 'counter_tab_exp_control',
+        controlType: 'VIEWPANEL',
+        appDataEntityId: 'web.master',
+        controlParam: {},
+        name: 'control',
+        id: 'counter_tab_exp_control',
       },
       {
         capLanguageRes: {

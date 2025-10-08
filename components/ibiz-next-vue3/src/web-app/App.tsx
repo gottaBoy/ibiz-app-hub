@@ -1,4 +1,4 @@
-import { defineComponent, onUnmounted } from 'vue';
+import { defineComponent, onUnmounted, onMounted, onBeforeUnmount } from 'vue';
 import { Modal, ViewMode } from '@ibiz-template/runtime';
 import { AppHooks } from '@ibiz-template/vue3-util';
 import './App.scss';
@@ -20,6 +20,24 @@ export default defineComponent({
 
     // 页面关闭
     window.addEventListener('unload', destroyAppHub);
+
+    // 水印销毁方法
+    let watermarkDestroy: void | null | (() => void);
+    onMounted(() => {
+      AppHooks.initedApp.tapPromise(async ({ context }) => {
+        watermarkDestroy?.();
+        // 挂载应用水印，默认将水印挂载到body下
+        watermarkDestroy = ibiz.util.watermark.mount(
+          ibiz.config.watermark,
+          undefined,
+          { ...context, ...ibiz.appData?.context } as IContext,
+        );
+      });
+    });
+
+    onBeforeUnmount(() => {
+      watermarkDestroy?.();
+    });
 
     // 页面卸载
     onUnmounted(() => {

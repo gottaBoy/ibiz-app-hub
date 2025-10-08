@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-expressions */
 import { plus, RuntimeModelError, toNumberOrNil } from '@ibiz-template/core';
 import {
-  IChartSeriesCSCartesian2DEncode,
   IDEChartSeries,
+  IChartSeriesCSCartesian2DEncode,
 } from '@ibiz/model-core';
 import dayjs, { Dayjs } from 'dayjs';
 import minMax from 'dayjs/plugin/minMax';
@@ -13,12 +13,12 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 import type { ECElementEvent, SeriesOption } from 'echarts';
 import { clone, isNil, mergeDeepRight } from 'ramda';
 import {
-  ChartOptionsGenerator,
   parseUserParams,
+  ChartOptionsGenerator,
 } from './chart-options-generator';
 import { CodeListItem, IChartData } from '../../../../interface';
 import { ChartData } from '../../../../service';
-import { generateYearWeekRange } from '../../../utils';
+import { generateYearWeekRange } from '../../../../utils';
 
 dayjs.extend(minMax);
 dayjs.extend(isSameOrBefore);

@@ -3,7 +3,8 @@ export default {
   xdataControlName: 'grid',
   loadDefault: true,
   deviewCodeName: 'grid_span',
-  deviewId: '31d6c44eed5c35db1f33908eab871843',
+  deviewId: '9c4c735af7d641e92462626e9e1cdcc6',
+  appWFId: 'workflow',
   accUserMode: 2,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
@@ -91,6 +92,7 @@ export default {
       groupStyle: 'DEFAULT',
       minorSortDir: 'ASC',
       minorSortAppDEFieldId: 'status',
+      orderValueAppDEFieldId: 'px',
       degridColumns: [
         {
           clconvertMode: 'FRONT',
@@ -186,10 +188,34 @@ export default {
           id: 'region_id',
         },
         {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'srfdatatype',
+        },
+        {
+          appDEFieldId: 'category_type',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_type',
+        },
+        {
+          appDEFieldId: 'category_id',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'category_id',
+        },
+        {
           appDEFieldId: 'name',
           valueType: 'SIMPLE',
           dataType: 25,
           id: 'srfmajortext',
+        },
+        {
+          appDEFieldId: 'wf_status',
+          valueType: 'SIMPLE',
+          dataType: 25,
+          id: 'wf_status',
         },
       ],
       degridEditItems: [
@@ -211,6 +237,7 @@ export default {
       pagingMode: 1,
       pagingSize: 20,
       sortMode: 'REMOTE',
+      hasWFDataItems: true,
       enableCustomized: true,
       enablePagingBar: true,
       navViewPos: 'NONE',
@@ -234,14 +261,14 @@ export default {
         {
           attrName: 'span-method',
           attrValue:
-            'const columnIndex = metadata.columnIndex;\r\nconst row = metadata.row;\r\nconst column = metadata.column;\r\nconst rowIndex = metadata.rowIndex;\r\nconst tableData = metadata.items;\r\nconst spanArr = [];\r\n// 处理第一列的行合并\r\nif (columnIndex === 1) {\r\n  let temp = { startRow: 0, endRow: 1 };\r\n  const spans = [];\r\n  for (let i = 0; i < tableData.length; i++) {\r\n    if (i === 0) {\r\n      spans.push(temp);\r\n    }\r\n    if(i + 1 === tableData.length){\r\n      if (tableData[i - 1][column.property] === tableData[i][column.property]) {\r\n        temp.endRow += 1;\r\n      }else{\r\n        temp = { startRow: i, endRow: i + 1 };\r\n        spans.push(temp);\r\n      }\r\n    }else{\r\n      if (tableData[i][column.property] === tableData[i + 1][column.property]) {\r\n        temp.endRow += 1;\r\n      } else {\r\n        temp = { startRow: i + 1, endRow: i + 1 };\r\n        spans.push(temp);\r\n      }\r\n    }\r\n  }\r\n  if(spans && spans.length >0){\r\n    const target = spans.find((item) =>{\r\n      return item.startRow <= rowIndex  && rowIndex < item.endRow;\r\n    })\r\n    if(target && target.startRow === rowIndex){\r\n        return {\r\n          rowspan: target.endRow - target.startRow,\r\n          colspan: 1\r\n        }\r\n    }else{\r\n        return {\r\n          rowspan: 0 ,\r\n          colspan: 0\r\n        }\r\n    }\r\n  }\r\n}',
+            'let columnIndex = metadata.columnIndex;\r\nlet row = metadata.row;\r\nlet column = metadata.column;\r\nlet rowIndex = metadata.rowIndex;\r\nlet tableData = metadata.items;\r\nlet spanArr = [];\r\n// 处理第一列的行合并\r\nif (columnIndex === 1) {\r\n  let temp = { startRow: 0, endRow: 1 };\r\n  let spans = [];\r\n  for (let i = 0; i < tableData.length; i++) {\r\n    if (i === 0) {\r\n      spans.push(temp);\r\n    }\r\n    if(i + 1 === tableData.length){\r\n      if (tableData[i - 1][column.property] === tableData[i][column.property]) {\r\n        temp.endRow += 1;\r\n      }else{\r\n        temp = { startRow: i, endRow: i + 1 };\r\n        spans.push(temp);\r\n      }\r\n    }else{\r\n      if (tableData[i][column.property] === tableData[i + 1][column.property]) {\r\n        temp.endRow += 1;\r\n      } else {\r\n        temp = { startRow: i + 1, endRow: i + 1 };\r\n        spans.push(temp);\r\n      }\r\n    }\r\n  }\r\n  if(spans && spans.length >0){\r\n    let target = spans.find((item) =>{\r\n      return item.startRow <= rowIndex  && rowIndex < item.endRow;\r\n    })\r\n    if(target && target.startRow === rowIndex){\r\n        return {\r\n          rowspan: target.endRow - target.startRow,\r\n          colspan: 1\r\n        }\r\n    }else{\r\n        return {\r\n          rowspan: 0 ,\r\n          colspan: 0\r\n        }\r\n    }\r\n  }\r\n}',
           id: 'spanmethod',
         },
       ],
       controlParam: {
         id: 'grid',
       },
-      modelId: '0667f5eaff51981c7c5f08e119e78552',
+      modelId: '0920702c22fbd4b05e55ac9215e5f91e',
       modelType: 'PSDEGRID',
       name: 'grid',
       id: 'web.master.main18',
@@ -276,7 +303,7 @@ export default {
       controlParam: {
         id: 'searchform',
       },
-      modelId: 'ec6ac9f1734ba60448ac1337ca49071d',
+      modelId: '092778bc27aa3ffced92714ca5d82197',
       modelType: 'PSDEFORM_SEARCHFORM',
       name: 'searchform',
       id: 'web.master.main83',
@@ -290,7 +317,7 @@ export default {
       controlParam: {
         id: 'toolbar',
       },
-      modelId: '5bef433a828f7d84431739feba7754bc',
+      modelId: '23738c34e7cbff3333416f290c7267a9',
       modelType: 'PSDETOOLBAR',
       name: 'toolbar',
       id: 'grid_span_toolbar',
@@ -333,7 +360,7 @@ export default {
   viewType: 'DEGRIDVIEW',
   enableDP: true,
   showCaptionBar: false,
-  modelId: '545cd8f89465738bed6ebc30f9a34baa',
+  modelId: '640624641020b6f5f4f191e7edf93fd7',
   modelType: 'PSAPPDEVIEW',
   name: 'MASTERgrid_span',
   id: 'web.master_grid_span',

@@ -43,7 +43,6 @@ export function useFilesParse(
   c: GridFieldColumnController,
 ): {
   uploadUrl: Ref<string>;
-  downloadUrl: Ref<string>;
   files: Ref<
     {
       id: string;
@@ -53,6 +52,11 @@ export function useFilesParse(
     }[]
   >;
   onDownload: (file: IData) => void;
+  getDownloadUrl: (data: IData, file: IData) => string;
+  getDownloadTicketParams: () => {
+    appEntityTag?: string;
+    dataFieldTag?: string;
+  };
 } {
   // 文件列表
   const files: Ref<
@@ -67,11 +71,30 @@ export function useFilesParse(
   // 上传文件路径
   const uploadUrl: Ref<string> = ref('');
 
-  // 下载文件路径
-  const downloadUrl: Ref<string> = ref('');
-
   // svg图片Blob路径存储
   const svgBlob: Map<string, string> = new Map();
+
+  // 获取下载凭证参数
+  const getDownloadTicketParams = (): {
+    appEntityTag?: string;
+    dataFieldTag?: string;
+  } => {
+    const downloadTicketParams = {};
+    if (!c.model.userParam) {
+      return downloadTicketParams;
+    }
+    if (c.model.userParam.appentitytag) {
+      Object.assign(downloadTicketParams, {
+        appEntityTag: c.model.userParam.appentitytag,
+      });
+    }
+    if (c.model.userParam.datafieldtag) {
+      Object.assign(downloadTicketParams, {
+        dataFieldTag: c.model.userParam.datafieldtag,
+      });
+    }
+    return downloadTicketParams;
+  };
 
   // 获取svg以data:image开头的预览路径
   const fetchSVGAsBase64 = async (url: string): Promise<void | string> => {
@@ -122,10 +145,38 @@ export function useFilesParse(
     }
   };
 
+  /**
+   * @description 获取下载路径,若业务数据中存在folder，则以业务数据中folder作为目录
+   * @param {IData} data
+   * @param {IData} file
+   * @returns {*}  {string}
+   */
+  const getDownloadUrl = (data: IData, file: IData): string => {
+    const editorParams: IData = {};
+    if (file && file.folder) {
+      editorParams.osscat = file.folder;
+    }
+    const urls = ibiz.util.file.calcFileUpDownUrl(
+      c.context,
+      c.params,
+      data,
+      editorParams,
+    );
+    return urls.downloadUrl;
+  };
+
   // 下载文件
   const onDownload = (file: IData): void => {
-    const url = file.url || downloadUrl.value.replace('%fileId%', file.id);
-    ibiz.util.file.fileDownload(url, file.name);
+    const downloadUrl = getDownloadUrl(props.data, file);
+    const url = file.url || downloadUrl.replace('%fileId%', file.id);
+    ibiz.util.file.fileDownload(url, file.name, {
+      context: c.context,
+      params: c.params,
+      data: props.data,
+      file: { fileId: file.id, ...file },
+      extraParams: {},
+      downloadTicketParams: getDownloadTicketParams(),
+    });
   };
 
   // 值响应式变更
@@ -154,7 +205,6 @@ export function useFilesParse(
           {},
         );
         uploadUrl.value = urls.uploadUrl;
-        downloadUrl.value = urls.downloadUrl;
       }
     },
     { immediate: true, deep: true },
@@ -164,30 +214,35 @@ export function useFilesParse(
     files,
     newVal => {
       // 变更后且下载基础路径存在时解析
-      if (newVal?.length && downloadUrl.value) {
+      if (newVal?.length) {
         newVal.forEach((file: IData) => {
+          const downloadUrl = getDownloadUrl(props.data, file);
           Object.assign(file, {
-            url: file.url || downloadUrl.value.replace('%fileId%', file.id),
+            url: file.url || downloadUrl.replace('%fileId%', file.id),
           });
-          if (file.name.split('.').pop() === 'svg') {
-            calcSvgPreview(file);
-          }
-        });
-      }
-    },
-    { immediate: true },
-  );
-
-  watch(
-    downloadUrl,
-    newVal => {
-      // 变更后且下载基础路径存在时解析
-      if (newVal && files.value.length) {
-        files.value.forEach((file: IData) => {
-          Object.assign(file, {
-            url: downloadUrl.value.replace('%fileId%', file.id),
-          });
-          if (file.name.split('.').pop() === 'svg') {
+          if (ibiz.config.common.enableDownloadTicket) {
+            ibiz.util.file
+              .getDownloadTicket(
+                c.context,
+                c.params,
+                props.data,
+                {
+                  fileId: file.id,
+                },
+                getDownloadTicketParams(),
+              )
+              .then(downloadTicket => {
+                if (downloadTicket && downloadTicket.ticket) {
+                  file.url = downloadUrl.replace(
+                    '%fileId%',
+                    downloadTicket.ticket,
+                  );
+                  if (file.name.split('.').pop() === 'svg') {
+                    calcSvgPreview(file);
+                  }
+                }
+              });
+          } else if (file.name.split('.').pop() === 'svg') {
             calcSvgPreview(file);
           }
         });
@@ -200,6 +255,7 @@ export function useFilesParse(
     files,
     uploadUrl,
     onDownload,
-    downloadUrl,
+    getDownloadUrl,
+    getDownloadTicketParams,
   };
 }

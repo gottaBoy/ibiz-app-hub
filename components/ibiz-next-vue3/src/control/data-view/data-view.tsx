@@ -4,6 +4,7 @@ import {
   IBizCustomRender,
   useControlController,
   hasEmptyPanelRenderer,
+  useControlPopoverzIndex,
 } from '@ibiz-template/vue3-util';
 import {
   h,
@@ -24,16 +25,21 @@ import {
   ControlVO,
   ISortItem,
   getControl,
+  IDragChangeInfo,
   IControlProvider,
   IMDControlGroupState,
   DataViewControlController,
 } from '@ibiz-template/runtime';
 import { createUUID } from 'qx-util';
+import draggable from 'vuedraggable';
 import { usePagination } from '../../util';
 import './data-view.scss';
 
 export const DataViewControl = defineComponent({
   name: 'IBizDataViewControl',
+  components: {
+    draggable,
+  },
   props: {
     /**
      * @description 数据视图（卡片）模型数据
@@ -79,6 +85,7 @@ export const DataViewControl = defineComponent({
       (...args) => new DataViewControlController<IDEDataView>(...args),
     );
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
+    useControlPopoverzIndex(c);
 
     const classNames = computed(() => {
       return [ns.is('enable-page', c.model.enablePagingBar === true)];
@@ -220,6 +227,40 @@ export const DataViewControl = defineComponent({
       return c.onDbRowClick(item);
     };
 
+    let cacheInfo: Partial<IDragChangeInfo> | null = null;
+
+    /**
+     * @description 拖拽变更
+     * @param {IData} evt
+     * @param {(string | number)} [groupKey]
+     */
+    const onDraggableChange = (evt: IData, groupKey?: string | number) => {
+      if (evt.moved) {
+        // 排序
+        c.onDragChange({
+          from: groupKey!,
+          to: groupKey!,
+          fromIndex: evt.moved.oldIndex,
+          toIndex: evt.moved.newIndex,
+        });
+      }
+      // 分组变更时会先触发added后触发removed，因此需提前缓存added的参数
+      if (evt.added) {
+        cacheInfo = {
+          to: groupKey,
+          toIndex: evt.added.newIndex,
+        };
+      }
+      if (evt.removed) {
+        if (cacheInfo) {
+          cacheInfo.from = groupKey;
+          cacheInfo.fromIndex = evt.removed.oldIndex;
+          c.onDragChange(cacheInfo as IDragChangeInfo);
+        }
+        cacheInfo = null;
+      }
+    };
+
     /**
      * @description 绘制新建卡片项
      * @param {IMDControlGroupState} [group]
@@ -270,6 +311,7 @@ export const DataViewControl = defineComponent({
           class={ns.bem('item-content', 'bottom', 'actions')}
           action-details={c.getOptItemModel()}
           actions-state={c.state.uaState[item.srfkey]}
+          zIndex={c.state.zIndex}
           onActionClick={(
             detail: IUIActionGroupDetail,
             event: MouseEvent,
@@ -327,6 +369,23 @@ export const DataViewControl = defineComponent({
           }
         >
           <div class={ns.be('item', 'content')}>
+            {c.state.draggable && !c.state.readonly && (
+              <svg
+                viewBox='0 0 16 16'
+                xmlns='http://www.w3.org/2000/svg'
+                height='1em'
+                width='1em'
+                class={ns.e('drag-icon')}
+                preserveAspectRatio='xMidYMid meet'
+                focusable='false'
+              >
+                <g stroke-width='1' fill-rule='evenodd'>
+                  <g transform='translate(5 1)' fill-rule='nonzero'>
+                    <path d='M1 2a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM1 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z'></path>
+                  </g>
+                </g>
+              </svg>
+            )}
             {cardStyle.value === 'style2' && !c.state.singleSelect && (
               <el-checkbox
                 size='large'
@@ -348,13 +407,25 @@ export const DataViewControl = defineComponent({
      * @param {IData[]} items
      * @return {*}
      */
-    const renderCardLayout = (items: IData[], group?: IMDControlGroupState) => {
+    const renderCardLayout = (
+      items: IData[],
+      group?: IMDControlGroupState,
+      disabled: boolean = true,
+    ) => {
       const { cardColXS, cardColSM, cardColMD, cardColLG } = c.model;
       if (cardColXS || cardColSM || cardColMD || cardColLG)
         return (
-          <el-row class={ns.e('layout-row')}>
-            {items.map(item => {
-              return (
+          <draggable
+            itemKey='srfkey'
+            modelValue={items}
+            group={c.model.id}
+            handle={`.${ns.e('drag-icon')}`}
+            class={['el-row', ns.e('layout-row')]}
+            disabled={disabled || c.state.updating || c.state.readonly}
+            onChange={(evt: IData) => onDraggableChange(evt, group?.key)}
+          >
+            {{
+              item: ({ element }: { element: IData }) => (
                 <el-col
                   xs={cardColXS}
                   sm={cardColSM}
@@ -362,32 +433,49 @@ export const DataViewControl = defineComponent({
                   lg={cardColLG}
                   class={ns.e('layout-col')}
                 >
-                  <div class={ns.b('scroll-item')}>{renderCard(item)}</div>
+                  <div class={ns.b('scroll-item')}>{renderCard(element)}</div>
                 </el-col>
-              );
-            })}
-            {c.enableNew && !c.state.readonly && (
-              <el-col
-                xs={cardColXS}
-                sm={cardColSM}
-                md={cardColMD}
-                lg={cardColLG}
-                class={ns.e('layout-col')}
-              >
-                <div class={ns.b('scroll-item')}>{renderNewCard(group)}</div>
-              </el-col>
-            )}
-          </el-row>
+              ),
+              footer: () => {
+                if (c.enableNew && !c.state.readonly)
+                  return (
+                    <el-col
+                      xs={cardColXS}
+                      sm={cardColSM}
+                      md={cardColMD}
+                      lg={cardColLG}
+                      class={ns.e('layout-col')}
+                    >
+                      <div class={ns.b('scroll-item')}>
+                        {renderNewCard(group)}
+                      </div>
+                    </el-col>
+                  );
+              },
+            }}
+          </draggable>
         );
       return (
-        <div class={ns.e('layout-flex')}>
-          {items.map(item => {
-            return <div class={ns.b('scroll-item')}>{renderCard(item)}</div>;
-          })}
-          {c.enableNew && !c.state.readonly && (
-            <div class={ns.b('scroll-item')}>{renderNewCard(group)}</div>
-          )}
-        </div>
+        <draggable
+          itemKey='srfkey'
+          modelValue={items}
+          group={c.model.id}
+          class={[ns.e('layout-flex'), ns.em('layout-flex', 'draggable')]}
+          disabled={disabled || c.state.updating || c.state.readonly}
+          onChange={(evt: IData) => onDraggableChange(evt, group?.key)}
+        >
+          {{
+            item: ({ element }: { element: IData }) => (
+              <div class={ns.b('scroll-item')}>{renderCard(element)}</div>
+            ),
+            footer: () => {
+              if (c.enableNew && !c.state.readonly)
+                return (
+                  <div class={ns.b('scroll-item')}>{renderNewCard(group)}</div>
+                );
+            },
+          }}
+        </draggable>
       );
     };
 
@@ -412,6 +500,7 @@ export const DataViewControl = defineComponent({
             <span class={ns.be('group-content', 'item-action')}>
               {c.model.groupUIActionGroup && group.groupActionGroupState && (
                 <iBizActionToolbar
+                  zIndex={c.state.zIndex}
                   class={ns.be('group-content', 'header-actions')}
                   action-details={
                     c.model.groupUIActionGroup.uiactionGroupDetails
@@ -428,7 +517,7 @@ export const DataViewControl = defineComponent({
             </span>
           </div>
           {group.children.length > 0 ? (
-            renderCardLayout(group.children, group)
+            renderCardLayout(group.children, group, !c.state.draggable)
           ) : (
             <div class={ns.bem('group-content', 'item', 'empty')}>
               {ibiz.i18n.t('app.noData')}
@@ -451,6 +540,8 @@ export const DataViewControl = defineComponent({
       }
       return renderCardLayout(
         isCollapse.value ? c.state.items.slice(0, c.state.size) : c.state.items,
+        undefined,
+        !c.enableEditOrder,
       );
     };
 

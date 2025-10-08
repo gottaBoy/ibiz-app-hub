@@ -33,6 +33,14 @@ export interface IApiPickupViewPanelController<
   getSelectedData(): Promise<IApiData[]>;
 
   /**
+   * @description 设置选中数据
+   * @param {IApiData[]} items
+   * @returns {*}  {Promise<void>}
+   * @memberof IApiPickupViewPanelController
+   */
+  setSelectedData(items: IApiData[]): Promise<void>;
+
+  /**
    * @description 获取所有数据
    * @returns {*}  {Promise<IApiData[]>}
    * @memberof IApiPickupViewPanelController

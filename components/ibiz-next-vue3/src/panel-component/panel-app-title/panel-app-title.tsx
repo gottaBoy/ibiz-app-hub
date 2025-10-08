@@ -13,6 +13,7 @@ import './panel-app-title.scss';
 /**
  * 应用标题
  * @description 用于绘制应用logo和应用标题，提供点击标题跳转首页的能力。
+ * @panelitemparams {name:strictly,parameterType:boolean,defaultvalue:false,description:是否取消与首页菜单的关联，即菜单收缩时不会跟随改变，当应用标题未配置在首页左侧时应启用}
  * @primary
  */
 export const PanelAppTitle = defineComponent({
@@ -76,6 +77,10 @@ export const PanelAppTitle = defineComponent({
     });
 
     const isCollapse = computed(() => {
+      const { strictly } = c.rawItemParams;
+      if (strictly && strictly === 'true') {
+        return false;
+      }
       return (c.panel.view.state as IData).isCollapse;
     });
 

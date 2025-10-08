@@ -21,6 +21,10 @@ export const SearchGroups = defineComponent({
       type: Object as PropType<SearchBarController>,
       required: true,
     },
+    counterData: {
+      type: Object as PropType<IData>,
+      default: () => {},
+    },
   },
   setup(props) {
     const ns = useNamespace('search-groups');
@@ -246,6 +250,10 @@ export const SearchGroups = defineComponent({
     return (
       <div class={this.ns.b()}>
         {this.showGroups?.map(groupItem => {
+          const visible = this.c.calcCountVisible(groupItem);
+          if (!visible) {
+            return null;
+          }
           return (
             <span
               class={[
@@ -258,6 +266,13 @@ export const SearchGroups = defineComponent({
               onClick={() => this.onGroupClick(groupItem)}
             >
               {groupItem.caption || groupItem.name}
+              {groupItem.counterId && (
+                <iBizBadge
+                  class={this.ns.e('counter')}
+                  value={this.counterData[groupItem.counterId]}
+                  counterMode={groupItem.counterMode}
+                />
+              )}
             </span>
           );
         })}

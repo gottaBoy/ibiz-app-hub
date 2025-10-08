@@ -12,7 +12,7 @@ $tree-grid-ex-ua-column: (
 
   display: flex;
   align-items: center;
-  justify-content: getCssVar('tree-grid-ex-column', 'text-align');
+  justify-content: getCssVar('grid-column', 'text-align');
   width: 100%;
   height: 100%;
   padding: getCssVar(tree-grid-ex-ua-column, cell-padding);

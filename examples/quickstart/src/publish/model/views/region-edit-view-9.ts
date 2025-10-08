@@ -99,8 +99,10 @@ export default {
                   detailStyle: 'DEFAULT',
                   detailType: 'FORMITEM',
                   layoutPos: {
-                    colLG: 20,
-                    colMD: 20,
+                    colLG: 12,
+                    colMD: 12,
+                    colSM: 12,
+                    colXS: 12,
                     layout: 'TABLE_24COL',
                   },
                   showCaption: true,
@@ -128,8 +130,9 @@ export default {
                   detailStyle: 'DEFAULT',
                   detailType: 'FORMITEM',
                   layoutPos: {
-                    colLG: 4,
-                    colMD: 4,
+                    colLG: 12,
+                    colMD: 12,
+                    colSM: 12,
                     layout: 'TABLE_24COL',
                   },
                   showCaption: true,
@@ -197,7 +200,7 @@ export default {
       controlParam: {
         id: 'form',
       },
-      modelId: 'e2b16dbc15027f67ebfc4f7eb8e76a3d',
+      modelId: 'ffb886b7ba54ef215b85a99011afb4ca',
       modelType: 'PSDEFORM_EDITFORM',
       name: 'form',
       id: 'web.region.edit_view9_form',

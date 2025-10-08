@@ -1,4 +1,4 @@
-import { ISysMap } from '@ibiz/model-core';
+import { ISysMap, ISysMapItem } from '@ibiz/model-core';
 import { EChartsOption, EChartsType } from 'echarts';
 import { MapService } from './map.service';
 import {
@@ -9,6 +9,7 @@ import {
   MDCtrlLoadParams,
 } from '../../../interface';
 import { MDControlController } from '../../common';
+import { getAreaLevelByCode, getAreaLevelNum } from '../../../utils';
 
 export class MapController
   extends MDControlController<ISysMap, IMapState, IMapEvent>
@@ -36,8 +37,10 @@ export class MapController
     this.state.size = 1000;
     this.state.pointData = [];
     this.state.areaData = [];
+    this.state.areaLevel = '';
     this.state.mapInfo = {};
     this.state.enabledDrillDown = true;
+    this.state.enabledFullScreen = false;
   }
 
   protected async onCreated(): Promise<void> {
@@ -62,11 +65,17 @@ export class MapController
     try {
       // *初始加载需要重置分页
       const isInitialLoad = args.isInitialLoad === true;
-
-      // *查询参数处理
       const { context } = this.handlerAbilityParams(args);
       const params = await this.getFetchParams(args?.viewParam);
+      // 将当前区域编码与行政等级添加到上下文中，可在地图项中配置自定义条件转换为视图参数
       context.srfareacode = this.state.areaCode;
+      context.srfarealevel = this.state.areaLevel;
+      // 地图为100000时无行政等级
+      if (context.srfarealevel) {
+        context.srfarealevelnum = getAreaLevelNum(this.state.areaLevel);
+      } else {
+        context.srfarealevelnum = 1;
+      }
 
       const res = await this.service.fetchAll(context, params);
 
@@ -118,6 +127,15 @@ export class MapController
     this.state.strAreaCode = false;
     this.state.defaultAreaCode = 100000;
 
+    // 存在导航视图时激活模式改为双击
+    const { sysMapItems = [] } = this.model;
+    const index = sysMapItems.findIndex(
+      (item: ISysMapItem) => item.navAppViewId,
+    );
+    if (index !== -1) {
+      this.state.mdctrlActiveMode = 2;
+    }
+
     Object.keys(this.controlParams).forEach(key => {
       const value = this.controlParams[key];
       switch (key.toLowerCase()) {
@@ -133,6 +151,9 @@ export class MapController
         case 'enableddrilldown':
           this.state.enabledDrillDown = value === 'true';
           break;
+        case 'enabledfullscreen':
+          this.state.enabledFullScreen = value === 'true';
+          break;
         default:
           break;
       }
@@ -144,6 +165,7 @@ export class MapController
       : Number(this.state.defaultAreaCode);
 
     this.state.areaCode = this.state.defaultAreaCode;
+    this.state.areaLevel = getAreaLevelByCode(this.state.areaCode.toString());
   }
 
   /**
@@ -156,7 +178,7 @@ export class MapController
     await this.evt.emit('onMapChange', { data: { areaCode } });
     // 修改预置视图参数，然后加载
     this.state.areaCode = areaCode;
-    this.load({});
+    await this.load({});
   }
 
   /**
@@ -165,7 +187,14 @@ export class MapController
    * @date 2023-10-31 05:30:54
    * @param {IMapData} mapData
    */
-  onAreaClick(mapData: IMapData): void {
+  onAreaClick(
+    mapData: IMapData,
+    areaCode: string | number,
+    areaLevel: string,
+  ): void {
+    this.evt.emit('onNavDataChange', {
+      navData: { ...mapData, areaCode, areaLevel },
+    });
     this.evt.emit('onAreaClick', { data: [mapData] });
   }
 
@@ -178,5 +207,22 @@ export class MapController
   onPointClick(mapData: IMapData): void {
     this.setNavData(mapData);
     this.evt.emit('onPointClick', { data: [mapData] });
+  }
+
+  /**
+   * @description 下钻
+   * @param {string | number} areaCode
+   * @memberof MapController
+   */
+  drillDown(areaCode: string | number): void {
+    this.evt.emit('onDrillDown', { data: { areaCode } });
+  }
+
+  /**
+   * @description 返回
+   * @memberof MapController
+   */
+  back(): void {
+    this.evt.emit('onBackClick', undefined);
   }
 }

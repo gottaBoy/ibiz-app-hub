@@ -9,6 +9,13 @@ import { isNil, equals } from 'ramda';
 import './ibiz-checkbox-list.scss';
 import { CheckBoxListEditorController } from '../checkbox-list-editor.controller';
 
+/**
+ * 选项框列表
+ * @primary
+ * @description 使用van-checkbox-group组件和van-checkbox组件，用于在一组备选项中进行多选的场景。支持编辑器类型包含：`选项框列表`
+ * @ignoreprops  autoFocus | overflowMode
+ * @ignoreemits  infoTextChange | enter
+ */
 export const IBizCheckboxList = defineComponent({
   name: 'IBizCheckboxList',
   props: getCheckboxListProps<CheckBoxListEditorController>(),

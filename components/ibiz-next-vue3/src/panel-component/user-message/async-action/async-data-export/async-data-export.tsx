@@ -28,6 +28,7 @@ export const AsyncDataExport = defineComponent({
       beginTime: '',
       endTime: '',
       fileUrl: '',
+      fileName: '',
       isFinish: false,
     });
 
@@ -46,6 +47,7 @@ export const AsyncDataExport = defineComponent({
           '/{cat}',
           '',
         );
+      info.fileName = asyncResultDownloadObj.filename;
     }
     if (!finishedStates.includes(props.asyncAction.actionstate)) {
       info.isFinish = false;
@@ -54,7 +56,12 @@ export const AsyncDataExport = defineComponent({
     }
 
     const onDownLoad = () => {
-      ibiz.util.file.fileDownload(info.fileUrl);
+      ibiz.util.file.fileDownload(
+        info.fileUrl,
+        info.fileName,
+        undefined,
+        false,
+      );
     };
 
     return { ns, info, onClose, onDownLoad };

@@ -44,10 +44,21 @@ export class MapData implements IMapData {
 
   _symbol?: string = undefined;
 
+  _bgcolor?: string = undefined;
+
+  _color?: string = undefined;
+
+  _borderColor?: string = undefined;
+
+  _borderWidth?: number = undefined;
+
+  _className?: string = undefined;
+
   constructor(deData: IData, mapItem: ISysMapItem) {
     const {
       id,
       itemStyle,
+      sysCss,
       longitudeAppDEFieldId,
       latitudeAppDEFieldId,
       textAppDEFieldId,
@@ -56,9 +67,13 @@ export class MapData implements IMapData {
       tipsAppDEFieldId,
       sysImage,
       altitudeAppDEFieldId,
+      bkcolor,
       bkcolorAppDEFieldId,
       clsAppDEFieldId,
+      color,
       colorAppDEFieldId,
+      borderColor,
+      borderWidth,
       contentAppDEFieldId,
       iconAppDEFieldId,
       idAppDEFieldId,
@@ -76,6 +91,21 @@ export class MapData implements IMapData {
 
     if (sysImage) {
       this._symbol = sysImage.rawContent || sysImage.imagePath;
+    }
+    if (sysCss) {
+      this._className = sysCss.cssName;
+    }
+    if (bkcolor) {
+      this._bgcolor = bkcolor;
+    }
+    if (color) {
+      this._color = color;
+    }
+    if (borderColor) {
+      this._borderColor = borderColor;
+    }
+    if (borderWidth) {
+      this._borderWidth = borderWidth;
     }
     if (AreaItemStyles.includes(this._itemStyle)) {
       if (longitudeAppDEFieldId) {

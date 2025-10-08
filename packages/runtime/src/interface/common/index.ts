@@ -21,10 +21,13 @@ export type {
   IGlobalAppMenuConfig,
   IGlobalViewConfig,
   IGlobalPickerEditorConfig,
+  IGlobalUploadEditorConfig,
   IGlobalFormConfig,
   IGlobalSearchFormConfig,
   IGlobalTreeConfig,
   IGlobalCommonConfig,
+  IGlobalFlowDrtabConfig,
+  IGlobalMobConfig,
 } from './i-global-config';
 export type { IUILogicParams } from './i-ui-logic-params/i-ui-logic-params';
 export type { IDataAbilityParams } from './i-data-ability-params/i-data-ability-params';
@@ -39,3 +42,4 @@ export type { IFloatWindowOptions } from './i-float-window-options/i-float-windo
 export type { ISortItem } from './i-sort-item/i-sort-item';
 export type { IRedrawData } from './i-redraw-data/i-redraw-data';
 export type { IOverlayContainerOptions } from './i-overlay-container-options/i-overlay-container-options';
+export type { IViewShellHooks } from './i-view-shell-hooks/i-view-shell-hooks';

@@ -511,7 +511,10 @@ export const IBizVirtualizedList = defineComponent({
     const editContent = (
       <el-select-v2
         ref='editorRef'
-        v-model={this.curValue}
+        modelValue={this.curValue || undefined}
+        onUpdate:modelValue={(value: string | string[] | undefined) => {
+          this.curValue = value;
+        }}
         clearable
         class={[this.ns.b('select')]}
         filterable={true}
