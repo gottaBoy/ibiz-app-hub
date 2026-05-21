@@ -1,0 +1,37 @@
+$tab-default-layout: (
+  // Color
+  color-border: getCssVar('color', 'border'),
+  // Width/Height
+  height-tab-item: rem(50px),
+  // Font
+  font-tab-fontSize: getCssVar('tab-layout', 'font-tab-font-size')
+);
+
+@include b(tab-default-layout) {
+  @include set-component-css-var('tab-default-layout', $tab-default-layout);
+
+  @include e('tab-item') {
+    font-size: getCssVar(tab-default-layout, font-tab-fontSize);
+  }
+
+  @include when('top') {
+    .van-tabs--line .van-tabs__wrap {
+      height: getCssVar(tab-default-layout, height-tab-item);
+    }
+
+    .van-tab__text {
+      overflow: unset;
+    }
+  }
+
+  @include when('bottom') {
+    .van-tabbar {
+      height: getCssVar(tab-default-layout, height-tab-item);
+      border-top: 1px solid getCssVar(tab-default-layout, color-border);
+    }
+
+    .van-tabs__line {
+      display: none;
+    }
+  }
+}

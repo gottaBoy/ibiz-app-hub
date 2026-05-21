@@ -23,4 +23,11 @@ export class PanelButtonState extends PanelItemState {
    * @type {UIActionButtonState}
    */
   uiActionState!: UIActionButtonState;
+
+  /**
+   * @description 是否为全局AI助手
+   * @type {boolean}
+   * @memberof PanelButtonState
+   */
+  isGlobalAIAssistant: boolean = false;
 }

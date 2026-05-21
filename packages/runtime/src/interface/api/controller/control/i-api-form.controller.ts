@@ -86,14 +86,14 @@ export interface IApiFormController<
 
   /**
    * @description 切换折叠，其中tag表示操作指定分组标识，若不传则操作当前表单的所有分组展开状态，expand表示是否展开，若不传则以当前分组状态为基准切换
-   * @param {{ tag: string; expand: boolean }} [params]
+   * @param {{ tag: string; expand: boolean }} [params] 切换折叠参数
    * @memberof IApiFormController
    */
   changeCollapse(params?: { tag?: string; expand?: boolean }): void;
 
   /**
    * @description 设置表单激活分页
-   * @param {string} name
+   * @param {string} name 分页标识
    * @memberof IApiFormController
    */
   setActiveTab(name: string): void;

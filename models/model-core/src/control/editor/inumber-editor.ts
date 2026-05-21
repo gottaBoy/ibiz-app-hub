@@ -36,4 +36,11 @@ export interface INumberEditor extends IEditor {
    * 来源  getPrecision
    */
   precision?: number;
+
+  /**
+   * 小数点位数[SCALE]
+   * @type {number}
+   * 来源  getScale
+   */
+  scale?: number;
 }

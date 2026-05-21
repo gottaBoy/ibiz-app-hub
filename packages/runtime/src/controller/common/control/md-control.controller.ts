@@ -14,6 +14,7 @@ import {
   IControlNavigatable,
 } from '@ibiz/model-core';
 import { isNil } from 'ramda';
+import { isArray } from 'lodash-es';
 import {
   EventBase,
   IMDControlEvent,
@@ -95,6 +96,49 @@ export class MDControlController<
       return this.controlParams.mdctrlrefreshmode;
     }
     return ibiz.config.mdctrlrefreshmode;
+  }
+
+  /**
+   * 批操作工具栏显示模式
+   *
+   * @readonly
+   * @type {('default' | 'multiple')}
+   * @memberof MDControlController
+   */
+  get batchToolbarMode(): 'default' | 'multiple' {
+    if (this.controlParams.batchtoolbarmode) {
+      return this.controlParams.batchtoolbarmode;
+    }
+    return ibiz.config.common.batchToolbarMode;
+  }
+
+  /**
+   * @description 是否显示批操作工具栏
+   * @readonly
+   * @type {boolean}
+   * @memberof MDControlController
+   */
+  get showBatchToolbar(): boolean {
+    switch (this.batchToolbarMode) {
+      case 'multiple':
+        return this.state.selectedData.length >= 2;
+      case 'default':
+      default:
+        return this.state.selectedData.length > 0;
+    }
+  }
+
+  /**
+   * @description 分页显示模式，default：显示完整分页栏，simple：只显示总条数，上一页，页码栏，下一页
+   * @readonly
+   * @type {('default' | 'simple')}
+   * @memberof MDControlController
+   */
+  get paginationMode(): 'default' | 'simple' {
+    if (this.controlParams.paginationmode) {
+      return this.controlParams.paginationmode;
+    }
+    return 'default';
   }
 
   protected get _evt(): ControllerEvent<IMDControlEvent> {
@@ -197,6 +241,7 @@ export class MDControlController<
 
   protected async onCreated(): Promise<void> {
     await super.onCreated();
+    await this.initUIActions();
 
     if (this.model.appDataEntityId) {
       // 初始化实体属性id和name的映射
@@ -223,6 +268,13 @@ export class MDControlController<
       this.load({ isInitialLoad: true });
     }
   }
+
+  /**
+   * @description 初始化界面行为组
+   * @protected
+   * @memberof MDControlController
+   */
+  protected async initUIActions(): Promise<void> {}
 
   /**
    * @description 执行多数据分组
@@ -356,7 +408,7 @@ export class MDControlController<
       resultParams.sort = sortQuery;
     }
     // *请求参数处理
-    await this._evt.emit('onBeforeLoad', undefined);
+    await this._evt.emit('onBeforeLoad', { params: resultParams });
     // 合并搜索条件参数，这些参数在onBeforeLoad监听里由外部填入
     Object.assign(resultParams, {
       ...this.state.searchParams,
@@ -366,19 +418,21 @@ export class MDControlController<
     if (extraParams) {
       Object.assign(resultParams, extraParams);
     }
-    // 门户过滤参数统一处理
+    // 门户过滤参数统一处理,部件引擎中搜索栏参数也在此处理
     if (resultParams.srfsearchconds) {
+      const srfsearchconds = isArray(resultParams.srfsearchconds)
+        ? resultParams.srfsearchconds
+        : [resultParams.srfsearchconds];
       if (resultParams.searchconds && resultParams.searchconds.length > 0) {
-        resultParams.searchconds = {
-          condop: 'AND',
-          condtype: 'GROUP',
-          searchconds: [
-            resultParams.srfsearchconds,
-            ...resultParams.searchconds,
-          ],
-        };
+        resultParams.searchconds = [
+          {
+            condop: 'AND',
+            condtype: 'GROUP',
+            searchconds: [...srfsearchconds, ...resultParams.searchconds],
+          },
+        ];
       } else {
-        resultParams.searchconds = [resultParams.srfsearchconds];
+        resultParams.searchconds = [...srfsearchconds];
       }
       delete resultParams.srfsearchconds;
     }
@@ -871,7 +925,12 @@ export class MDControlController<
       return;
     }
     // 非这个实体的数据变更，则不处理
-    const data = msg.data as IData;
+    let data: IData | undefined;
+    try {
+      data = msg.data || (msg.content ? JSON.parse(msg.content) : undefined);
+    } catch (error) {
+      ibiz.log.error(error);
+    }
     if (
       !data ||
       (!data.srfdecodename && !data.srfdename) ||
@@ -883,7 +942,7 @@ export class MDControlController<
     }
 
     let isRefresh = false;
-    const { srfkey } = msg.data as IData;
+    const { srfkey } = data as IData;
 
     // 新增一定刷新，修改和删除只有当前多数据部件存在的数据命中后才刷新
     switch (msg.subtype) {

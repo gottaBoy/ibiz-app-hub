@@ -1,7 +1,7 @@
+import { PanelContainerController } from '@ibiz-template/runtime';
 import { IPanelContainer } from '@ibiz/model-core';
 import { computed, defineComponent, PropType, VNode } from 'vue';
 import { useNamespace } from '../../use';
-import { PanelContainerController } from './panel-container.controller';
 import './panel-container.scss';
 
 /**
@@ -110,9 +110,8 @@ export const PanelContainer = defineComponent({
     return (
       <div
         class={this.classArr}
-        onClick={() => {
-          this.controller.onClick();
-        }}
+        v-loading={this.controller.state.loading}
+        onClick={event => this.controller.onClick(event)}
       >
         {this.controller.model.cssStyle ? (
           <style type='text/css'>{this.controller.model.cssStyle}</style>

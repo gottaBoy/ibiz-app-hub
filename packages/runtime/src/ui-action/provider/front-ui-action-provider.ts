@@ -63,12 +63,8 @@ export class FrontUIActionProvider extends UIActionProviderBase {
           );
         }
         // 处理参数
-        const { resultContext, resultParams } = await this.handleParams(
-          action,
-          context,
-          data,
-          params,
-        );
+        const { resultContext, resultParams, resultData } =
+          await this.handleParams(action, context, data, params);
 
         // 获取视图数据能力部件
         const { xdataControlName = '' } = view.model as IData;
@@ -86,7 +82,13 @@ export class FrontUIActionProvider extends UIActionProviderBase {
           frontPSAppView,
           resultContext,
           resultParams,
-          { ctx: view.getCtx(), event, noWaitRoute, ...options },
+          {
+            ctx: view.getCtx(),
+            event,
+            noWaitRoute,
+            parentData: resultData,
+            ...options,
+          },
         );
         // 打开视图取消操作
         if (!res?.ok) {
@@ -146,15 +148,29 @@ export class FrontUIActionProvider extends UIActionProviderBase {
     action: IAppDEUIAction,
     args: IUILogicParams,
   ): Promise<IUIActionResult> {
-    const { scriptCode, uiactionTag } = action as IUIAction;
     const { context, params, data, event, view, ctrl } = args;
+    const { resultContext, resultParams } = await this.handleParams(
+      action,
+      context,
+      data,
+      params,
+    );
+    const { scriptCode, uiactionTag } = action as IUIAction;
     if (uiactionTag === SysUIActionTag.SHOTR_CUT) {
       const result = await view.callUIAction(uiactionTag, args);
       return result || {};
     }
     if (scriptCode) {
       const result = (await ScriptFactory.asyncExecScriptFn(
-        { context, params, data, el: event?.target, view, ctrl, action },
+        {
+          context: resultContext,
+          params: { ...params, ...resultParams },
+          data,
+          el: event?.target,
+          view,
+          ctrl,
+          action,
+        },
         scriptCode,
       )) as IUIActionResult | undefined;
       return result || {};
@@ -214,6 +230,12 @@ export class FrontUIActionProvider extends UIActionProviderBase {
         },
       });
       if (res.ok) {
+        const success = await ibiz.printPreview.execPrint(
+          resultContext,
+          resultParams,
+          res.data as Blob,
+        );
+        if (success) return;
         // 存在srfcontenttype参数需响应文件
         if (resultParams && resultParams.srfcontenttype) {
           const fileName = ibiz.util.file.getFileName(res);
@@ -249,12 +271,8 @@ export class FrontUIActionProvider extends UIActionProviderBase {
     args: IUILogicParams,
   ): Promise<IUIActionResult> {
     // 处理参数
-    const { resultContext, resultParams } = await this.handleParams(
-      action,
-      args.context,
-      args.data,
-      args.params,
-    );
+    const { resultContext, resultParams, presetParams } =
+      await this.handleParams(action, args.context, args.data, args.params);
 
     const { appDataEntityId, appDEDataImportId, frontAppViewId } = action;
     if (!appDataEntityId || !appDEDataImportId) {
@@ -270,6 +288,8 @@ export class FrontUIActionProvider extends UIActionProviderBase {
       dataImportViewId: frontAppViewId,
       context: resultContext,
       params: resultParams,
+      event: args.event,
+      viewOption: presetParams.viewoption,
     });
 
     return {
@@ -426,6 +446,9 @@ export class FrontUIActionProvider extends UIActionProviderBase {
             overlay.dismiss();
           }
           hasSave = true;
+        },
+        onFinish: (_eventArgs: PartialWithObject<EditFormEvent, EventBase>) => {
+          overlay?.dismiss();
         },
       },
       popoverOpts,

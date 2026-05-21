@@ -1,0 +1,204 @@
+@include b('chunk-tool-call') {
+  padding: 4px;
+  margin-bottom: 8px;
+  background-color: getCssVar(chat-tool-call-item, bg);
+  border: getCssVar(chat-tool-call-item, border-color);
+  border-radius: 4px;
+
+  svg {
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  @include e('header') {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px;
+
+    >div {
+      display: flex;
+      column-gap: 4px;
+      align-items: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  @include e('header-left') {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    min-width: 0;
+    margin-right: 8px;
+
+    @include m(icon) {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+    }
+
+    @include m(caption) {
+      flex-shrink: 0;
+    }
+
+    @include m('desc') {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  @include e('header-right') {
+    flex-shrink: 0;
+
+    svg {
+      width: 14px !important;
+      height: 14px !important;
+      fill: none !important;
+    }
+  }
+
+  @include e('content') {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 400px;
+    padding: 8px;
+    overflow: auto;
+    color: getCssVar('color', 'text-2');
+  }
+
+  @include e('copy') {
+    display: flex;
+    align-items: center;
+  }
+
+  @include e('cluster') {
+    @include m('header') {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    @include m('title') {
+      flex-shrink: 0;
+      color: getCssVar(color, primary-active);
+    }
+
+    @include m('summary') {
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @include m('icon') {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      cursor: pointer;
+
+      svg {
+        fill: none !important;
+      }
+    }
+
+    @include m('content') {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-left: 6px;
+      font-size: 12px;
+    }
+
+    @include m('children') {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+  }
+
+  @include e('kbguidance') {
+    flex-shrink: 0;
+    padding: 0 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: getCssVar(color, primary-active);
+  }
+
+  @include e('similarity') {
+    position: relative;
+    flex-shrink: 0;
+    padding: 0 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: getCssVar(color, primary-active);
+    background: linear-gradient(to right,
+        getCssVar(ai-chat, background-color-2) 0%,
+        getCssVar(ai-chat, background-color-2) var(--percent),
+        transparent var(--percent),
+        transparent 100%);
+
+    &::before {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 2px;
+      height: 16px;
+      content: '';
+      background-color: getCssVar(color, primary-active);
+      border-radius: 2px;
+      transform: translateY(-50%);
+    }
+  }
+
+  @include e('original') {
+    flex-shrink: 0;
+    color: green;
+  }
+
+  @include e('item') {
+    position: relative;
+    display: flex;
+    gap: 4px;
+    font-size: 12px;
+
+    @include m('content') {
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  @include e('footer') {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding-top: 4px;
+    font-size: 12px;
+    border-top: 1px solid getCssVar(ai-chat, border-color);
+  }
+
+  @include e('chunk') {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px;
+    background: getCssVar(ai-chat, background-color-light);
+    border-radius: 4px;
+  }
+
+  @include e('error') {
+    color: getCssVar(chat-tool-call-item, text-error);
+  }
+
+  @include e('center-text') {
+    text-align: center;
+  }
+}

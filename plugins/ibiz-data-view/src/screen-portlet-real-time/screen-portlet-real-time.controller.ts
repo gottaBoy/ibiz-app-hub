@@ -44,39 +44,22 @@ export class ScreenPortletRealTimeController extends PortletPartController<IDBTo
       const { ctrlParams } = this.model.controlParam;
       if (ctrlParams && ctrlParams.VALUEFORMAT) {
         const arr = ctrlParams.VALUEFORMAT.split(',');
-        const index = arr.findIndex((w: string) => w === 'week'); // 找到week
+        // 安全检查：确保至少有一个元素
+        if (arr.length === 0) {
+          return;
+        }
 
-        if (index > -1) {
+        const index = arr.indexOf('week');
+
+        if (index !== -1) {
           this.showWeek = true;
-          if (index === 0) {
-            // 左侧没配 0 1
-            this.leftTime = '';
-            this.rightTime = arr[1];
-          }
-          if (index === 1) {
-            // 左侧配了  0 1 ， 0 1 2
-            arr.splice(index, 1);
-            arr.forEach((str: string, i: number) => {
-              if (i === 0) {
-                this.leftTime = str;
-              }
-              if (i === 1) {
-                this.rightTime = str;
-              }
-            });
-          }
+          arr.splice(index, 1);
         } else {
           this.showWeek = false;
-          // 按顺序赋值  0 2
-          arr.forEach((str: string, i: number) => {
-            if (i === 0) {
-              this.leftTime = str;
-            }
-            if (i === 1) {
-              this.rightTime = str;
-            }
-          });
         }
+        // 按顺序赋值
+        this.leftTime = arr[0] ?? '';
+        this.rightTime = arr[1] ?? '';
       }
     }
   }

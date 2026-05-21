@@ -181,7 +181,7 @@ export const DashboardDesign = defineComponent({
     // 准备UI需要的数据
     const prepareData = async () => {
       const list3: IPortletList[] = [];
-      const app = ibiz.hub.getApp(ibiz.env.appId);
+      const app = ibiz.hub.getApp(c.model.appId);
       if (c.model.customizeMode === 2) {
         const dynamicPortlets = await c.loadAllDynaPortlet();
         dynamicPortlets?.forEach((portlet: IData) => {
@@ -305,7 +305,7 @@ export const DashboardDesign = defineComponent({
     const getPortletModelByCodeName = (
       tag: string,
     ): IDBPortletPart | undefined => {
-      const app = ibiz.hub.getApp(ibiz.env.appId);
+      const app = ibiz.hub.getApp(c.model.appId);
       if (app.model.appPortlets) {
         const appPortlet = app.model.appPortlets.find(portlet => {
           return portlet.control?.codeName === tag;

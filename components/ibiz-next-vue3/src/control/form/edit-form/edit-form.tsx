@@ -1,5 +1,9 @@
 /* eslint-disable no-param-reassign */
-import { EditFormController, IControlProvider } from '@ibiz-template/runtime';
+import {
+  ControlVO,
+  EditFormController,
+  IControlProvider,
+} from '@ibiz-template/runtime';
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import { IDEEditForm } from '@ibiz/model-core';
 import { debounce } from 'lodash-es';
@@ -78,9 +82,22 @@ export const EditFormControl: ReturnType<typeof defineComponent> =
           newVal => {
             const changeVal = newVal || {};
             // 找有没有不一致的属性
-            const find = Object.keys(c.data).find(key => {
-              return changeVal[key] !== c.data[key];
-            });
+            const originData =
+              c.data instanceof ControlVO ? c.data.getOrigin() : c.data;
+            let find: boolean = false;
+            if (
+              originData &&
+              Object.keys(originData) &&
+              changeVal &&
+              Object.keys(changeVal) &&
+              Object.keys(originData).length !== Object.keys(changeVal).length
+            ) {
+              find = true;
+            } else {
+              find = !!Object.keys(originData).find(key => {
+                return changeVal[key] !== originData[key];
+              });
+            }
             // 内外部数据不一致时，只能是外部修改了，这是更新数据并重走load
             if (find) {
               c.setSimpleData(changeVal);

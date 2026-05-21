@@ -64,6 +64,11 @@ export default {
           id: 'toolbar',
         },
         {
+          caption: '简略分页栏',
+          appViewId: 'web.master_data_view_simple_page',
+          id: 'simplepage',
+        },
+        {
           caption: '值显示',
           appViewId: 'web.master_card_format',
           id: 'value_format',
@@ -97,6 +102,16 @@ export default {
           caption: '刷新模式',
           appViewId: 'web.master_card_refreshmode_exp',
           id: 'refreshmode',
+        },
+        {
+          caption: '批操作工具栏显示模式',
+          appViewId: 'web.master_card_batchtoolbarmode',
+          id: 'batchtoolbarmode',
+        },
+        {
+          caption: '动态界面行为组',
+          appViewId: 'web.master_card_dy_uiaction_group_exp',
+          id: 'dy_uiaction_group',
         },
         {
           caption: '事件及调用',

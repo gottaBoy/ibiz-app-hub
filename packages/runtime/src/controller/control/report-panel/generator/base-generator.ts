@@ -1,13 +1,17 @@
 import { IDEReportPanel } from '@ibiz/model-core';
-import { IReportPanelController } from '../../../../interface';
+import {
+  IApiReportPanelGenerator,
+  IReportPanelController,
+} from '../../../../interface';
 
 /**
  * 报表生成器基类
  *
  * @export
  * @class ReportPanelBaseGenerator
+ * @implements {IApiReportPanelGenerator}
  */
-export class ReportPanelBaseGenerator {
+export class ReportPanelBaseGenerator implements IApiReportPanelGenerator {
   /**
    * 报表面板模型
    *
@@ -35,6 +39,13 @@ export class ReportPanelBaseGenerator {
    * @memberof ReportPanelBaseGenerator
    */
   public protoRef: IData | undefined;
+
+  /**
+   * @description 报表类型
+   * @type {string}
+   * @memberof ReportPanelBaseGenerator
+   */
+  reportType?: string;
 
   /**
    * 配置
@@ -84,5 +95,17 @@ export class ReportPanelBaseGenerator {
    */
   public load(data: IData = {}): Promise<IData> {
     return Promise.resolve(data);
+  }
+
+  /**
+   * @description 生成
+   * @param {IData[]} _items
+   * @returns {*}  {({ model: IModel; options: IData; data: IData[] } | undefined)}
+   * @memberof ReportPanelBaseGenerator
+   */
+  public generate(
+    _items: IData[],
+  ): { model: IModel; options: IData; data: IData[] } | undefined {
+    return undefined;
   }
 }

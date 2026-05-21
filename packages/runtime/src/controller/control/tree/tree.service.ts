@@ -508,21 +508,27 @@ export class TreeService<
         appDataEntityId!,
         appId,
       );
-      const nodeDatas = result.map((item: IData, index: number) => {
+      const nodeDatas: TreeDataSetNodeData[] = [];
+      for (let index = 0; index < result.length; index++) {
+        const item = result[index];
         const defaultExpand = this.calcExpand(nodeModel, index);
         let data = item;
         // 不是应用数据实体对象的数据项必须转为应用数据实体对象
         if (!(item instanceof AppDataEntity)) {
           data = new AppDataEntity(entityModel, item);
         }
-        return new TreeDataSetNodeData(nodeModel, parentNodeData, {
+        const nodeData = new TreeDataSetNodeData(nodeModel, parentNodeData, {
           data,
           leaf: !!opts.leaf,
+          context: opts.context,
+          params: opts.params,
           navContext,
           navParams,
           defaultExpand,
         });
-      });
+        await nodeData.initAsyncData(nodeModel);
+        nodeDatas.push(nodeData);
+      }
       this.updatePageItems(
         nodeModel,
         parentNodeData,
@@ -771,6 +777,8 @@ export class TreeService<
           const node = new TreeCodeListNodeData(nodeModel, parent, {
             data: codeListItem,
             leaf: !!opts.leaf && !codeListItem.children?.length,
+            context: opts.context,
+            params: opts.params,
             navContext,
             navParams,
             defaultExpand,

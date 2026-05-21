@@ -1,6 +1,6 @@
 import { computed, defineComponent, PropType, VNode } from 'vue';
 import { IPanelContainer } from '@ibiz/model-core';
-import { PanelItemController } from '@ibiz-template/runtime';
+import { PanelContainerController } from '@ibiz-template/runtime';
 import { useNamespace } from '../../use';
 
 /**
@@ -23,7 +23,7 @@ export const PanelTabPage = defineComponent({
      * @description 面板分页控制器
      */
     controller: {
-      type: PanelItemController,
+      type: PanelContainerController,
       required: true,
     },
   },
@@ -47,6 +47,7 @@ export const PanelTabPage = defineComponent({
       <iBizRow
         class={[this.ns.b(), this.ns.m(this.modelData.codeName), this.classArr]}
         layout={this.modelData.layout}
+        v-loading={this.controller.state.loading}
       >
         {defaultSlots.map(slot => {
           const props = slot.props as IData;

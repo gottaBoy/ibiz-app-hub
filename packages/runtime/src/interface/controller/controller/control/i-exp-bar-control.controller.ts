@@ -4,7 +4,6 @@ import { IExpBarControlState } from '../../state';
 import { IControlController } from './i-control.controller';
 import { IApiExpBarControlController } from '../../../api';
 import { IViewController } from '../view';
-import { IMDControlController } from './i-md-control.controller';
 
 /**
  * @description 导航栏控制器接口
@@ -22,12 +21,6 @@ export interface IExpBarControlController<
   E extends IExpBarControlEvent = IExpBarControlEvent,
 > extends IControlController<T, S, E>,
     IApiExpBarControlController<T, S> {
-  /**
-   * @description 数据部件控制器（多数据）
-   * @type {IMDControlController}
-   * @memberof IExpBarControlController
-   */
-  xDataController: IMDControlController;
   /**
    * @description 视图控制器
    * @type {IViewController}

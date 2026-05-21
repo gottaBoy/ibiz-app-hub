@@ -16,6 +16,26 @@
     height: getCssVar('width-icon', 'extra-small');
     background: getCssVar('color-bg-2');
     transform: rotate(45deg);
+
+    &[data-placement^=top] {
+      border-right: 1px solid getCssVar('color-border');
+      border-bottom: 1px solid getCssVar('color-border');
+    }
+
+    &[data-placement^=bottom] {
+      border-top: 1px solid getCssVar('color-border');
+      border-left: 1px solid getCssVar('color-border');
+    }
+
+    &[data-placement^=left] {
+      border-top: 1px solid getCssVar('color-border');
+      border-right: 1px solid getCssVar('color-border');
+    }
+
+    &[data-placement^=right] {
+      border-bottom: 1px solid getCssVar('color-border');
+      border-left: 1px solid getCssVar('color-border');
+    }
   }
 
   @include when(show) {

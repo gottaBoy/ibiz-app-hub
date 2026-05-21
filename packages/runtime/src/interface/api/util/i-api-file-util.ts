@@ -1,5 +1,48 @@
-import { IApiContext, IApiData, IApiParams } from '@ibiz-template/core';
+import {
+  IApiContext,
+  IApiData,
+  IApiParams,
+  IHttpResponse,
+} from '@ibiz-template/core';
 import { IApiDownloadTicket } from '../common';
+
+/**
+ * @description 扩展参数接口，用于计算附件的上传和下载路径
+ * @export
+ * @interface IApiFileUpDownExtraParams
+ */
+export interface IApiFileUpDownExtraParams {
+  /**
+   * @description 上传附件参数，用于计算上传路径
+   * @type {IApiData}
+   * @memberof IApiFileUpDownExtraParams
+   */
+  uploadParams?: IApiData;
+  /**
+   * @description 下载附件参数，用于计算下载路径
+   * @type {IApiData}
+   * @memberof IApiFileUpDownExtraParams
+   */
+  exportParams?: IApiData;
+  /**
+   * @description 用于计算上传和下载路径的OSS参数
+   * @type {string}
+   * @memberof IApiFileUpDownExtraParams
+   */
+  osscat?: string;
+  /**
+   * @description 启用无权限模式。启用后，上传文件夹需拼接'$'字符，也不需要计算下载凭证
+   * @type {boolean}
+   * @memberof IApiFileUpDownExtraParams
+   */
+  enableNoAccess?: boolean;
+  /**
+   * @description 是否启用全局下载文件前缀
+   * @type {boolean}
+   * @memberof IApiFileUpDownExtraParams
+   */
+  globalDownloadPrifix?: boolean;
+}
 
 /**
  * @description 文件工具类
@@ -9,7 +52,7 @@ import { IApiDownloadTicket } from '../common';
 export interface IApiFileUtil {
   /**
    * @description 设置文件上传请求头数据
-   * @param {Record<string, string>} args
+   * @param {Record<string, string>} args 请求头数据
    * @memberof IApiFileUtil
    */
   setUploadHeaders(args: Record<string, string>): void;
@@ -26,11 +69,7 @@ export interface IApiFileUtil {
    * @param {IApiContext} context 应用上下文对象
    * @param {IApiParams} params 视图参数对象
    * @param {IApiData} [data] 业务数据对象，默认给{}
-   * @param {{
-   *       uploadParams?: IApiData;
-   *       exportParams?: IApiData;
-   *       osscat?: string;
-   *     }} [extraParams] 上传附件参数;下载附加参数；自定义oss分类名称
+   * @param {IApiFileUpDownExtraParams} [extraParams] 扩展参数（包含上传附件参数、下载附加参数、自定义oss分类名称、启用无权限模式）
    * @returns {*}  {{
    *     uploadUrl: string;
    *     downloadUrl: string;
@@ -41,11 +80,7 @@ export interface IApiFileUtil {
     context: IApiContext,
     params: IApiParams,
     data?: IApiData,
-    extraParams?: {
-      uploadParams?: IApiData;
-      exportParams?: IApiData;
-      osscat?: string;
-    },
+    extraParams?: IApiFileUpDownExtraParams,
   ): {
     uploadUrl: string;
     downloadUrl: string;
@@ -57,21 +92,22 @@ export interface IApiFileUtil {
    * @returns {*}  {string}
    * @memberof IApiFileUtil
    */
-  getFileName(response: IApiData): string;
+  getFileName(response: IHttpResponse): string;
 
   /**
    * @description 文件下载
-   * @param {string} url
-   * @param {string} [name]
+   * @param {string} url 下载地址
+   * @param {string} [name] 文件名
    * @param {({
    *       context: IApiContext;
    *       params: IApiParams;
    *       data: IApiData;
    *       file: { fileId: string } & IApiData;
-   *       extraParams?: IApiData;
+   *       extraParams?: IApiFileUpDownExtraParams;
    *       downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
-   *     })} [downloadParams] 下载参数
+   *     })} [downloadParams] {应用上下文；视图参数；数据；文件信息；扩展参数（包含上传附件参数、下载附加参数、自定义oss分类名称、启用无权限模式）;下载凭证参数}
    * @param {boolean} [enableDownloadTicket] 启用下载凭证
+   * @param {boolean} [enableNoAccess] 启用无权限模式
    * @returns {*}  {Promise<void>}
    * @memberof IApiFileUtil
    */
@@ -83,18 +119,19 @@ export interface IApiFileUtil {
       params: IApiParams;
       data: IApiData;
       file: { fileId: string } & IApiData;
-      extraParams?: IApiData;
+      extraParams?: IApiFileUpDownExtraParams;
       downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
     },
     enableDownloadTicket?: boolean,
+    enableNoAccess?: boolean,
   ): Promise<void>;
 
   /**
    * @description 获取下载凭证
-   * @param {IApiContext} context
-   * @param {IApiParams} params
-   * @param {IApiData} data
-   * @param {({ fileId: string } & IApiData)}
+   * @param {IApiContext} context 上下文参数
+   * @param {IApiParams} params 视图参数
+   * @param {IApiData} data 业务数据
+   * @param {({ fileId: string } & IApiData)} file 文件信息
    * @param {{ appEntityTag?: string; dataFieldTag?: string }} [downloadTicketParams] 存在appEntityTag，则调用appEntityTag映射的实体服务创建下载凭证能力，否则调用当前界面域主实体的实体服务；存在dataFieldTag，则按照业务数据（data）、上下文（context）、视图参数（params）顺序找对应的属性值作为创建下载凭证数据主键，没有则使用上下文中找对应的数据主键
    * @returns {*}  {(Promise<IApiDownloadTicket | undefined>)}
    * @memberof IApiFileUtil
@@ -109,17 +146,17 @@ export interface IApiFileUtil {
 
   /**
    * @description 设置下载票据
-   * @param {string} fileId
-   * @param {IApiData} downloadTicket
+   * @param {string} fileId 文件标识
+   * @param {IApiData} downloadTicket 下载凭证数据
    * @memberof IApiFileUtil
    */
   setDownloadTicket(fileId: string, downloadTicket: IApiData): void;
 
   /**
    * @description 文件上传
-   * @param {string} uploadUrl
-   * @param {Blob} file
-   * @param {IApiData} headers
+   * @param {string} uploadUrl 上传地址
+   * @param {Blob} file 文件
+   * @param {IApiData} headers 请求头
    * @returns {*}  {Promise<IApiData>}
    * @memberof IApiFileUtil
    */
@@ -131,19 +168,15 @@ export interface IApiFileUtil {
 
   /**
    * @description 选择并上传文件
-   * @param {IApiContext} context
-   * @param {IApiParams} params
-   * @param {IApiData} data
+   * @param {IApiContext} context 上下文参数
+   * @param {IApiParams} params 视图参数
+   * @param {IApiData} data 业务数据
    * @param {{
    *       accept: string;
    *       multiple?: boolean;
    *       showUploadManager?: boolean;
-   *       extraParams?: {
-   *         uploadParams?: IApiData;
-   *         exportParams?: IApiData;
-   *         osscat?: string;
-   *       };
-   *     }} [option] {上传文件类型,是否多选，是否展示文件管理器，扩展参数（包含上传附件参数、下载附加参数、自定义oss分类名称）}
+   *       extraParams?: IApiFileUpDownExtraParams;
+   *     }} [option] {上传文件类型；是否多选；是否展示文件管理器；扩展参数（包含上传附件参数、下载附加参数、自定义oss分类名称、启用无权限模式）}
    * @returns {*}  {Promise<IApiData[]>}
    * @memberof IApiFileUtil
    */
@@ -155,22 +188,18 @@ export interface IApiFileUtil {
       accept: string;
       multiple?: boolean;
       showUploadManager?: boolean;
-      extraParams?: {
-        uploadParams?: IApiData;
-        exportParams?: IApiData;
-        osscat?: string;
-      };
+      extraParams?: IApiFileUpDownExtraParams;
     },
-  ): Promise<IApiData[]>;
+  ): Promise<IApiData[] | undefined>;
 
   /**
    * @description 选择文件
    * @param {string} [accept] 选择文件类型
    * @param {boolean} [multiple] 是否多选，默认为false
-   * @returns {*}  {Promise<FileList>}
+   * @returns {*}  {Promise<FileList | undefined>}
    * @memberof IApiFileUtil
    */
-  chooseFile(accept: string, multiple?: boolean): Promise<FileList>;
+  chooseFile(accept: string, multiple?: boolean): Promise<FileList | undefined>;
 
   /**
    * @description 通用请求文件方法，可自定义 responseType（默认获取Blob类型的文件流，responseType 的配置决定了请求服务时返回的文件数据格式）
@@ -180,10 +209,11 @@ export interface IApiFileUtil {
    *       params: IApiParams;
    *       data: IApiData;
    *       file: { fileId: string } & IApiData;
-   *       extraParams?: IApiData;
+   *       extraParams?: IApiFileUpDownExtraParams;
    *       downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
-   *     })} [downloadParams] 下载参数
+   *     })} [downloadParams] {应用上下文；视图参数；数据；文件信息；扩展参数（包含上传附件参数、下载附加参数、自定义oss分类名称、启用无权限模式）;下载凭证参数}
    * @param {boolean} [enableDownloadTicket] 启用下载凭证
+   * @param {boolean} [enableNoAccess] 启用无权限模式
    * @returns {*}  {Promise<IApiData>}
    * @memberof FileUtil
    */
@@ -195,9 +225,28 @@ export interface IApiFileUtil {
       params: IApiParams;
       data: IApiData;
       file: { fileId: string } & IApiData;
-      extraParams?: IApiData;
+      extraParams?: IApiFileUpDownExtraParams;
       downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
     },
     enableDownloadTicket?: boolean,
+    enableNoAccess?: boolean,
   ): Promise<IApiData>;
+
+  /**
+   * @description 图片压缩
+   * @param {File} file 原始文件
+   * @param {number} maxW 最大宽度（默认 1280）
+   * @param {number} quality 压缩质量 0~1（默认 0.8）
+   * @returns {*}  {Promise<File>} 压缩后的新文件
+   * @memberof IApiFileUtil
+   */
+  compressImg(file: File, maxW: number, quality: number): Promise<File>;
+
+  /**
+   * @description base64转Blob对象
+   * @param {string} base64 base64 字符串
+   * @returns {*}  {Blob} Blob对象
+   * @memberof IApiFileUtil
+   */
+  base64ToBlob(base64: string): Blob;
 }

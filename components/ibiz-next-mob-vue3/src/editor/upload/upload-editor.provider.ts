@@ -33,6 +33,7 @@ export class FileUploaderEditorProvider implements IEditorProvider {
         componentName = 'IBizImageSelect';
         break;
       case 'MOBPICTURE_CROPPING':
+      case 'PICTURE_CROPPING':
         componentName = 'IBizImageCropping';
         break;
       case 'CAROUSEL':

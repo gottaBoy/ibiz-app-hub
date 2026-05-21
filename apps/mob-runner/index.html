@@ -39,10 +39,180 @@
     ></script>
     <script src="/environments/environment.js"></script>
     <script src="/assets/ionicons/7.1.2/ionicons.js"></script>
+    <style>
+      .app-loading-x {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .app-loading-x-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        color: #fff;
+        background: rgba(0, 100, 250, 1);
+      }
+
+      .app-loading-x-container .icon {
+        border: 2px solid #ffffff4d;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        width: 6rem;
+        height: 6rem;
+        align-items: center;
+        animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        background-color: #ffffff4d;
+        margin-bottom: 2rem;
+      }
+
+      .app-loading-x-container .icon img {
+        width: 3rem;
+        height: 3rem;
+      }
+
+      .app-loading-x-container .text {
+        animation: fade-in-up 0.8s ease-out 0.3s both;
+        text-align: center;
+        padding: 0px 1rem;
+        max-width: 100%;
+      }
+
+      .app-loading-x-container .title {
+        font-size: 2.25rem;
+        line-height: calc(2.5 / 2.25);
+        letter-spacing: 0.025em;
+        margin-bottom: 0.5rem;
+      }
+
+      .app-loading-x-container .description {
+        color: #fffc;
+        font-size: 0.875rem;
+        line-height: calc(1.25 / 0.875);
+      }
+
+      .app-loading-x-container .round {
+        display: flex;
+        margin-top: 3rem;
+      }
+
+      .app-loading-x-container .round-item {
+        width: 0.625rem;
+        height: 0.625rem;
+        border-radius: 50%;
+        background-color: #fffc;
+        margin-right: 0.5rem;
+        animation: bounce 1s infinite;
+      }
+
+      .app-loading-x-container .round-item:last-child {
+        margin-right: 0px;
+      }
+
+      .app-loading-x-container .round-item:nth-child(1) {
+        animation-delay: 0ms;
+      }
+
+      .app-loading-x-container .round-item:nth-child(2) {
+        animation-delay: 150ms;
+      }
+
+      .app-loading-x-container .round-item:nth-child(3) {
+        animation-delay: 300ms;
+      }
+
+      @keyframes pulse-slow {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+
+        50% {
+          opacity: 0.8;
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes fade-in-up {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+          transform: translateY(-25%);
+        }
+
+        50% {
+          animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+          transform: none;
+        }
+      }
+    </style>
   </head>
 
   <body>
     <div id="app"></div>
+    <div id="app-loading-x" class="app-loading-x">
+      <div class="app-loading-x-container">
+        <div class="icon">
+          <img src="/assets/img/loading-logo.png" />
+        </div>
+        <div class="text">
+          <div class="caption"></div>
+          <div class="description"></div>
+        </div>
+        <div class="round">
+          <div class="round-item"></div>
+          <div class="round-item"></div>
+          <div class="round-item"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const mobLoading = document.querySelector(
+        '#app-loading-x',
+      );
+      if (mobLoading && (!window.Environment || !window.Environment.isEnableMobLoading)) {
+        mobLoading.remove();
+      }
+      if (window.Environment && window.Environment.isEnableMobLoading) {
+        const container = document.querySelector(
+          '.app-loading-x .app-loading-x-container',
+        );
+        if (container) {
+          container.style.background =
+            window.Environment.mobLoadingBackground || '';
+        }
+        const caption = document.querySelector('.app-loading-x .caption');
+        if (caption) {
+          caption.textContent = window.Environment.mobLoadingCaption || '';
+        }
+        const description = document.querySelector(
+          '.app-loading-x .description',
+        );
+        if (description) {
+          description.textContent =
+            window.Environment.mobLoadingDescription || '';
+        }
+      }
+    </script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

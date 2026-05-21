@@ -1,5 +1,5 @@
 $chat-thought-chain: (
-    font-size: 12px,
+    font-size: 14px,
     header-height: 32px,
     color-2: var(--ibiz-ai-chat-color-2),
     bg: var(--ibiz-ai-chat-hover-background-color),
@@ -82,14 +82,13 @@ $chat-thought-chain: (
 
     @include e(item-content) {
         flex: auto;
-        padding-left: 4px;
     }
     @include e(item-title) {
         position: relative;
         display: flex;
         align-items: center;
         height: getCssVar(chat-thought-chain, header-height);
-        padding: 4px 4px 4px 6px;
+        padding: 4px;
         cursor: pointer;
         transition: .3s background-color;
 
@@ -102,15 +101,11 @@ $chat-thought-chain: (
             transition: .3s transform;
         }
 
-        &:hover {
-            background-color: getCssVar(chat-thought-chain, bg, 2);
-            border-radius: 8px;
-        }
     }
     @include e(item-description) {
         height: 100%;
         overflow: hidden;
-        color: var(--ibiz-color-text-2);
+        color: getCssVar('color', 'text-2');
         transition: height .3s cubic-bezier(.4,0,.2,1),opacity .3s cubic-bezier(.4,0,.2,1);
     }
 

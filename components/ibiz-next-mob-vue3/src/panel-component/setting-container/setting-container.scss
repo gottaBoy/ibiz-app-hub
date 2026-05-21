@@ -1,0 +1,61 @@
+$setting-container: (
+  'color-bg-color': getCssVar('color', 'bg', 1),
+  'color-md-sort-icon-color': getCssVar(color, text, 0),
+  'spacing-setting-container-padding': getCssVar('spacing', 'tight') getCssVar('spacing', 'base')
+    getCssVar('spacing', 'tight') 0,
+  'height-setting-container': getCssVar('height-control', 'default'),
+  'font-md-sort-fontSize': getCssVar('font-size', 'header-4'),
+);
+
+@include b('setting-container') {
+  @include set-component-css-var('setting-container', $setting-container);
+  height: 100%;
+  padding: getCssVar('setting-container', 'spacing-setting-container-padding');
+  background-color: getCssVar('setting-container', 'color-bg-color');
+
+  @include e('content') {
+    height: getCssVar('setting-container', 'height-setting-container');
+    display: flex;
+    align-items: center;
+  }
+
+  // 排序按钮样式
+  @include e('md-sort') {
+    display: flex;
+    align-items: center;
+    font-size: getCssVar('setting-container', 'font-md-sort-fontSize');
+    cursor: pointer;
+
+    svg {
+      fill: getCssVar('setting-container', 'color-md-sort-icon-color');
+    }
+  }
+
+  @include e('md-advaned-searchform') {
+    display: flex;
+    align-items: center;
+    font-size: getCssVar('setting-container', 'font-md-sort-fontSize');
+    cursor: pointer;
+
+    svg {
+      fill: getCssVar('setting-container', 'color-md-sort-icon-color');
+    }
+  }
+
+  .van-button {
+    height: auto;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .van-button__content,
+  .van-button__text {
+    display: flex;
+    align-items: center;
+  }
+}

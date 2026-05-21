@@ -1,42 +1,12 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { defineDownloadPkgConfig } from '@ibiz-template/cli';
-import { refAppPkgConfig } from './ibiz-ref-app-pkg.config';
 
 export default defineDownloadPkgConfig({
   clean: true,
   registry: 'http://172.16.240.221:8081/repository/ibizsys/',
   outDir: './public/plugins',
+  // 依赖包填写示例
   dependencies: [
-    ...refAppPkgConfig,
-    '@ibiz-template-plm/html-comment@0.0.3-alpha.165',
-    '@ibiz-template-plugins/cron-editor@0.0.1-dev.4',
-    '@ibiz-template-plm/personal-info@0.0.3-dev.119',
-    '@ibiz-template-plugin/person-select@0.1.8-alpha.306',
-    '@ibiz-template-plm/person-select@0.0.3-alpha.224',
-    '@ibiz-plugin-template/global-plugin@0.0.9',
-    '@ibiz-template-plm/list-tree@0.0.3-dev.198',
-    '@ibiz-template-plugin/org-select@0.1.8-alpha.303',
-    '@ibiz-plugin-example/entity-field-grid@0.0.10',
-    '@ibiz-plugin-template/de-action-plugin@0.0.10-alpha.1',
-    '@ibiz-plugin-template/toolbar-item-plugin@0.0.9',
-    '@ibiz-template-plugin/file-download@0.0.3-alpha.107',
-    '@ibiz-plugin-example/replace-default-demo@0.0.10-alpha.0',
-    '@ibiz-plugin-template/ui-action-plugin@0.0.9',
-    '@ibiz-plugin-template/ui-logic-node-plugin@0.0.9',
-    '@ibiz-template-plm/raw-activity@0.0.3-dev.1',
-    '@ibiz-plugin-template/editor-plugin@0.0.9',
-    '@ibiz-template-plm/auto-rules@0.0.3-dev.215',
-    '@ibiz-plugin-template/ac-item-plugin@0.0.9',
-    '@ibiz-plugin-template/control-plugin@0.0.9',
-    '@ibiz-plugin-template/form-user-control-plugin@0.0.9',
-    '@ibiz-plugin-template/grid-column-plugin@0.0.9',
-    '@ibiz-plugin-template/view-plugin@0.0.9',
-    '@ibiz-plugin-template/counter-plugin@0.0.9',
-    '@ibiz-template-plm/comment-item@0.0.3-alpha.209',
-    '@ibiz-template-plugin/pivottable@1.1.0',
-    '@ibiz-template-plugin/department-select@0.1.8-alpha.303',
-    '@ibiz-plugin-template/portlet-plugin@0.0.9',
-    '@ibiz-template-plm/attachment-grid@0.0.3-dev.48',
-    '@ibiz-plugin-template/panel-item-plugin@0.0.9',
+    // '@ibiz-template-plugin/antv-x6-design@0.0.1',
   ],
 });

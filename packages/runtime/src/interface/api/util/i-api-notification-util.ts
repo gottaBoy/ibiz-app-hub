@@ -56,31 +56,31 @@ export interface IApiNotificationParams {
 export interface IApiNotificationUtil {
   /**
    * @description 弹出默认通知
-   * @param {IApiNotificationParams} params
+   * @param {IApiNotificationParams} params 通知参数
    * @memberof IApiNotificationUtil
    */
   default(params: IApiNotificationParams): void;
   /**
    * @description 弹出普通通知
-   * @param {IApiNotificationParams} params
+   * @param {IApiNotificationParams} params 通知参数
    * @memberof IApiNotificationUtil
    */
   info(params: IApiNotificationParams): void;
   /**
    * @description 弹出成功通知
-   * @param {IApiNotificationParams} params
+   * @param {IApiNotificationParams} params 通知参数
    * @memberof IApiNotificationUtil
    */
   success(params: IApiNotificationParams): void;
   /**
    * @description 弹出警告通知
-   * @param {IApiNotificationParams} params
+   * @param {IApiNotificationParams} params 通知参数
    * @memberof IApiNotificationUtil
    */
   warning(params: IApiNotificationParams): void;
   /**
    * @description 弹出失败通知
-   * @param {IApiNotificationParams} params
+   * @param {IApiNotificationParams} params 通知参数
    * @memberof IApiNotificationUtil
    */
   error(params: IApiNotificationParams): void;

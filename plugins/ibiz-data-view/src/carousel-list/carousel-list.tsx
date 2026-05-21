@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import {
   defineComponent,
@@ -50,7 +48,6 @@ export const CarouselList = defineComponent({
   },
   setup(props) {
     const c = useControlController(
-      // @ts-ignore
       (...args) => new CarouselListController(...args),
     );
     const ns = useNamespace('carousel-list');

@@ -1,5 +1,42 @@
-import { IApiData } from '@ibiz-template/core';
 import { IApiMDControlState } from './i-api-md-control.state';
+
+/**
+ * @description 图表数据预置导航参数接口
+ * @export
+ * @interface IApiChartDataNavParams
+ */
+export interface IApiChartDataNavParams {
+  /**
+   * @description 分类值
+   * @type {string}
+   * @memberof IApiChartDataNavParams
+   */
+  srfcategory?: string;
+  /**
+   * @description 配置的分类值
+   * @type {string}
+   * @memberof IApiChartDataNavParams
+   */
+  srfcategoryvalue?: string;
+  /**
+   * @description 配置的序列名称值
+   * @type {string}
+   * @memberof IApiChartDataNavParams
+   */
+  srfgroupvalue?: string;
+  /**
+   * @description 开始时间
+   * @type {string}
+   * @memberof IApiChartDataNavParams
+   */
+  srfstarttime?: string;
+  /**
+   * @description 结束时间
+   * @type {string}
+   * @memberof IApiChartDataNavParams
+   */
+  srfendtime?: string;
+}
 
 /**
  * @description 图表部件状态接口
@@ -33,27 +70,30 @@ export interface IApiChartState extends IApiMDControlState {
  */
 export interface IApiChartData {
   /**
-   * 序列模型id
-   *
+   * @description 序列模型id
+   * @type {string}
+   * @memberof IApiChartData
    */
   _seriesModelId?: string;
 
   /**
-   * 分组名称
-   *
+   * @description 分组名称
+   * @type {string}
+   * @memberof IApiChartData
    */
   _groupName?: string;
 
   /**
-   * 分类值
-   *
+   * @description 分类值
+   * @type {string}
+   * @memberof IApiChartData
    */
   _catalog?: string;
 
   /**
    * @description 预置导航参数
-   * @type {IApiData}
+   * @type {IApiChartDataNavParams}
    * @memberof IApiChartData
    */
-  navParams: IApiData;
+  navParams: IApiChartDataNavParams;
 }

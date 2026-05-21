@@ -10,7 +10,7 @@ import { IInternalMessage } from './i-internal-message';
 export interface ICommandInternalMessage extends ICommandBase {
   /**
    * @description 发送消息
-   * @param {IInternalMessage} data
+   * @param {IInternalMessage} data 站内信数据
    * @memberof ICommandInternalMessage
    */
   send(data: IInternalMessage): void;

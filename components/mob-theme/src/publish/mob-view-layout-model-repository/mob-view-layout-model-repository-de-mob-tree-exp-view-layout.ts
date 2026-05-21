@@ -5,6 +5,27 @@ export default {
   },
   "rootPanelItems": [
     {
+      "rawItem": {
+        "rawItemParams": [
+          {
+            "key": "POSITION",
+            "value": "TOP"
+          }
+        ],
+        "predefinedType": "VIEWMSG_POS",
+        "id": "viewmsg_pos_top"
+      },
+      "caption": "视图消息占位",
+      "itemStyle": "DEFAULT",
+      "itemType": "RAWITEM",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "showCaption": true,
+      "id": "viewmsg_pos_top"
+    },
+    {
       "actionGroupExtractMode": "ITEM",
       "panelItems": [
         {
@@ -186,6 +207,27 @@ export default {
       "id": "view_top"
     },
     {
+      "rawItem": {
+        "rawItemParams": [
+          {
+            "key": "POSITION",
+            "value": "BODY"
+          }
+        ],
+        "predefinedType": "VIEWMSG_POS",
+        "id": "viewmsg_pos_body"
+      },
+      "caption": "视图消息占位",
+      "itemStyle": "DEFAULT",
+      "itemType": "RAWITEM",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "showCaption": true,
+      "id": "viewmsg_pos_body"
+    },
+    {
       "actionGroupExtractMode": "ITEM",
       "panelItems": [
         {
@@ -196,6 +238,7 @@ export default {
               "itemStyle": "DEFAULT",
               "itemType": "CTRLPOS",
               "layoutPos": {
+                "grow": 1,
                 "shrink": 1,
                 "layout": "FLEX"
               },
@@ -232,6 +275,7 @@ export default {
               "itemStyle": "DEFAULT",
               "itemType": "RAWITEM",
               "layoutPos": {
+                "grow": 1,
                 "shrink": 1,
                 "layout": "FLEX"
               },
@@ -254,6 +298,7 @@ export default {
           "id": "container2"
         }
       ],
+      "predefinedType": "Content",
       "layout": {
         "dir": "row",
         "layout": "FLEX"
@@ -263,10 +308,32 @@ export default {
       "itemStyle": "DEFAULT",
       "itemType": "CONTAINER",
       "layoutPos": {
+        "grow": 1,
         "shrink": 1,
         "layout": "FLEX"
       },
       "id": "view_content"
+    },
+    {
+      "rawItem": {
+        "rawItemParams": [
+          {
+            "key": "POSITION",
+            "value": "BOTTOM"
+          }
+        ],
+        "predefinedType": "VIEWMSG_POS",
+        "id": "viewmsg_pos_bottom"
+      },
+      "caption": "视图消息占位",
+      "itemStyle": "DEFAULT",
+      "itemType": "RAWITEM",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "showCaption": true,
+      "id": "viewmsg_pos_bottom"
     }
   ],
   "layoutPanel": true,

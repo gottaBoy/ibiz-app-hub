@@ -1,4 +1,4 @@
-import { PanelItemController } from '@ibiz-template/runtime';
+import { PanelContainerController } from '@ibiz-template/runtime';
 import { IPanelContainer } from '@ibiz/model-core';
 import { PanelContainerImageState } from './panel-container-image.state';
 
@@ -7,9 +7,9 @@ import { PanelContainerImageState } from './panel-container-image.state';
  *
  * @export
  * @class PanelContainerImageController
- * @extends {PanelItemController}
+ * @extends {PanelContainerController}
  */
-export class PanelContainerImageController extends PanelItemController<IPanelContainer> {
+export class PanelContainerImageController extends PanelContainerController<IPanelContainer> {
   /**
    * @description 状态
    * @exposedoc

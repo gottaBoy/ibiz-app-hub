@@ -32,6 +32,11 @@ export default {
           appViewId: 'web.master_de_logic_regular',
           id: 'regular',
         },
+        {
+          caption: '高级',
+          appViewId: 'web.master_de_logic_advanced',
+          id: 'advanced',
+        },
       ],
       dataRelationTag: 'DataRelation120',
       editItemCapLanguageRes: {

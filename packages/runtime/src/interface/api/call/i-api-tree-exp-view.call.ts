@@ -20,7 +20,7 @@ export interface IApiTreeExpViewCall extends Omit<IApiMDViewCall, 'Refresh'> {
     args: undefined;
   };
   /**
-   * @description 刷新视图
+   * @description 刷新视图，data：树节点数据
    * @type {{
    *     args?: { data?: (IApiTreeNodeData | IApiData)[] };
    *   }}
@@ -30,7 +30,7 @@ export interface IApiTreeExpViewCall extends Omit<IApiMDViewCall, 'Refresh'> {
     args?: { data?: (IApiTreeNodeData | IApiData)[] };
   };
   /**
-   * @description 树界面_刷新父节点操作
+   * @description 树界面_刷新父节点操作，data：树节点数据
    * @type {{
    *     args: { data: (IApiTreeNodeData | IApiData)[] };
    *   }}
@@ -40,7 +40,7 @@ export interface IApiTreeExpViewCall extends Omit<IApiMDViewCall, 'Refresh'> {
     args: { data: (IApiTreeNodeData | IApiData)[] };
   };
   /**
-   * @description 展开
+   * @description 展开节点，data：树节点数据，srfcollapsetag：树节点标识
    * @type {{
    *     args: { data?: IApiData[]; params?: { srfcollapsetag?: string } };
    *   }}
@@ -50,7 +50,7 @@ export interface IApiTreeExpViewCall extends Omit<IApiMDViewCall, 'Refresh'> {
     args: { data?: IApiData[]; params?: { srfcollapsetag?: string } };
   };
   /**
-   * @description 折叠
+   * @description 收缩节点，data：树节点数据，srfcollapsetag：树节点标识
    * @type {{
    *     args: { data?: IApiData[]; params?: { srfcollapsetag?: string } };
    *   }}

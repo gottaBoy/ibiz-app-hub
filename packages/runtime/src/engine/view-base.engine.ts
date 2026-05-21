@@ -7,6 +7,7 @@ import {
 } from '@ibiz-template/core';
 import { IDEToolbar, IPanel, IPanelContainer } from '@ibiz/model-core';
 import qs from 'qs';
+import { isNil } from 'ramda';
 import { SysUIActionTag, ViewCallTag } from '../constant';
 import {
   IViewController,
@@ -184,6 +185,9 @@ export class ViewEngineBase implements IViewEngine {
     // 监听实体数据变更
     this.onDEDataChange = this.onDEDataChange.bind(this);
     ibiz.mc.command.change.on(this.onDEDataChange);
+    if (ibiz.env.isMob) {
+      ibiz.util.hiddenAppLoading();
+    }
   }
 
   /**
@@ -522,9 +526,17 @@ export class ViewEngineBase implements IViewEngine {
    */
   protected calcViewFooterVisible(): boolean {
     let showFooter: boolean = false;
-
-    // 工具栏
+    const { model } = this.view;
+    // 存在底部工具栏显示视图底部
     if (this.isExistAndInLayout('footertoolbar')) {
+      showFooter = true;
+    }
+
+    // 是工作流视图显示视图底部
+    if (
+      model.viewType === 'DEMOBWFDYNAEDITVIEW3' ||
+      model.viewType === 'DEMOBWFDYNAEDITVIEW'
+    ) {
       showFooter = true;
     }
     return showFooter;
@@ -572,7 +584,11 @@ export class ViewEngineBase implements IViewEngine {
       // 更新视图作用域数据和srfreadonly数据
       this.view.state.srfactiveviewdata = data;
       if (Object.prototype.hasOwnProperty.call(data, 'srfreadonly')) {
-        this.view.context.srfreadonly = data.srfreadonly;
+        if (data.srfreadonly) {
+          this.view.context.srfreadonly = true;
+        } else if (isNil(this.view.context.srfreadonly)) {
+          this.view.context.srfreadonly = false;
+        }
       }
       evt.emit('onDataChange', { actionType: 'LOAD', data: [data] });
       if (data.srfkey) {

@@ -64,7 +64,7 @@ export interface IAppViewLogic extends IModelObject {
 
   /**
    * 逻辑触发
-   * @description 值模式 [实体视图逻辑类型] {TIMER：定时器触发、 VIEWEVENT：视图事件触发、 CTRLEVENT：部件事件触发、 ITEMVISIBLE：项显示逻辑、 ITEMENABLE：项启用逻辑、 ITEMBLANK：项空输入逻辑、 ITEMDYNACLASS：项动态样式表、 RENDER：绘制器、 ATTRIBUTE：注入属性、 CUSTOM：只挂接（外部调用）、 VUE_DIRECTIVE：VUE指令 }
+   * @description 值模式 [视图逻辑类型] {TIMER：定时器触发、 VIEWEVENT：视图事件触发、 CTRLEVENT：部件事件触发、 ITEMVISIBLE：项显示逻辑、 ITEMENABLE：项启用逻辑、 ITEMBLANK：项空输入逻辑、 ITEMDYNACLASS：项动态样式表、 RENDER：绘制器、 ATTRIBUTE：注入属性、 CUSTOM：只挂接（外部调用）、 VUE_DIRECTIVE：VUE指令 }
    * @type {( string | 'TIMER' | 'VIEWEVENT' | 'CTRLEVENT' | 'ITEMVISIBLE' | 'ITEMENABLE' | 'ITEMBLANK' | 'ITEMDYNACLASS' | 'RENDER' | 'ATTRIBUTE' | 'CUSTOM' | 'VUE_DIRECTIVE')}
    * 来源  getLogicTrigger
    */

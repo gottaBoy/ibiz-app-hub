@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-expressions */
+/* eslint-disable no-use-before-define */
 import {
   ref,
   PropType,
@@ -9,7 +10,7 @@ import {
   onDeactivated,
   defineComponent,
 } from 'vue';
-import { useNamespace } from '@ibiz-template/vue3-util';
+import { useNamespace, useUIStore } from '@ibiz-template/vue3-util';
 import {
   IPanelButtonList,
   IDEFormButtonList,
@@ -44,6 +45,9 @@ export const IBizButtonList = defineComponent({
   },
   setup(props, { emit }) {
     const ns = useNamespace('button-list');
+
+    const { zIndex } = useUIStore();
+
     const dropdown = ref();
     const componentRef = ref();
     const { actionGroupExtractMode, buttonListType, uiactionGroup } =
@@ -200,44 +204,130 @@ export const IBizButtonList = defineComponent({
     };
 
     /**
-     * 绘制行为项内容
-     *
-     * @param {IAppDEUIActionGroupDetail} item
-     * @param {boolean} [disabled=false]
-     * @return {*}  {(JSX.Element | null)}
+     * @description 绘制界面行为组
+     * @param {IAppDEUIActionGroupDetail} detail 引用界面行为
+     * @param {boolean} [isFlatten=true] 是否为平铺按钮
+     * @returns {*}
+     */
+    const renderActionGroup = (
+      detail: IAppDEUIActionGroupDetail,
+      isFlatten: boolean,
+    ) => {
+      const actionGroup = detail.refUIActionGroup;
+      if (!actionGroup?.uiactionGroupDetails?.length) return null;
+      // 子项所有项都隐藏，父项也应该隐藏
+      const pvisible =
+        actionGroup.uiactionGroupDetails.findIndex(item => {
+          return props.buttonsState[item.id!].visible === true;
+        }) !== -1;
+      if (!pvisible) return null;
+      return (
+        <el-popover
+          trigger='click'
+          teleported={isFlatten}
+          popper-class={ns.e('popover')}
+          placement={isFlatten ? 'bottom' : 'right-start'}
+          popper-options={{
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, 4],
+                },
+              },
+            ],
+          }}
+          popper-style={`z-index: ${zIndex.zIndex}`}
+        >
+          {{
+            reference: () => {
+              return (
+                <el-button
+                  class={[
+                    ns.e('item'),
+                    ns.em('item', 'group'),
+                    ns.em('item', `${detail.id?.toLowerCase()}`),
+                    `${detail.sysCss?.cssName || ''}`,
+                  ]}
+                  type={convertBtnType(detail.buttonStyle)}
+                >
+                  <div class={ns.e('button-content')}>
+                    {detail.showIcon && (
+                      <iBizIcon
+                        icon={detail.sysImage}
+                        class={ns.em('button-content', 'icon')}
+                      />
+                    )}
+                    {detail.showCaption && (
+                      <span class={ns.em('button-content', 'caption')}>
+                        {actionGroup.name || actionGroup.id}
+                      </span>
+                    )}
+                  </div>
+                  <ion-icon
+                    class={ns.em('item', 'group-icon')}
+                    name={
+                      isFlatten
+                        ? 'chevron-down-outline'
+                        : 'chevron-forward-outline'
+                    }
+                  ></ion-icon>
+                </el-button>
+              );
+            },
+            default: () => {
+              return actionGroup.uiactionGroupDetails?.map(item =>
+                renderButton(item, false),
+              );
+            },
+          }}
+        </el-popover>
+      );
+    };
+
+    /**
+     * @description 绘制行为项
+     * @param {IAppDEUIActionGroupDetail} item 行为项
+     * @param {boolean} [isFlatten=true] 是否为平铺按钮
+     * @param {string} [type] 按钮类型
+     * @returns {*}
      */
     const renderButton = (
       item: IAppDEUIActionGroupDetail,
+      isFlatten: boolean,
       type?: string,
-    ): JSX.Element | null => {
-      if (props.buttonsState[item.id!]?.visible === false) return null;
-      return (
-        <el-button
-          class={[
-            ns.e('item'),
-            ns.em('item', `${item.id?.toLowerCase()}`),
-            `${item.sysCss?.cssName || ''}`,
-          ]}
-          type={type || convertBtnType(item.buttonStyle)}
-          title={item.tooltip || item.caption}
-          disabled={props.buttonsState[item.id!]?.disabled || props.disabled}
-          onClick={(event: MouseEvent) => handleClick(event, item)}
-        >
-          <div class={ns.e('button-content')}>
-            {item.showIcon && (
-              <iBizIcon
-                icon={item.sysImage}
-                class={ns.em('button-content', 'icon')}
-              />
-            )}
-            {item.showCaption && (
-              <span class={ns.em('button-content', 'caption')}>
-                {item.caption}
-              </span>
-            )}
-          </div>
-        </el-button>
-      );
+    ) => {
+      if (item.detailType === 'DEUIACTIONGROUP' && item.refUIActionGroup)
+        return renderActionGroup(item, isFlatten);
+      if (props.buttonsState[item.id!]?.visible)
+        return (
+          <el-button
+            class={[
+              ns.e('item'),
+              ns.em('item', `${item.id?.toLowerCase()}`),
+              `${item.sysCss?.cssName || ''}`,
+            ]}
+            text={!isFlatten}
+            title={item.tooltip || item.caption}
+            type={type || convertBtnType(item.buttonStyle)}
+            onClick={(event: MouseEvent) => handleClick(event, item)}
+            disabled={props.buttonsState[item.id!]?.disabled || props.disabled}
+          >
+            <div class={ns.e('button-content')}>
+              {item.showIcon && (
+                <iBizIcon
+                  icon={item.sysImage}
+                  class={ns.em('button-content', 'icon')}
+                />
+              )}
+              {item.showCaption && (
+                <span class={ns.em('button-content', 'caption')}>
+                  {item.caption}
+                </span>
+              )}
+            </div>
+          </el-button>
+        );
     };
 
     /**
@@ -285,7 +375,11 @@ export const IBizButtonList = defineComponent({
                 <el-button-group>
                   {actionGroupExtractMode === 'ITEMX' &&
                     item &&
-                    renderButton(item, convertBtnType(buttonListStyle.value))}
+                    renderButton(
+                      item,
+                      true,
+                      convertBtnType(buttonListStyle.value),
+                    )}
                   {(actionGroupExtractMode !== 'ITEMX' || item) && (
                     <el-button
                       disabled={props.disabled}
@@ -326,20 +420,18 @@ export const IBizButtonList = defineComponent({
               );
             },
             dropdown: () => (
-              <el-dropdown-menu>
+              <div class={ns.e('dropdown-popper-content')}>
                 {items.map((item: IAppDEUIActionGroupDetail, index: number) => {
                   if (
                     !(props.buttonsState[item.id!]?.visible === false) &&
                     (actionGroupExtractMode !== 'ITEMX' ||
                       index !== firstIndex.value)
                   ) {
-                    return (
-                      <el-dropdown-item>{renderButton(item)}</el-dropdown-item>
-                    );
+                    return renderButton(item, false);
                   }
                   return null;
                 })}
-              </el-dropdown-menu>
+              </div>
             ),
           }}
         </el-dropdown>
@@ -362,7 +454,9 @@ export const IBizButtonList = defineComponent({
         sliceIndex.value === -1 ? [] : groupDetails.slice(sliceIndex.value);
       return (
         <div class={ns.e('content')} ref={componentRef}>
-          {items.map((item: IAppDEUIActionGroupDetail) => renderButton(item))}
+          {items.map((item: IAppDEUIActionGroupDetail) =>
+            renderButton(item, true),
+          )}
           {moreItems.length
             ? renderDropdown(moreItems, 'ellipsis-horizontal')
             : null}

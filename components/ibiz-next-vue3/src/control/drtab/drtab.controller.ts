@@ -21,6 +21,7 @@ import {
 import { getNestedRoutePath } from '@ibiz-template/vue3-util';
 import { IDEDRCtrlItem, IDEDRTab } from '@ibiz/model-core';
 import { Router } from 'vue-router';
+import { isNil } from 'ramda';
 
 /**
  * 数据关系栏控制器
@@ -319,7 +320,11 @@ export class DRTabController
         const data = event.data[0];
         this.view.state.srfactiveviewdata = data;
         if (Object.prototype.hasOwnProperty.call(data, 'srfreadonly')) {
-          this.view.context.srfreadonly = data.srfreadonly;
+          if (data.srfreadonly) {
+            this.view.context.srfreadonly = true;
+          } else if (isNil(this.view.context.srfreadonly)) {
+            this.view.context.srfreadonly = false;
+          }
         }
         await this.calcDrTabPagesState();
         this.handleFormChange();
@@ -585,6 +590,7 @@ export class DRTabController
    * @return {*}  {Promise<void>}
    */
   protected async initCounter(): Promise<void> {
+    if (this.state.isCounterDisabled) return;
     // todo 接口更新后换
     const { appCounterRefs } = this.model as IData;
     const appCounterRef = appCounterRefs?.[0];

@@ -1,4 +1,4 @@
-import { IDEReportPanel, IAppDataEntity } from '@ibiz/model-core';
+import { IDEReportPanel } from '@ibiz/model-core';
 import { IHttpResponse } from '@ibiz-template/core';
 import { ControlService, ControlVO } from '../../../service';
 
@@ -6,34 +6,30 @@ export class ReportPanelService<
   T extends IDEReportPanel = IDEReportPanel,
 > extends ControlService<T> {
   /**
-   * 当前部件对应的应用实体对象
-   *
-   * @protected
-   * @type {IAppDataEntity}
-   */
-  protected dataEntity!: IAppDataEntity;
-
-  /**
-   * 执行查询报表数据的方法
-   *
+   * @description 查询报表数据
+   * @param {string} reportTag 报表标识
+   * @param {string} appDataEntityId 报表实体标识
    * @param {IContext} context 上下文
    * @param {IParams} [params={}] 视图参数
-   * @returns {*}  {Promise<IHttpResponse>}
+   * @returns {*}  {Promise<IHttpResponse<ControlVO[]>>}
+   * @memberof ReportPanelService
    */
   async fetch(
+    reportTag: string,
+    appDataEntityId: string,
     context: IContext,
     params: IParams = {},
-  ): Promise<IHttpResponse<ControlVO>> {
-    this.dataEntity = await ibiz.hub.getAppDataEntity(
-      this.model.appDataEntityId!,
+  ): Promise<IHttpResponse<ControlVO[]>> {
+    const dataEntity = await ibiz.hub.getAppDataEntity(
+      appDataEntityId!,
       this.model.appId,
     );
-    const url = `${this.dataEntity.deapicodeName2}/report?srfreporttag=${this.model.codeName}`;
+    const url = `${dataEntity.deapicodeName2}/report?srfreporttag=${reportTag}`;
     let res = await ibiz.net.request(url, {
       method: 'post',
       data: params,
     });
     res = this.handleResponse(res);
-    return res as IHttpResponse<ControlVO>;
+    return res as IHttpResponse<ControlVO[]>;
   }
 }

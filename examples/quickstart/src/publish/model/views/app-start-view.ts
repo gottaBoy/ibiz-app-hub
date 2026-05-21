@@ -1,4 +1,5 @@
 export default {
+  accUserMode: 3,
   caption: '应用启动视图',
   codeName: 'app_start_view',
   controls: [

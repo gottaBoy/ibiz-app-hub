@@ -13,6 +13,7 @@ import {
 } from '@ibiz-template/runtime';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import './form-mdctrl-md.scss';
+import { showTitle } from '@ibiz-template/core';
 
 export const FormMDCtrlMD = defineComponent({
   name: 'IBizFormMDCtrlMD',
@@ -40,7 +41,57 @@ export const FormMDCtrlMD = defineComponent({
       isSelected.value = event.data.length > 0;
     };
 
-    return { ns, showActions, isSelected, onCreated, onSelectionChange };
+    /** 处理删除 */
+    const handleRemove = (): void => {
+      isSelected.value = false;
+      props.controller.remove();
+    };
+
+    /** 绘制删除按钮 */
+    const renderRemoveBtn = () => {
+      if (!props.controller.enableDelete) return null;
+      if (ibiz.config.form.mdCtrlConfirmBeforeRemove) {
+        return (
+          <el-popconfirm
+            title={showTitle(
+              ibiz.i18n.t('control.form.mdCtrlContainer.promptInformation'),
+            )}
+            confirm-button-text={ibiz.i18n.t('app.confirm')}
+            cancel-button-text={ibiz.i18n.t('app.cancel')}
+            onConfirm={() => handleRemove()}
+          >
+            {{
+              reference: () => {
+                return (
+                  <el-button
+                    type='danger'
+                    disabled={!isSelected.value}
+                    class={[
+                      ns.be('actions', 'remove'),
+                      ns.be('actions', 'btn'),
+                    ]}
+                  >
+                    {ibiz.i18n.t('app.delete')}
+                  </el-button>
+                );
+              },
+            }}
+          </el-popconfirm>
+        );
+      }
+      return (
+        <el-button
+          type='danger'
+          disabled={!isSelected.value}
+          class={[ns.be('actions', 'remove'), ns.be('actions', 'btn')]}
+          onClick={(): void => handleRemove()}
+        >
+          {ibiz.i18n.t('app.delete')}
+        </el-button>
+      );
+    };
+
+    return { ns, showActions, onCreated, onSelectionChange, renderRemoveBtn };
   },
   render() {
     const { mdProvider, model } = this.controller;
@@ -81,19 +132,7 @@ export const FormMDCtrlMD = defineComponent({
                 {ibiz.i18n.t('app.add')}
               </el-button>
             )}
-            {this.controller.enableDelete && (
-              <el-button
-                type='danger'
-                disabled={!this.isSelected}
-                class={[
-                  this.ns.be('actions', 'remove'),
-                  this.ns.be('actions', 'btn'),
-                ]}
-                onClick={(): void => this.controller.remove()}
-              >
-                {ibiz.i18n.t('app.delete')}
-              </el-button>
-            )}
+            {this.renderRemoveBtn()}
           </div>
         )}
       </div>

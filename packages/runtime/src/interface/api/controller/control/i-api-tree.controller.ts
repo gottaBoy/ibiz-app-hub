@@ -16,6 +16,7 @@ import { IApiNewTreeNodeParams } from './tree';
  * @ctrlparams {"name":"menushowmode","title":"右键菜单显示模式","parameterType":"'default' | 'hover'","defaultvalue":"'default'","description":"上下文菜单的显示时机支持两种配置模式：始终显示的 'default' 模式，以及仅鼠标悬停树节点时显示对应菜单的 'hover' 模式","effectPlatform":"web"}
  * @ctrlparams {"name":"mdctrlrefreshmode","title":"刷新模式","defaultvalue":"'cache'","parameterType":"'nocache' | 'cache'","description":"多数据部件刷新模式，当值为 'cache'，部件刷新时保留选中数据；当值为 'nocache'，部件刷新时清空选中数据","effectPlatform":"web"}
  * @ctrlparams {name:searchphseparator,title:快速搜索提示分隔符,parameterType:string,defaultvalue:'、',description:搜索栏输入框根据该值将所有输入项提示文本进行拼接展示}
+ * @ctrlparams {"name":crumbshowmode,title:面包屑显示模式,parameterType:'DEFAULT' | 'HEADERSTYLE',defaultvalue:'DEFAULT',description:面包屑的呈现方式支持两种配置：'DEFAULT' 为标准面包屑展示模式；'HEADERSTYLE' 为头部样式展示模式，该模式下面包屑只显示返回上一层按钮及节点主文本,"effectPlatform":mob}
  * @template T
  * @template S
  */
@@ -39,7 +40,7 @@ export interface IApiTreeController<
   /**
    * 展开并加载节点
    * @description 展开并加载节点
-   * @param {string[]} expandedKeys
+   * @param {string[]} expandedKeys 节点标识集合
    * @returns {*}  {Promise<void>}
    * @memberof IApiTreeController
    */
@@ -47,7 +48,7 @@ export interface IApiTreeController<
 
   /**
    * @description 切换折叠，其中tag表示操作指定树节点标识，若不传则操作当前树的第一层节点展开状态，expand表示是否展开，若不传则基于节点展开状态取反
-   * @param {{ tag?: string; expand?: boolean }} [params]
+   * @param {{ tag?: string; expand?: boolean }} [params] 切换折叠参数
    * @memberof IApiTreeController
    */
   changeCollapse(params?: { tag?: string; expand?: boolean }): void;
@@ -55,7 +56,7 @@ export interface IApiTreeController<
   /**
    * 获取节点模型
    * @description 获取节点模型
-   * @param {string} id
+   * @param {string} id 节点标识
    * @returns {*}  {(IDETreeNode | undefined)}
    * @memberof IApiTreeController
    */
@@ -76,4 +77,10 @@ export interface IApiTreeController<
    * @param {IApiNewTreeNodeParams} _params 新建树节点需要的参数
    */
   newTreeNode(_params: IApiNewTreeNodeParams): void;
+
+  /**
+   * @description 更新UI
+   * @memberof IApiTreeController
+   */
+  updateUI(): void;
 }

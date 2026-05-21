@@ -49,7 +49,7 @@ export default {
           id: 'counter',
         },
         {
-          caption: '计数器禁用',
+          caption: '计数器动态禁用',
           appViewId: 'web.master_toolbar_counter_disabled',
           id: 'disable_counter',
         },

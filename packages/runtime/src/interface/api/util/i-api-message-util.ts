@@ -1,5 +1,3 @@
-import { IApiData } from '@ibiz-template/core';
-
 /**
  * @description 消息提示参数接口
  * @export
@@ -83,8 +81,8 @@ export interface IApiMessageUtil {
   error(msg: string, duration?: number, closable?: boolean): void;
   /**
    * @description 通用消息方法
-   * @param {IApiData} params 配置详细的参数，详情参见：https://element-plus.org/zh-CN/component/message.html#message-%E9%85%8D%E7%BD%AE%E9%A1%B9
+   * @param {IApiMessageParams} params 配置详细的参数，详情参见：https://element-plus.org/zh-CN/component/message.html#message-%E9%85%8D%E7%BD%AE%E9%A1%B9
    * @memberof IApiMessageUtil
    */
-  notice(params: IApiData): void;
+  notice(params: IApiMessageParams): void;
 }

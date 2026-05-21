@@ -128,13 +128,13 @@ export interface IMDControlEvent extends IControlEvent {
    * @description 加载前事件
    * @type {{
    *     event: EventBase;
-   *     emitArgs: undefined;
+   *     emitArgs: Partial<EventBase>;
    *   }}
    * @memberof IMDControlEvent
    */
   onBeforeLoad: {
     event: EventBase;
-    emitArgs: undefined;
+    emitArgs: Partial<EventBase>;
   };
 
   /**

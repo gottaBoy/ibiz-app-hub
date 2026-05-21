@@ -1,8 +1,66 @@
+$internal-message-json: (
+  text-color: #999,
+  font-size: 10px,
+  bg-color: skyblue,
+);
+
 @include b(internal-message-json) {
+  @include set-component-css-var(internal-message-json, $internal-message-json);
   @include flex(column);
 
   @include e(content){
     flex-grow: 1;
+  }
+
+  @include e('card') {
+    display: flex;
+    align-items: flex-start;
+
+    @include m('avatar') {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      margin-right: getCssVar('spacing', 'tight');
+      font-size: getCssVar('internal-message-json', 'font-size');
+      background-color: getCssVar('internal-message-json', 'bg-color');
+      border-radius: getCssVar('border-radius', 'circle');
+    }
+    @include m('content') {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      gap: getCssVar('spacing', 'extra-tight');
+      min-width: 0;
+    }
+  }
+
+  @include e('todo') {
+    display: flex;
+    gap: getCssVar('spacing', 'extra-tight');
+    align-items: center;
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @include m('footer') {
+      font-size: getCssVar('internal-message-json', 'font-size');
+      color: getCssVar('internal-message-json', 'text-color');
+    }
+
+    @include m('state') {
+      flex-shrink: 0;
+    }
+
+    .#{bem('internal-message-json', 'todo','person')},
+    .#{bem('internal-message-json', 'todo','title')} {
+      color: getCssVar('internal-message-json', 'text-color');
+    }
   }
 
 }

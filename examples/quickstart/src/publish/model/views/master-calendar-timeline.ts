@@ -40,6 +40,7 @@ export default {
       id: 'opendata',
     },
   ],
+  appViewMsgGroupId: 'vmgroup239',
   controls: [
     {
       calendarStyle: 'TIMELINE',
@@ -52,6 +53,7 @@ export default {
           idAppDEFieldId: 'id',
           itemStyle: 'DEFAULT',
           itemType: 'master',
+          maxSize: 10,
           appDEDataSetId: 'fetch_default',
           textAppDEFieldId: 'name',
           appDataEntityId: 'web.master',

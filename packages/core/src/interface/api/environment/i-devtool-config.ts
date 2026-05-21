@@ -10,6 +10,8 @@ export interface IDevToolConfig {
    * @description 配置平台基础路径
    * @type {string}
    * @default https://open.ibizlab.cn/modeldesign/#/
+   * @platform web
+   * @platform mob
    * @memberof IDevToolConfig
    */
   studioBaseUrl?: string;
@@ -17,6 +19,8 @@ export interface IDevToolConfig {
   /**
    * @description 模型预览宽度
    * @type {number}
+   * @platform web
+   * @platform mob
    * @memberof IDevToolConfig
    */
   modelPreviewWidth?: number;
@@ -24,6 +28,8 @@ export interface IDevToolConfig {
   /**
    * @description 日志级别
    * @type {LogLevelDesc}
+   * @platform web
+   * @platform mob
    * @memberof IDevToolConfig
    */
   logLevel?: LogLevelDesc;
@@ -32,6 +38,8 @@ export interface IDevToolConfig {
    * @description 是否启用v9模式
    * @type {boolean}
    * @default false
+   * @platform web
+   * @platform mob
    * @memberof IDevToolConfig
    */
   v9Mode?: boolean;
@@ -39,7 +47,9 @@ export interface IDevToolConfig {
   /**
    * @description 默认打开模式
    * @type {('open' | 'close')}
-   * @default 'close'
+   * @default close
+   * @platform web
+   * @platform mob
    * @memberof IDevToolConfig
    */
   defaultMode?: 'open' | 'close';

@@ -137,6 +137,7 @@ const AppPopoverComponent = defineComponent({
       // 默认半屏
       customStyle.height = '30%';
     }
+    customStyle.zIndex = popoverZIndex;
 
     const modal = new Modal({
       mode: ViewMode.POPOVER,

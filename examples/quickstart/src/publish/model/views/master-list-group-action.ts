@@ -101,8 +101,8 @@ export default {
             showCaption: true,
             showIcon: true,
             sysImage: {
-              cssClass: 'fa fa-info-circle',
-              glyph: 'xf05a@FontAwesome',
+              cssClass: 'fa fa-cube',
+              glyph: 'xf1b2@FontAwesome',
             },
             id: 'ub9b7b34',
           },
@@ -116,6 +116,9 @@ export default {
             uiactionId: 'open_document@master',
             showCaption: true,
             showIcon: true,
+            sysImage: {
+              cssClass: 'bulb',
+            },
             id: 'u888567e',
           },
           {
@@ -128,6 +131,10 @@ export default {
             uiactionId: 'open_dialog@master',
             showCaption: true,
             showIcon: true,
+            sysImage: {
+              cssClass: 'fa fa-send-o',
+              glyph: 'xf1d9@FontAwesome',
+            },
             id: 'u4be1ad5',
           },
           {
@@ -187,11 +194,17 @@ export default {
             },
             showCaption: true,
             showIcon: true,
+            sysImage: {
+              cssClass: 'fa fa-list',
+              glyph: 'xf03a@FontAwesome',
+            },
             id: 'u292614b',
           },
         ],
         appDataEntityId: 'web.master',
-        id: '分组界面行为组',
+        uniqueTag: 'master__Auto14763628',
+        name: '分组界面行为组',
+        id: 'auto14763628',
       },
       groupStyle: 'DEFAULT',
       itemLayoutPanel: {

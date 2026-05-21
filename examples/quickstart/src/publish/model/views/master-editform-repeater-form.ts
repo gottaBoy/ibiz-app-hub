@@ -127,6 +127,7 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
+                  fieldName: 'name',
                   labelPos: 'LEFT',
                   labelWidth: 130,
                   noPrivDisplayMode: 1,
@@ -155,6 +156,7 @@ export default {
                 {
                   dataType: 25,
                   enableCond: 3,
+                  fieldName: 'num',
                   labelPos: 'LEFT',
                   labelWidth: 130,
                   noPrivDisplayMode: 1,

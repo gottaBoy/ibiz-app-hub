@@ -94,6 +94,13 @@ export interface ISubAppRef extends IModelObject {
   appMenuModel?: IAppMenuModel;
 
   /**
+   * 开发系统标识
+   * @type {string}
+   * 来源  getPSDevSlnSysId
+   */
+  devSlnSysId?: string;
+
+  /**
    * 引用参数
    * @type {string}
    * 来源  getRefParam

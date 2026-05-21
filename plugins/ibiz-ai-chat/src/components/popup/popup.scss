@@ -21,7 +21,8 @@
     align-items: center;
 
     &:hover {
-      background-color: getCssVar(color, primary, hover);
+      color: getCssVar('ai-chat', 'hover-color');
+      background-color: getCssVar('ai-chat', 'hover-background-color');
     }
 
     @include m(caption) {

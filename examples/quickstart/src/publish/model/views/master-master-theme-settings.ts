@@ -6,7 +6,7 @@ export default {
   deviewCodeName: 'master_theme_settings',
   deviewId: '9286D38E-C8BA-416E-8DCC-1AB72CF5268F',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

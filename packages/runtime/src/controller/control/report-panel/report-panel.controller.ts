@@ -1,9 +1,9 @@
 import { IDEReportPanel, IAppDataEntity } from '@ibiz/model-core';
 import {
   MDCtrlLoadParams,
-  IReportPanelController,
   IReportPanelEvent,
   IReportPanelState,
+  IReportPanelController,
 } from '../../../interface';
 import { ControlController } from '../../common';
 import { ReportPanelService } from './report-panel.service';
@@ -56,53 +56,64 @@ export class ReportPanelController
   }
 
   /**
-   * 是否为bi报表
-   *
-   * @author tony001
-   * @date 2024-06-19 18:06:02
+   * @description 是否为BI报表设计
    * @readonly
+   * @type {boolean}
+   * @memberof ReportPanelController
    */
-  get isBIReport(): boolean {
+  get isBIReportDesign(): boolean {
+    const { appDEReport } = this.model;
+    const biReportType = [
+      'DESYSBIREPORTS',
+      'SYSBICUBE',
+      'DESYSBICUBES',
+      'ALLSYSBICUBES',
+      'SYSBIREPORT',
+      'SYSBICUBEREPORTS',
+      'ALLSYSBIREPORTS',
+    ];
     if (
-      this.state.reportType === 'DESYSBIREPORTS' ||
-      this.state.reportType === 'SYSBICUBE' ||
-      this.state.reportType === 'DESYSBICUBES' ||
-      this.state.reportType === 'ALLSYSBICUBES' ||
-      this.state.reportType === 'SYSBIREPORT' ||
-      this.state.reportType === 'SYSBICUBEREPORTS' ||
-      this.state.reportType === 'ALLSYSBIREPORTS'
+      appDEReport?.reportType &&
+      biReportType.includes(appDEReport?.reportType)
     ) {
-      return true;
+      return !this.generator.reportType;
     }
     return false;
   }
 
   /**
-   * 初始化状态
-   *
+   * @description 获取数据
+   * @returns {*}  {IData[]}
+   * @memberof ReportPanelController
+   */
+  getData(): IData[] {
+    if (this.isBIReportDesign)
+      return this.generator.protoRef?.state.items || [];
+    return this.state.data;
+  }
+
+  /**
+   * @description 初始化状态
    * @protected
    * @memberof ReportPanelController
    */
   protected initState(): void {
     super.initState();
-    this.state.data = {};
+    this.state.data = [];
     this.state.searchParams = {};
-    this.state.reportType =
-      (this.model.appDEReport && this.model.appDEReport.reportType) || '';
+    this.state.biReport = undefined;
   }
 
   /**
-   * 初始化方法
-   *
+   * @description 生命周期-创建完成
    * @protected
    * @returns {*}  {Promise<void>}
+   * @memberof ReportPanelController
    */
   protected async onCreated(): Promise<void> {
     await super.onCreated();
     this.generator = ReportPanelGeneratorFactory.getInstance(this.model, this);
-    if (this.generator) {
-      await this.generator.initConfig();
-    }
+    await this.generator?.initConfig();
     this.dataEntity = await ibiz.hub.getAppDataEntity(
       this.model.appDataEntityId!,
       this.model.appId,
@@ -112,10 +123,9 @@ export class ReportPanelController
   }
 
   /**
-   * 挂载
-   *
+   * @description 生命周期-加载完成
    * @protected
-   * @return {*}  {Promise<void>}
+   * @returns {*}  {Promise<void>}
    * @memberof ReportPanelController
    */
   protected async onMounted(): Promise<void> {
@@ -127,35 +137,96 @@ export class ReportPanelController
   }
 
   /**
-   * 销毁
-   *
+   * @description 获取报表参数
    * @protected
-   * @return {*}  {Promise<void>}
+   * @returns {*}  {IParams}
    * @memberof ReportPanelController
    */
-  protected onDestroyed(): Promise<void> {
-    return super.onDestroyed();
+  protected getReportParams(): IParams {
+    const appBIReport = this.model.appDEReport?.appBIReport;
+    if (!appBIReport) return {};
+    const {
+      appBICubeId,
+      reportUIModel,
+      appBIReportMeasures,
+      appBIReportDimensions,
+    } = appBIReport;
+    const uiModel = reportUIModel ? JSON.parse(reportUIModel) : {};
+    const period = uiModel.period?.[0];
+    const colSort: IData[] | undefined = uiModel.grid_col_sort;
+    const result = {
+      bicubetag: appBICubeId,
+      bimeasures:
+        appBIReportMeasures?.map(measure => {
+          const item: IParams = { name: measure.measureTag?.toLowerCase() };
+          if (measure.measureParams) item.param = measure.measureParams;
+          if (measure.aggMode) item.aggmode = measure.aggMode;
+          return item;
+        }) || [],
+      bidimensions:
+        appBIReportDimensions?.map(dimension => {
+          const item: IParams = { name: dimension.dimensionTag?.toLowerCase() };
+          if (dimension.dimensionParams) item.param = dimension.dimensionParams;
+          return item;
+        }) || [],
+      bisort: colSort
+        ?.map(col => `${col.codename.toLowerCase()},${col.sort}`)
+        .join(';'),
+      biperiod: period?.params,
+    };
+    return result;
   }
 
   /**
-   * 加载数据
-   *
-   * @public
-   * @param {(MDCtrlLoadParams)} [args]
-   * @return {*}  {Promise<IData>}
+   * @description 获取请求过滤参数
+   * @param {IParams} [extraParams]
+   * @returns {*}  {Promise<IParams>}
+   * @memberof ReportPanelController
+   */
+  async getFetchParams(extraParams?: IParams): Promise<IParams> {
+    const resultParams: IParams = {
+      ...this.params,
+      ...this.getReportParams(),
+    };
+    // *请求参数处理
+    await this._evt.emit('onBeforeLoad', undefined);
+    // 合并搜索条件参数，这些参数在onBeforeLoad监听里由外部填入
+    Object.assign(resultParams, {
+      ...this.state.searchParams,
+    });
+
+    // 额外附加参数
+    if (extraParams) {
+      Object.assign(resultParams, extraParams);
+    }
+    return resultParams;
+  }
+
+  /**
+   * @description 加载数据
+   * @param {MDCtrlLoadParams} [args={}]
+   * @returns {*}  {Promise<IData>}
    * @memberof ReportPanelController
    */
   public async load(args: MDCtrlLoadParams = {}): Promise<IData> {
-    if (this.state.reportType && this.isBIReport) {
-      return {};
-    }
-    await this.startLoading();
+    // 如果是BI报表设计则交给BI报表设计组件处理
+    if (this.isBIReportDesign) return this.state.data;
     try {
       // *查询参数处理
+      await this.startLoading();
+      const { codeName, appDEReport, appDataEntityId } = this.model;
+      const reportTag = appDEReport?.appBIReport?.id || codeName!;
+      const enyityId =
+        appDEReport?.appBIReport?.appDataEntityId || appDataEntityId!;
       const { context } = this.handlerAbilityParams(args);
       const params = await this.getFetchParams(args?.viewParam);
 
-      const res = await this.service.fetch(context, params);
+      const res = await this.service.fetch(
+        reportTag,
+        enyityId,
+        context,
+        params,
+      );
 
       this.state.data = res.data;
 
@@ -177,60 +248,24 @@ export class ReportPanelController
   }
 
   /**
-   * 部件加载后处理
-   *
-   * @author chitanda
-   * @date 2023-06-21 15:06:44
-   * @param {MDCtrlLoadParams} args 本次请求参数
-   * @param {IData[]} items 上游处理的数据（默认是后台数据）
-   * @return {*}  {Promise<IData[]>} 返回给后续处理的数据
+   * @description 部件加载后处理
+   * @param {MDCtrlLoadParams} args
+   * @param {IData} data
+   * @returns {*}  {Promise<IData>}
+   * @memberof ReportPanelController
    */
-  async afterLoad(args: MDCtrlLoadParams, data: IData): Promise<IData> {
+  async afterLoad(args: MDCtrlLoadParams, data: IData[]): Promise<IData> {
+    this.state.biReport = this.generator.generate(data);
     return data;
   }
 
   /**
-   * 获取请求过滤参数（整合了视图参数，各种过滤条件，排序，分页）
-   * @param {IParams} [extraParams] 额外视图参数，附加在最后
-   * @return {*}  {Promise<IParams>}
-   */
-  async getFetchParams(extraParams?: IParams): Promise<IParams> {
-    const resultParams: IParams = {
-      ...this.params,
-    };
-    // *请求参数处理
-    await this._evt.emit('onBeforeLoad', undefined);
-    // 合并搜索条件参数，这些参数在onBeforeLoad监听里由外部填入
-    Object.assign(resultParams, {
-      ...this.state.searchParams,
-    });
-
-    // 额外附加参数
-    if (extraParams) {
-      Object.assign(resultParams, extraParams);
-    }
-    return resultParams;
-  }
-
-  /**
-   * 报表数据
-   *
-   * @return {*}  {IData[]}
+   * @description 刷新
+   * @returns {*}  {Promise<void>}
    * @memberof ReportPanelController
    */
-  getData(): IData[] {
-    if (this.isBIReport) {
-      return this.generator.protoRef?.state.items || [];
-    }
-    return [this.state.data];
-  }
-
-  /**
-   * 部件刷新，走初始加载
-   * @date 2023-05-23 03:42:41
-   */
   async refresh(): Promise<void> {
-    if (this.isBIReport) {
+    if (this.isBIReportDesign) {
       this.generator.load();
     } else {
       this.doNextActive(() => this.load({ isInitialLoad: false }), {

@@ -16,7 +16,7 @@ import {
   isDataContainer,
   IViewController,
   PanelData,
-  PanelItemController,
+  PanelContainerController,
   PanelNotifyState,
   ScriptFactory,
 } from '@ibiz-template/runtime';
@@ -27,11 +27,11 @@ import { SingleDataContainerState } from './single-data-container.state';
  * @description 单项数据容器控制器
  * @export
  * @class SingleDataContainerController
- * @extends {PanelItemController<IPanelContainer>}
+ * @extends {PanelContainerController<IPanelContainer>}
  * @implements {IPanelDataContainerController}
  */
 export class SingleDataContainerController
-  extends PanelItemController<IPanelContainer>
+  extends PanelContainerController<IPanelContainer>
   implements IPanelDataContainerController
 {
   /**

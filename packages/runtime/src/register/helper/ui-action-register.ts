@@ -2,6 +2,7 @@ import { RuntimeError } from '@ibiz-template/core';
 import { IAppUIAction } from '@ibiz/model-core';
 import { IUIActionProvider } from '../../interface';
 import { getPluginRegisterKey } from './common-register';
+import { CustomRegister } from '../custom-register';
 
 /** 界面行为适配器前缀 */
 export const UIACTION_PROVIDER_PREFIX = 'UIACTION';
@@ -41,6 +42,20 @@ export async function getUIActionProvider(
   let provider: IUIActionProvider | undefined;
   const { uiactionMode, sysPFPluginId, appId, uiactionTag } =
     model as Required<IAppUIAction>;
+  // 找自定义注册的适配器
+  const registerKey = CustomRegister.getRegisterKey(UIACTION_PROVIDER_PREFIX, {
+    uiActionModel: model,
+  });
+  provider = getProvider(registerKey);
+  if (!provider) {
+    ibiz.log.debug(
+      ibiz.i18n.t('runtime.register.helper.customRegistration', {
+        registerKey,
+      }),
+    );
+  } else {
+    return provider;
+  }
 
   // 找插件适配器
   if (sysPFPluginId) {

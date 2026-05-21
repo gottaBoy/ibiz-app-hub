@@ -1,0 +1,99 @@
+$float-toolbar: (
+  // Color
+  color-item: getCssVar('color', 'text', 0),
+  color-item-bg: getCssVar(color, bg, 1),
+  color-box-shadow: getCssVar(shadow, elevated),
+  color-disabled-text: getCssVar('control-toolbar', 'color-disabled-text'),
+  color-disabled-bg: getCssVar('control-toolbar', 'color-disabled-bg'),
+  color-immediate-float-item: getCssVar(color, white),
+  color-immediate-float-item-bg: getCssVar(color, primary),
+  // Width/Height
+  width-wrapper-max-width:calc(100vw - (#{getCssVar('height-control', 'large')} + #{getCssVar('spacing','tight')})), // 总宽度值减去悬浮按钮宽度+弹框偏移距离
+  width-item-min-width: getCssVar('height-control', 'large'),
+  height-item: getCssVar('height-control', 'large'),
+  width-immediate-float-item-min-width: rem(44px),
+  height-immediate-float-item: rem(44px),
+  // Spacing
+  spacing-wrapper-gap: getCssVar('spacing', 'tight'),
+  spacing-item-padding: getCssVar('spacing', 'tight'),
+  spacing-immediate-float-padding: 1.875rem, // 与返回顶部按钮的间隔保持一致
+  // Radius
+  radius-item-circle: getCssVar('float-toolbar', 'height-item'),
+  // Font
+  font-item-font-size: getCssVar('font-size', 'header-6')
+);
+
+@mixin list-item-style {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: getCssVar(float-toolbar, width-item-min-width);
+  height: getCssVar(float-toolbar, height-item);
+  padding: getCssVar(float-toolbar, spacing-item-padding);
+  font-size: getCssVar(float-toolbar, font-item-font-size);
+  color: getCssVar(float-toolbar, color-item);
+  white-space: nowrap;
+  background-color: getCssVar(float-toolbar, color-item-bg);
+  border-radius: getCssVar(float-toolbar, radius-item-circle);
+  box-shadow: getCssVar(float-toolbar, color-box-shadow);
+
+  @include when('disabled') {
+    color: getCssVar(float-toolbar, color-disabled-text);
+    background-color: getCssVar(float-toolbar, color-disabled-bg);
+  }
+}
+
+@include b(float-toolbar) {
+  @include set-component-css-var('float-toolbar', $float-toolbar);
+
+  width: auto;
+  height: auto;
+  @include e('wrapper') {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: getCssVar(float-toolbar, spacing-wrapper-gap);
+    align-items: center;
+    max-width: getCssVar(float-toolbar, width-wrapper-max-width);
+  }
+
+  @include e('modal') {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  @include e('item') {
+    @include list-item-style
+  }
+
+  @include e('group-item') {
+    @include list-item-style
+  }
+
+  @include when('vertical') {
+    @include e('wrapper') {
+      flex-direction: column;
+    }
+  }
+
+  @include when('immediate-float') {
+    #{getCssVarName(float-toolbar, color-item)}: getCssVar(float-toolbar, color-immediate-float-item);
+    #{getCssVarName(float-toolbar, color-item-bg)}: getCssVar(float-toolbar, color-immediate-float-item-bg);
+    #{getCssVarName(float-toolbar, width-item-min-width)}: getCssVar(float-toolbar, width-immediate-float-item-min-width);
+    #{getCssVarName(float-toolbar, height-item)}: getCssVar(float-toolbar, height-immediate-float-item);
+    padding: getCssVar(float-toolbar, spacing-immediate-float-padding);
+  }
+
+  @include b('float-toolbar-item') {
+    justify-content: center;
+
+    @include b('icon') {
+      justify-content: center;
+    }
+  }
+}

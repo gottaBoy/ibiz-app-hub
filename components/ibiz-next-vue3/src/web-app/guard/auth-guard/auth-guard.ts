@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import {
   CoreConst,
   getAppCookie,
@@ -92,7 +93,19 @@ export class AuthGuard {
           // 存在refreshToken时，通过refreshToken换算新的token，反之，则走匿名登录
           const refreshToken = getAppCookie(CoreConst.REFRESH_TOKEN);
           if (refreshToken) {
-            await ibiz.auth.refreshToken();
+            // 刷新token失败，若启用匿名登录，则转化为匿名登录，再走后续逻辑
+            try {
+              await ibiz.auth.refreshToken();
+            } catch (refreshTokenError: unknown) {
+              if (ibiz.env.enableAnonymous) {
+                const loginResult = await ibiz.auth.anonymousLogin();
+                if (!loginResult) {
+                  throw error;
+                }
+              } else {
+                throw error;
+              }
+            }
             await this.appInit(context);
             return;
           }
@@ -130,7 +143,7 @@ export class AuthGuard {
     const viewName = urlPaths[urlPaths.length - 2];
     let viewModel: IAppView | undefined;
     try {
-      if (viewName === '#' && ibiz.hub.defaultPage) {
+      if (['#', 'index'].includes(viewName) && ibiz.hub.defaultPage) {
         // 未指定具体页面，通过应用默认页获取viewName
         viewModel = await ibiz.hub.getAppView(ibiz.hub.defaultPage.id);
       } else {
@@ -194,7 +207,19 @@ export class AuthGuard {
         refreshToken !== ''
       ) {
         try {
-          await ibiz.auth.refreshToken();
+          // 刷新token失败，若启用匿名登录，则转化为匿名登录，再走后续逻辑
+          try {
+            await ibiz.auth.refreshToken();
+          } catch (refreshTokenError: unknown) {
+            if (ibiz.env.enableAnonymous) {
+              const loginResult = await ibiz.auth.anonymousLogin();
+              if (!loginResult) {
+                throw error;
+              }
+            } else {
+              throw error;
+            }
+          }
           if (ibiz.env.isSaaSMode === true) {
             await this.loadOrgData();
           }
@@ -297,8 +322,11 @@ export class AuthGuard {
         );
       });
       if (colorThemes.length > 0) {
-        const colorTheme = colorThemes[0];
-        await ibiz.util.theme.loadTheme(colorTheme);
+        for (let index = 0; index < colorThemes.length; index++) {
+          const colorTheme = colorThemes[index];
+          // eslint-disable-next-line no-await-in-loop
+          await ibiz.util.theme.loadTheme(colorTheme);
+        }
       }
       // 加载图标主题
       const iconThemes = uiThemes.filter(uiTheme => {
@@ -307,8 +335,11 @@ export class AuthGuard {
         );
       });
       if (iconThemes.length > 0) {
-        const iconTheme = iconThemes[0];
-        await ibiz.util.theme.loadTheme(iconTheme, 'ICON');
+        for (let index = 0; index < iconThemes.length; index++) {
+          const iconTheme = iconThemes[index];
+          // eslint-disable-next-line no-await-in-loop
+          await ibiz.util.theme.loadTheme(iconTheme, 'ICON');
+        }
       }
     }
   }

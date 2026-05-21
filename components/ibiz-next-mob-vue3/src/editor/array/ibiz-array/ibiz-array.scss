@@ -1,0 +1,74 @@
+$array: (
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-placeholder: getCssVar(editor, default, placeholder-color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  // 间距
+  spacing-icons-gap: getCssVar(spacing, tight),
+  spacing-icons-margin: 0 0 0 getCssVar(spacing, base),
+  // 字体
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  // 其他
+  border-item: getCssVar('border-thickness', 'control') solid getCssVar(color, border),
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
+
+@include b(array) {
+  @include set-component-css-var('array', $array);
+
+  height: 100%;
+  font-size: getCssVar(array, font-fontSize);
+  line-height: getCssVar(array, font-lineHeight);
+  color: getCssVar(array, color);
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+
+  --van-field-input-text-color: #{getCssVar(array, color)};
+  --van-cell-text-color: #{getCssVar(array, color)};
+  --van-cell-value-color: #{getCssVar(array, color)};
+  --van-cell-line-height: #{getCssVar(array, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(array, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(array, font-fontSize)};
+  --van-field-input-disabled-text-color: #{getCssVar(array, color-disabled)};
+
+  input::placeholder {
+    color: getCssVar(array, color-placeholder);
+    -webkit-text-fill-color: getCssVar(array, color-placeholder);
+  }
+
+  @include m(disabled) {
+    color: getCssVar(array, color-disabled);
+
+    --van-field-input-disabled-text-color: #{getCssVar(array, color-disabled)};
+  }
+
+  @include m(readonly) {
+    color: getCssVar(array, color-readonly);
+
+    --van-field-input-text-color: #{getCssVar(array, color-readonly)};
+  }
+}
+
+@include b('array-item') {
+  width: 100%;
+  border-bottom: getCssVar(array, border-item);
+}
+
+@include b(array-add-icon) {
+  display: flex;
+  align-items: center;
+  min-height: getCssVar(array, font-lineHeight);
+}
+
+@include b(array-icons) {
+  display: flex;
+  align-items: center;
+  justify-content: getCssVar(array, flex-justify-content);
+  min-height: getCssVar(array, font-lineHeight);
+  margin: getCssVar(array, spacing-icons-margin);
+  gap: getCssVar(array, spacing-icons-gap);
+}

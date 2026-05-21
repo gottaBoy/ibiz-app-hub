@@ -3,55 +3,57 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-restricted-syntax */
 import {
-  useControlController,
-  useNamespace,
   useUIStore,
+  useNamespace,
   IBizControlShell,
-  hasEmptyPanelRenderer,
   IBizCustomRender,
+  useControlController,
+  hasEmptyPanelRenderer,
 } from '@ibiz-template/vue3-util';
 import {
-  computed,
-  defineComponent,
-  PropType,
-  resolveComponent,
-  VNode,
   h,
-  watch,
-  onMounted,
-  getCurrentInstance,
   ref,
   Ref,
+  VNode,
+  watch,
   nextTick,
+  computed,
+  PropType,
+  onMounted,
+  defineComponent,
+  resolveComponent,
+  getCurrentInstance,
 } from 'vue';
 import {
-  IDEGantt,
-  IDETBGroupItem,
-  IDETBRawItem,
-  IDETBUIActionItem,
-  IDEToolbarItem,
-  IDETreeColumn,
   IPanel,
+  IDEGantt,
+  IDETBRawItem,
+  IDETreeColumn,
+  IDETBGroupItem,
+  IDEToolbarItem,
+  IDETBUIActionItem,
+  IUIActionGroupDetail,
 } from '@ibiz/model-core';
 import {
-  IControlProvider,
-  GanttController,
-  IGanttNodeData,
-  IButtonState,
-  IButtonContainerState,
   IModal,
   IModalData,
+  IButtonState,
   IColumnState,
+  IGanttNodeData,
+  GanttController,
+  IControlProvider,
+  IButtonContainerState,
   IOverlayPopoverContainer,
 } from '@ibiz-template/runtime';
 import { showTitle } from '@ibiz-template/core';
 import { MenuItem } from '@imengyu/vue3-context-menu';
 import dayjs from 'dayjs';
 import {
-  AllowDropType,
   NodeDropType,
+  AllowDropType,
 } from 'element-plus/es/components/tree/src/tree.type';
 import { findNodeData, formatNodeDropType } from '../tree/el-tree-util';
+import { useContextMenu } from '../../util';
 import './gantt.scss';
 
 export const GanttControl = defineComponent({
@@ -89,7 +91,7 @@ export const GanttControl = defineComponent({
     singleSelect: { type: Boolean, default: undefined },
   },
   setup(props) {
-    const c = useControlController<GanttController>(
+    const c: GanttController = useControlController<GanttController>(
       (...args) => new GanttController(...args),
     );
 
@@ -212,6 +214,15 @@ export const GanttControl = defineComponent({
 
     const locale = computed(() => {
       return ibiz.i18n.getLang().toLowerCase();
+    });
+
+    const expandColumnName = computed(() => {
+      const columnKey = c.controlParams.expandiconcolumn?.toLowerCase();
+      const columnSatate = c.state.columnStates.find(
+        item => columnKey && item.key.toLowerCase() === columnKey,
+      );
+      if (columnSatate && !columnSatate.hidden) return columnSatate.key;
+      return undefined;
     });
 
     // 监听选中数据，操作甘特来处理界面回显选中效果。
@@ -536,6 +547,25 @@ export const GanttControl = defineComponent({
     };
 
     /**
+     * 上下文菜单相关
+     */
+    let ContextMenu: IData;
+    c.evt.on('onMounted', () => {
+      // 有上下文菜单时加载组件
+      if (Object.values(c.contextMenus).length > 0) {
+        const importMenu = () => import('@imengyu/vue3-context-menu');
+        importMenu().then(value => {
+          ContextMenu = value.default;
+          if (ContextMenu.default && !ContextMenu.showContextMenu) {
+            ContextMenu = ContextMenu.default;
+          }
+        });
+      }
+    });
+
+    const { calcUiactionGroup } = useContextMenu();
+
+    /**
      * 计算上下文菜单组件配置项集合
      *
      * @param {IDEToolbarItem[]} toolbarItems
@@ -565,7 +595,7 @@ export const GanttControl = defineComponent({
         }
 
         // 除分隔符之外的公共部分
-        const menuItem: MenuItem = {};
+        let menuItem: MenuItem | undefined = {};
         if (item.showCaption && item.caption) {
           menuItem.label = item.caption;
         }
@@ -592,6 +622,7 @@ export const GanttControl = defineComponent({
           }
         } else if (item.itemType === 'ITEMS') {
           // 分组项绘制子菜单
+          const group = item as IDETBGroupItem;
           if ((item as IDETBGroupItem).detoolbarItems?.length) {
             menuItem.children = calcContextMenuItems(
               (item as IDETBGroupItem).detoolbarItems!,
@@ -600,29 +631,43 @@ export const GanttControl = defineComponent({
               menuState,
             );
           }
+          // 分组项配置界面行为组
+          if (group.uiactionGroup && group.groupExtractMode) {
+            const menuItems = calcUiactionGroup(
+              group.uiactionGroup,
+              menuState,
+              (detail: IUIActionGroupDetail) => {
+                ContextMenu.closeContextMenu();
+                c.doUIAction(detail.uiactionId!, nodeData, evt, detail.appId);
+              },
+            );
+            switch (group.groupExtractMode) {
+              case 'ITEMS':
+                menuItem.children = menuItems;
+                break;
+              case 'ITEMX':
+                if (menuItems) {
+                  menuItem = menuItems[0];
+                  menuItem.children = menuItems.slice(1);
+                }
+                break;
+              case 'ITEM':
+              default:
+                menuItem = undefined;
+                if (menuItems) {
+                  result.push(...menuItems);
+                }
+                break;
+            }
+          }
         }
-        result.push(menuItem);
+        if (menuItem) {
+          result.push(menuItem);
+        }
       });
 
       return result;
     };
-
-    /**
-     * 上下文菜单相关
-     */
-    let ContextMenu: IData;
-    c.evt.on('onMounted', () => {
-      // 有上下文菜单时加载组件
-      if (Object.values(c.contextMenus).length > 0) {
-        const importMenu = () => import('@imengyu/vue3-context-menu');
-        importMenu().then(value => {
-          ContextMenu = value.default;
-          if (ContextMenu.default && !ContextMenu.showContextMenu) {
-            ContextMenu = ContextMenu.default;
-          }
-        });
-      }
-    });
 
     /**
      * 节点右键菜单点击事件
@@ -735,6 +780,7 @@ export const GanttControl = defineComponent({
                 return h(comp, {
                   controller: columnC,
                   row: rowState,
+                  nowrap: true,
                   key: rowState.data._uuid + codeName,
                 });
               }
@@ -1007,6 +1053,7 @@ export const GanttControl = defineComponent({
       columns,
       onCheck,
       loading,
+      expandColumnName,
       ganttStyle,
       onNodeClick,
       onNodeDbClick,
@@ -1062,6 +1109,7 @@ export const GanttControl = defineComponent({
           allow-drop={this.allowDrop}
           allow-drag={this.allowDrag}
           onNodeDrop={this.handleDrop}
+          expandColumnName={this.expandColumnName}
           showCheckbox={!this.c.state.singleSelect}
           onNodeExpand={this.onNodeExpand}
           onNodeCollapse={this.onNodeCollapse}

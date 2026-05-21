@@ -12,6 +12,7 @@ $style-10: (
     height: 100%;
     @include e(wrapper){
       position: absolute;
+      top: getCssVar(style-10, 'offsetY');
       width: 100%;
       height: calc(100% - getCssVar(style-10, 'offsetY'));
     }
@@ -21,7 +22,7 @@ $style-10: (
     }
     @include e(mask) {
       position: absolute;
-      top: getCssVar(style-10, 'padding');
+      top: calc(getCssVar(style-10, 'padding') + getCssVar(style-10, 'offsetY'));
       left: getCssVar(style-10, 'padding');
       width:  calc(100% - 2 * getCssVar(style-10, 'padding'));
       height: calc(100% - 2 * getCssVar(style-10, 'padding') - getCssVar(style-10, 'offsetY'));

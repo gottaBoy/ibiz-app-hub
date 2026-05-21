@@ -57,6 +57,19 @@ export class HtmlEditorController extends EditorController<IHtml> {
   public imageMode: 'base64' | 'file' = 'file';
 
   /**
+   * @description 是否启用无权限
+   * @type {boolean}
+   * @memberof HtmlEditorController
+   */
+  public enableNoAccess: boolean = false;
+
+  /**
+   * @description 是否使用全局文件下载前缀
+   * @memberof HtmlEditorController
+   */
+  public globalDownloadPrifix = false;
+
+  /**
    * @description quill配置
    * @type {IData}
    * @memberof HtmlEditorController
@@ -88,11 +101,32 @@ export class HtmlEditorController extends EditorController<IHtml> {
         MODULES,
         DEFAULTHEIGHT,
         SHOWCOLLAPSE,
+        uploadparams,
+        exportparams,
+        showtoolbar,
+        valuemode,
+        imagemode,
+        modules,
+        defaultheight,
+        showcollapse,
+        enablenoaccess,
+        globaldownloadprifix,
       } = this.editorParams;
 
       if (uploadParams) {
         try {
           this.uploadParams = JSON.parse(uploadParams);
+        } catch (error) {
+          ibiz.log.error(
+            `编辑器[${ibiz.log.error(
+              error,
+            )}]编辑器参数 uploadParams 非 json 格式`,
+          );
+        }
+      }
+      if (uploadparams) {
+        try {
+          this.uploadParams = JSON.parse(uploadparams);
         } catch (error) {
           ibiz.log.error(
             `编辑器[${ibiz.log.error(
@@ -112,27 +146,71 @@ export class HtmlEditorController extends EditorController<IHtml> {
           );
         }
       }
+      if (exportparams) {
+        try {
+          this.exportParams = JSON.parse(exportparams);
+        } catch (error) {
+          ibiz.log.error(
+            `编辑器[${ibiz.log.error(
+              error,
+            )}]编辑器参数 exportParams 非 json 格式`,
+          );
+        }
+      }
       if (SHOWTOOLBAR) {
         this.showToolbar = this.toBoolean(SHOWTOOLBAR);
+      }
+      if (showtoolbar) {
+        this.showToolbar = this.toBoolean(showtoolbar);
       }
       if (VALUEMODE) {
         this.valueMode = VALUEMODE.toLowerCase();
       }
+      if (valuemode) {
+        this.valueMode = valuemode.toLowerCase();
+      }
       if (IMAGEMODE) {
         this.imageMode = IMAGEMODE.toLowerCase();
+      }
+      if (imagemode) {
+        this.imageMode = imagemode.toLowerCase();
       }
       if (MODULES) {
         this.modules = ScriptFactory.execScriptFn(
           { controller: this },
           MODULES,
+          {
+            isAsync: false,
+          },
+        ) as IData;
+      }
+      if (modules) {
+        this.modules = ScriptFactory.execScriptFn(
+          { controller: this },
+          modules,
+          {
+            isAsync: false,
+          },
         ) as IData;
       }
       if (DEFAULTHEIGHT) {
         this.defaultHeight = Number(DEFAULTHEIGHT);
       }
+      if (defaultheight) {
+        this.defaultHeight = Number(defaultheight);
+      }
       if (SHOWCOLLAPSE) {
         this.showCollapse = this.toBoolean(SHOWCOLLAPSE);
       }
+      if (showcollapse) {
+        this.showCollapse = this.toBoolean(showcollapse);
+      }
+      if (enablenoaccess) {
+        this.enableNoAccess = enablenoaccess === 'true';
+      }
+      this.globalDownloadPrifix =
+        globaldownloadprifix === 'true' ||
+        ibiz.config.common.globalDownloadPrifix;
     }
   }
 }

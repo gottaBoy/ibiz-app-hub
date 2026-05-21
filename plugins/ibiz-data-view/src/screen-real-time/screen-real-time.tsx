@@ -6,7 +6,6 @@ import './screen-real-time.scss';
 
 export const ScreenRealTime = defineComponent({
   name: 'ScreenRealTime',
-  // @ts-ignore
   props: getSpanProps<ScreenRealTimeController>(),
   setup(props) {
     const ns = useNamespace('screen-real-time');

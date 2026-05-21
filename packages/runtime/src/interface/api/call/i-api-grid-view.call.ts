@@ -48,7 +48,7 @@ export interface IApiGridViewCall extends IApiMDViewCall {
     args: undefined;
   };
   /**
-   * @description 展开
+   * @description 展开表格分组，srfcollapsetag: 表格分组标识
    * @type {{
    *     args: { params?: { srfcollapsetag?: string } };
    *   }}
@@ -58,7 +58,7 @@ export interface IApiGridViewCall extends IApiMDViewCall {
     args: { params?: { srfcollapsetag?: string } };
   };
   /**
-   * @description 折叠
+   * @description 收缩表格分组，srfcollapsetag: 表格分组标识
    * @type {{
    *     args: { params?: { srfcollapsetag?: string } };
    *   }}

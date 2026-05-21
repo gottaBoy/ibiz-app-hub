@@ -20,9 +20,9 @@
   --van-button-normal-font-size:#{getCssVar('font-size', 'regular')};
   --van-grid-item-content-background: transparent;
   --van-grid-item-content-padding: #{getCssVar('spacing', 'tight')};
-  --van-tabs-bottom-bar-color: #{getCssVar(color, text, 0)};
   --van-uploader-size: #{rem(50px)};
   --van-uploader-icon-size: #{rem(18px)};
+  --van-uploader-upload-active-color: #{getCssVar(color, primary, light, active)};
   --van-cell-horizontal-padding: 0;
   --van-dialog-background: #{getCssVar(color, bg, 0)};
   --van-font-size-sm:#{getCssVar('font-size', 'small')};
@@ -43,8 +43,51 @@
   --van-search-padding: #{rem(10px)} #{getCssVar('spacing', 'base-tight')};
   --van-search-input-height: #{rem(34px)};
   --van-button-small-height: #{rem(32px)};
+  --van-button-default-height: #{rem(40px)};
   --van-tabbar-height: #{rem(50px)};
   --van-uploader-delete-icon-size:#{getCssVar('font-size', 'header-6')};
+  --van-cell-group-title-line-height: #{rem(18px)};
+
+  --van-tab-active-text-color: #{getCssVar(color, primary)};
+  --van-tabs-bottom-bar-color: #{getCssVar(color, primary)};
+  --van-sidebar-selected-text-color: #{getCssVar(color, primary)};
+  --van-sidebar-selected-border-color: #{getCssVar(color, primary)};
+
+  // 消息弹框
+  --van-notify-primary-background: #{getCssVar(color, info, light, default)};
+  --van-notify-success-background: #{getCssVar(color, success, light, default)};
+  --van-notify-warning-background: #{getCssVar(color, warning, light, default)};
+  --van-notify-danger-background: #{getCssVar(color, danger, light, default)};
+
+  // 消息栏（视图消息）
+  --van-notice-bar-wrapable-padding: #{getCssVar('spacing', 'extra-tight')} #{getCssVar('spacing', 'tight')};
+
+  // 气泡弹出框
+  --van-popover-light-action-disabled-text-color: #{getCssVar(color, disabled, text)};
+
+  // loading样式
+  --van-loading-spinner-color: #{getCssVar(color, primary)};
+
+  // cell样式
+  --van-cell-background: transparent;
+
+  // 标签页样式
+  --van-tab-text-color: #{getCssVar(color, text, 0)};
+
+  // 索引锚点栏
+  --van-index-bar-index-font-size: 1rem;
+
+  // 回到顶部按钮
+  --van-back-top-background: #{getCssVar(color, primary)};
+  --van-back-top-size: #{rem(44px)};
+
+  // 级联激活背景色
+  --van-active-color: #{getCssVar(color, fill, 2)};
+  
+  &.dark{
+    // 暗色主题下van-picker 蒙层颜色
+    --van-picker-mask-color: unset;
+  }
 }
 
 .van-cell {
@@ -67,4 +110,148 @@
 // 搜索框只有左侧有padding 以下样式适配右侧padding
 .van-search__content {
   padding-right: var(--van-padding-sm);
+}
+
+// 分组样式
+.van-cell-group__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: getCssVar(color, bg, 0);
+  padding: getCssVar('spacing', 'base');
+  font-size: getCssVar('font-size', 'header-6');
+}
+
+.van-hairline--top-bottom::after {
+  border: none;
+}
+
+// cell点击激活样式
+.van-cell--clickable:active {
+  background-color: getCssVar(color, bg, 0);
+}
+
+// 抽屉样式
+.van-popup--bottom.van-popup--round{
+  border-radius: 0;
+}
+.van-popup--left.van-popup--round{
+  border-radius: 0;
+}
+.van-popup--right.van-popup--round{
+  border-radius: 0;
+}
+.van-popup--top.van-popup--round{
+  border-radius: 0;
+}
+
+.van-steps--horizontal {
+  padding: getCssVar('spacing', 'base') getCssVar('spacing', 'base') 0;
+}
+.van-pagination {
+  .van-pagination__item--active {
+    color: getCssVar(color, primary);
+    background-color: getCssVar(color, primary, light, default);
+  }
+}
+// 消息弹框
+.van-notify--primary {
+  color: getCssVar(color, info);
+}
+.van-notify--success {
+  color: getCssVar(color, success);
+}
+.van-notify--warning {
+  color: getCssVar(color, warning);
+}
+.van-notify--danger {
+  color: getCssVar(color, danger);
+}
+// 消息栏
+.van-notice-bar {
+    border: 1px solid getCssVar(color, border);
+}
+.van-notice-bar[type=info] {
+    color: getCssVar(color, info);
+    background-color: getCssVar(color, info, light, default);
+    border-color: getCssVar(color, info, light, hover);
+}
+
+.van-notice-bar[type=warning],.van-notice-bar[type=warn] {
+    color: getCssVar(color, warning);
+    background-color: getCssVar(color, warning, light, default);
+    border-color: getCssVar(color, warning, light, hover);
+}
+
+.van-notice-bar[type=success] {
+    color: getCssVar(color, success);
+    background-color: getCssVar(color, success, light, default);
+    border-color: getCssVar(color, success, light, hover);
+}
+
+.van-notice-bar[type=error] {
+    color: getCssVar(color, danger);
+    background-color: getCssVar(color, danger, light, default);
+    border-color: getCssVar(color, danger, light, hover);
+}
+// 按钮
+.van-button--default {
+  color: getCssVar(color, primary);
+  background-color: transparent;
+  border-color: getCssVar(color, primary);
+}
+.van-button--primary {
+  color: getCssVar(color, white);
+  background-color: getCssVar(color, primary);
+  border-color: getCssVar(color, primary);
+}
+.van-button--inverse {
+  color: getCssVar(color, text, 0);
+  background-color: transparent;
+  border-color: getCssVar(color, border);
+}
+.van-button--danger {
+  color: getCssVar(color, white);
+  background-color: getCssVar(color, danger);
+  border-color: getCssVar(color, danger);
+}
+.van-button--info {
+  color: getCssVar(color, white);
+  background-color: getCssVar(color, info);
+  border: none;
+}
+.van-button--success {
+  color: getCssVar(color, white);
+  background-color: getCssVar(color, success);
+  border: none;
+}
+.van-button--warning {
+  color: getCssVar(color, white);
+  background-color: getCssVar(color, warning);
+  border: none;
+}
+.van-button--link{
+  color: getCssVar(color, primary);
+  background-color: transparent;
+  border: none;
+  &:active:before{
+    opacity: 0;
+  }
+}
+// 下拉刷新头部
+.van-pull-refresh__head{
+  z-index: -1;
+}
+// 索引锚点栏
+.van-index-bar__index{
+  margin: getCssVar(spacing,extra-tight) 0;
+}
+
+// 下拉菜单
+.van-dropdown-menu__title::after {
+  border-color: transparent transparent getCssVar(color, text, 3) getCssVar(color, text, 3);
+}
+
+.van-dropdown-menu__title--active::after {
+  border-color: transparent transparent getCssVar(color, primary) getCssVar(color, primary);
 }

@@ -16,7 +16,7 @@ export class WFDynaStartViewEngine extends WFDynaEditViewEngine {
    * @type {ViewController<IAppDEWFDynaStartView, IWFDynaStartViewState, IWFDynaStartViewEvent>}
    * @memberof WFDynaStartViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEWFDynaStartView,
     IWFDynaStartViewState,
     IWFDynaStartViewEvent

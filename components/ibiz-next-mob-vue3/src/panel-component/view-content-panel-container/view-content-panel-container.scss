@@ -1,33 +1,56 @@
 $panel-component-view-content: (
-  'margin': 0,
+  'spacing-margin': 0,
+  'color-background-color': getCssVar(view, bg, color),
 );
 $control: (
   'overflow': hidden auto,
 );
 
-@include b(view) {
+// 设置部件滚动条默认变量，此变量用于控制启用下拉刷新时控制内容部件滚动条
+:root {
   #{getCssVarName(control, overflow)}: hidden auto;
 }
 
+@include b(view) {
+
+  @include b(view-header) {
+    z-index: 1;
+  }
+
+  @include b(panel-container) {
+    @include m(view_top) {
+      position: relative;
+      z-index: 1;
+      &:has(.van-search){
+        z-index: 2; 
+      }
+    }
+  }
+}
+
 @include b(view-content) {
-  #{--van-back-top-size}: rem(44px);
-  @include set-component-css-var('panel-component-view-content', $panel-component-view-content);
+  @include set-component-css-var(
+    'panel-component-view-content',
+    $panel-component-view-content
+  );
 
   height: 100%;
-  margin-top: getCssVar('panel-component-view-content', 'margin');
+  margin-top: getCssVar('panel-component-view-content', 'spacing-margin');
   overflow: auto;
-  background-color: getCssVar(view, bg, color);
+  background-color: getCssVar(
+    'panel-component-view-content',
+    'color-background-color'
+  );
 
-  @include when(scroll) {
+  @include when(refresh) {
     overflow-y: auto;
     #{getCssVarName(control, overflow)}: unset unset;
   }
-  @include when(embed) {
-    #{getCssVarName(control, overflow)}: hidden auto;
+  @include when(back-top) {
+    overflow-y: auto;
+    #{getCssVarName(control, overflow)}: unset unset;
   }
-  .#{bem(view)} {
-    #{getCssVarName(control, overflow)}: hidden auto;
-  }
+
 }
 
 @include b(view-content-refresh) {

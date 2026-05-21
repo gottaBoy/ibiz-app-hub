@@ -73,7 +73,9 @@ export class PanelAppTitleController extends PanelItemController<IPanelRawItem> 
     }
 
     // 图标路径2(收缩时)
-    if (indexViewModel.appIconPath2) {
+    if (indexViewModel.sysImage && indexViewModel.sysImage.rawContent) {
+      this.state.icon2 = indexViewModel.sysImage.rawContent;
+    } else if (indexViewModel.appIconPath2) {
       this.state.icon2 = indexViewModel.appIconPath2;
     }
 

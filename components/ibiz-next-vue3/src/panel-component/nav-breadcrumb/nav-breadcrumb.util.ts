@@ -130,7 +130,11 @@ export function getViewInfoByViewStack(
   if (view) {
     // 识别嵌入视图
     let isEmbed = false;
-    if (view.parentView && view.parentView.model.codeName !== indexViewName) {
+    if (
+      view.parentView &&
+      view.parentView.model.codeName !== indexViewName &&
+      view.parentView.model.viewType !== 'APPINDEXVIEW'
+    ) {
       isEmbed = true;
     }
     const data = view.state.srfactiveviewdata;

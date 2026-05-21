@@ -1,55 +1,25 @@
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
-import { computed, defineComponent, PropType, VNode } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 import {
+  IAppDEUIActionGroupDetail,
   IDETBGroupItem,
-  IDETBUIActionItem,
   IDEToolbar,
   IDEToolbarItem,
 } from '@ibiz/model-core';
 import {
   IControlProvider,
   IExtraButton,
-  IToolbarState,
   ToolbarController,
 } from '@ibiz-template/runtime';
-import { IBizPopperToolbar } from './popper-toolbar/popper-toolbar';
-import { convertBtnType } from '../../util';
+import {
+  getGroupItemxFirstIndex,
+  IToolbarItemRenderProps,
+  useCustomToolBarRender,
+  useToolBarItemRender,
+  useToolbarGroupModalHandler,
+  isRefUIActionGroup,
+} from './toolbar-render-util';
 import './toolbar.scss';
-
-const btnContent = (
-  item: IDEToolbarItem | IExtraButton,
-  state?: IToolbarState,
-) => {
-  const tempItem = item as IDEToolbarItem;
-  const counterNum =
-    state && tempItem.counterId
-      ? state.counterData[tempItem.counterId]
-      : undefined;
-  const image = (item as IDEToolbarItem).sysImage;
-  const result = [];
-  const ns = useNamespace('toolbar-item');
-  if ((item as IDEToolbarItem).showIcon && image) {
-    result.push(<iBizIcon class={ns.b('icon')} icon={image} />);
-  }
-  // 工作流特殊按钮下 无showCaption 统一显示caption
-  if (
-    ((item as IDEToolbarItem).showCaption ||
-      (item as IExtraButton).buttonType === 'extra') &&
-    item.caption
-  ) {
-    result.push(<span class={ns.b('text')}>{item.caption}</span>);
-  }
-  if (counterNum) {
-    result.push(
-      <iBizBadge
-        class={ns.b('counter')}
-        value={counterNum}
-        counterMode={tempItem.counterMode}
-      />,
-    );
-  }
-  return result;
-};
 
 export const ToolbarControl = defineComponent({
   name: 'IBizToolbarControl',
@@ -79,14 +49,6 @@ export const ToolbarControl = defineComponent({
     const c = useControlController((...args) => new ToolbarController(...args));
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
 
-    // 点击事件
-    const handleClick = async (
-      item: IDEToolbarItem | IExtraButton,
-      event: MouseEvent,
-    ) => {
-      await c.onItemClick(item, event);
-    };
-
     let position = '';
 
     switch (props.modelData.toolbarStyle) {
@@ -110,49 +72,176 @@ export const ToolbarControl = defineComponent({
       return position === 'bottom' ? 'normal' : 'small';
     });
 
-    const btnType = (item: IDETBUIActionItem) => {
-      if (item.actionLevel && item.actionLevel > 100) return 'primary';
-      return convertBtnType(item.buttonStyle);
-    };
-
-    const getChildrenActions = (item: IDETBGroupItem) => {
-      let result: IData[] = [];
-      const visibleItems = item.detoolbarItems?.filter(
-        _item => c.state.buttonsState[_item.id!]?.visible,
-      );
-      if (visibleItems && visibleItems.length > 0) {
-        result = visibleItems.map(_item => {
-          return {
-            ..._item,
-            disabled: c.state.buttonsState[_item.id!]?.disabled,
-            className: _item.sysCss?.cssName,
-          };
+    // 点击事件
+    const handleClick = async (
+      item: IDEToolbarItem | IExtraButton,
+      event: MouseEvent,
+      isGroupExtractMode?: boolean,
+    ) => {
+      const tempItem = { ...item };
+      if (isGroupExtractMode) {
+        Object.assign(tempItem, {
+          ...item,
+          itemType: (item as IAppDEUIActionGroupDetail).detailType,
         });
       }
-      return result;
+      await c.onItemClick(tempItem, event);
     };
 
+    // 工具栏通用绘制项
+    const { btnType, getToolbarItemRenderProps, renderToolbarItemContent } =
+      useToolBarItemRender(ns, c.state);
+
+    // 工具栏绘制分组的模态框
+    const { handleGroupItemClick } = useToolbarGroupModalHandler({
+      buttonsState: c.state.buttonsState,
+      counterData: c.state.counterData,
+      groupShowMode: c.groupShowMode,
+      modalCloseCallback: handleClick.bind(this),
+    });
+
+    // 用户自定义
+    const { renderFloatButton } = useCustomToolBarRender(
+      ns,
+      props,
+      c,
+      handleClick.bind(this),
+    );
+
+    // 绘制分组项
+    const renderGroupItem = (_opts: IToolbarItemRenderProps) => {
+      const { itemModel, key, type, isGroupExtractMode } = _opts;
+      return (
+        <div key={key} class={[ns.e('group')]}>
+          <van-button
+            size={btnSize.value}
+            type={type}
+            onClick={(e: MouseEvent) =>
+              handleGroupItemClick(itemModel, e, isGroupExtractMode)
+            }
+          >
+            {renderToolbarItemContent(itemModel)}
+          </van-button>
+        </div>
+      );
+    };
+
+    // 绘制工具栏行为项
+    const renderActionItem = (_opts: IToolbarItemRenderProps) => {
+      const { itemModel, key, cssName, title, type, isGroupExtractMode } =
+        _opts;
+
+      if (isRefUIActionGroup(itemModel)) {
+        return renderGroupItem(_opts);
+      }
+
+      return (
+        <div key={key} class={[ns.e('item'), cssName]}>
+          <van-button
+            title={title}
+            size={btnSize.value}
+            type={type}
+            loading={c.state.buttonsState[key].loading}
+            disabled={c.state.buttonsState[key].disabled}
+            onClick={(e: MouseEvent) =>
+              handleClick(itemModel, e, isGroupExtractMode)
+            }
+          >
+            {renderToolbarItemContent(itemModel)}
+          </van-button>
+        </div>
+      );
+    };
+
+    // 绘制按分组展开
+    const renderActionGroupItems = (item: IDETBGroupItem) => {
+      const { uiactionGroup } = item;
+      if (uiactionGroup && uiactionGroup.uiactionGroupDetails) {
+        return renderGroupItem(getToolbarItemRenderProps(item, true));
+      }
+
+      return null;
+    };
+
+    // 绘制首项+分组展开
+    const renderActionGroupItemx = (item: IDETBGroupItem) => {
+      const { uiactionGroup } = item;
+      if (uiactionGroup && uiactionGroup.uiactionGroupDetails) {
+        const { uiactionGroupDetails } = uiactionGroup;
+        const firstIndex = getGroupItemxFirstIndex(
+          uiactionGroupDetails,
+          c.state.buttonsState,
+          0,
+        );
+        if (firstIndex !== -1) {
+          const firstItem = uiactionGroupDetails[
+            firstIndex
+          ] as IAppDEUIActionGroupDetail;
+          return (
+            <div key={item.id} class={[ns.e('group-itemx')]}>
+              {renderActionItem(getToolbarItemRenderProps(firstItem, true))}
+              <van-button
+                size={btnSize.value}
+                type={btnType(item)}
+                icon={'arrow-down'}
+                onClick={(e: MouseEvent) => handleGroupItemClick(item, e, true)}
+              ></van-button>
+            </div>
+          );
+        }
+      }
+
+      return null;
+    };
+
+    // 绘制按项展开
+    const renderActionGroupItem = (item: IDETBGroupItem) => {
+      const { uiactionGroup } = item;
+      if (uiactionGroup && uiactionGroup.uiactionGroupDetails) {
+        const { uiactionGroupDetails } = uiactionGroup;
+        return uiactionGroupDetails.map((detail: IAppDEUIActionGroupDetail) =>
+          renderActionItem(getToolbarItemRenderProps(detail, true)),
+        );
+      }
+      return null;
+    };
+
+    // 绘制行为组展开模式
+    const renderActionGroup = (item: IDETBGroupItem) => {
+      const { groupExtractMode } = item;
+
+      switch (groupExtractMode) {
+        case 'ITEMS':
+          return renderActionGroupItems(item);
+        case 'ITEMX':
+          return renderActionGroupItemx(item);
+        case 'ITEM':
+        default:
+          return renderActionGroupItem(item);
+      }
+    };
+
+    // 绘制扩展按钮
     const renderExtraButtons = (extraButtons: IExtraButton[]) => {
       return extraButtons.map(button => {
         return (
-          <div
-            key={button.id}
-            class={[ns.e('item'), ns.e('item-extra'), ns.e(`item-${position}`)]}
-          >
+          <div key={button.id} class={[ns.e('item'), ns.e('item-extra')]}>
             <van-button
               title={button.tooltip}
               size={btnSize.value}
               onClick={(e: MouseEvent) => handleClick(button, e)}
             >
-              {btnContent(button, c.state)}
+              {renderToolbarItemContent(button)}
             </van-button>
           </div>
         );
       });
     };
 
+    // 绘制工具栏项
     const renderToolbarItem = (item: IDEToolbarItem) => {
       const itemId = item.id!;
+      const visible = c.state.buttonsState[itemId]?.visible;
       if (['SEPERATOR', 'RAWITEM'].includes(item.itemType!)) {
         ibiz.log.error(
           ibiz.i18n.t('control.toolbar.noSupportType', {
@@ -161,117 +250,15 @@ export const ToolbarControl = defineComponent({
         );
         return null;
       }
-      if (item.itemType === 'ITEMS' && c.state.buttonsState[itemId]?.visible) {
-        const placement = position === 'right' ? 'bottom-end' : 'bottom';
-        return (
-          <div
-            key={itemId}
-            class={[ns.e('item'), ns.e('item-items'), ns.e(`item-${position}`)]}
-          >
-            <van-popover
-              class={[ns.e('popover'), item.sysCss?.cssName]}
-              actions={getChildrenActions(item)}
-              placement={placement}
-              onSelect={(data: IDETBGroupItem, e: MouseEvent) => {
-                handleClick(data, e);
-              }}
-            >
-              {{
-                action: ({ action }: { action: IDEToolbarItem }): VNode => {
-                  const image = action.sysImage;
-                  const counterNum =
-                    c.state && item.counterId
-                      ? c.state.counterData[item.counterId]
-                      : undefined;
-                  let icon = null;
-                  let text = null;
-                  let counter = null;
-                  if (action.showIcon) {
-                    icon = <iBizIcon class={ns.e('icon')} icon={image} />;
-                  }
-                  if (action.showCaption) {
-                    text = <span class={ns.e('text')}>{action.caption}</span>;
-                  }
-                  if (counterNum) {
-                    counter = (
-                      <iBizBadge
-                        class={ns.b('counter')}
-                        value={counterNum}
-                        counterMode={item.counterMode}
-                      />
-                    );
-                  }
-                  return (
-                    <span class={ns.e('popover-item')}>
-                      {icon}
-                      {text}
-                      {counter}
-                    </span>
-                  );
-                },
-                reference: (): VNode => {
-                  const image = (item as IDEToolbarItem).sysImage;
-                  const counterNum =
-                    c.state && item.counterId
-                      ? c.state.counterData[item.counterId]
-                      : undefined;
-                  let icon = null;
-                  let text = null;
-                  let counter = null;
-                  if (item.showIcon) {
-                    icon = <iBizIcon class={ns.e('icon')} icon={image} />;
-                  }
-                  if (item.showCaption) {
-                    text = <span class={ns.e('text')}>{item.caption}</span>;
-                  }
-                  if (counterNum) {
-                    counter = (
-                      <iBizBadge
-                        class={ns.b('counter')}
-                        value={counterNum}
-                        counterMode={item.counterMode}
-                      />
-                    );
-                  }
-                  return (
-                    <van-button size={btnSize.value} type={btnType(item)}>
-                      {icon}
-                      {text}
-                      {counter}
-                    </van-button>
-                  );
-                },
-              }}
-            </van-popover>
-          </div>
-        );
+      if (item.itemType === 'ITEMS' && visible) {
+        const groupItem = item as IDETBGroupItem;
+        if (groupItem.groupExtractMode && groupItem.uiactionGroup) {
+          return renderActionGroup(item);
+        }
+        return renderGroupItem(getToolbarItemRenderProps(item));
       }
-      if (
-        item.itemType === 'DEUIACTION' &&
-        c.state.buttonsState[itemId]?.visible
-      ) {
-        return (
-          <div
-            key={itemId}
-            class={[
-              ns.e('item'),
-              ns.e('item-deuiaction'),
-              ns.e(`item-${position}`),
-              item.sysCss?.cssName,
-            ]}
-          >
-            <van-button
-              title={item.tooltip}
-              size={btnSize.value}
-              type={btnType(item)}
-              loading={c.state.buttonsState[itemId].loading}
-              disabled={c.state.buttonsState[itemId].disabled}
-              onClick={(e: MouseEvent) => handleClick(item, e)}
-            >
-              {btnContent(item, c.state)}
-            </van-button>
-          </div>
-        );
+      if (item.itemType === 'DEUIACTION' && visible) {
+        return renderActionItem(getToolbarItemRenderProps(item));
       }
 
       return null;
@@ -283,6 +270,8 @@ export const ToolbarControl = defineComponent({
       btnSize,
       position,
       handleClick,
+      renderFloatButton,
+      renderToolbarItemContent,
       renderExtraButtons,
       renderToolbarItem,
     };
@@ -290,24 +279,17 @@ export const ToolbarControl = defineComponent({
   render() {
     const { state } = this.c;
 
+    if (!state.isCreated) return null;
+
     if (this.position === 'popper') {
       return (
-        <IBizPopperToolbar
-          context={this.context}
-          params={this.params}
+        <iBizControlBase
+          ref='contentRef'
           controller={this.c}
-          modelData={this.modelData}
-          class={[
-            this.ns.m(state.viewMode.toLowerCase()),
-            this.ns.b(this.position),
-          ]}
+          class={[this.ns.b(), this.ns.b(this.position)]}
         >
-          {{
-            btnContent: (item: IDEToolbarItem | IExtraButton) => {
-              return btnContent(item, state);
-            },
-          }}
-        </IBizPopperToolbar>
+          {this.renderFloatButton()}
+        </iBizControlBase>
       );
     }
 

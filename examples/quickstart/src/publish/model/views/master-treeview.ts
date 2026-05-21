@@ -34,12 +34,12 @@ export default {
           id: 'data_source',
         },
         {
-          caption: '搜索',
-          appViewId: 'web.master_tree_search',
-          id: 'search',
+          caption: '快速搜索',
+          appViewId: 'web.master_tree_quicksearch_exp_view',
+          id: 'quicksearch',
         },
         {
-          caption: '导航传参',
+          caption: '节点传参',
           appViewId: 'web.master_treeview_navparams_tabexpview',
           id: 'pass_parameters',
         },
@@ -47,6 +47,11 @@ export default {
           caption: '上下文菜单',
           appViewId: 'web.master_tree_view_contextmenu',
           id: 'context',
+        },
+        {
+          caption: '动态界面行为组',
+          appViewId: 'web.master_tree_dy_uiaction_group_exp',
+          id: 'dy_uiaction_group',
         },
         {
           caption: '拖拽',
@@ -111,11 +116,11 @@ export default {
         },
         {
           caption: '计数器',
-          appViewId: 'web.master_tree_counter',
+          appViewId: 'web.master_tree_count',
           id: 'counter',
         },
         {
-          caption: '计数器禁用',
+          caption: '计数器动态禁用',
           appViewId: 'web.master_tree_counter_disabled',
           id: 'counter_disabled',
         },

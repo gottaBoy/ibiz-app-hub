@@ -1,0 +1,17 @@
+@include b(ai-tool-call) {
+  color: getCssVar(inline-ai-textarea-container, color-text-0);
+
+  @include e(toggle) {
+    display: block;
+    padding: getCssVar(spacing, tight) 0;
+    margin-top: getCssVar(spacing, tight);
+    text-align: center;
+    cursor: pointer;
+    background-color: getCssVar(inline-ai-textarea-container, color-bg-1);
+    border-radius: getCssVar(border-radius, small);
+
+    &:hover {
+      background-color: getCssVar(inline-ai-textarea-container, color-bg-hover-1);
+    }
+  }
+}

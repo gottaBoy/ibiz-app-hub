@@ -4,6 +4,7 @@ import { App } from 'vue';
 import { ReportPanelControl } from './report-panel';
 import { ReportPanelProvider } from './report-panel.provider';
 import {
+  IBizBIReport,
   IBizBIReportPanel,
   IBizUser2ReportPanel,
   IBizUserReportPanel,
@@ -13,6 +14,7 @@ import {
 export const IBizReportPanelControl: any = withInstall(
   ReportPanelControl,
   function (v: App) {
+    v.use(IBizBIReport);
     v.use(IBizUserReportPanel);
     v.use(IBizUser2ReportPanel);
     v.use(IBizBIReportPanel);

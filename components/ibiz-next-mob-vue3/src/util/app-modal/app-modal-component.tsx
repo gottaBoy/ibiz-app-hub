@@ -56,7 +56,7 @@ export const AppModalComponent = defineComponent({
     const options = ref<IParams>({
       footerHide: true,
       modalClass: '',
-      // 是否显示弹框关闭按钮，默认不显示
+      // 不显示关闭按钮
       showClose: false,
       // 是否显示遮罩，默认显示
       overlay: true,
@@ -117,6 +117,7 @@ export const AppModalComponent = defineComponent({
           <van-button
             class={this.ns.e('close')}
             plain
+            style={{ zIndex: this.modalZIndex }}
             onClick={this.onDialogClose}
           >
             <van-icon name='cross' />
@@ -127,6 +128,7 @@ export const AppModalComponent = defineComponent({
     return (
       <van-dialog
         show={this.isShow}
+        lockScroll={false}
         close-on-popstate={true}
         showConfirmButton={false}
         class={[
@@ -136,6 +138,7 @@ export const AppModalComponent = defineComponent({
         ]}
         style={this.customStyle}
         overlay={this.options.overlay}
+        close-on-click-overlay={true}
         before-close={this.onBeforeClose}
         {...this.options}
       >

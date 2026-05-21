@@ -23,10 +23,10 @@ export interface IApiExpBarControlController<
 > extends IApiControlController<T, S> {
   /**
    * @description 多数据部件控制器
-   * @type {IMDControlController}
+   * @type {(IMDControlController | undefined)}
    * @memberof IApiExpBarControlController
    */
-  xDataController: IApiMDControlController;
+  xDataController: IApiMDControlController | undefined;
 
   /**
    * @description 工具栏控制器
@@ -44,9 +44,9 @@ export interface IApiExpBarControlController<
 
   /**
    * @description 获取导航视图消息
-   * @param {IApiData} data
-   * @param {IApiContext} context
-   * @param {IApiParams} params
+   * @param {IApiData} data 导航数据
+   * @param {IApiContext} context 上下文参数
+   * @param {IApiParams} params 视图参数
    * @returns {*}  {INavViewMsg}
    * @memberof IExpBarControlController
    */

@@ -14,7 +14,7 @@ import { RuntimeError } from '@ibiz-template/core';
 import { IAppDETreeView } from '@ibiz/model-core';
 
 export class TreeViewEngine extends MDViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDETreeView,
     ITreeViewState,
     ITreeViewEvent
@@ -22,9 +22,13 @@ export class TreeViewEngine extends MDViewEngine {
 
   async onCreated(): Promise<void> {
     await super.onCreated();
+    const { model } = this.view;
     if (!this.view.slotProps.tree) {
       this.view.slotProps.tree = {};
     }
+    this.view.slotProps.tree.mdctrlActiveMode = (
+      model as IData
+    ).mdctrlActiveMode!;
   }
 
   get tree(): ITreeController {

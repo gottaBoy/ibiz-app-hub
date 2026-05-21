@@ -10,7 +10,7 @@ import { IAppDEGanttView } from '@ibiz/model-core';
 import { TreeGridExViewEngine } from './tree-grid-ex-view.engine';
 
 export class GanttViewEngine extends TreeGridExViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEGanttView,
     IGanttViewState,
     IGanttViewEvent

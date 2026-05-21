@@ -24,6 +24,7 @@ import {
   IDEToolbarItem,
   IDETBGroupItem,
   IDETBUIActionItem,
+  IUIActionGroupDetail,
 } from '@ibiz/model-core';
 import {
   IButtonState,
@@ -40,7 +41,6 @@ import {
   NodeDropType,
   AllowDropType,
 } from 'element-plus/es/components/tree/src/tree.type';
-import { isNil } from 'ramda';
 import {
   findNodeData,
   useElTreeUtil,
@@ -51,6 +51,7 @@ import {
   getNodeControlPanel,
   getNewNodeControlPanel,
 } from './el-tree-util';
+import { useContextMenu } from '../../util';
 import './tree.scss';
 
 export const TreeControl = defineComponent({
@@ -110,24 +111,18 @@ export const TreeControl = defineComponent({
     data: { type: Array<ITreeNodeData>, required: false },
   },
   setup(props) {
-    const c = useControlController<TreeController>(
+    const c: TreeController = useControlController<TreeController>(
       (...args) => new TreeController(...args),
     );
 
     useAppTreeBase(c, props);
 
     const cascadeSelect = ref(false);
-    const counterData: Ref<IData> = ref({});
 
     // 上下文分组图标显示模式,值为hover时默认隐藏，hover时显示
     const menuShowMode: Ref<'default' | 'hover'> = ref('default');
-    const fn = (counter: IData) => {
-      counterData.value = counter;
-    };
+
     c.evt.on('onCreated', () => {
-      if (c.counter) {
-        c.counter.onChange(fn, true);
-      }
       if (c.controlParams.cascadeselect) {
         cascadeSelect.value = true;
       }
@@ -204,6 +199,17 @@ export const TreeControl = defineComponent({
         }
       },
     );
+
+    c.evt.on('onSelectionChange', async () => {
+      if (!treeRef.value) return;
+      if (c.state.singleSelect) {
+        treeRef.value.setCurrentKey(c.state.selectedData[0]?._id);
+      } else {
+        treeRef.value.setCheckedKeys(
+          c.state.selectedData.map(item => item._id),
+        );
+      }
+    });
 
     /**
      * 编辑当前节点的文本
@@ -384,6 +390,11 @@ export const TreeControl = defineComponent({
       }
     });
 
+    // 更新UI
+    c.evt.on('onUpdateUI', () => {
+      updateUI();
+    });
+
     /** 树展示数据 */
     const treeData = computed(() => {
       if (!c.state.isLoaded) {
@@ -558,6 +569,8 @@ export const TreeControl = defineComponent({
     const iBizRawItem = resolveComponent('IBizRawItem');
     const iBizIcon = resolveComponent('IBizIcon');
 
+    const { calcUiactionGroup } = useContextMenu();
+
     /**
      * 计算上下文菜单组件配置项集合
      */
@@ -620,32 +633,14 @@ export const TreeControl = defineComponent({
           }
           // 分组项配置界面行为组
           if (group.uiactionGroup && group.groupExtractMode) {
-            const menuItems = group.uiactionGroup.uiactionGroupDetails
-              ?.filter(detail => {
-                const detailState: IButtonState = menuState[detail.id!];
-                return detailState.visible;
-              })
-              .map(detail => {
-                const detailState: IButtonState = menuState[detail.id!];
-                const { sysImage } = detail as IData;
-                return {
-                  label: detail.showCaption ? detail.caption : undefined,
-                  icon: detail.showIcon ? (
-                    <iBizIcon icon={sysImage}></iBizIcon>
-                  ) : undefined,
-                  disabled: detailState.disabled,
-                  clickableWhenHasChildren: true,
-                  onClick: () => {
-                    ContextMenu.closeContextMenu();
-                    c.doUIAction(
-                      detail.uiactionId!,
-                      nodeData,
-                      evt,
-                      detail.appId,
-                    );
-                  },
-                };
-              });
+            const menuItems = calcUiactionGroup(
+              group.uiactionGroup,
+              menuState,
+              (detail: IUIActionGroupDetail) => {
+                ContextMenu.closeContextMenu();
+                c.doUIAction(detail.uiactionId!, nodeData, evt, detail.appId);
+              },
+            );
             switch (group.groupExtractMode) {
               case 'ITEMS':
                 menuItem.children = menuItems;
@@ -866,16 +861,21 @@ export const TreeControl = defineComponent({
       treeviewRef.value?.$el.removeEventListener('keydown', keydownHandle);
     });
 
-    const renderCounter = (nodeModel: IDETreeNode) => {
+    const renderCounter = (nodeModel: IDETreeNode, nodeData: ITreeNodeData) => {
       if (nodeModel.counterId) {
-        const value = counterData.value[nodeModel.counterId];
-        if (isNil(value)) {
-          return null;
+        let counterId = nodeModel.counterId;
+        // 如果是动态代码表节点，追加节点值作为计数标识，如：abc 前端自动根据树节点值即识别 abc__{codeitemvalue}
+        if (nodeModel.treeNodeType === 'CODELIST') {
+          counterId = `${counterId}__${nodeData._value}`;
         }
-        if (nodeModel.counterMode === 1 && value === 0) {
-          return null;
-        }
-        return <iBizBadge class={ns.e('counter')} value={value} />;
+        const value = c.state.counterData[counterId];
+        return (
+          <iBizBadge
+            value={value}
+            class={ns.e('counter')}
+            counterMode={nodeModel.counterMode}
+          />
+        );
       }
     };
 
@@ -1127,9 +1127,6 @@ export const TreeControl = defineComponent({
 
                 return (
                   <div
-                    onDblclick={evt => this.onNodeDbClick(nodeData, evt)}
-                    onClick={evt => this.onNodeClick(nodeData, data, evt)}
-                    onContextmenu={evt => this.onNodeContextmenu(nodeData, evt)}
                     class={[
                       this.ns.b('node'),
                       nodeData._disableSelect
@@ -1137,9 +1134,13 @@ export const TreeControl = defineComponent({
                         : '',
                       nodeModel.sysCss?.cssName,
                     ]}
+                    title={nodeData._text}
+                    onDblclick={evt => this.onNodeDbClick(nodeData, evt)}
+                    onClick={evt => this.onNodeClick(nodeData, data, evt)}
+                    onContextmenu={evt => this.onNodeContextmenu(nodeData, evt)}
                   >
                     {content}
-                    {this.renderCounter(nodeModel)}
+                    {this.renderCounter(nodeModel, nodeData)}
                     {this.renderContextMenu(nodeModel, nodeData)}
                   </div>
                 );

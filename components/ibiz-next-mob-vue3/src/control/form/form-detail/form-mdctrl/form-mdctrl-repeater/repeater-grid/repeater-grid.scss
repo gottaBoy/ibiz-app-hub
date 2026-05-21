@@ -1,0 +1,81 @@
+$repeater-grid: (
+  // 颜色
+  color-th: getCssVar(color, text, 2),
+  color-td: getCssVar(color, text, 0),
+  color-btn: getCssVar(color, text, 2),
+
+  // 间距
+  spacing-padding: getCssVar(spacing, extra-tight) getCssVar(spacing, tight),
+  spacing-icon-gap: getCssVar(spacing, tight),
+
+  // 字体
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-icon-fontSize: getCssVar(width-icon, large),
+
+  // 边框
+  border: getCssVar('border-thickness', 'control') solid getCssVar(color, border),
+);
+
+@include b(repeater-grid) {
+  @include set-component-css-var(repeater-grid, $repeater-grid);
+
+  width: 100%;
+  overflow: auto;
+
+  table {
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+
+  th {
+    min-width: 0;
+    padding: getCssVar(repeater-grid, spacing-padding);
+    overflow: hidden;
+    line-height: getCssVar(repeater-grid, font-lineHeight);
+    color: getCssVar(repeater-grid, color-th);
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: getCssVar(repeater-grid, border);
+  }
+
+  td {
+    min-width: 0;
+    padding: getCssVar(repeater-grid, spacing-padding);
+    overflow: hidden;
+    line-height: getCssVar(repeater-grid, font-lineHeight);
+    color: getCssVar(repeater-grid, color-td);
+    text-align: center;
+    border: getCssVar(repeater-grid, border);
+  }
+
+  @include b(repeater-grid-action-cell) {
+    border: none;
+  }
+}
+
+@include b(repeater-grid-action-group) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: getCssVar(repeater-grid, font-lineHeight);
+
+  ion-icon {
+    box-sizing: border-box;
+    font-size: getCssVar(repeater-grid, font-icon-fontSize);
+    color: getCssVar(repeater-grid, color-btn);
+    cursor: pointer;
+    border: getCssVar(repeater-grid, border);
+
+    + ion-icon {
+      margin-left: getCssVar(repeater-grid, spacing-icon-gap);
+    }
+  }
+}
+
+@include b(repeater-grid-empty-content) {
+  td {
+    color: getCssVar(repeater-grid, color-th);
+  }
+}
+

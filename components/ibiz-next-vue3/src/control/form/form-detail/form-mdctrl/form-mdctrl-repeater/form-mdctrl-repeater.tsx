@@ -4,6 +4,7 @@ import { useNamespace } from '@ibiz-template/vue3-util';
 import { RepeaterSingleForm } from './repeater-single-form/repeater-single-form';
 import { RepeaterMultiForm } from './repeater-multi-form/repeater-multi-form';
 import { RepeaterGrid } from './repeater-grid/repeater-grid';
+import { RepeaterGrid2 } from './repeater-grid2/repeater-grid2';
 
 export const FormMDCtrlRepeater = defineComponent({
   name: 'IBizFormMDCtrlRepeater',
@@ -32,6 +33,17 @@ export const FormMDCtrlRepeater = defineComponent({
           ></RepeaterMultiForm>
         );
       case 'Grid':
+        // eslint-disable-next-line no-case-declarations
+        const gridStyle = this.controller.model.ctrlParams?.gridStyle;
+        if (gridStyle === 'style2') {
+          return (
+            <RepeaterGrid2
+              class={classNames}
+              controller={this.controller}
+              onChange={this.onDataChange}
+            ></RepeaterGrid2>
+          );
+        }
         return (
           <RepeaterGrid
             class={classNames}

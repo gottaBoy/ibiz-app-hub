@@ -1,5 +1,9 @@
 /* eslint-disable no-nested-ternary */
-import { IDEList, IUIActionGroupDetail } from '@ibiz/model-core';
+import {
+  IDEList,
+  IDEUIActionGroup,
+  IUIActionGroupDetail,
+} from '@ibiz/model-core';
 import { createUUID, isBoolean } from 'qx-util';
 import { isNil } from 'ramda';
 import {
@@ -25,6 +29,7 @@ import { UIActionButtonState, ButtonContainerState } from '../../utils';
 import { UIActionUtil } from '../../../ui-action';
 import {
   calcDeCodeNameById,
+  calcUIActionGroup,
   getAllUIActionItems,
   getParentTextAppDEFieldId,
 } from '../../../model';
@@ -86,6 +91,38 @@ export class ListController
     this.state.size = this.model.pagingSize || 20;
     this.service = new ListService(this.model);
     await this.service.init(this.context);
+  }
+
+  /**
+   * @description 初始化界面行为组
+   * @protected
+   * @memberof ListController
+   */
+  protected async initUIActions(): Promise<void> {
+    // 收集所有遍历过程中的异步任务
+    const asyncTasks: Promise<IDEUIActionGroup>[] = [];
+    // 分组界面行为组
+    if (this.model.groupUIActionGroup) {
+      const task = calcUIActionGroup(
+        this.model.groupUIActionGroup!,
+        this.context,
+        this.params,
+      );
+      asyncTasks.push(task);
+    }
+
+    // 操作项界面行为组
+    this.model.delistItems?.forEach(item => {
+      if (item.itemType === 'ACTIONITEM' && item.deuiactionGroup) {
+        const task = calcUIActionGroup(
+          item.deuiactionGroup!,
+          this.context,
+          this.params,
+        );
+        asyncTasks.push(task);
+      }
+    });
+    await Promise.all(asyncTasks);
   }
 
   /**

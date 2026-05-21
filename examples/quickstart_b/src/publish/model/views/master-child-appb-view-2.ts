@@ -1,7 +1,7 @@
 export default {
   deviewCodeName: 'child_appb_view2',
   deviewId: 'd63b640db02cffaa344525189824e537',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

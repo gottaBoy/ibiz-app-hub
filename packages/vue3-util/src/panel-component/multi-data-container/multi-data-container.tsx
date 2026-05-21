@@ -115,6 +115,10 @@ export const MultiDataContainer = defineComponent({
         );
       });
     }
-    return <div class={this.classArr}>{content}</div>;
+    return (
+      <div class={this.classArr} v-loading={this.controller.state.loading}>
+        {content}
+      </div>
+    );
   },
 });

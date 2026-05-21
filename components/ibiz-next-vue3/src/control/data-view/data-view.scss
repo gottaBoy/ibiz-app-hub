@@ -107,8 +107,12 @@ $control-dataview-group-item-content: (
   }
 
   @include e(batchtoolbar) {
+    display: none;
     padding: 0 getCssVar(spacing, base);
     margin: getCssVar(spacing, tight) getCssVar(spacing, super, tight);
+    @include when('show') {
+      display: block;
+    }
   }
 
   @include e(quicktoolbar) {
@@ -185,6 +189,7 @@ $control-dataview-group-item-content: (
     border-top: 1px solid getCssVar('color', 'border');
     @include m(actions) {
       display: flex;
+      column-gap: getCssVar('spacing', 'extra', 'tight');
       justify-content: center;
       .#{bem(action-toolbar, item)} {
         margin: 0;

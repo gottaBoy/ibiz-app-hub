@@ -9,7 +9,7 @@ export default {
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
-  caption: '数据关系分页_计数器禁用',
+  caption: '数据关系分页_计数器动态禁用',
   codeName: 'master_drtab_counter_disabled',
   appDataEntityId: 'web.master',
   appViewEngines: [
@@ -25,7 +25,7 @@ export default {
       logicTrigger: 'VIEWEVENT',
       logicType: 'SCRIPT',
       scriptCode:
-        "view.ctx.evt.on('onRegister', (name, ctrl) => {\r\n   if (name === 'tabexppanel') {\r\n      ctrl?.disableCounter();\r\n      console.log('部件注册成功事件触发调用部件禁用计数器能力');\r\n   }\r\n})",
+        "view.ctx.evt.on('onRegister', (name, ctrl) => {\r\n   if (name === 'tabexppanel') {\r\n      ctrl.disableCounter?.();\r\n      console.log('部件注册成功事件触发后，调用禁用部件计数器能力');\r\n   }\r\n})",
       builtinLogic: true,
       id: 'disable_counter',
     },
@@ -97,7 +97,7 @@ export default {
       capLanguageRes: {
         lanResTag: 'DE.LNAME.MASTER',
       },
-      caption: '数据关系分页_计数器禁用',
+      caption: '数据关系分页_计数器动态禁用',
       codeName: 'drtab_counter_disabled_captionbar',
       controlType: 'CAPTIONBAR',
       appDataEntityId: 'web.master',
@@ -117,7 +117,7 @@ export default {
     controlParam: {},
     id: 'layoutpanel',
   },
-  title: '数据关系分页_计数器禁用',
+  title: '数据关系分页_计数器动态禁用',
   viewStyle: 'DEFAULT',
   viewType: 'DETABEXPVIEW',
   enableDP: true,

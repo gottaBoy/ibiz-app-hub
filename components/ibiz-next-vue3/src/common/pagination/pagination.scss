@@ -71,3 +71,19 @@ $pagination: (
     }
   }
 }
+@include b(pagination-simple){
+  .el-pager{
+    .number{
+      display: none;
+
+      &.is-active{
+        display: block;
+      }
+    }
+
+    .more{
+      display: none;
+    }
+
+  }
+}

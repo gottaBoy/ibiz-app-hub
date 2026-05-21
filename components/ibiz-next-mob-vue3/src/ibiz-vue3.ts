@@ -37,6 +37,8 @@ import {
   VueBrowserPlatformProvider,
   DingTalkPlatformProvider,
   IosPlatformProvider,
+  WeChatOfficialPlatformProvider,
+  AndroidPlatformProvider,
 } from './platform';
 import { IBizPortalView } from './view/portal-view';
 import { IBizViewEngine } from './view-engine';
@@ -46,10 +48,13 @@ import './style/index.scss';
 export default {
   install: (v: App): void => {
     ibiz.i18n = iBizI18n;
+    ibiz.util.getExcelUtil = () => import('./util/xlsx-util/xlsx-util');
     // vue 浏览器搭载平台
     const browserPlatformProvider = new VueBrowserPlatformProvider();
     const dingTalkPlatformProvider = new DingTalkPlatformProvider();
     const iosPlatformProvider = new IosPlatformProvider();
+    const weChatOfficialPlatformProvider = new WeChatOfficialPlatformProvider();
+    const androidPlatformProvider = new AndroidPlatformProvider();
     registerPlatformProvider(
       PlatformType.BROWSER,
       () => browserPlatformProvider,
@@ -59,6 +64,14 @@ export default {
       () => dingTalkPlatformProvider,
     );
     registerPlatformProvider(PlatformType.IOS, () => iosPlatformProvider);
+    registerPlatformProvider(
+      PlatformType.WECHAT,
+      () => weChatOfficialPlatformProvider,
+    );
+    registerPlatformProvider(
+      PlatformType.ANDROID,
+      () => androidPlatformProvider,
+    );
 
     v.use(IBizCommonComponents);
     v.use(IBizViewEngine);

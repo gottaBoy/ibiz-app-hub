@@ -38,3 +38,6 @@ export { ChangeTracker } from './change-tracker/change-tracker';
 export { ViewShellHooks } from './view-shell-hooks/view-shell-hooks';
 export { WaterMarkUtil } from './water-mark-util/water-mark-util';
 export * from './map-util/map-util';
+export * from './wechat-util/wechat-util';
+export * from './json-util/json-util';
+export * from './stringify-util/stringify-util';

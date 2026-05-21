@@ -69,37 +69,44 @@ export interface IApiModalParams {
 export interface IApiModalUtil {
   /**
    * @description 弹出普通信息
-   * @param {IApiModalParams} params
+   * @param {IApiModalParams} params 确认框参数
    * @returns {*}  {Promise<void>}
    * @memberof IApiModalUtil
    */
   info(params: IApiModalParams): Promise<void>;
   /**
    * @description 弹出成功信息
-   * @param {IApiModalParams} params
+   * @param {IApiModalParams} params 确认框参数
    * @returns {*}  {Promise<void>}
    * @memberof IApiModalUtil
    */
   success(params: IApiModalParams): Promise<void>;
   /**
    * @description 弹出警告信息
-   * @param {IApiModalParams} params
+   * @param {IApiModalParams} params 确认框参数
    * @returns {*}  {Promise<void>}
    * @memberof IApiModalUtil
    */
   warning(params: IApiModalParams): Promise<void>;
   /**
    * @description 弹出错误信息
-   * @param {IApiModalParams} params
+   * @param {IApiModalParams} params 确认框参数
    * @returns {*}  {Promise<void>}
    * @memberof IApiModalUtil
    */
   error(params: IApiModalParams): Promise<void>;
   /**
    * @description 弹出确认操作
-   * @param {IApiModalParams} params
+   * @param {IApiModalParams} params 确认框参数
    * @returns {*}  {Promise<boolean>}
    * @memberof IApiModalUtil
    */
   confirm(params: IApiModalParams): Promise<boolean>;
+  /**
+   * @description 弹出确认操作，返回确认结果（yes | no | cancel）
+   * @param {IApiModalParams} params 确认框参数
+   * @returns {*}  {(Promise<'yes' | 'no' | 'cancel'>)}
+   * @memberof IApiModalUtil
+   */
+  extendConfirm(params: IApiModalParams): Promise<'yes' | 'no' | 'cancel'>;
 }

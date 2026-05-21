@@ -16,7 +16,7 @@
       }"
     >
       <div class="cell-box" :style="{ lineHeight: `${rowHeight}px`, height: `${rowHeight}px` }">
-        <div v-if="props.__index === 0" ref="selectionRef" class="prefix">
+        <div v-if="$param.expandColumnName ? $param.expandColumnName === props.prop : props.__index === 0" ref="selectionRef" class="prefix">
           <SelectionVue :data="data" :indent="20" />
         </div>
 
@@ -64,6 +64,7 @@ import {
 } from 'vue';
 import useStyle from '@/composables/useStyle';
 import useSlotsBox from '@/composables/useSlotsBox';
+import useParam from '@/composables/useParam';
 import SelectionVue from './selection.vue';
 import useData from '@/composables/useData';
 import { day } from '@/utils/date';
@@ -79,6 +80,7 @@ const slots = useSlots();
 
 const { $styleBox, rowHeight } = useStyle();
 const { toRowData, getProp } = useData();
+const { $param } = useParam();
 
 const originData = computed(() =>
   getProp(props.data!, props.prop, props.emptyData)

@@ -5,31 +5,30 @@ import { PercentPondController } from './percent-pond.controller';
 
 export const PercentPond = defineComponent({
   name: 'PercentPond',
-  // @ts-ignore
   props: getSliderProps<PercentPondController>(),
   setup(props) {
     const ns = useNamespace('percent-pond');
     const c = props.controller;
-    const total = ref(0);
+    const total = ref(100);
 
     const useCover = () => {
       const tempValue = Number(props.value) || 0;
       return `${total.value === 0 ? 0 : Math.round((tempValue / total.value) * 100) || 0}%`;
     };
 
-    watch(
-      () => props.data[c.totalField],
-      newVal => {
-        if (newVal || newVal === 0) {
-          total.value = newVal;
-        } else {
-          total.value = 0;
-        }
-      },
-      {
-        immediate: true,
-      },
-    );
+    if (c.totalField) {
+      watch(
+        () => props.data[c.totalField],
+        newVal => {
+          if (newVal || newVal === 0) {
+            total.value = newVal;
+          }
+        },
+        {
+          immediate: true,
+        },
+      );
+    }
 
     return { ns, useCover, total };
   },

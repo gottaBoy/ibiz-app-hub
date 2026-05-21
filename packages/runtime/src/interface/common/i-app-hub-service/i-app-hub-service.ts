@@ -2,6 +2,7 @@ import {
   IAppBICube,
   IAppBIReport,
   IAppBIScheme,
+  IAppCodeList,
   IAppDataEntity,
   IApplication,
   IAppView,
@@ -103,6 +104,13 @@ export interface IAppHubService extends IApiAppHubService {
   registerSubAppDrControls(appId: string, model: IModel): void;
 
   /**
+   * 注册子应用分页导航面板模型
+   * @param appId
+   * @param model
+   */
+  registerSubAppTabExpPanel(appId: string, model: IModel): void;
+
+  /**
    * @description 注册子应用界面行为组模型
    * @param {string} appId
    * @param {IModel} model
@@ -125,6 +133,13 @@ export interface IAppHubService extends IApiAppHubService {
    * @memberof IAppHubService
    */
   registerSubAppControls(appId: string, model: IModel): void;
+
+  /**
+   * 注册子应用代码表
+   * @param appId
+   * @param model
+   */
+  registerSubAppCodeList(appId: string, model: IAppCodeList): void;
 
   /**
    * @description 设置应用视图所属应用，兼容识别视图 codeName 或 id
@@ -161,6 +176,13 @@ export interface IAppHubService extends IApiAppHubService {
   getSubAppDrControl(tag: string, appId: string): IModel | undefined;
 
   /**
+   * @description 根据分页导航面板的唯一标识（uniqueTag）获取模型
+   * @param tag
+   * @param appId
+   */
+  getSubAppTabExpPanel(tag: string, appId: string): IModel | undefined;
+
+  /**
    * @description 根据界面行为组标识和子应用标识获取模型
    * @param {string} tag
    * @param {string} appId
@@ -186,6 +208,13 @@ export interface IAppHubService extends IApiAppHubService {
    * @memberof IAppHubService
    */
   getSubAppControl(tag: string, appId: string): IModel | undefined;
+
+  /**
+   * 根据代码表标识和子应用标识获取代码表模型
+   * @param id
+   * @param appId
+   */
+  getSubAppCodeList(id: string, appId: string): IAppCodeList | undefined;
 
   /**
    * @description 根据参数加载请求视图模型，用于后台根据运行时参数加载视图
@@ -333,4 +362,11 @@ export interface IAppHubService extends IApiAppHubService {
    * @memberof IAppHubService
    */
   getAppSourceModel(app?: string | IApplication): IModel;
+
+  /**
+   * @description 合并子应用代码表
+   * @param {IAppCodeList} codeList
+   * @memberof IAppHubService
+   */
+  mergeSubAppCodeList(codeList: IAppCodeList): void;
 }

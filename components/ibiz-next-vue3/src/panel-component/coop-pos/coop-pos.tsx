@@ -15,6 +15,7 @@ import './coop-pos.scss';
  *      - 勾选【登记更新数据】 -> 显示编辑用户
  *      - 勾选【提示刷新数据】 -> 显示更新用户
  * @panelitemparams {name:showmode,parameterType:'avatar' | 'default',defaultvalue:'default',description:当值为avatar时会绘制头像}
+ * @panelitemparams {"name":"enablenoaccess","parameterType":"boolean","defaultvalue":"false", "description":"是否启用无权限模式，若启用无权限模式，上传文件夹需拼接'$'字符，也不需要计算下载凭证"}
  *
  */
 

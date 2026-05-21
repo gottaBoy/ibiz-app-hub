@@ -143,6 +143,26 @@ $control-appmenu-item: (
     @include raw-item-menu-style;
   }
 
+  // 分组菜单样式
+  .#{bem('control-appmenu-groupmenu')} {
+    .el-menu-item-group__title {
+      padding: getCssVar('spacing', 'extra-tight') 0 getCssVar('spacing', 'extra-tight') 10px;
+      font-size: getCssVar('control-appmenu-item', 'font-size');
+      color: getCssVar('control-appmenu-item', 'horizontal-color');
+    }
+
+    > ul {
+      > .el-menu-item {
+        padding: 0 getCssVar('spacing', 'extra-loose');
+      }
+
+      > .el-divider {
+        width: calc(100% - 40px);
+        margin: getCssVar('spacing', 'tight') getCssVar('spacing', 'base-loose')
+      }
+    }
+  }
+
   .el-sub-menu {
     .el-sub-menu__icon-arrow {
       right: 10px;
@@ -261,6 +281,10 @@ $control-appmenu-item: (
     margin: getCssVar('control-appmenu', 'icon-margin');
     font-size: getCssVar('control-appmenu','icon-size');
 
+    > svg {
+      max-width: getCssVar('control-appmenu', 'icon-width');
+      max-height: getCssVar('control-appmenu', 'icon-height');
+    }
   }
 
   // 收缩
@@ -320,6 +344,14 @@ $control-appmenu-item: (
 @include b(control-appmenu-popup-container){
   @include raw-item-menu-style;
 
+  .#{bem('control-appmenu-popup-container', 'extview1')} {
+    &.el-menu--popup-container {
+      .el-menu--popup {
+        padding: getCssVar('spacing', 'extra-tight') 0 !important;
+      }
+    }
+  }
+
   // 收缩时菜单项样式
   // 以及水平菜单悬浮出来菜单样式
   &.el-menu--popup-container {
@@ -335,6 +367,26 @@ $control-appmenu-item: (
       overflow: auto;
       background-color: getCssVar('color', 'primary');
 
+      // 分组菜单样式
+      .#{bem('control-appmenu-groupmenu')} {
+        .el-menu-item-group__title {
+          padding: getCssVar('spacing', 'extra-tight') 0 getCssVar('spacing', 'extra-tight') 10px;
+          font-size: getCssVar('control-appmenu-item', 'font-size');
+          color: getCssVar('control-appmenu-item', 'horizontal-color');
+        }
+
+        > ul {
+          > .el-menu-item {
+            padding: 0 getCssVar('spacing', 'extra-loose');
+          }
+
+          > .el-divider {
+            width: calc(100% - 40px);
+            margin: getCssVar('spacing', 'tight') getCssVar('spacing', 'base-loose')
+          }
+        }
+      }
+    
       .el-menu-item,
       .el-sub-menu__title {
         @include flex(row, flex-start, center);
@@ -471,6 +523,10 @@ $control-appmenu-item: (
       .el-icon {
         display: none;
       }
+    }
+
+    .el-menu-item.is-disabled:hover{
+      background-color: getCssVar('control-appmenu-item', 'hover-bg-color')!important;
     }
   }
 

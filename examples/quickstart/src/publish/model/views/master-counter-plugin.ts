@@ -84,6 +84,7 @@ export default {
           },
           deformDetails: [
             {
+              dataRelationTag: 'DataRelation2',
               deformTabPages: [
                 {
                   layout: {

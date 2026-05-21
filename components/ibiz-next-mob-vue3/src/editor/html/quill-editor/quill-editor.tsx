@@ -18,16 +18,20 @@ import './quill-editor.scss';
  * 移动端HTML编辑框
  * @primary
  * @description  基于Quill深度定制可扩展的富文本编辑器，集成文件/图片上传、实时预览及样式配置功能，提供完整的富媒体编辑解决方案。支持编辑器类型包含：`移动端HTML编辑框`
- * @editorparams {name:uploadParams,parameterType:IData,defaultvalue:{},description:上传参数}
- * @editorparams {name:exportParams,parameterType:IData,defaultvalue:{},description:下载参数}
- * @editorparams {name:SHOWTOOLBAR,parameterType:boolean,defaultvalue:true,description:显示工具栏}
- * @editorparams {name:VALUEMODE,parameterType:'text' | 'html',defaultvalue:html,description:值模式，暂时只支持html模式}
- * @editorparams {name:IMAGEMODE,parameterType:'base64' | 'file',defaultvalue:'file',description:图片模式}
- * @editorparams {name:MODULES,parameterType:IData,description:quill配置}
- * @editorparams {name:DEFAULTHEIGHT,parameterType:number,defaultvalue:200,description:收缩时的高度}
- * @editorparams {name:SHOWCOLLAPSE,parameterType:boolean,defaultvalue:true,description:是否显示伸缩按钮}
+ * @editorparams {name:uploadparams,parameterType:string,description:上传参数，图片或文件上传时，用于计算上传路径}
+ * @editorparams {name:exportparams,parameterType:string,description:下载参数，图片或文件下载时，用于计算下载路径}
+ * @editorparams {name:osscat,parameterType:string,description:用于计算上传和下载路径的OSS参数}
+ * @editorparams {name:showtoolbar,parameterType:boolean,defaultvalue:true,description:显示工具栏}
+ * @editorparams {name:valuemode,parameterType:'text' | 'html',defaultvalue:html,description:值模式，暂时只支持html模式}
+ * @editorparams {name:imagemode,parameterType:'base64' | 'file',defaultvalue:'file',description:图片模式}
+ * @editorparams {name:modules,parameterType:string,description:quill配置}
+ * @editorparams {name:defaultheight,parameterType:number,defaultvalue:200,description:收缩时的高度}
+ * @editorparams {name:showcollapse,parameterType:boolean,defaultvalue:true,description:是否显示伸缩按钮}
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
+ * @editorparams {"name":"enablenoaccess","parameterType":"boolean","defaultvalue":"false", "description":"是否启用无权限模式，若启用无权限模式，上传文件夹需拼接'$'字符，也不需要计算下载凭证"}
+ * @editorparams {"name":"globaldownloadprifix","parameterType":"boolean","defaultvalue":"false", "description":"是否使用全局文件下载前缀，若启用，则以global作为前缀"}
  * @ignoreprops  autoFocus | overflowMode
- * @ignoreemits  infoTextChange | enter
+ * @ignoreemits  blur | focus | infoTextChange | enter
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const IBizQuill: any = defineComponent({
@@ -92,7 +96,18 @@ const IBizQuill: any = defineComponent({
         blob,
         headers.value,
       );
-      const url = downloadUrl.value.replace('%fileId%', file.fileid);
+      let url = downloadUrl.value.replace('%fileId%', file.fileid);
+      if (ibiz.config.common.enableDownloadTicket && !c.enableNoAccess) {
+        const downloadTicket = await ibiz.util.file.getDownloadTicket(
+          c.context,
+          c.params,
+          props.data || {},
+          { fileId: file.id },
+          c.downloadTicketParams,
+        );
+        if (downloadTicket && downloadTicket.ticket)
+          url = downloadUrl.value.replace('%fileId%', downloadTicket.ticket);
+      }
       const value = getValue();
       tempValue.value = value.replace(image, url);
     };
@@ -143,11 +158,22 @@ const IBizQuill: any = defineComponent({
       () => props.data,
       newVal => {
         if (newVal) {
+          const editorParams: IData = {
+            ...c.editorParams,
+            enableNoAccess: c.enableNoAccess,
+            globalDownloadPrifix: c.globalDownloadPrifix,
+          };
+          if (editorParams.uploadparams) {
+            editorParams.uploadParams = JSON.parse(editorParams.uploadparams);
+          }
+          if (editorParams.exportparams) {
+            editorParams.exportParams = JSON.parse(editorParams.exportparams);
+          }
           const urls = ibiz.util.file.calcFileUpDownUrl(
             c.context,
             c.params,
             newVal,
-            c.editorParams,
+            editorParams,
           );
           uploadUrl.value = urls.uploadUrl;
           downloadUrl.value = urls.downloadUrl;

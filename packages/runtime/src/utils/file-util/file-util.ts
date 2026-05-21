@@ -9,7 +9,11 @@ import {
 } from '@ibiz-template/core';
 import qs from 'qs';
 import { convertNavData } from '../nav-params/nav-params';
-import { IApiDownloadTicket, IApiFileUtil } from '../../interface';
+import {
+  IApiDownloadTicket,
+  IApiFileUpDownExtraParams,
+  IApiFileUtil,
+} from '../../interface';
 import { DownloadTicketUtil } from './download-ticket/download-ticket-util';
 import { DownloadTicket } from './download-ticket/download-ticket';
 
@@ -86,27 +90,37 @@ export class FileUtil implements IApiFileUtil {
   }
 
   /**
-   * @description 计算OSSCat参数
-   * @protected
-   * @param {string} url
-   * @param {IContext} context
-   * @param {string} [OSSCatName]
-   * @returns {*}  {string}
-   * @memberof FileUtil
+   * 计算OSSCat参数
+   * @param url
+   * @param context
+   * @param OSSCatName
+   * @param enableNoAccess 若启用无权限模式则在文件存储目录后面拼接特殊字符'$'
+   * @param globalDownloadPrifix 是否启用全局下载文件前缀，启用则以global作为前缀
+   * @returns
    */
   protected calcOSSCatUrl(
     url: string,
     context: IContext,
     OSSCatName?: string,
+    enableNoAccess: boolean = false,
+    globalDownloadPrifix: boolean = false,
   ): string {
-    let uploadUrl = `${ibiz.env.baseUrl}/${ibiz.env.appId}${url}`;
+    let targetUrl = `${ibiz.env.baseUrl}/${ibiz.env.appId}${url}`;
+    // 启用则以global作为前缀,仅下载识别此参数
+    if (globalDownloadPrifix) {
+      targetUrl = `/__APP__${url}`;
+    }
     const app = ibiz.hub.getApp(context.srfappid);
     const OSSCat =
       OSSCatName ||
+      ibiz.env.defaultOSSCat ||
       app.model.defaultOSSCat ||
       app.model.userParam?.DefaultOSSCat;
-    uploadUrl = uploadUrl.replace('/{cat}', OSSCat ? `/${OSSCat}` : '');
-    return uploadUrl;
+    targetUrl = targetUrl.replace(
+      '/{cat}',
+      OSSCat ? `/${OSSCat}${enableNoAccess ? '$' : ''}` : '',
+    );
+    return targetUrl;
   }
 
   /**
@@ -114,7 +128,7 @@ export class FileUtil implements IApiFileUtil {
    * @param {IContext} context
    * @param {IParams} params
    * @param {IData} [data={}]
-   * @param {IData} [extraParams={}]
+   * @param {IApiFileUpDownExtraParams} [extraParams={}]
    * @returns {*}  {{
    *     uploadUrl: string;
    *     downloadUrl: string;
@@ -125,22 +139,32 @@ export class FileUtil implements IApiFileUtil {
     context: IContext,
     params: IParams,
     data: IData = {},
-    extraParams: IData = {},
+    extraParams: IApiFileUpDownExtraParams = {},
   ): {
     uploadUrl: string;
     downloadUrl: string;
   } {
-    const { uploadParams, exportParams, osscat: OSSCatName } = extraParams;
+    const {
+      uploadParams,
+      exportParams,
+      osscat: OSSCatName,
+      enableNoAccess,
+      globalDownloadPrifix,
+    } = extraParams;
     // 计算文件上传路径
     let uploadUrl = this.calcOSSCatUrl(
       ibiz.env.uploadFileUrl,
       context,
       OSSCatName,
+      enableNoAccess,
     );
+    // 计算文件下载路径
     let downloadUrl = this.calcOSSCatUrl(
       `${ibiz.env.downloadFileUrl}/%fileId%`,
       context,
       OSSCatName,
+      enableNoAccess,
+      globalDownloadPrifix,
     );
     let _uploadParams: IParams = {};
     let _exportParams: IParams = {};
@@ -203,7 +227,7 @@ export class FileUtil implements IApiFileUtil {
    *       params: IParams;
    *       data: IData;
    *       file: { fileId: string } & IData;
-   *       extraParams?: IData;
+   *       extraParams?: IApiFileUpDownExtraParams;
    *       downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
    *     })} [downloadParams]
    * @param {boolean} [enableDownloadTicket]
@@ -218,13 +242,14 @@ export class FileUtil implements IApiFileUtil {
       params: IParams;
       data: IData;
       file: { fileId: string } & IData;
-      extraParams?: IData;
+      extraParams?: IApiFileUpDownExtraParams;
       downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
     },
     enableDownloadTicket?: boolean,
+    enableNoAccess?: boolean,
   ): Promise<void> {
     const tempEnableDownloadTicket =
-      this.getEnableDownloadTicket(enableDownloadTicket);
+      !enableNoAccess && this.getEnableDownloadTicket(enableDownloadTicket);
     let tempDownloadUrl: string = url;
     // 应用启用传入下载凭证且外部传入下载参数才去计算凭证
     if (tempEnableDownloadTicket && downloadParams) {
@@ -345,7 +370,7 @@ export class FileUtil implements IApiFileUtil {
     params: IParams,
     data: IData,
     option: IData = {},
-  ): Promise<IData[]> {
+  ): Promise<IData[] | undefined> {
     const { accept, multiple, showUploadManager, extraParams } = option;
     const urls = ibiz.util.file.calcFileUpDownUrl(
       context,
@@ -354,6 +379,7 @@ export class FileUtil implements IApiFileUtil {
       extraParams,
     );
     const files = await ibiz.util.file.chooseFile(accept, multiple);
+    if (!files) return;
     let promises: IData[] = [];
     const headers = this.getUploadHeaders();
     if (showUploadManager) {
@@ -385,18 +411,27 @@ export class FileUtil implements IApiFileUtil {
   chooseFile(
     accept: string = '',
     multiple: boolean = false,
-  ): Promise<FileList> {
+  ): Promise<FileList | undefined> {
     return new Promise(resolve => {
       // 创建 input 元素
-      const inputElement = document.createElement('input');
+      let inputElement: HTMLInputElement | null =
+        document.createElement('input');
       inputElement.type = 'file';
       inputElement.accept = accept;
       inputElement.multiple = multiple;
       inputElement.webkitdirectory = false;
       // 添加事件监听器，处理文件上传逻辑
-      inputElement.addEventListener('change', (e: IData) => {
-        resolve(e.target.files);
-      });
+      inputElement.addEventListener(
+        'change',
+        (e: IData) => {
+          if (inputElement) {
+            document.body.removeChild(inputElement);
+            inputElement = null;
+          }
+          resolve(e.target.files);
+        },
+        { once: true },
+      );
 
       // 将 input 元素添加到页面中
       document.body.appendChild(inputElement);
@@ -404,8 +439,22 @@ export class FileUtil implements IApiFileUtil {
       // 执行文件上传操作
       inputElement.click();
 
-      // 方法结束后销毁 input 元素
-      document.body.removeChild(inputElement);
+      // 监听取消操作
+      window.addEventListener(
+        'focus',
+        () => {
+          // 确保执行在 change 之后
+          setTimeout(() => {
+            // 方法结束后销毁 input 元素
+            if (inputElement) {
+              document.body.removeChild(inputElement);
+              inputElement = null;
+            }
+            resolve(undefined);
+          }, 1000);
+        },
+        { once: true },
+      );
     });
   }
 
@@ -418,7 +467,7 @@ export class FileUtil implements IApiFileUtil {
    *       params: IParams;
    *       data: IData;
    *       file: { fileId: string } & IData;
-   *       extraParams?: IData;
+   *       extraParams?: IApiFileUpDownExtraParams;
    *       downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
    *     })} [downloadParams]
    * @param {boolean} [enableDownloadTicket]
@@ -433,14 +482,15 @@ export class FileUtil implements IApiFileUtil {
       params: IParams;
       data: IData;
       file: { fileId: string } & IData;
-      extraParams?: IData;
+      extraParams?: IApiFileUpDownExtraParams;
       downloadTicketParams?: { appEntityTag?: string; dataFieldTag?: string };
     },
     enableDownloadTicket?: boolean,
+    enableNoAccess?: boolean,
   ): Promise<IData> {
     let tempDownloadUrl: string = url;
     const tempEnableDownloadTicket =
-      this.getEnableDownloadTicket(enableDownloadTicket);
+      !enableNoAccess && this.getEnableDownloadTicket(enableDownloadTicket);
     // 如果启用了下载凭证，并且传入了下载参数，则拼接带凭证的下载地址
     if (tempEnableDownloadTicket && downloadParams) {
       const { context, params, data, file, extraParams, downloadTicketParams } =
@@ -483,5 +533,68 @@ export class FileUtil implements IApiFileUtil {
     }
 
     return response.data;
+  }
+
+  /**
+   * 图片压缩
+   * @param file      原始文件
+   * @param maxW      最大宽度（默认 1280）
+   * @param quality   压缩质量 0~1（默认 0.8）
+   * @returns Promise<File> 压缩后的新文件
+   */
+  compressImg = (
+    file: File,
+    maxW: number = 1280,
+    quality: number = 0.8,
+  ): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onerror = (e: string | Event): void => reject(e);
+      img.onload = (): void => {
+        const { width: w, height: h } = img;
+
+        // 等比缩放
+        const scale = w > h ? maxW / w : maxW / h;
+        const cw = scale < 1 ? Math.round(w * scale) : w;
+        const ch = scale < 1 ? Math.round(h * scale) : h;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = cw;
+        canvas.height = ch;
+        const ctx = canvas.getContext('2d')!;
+        ctx.drawImage(img, 0, 0, cw, ch);
+
+        canvas.toBlob(
+          blob => {
+            if (!blob) return reject();
+            // 把 blob 转成新 File（保留原名、类型）
+            const newFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+            resolve(newFile);
+          },
+          'image/jpeg',
+          quality,
+        );
+      };
+    });
+  };
+
+  /**
+   * @description base64字符串转Blob对象
+   * @param {string} base64
+   * @returns {*}  {Blob}
+   * @memberof FileUtil
+   */
+  base64ToBlob(base64: string): Blob {
+    const binStr = atob(base64.split(',')[1]);
+    const len = binStr.length;
+    const arr = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      arr[i] = binStr.charCodeAt(i);
+    }
+    return new Blob([arr]);
   }
 }

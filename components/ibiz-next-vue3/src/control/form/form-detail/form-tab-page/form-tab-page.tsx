@@ -34,6 +34,7 @@ export const FormTabPage = defineComponent({
           ...this.controller.containerClass,
         ]}
         layout={this.modelData.layout}
+        v-loading={this.controller.state.loading}
         onClick={(event: MouseEvent) => this.controller.onClick(event)}
       >
         {defaultSlots.map(slot => {

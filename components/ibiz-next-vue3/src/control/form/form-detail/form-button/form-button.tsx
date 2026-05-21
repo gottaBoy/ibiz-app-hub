@@ -41,6 +41,7 @@ export const FormButton = defineComponent({
           this.ns.b(),
           this.ns.m(this.modelData.codeName),
           this.ns.is('loading', this.controller.state.loading),
+          this.ns.is('readonly', this.controller.state.readonly),
           this.modelData.detailStyle &&
             this.ns.m(this.modelData.detailStyle.toLowerCase()),
           ...this.controller.containerClass,

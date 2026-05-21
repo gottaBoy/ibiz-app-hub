@@ -1,4 +1,4 @@
-import { PanelItemState } from '@ibiz-template/runtime';
+import { PanelContainerState } from '@ibiz-template/runtime';
 
 /**
  * 分页面板状态
@@ -7,9 +7,9 @@ import { PanelItemState } from '@ibiz-template/runtime';
  * @date 2024-05-12 14:05:01
  * @export
  * @class PanelTabPanelState
- * @extends {PanelItemState}
+ * @extends {PanelContainerState}
  */
-export class PanelTabPanelState extends PanelItemState {
+export class PanelTabPanelState extends PanelContainerState {
   /**
    * @description 当前激活分页
    * @exposedoc

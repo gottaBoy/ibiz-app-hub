@@ -1,13 +1,16 @@
 /* eslint-disable object-shorthand */
 import {
-  ButtonContainerState,
+  UIActionUtil,
   PanelController,
-  PanelItemController,
   PanelNotifyState,
   UIActionButtonState,
-  UIActionUtil,
+  PanelItemController,
+  getAllUIActionItems,
+  ButtonContainerState,
+  calcUIActionGroup,
 } from '@ibiz-template/runtime';
 import {
+  IDEUIActionGroup,
   IPanelButton,
   IPanelButtonList,
   IUIActionGroupDetail,
@@ -62,7 +65,26 @@ export class PanelButtonListController extends PanelItemController<IPanelButtonL
    */
   async onInit(): Promise<void> {
     await super.onInit();
+    await this.initUIActions();
     await this.initButtonsState();
+  }
+
+  /**
+   * 初始化界面行为组
+   *
+   * @protected
+   * @return {*}  {Promise<void>}
+   * @memberof PanelButtonListController
+   */
+  protected async initUIActions(): Promise<void> {
+    const { buttonListType, uiactionGroup } = this.model;
+    if (buttonListType === 'UIACTIONGROUP' && uiactionGroup) {
+      await calcUIActionGroup(
+        uiactionGroup as IDEUIActionGroup,
+        this.panel.context,
+        this.panel.params,
+      );
+    }
   }
 
   /**
@@ -75,17 +97,20 @@ export class PanelButtonListController extends PanelItemController<IPanelButtonL
   protected async initButtonsState(): Promise<void> {
     const { buttonListType, uiactionGroup, panelButtons } = this.model;
     if (buttonListType === 'UIACTIONGROUP') {
-      uiactionGroup?.uiactionGroupDetails?.forEach(detail => {
-        if (detail.uiactionId) {
-          const buttonState = new UIActionButtonState(
-            detail.id!,
-            this.model.appId,
-            detail.uiactionId,
-            detail,
-          );
-          this.state.buttonsState.addState(detail.id!, buttonState);
-        }
-      });
+      if (uiactionGroup?.uiactionGroupDetails) {
+        const actions = getAllUIActionItems(uiactionGroup.uiactionGroupDetails);
+        actions.forEach(detail => {
+          if (detail.uiactionId) {
+            const buttonState = new UIActionButtonState(
+              detail.id!,
+              detail.appId,
+              detail.uiactionId,
+              detail,
+            );
+            this.state.buttonsState.addState(detail.id!, buttonState);
+          }
+        });
+      }
     } else {
       panelButtons?.forEach(button => {
         if (button.uiactionId) {
@@ -143,10 +168,10 @@ export class PanelButtonListController extends PanelItemController<IPanelButtonL
     id: string,
   ): IPanelButton | IUIActionGroupDetail | undefined {
     const { buttonListType, uiactionGroup, panelButtons } = this.model;
-    if (buttonListType === 'UIACTIONGROUP')
-      return uiactionGroup?.uiactionGroupDetails?.find(
-        detail => detail.id === id,
-      );
+    if (buttonListType === 'UIACTIONGROUP') {
+      const actions = getAllUIActionItems(uiactionGroup?.uiactionGroupDetails);
+      return actions.find(detail => detail.id === id);
+    }
     return panelButtons?.find(button => button.id === id);
   }
 

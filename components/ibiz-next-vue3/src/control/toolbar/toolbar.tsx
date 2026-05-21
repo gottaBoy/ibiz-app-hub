@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import {
   ref,
@@ -32,6 +33,11 @@ const btnContent = (
 ): (string | VNode)[] => {
   const counterNum =
     state && item.counterId ? state.counterData[item.counterId] : undefined;
+  const tempItem = item as IData;
+  const caption =
+    tempItem.refUIActionGroup?.name ||
+    tempItem.refUIActionGroup?.id ||
+    item.caption;
   const image = item.sysImage;
   const result = [];
   const ns = useNamespace('toolbar-item');
@@ -42,8 +48,8 @@ const btnContent = (
       </span>,
     );
   }
-  if (item.showCaption && item.caption) {
-    result.push(<span class={ns.b('text')}>{item.caption}</span>);
+  if (item.showCaption && caption) {
+    result.push(<span class={ns.b('text')}>{caption}</span>);
   }
   if (counterNum) {
     result.push(
@@ -110,6 +116,13 @@ export const ToolbarControl = defineComponent({
     const btnSize = ref('default');
     const toolbarStyle = (c.model as IDEToolbar).toolbarStyle?.toLowerCase();
 
+    // 是否为引用界面行为组
+    const isRefUIActionGroup = (detail: IAppDEUIActionGroupDetail): boolean => {
+      return !!(
+        detail.detailType === 'DEUIACTIONGROUP' && detail.refUIActionGroup
+      );
+    };
+
     // 点击事件
     const handleClick = async (
       item: IDEToolbarItem,
@@ -159,6 +172,10 @@ export const ToolbarControl = defineComponent({
       item: IDETBGroupItem,
       detail: IAppDEUIActionGroupDetail,
     ) => {
+      // 绘制动态界面行为组
+      if (item.id !== detail.id && isRefUIActionGroup(detail))
+        return renderActionGroupItems(detail, true);
+
       const actionId = (detail as IDETBUIActionItem).uiactionId;
       const visible = c.state.buttonsState[detail.id!]?.visible;
       const provider = c.itemProviders[detail.id!];
@@ -251,15 +268,19 @@ export const ToolbarControl = defineComponent({
     const renderDropdownItem = (detail: IAppDEUIActionGroupDetail) => {
       if (c.state.buttonsState[detail.id!].visible) {
         const disabled = c.state.buttonsState[detail.id!].disabled;
+        const content = isRefUIActionGroup(detail)
+          ? renderActionGroupItems(detail, false, true)
+          : renderActionButton(detail);
+
         return (
           <el-dropdown-item
             class={[
               ns2.be('dropdown-popper', 'dropdown-item'),
-              ns2.is('disabled', disabled),
+              ns2.is('disabled', !!disabled),
               ns.em('item', convertBtnType(detail.buttonStyle)),
             ]}
           >
-            {renderActionButton(detail)}
+            {content}
           </el-dropdown-item>
         );
       }
@@ -267,10 +288,16 @@ export const ToolbarControl = defineComponent({
     };
 
     // 绘制按分组展开
-    const renderActionGroupItems = (item: IDETBGroupItem, isEmbed: boolean) => {
-      const { uiactionGroup } = item;
-      if (uiactionGroup && uiactionGroup.uiactionGroupDetails) {
-        const { uiactionGroupDetails } = uiactionGroup;
+    const renderActionGroupItems = (
+      item: IDETBGroupItem,
+      isEmbed: boolean,
+      isSubPopover = false,
+    ) => {
+      const { uiactionGroup, refUIActionGroup } = item as IData;
+      const uiactionGroupDetails: IAppDEUIActionGroupDetail[] =
+        uiactionGroup?.uiactionGroupDetails ||
+        refUIActionGroup?.uiactionGroupDetails;
+      if (uiactionGroupDetails) {
         const enableDropdown = uiactionGroupDetails.length > 0;
         const groupButtonStyle = (item as IDETBGroupItem).buttonStyle || '';
         if (isEmbed) {
@@ -313,6 +340,75 @@ export const ToolbarControl = defineComponent({
             </el-sub-menu>
           );
         }
+        // 显示次级气泡
+        if (isSubPopover) {
+          return (
+            <el-popover
+              popper-class={[
+                ns2.b('popper'),
+                ns2.b('dropdown-popper'),
+                ns2.bm('dropdown-popper', toolbarStyle),
+                ns2.em('dropdown-popper', groupButtonStyle.toLowerCase()),
+                ns2.bm('dropdown-popper', calcCssName(item)),
+              ]}
+              placement='right-start'
+              teleported={false}
+              popper-options={{
+                modifiers: [
+                  {
+                    name: 'offset',
+                    options: {
+                      offset: [0, 4],
+                    },
+                  },
+                ],
+              }}
+            >
+              {{
+                reference: () => {
+                  return (
+                    <el-button
+                      text
+                      size={btnSize.value}
+                      class={calcCssName(item)}
+                      type={convertBtnType(item.buttonStyle)}
+                      title={showTitle(item.tooltip || item.caption)}
+                      disabled={c.state.buttonsState[item.id!].disabled}
+                    >
+                      <div class={ns2.be('popper', 'reference-btn')}>
+                        <div
+                          class={ns2.bem('popper', 'reference-btn', 'content')}
+                        >
+                          {btnContent(item, c.state)}
+                        </div>
+                        <div
+                          class={ns2.bem('popper', 'reference-btn', 'chevron')}
+                        >
+                          <ion-icon name={'chevron-forward-outline'}></ion-icon>
+                        </div>
+                      </div>
+                    </el-button>
+                  );
+                },
+                default: () => (
+                  <div class={ns2.be('popper', 'wrapper')}>
+                    {uiactionGroupDetails.map(
+                      (detail: IAppDEUIActionGroupDetail) => {
+                        const content = isRefUIActionGroup(detail)
+                          ? renderActionGroupItems(detail, false, true)
+                          : renderActionButton(detail);
+
+                        return (
+                          <div class={ns2.be('popper', 'item')}>{content}</div>
+                        );
+                      },
+                    )}
+                  </div>
+                ),
+              }}
+            </el-popover>
+          );
+        }
         return (
           <el-dropdown
             popper-class={[
@@ -348,6 +444,9 @@ export const ToolbarControl = defineComponent({
     ): number => {
       const firstItem: IParams = details[index];
       if (firstItem) {
+        if (isRefUIActionGroup(firstItem as IAppDEUIActionGroupDetail)) {
+          return index;
+        }
         if (c.state.buttonsState[firstItem.id!].visible) {
           return index;
         }
@@ -416,11 +515,15 @@ export const ToolbarControl = defineComponent({
               ]}
             >
               {{
-                default: () =>
-                  renderActionButton(
+                default: () => {
+                  if (isRefUIActionGroup(firstItem))
+                    return renderActionGroupItems(firstItem, false);
+
+                  return renderActionButton(
                     firstItem,
                     convertBtnType(groupButtonStyle),
-                  ),
+                  );
+                },
                 dropdown: () =>
                   enableDropdown && (
                     <el-dropdown-menu>
@@ -450,16 +553,24 @@ export const ToolbarControl = defineComponent({
             },
           );
         }
-        return uiactionGroupDetails.map((detail: IAppDEUIActionGroupDetail) => (
-          <div
-            class={[
-              ns2.e('item-deuiaction'),
-              ns.em('item', convertBtnType(detail.buttonStyle)),
-            ]}
-          >
-            {renderActionButton(detail)}
-          </div>
-        ));
+        return uiactionGroupDetails.map(
+          (detail: IAppDEUIActionGroupDetail): VNode | VNode[] => {
+            const itemContent = isRefUIActionGroup(detail)
+              ? renderActionGroupItems(detail, isEmbed)
+              : renderActionButton(detail);
+
+            return (
+              <div
+                class={[
+                  ns2.e('item-deuiaction'),
+                  ns.em('item', convertBtnType(detail.buttonStyle)),
+                ]}
+              >
+                {itemContent}
+              </div>
+            );
+          },
+        );
       }
       return null;
     };

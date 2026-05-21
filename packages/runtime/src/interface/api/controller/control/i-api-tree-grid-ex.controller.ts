@@ -22,7 +22,7 @@ export interface IApiTreeGridEXController<
 > extends IApiTreeController<T, S> {
   /**
    * @description 保存单条数据
-   * @param {IApiTreeNodeData} data
+   * @param {IApiTreeNodeData} data 树节点数据
    * @returns {*}  {Promise<void>}
    * @memberof IApiTreeGridEXController
    */

@@ -1,0 +1,3 @@
+@include b(view-message) {
+  padding: getCssVar(view-message, padding);
+}

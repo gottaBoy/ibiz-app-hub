@@ -46,8 +46,7 @@ export const CustomDV9 = defineComponent({
     const mergedColor = computed(() => {
       return deepMerge(defaultColor, props.color || []) as string[];
     });
-    const backgroundColor = 'var(--ibiz-screen-dashboard-custom-dv-bg)';
-    /**
+    const backgroundColor = `var(${ns.cssVarName('screen-dashboard-custom-dv-bg')})`;    /**
      * 绘制边框svg
      */
     const renderBorder = () => {

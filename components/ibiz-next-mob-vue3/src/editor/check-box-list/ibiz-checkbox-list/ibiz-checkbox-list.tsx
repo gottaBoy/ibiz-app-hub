@@ -4,6 +4,7 @@ import {
   getEditorEmits,
   useFocusAndBlur,
   useNamespace,
+  useFilterAttribute,
 } from '@ibiz-template/vue3-util';
 import { isNil, equals } from 'ramda';
 import './ibiz-checkbox-list.scss';
@@ -13,8 +14,9 @@ import { CheckBoxListEditorController } from '../checkbox-list-editor.controller
  * 选项框列表
  * @primary
  * @description 使用van-checkbox-group组件和van-checkbox组件，用于在一组备选项中进行多选的场景。支持编辑器类型包含：`选项框列表`
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
- * @ignoreemits  infoTextChange | enter
+ * @ignoreemits  blur | focus | infoTextChange | enter
  */
 export const IBizCheckboxList = defineComponent({
   name: 'IBizCheckboxList',
@@ -173,7 +175,7 @@ export const IBizCheckboxList = defineComponent({
             direction='horizontal'
             v-model={this.selectArray}
             onChange={this.onSelectArrayChange}
-            {...this.$attrs}
+            {...useFilterAttribute(this.$attrs)}
           >
             {this.items.map((item, index: number) => (
               <van-checkbox

@@ -37,4 +37,13 @@ $badge: (
   @include m(primary){
     #{getCssVarName(badge, bg-color)}: getCssVar(color,primary);
   }
+
+  @include when(mob) {
+    #{getCssVarName('panel-badge', 'text-color')}: getCssVar(color, white);
+    #{getCssVarName('panel-badge', 'font-weight')}: 600;
+    #{getCssVarName('panel-badge', 'height')}: rem(18px);
+    #{getCssVarName('panel-badge', 'border-radius')}: rem(10px);
+    font-weight: getCssVar('panel-badge', 'font-weight');
+    color: getCssVar('panel-badge', 'text-color');
+  }
 }

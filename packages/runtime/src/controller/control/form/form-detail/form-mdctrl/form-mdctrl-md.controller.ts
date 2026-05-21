@@ -128,7 +128,9 @@ export class FormMDCtrlMDController
    * @memberof FormMDCtrlMDController
    */
   remove(): void {
-    this.mdController.remove();
+    this.mdController.remove({
+      silent: true,
+    });
   }
 
   /**
@@ -212,7 +214,7 @@ export class FormMDCtrlMDController
    */
   async save(): Promise<void> {
     // 目前只有表格
-    if ((this.mdController as IData).saveAll) {
+    if (this.mdController && (this.mdController as IData).saveAll) {
       await (this.mdController as IData).saveAll();
     }
   }

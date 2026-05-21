@@ -1,5 +1,6 @@
 import {
   IPanelItemProvider,
+  PanelContainerController,
   PanelController,
   PanelItemController,
 } from '@ibiz-template/runtime';
@@ -19,8 +20,8 @@ export class PanelTabPageProvider implements IPanelItemProvider {
     panelItem: IPanelItem,
     panel: PanelController,
     parent: PanelItemController | undefined,
-  ): Promise<PanelItemController> {
-    const c = new PanelItemController(panelItem, panel, parent);
+  ): Promise<PanelContainerController> {
+    const c = new PanelContainerController(panelItem, panel, parent);
     await c.init();
     return c;
   }

@@ -15,7 +15,7 @@ export class WizardViewEngine extends ViewEngineBase {
    * @type {ViewController<IAppDEWizardView, IWizardViewState, IWizardViewEvent>}
    * @memberof WizardViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEWizardView,
     IWizardViewState,
     IWizardViewEvent

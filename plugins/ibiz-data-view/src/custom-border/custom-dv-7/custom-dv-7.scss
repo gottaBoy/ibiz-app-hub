@@ -12,7 +12,7 @@ $style-7: (
     }
     @include e('svg-container') {
       position: absolute;
-      top: 0;
+      top: 8px;
       left: 0;
       width: 100%;
       height: calc(100% - getCssVar(style-7,'offsetY'));

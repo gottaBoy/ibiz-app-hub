@@ -1,65 +1,83 @@
-$control-appmenu: (list-view-icon-size: getCssVar(font-size, header-4),
-  list-view-font-size: getCssVar(font-size, regular),
-  list-view-color: getCssVar(font-size, regular),
-  list-view-padding: 0,
-  list-view-item-padding: rem(8px) rem(16px),
-  list-view-item-color: getCssVar(color, text, 1),
+$control-appmenu-listview: (
+  color-item-bg: getCssVar(color, bg, 2),
+  color-item-text: getCssVar(color, text, 0), // 菜单项文字颜色
+  spacing-item-padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'base'), // 菜单项间距
+  spacing-group-item-icon-margin: 0 getCssVar('spacing', 'extra-tight') 0 0, // 分组项图标间距
+  spacing-icon-counter-margin: 0 0 0 getCssVar('spacing', 'tight'), // 菜单项图标计数器间距
+  spacing-item-icon-margin: 0 getCssVar('spacing', 'extra-tight') 0 0, // 菜单项图标间距
+  font-item-fontSize: getCssVar(font-size, regular), // 菜单项字体大小
+  font-icon-fontSize: var(--van-cell-icon-size), // 菜单项图标字体大小
 );
 
-
 @include b(control-appmenu-listview) {
-  @include set-component-css-var('control-appmenu', $control-appmenu);
+  @include set-component-css-var(
+    'control-appmenu-listview',
+    $control-appmenu-listview
+  );
 
-  --van-cell-border-color: #{getCssVar(color, border)};
-  --van-divider-margin: #{rem(2px)};
-  --van-divider-border-color: transparent;
-  --van-cell-horizontal-padding: #{rem(12px)};
-  --van-cell-active-color: transparent;
-  --van-cell-right-icon-color: var(--van-gray-6);
-  --van-cell-group-title-color: #{getCssVar(color, text, 2)};
-  --van-cell-group-title-padding: #{rem(8px)} #{rem(16px)};
-  --van-cell-group-title-font-size: #{getCssVar(font-size, regular)};
-  --van-cell-group-title-line-height: var(--van-cell-line-height);
-
-  border-radius: getCssVar(border-radius, small);
-
-  @include b(control-appmenu-item) {
-    padding: getCssVar(control-appmenu, list-view-item-padding);
-    font-size: getCssVar(control-appmenu, list-view-font-size);
-    color: getCssVar(control-appmenu, list-view-item-color);
-
-    &:last-child {
-      border-width: 0;
-    }
-  }
-
-  .van-cell::after {
-    left: 0;
-  }
-
-  @include b(control-appmenu-icon) {
+  @include e(group-title) {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: getCssVar(control-appmenu, list-view-icon-size);
-    margin-right: getCssVar(spacing, tight);
-    font-size: getCssVar(control-appmenu, list-view-icon-size);
 
-    @include b(icon) {
-      display: flex;
-      align-items: center;
+    .#{bem(icon)} {
+      margin: getCssVar(control-appmenu-listview, spacing-group-item-icon-margin);
     }
 
+    @include m(counter) {
+      margin: getCssVar(control-appmenu-listview, spacing-icon-counter-margin);
+    }
   }
 
-  .van-cell-group__title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    background: getCssVar(color, bg, 0);
-  }
+  @include e(item) {
+    &.#{bem(control-appmenu-listview, item)} {
+      padding: getCssVar(control-appmenu-listview, spacing-item-padding);
+      font-size: getCssVar(control-appmenu-listview, font-item-fontSize);
+      color: getCssVar(control-appmenu-listview, color-item-text);
+      background-color: getCssVar(control-appmenu-listview, color-item-bg);
 
-  .van-hairline--top-bottom::after {
-    border: none;
+      &:last-child {
+        border-width: 0;
+      }
+
+      &::after {
+        left: 0;
+      }
+    }
+    @include m(value) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    @include m(icon) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: getCssVar(control-appmenu-listview, font-icon-fontSize);
+      margin: getCssVar(control-appmenu-listview, spacing-item-icon-margin);
+      font-size: getCssVar(control-appmenu-listview, font-icon-fontSize);
+    }
+
+    // 主文本样式
+    .van-cell__title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+    }
+
+    // 计数器样式
+    .van-cell__value {
+      width: auto;
+      flex: unset;
+      margin-left: auto;
+    }
   }
+}
+
+@include b(control-appmenu-listview-no-data) {
+  padding: getCssVar(control-appmenu-listview, spacing-item-padding);
+  font-size: getCssVar(control-appmenu-listview, font-item-fontSize);
+  color: getCssVar(control-appmenu-listview, color-item-text);
+  text-align: center;
 }

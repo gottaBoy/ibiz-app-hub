@@ -1,0 +1,115 @@
+$menu-design-list: (
+  // Color
+  color-group-caption: getCssVar(color, text, 2),
+  color-group-content-bg: getCssVar(color, bg, 1),
+  color-draggable-prefix-icon: getCssVar(color, danger),
+  color-draggable-add-icon: getCssVar(color, primary),
+  color-draggable-item-content-border: getCssVar(color, border),
+  // Width/Height
+  width-draggable-item-icon: var(--van-tabbar-item-icon-size),
+  // Spacing
+  spacing-caption-padding: getCssVar(spacing, base) 0,
+  spacing-group-content-padding: getCssVar(spacing, base, tight),
+  spacing-draggable-item-content-padding: getCssVar(spacing, base, tight) 0,
+  spacing-draggable-prefix-icon-margin: 0 getCssVar(spacing, tight) 0 0,
+  spacing-draggable-item-icon: 0 getCssVar(spacing, tight) 0 0,
+  // Radius
+  radius-group-content-circle: getCssVar(border-radius, medium),
+  // Font
+  font-draggable-icon: getCssVar(font-size, header, 3),
+  font-draggable-item: getCssVar(width, icon, medium),
+  // Other
+  line-height-draggable-item-caption: 1
+);
+@include b(menu-design-list) {
+  @include set-component-css-var('menu-design-list', $menu-design-list);
+  @include e(group) {
+    @include m(caption) {
+      padding: getCssVar(menu-design-list, spacing-caption-padding);
+      color: getCssVar(menu-design-list, color-group-caption);
+    }
+
+    @include m(content) {
+      padding: getCssVar(menu-design-list, spacing-group-content-padding);
+      background-color: getCssVar(menu-design-list, color-group-content-bg);
+      border-radius: getCssVar(menu-design-list, radius-group-content-circle);
+    }
+
+    @include when(no-data) {
+      .#{bem(menu-design-list, group--content)} {
+        position: relative;
+      }
+      .#{bem(menu-design-list, draggable)} {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 3;
+      }
+    }
+  }
+
+  @include e(draggable) {
+    @include m(icon) {
+      font-size: getCssVar(menu-design-list, font-draggable-icon);
+      &.#{bem(menu-design-list, draggable, prefix-icon)} {
+        margin: getCssVar(
+          menu-design-list,
+          spacing-draggable-prefix-icon-margin
+        );
+      }
+      &.#{bem(menu-design-list, draggable, remove-icon)} {
+        color: getCssVar(menu-design-list, color-draggable-prefix-icon);
+      }
+      &.#{bem(menu-design-list, draggable, add-icon)} {
+        color: getCssVar(menu-design-list, color-draggable-add-icon);
+      }
+    }
+
+    @include m(item) {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      font-size: getCssVar(menu-design-list, font-draggable-item);
+    }
+
+    @include m(item-content) {
+      display: flex;
+      flex-grow: 1;
+      align-items: center;
+      justify-content: space-between;
+      padding: getCssVar(
+        menu-design-list,
+        spacing-draggable-item-content-padding
+      );
+      border-bottom: 1px solid
+        getCssVar(menu-design-list, color-draggable-item-content-border);
+    }
+
+    @include m(item-caption) {
+      display: flex;
+      align-items: center;
+      line-height: getCssVar(
+        menu-design-list,
+        line-height-draggable-item-caption
+      );
+    }
+
+    @include m(item-icon) {
+      display: flex;
+      align-items: center;
+      width: getCssVar(menu-design-list, width-draggable-item-icon);
+      margin: getCssVar(menu-design-list, spacing-draggable-item-icon);
+    }
+  }
+
+  @include e(no-data) {
+    &.#{bem(no-data)} {
+      padding: 0;
+    }
+    .van-empty__bottom {
+      display: none;
+    }
+  }
+}

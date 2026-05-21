@@ -1,21 +1,14 @@
-$form-mdctrl: (header-height: 32px);
-
-$form-mdctrl-header: (bg-color: getCssVar(color, bg, 1),
-  padding: getCssVar(spacing, tight) getCssVar(spacing, base),
-  border-color: getCssVar(color, border),
-);
-
-$form-mdctrl-caption: (text-color: getCssVar(color, text, 2),
-  font-size: getCssVar(font-size, header-6),
-  font-weight: getCssVar(font-weight, regular),
-  height: rem(32px),
-  line-height: rem(32px),
+$form-mdctrl: (
+  color-header-bg: getCssVar(color, bg, 0),
+  color-text: getCssVar(color, text, 1),
+  spacing-header-padding: getCssVar(spacing, base),
+  font-caption-fontSize: getCssVar(font-size, header-6),
+  font-caption-fontWeight: getCssVar(font-weight, regular),
+  font-caption-linHeight: getCssVar(font-size, header-5),
 );
 
 @include b(form-mdctrl) {
   @include set-component-css-var(form-mdctrl, $form-mdctrl);
-  @include set-component-css-var(form-mdctrl-header, $form-mdctrl-header);
-  @include set-component-css-var(form-mdctrl-caption, $form-mdctrl-caption);
 
   height: 100%;
 
@@ -23,11 +16,10 @@ $form-mdctrl-caption: (text-color: getCssVar(color, text, 2),
   @include e(title) {
     @include utils-ellipsis;
 
-    height: getCssVar(form-mdctrl-caption, height);
-    font-size: getCssVar(form-mdctrl-caption, font-size);
-    font-weight: getCssVar(form-mdctrl-caption, font-weight);
-    line-height: getCssVar(form-mdctrl-caption, line-height);
-    color: getCssVar(form-mdctrl-caption, text-color);
+    font-size: getCssVar(form-mdctrl, font-caption-fontSize);
+    font-weight: getCssVar(form-mdctrl, font-caption-fontWeight);
+    line-height: getCssVar(form-mdctrl, font-caption-linHeight);
+    color: getCssVar(form-mdctrl, color-text);
   }
 
   @include m(has-value) {
@@ -39,5 +31,6 @@ $form-mdctrl-caption: (text-color: getCssVar(color, text, 2),
 
 @include b(form-mdctrl-header) {
   display: flex;
-  padding: getCssVar(form-mdctrl-header, padding);
+  padding: getCssVar(form-mdctrl, spacing-header-padding);
+  background-color: getCssVar(form-mdctrl, color-header-bg);
 }

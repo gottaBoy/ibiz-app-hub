@@ -3,9 +3,10 @@ import {
   getEditorEmits,
   getInputNumberProps,
   useNamespace,
+  useFilterAttribute,
 } from '@ibiz-template/vue3-util';
 import './ibiz-input-number.scss';
-import { floor } from 'lodash-es';
+import { floor, isNil } from 'lodash-es';
 import { TextBoxEditorController } from '../text-box-editor.controller';
 
 /**
@@ -13,7 +14,9 @@ import { TextBoxEditorController } from '../text-box-editor.controller';
  *
  * @description 使用van-field组件，用于仅允许输入标准的数字值的场景。支持编辑器类型包含：`移动端数值框`
  * @primary
- * @editorparams {name:precision,parameterType:number,description:设置数值精度，van-field组件的precision属性}
+ * @editorparams {name:precision,parameterType:number,description:设置数值精度}
+ * @editorparams {"name":"triggermode","parameterType":"'blur' | 'input'","defaultvalue":"'blur'","description":"指定编辑器触发 `change` 值变更事件的模式，input: 输入框输入时触发事件，blur：输入框blur时触发事件"}
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops overflowMode
  * @ignoreemits infoTextChange | enter
  */
@@ -26,32 +29,39 @@ export const IBizInputNumber = defineComponent({
 
     const c = props.controller;
 
-    const currentVal = ref<number | undefined>(undefined);
+    const currentVal = ref<number | null>(null);
+    let blurCacheValue: number | null = null;
 
     const show = ref(false);
 
-    const oldEmitVal = ref<number | undefined>(undefined);
-
     watch(
       () => props.value,
-      (newVal, oldVal) => {
+      (newVal: unknown, oldVal) => {
         if (newVal !== oldVal) {
-          const number = Number(newVal);
-          currentVal.value = Number.isNaN(number) ? undefined : number;
+          const number = isNil(newVal) || newVal === '' ? null : Number(newVal);
+          currentVal.value = Number.isNaN(number) ? null : number;
+          blurCacheValue = currentVal.value;
         }
       },
       { immediate: true },
     );
 
-    const handleChange = (evt: IData) => {
-      const value = Number(evt.target.value);
+    const onEmit = (val: number | null, eventName: string = 'blur') => {
+      if (eventName === c.triggerMode) {
+        emit('change', val);
+      }
+    };
 
-      const emitValue = c.precision ? floor(value, c.precision) : value;
-      if (emitValue === oldEmitVal.value) {
+    const handleChange = (evt: IData) => {
+      const value = evt.target.value === '' ? null : Number(evt.target.value);
+
+      const emitValue =
+        c.precision && value !== null ? floor(value, c.precision) : value;
+      if (emitValue === blurCacheValue) {
         return;
       }
-      emit('change', emitValue);
-      oldEmitVal.value = Number(emitValue);
+      onEmit(emitValue, 'input');
+      blurCacheValue = emitValue;
     };
 
     const inputRef = ref();
@@ -72,11 +82,14 @@ export const IBizInputNumber = defineComponent({
 
     // 失焦
     const onBlur = () => {
+      if (blurCacheValue !== props.value) {
+        onEmit(blurCacheValue);
+      }
       emit('blur');
     };
 
     const onClear = () => {
-      emit('change', undefined);
+      onEmit(null, c.triggerMode);
     };
 
     return {
@@ -109,17 +122,17 @@ export const IBizInputNumber = defineComponent({
           ref='inputRef'
           modelValue={this.currentVal}
           placeholder={this.c.placeHolder}
-          precision={this.c.model.precision}
           type='number'
+          inputmode='decimal'
           disabled={this.disabled}
           clearable
           onClear={this.onClear}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onInput={this.handleChange}
-          {...this.$attrs}
+          {...useFilterAttribute(this.$attrs)}
         ></van-field>,
-        unitName && <i class={this.ns.e('unit')}>{unitName}</i>,
+        unitName && <span class={this.ns.e('unit')}>{unitName}</span>,
       ];
     }
 

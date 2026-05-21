@@ -261,6 +261,7 @@ $control-kanban: (
     border-top: 1px solid getCssVar('color', 'border');
     @include m(actions) {
       display: flex;
+      column-gap: getCssVar('spacing', 'extra', 'tight');
       justify-content: center;
       .#{bem(action-toolbar, item)} {
         margin: 0;
@@ -282,11 +283,14 @@ $control-kanban: (
   position: relative;
 
   @include e(popover) {
-    >.el-scrollbar {
+    > .el-scrollbar {
+      min-width: 150px;
       overflow: visible;
     }
     .#{bem(action-toolbar, popover)} {
+      padding: getCssVar(spacing, extra, tight) getCssVar('spacing', 'none') !important;
       background-color: getCssVar(color, primary) !important;
+      border-radius: 0 !important;
     }
   }
 

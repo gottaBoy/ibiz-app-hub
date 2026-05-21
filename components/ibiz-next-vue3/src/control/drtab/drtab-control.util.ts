@@ -16,7 +16,7 @@ import { DRTabController } from './drtab.controller';
 export function useAppDRTab(
   c: DRTabController,
   controlRef: Ref<IData | undefined>,
-  counterData: IData,
+  counterData: Ref<IData>,
 ): {
   visibleItems: Ref<IData>;
   moreItems: Ref<IData>;
@@ -75,7 +75,7 @@ export function useAppDRTab(
         const caption = tab.caption || '';
         // 计数器
         const counterNum = tab.counterId
-          ? counterData[tab.counterId]
+          ? counterData.value[tab.counterId]
           : undefined;
         const fontSize = `var(--${defaultNamespace}-font-size-regular)`;
 

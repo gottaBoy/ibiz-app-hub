@@ -74,7 +74,7 @@ export interface IMessageCommand extends IMessageBase {
 
   /**
    * @description 推送指令消息
-   * @param {IPortalMessage} msg
+   * @param {IPortalMessage} msg 消息
    * @memberof IMessageCommand
    */
   next(msg: IPortalMessage): void;

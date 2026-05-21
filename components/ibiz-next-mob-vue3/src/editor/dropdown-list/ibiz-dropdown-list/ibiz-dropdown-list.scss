@@ -1,96 +1,94 @@
-@include b(dropdown-list) {
-  height: 100%;
+$dropdown-list: (
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  color-active: getCssVar(color, primary, light, default),
+  // 间距
+  spacing-gap: getCssVar(spacing, tight),
+  spacing-item-gap: getCssVar(spacing, tight),
+  spacing-item-padding: 0 getCssVar(spacing, tight),
+  // 字体
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  // 圆角
+  radius-item: getCssVar(border-radius, small),
+  // 其它
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
 
+@include b(dropdown-list) {
+  @include set-component-css-var(dropdown-list, $dropdown-list);
+
+  height: 100%;
+  font-size: getCssVar(dropdown-list, font-fontSize);
+  line-height: getCssVar(dropdown-list, font-lineHeight);
+  color: getCssVar(dropdown-list, color);
+
+  --van-field-input-text-color: #{getCssVar(dropdown-list, color)};
+  --van-cell-text-color: #{getCssVar(dropdown-list, color)};
+  --van-cell-value-color: #{getCssVar(dropdown-list, color)};
+  --van-cell-line-height: #{getCssVar(dropdown-list, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(dropdown-list, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(dropdown-list, font-fontSize)};
 
   .van-field__control {
-    gap: getCssVar(spacing, tight);
+    gap: getCssVar(dropdown-list, spacing-gap);
   }
 
-
-
-  .van-picker {
-    .van-picker__mask {
-      background-image: getCssVar(color, overlay, bg);
-    }
-  }
-
-  @include b(dropdown-list-toolbar) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: getCssVar(spacing, base-tight);
-
-    button {
-      padding: 0;
-      background-color: transparent;
-      border: none;
-    }
-
-    @include e(confirm) {
-      color: getCssVar(color, primary);
-    }
-
-    @include e(cancel) {
-      color: getCssVar(color, text, 3);
-    }
-  }
-
-  @include b(dropdown-list-columns) {
-    min-height: 30vh;
-    max-height: 50vh;
-    overflow: auto;
-
-    .van-cell-group {
-      height: 100%;
-      overflow: auto;
-    }
-
-    .van-cell {
-      padding: getCssVar(spacing, base-tight);
-    }
-  }
-
-  input:disabled {
-    color: getCssVar(form-item, disabled-color);
-    background-color: getCssVar(form-item, disabled-bg-color);
-    border-color: getCssVar(form-item, disabled-border-color);
-    -webkit-text-fill-color: getCssVar(form-item, disabled-color);
+  @include e('placeholder') {
+    color: getCssVar(dropdown-list, color-placeholder);
   }
 
   @include m(disabled) {
-    opacity: .8;
+    --van-field-input-text-color: #{getCssVar(editor, disabled, text-color)};
   }
 
   @include m(readonly) {
-    color: getCssVar(form-item, readonly-color);
-    -webkit-text-fill-color: getCssVar(form-item, readonly-color);
-  }
-
-  .van-cell-group--inset {
-    margin: 0;
+    color: getCssVar(dropdown-list, color-readonly);
+    -webkit-text-fill-color: getCssVar(dropdown-list, color-readonly);
+    text-align: getCssVar(dropdown-list, font-textAlign);
   }
 
   @include b(dropdown-list-select-item) {
     display: flex;
-    gap: getCssVar(spacing, tight);
+    gap: getCssVar(dropdown-list, spacing-item-gap);
     align-items: center;
     justify-content: space-between;
-    padding: getCssVar(spacing, tight);
-    background-color: getCssVar(color, disabled, bg);
-    border-radius: getCssVar('border-radius', 'small');
+    padding: getCssVar(dropdown-list, spacing-item-padding);
+    overflow: hidden;
+    font-size: getCssVar(dropdown-list, font-fontSize);
+    line-height: calc(getCssVar(dropdown-list, font-lineHeight) - #{rem(4px)});
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background-color: getCssVar(dropdown-list, color-active);
+    border-radius: getCssVar(dropdown-list, radius-item);
+
+    @include e('text') {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @include e('close') {
+      flex-shrink: 0;
+    }
+
+    @include m('more') {
+      flex-shrink: 0;
+    }
   }
 
+  .van-field__value {
+    width: 100%;
+  }
 
   .van-field__control--custom {
     display: flex;
     flex-direction: row;
-    justify-content: getCssVar(form-item-container, editor-align);
-    flex-wrap: wrap;
-  }
-  &.#{bem('dropdown-list','','readonly')} {
-    display: flex;
-    flex-direction: row;
-    justify-content: getCssVar(form-item-container, editor-align);
+    justify-content: getCssVar(dropdown-list, flex-justify-content);
   }
 }
 

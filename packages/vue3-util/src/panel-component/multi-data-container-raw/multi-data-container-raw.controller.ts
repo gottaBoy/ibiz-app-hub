@@ -14,7 +14,7 @@ import {
   IPanelItemProvider,
   isDataContainer,
   IViewController,
-  PanelItemController,
+  PanelContainerController,
   PanelNotifyState,
   ScriptFactory,
 } from '@ibiz-template/runtime';
@@ -26,10 +26,10 @@ import { MultiDataContainerRawState } from './multi-data-container-raw.state';
  *
  * @export
  * @class MultiDataContainerRawController
- * @extends {PanelItemController}
+ * @extends {PanelContainerController}
  */
 export class MultiDataContainerRawController
-  extends PanelItemController<IPanelContainer>
+  extends PanelContainerController<IPanelContainer>
   implements IPanelDataContainerController
 {
   /**

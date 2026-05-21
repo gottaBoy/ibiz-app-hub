@@ -88,16 +88,12 @@ export const PanelRawItem = defineComponent({
   },
   render() {
     // 动态控制显示
-    if (!this.controller.state.visible) {
-      return;
-    }
+    if (!this.controller.state.visible) return;
     return (
       <div
         class={this.classArr}
         style={this.tempStyle}
-        onClick={(event: MouseEvent) => {
-          this.controller.onClick(event);
-        }}
+        onClick={event => this.controller.onClick(event)}
       >
         <iBizRawItem
           rawItem={this.modelData}

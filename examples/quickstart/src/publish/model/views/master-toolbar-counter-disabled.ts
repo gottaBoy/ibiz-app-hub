@@ -6,7 +6,7 @@ export default {
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
-  caption: '工具栏_计数器禁用',
+  caption: '工具栏_计数器动态禁用',
   codeName: 'master_toolbar_counter_disabled',
   appDataEntityId: 'web.master',
   appViewMsgGroupId: 'disable_counter',
@@ -23,6 +23,12 @@ export default {
         panelItems: [
           {
             rawItem: {
+              rawItemParams: [
+                {
+                  key: 'position',
+                  value: 'TOP',
+                },
+              ],
               predefinedType: 'VIEWMSG_POS',
               id: 'viewmsg_pos',
             },
@@ -88,7 +94,7 @@ export default {
         logicTrigger: 'VIEWEVENT',
         logicType: 'SCRIPT',
         scriptCode:
-          "view.ctx.evt.on('onRegister', (name, ctrl) => {\r\n   if (name === 'toolbar') {\r\n      ctrl?.disableCounter();\r\n      console.log('部件注册成功事件触发调用部件禁用计数器能力');\r\n   }\r\n})",
+          "view.ctx.evt.on('onRegister', (name, ctrl) => {\r\n   if (name === 'toolbar') {\r\n      ctrl.disableCounter?.();\r\n      console.log('部件注册成功事件触发后，调用禁用部件计数器能力');\r\n   }\r\n})",
         builtinLogic: true,
         id: 'disable_counter',
       },
@@ -153,7 +159,7 @@ export default {
         capLanguageRes: {
           lanResTag: 'DE.LNAME.MASTER',
         },
-        caption: '工具栏_计数器禁用',
+        caption: '工具栏_计数器动态禁用',
         codeName: 'toolbar_counter_disabled_captionbar',
         controlType: 'CAPTIONBAR',
         appDataEntityId: 'web.master',
@@ -171,7 +177,7 @@ export default {
     modelType: 'PSSYSVIEWLAYOUTPANEL',
     id: 'layoutpanel',
   },
-  title: '工具栏_计数器禁用',
+  title: '工具栏_计数器动态禁用',
   viewStyle: 'DEFAULT',
   viewType: 'DECUSTOMVIEW',
   enableDP: true,

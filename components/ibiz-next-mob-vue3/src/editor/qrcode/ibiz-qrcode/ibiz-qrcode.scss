@@ -1,11 +1,21 @@
+$qrcode: (
+  color: getCssVar(color, disabled, text),
+  width: rem(300px),
+);
+
 @include b(qrcode) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include set-component-css-var(qrcode, $qrcode);
+
+  @include flex(row, center, center);
   width: 100%;
   height: 100%;
 
+  @include e('img') {
+    width: getCssVar(qrcode, width);
+    max-width: 100%;
+  }
+
   @include e('no-img') {
-    color: getCssVar(color, disabled, text);
+    color: getCssVar(qrcode, color);
   }
 }

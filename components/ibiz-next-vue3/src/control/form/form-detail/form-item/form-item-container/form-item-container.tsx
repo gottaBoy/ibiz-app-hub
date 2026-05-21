@@ -1,5 +1,12 @@
 import { IBizIcon, useNamespace } from '@ibiz-template/vue3-util';
-import { ref, PropType, defineComponent, watch, onUnmounted } from 'vue';
+import {
+  ref,
+  PropType,
+  defineComponent,
+  watch,
+  onUnmounted,
+  computed,
+} from 'vue';
 import { showTitle } from '@ibiz-template/core';
 import { FormItemController } from '@ibiz-template/runtime';
 import './form-item-container.scss';
@@ -27,6 +34,11 @@ export const IBizFormItemContainer = defineComponent({
 
     onUnmounted(() => c.clearTipsCache());
 
+    const showError = computed(() => {
+      const { validateMode } = c.form;
+      return validateMode === 'default';
+    });
+
     const renderTipContent = () => {
       const { inputTip } = c.state;
       switch (ibiz.config.tooltiprendermode) {
@@ -40,7 +52,7 @@ export const IBizFormItemContainer = defineComponent({
       }
     };
 
-    const renderInputTip = () => {
+    const renderTipsIcon = () => {
       return (
         <el-tooltip
           effect='light'
@@ -55,26 +67,10 @@ export const IBizFormItemContainer = defineComponent({
           {{
             default: () => {
               return (
-                <div
-                  class={[
-                    ns.em('label', 'content'),
-                    ns.is('tooltip', enableInputTip),
-                  ]}
-                >
-                  {enableInputTip && ibiz.config.form.showTipsIcon && (
-                    <ion-icon
-                      name='bulb-outline'
-                      class={ns.em('label', 'icon')}
-                    ></ion-icon>
-                  )}
-                  {sysImage && (
-                    <IBizIcon
-                      class={ns.em('label', 'icon')}
-                      icon={sysImage}
-                    ></IBizIcon>
-                  )}
-                  <div class={ns.em('label', 'text')}>{c.labelCaption}</div>
-                </div>
+                <ion-icon
+                  name='bulb-outline'
+                  class={ns.em('label', 'icon')}
+                ></ion-icon>
               );
             },
             content: () => {
@@ -100,18 +96,99 @@ export const IBizFormItemContainer = defineComponent({
       );
     };
 
-    const renderLabel = () => {
+    const renderLabelWithoutTips = () => {
       return (
-        <div
-          title={enableInputTip ? undefined : showTitle(c.labelCaption)}
-          class={[ns.e('label'), ...(c.labelClass || [])]}
+        <el-tooltip
+          effect='light'
+          v-model:visible={visible.value}
+          popper-class={[
+            ns.e('popper'),
+            ns.is(ibiz.config.tooltiprendermode.toLowerCase(), true),
+          ]}
+          disabled={!enableInputTip}
+          placement={labelPos === 'RIGHT' ? 'right' : 'left'}
         >
-          {renderInputTip()}
+          {{
+            default: () => {
+              return (
+                <div
+                  class={[
+                    ns.em('label', 'content'),
+                    ns.is('tooltip', enableInputTip),
+                  ]}
+                >
+                  {sysImage && (
+                    <IBizIcon
+                      class={ns.em('label', 'icon')}
+                      icon={sysImage}
+                    ></IBizIcon>
+                  )}
+                  <div
+                    class={ns.em('label', 'text')}
+                    title={
+                      enableInputTip ? undefined : showTitle(c.labelCaption)
+                    }
+                  >
+                    {c.labelCaption}
+                  </div>
+                </div>
+              );
+            },
+            content: () => {
+              return (
+                <div class={ns.em('popper', 'content')}>
+                  <div class={ns.em('popper', 'tooltip')}>
+                    {renderTipContent()}
+                  </div>
+                  {c.state.inputTipUrl && (
+                    <a
+                      target='_blank'
+                      href={c.state.inputTipUrl}
+                      title={ibiz.i18n.t('component.formItemContainer.more')}
+                    >
+                      {ibiz.i18n.t('component.formItemContainer.more')}
+                    </a>
+                  )}
+                </div>
+              );
+            },
+          }}
+        </el-tooltip>
+      );
+    };
+    const renderLabel = () => {
+      const form = props.controller.form;
+      const showTipsIcon = enableInputTip && form.showTipsIcon;
+      return (
+        <div class={[ns.e('label'), ...(c.labelClass || [])]}>
+          {showTipsIcon && (
+            <div
+              class={[
+                ns.em('label', 'content'),
+                ns.is('tooltip', enableInputTip),
+              ]}
+            >
+              {renderTipsIcon()}
+              {sysImage && (
+                <IBizIcon
+                  class={ns.em('label', 'icon')}
+                  icon={sysImage}
+                ></IBizIcon>
+              )}
+              <div
+                class={ns.em('label', 'text')}
+                title={showTitle(c.labelCaption)}
+              >
+                {c.labelCaption}
+              </div>
+            </div>
+          )}
+          {!showTipsIcon && renderLabelWithoutTips()}
         </div>
       );
     };
 
-    return { ns, renderLabel };
+    return { ns, showError, renderLabel };
   },
   render() {
     const { labelPos, labelWidth } = this.controller.model;
@@ -124,7 +201,7 @@ export const IBizFormItemContainer = defineComponent({
         ]}
       >
         <div class={[this.ns.e('editor')]}>{this.$slots.default?.()}</div>
-        {this.controller.state.error ? (
+        {this.showError && this.controller.state.error ? (
           <div
             title={showTitle(this.controller.state.error)}
             class={[this.ns.e('error')]}

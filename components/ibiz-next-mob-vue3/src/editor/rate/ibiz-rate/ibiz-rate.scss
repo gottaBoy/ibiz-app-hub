@@ -1,10 +1,23 @@
+$stepper: (
+  min-height: getCssVar(editor, default, line-height),
+  color-icon: getCssVar(color, primary),
+  font-textAlign: getCssVar(editor, default, text-align),
+  // 其它
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
+
 @include b(rate) {
+  @include set-component-css-var(stepper, $stepper);
+
   display: flex;
   flex-direction: row;
-  justify-content: getCssVar(form-item-container, editor-align);
+  align-items: center;
+  justify-content: getCssVar(stepper, flex-justify-content);
+  min-height: getCssVar(stepper, min-height);
+
   .van-rate {
     .van-rate__icon--full {
-      color: getCssVar(color, primary);
+      color: getCssVar(stepper, color-icon);
     }
   }
 }

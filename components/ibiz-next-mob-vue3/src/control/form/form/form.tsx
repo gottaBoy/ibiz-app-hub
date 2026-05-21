@@ -156,14 +156,20 @@ export const FormControl = defineComponent({
       } else {
         const key = controlPanel ? model.name! : 'default';
         // 树自己绘制，要传递额外的参数
-        slots[key] = (): VNode => {
-          return (
+        slots[key] = (): IData[] => {
+          const result: IData[] = [];
+          const tempForm = (
             <iBizFormPage modelData={this.c.model} controller={this.c}>
               {this.c.model.deformPages?.map(page => {
                 return this.renderByDetailType(page);
               })}
             </iBizFormPage>
           );
+          result.push(tempForm);
+          if (this.$slots.searchFooter) {
+            result.push(this.$slots.searchFooter());
+          }
+          return result;
         };
       }
     }

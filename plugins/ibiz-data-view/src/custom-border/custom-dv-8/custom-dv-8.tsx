@@ -57,18 +57,18 @@ export const CustomDV8 = defineComponent({
     const path = `border-box-8-path-${id}`;
     const gradient = `border-box-8-gradient-${id}`;
     const mask = `border-box-8-mask-${id}`;
-    const backgroundColor = 'var(--ibiz-screen-dashboard-custom-dv-bg)';
-    const length = computed(() => {
+    const backgroundColor = `var(${ns.cssVarName('screen-dashboard-custom-dv-bg')})`;    const length = computed(() => {
       return (width.value + height.value - props.offsetY - 5) * 2;
     });
 
     const pathD = (padding: number) => {
+      const borderWidth = 0.5;
       if (props.reverse) {
         // 当reverse为true时，从左上角开始，逆时针方向绘制
-        return `M ${2.5 + padding},${2.5 + padding} L ${2.5 + padding},${height.value - 2.5 - props.offsetY - padding} L ${width.value - 2.5 - padding},${height.value - 2.5 - props.offsetY - padding} L ${width.value - 2.5 - padding},${2.5 + padding} Z`;
+        return `M ${borderWidth + padding},${borderWidth + padding} L ${borderWidth + padding},${height.value - borderWidth - props.offsetY - padding} L ${width.value - borderWidth - padding},${height.value - borderWidth - props.offsetY - padding} L ${width.value - borderWidth - padding},${borderWidth + padding} Z`;
       }
       // 当reverse为false时，从左上角开始，顺时针方向绘制
-      return `M ${2.5 + padding},${2.5 + padding} L ${width.value - 2.5 - padding},${2.5 + padding} L ${width.value - 2.5 - padding},${height.value - 2.5 - props.offsetY - padding} L ${2.5 + padding},${height.value - 2.5 - props.offsetY - padding} Z`;
+      return `M ${borderWidth + padding},${borderWidth + padding} L ${width.value - borderWidth - padding},${borderWidth + padding} L ${width.value - borderWidth - padding},${height.value - borderWidth - props.offsetY - padding} L ${borderWidth + padding},${height.value - borderWidth - props.offsetY - padding} Z`;
     };
 
     /**
@@ -209,7 +209,7 @@ export const CustomDV8 = defineComponent({
 
           <polygon
             fill={backgroundColor}
-            points={`${5 + padding}, ${5 + padding} ${width.value - 5 - padding}, ${5 + padding} ${width.value - 5 - padding} ${height.value - 5 - props.offsetY - padding}, ${5 + padding}, ${height.value - 5 - props.offsetY - padding}`}
+            points={`${0}, ${padding} ${width.value}, ${padding} ${width.value}, ${height.value - props.offsetY - padding} ${0}, ${height.value - props.offsetY - padding}`}
           />
 
           <use

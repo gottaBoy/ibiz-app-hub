@@ -64,6 +64,11 @@ export default {
           id: 'logic',
         },
         {
+          caption: '注入属性',
+          appViewId: 'web.master_editor_field_injection',
+          id: 'injection',
+        },
+        {
           caption: '表单项更新',
           appViewId: 'web.master_form_defiupdate',
           id: 'defiupdate',
@@ -77,6 +82,11 @@ export default {
           caption: '值显示',
           appViewId: 'web.master_form_value_display',
           id: 'value_display',
+        },
+        {
+          caption: '启用jsonschema',
+          appViewId: 'web.master_form_enablejsonschema',
+          id: 'enablejsonschema',
         },
         {
           caption: '锚点',
@@ -94,6 +104,11 @@ export default {
           id: 'cancel_change',
         },
         {
+          caption: '动态界面行为组',
+          appViewId: 'web.master_form_dy_uiaction_group',
+          id: 'dy_uiaction_group',
+        },
+        {
           caption: '事件及调用',
           appViewId: 'web.master_form_event_tab_exp_view',
           id: 'event',
@@ -102,6 +117,11 @@ export default {
           caption: '校验模式',
           appViewId: 'web.master_form_validatemode',
           id: 'validatemode',
+        },
+        {
+          caption: '剩余高度',
+          appViewId: 'web.master_remaining_height_edit_view',
+          id: 'remaining_height',
         },
       ],
       dataRelationTag: 'form_DR',

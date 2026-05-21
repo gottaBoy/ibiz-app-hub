@@ -1,4 +1,15 @@
+$not-supported-editor: (
+  // 颜色
+  color: getCssVar(color, danger),
+  // 字体
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+);
+
 @include b(not-supported-editor) {
-  font-size: getCssVar('font-size', 'regular');
-  color: getCssVar('color', 'danger');
+  @include set-component-css-var(not-supported-editor, $not-supported-editor);
+
+  font-size: getCssVar(not-supported-editor, font-fontSize);
+  line-height: getCssVar(not-supported-editor, font-lineHeight);
+  color: getCssVar(not-supported-editor, color);
 }

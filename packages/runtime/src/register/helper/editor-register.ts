@@ -1,6 +1,7 @@
-import { IEditor } from '@ibiz/model-core';
+import { IControl, IControlItem, IEditor } from '@ibiz/model-core';
 import { IEditorProvider } from '../../interface';
 import { getPluginRegisterKey } from './common-register';
+import { CustomRegister } from '../custom-register';
 
 /** 编辑器适配器前缀 */
 export const EDITOR_PROVIDER_PREFIX = 'EDITOR';
@@ -27,19 +28,38 @@ function getProvider(key: string): IEditorProvider | undefined {
 }
 
 /**
- * 获取编辑器适配器
- * @author lxm
- * @date 2023-05-06 09:29:23
+ * @description 获取编辑器适配器
  * @export
- * @param {IAppView} model
- * @return {*}  {Promise<IEditorProvider>}
+ * @param {IEditor} model 编辑器模型
+ * @param {IControlItem} [ctrlItem] 控件项模型
+ * @param {IControl} [ctrl] 部件模型
+ * @returns {*}  {(Promise<IEditorProvider | undefined>)}
  */
 export async function getEditorProvider(
   model: IEditor,
+  ctrlItem?: IControlItem,
+  ctrl?: IControl,
 ): Promise<IEditorProvider | undefined> {
   let provider: IEditorProvider | undefined;
   const { editorType, editorStyle, predefinedType, sysPFPluginId, appId } =
     model as Required<IEditor>;
+
+  // 找自定义的编辑器适配器
+  const registerKey = CustomRegister.getRegisterKey(EDITOR_PROVIDER_PREFIX, {
+    controlItemModel: ctrlItem,
+    controlModel: ctrl,
+    editorModel: model,
+  });
+  provider = getProvider(registerKey);
+  if (!provider) {
+    ibiz.log.debug(
+      ibiz.i18n.t('runtime.register.helper.customRegistration', {
+        registerKey,
+      }),
+    );
+  } else {
+    return provider;
+  }
 
   // 找插件适配器
   if (sysPFPluginId) {

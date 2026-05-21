@@ -1,0 +1,24 @@
+@include b(download-view) {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+
+    @include e(tooltip) {
+        padding: 20px;
+        color: var(--van-cell-text-color);
+    }
+
+    @include e(tip) {
+        width: 100%;
+        img {
+            width: 100%;
+        }
+        .van-loading {
+            text-align: center;
+        }
+    }
+}

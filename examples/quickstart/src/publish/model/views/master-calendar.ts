@@ -44,9 +44,19 @@ export default {
           id: 'contextmenu',
         },
         {
+          caption: '动态界面行为组',
+          appViewId: 'web.master_calendar_dy_uiaction_group_exp',
+          id: 'dy_uiaction_group',
+        },
+        {
           caption: '设置默认值',
           appViewId: 'web.master_default_date_tab_exp_view',
           id: 'defaultdate',
+        },
+        {
+          caption: '分组时间属性',
+          appViewId: 'web.master_calendar_timeline_loadmore',
+          id: 'grouptimefield',
         },
         {
           caption: '内置导航',

@@ -10,8 +10,9 @@ export default {
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
-  caption: '数据关系栏_计数器禁用',
+  caption: '数据关系栏_计数器动态禁用',
   codeName: 'master_drbar_counter_disabled',
+  height: 600,
   appDataEntityId: 'web.master',
   appViewEngines: [
     {
@@ -26,19 +27,29 @@ export default {
       logicTrigger: 'VIEWEVENT',
       logicType: 'SCRIPT',
       scriptCode:
-        "view.ctx.evt.on('onRegister', (name, ctrl) => {\r\n   if (name === 'drbar') {\r\n      ctrl?.disableCounter();\r\n      console.log('部件注册成功事件触发调用部件禁用计数器能力');\r\n   }\r\n})",
+        "view.ctx.evt.on('onRegister', (name, ctrl) => {\r\n   if (name === 'drbar') {\r\n      ctrl.disableCounter?.();\r\n      console.log('部件注册成功事件触发后，调用禁用部件计数器能力');\r\n   }\r\n})",
       builtinLogic: true,
+      name: 'DISABLE_COUNTER',
       id: 'disable_counter',
     },
   ],
   appViewMsgGroupId: 'disable_counter',
+  appViewNavContexts: [
+    {
+      rawValue: true,
+      key: 'MASTER',
+      value: 'sample',
+      name: 'MASTER',
+      id: 'master',
+    },
+  ],
   controls: [
     {
       dedrbarGroups: [
         {
           caption: '默认',
           name: '默认',
-          id: 'a0aa99ad32515d58406',
+          id: 'nocache_refreshmode',
         },
       ],
       showTitle: true,
@@ -50,7 +61,7 @@ export default {
       appCounterRefId: 'd0a6e348d1ed8a3141d3466137925bc7',
       dedrctrlItems: [
         {
-          dedrbarGroupId: 'a0aa99ad32515d58406',
+          dedrbarGroupId: 'nocache_refreshmode',
           caption: '区划',
           counterId: 'grid',
           enableMode: 'COUNT_GT_ZERO',
@@ -58,7 +69,7 @@ export default {
           id: 'region',
         },
         {
-          dedrbarGroupId: 'a0aa99ad32515d58406',
+          dedrbarGroupId: 'nocache_refreshmode',
           caption: '分类',
           counterId: 'form',
           enableMode: 'COUNT_GT_ZERO',
@@ -66,7 +77,7 @@ export default {
           id: 'category',
         },
         {
-          dedrbarGroupId: 'a0aa99ad32515d58406',
+          dedrbarGroupId: 'nocache_refreshmode',
           caption: '主数据',
           counterId: 'tree',
           enableMode: 'COUNT_GT_ZERO',
@@ -272,7 +283,7 @@ export default {
       capLanguageRes: {
         lanResTag: 'DE.LNAME.MASTER',
       },
-      caption: '数据关系栏_计数器禁用',
+      caption: '数据关系栏_计数器动态禁用',
       codeName: 'drbar_counter_disabled_captionbar',
       controlType: 'CAPTIONBAR',
       appDataEntityId: 'web.master',
@@ -292,7 +303,7 @@ export default {
     controlParam: {},
     id: 'layoutpanel',
   },
-  title: '数据关系栏_计数器禁用',
+  title: '数据关系栏_计数器动态禁用',
   viewStyle: 'DEFAULT',
   viewType: 'DEEDITVIEW2',
   enableDP: true,

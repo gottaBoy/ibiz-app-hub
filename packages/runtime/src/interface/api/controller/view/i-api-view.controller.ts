@@ -13,6 +13,11 @@ import { IApiModalData, IApiRedrawData } from '../../common';
  * @viewparams {"name":"srfrenewsession","title":"强制重新构建界面域","parameterType":"string","defaultvalue":"-","description":"特殊视图参数，值为'true'时，强制重新构建界面域"}
  * @viewparams {"name":"modalOption","title":"模态、抽屉额外注入参数","parameterType":"Object","defaultvalue":"-","description":"定义视图通过模态或者抽屉方式打开，给模态和抽屉注入额外参数，相关参数可参考element plus官方文档"}
  * @viewparams {"name":"waterMarkOption","title":"视图水印相关参数","parameterType":"Object","defaultvalue":"-","description":"定义水印相关参数，相关参数参见IApiGlobalWaterMarkConfig接口"}
+ * @viewparams {"name":"checkstrictly","title":"是否严格的遵循穿梭空左右互相关联","parameterType":"boolean","defaultvalue":"false","description":"特殊视图参数，在数据多项选择视图，数据多项选择视图（左右关系）中使用，用于控制选择面板左右数据是否相互关联"}
+ * @viewparams {"name":"srfdataaccaction","title":"是否允许请求数据权限","parameterType":"boolean","defaultvalue":"false","description":"特殊视图参数，值为'true'时，请求实体数据权限"}
+ * @viewparams {"name":"srfmarkopendatakey","title":"标记打开数据服务标识","parameterType":"string","defaultvalue":"-","description":"特殊视图参数，指定视图发送的站内信标识"}
+ * @viewparams {"name":"srfshowbacktop","title":"是否允许显示返回顶部按钮","parameterType":"boolean","defaultvalue":"-","description":"特殊视图参数，用于决定视图内部是否显示返回顶部按钮","effectPlatform":"mob"}
+ * @viewparams {"name":"srfmobshowpresetback","title":"是否显示视图顶部预置返回按钮","parameterType":"boolean","defaultvalue":"-","description":"特殊视图参数，用于决定是否显示视图顶部预置返回按钮","effectPlatform":"mob"}
  * @export
  * @interface IApiViewController
  * @extends {IApiController<T, S>}
@@ -59,8 +64,15 @@ export interface IApiViewController<
   layoutPanel?: IApiViewLayoutPanelController & IApiData;
 
   /**
+   * @description 父视图数据
+   * @type {IApiData[]}
+   * @memberof IApiViewController
+   */
+  parentData?: IApiData[];
+
+  /**
    * @description 关闭视图
-   * @param {IApiModalData} [modalData]
+   * @param {IApiModalData} [modalData] 返回数据
    * @returns {*}  {Promise<void>}
    * @memberof IApiViewController
    */
@@ -68,7 +80,7 @@ export interface IApiViewController<
 
   /**
    * @description 重绘视图
-   * @param {IRedrawData} redrawData
+   * @param {IApiRedrawData} redrawData 重绘数据
    * @memberof IApiViewController
    */
   redrawView(redrawData: IApiRedrawData): void;

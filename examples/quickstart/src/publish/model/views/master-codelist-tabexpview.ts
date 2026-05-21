@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'codelist_tabexpview',
   deviewId: 'feef69a3658e656daa547d616ae367d4',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

@@ -51,6 +51,7 @@ export function useFilesParse(
       base64?: string | undefined;
     }[]
   >;
+  enableNoAccess: boolean;
   onDownload: (file: IData) => void;
   getDownloadUrl: (data: IData, file: IData) => string;
   getDownloadTicketParams: () => {
@@ -73,6 +74,20 @@ export function useFilesParse(
 
   // svg图片Blob路径存储
   const svgBlob: Map<string, string> = new Map();
+
+  // 是否启用无权限
+  const enableNoAccess = c.model.userParam?.enablenoaccess === 'true';
+
+  // 是否全局下载前缀
+  let globalDownloadPrifix: boolean = false;
+  if (c.model.userParam?.globaldownloadprifix) {
+    globalDownloadPrifix = c.model.userParam?.globaldownloadprifix === 'true';
+  } else {
+    globalDownloadPrifix = ibiz.config.common.globalDownloadPrifix;
+  }
+
+  // 用于计算上传和下载路径的OSS参数
+  const osscat = c.model.userParam?.osscat;
 
   // 获取下载凭证参数
   const getDownloadTicketParams = (): {
@@ -152,7 +167,11 @@ export function useFilesParse(
    * @returns {*}  {string}
    */
   const getDownloadUrl = (data: IData, file: IData): string => {
-    const editorParams: IData = {};
+    const editorParams: IData = {
+      osscat,
+      enableNoAccess,
+      globalDownloadPrifix,
+    };
     if (file && file.folder) {
       editorParams.osscat = file.folder;
     }
@@ -169,14 +188,20 @@ export function useFilesParse(
   const onDownload = (file: IData): void => {
     const downloadUrl = getDownloadUrl(props.data, file);
     const url = file.url || downloadUrl.replace('%fileId%', file.id);
-    ibiz.util.file.fileDownload(url, file.name, {
-      context: c.context,
-      params: c.params,
-      data: props.data,
-      file: { fileId: file.id, ...file },
-      extraParams: {},
-      downloadTicketParams: getDownloadTicketParams(),
-    });
+    ibiz.util.file.fileDownload(
+      url,
+      file.name,
+      {
+        context: c.context,
+        params: c.params,
+        data: props.data,
+        file: { fileId: file.id, ...file },
+        extraParams: { osscat, enableNoAccess, globalDownloadPrifix },
+        downloadTicketParams: getDownloadTicketParams(),
+      },
+      undefined,
+      enableNoAccess,
+    );
   };
 
   // 值响应式变更
@@ -198,11 +223,12 @@ export function useFilesParse(
     () => props.data,
     newVal => {
       if (newVal) {
+        const editorParams: IData = { osscat, enableNoAccess };
         const urls = ibiz.util.file.calcFileUpDownUrl(
           c.context,
           c.params,
           newVal,
-          {},
+          editorParams,
         );
         uploadUrl.value = urls.uploadUrl;
       }
@@ -220,7 +246,7 @@ export function useFilesParse(
           Object.assign(file, {
             url: file.url || downloadUrl.replace('%fileId%', file.id),
           });
-          if (ibiz.config.common.enableDownloadTicket) {
+          if (ibiz.config.common.enableDownloadTicket && !enableNoAccess) {
             ibiz.util.file
               .getDownloadTicket(
                 c.context,
@@ -254,6 +280,7 @@ export function useFilesParse(
   return {
     files,
     uploadUrl,
+    enableNoAccess,
     onDownload,
     getDownloadUrl,
     getDownloadTicketParams,

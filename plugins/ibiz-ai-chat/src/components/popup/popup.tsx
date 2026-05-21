@@ -16,6 +16,7 @@ interface ActionItem {
 }
 
 export const Popup = ({
+  triggerMode,
   children,
   actions, // 接收行为数据
   content,
@@ -24,6 +25,7 @@ export const Popup = ({
   onToggleOpen,
   onAction, // 接收行为事件回调
 }: {
+  triggerMode: 'click' | 'hover';
   children: import('preact').ComponentChildren;
   actions?: ActionItem[]; // 添加 actions 属性
   content?: import('preact').ComponentChildren;
@@ -40,6 +42,7 @@ export const Popup = ({
   const [isOpen, setIsOpen] = useState(isOpenProp || false);
   const triggerRef = useRef<HTMLDivElement | null>(null);
   const portalContainer = useRef<HTMLDivElement | null>(null);
+  const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // 监听外部传入的 isOpen 变化
   useEffect(() => {
@@ -121,6 +124,46 @@ export const Popup = ({
     return { ...baseStyle, ...positions[position] };
   };
 
+  // 清除关闭定时器
+  const clearCloseTimer = () => {
+    if (closeTimerRef.current && triggerMode === 'hover') {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  };
+
+  // 处理点击打开
+  const handleClickOpen = (e: MouseEvent) => {
+    if (triggerMode === 'click') {
+      e.stopPropagation();
+      const newIsOpen = !isOpen;
+      setIsOpen(newIsOpen);
+      onToggleOpen?.(newIsOpen);
+    }
+  };
+
+  // 触发打开弹窗
+  const scheduleOpen = (e: MouseEvent) => {
+    if (triggerMode === 'hover') {
+      e.stopPropagation();
+      clearCloseTimer();
+      const newIsOpen = true;
+      setIsOpen(newIsOpen);
+      onToggleOpen?.(newIsOpen);
+    }
+  };
+
+  // 延迟关闭弹窗
+  const scheduleClose = () => {
+    if (triggerMode === 'hover') {
+      clearCloseTimer();
+      closeTimerRef.current = setTimeout(() => {
+        setIsOpen(false);
+        onToggleOpen?.(false);
+      }, 100); // 100ms 延迟，给用户一点时间移动到弹窗上
+    }
+  };
+
   return (
     <span className={`${ns.b('trigger-container')}`}>
       {/* 触发元素 */}
@@ -128,10 +171,14 @@ export const Popup = ({
         className={`${ns.b('trigger-element')}`}
         ref={triggerRef}
         onClick={e => {
+          handleClickOpen(e);
+        }}
+        onMouseEnter={e => {
+          scheduleOpen(e);
+        }}
+        onMouseLeave={e => {
           e.stopPropagation();
-          const newIsOpen = !isOpen;
-          setIsOpen(newIsOpen);
-          onToggleOpen?.(newIsOpen);
+          scheduleClose();
         }}
       >
         {children}
@@ -144,6 +191,8 @@ export const Popup = ({
           <div
             className={`${ns.b()} pop-${position}`}
             style={getPositionStyle()}
+            onMouseEnter={clearCloseTimer}
+            onMouseLeave={scheduleClose}
           >
             {content ||
               actions?.map(action => (

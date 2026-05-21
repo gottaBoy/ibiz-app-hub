@@ -1,4 +1,4 @@
-import { IApiData } from '@ibiz-template/core';
+import { IApiData, IApiHttpError, IHttpResponse } from '@ibiz-template/core';
 
 /**
  * @description 权限结果
@@ -12,10 +12,11 @@ export interface IApiAuthResult {
    * @memberof IApiAuthResult
    */
   ok: boolean;
+
   /**
-   * @description 结果
-   * @type {IApiData}
+   * @description http请求返回数据
+   * @type {(IApiData | IHttpResponse | IApiHttpError)}
    * @memberof IApiAuthResult
    */
-  result: IApiData;
+  result: IApiData | IHttpResponse | IApiHttpError;
 }

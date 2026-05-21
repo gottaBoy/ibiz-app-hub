@@ -7,6 +7,36 @@
 
 ## [Unreleased]
 
+## [0.7.41-alpha.63] - 2026-01-07
+
+### Added
+
+- 新增移动端isEnableMobLoading环境变量
+
+## [0.7.41-alpha.61] - 2026-01-04
+
+### Added
+
+- 新增移动端应用初始化loading环境变量（mobLoadingCaption、mobLoadingDescription、mobLoadingBackground）
+
+## [0.7.41-alpha.59] - 2025-12-30
+
+### Fixed
+
+- 修复第三方包漏洞，更新axios版本至1.8.2、vitest版本至1.6.1
+
+## [0.7.41-alpha.35] - 2025-11-10
+
+### Added
+
+- 新增isPortalApp环境变量，默认为false，用于约束站内信通知查询（非门户应用仅查询当前系统数据）
+
+## [0.7.41-alpha.23] - 2025-09-04
+
+### Added
+
+- 新增移动端微信mobWeChatAppId环境参数，值为微信公众号appId或微信小程序appid
+
 ## [0.7.41-alpha.18] - 2025-08-14
 
 ### Fixed

@@ -1,4 +1,6 @@
 import {
+  IAppCodeList,
+  IAppDEACMode,
   IAppMenuModel,
   IAppView,
   IControl,
@@ -13,16 +15,22 @@ import {
   IDEToolbarItem,
   IDETree,
   ISubAppRef,
+  ITabExpPanel,
   IUIActionGroup,
 } from '@ibiz/model-core';
 import { DSLHelper } from '@ibiz/rt-model-api';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { recursiveIterate } from '@ibiz-template/core';
 import { mergeAppMenu } from './merge-app-menu';
-import { mergeDEDrControl } from './merge-de-drcontrol';
+import { mergeDEDrControl, mergeDETabExpPanel } from './merge-de-drcontrol';
 import { mergeAppDEUIActionGroup } from './merge-app-uiaction-group';
 import { mergeTreeView } from './merge-treeview';
-import { mergeAppDEForm } from './merge-de-form';
+import {
+  getFormdataRelationTags,
+  mergeAppDEForm,
+  mergeFormDRTabpanel,
+} from './merge-de-form';
+import { mergeAppCodeList } from './merge-app-codelist';
 /**
  * 子应用模型合并对象
  *
@@ -54,6 +62,13 @@ export class MergeSubModelHelper {
     controls: IControl[] | undefined,
     subAppRefs: ISubAppRef[],
   ): void {
+    // config.common.mergeAppMenu参数值为disable，不处理该应用的菜单合并
+    if (
+      ibiz.config.common.mergeAppMenu &&
+      ibiz.config.common.mergeAppMenu === 'disable'
+    ) {
+      return;
+    }
     const dstAppMenu = controls?.find(item => {
       return item.controlType === 'APPMENU' && item.name === 'appmenu';
     });
@@ -61,6 +76,24 @@ export class MergeSubModelHelper {
       for (let i = 0; i < subAppRefs.length; i++) {
         const srcAppMenu = subAppRefs[i].appMenuModel;
         if (srcAppMenu) {
+          const { userTag } = srcAppMenu as IModel;
+          if (userTag) {
+            const [userKey, userValue] = userTag.split(':');
+            // mergemenutag: 目标菜单代码名称,目标菜单代码名称建议识别正则缺省配置以匹配更多目标
+            if (userKey === 'mergemenutag') {
+              try {
+                const userValueReg = new RegExp(userValue);
+                if (!userValueReg.test(dstAppMenu.codeName!)) {
+                  continue;
+                }
+              } catch (error) {
+                ibiz.log.warn(
+                  `[菜单合并]：无效的正则表达式${userValue},忽略处理`,
+                );
+                continue;
+              }
+            }
+          }
           mergeAppMenu(dstAppMenu, srcAppMenu);
         }
       }
@@ -81,6 +114,13 @@ export class MergeSubModelHelper {
     controls: IControl[] | undefined,
     subAppRefs: ISubAppRef[],
   ): void {
+    // config.common.mergeAppMenu参数值为disable，不处理该应用的菜单合并
+    if (
+      ibiz.config.common.mergeAppMenu &&
+      ibiz.config.common.mergeAppMenu === 'disable'
+    ) {
+      return;
+    }
     if (view.viewType !== 'APPINDEXVIEW' || !controls) return;
     const dstAppMenus = controls!.filter(item => {
       return item.controlType === 'APPMENU' && item.name !== 'appmenu';
@@ -118,16 +158,35 @@ export class MergeSubModelHelper {
     subAppRefs: ISubAppRef[],
   ): void {
     const dstDRCtrl = controls?.find(item => {
-      return item.controlType === 'DRBAR' || item.controlType === 'DRTAB';
+      return (
+        item.controlType === 'DRBAR' ||
+        item.controlType === 'DRTAB' ||
+        item.controlType === 'TABEXPPANEL'
+      );
     });
     if (dstDRCtrl) {
-      for (let i = 0; i < subAppRefs.length; i++) {
-        const srcDRCtrl = ibiz.hub.getSubAppDrControl(
-          `${dstDRCtrl.appDataEntityId!.split('.')[1]}_${dstDRCtrl.modelType}_${(dstDRCtrl as IDEDRBar).dataRelationTag}`.toLowerCase(),
-          subAppRefs[i].appId,
-        );
-        if (srcDRCtrl) {
-          mergeDEDrControl(dstDRCtrl, srcDRCtrl);
+      if (dstDRCtrl.controlType === 'TABEXPPANEL') {
+        for (let i = 0; i < subAppRefs.length; i++) {
+          const srcDRCtrl = ibiz.hub.getSubAppTabExpPanel(
+            (dstDRCtrl as ITabExpPanel).uniqueTag!,
+            subAppRefs[i].appId,
+          );
+          if (srcDRCtrl) {
+            mergeDETabExpPanel(
+              dstDRCtrl as ITabExpPanel,
+              srcDRCtrl as ITabExpPanel,
+            );
+          }
+        }
+      } else {
+        for (let i = 0; i < subAppRefs.length; i++) {
+          const srcDRCtrl = ibiz.hub.getSubAppDrControl(
+            `${dstDRCtrl.appDataEntityId!.split('.')[1]}_${dstDRCtrl.modelType}_${(dstDRCtrl as IDEDRBar).dataRelationTag}`.toLowerCase(),
+            subAppRefs[i].appId,
+          );
+          if (srcDRCtrl) {
+            mergeDEDrControl(dstDRCtrl, srcDRCtrl);
+          }
         }
       }
     }
@@ -455,16 +514,89 @@ export class MergeSubModelHelper {
     });
     if (forms.length === 0) return;
     forms.forEach(dstForm => {
-      const ids: string[] = dstForm.id!.split('.');
+      const appDataEntityId = (dstForm as IDEForm).appDataEntityId?.split(
+        '.',
+      )?.[1];
+      const { codeName } = dstForm as IDEForm;
+      // 查找源表单存在基于数据关系部件构建的分页部件的数据关系标识
+      const dataRelationTags = getFormdataRelationTags(dstForm);
       for (let i = 0; i < subAppRefs.length; i++) {
         const srcForm = ibiz.hub.getSubAppControl(
-          ids[1] + ids[2],
+          appDataEntityId + codeName!,
           subAppRefs[i].appId,
         );
+        // 常规表单合并
         if (srcForm) {
           mergeAppDEForm(dstForm, srcForm as IDEForm);
         }
+        // 表单分页部件合并（数据关系部件）
+        if (dataRelationTags && dataRelationTags.length > 0) {
+          for (let j = 0; j < dataRelationTags.length; j++) {
+            const dataRelationTag = dataRelationTags[j];
+            const dataRelationForm = ibiz.hub.getSubAppControl(
+              appDataEntityId + dataRelationTag,
+              subAppRefs[i].appId,
+            );
+            if (dataRelationForm) {
+              mergeFormDRTabpanel(
+                dataRelationTag,
+                dstForm,
+                dataRelationForm as IDEForm,
+              );
+            }
+          }
+        }
       }
     });
+  }
+
+  /**
+   * @description 合并子应用代码表(子应用代码表标识和主应用代码表标识一致，包含模块、代码表代码名称2部分内容保持一致)
+   * @param codelist
+   * @param subAppRefs
+   */
+  mergeSubAppCodeList(codelist: IAppCodeList, subAppRefs: ISubAppRef[]): void {
+    if (!codelist || !subAppRefs || subAppRefs.length === 0) return;
+    for (let i = 0; i < subAppRefs.length; i++) {
+      const subCodeList = ibiz.hub.getSubAppCodeList(
+        codelist.codeListTag!,
+        subAppRefs[i].appId,
+      );
+      if (subCodeList) {
+        mergeAppCodeList(codelist, subCodeList);
+      }
+    }
+  }
+
+  /**
+   * @description 合并子应用AC自填模式界面行为组
+   * @param {(IAppDEACMode[] | undefined)} acModes
+   * @param {ISubAppRef[]} subAppRefs
+   * @returns {*}  {void}
+   * @memberof MergeSubModelHelper
+   */
+  mergeSubAppDEACModesActionGroup(
+    acModes: IAppDEACMode[] | undefined,
+    subAppRefs: ISubAppRef[],
+  ): void {
+    if (!acModes || !acModes.length || !subAppRefs || !subAppRefs.length)
+      return;
+    for (let index = 0; index < acModes.length; index++) {
+      const { deuiactionGroup } = acModes[index];
+      if (deuiactionGroup) {
+        for (let j = 0; j < subAppRefs.length; j++) {
+          const srcAppDEUIActionGroup = ibiz.hub.getSubAppDEUIActionGroups(
+            (deuiactionGroup as IModel).uniqueTag,
+            subAppRefs[j].appId,
+          );
+          if (srcAppDEUIActionGroup) {
+            mergeAppDEUIActionGroup(
+              deuiactionGroup as IUIActionGroup,
+              srcAppDEUIActionGroup as IUIActionGroup,
+            );
+          }
+        }
+      }
+    }
   }
 }

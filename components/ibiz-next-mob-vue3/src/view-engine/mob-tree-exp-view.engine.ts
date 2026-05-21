@@ -8,6 +8,8 @@ import {
   ViewEngineBase,
   IExpBarControlController,
   calcDeCodeNameById,
+  SysUIActionTag,
+  IApiMDViewCall,
 } from '@ibiz-template/runtime';
 import { IAppDataEntity, IAppDETreeExplorerView } from '@ibiz/model-core';
 
@@ -15,7 +17,7 @@ export class MobTreeExpViewEngine extends ViewEngineBase {
   /**
    * 树导航视图控制器
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDETreeExplorerView,
     ITreeExpViewState,
     ITreeExpViewEvent
@@ -79,6 +81,32 @@ export class MobTreeExpViewEngine extends ViewEngineBase {
       return;
     }
     await this.loadEntityData();
+  }
+
+  async call(
+    key: keyof IApiMDViewCall,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    _args: any,
+  ): Promise<IData | null | undefined> {
+    if (key === SysUIActionTag.REFRESH) {
+      await this.refresh();
+      return null;
+    }
+  }
+
+  /**
+   * 视图刷新
+   *
+   * @protected
+   * @return {*}  {Promise<void>}
+   * @memberof MobTreeExpViewEngine
+   */
+  protected async refresh(): Promise<void> {
+    // 重置当前展开节点,适配树控制load逻辑
+    this.tree.state.mobExpandedKey = '';
+    // 刷新后导航栏默认选中第一条并导航
+    this.expBar.state.srfnav = '';
+    await this.tree.refresh();
   }
 
   /**

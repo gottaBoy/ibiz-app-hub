@@ -6,7 +6,7 @@ export default {
   deviewCodeName: 'data_transfer_picker',
   deviewId: 'e53c01c70d2685b9822047fe4b69cd8e',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

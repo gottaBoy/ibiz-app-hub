@@ -2,6 +2,7 @@
 import { QXEvent } from 'qx-util';
 import { IController, IViewController } from '../../interface/controller';
 import { CTXState } from './ctx.state';
+import { IApiCtx } from '../../interface';
 
 type CTXEvent = {
   /**
@@ -24,8 +25,11 @@ type CTXEvent = {
  * @date 2023-03-27 01:43:36
  * @export
  * @class CTX
+ * @implements {IApiCtx}
  */
-export class CTX<V extends IViewController = IViewController> {
+export class CTX<V extends IViewController = IViewController>
+  implements IApiCtx
+{
   /**
    * 上下文环境状态
    * @author lxm

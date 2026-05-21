@@ -8,8 +8,8 @@ import { IApiData } from '@ibiz-template/core';
 export interface IApiHandlebarsUtil {
   /**
    * @description 异步绘制模板，返回渲染后的字符串
-   * @param {string} template
-   * @param {IApiData} data
+   * @param {string} template 模板字符串
+   * @param {IApiData} data 业务数据
    * @returns {*}  {Promise<string>}
    * @memberof IApiHandlebarsUtil
    */
@@ -17,8 +17,8 @@ export interface IApiHandlebarsUtil {
 
   /**
    * @description 同步绘制模板，返回渲染后的字符串
-   * @param {string} template
-   * @param {IApiData} data
+   * @param {string} template 模板字符串
+   * @param {IApiData} data 业务数据
    * @returns {*}  {string}
    * @memberof IApiHandlebarsUtil
    */

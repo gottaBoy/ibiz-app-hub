@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'tabCardTabExpView',
   deviewId: 'a48796acfdbef471d55e23fdaddc2984',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

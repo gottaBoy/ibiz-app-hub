@@ -1,18 +1,22 @@
-$panel-component-view-header: ('bg-color': getCssVar(color, bg, 1),
-    'back-font-size': getCssVar('font-size', 'header', 3),
-    'back-padding': 0 getCssVar('spacing', 'tight'),
-    'back-width' : rem(40px), 'back-height' : 100%,
-    'color':getCssVar('color', 'text', 0),
+$panel-component-view-header: (
+    'color-bg-color': getCssVar(color, bg, 1),
+    'font-back-fontSize': getCssVar('font-size', 'header', 6),
+    'spacing-back-padding': 0 getCssVar('spacing', 'tight'),
+    'width-back-width' : rem(40px), 
+    'height-back-height' : 100%,
+    'color-text':getCssVar('color', 'text', 0),
 );
 
 @include b('view-header') {
     @include set-component-css-var('panel-component-view-header', $panel-component-view-header);
 
     position: relative;
-    color: getCssVar('panel-component-view-header', 'color');
-    background-color: getCssVar('panel-component-view-header', 'bg-color');
+    color: getCssVar('panel-component-view-header', 'color-text');
+    background-color: getCssVar('panel-component-view-header', 'color-bg-color');
 
     @include m(precut-back) {
-        padding-left: getCssVar('panel-component-view-header', 'back-width');
+        .#{bem(panel-container,'',view_left_toolbar)}{
+            padding-left: getCssVar('panel-component-view-header', 'width-back-width');
+        }
     }
 }

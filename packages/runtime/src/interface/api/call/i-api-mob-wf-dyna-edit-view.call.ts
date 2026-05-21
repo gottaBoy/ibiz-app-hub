@@ -8,7 +8,7 @@ import { IApiMobEditViewCall } from './i-api-mob-edit-view.call';
  */
 export interface IApiMobWFDynaEditViewCall extends IApiMobEditViewCall {
   /**
-   * @description 工作流启动
+   * @description 工作流启动，id：工作流按钮标识
    * @type {{
    *     args: { id: string };
    *   }}

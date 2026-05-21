@@ -1,73 +1,24 @@
+$control-drtab: (
+  color-tab-text: getCssVar('color', 'text', 0),
+  color-tab-text-active: getCssVar('color', 'primary'),
+  font-tab-fontSize: getCssVar('font-size', 'regular')
+);
+
 @include b(control-drtab) {
-  padding: getCssVar(spacing, tight);
-  background-color: getCssVar(view, bg-color);
+  @include set-component-css-var('control-drtab', $control-drtab);
 
-  .van-button {
-    border: none;
-    height: 100%;
-    background-color: transparent;
-
-    .van-button__text {
-      display: flex;
-      align-items: center;
-      line-height: getCssVar(font-size, header-4);
-      font-size: getCssVar(font-size, header-4);
-      gap: getCssVar(spacing, extra-tight);
-    }
-  }
-
-  @include e(tab-item) {
-    @include m(title) {
-      display: flex;
-      align-items: center;
-      gap: getCssVar(spacing, extra-tight);
-      .#{bem(icon)} {
-        @include flex(row, center, center);
-
-        width: getCssVar(width-icon, medium);
-        height: getCssVar(width-icon, medium);
-        font-size: getCssVar(width-icon, medium);
-      }
-    }
-  }
-
-  @include e(popover) {
-    @include m(item) {
-      display: flex;
-      cursor: pointer;
-      position: relative;
-      align-items: center;
-      box-sizing: border-box;
-      height: var(--van-popover-action-height);
-      padding: 0 getCssVar(spacing, base-loose);
-      font-size: getCssVar(font-size, header-5);
-      gap: getCssVar(spacing, tight);
-
-      .#{bem(icon)} {
-        @include flex(row, center, center);
-
-        width: getCssVar(width-icon, medium);
-        height: getCssVar(width-icon, medium);
-        font-size: getCssVar(width-icon, medium);
-      }
-
-      .caption {
-        flex-grow: 1;
-        display: flex;
-        align-items: center;
-        gap: getCssVar(spacing, tight);
-      }
-
-      ion-icon {
-        color: getCssVar(color, primary);
-      }
-
-      @include when(disabled) {
-        pointer-events: none;
-        cursor: not-allowed;
-        color: getCssVar(color, disabled-text);
-        background-color: getCssVar(color, disabled-bg);
-      }
-    }
+  &.#{bem(tab-layout)} {
+    #{getCssVarName('tab-layout', 'color-tab-text')}: getCssVar(
+      control-drtab,
+      color-tab-text
+    );
+    #{getCssVarName('tab-layout', 'color-tab-text-active')}: getCssVar(
+      control-drtab,
+      color-tab-text-active
+    );
+    #{getCssVarName('tab-layout', 'font-tab-fontSize')}: getCssVar(
+      control-drtab,
+      font-tab-fontSize
+    );
   }
 }

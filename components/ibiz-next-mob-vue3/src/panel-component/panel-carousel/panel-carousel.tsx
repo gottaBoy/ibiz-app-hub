@@ -7,6 +7,11 @@ import './panel-carousel.scss';
  * 轮播图
  * @primary
  * @description 可配置一组静态图片，用于轮播。
+ * @panelitemparams {name:autoplay,parameterType:string,defaultvalue:-,description:为1时自动播放，为0时不自动播放}
+ * @panelitemparams {name:timespan,parameterType:number,defaultvalue:3000,description:轮播间隔，单位ms}
+ * @panelitemparams {name:duration,parameterType:number,defaultvalue:500,description:轮播动画时间，单位ms}
+ * @panelitemparams {name:showIndicators,parameterType:boolean,defaultvalue:true,description:是否显示指示器}
+ * @panelitemparams {name:touchable,parameterType:boolean,defaultvalue:true,description:是否允许手动滑动}
  */
 export const PanelCarousel = defineComponent({
   name: 'IBizPanelCarousel',

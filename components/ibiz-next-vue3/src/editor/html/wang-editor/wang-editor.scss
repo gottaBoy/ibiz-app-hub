@@ -84,6 +84,48 @@ $html: (
       width: 100%;
     }
   }
+
+  @include when('enable-edit'){
+    // 整体处于允许编辑的情况下，默认的工具栏样式变为聚焦时的样式
+    .w-e-bar-item>button{
+      color: var(--w-e-toolbar-color);
+      cursor: pointer;
+
+      svg{
+        fill: var(--w-e-toolbar-color);
+      }
+    }
+  }
+
+  @include when('show-editor-switch-menu') {
+    @include b(html-content) {
+      position: relative;
+    }
+
+    @include b(composite-form-item-ex-menu) {
+      #{getCssVarName('composite-form-item-ex', 'menu-height')}: 40px;
+      position: relative;
+      max-height: 100%;
+    }
+
+    @include b('html-toolbar') {
+      >.w-e-toolbar.w-e-bar {
+        padding-right: getCssVar('composite-form-item-ex', 'menu-width');
+      }
+    }
+
+    @include b(html-menu) {
+      position: absolute;
+      top: 2px;
+      right: 1px;
+      z-index: getCssVar('composite-form-item-ex', 'menu-z-index');
+      display: flex;
+      align-items: center;
+      height: calc(getCssVar('html', 'toolbar-height') - 1px);
+      background: getCssVar('composite-form-item-ex', 'menu-bg-color');
+      border-left: 1px solid getCssVar(color, border);
+    }
+  }  
 }
 
 @include b('html-editor-readonly') {
@@ -93,6 +135,25 @@ $html: (
 
   @include b('html-editor') {
     border: none;
+  }
+
+  @include b(composite-form-item-ex-menu) {
+    display: none;
+  }
+}
+
+@include b('html-toolbar'){
+  .w-e-toolbar{
+    background-color: getCssVar(color, bg, 0);
+    border: 1px solid getCssVar(color, border);
+    border-bottom: none;
+    box-shadow: none;
+
+    .w-e-bar-item>button{
+      &:hover{
+        background-color: getCssVar(color, bg, 0);
+      }
+    }
   }
 }
 
@@ -187,28 +248,50 @@ $html: (
 @include b('html-dialog-full-screen') {
   height: 80%;
 
+  .el-dialog__header{
+    display: none;
+  }
+
+  .el-dialog__body{
+    height: 100%; 
+    padding-top: 0;
+  }
+
+  @include when('editing'){
+    .el-dialog__body{
+      padding-bottom: 0;
+    }
+  }
+
   @include b('html') {
-    padding: 0 getCssVar('spacing', 'extra-loose');
+    padding: 0;
 
     --w-e-toolbar-bg-color: #{getCssVar(color, bg, 0)};
   }
 
   @include b('html-custom-toolbar') {
     height: 56px;
+    padding-right: 0;
   }
 
   @include b('html-content') {
-    height: calc(100% - 124px);
+    height: calc(100% - 56px);
 
     @include b('html-editor') {
       height: 100% !important;
     }
+
+    @include when('editing'){
+      height: calc(100% - 128px);
+    }
   }
+
 }
 
 @include b('html-footer-dialog') {
   height: 68px;
   margin-top: 0;
+  margin-right: 0;
 }
 
 // 表情元素

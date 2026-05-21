@@ -1,9 +1,14 @@
 import { IAppDERS } from '@ibiz/model-core';
 import { execDELogicAction } from '../../de-logic';
-import { IDRBarItemsState, IDRTabPagesState } from '../../interface';
+import {
+  IDRBarItemsState,
+  IDRTabPagesState,
+  ISearchCondField,
+} from '../../interface';
 import { calcDeCodeNameById, findDELogic } from '../../model';
 import { AppCounter } from '../../service';
 import { ScriptFactory } from '../script';
+import { ValueOP } from '../../constant';
 
 /**
  * 根据计数器数据，计算项显示状态
@@ -111,7 +116,10 @@ export async function getDeDataMajorField(
   appDataEntityId: string,
 ): Promise<IData> {
   const majorData: IData = {};
-  const appDe = await ibiz.hub.getAppDataEntity(appDataEntityId, context.appId);
+  const appDe = await ibiz.hub.getAppDataEntity(
+    appDataEntityId,
+    context.srfappid,
+  );
   if (appDe && appDe.minorAppDERSs && appDe.minorAppDERSs.length > 0) {
     appDe.minorAppDERSs?.forEach((minorAppDERS: IAppDERS) => {
       if (
@@ -132,4 +140,56 @@ export async function getDeDataMajorField(
     });
   }
   return majorData;
+}
+
+/**
+ * 将对象格式的查询参数转换为结构化的搜索条件数组
+ *
+ * @export
+ * @param {IParams} _params
+ * @return {*}  {ISearchCondField[]}
+ *
+ * @example
+ * 转换规则：
+ * 1. 仅处理键以'N_'开头且包含有效操作符后缀的参数
+ * 2. 从键中提取字段名（去除'N_'前缀和操作符后缀）
+ * 3. 仅当参数值不为null、undefined或空字符串时才生成条件
+ *
+ * 示例：
+ * 输入：{n_age_gt: 18, n_name_like: '慧', invalidKey: 'value'}
+ * 输出：[
+ *   {condtype: 'DEFIELD', fieldname: 'age', value: 18, condop: 'GT'},
+ *   {condtype: 'DEFIELD', fieldname: 'name', value: '慧', condop: 'LIKE'}
+ * ]
+ */
+export function paramsToSearchconds(_params: IParams): ISearchCondField[] {
+  const valueOPs: string[] = [];
+  for (const key in ValueOP) {
+    if (key !== ValueOP.EXISTS && key !== ValueOP.NOT_EXISTS) {
+      const value = ValueOP[key as keyof typeof ValueOP];
+      valueOPs.push(value);
+    }
+  }
+  const conds: ISearchCondField[] = [];
+  Object.keys(_params).forEach(_key => {
+    const value = _params[_key];
+    const tempKey = _key.toLocaleUpperCase();
+    let fieldname = '';
+
+    // 检查键是否以'N_'开头
+    const condop = valueOPs.find(filter => tempKey.endsWith(`_${filter}`));
+    if (tempKey.startsWith('N_') && condop) {
+      // 去除'N_'前缀与条件后缀
+      fieldname = _key.slice(2).slice(0, -`_${condop}`.length);
+    }
+    const isValue = value !== null && value !== undefined && value !== '';
+    if (fieldname && isValue && condop)
+      conds.push({
+        condtype: 'DEFIELD',
+        fieldname,
+        value,
+        condop: condop.toLocaleUpperCase() as ValueOP,
+      });
+  });
+  return conds;
 }

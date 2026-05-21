@@ -1,5 +1,5 @@
 window.Environment = {
-  appVersion: '0.7.41-alpha.21',
+  appVersion: '0.7.41-alpha.68',
   // 是否为开发模式
   dev: true,
   // 日志输出级别, 支持: TRACE,DEBUG,INFO,WARN,ERROR,SILENT

@@ -30,7 +30,7 @@ export class MobTabSearchViewEngine extends MobTabExpViewEngine {
    *   >}
    * @memberof MobTabSearchViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDETabSearchView,
     ITabSearchViewState,
     ITabSearchViewEvent
@@ -126,6 +126,27 @@ export class MobTabSearchViewEngine extends MobTabExpViewEngine {
       if (activeTabViewPanelModel) {
         this.onQuickSearchPlaceHolder(activeTabViewPanelModel);
       }
+      this.onQuickSearchQuery();
+    }
+  }
+
+  /**
+   * 给快捷搜索赋query参数
+   */
+  public onQuickSearchQuery(): void {
+    if (this.searchBar) {
+      const routeDepth = this.view.modal.routeDepth;
+      if (routeDepth) {
+        const { pathNodes } = ibiz.appUtil.route2routeObject();
+        const nextRouteObject = pathNodes[routeDepth];
+        if (
+          nextRouteObject &&
+          nextRouteObject.params &&
+          nextRouteObject.params.query
+        ) {
+          this.searchBar.state.query = nextRouteObject.params.query;
+        }
+      }
     }
   }
 
@@ -193,6 +214,7 @@ export class MobTabSearchViewEngine extends MobTabExpViewEngine {
     }
     if (key === SysUIActionTag.REFRESH) {
       await this.calcViewParams();
+      this.refresh();
       return null;
     }
     return super.call(key, args);
@@ -215,38 +237,6 @@ export class MobTabSearchViewEngine extends MobTabExpViewEngine {
       Object.assign(params, this.searchBar.getFilterParams());
     }
     return params;
-  }
-
-  /**
-   * 计算视图头部元素的显示与否
-   * 所有部件容器名称均为：view_部件名称
-   * - 注意 分页导航和分页搜索的默认布局不一致
-   *
-   *   分页导航：分页导航栏在视图头中
-   *
-   *   分页搜索：分页导航栏不在视图头中
-   * @protected
-   */
-  protected calcViewHeaderVisible(): boolean {
-    let showHeader: boolean = false;
-    const { model } = this.view;
-
-    // 标题栏
-    if (model.showCaptionBar) {
-      showHeader = true;
-    }
-    if (ibiz.env.isMob) {
-      if (this.isExistAndInLayout('lefttoolbar')) {
-        showHeader = true;
-      }
-
-      if (this.isExistAndInLayout('righttoolbar')) {
-        showHeader = true;
-      }
-    } else if (this.isExistAndInLayout('toolbar')) {
-      showHeader = true;
-    }
-    return showHeader;
   }
 
   /**

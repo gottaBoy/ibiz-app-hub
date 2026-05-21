@@ -7,7 +7,7 @@ import {
 import { IAppDECustomView } from '@ibiz/model-core';
 
 export class MobCustomViewEngine extends ViewEngineBase {
-  protected declare view: IViewController<
+  declare protected view: IViewController<
     IAppDECustomView,
     IViewState,
     IViewEvent

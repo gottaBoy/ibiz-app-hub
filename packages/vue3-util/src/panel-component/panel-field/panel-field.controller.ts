@@ -37,6 +37,20 @@ export class PanelFieldController
   unitName: string | undefined = undefined;
 
   /**
+   * @description 可冒泡点击事件的编辑器类型
+   * @static
+   * @memberof PanelFieldController
+   */
+  static enableClickType: string[] = [
+    'SPAN',
+    'SPAN_LINK',
+    'RAW',
+    'MOB2DBARCODEREADER',
+    'FIELD_CAROUSEL_PICTURE',
+    'FIELD_IMAGE_PICTURE_ONE',
+  ];
+
+  /**
    * @exposedoc
    * @description 值格式化
    * @readonly
@@ -159,7 +173,11 @@ export class PanelFieldController
     }
     // 初始化编辑器控制器,除了隐藏都会需要适配器
     if (this.model.editor && this.model.editor.editorType !== 'HIDDEN') {
-      this.editorProvider = await getEditorProvider(this.model.editor);
+      this.editorProvider = await getEditorProvider(
+        this.model.editor,
+        this.model,
+        this.panel.model,
+      );
       if (this.editorProvider) {
         this.editor = await this.editorProvider.createController(
           this.model.editor,
@@ -227,5 +245,29 @@ export class PanelFieldController
       panelItemEventName: PanelItemEventName.ENTER,
       event,
     });
+  }
+
+  /**
+   * @description 点击事件
+   * @param {MouseEvent} [event]
+   * @memberof PanelFieldController
+   */
+  onClick(event?: MouseEvent): void {
+    // 在移动端环境下，仅在以下情况下可向上冒泡
+    // 只读，禁用态时
+    // 或者编辑器不会抛值
+    if (ibiz.env.isMob) {
+      const disableEdit = this.state.readonly || this.state.disabled;
+      if (
+        !disableEdit &&
+        this.editor?.model.editorType &&
+        !PanelFieldController.enableClickType.includes(
+          this.editor.model.editorType,
+        )
+      ) {
+        event?.stopPropagation();
+      }
+    }
+    super.onClick(event);
   }
 }

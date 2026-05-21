@@ -9,6 +9,7 @@ import {
   CopyParamNode,
   DataSetNode,
   DEActionNode,
+  DebugParamNode,
   DELogicNode,
   EndNode,
   PrepareParamNode,
@@ -124,6 +125,9 @@ export class DELogic {
           break;
         case 'SORTPARAM': // 排序数组参数
           logicNode = new SortParamNode(node);
+          break;
+        case 'DEBUGPARAM': // 调试逻辑参数
+          logicNode = new DebugParamNode(node);
           break;
         default:
           throw new ModelError(

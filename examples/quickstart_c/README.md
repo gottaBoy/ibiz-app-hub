@@ -127,9 +127,19 @@ $ pnpm run preview
 ​        |─ ─ vite.config.ts                     vite 配置文件
 ```
 
+## 开发指南
+
+iBizAppHUB 提供了多层次、多维度的扩展机制，以满足不同层级的定制化需求。在实际开发中可根据具体需求选择合适的扩展方案，在灵活性与维护性之间取得最佳平衡，更多资源参见[全代码示例仓库](https://gitee.com/iBizModeling/ibiz-fullcode-example)。
+
 ## 更新日志
 
 每个版本的详细更改都记录在[发行说明](CHANGELOG.md)中。
+
+## 如何贡献
+
+如果你希望参与贡献，欢迎Pull Request，或通过自助服务群给我们报告 Bug。
+
+强烈推荐阅读 [《提问的智慧》](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way)(本指南不提供此项目的实际支持服务！)、[《如何向开源社区提问题》](https://github.com/seajs/seajs/issues/545) 和 [《如何有效地报告 Bug》](https://www.chiark.greenend.org.uk/~sgtatham/bugs-cn.html)、[《如何向开源项目提交无法解答的问题》](https://zhuanlan.zhihu.com/p/25795393)，更好的问题更容易获得帮助。
 
 ## 社区互助
 

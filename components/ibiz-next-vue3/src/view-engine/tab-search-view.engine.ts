@@ -30,7 +30,7 @@ export class TabSearchViewEngine extends TabExpViewEngine {
    *   >}
    * @memberof TabSearchViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDETabSearchView,
     ITabSearchViewState,
     ITabSearchViewEvent

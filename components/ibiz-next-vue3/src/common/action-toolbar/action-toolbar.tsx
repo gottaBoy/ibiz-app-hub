@@ -39,6 +39,20 @@ export const IBizActionToolbar = defineComponent({
     actionCallBack: {
       type: Function,
     },
+    direction: {
+      type: String as PropType<'horizontal' | 'vertical'>,
+      default: 'horizontal',
+    },
+    // 是否将 popover 的下拉列表插入至 body 元素，用于按钮模式下的分组显示
+    teleported: { type: Boolean, default: true },
+    // popover 出现位置，用于按钮模式下的分组显示
+    placement: {
+      type: String,
+    },
+    // 是否不换行，用于按钮模式
+    nowrap: {
+      type: Boolean,
+    },
   },
   setup(props, { emit }) {
     const ns = useNamespace('action-toolbar');
@@ -113,12 +127,46 @@ export const IBizActionToolbar = defineComponent({
       const { actionLevel } = item;
       return [
         ns.e('item'),
-        ns.is('disabled', false),
+        item.sysCss?.codeName,
         ns.em('item', `level-${actionLevel}`),
       ];
     };
 
     const popoverIndex = props.zIndex;
+
+    /**
+     * @description 绘制项内容
+     * @param {IAppDEUIActionGroupDetail} detail
+     * @returns {*}
+     */
+    const renderItemContent = (detail: IAppDEUIActionGroupDetail) => {
+      const caption =
+        detail.refUIActionGroup?.name ||
+        detail.refUIActionGroup?.id ||
+        detail.caption;
+      return [
+        <div
+          class={[
+            ns.em('item', 'icon'),
+            ns.is('has-caption', detail.showCaption && !!detail.caption),
+            ns.is('has-icon', detail.showIcon && !!detail.sysImage),
+          ]}
+        >
+          {detail.showIcon && detail.sysImage && (
+            <iBizIcon icon={detail.sysImage}></iBizIcon>
+          )}
+        </div>,
+        <div
+          class={[
+            ns.em('item', 'label'),
+            ns.is('has-caption', detail.showCaption && !!detail.caption),
+            ns.is('has-icon', detail.showIcon && !!detail.sysImage),
+          ]}
+        >
+          {caption}
+        </div>,
+      ];
+    };
 
     return {
       ns,
@@ -129,6 +177,7 @@ export const IBizActionToolbar = defineComponent({
       groupButtonRef,
       popoverVisible,
       handleClick,
+      renderItemContent,
       calcActionItemClass,
     };
   },
@@ -136,11 +185,12 @@ export const IBizActionToolbar = defineComponent({
     const details = this.actionDetails || [];
 
     const renderDivider = (isExpand: boolean) => {
+      const ishorizontal = isExpand && this.direction === 'horizontal';
       return (
         <el-divider
           class={this.ns.e('separator')}
           border-style='double'
-          direction={isExpand ? 'vertical' : 'horizontal'}
+          direction={ishorizontal ? 'vertical' : 'horizontal'}
         />
       );
     };
@@ -153,17 +203,18 @@ export const IBizActionToolbar = defineComponent({
       const actionGroup = detail.refUIActionGroup;
       if (!actionGroup?.uiactionGroupDetails?.length) return null;
       // 子项所有项都隐藏，父项也应该隐藏
-      const pvisible =
-        actionGroup.uiactionGroupDetails.findIndex(item => {
-          return this.actionsState[item.id!].visible === true;
-        }) !== -1;
+      const pvisible = actionGroup.uiactionGroupDetails.some(item => {
+        return this.actionsState[item.id!].visible;
+      });
       if (!pvisible) return null;
+      const ishorizontal = isExpand && this.direction === 'horizontal';
       return [
         detail.addSeparator && renderDivider(isExpand),
         <el-popover
-          teleported={false}
-          placement='right-start'
+          trigger='click'
+          teleported={ishorizontal}
           popper-class={this.ns.e('popover')}
+          placement={ishorizontal ? 'bottom' : 'right-start'}
           popper-options={{
             modifiers: [
               {
@@ -187,11 +238,17 @@ export const IBizActionToolbar = defineComponent({
                     this.ns.e('group-item'),
                   ]}
                 >
-                  <div class={this.ns.em('group-item', 'caption')}>
-                    <span>{actionGroup.id}</span>
+                  <div class={this.ns.em('group-item', 'content')}>
+                    <div class={this.ns.em('group-item', 'caption')}>
+                      {this.renderItemContent(detail)}
+                    </div>
                     <ion-icon
-                      class={this.ns.em('group-item', 'caption-icon')}
-                      name='chevron-forward-outline'
+                      class={this.ns.em('group-item', 'icon')}
+                      name={
+                        ishorizontal
+                          ? 'chevron-down-outline'
+                          : 'chevron-forward-outline'
+                      }
                     ></ion-icon>
                   </div>
                 </el-button>
@@ -200,7 +257,7 @@ export const IBizActionToolbar = defineComponent({
             default: () => {
               return renderActions(
                 actionGroup.uiactionGroupDetails || [],
-                isExpand,
+                false,
               );
             },
           }}
@@ -214,7 +271,11 @@ export const IBizActionToolbar = defineComponent({
     ): any => {
       return items.map(detail => {
         if (detail.detailType === 'DEUIACTIONGROUP' && detail.refUIActionGroup)
-          return renderActionGroup(detail);
+          return renderActionGroup(detail, isExpand);
+        const title =
+          isExpand && this.nowrap === true
+            ? detail.tooltip || detail.caption
+            : detail.tooltip;
         if (this.actionsState[detail.id!]?.visible) {
           return [
             detail.addSeparator && renderDivider(isExpand),
@@ -224,36 +285,11 @@ export const IBizActionToolbar = defineComponent({
               onClick={(e: MouseEvent): Promise<void> =>
                 this.handleClick(detail, e)
               }
-              title={showTitle(detail.tooltip)}
+              title={showTitle(title)}
               disabled={this.actionsState[detail.id!].disabled}
               class={this.calcActionItemClass(detail)}
             >
-              <div
-                class={[
-                  this.ns.em('item', 'icon'),
-                  this.ns.is(
-                    'has-caption',
-                    detail.showCaption && !!detail.caption,
-                  ),
-                  this.ns.is('has-icon', detail.showIcon && !!detail.sysImage),
-                ]}
-              >
-                {detail.showIcon && detail.sysImage && (
-                  <iBizIcon icon={detail.sysImage}></iBizIcon>
-                )}
-              </div>
-              <div
-                class={[
-                  this.ns.em('item', 'label'),
-                  this.ns.is(
-                    'has-caption',
-                    detail.showCaption && !!detail.caption,
-                  ),
-                  this.ns.is('has-icon', detail.showIcon && !!detail.sysImage),
-                ]}
-              >
-                {detail.showCaption ? detail.caption : ''}
-              </div>
+              {this.renderItemContent(detail)}
             </el-button>,
           ];
         }
@@ -300,7 +336,8 @@ export const IBizActionToolbar = defineComponent({
           }}
         </el-button>,
         <el-popover
-          placement='bottom-start'
+          placement={this.placement || 'bottom-start'}
+          teleported={this.teleported}
           virtual-ref={this.groupButtonRef}
           visible={this.popoverVisible}
           popper-class={this.ns.e('popover')}
@@ -318,7 +355,11 @@ export const IBizActionToolbar = defineComponent({
       // 按钮模式
       return (
         <div
-          class={[this.ns.b(), this.ns.m('buttons')]}
+          class={[
+            this.ns.b(),
+            this.ns.m('buttons'),
+            this.ns.is('nowrap', this.nowrap === true),
+          ]}
           onClick={(e): void => e.stopPropagation()}
         >
           {renderActions(this.expandDetails)}
@@ -353,13 +394,10 @@ export const IBizActionToolbar = defineComponent({
                   if (this.actionsState[detail.id!].visible) {
                     return (
                       <el-dropdown-item
-                        class={[
-                          this.ns.e('item'),
-                          this.ns.is('disabled', false),
-                        ]}
-                        title={showTitle(detail.tooltip)}
-                        disabled={this.actionsState[detail.id!].disabled}
                         command={detail}
+                        title={showTitle(detail.tooltip)}
+                        class={this.calcActionItemClass(detail)}
+                        disabled={this.actionsState[detail.id!].disabled}
                       >
                         {detail.showIcon && detail.sysImage && (
                           <iBizIcon icon={detail.sysImage}></iBizIcon>

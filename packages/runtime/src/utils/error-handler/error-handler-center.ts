@@ -1,4 +1,4 @@
-import { IErrorHandler } from '../../interface';
+import { IApiErrorHandlerCenter, IErrorHandler } from '../../interface';
 
 /**
  * 事件处理工具
@@ -7,8 +7,9 @@ import { IErrorHandler } from '../../interface';
  * @date 2022-09-21 18:09:31
  * @export
  * @class ErrorHandler
+ * @implements {IApiErrorHandlerCenter}
  */
-export class ErrorHandlerCenter {
+export class ErrorHandlerCenter implements IApiErrorHandlerCenter {
   /**
    * 处理器集合
    * @author lxm

@@ -59,6 +59,11 @@ export default {
           id: 'uiaction_group',
         },
         {
+          caption: '动态界面行为组',
+          appViewId: 'web.master_grid_column_dy_uiaction_group_exp',
+          id: 'dy_uiaction_group',
+        },
+        {
           caption: '行编辑',
           appViewId: 'web.master_grid_edit',
           id: 'edit',
@@ -114,9 +119,19 @@ export default {
           id: 'css',
         },
         {
+          caption: '注入属性',
+          appViewId: 'web.master_grid_property_injection',
+          id: 'property_injection',
+        },
+        {
           caption: '事件及调用',
           appViewId: 'web.master_grid_logic',
           id: 'event_and_call',
+        },
+        {
+          caption: '简略分页栏',
+          appViewId: 'web.master_simple_page_grid_view',
+          id: 'simplepage',
         },
         {
           caption: '显示模式',
@@ -147,6 +162,11 @@ export default {
           caption: '分组行模式',
           appViewId: 'web.master_grid_grouprowmode_exp',
           id: 'grouprowmode',
+        },
+        {
+          caption: '批操作工具栏显示模式',
+          appViewId: 'web.master_grid_batchtoolbarmode',
+          id: 'batchtoolbarmode',
         },
         {
           caption: '虚拟表格',

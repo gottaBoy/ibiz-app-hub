@@ -54,9 +54,10 @@ export const FormRawItem = defineComponent({
     }
     return (
       <iBizRawItem
-        class={this.ns.b()}
+        class={[this.ns.b(), ...this.controller.containerClass]}
         content={content}
         type={type}
+        rawItem={this.modelData}
         onClick={(event: MouseEvent) => this.controller.onClick(event)}
       ></iBizRawItem>
     );

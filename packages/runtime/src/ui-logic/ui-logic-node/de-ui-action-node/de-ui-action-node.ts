@@ -17,8 +17,13 @@ export class DEUIActionNode extends UILogicNode {
   declare model: IDEUIActionLogic;
 
   async exec(ctx: UILogicContext): Promise<void> {
-    const { dstAppDEUIActionId, dstDEUILogicParamId, dstAppDataEntityId } =
-      this.model;
+    const {
+      dstAppDEUIActionId,
+      dstDEUILogicParamId,
+      dstAppDataEntityId,
+      retDEUILogicParamId,
+    } = this.model;
+
     const { data, parameters } = ctx;
     if (!dstAppDEUIActionId) {
       throw new RuntimeModelError(
@@ -36,17 +41,8 @@ export class DEUIActionNode extends UILogicNode {
       }
     }
 
-    ibiz.log.debug(
-      ibiz.i18n.t('runtime.uiLogic.interfaceLogicNodeEntityInterfaceAction', {
-        id: this.model.id,
-        dstAppDEUIActionId,
-        dstAppDataEntityId,
-        dstDEUILogicParamId,
-      }),
-    );
-
-    await UIActionUtil.execAndResolved(
-      dstAppDEUIActionId!,
+    const res = await UIActionUtil.exec(
+      dstAppDEUIActionId,
       {
         ...parameters,
         context: ctx.context,
@@ -54,6 +50,21 @@ export class DEUIActionNode extends UILogicNode {
         data: actionData,
       },
       this.model.appId,
+    );
+
+    if (!res.cancel) {
+      ctx.params[retDEUILogicParamId!] = res.data;
+      ctx.setLastReturn(ctx.params[retDEUILogicParamId!]);
+    }
+
+    ibiz.log.debug(
+      ibiz.i18n.t('runtime.uiLogic.interfaceLogicNodeEntityInterfaceAction', {
+        id: this.model.id,
+        dstAppDEUIActionId,
+        dstAppDataEntityId,
+        dstDEUILogicParamId,
+      }),
+      ctx.params[retDEUILogicParamId!],
     );
   }
 }

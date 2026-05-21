@@ -14,6 +14,10 @@ export async function getEntitySchema(
   context: IContext,
   params: IParams = {},
 ): Promise<IData> {
+  // [特殊参数识别]删除界面使用视图参数srfdefdata
+  if (params && Object.prototype.hasOwnProperty.call(params, 'srfdefdata')) {
+    delete params.srfdefdata;
+  }
   const strParams = qs.stringify(params);
   const app = ibiz.hub.getApp(context.srfappid);
   const entity = await ibiz.hub.getAppDataEntity(entityId, context.srfappid);

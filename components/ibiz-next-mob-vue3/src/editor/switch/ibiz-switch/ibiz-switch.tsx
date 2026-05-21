@@ -4,6 +4,7 @@ import {
   getSwitchProps,
   useFocusAndBlur,
   useNamespace,
+  useFilterAttribute,
 } from '@ibiz-template/vue3-util';
 import './ibiz-switch.scss';
 import { SwitchEditorController } from '../switch-editor.controller';
@@ -13,6 +14,7 @@ import { SwitchEditorController } from '../switch-editor.controller';
  *
  * @description 使用van-switch组件，表示两种相互对立的状态间的切换，多用于触发「开/关」。支持编辑器类型包含：`移动端开关部件`
  * @primary
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops overflowMode | autoFocus
  * @ignoreemits enter | infoTextChange
  */
@@ -65,7 +67,7 @@ export const IBizSwitch = defineComponent({
           v-model={this.currentVal}
           disabled={this.disabled || this.readonly}
           onChange={this.handleChange}
-          {...this.$attrs}
+          {...useFilterAttribute(this.$attrs)}
         ></van-switch>
       </div>
     );

@@ -7,6 +7,37 @@
 
 ## [Unreleased]
 
+### Added
+
+- 新增应用实体AC模式界面行为组合并能力
+
+## [0.7.41-alpha.32] - 2025-10-16
+
+### Added
+
+- 新增应用代码表合并能力，通过用户标记dynamic_overlay:replace|merge指定合并规则
+
+## [0.7.41-alpha.31] - 2025-10-11
+
+### Added
+
+- 新增界面行为组动态合并逻辑，支持before/after/replace/delete4种操作(用户标记格式dynamic_overlay:操作类型:detailid)
+
+## [0.7.41-alpha.29] - 2025-09-30
+
+### Added
+
+- 应用菜单合并提供配置mergemenutag用于指定目标合并菜单名称
+- 应用提供config.common.mergeAppMenu参数值为disable时，关闭该应用的菜单合并
+
+## [0.7.41-alpha.28] - 2025-09-28
+
+### Added
+
+- 新增表单分页部件识别子应用数据关系部件合并逻辑
+- 增强关系部件模型合并逻辑
+- 增强树模型合并逻辑
+
 ## [0.7.41-alpha.11] - 2025-07-11
 
 ### Fixed

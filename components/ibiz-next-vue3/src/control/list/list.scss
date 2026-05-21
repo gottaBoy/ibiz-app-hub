@@ -25,6 +25,7 @@ $control-list-group-style2: (
     padding: 0 getCssVar(spacing, extra, tight);
     @include m(actions) {
       display: flex;
+      column-gap: getCssVar('spacing', 'extra', 'tight');
       justify-content: center;
       .#{bem(action-toolbar, item)} {
         margin: 0;
@@ -117,12 +118,18 @@ $control-list-group-style2: (
     width: 100%;
   }
 
-  @include b(control-list-content) {
-    flex-grow: 1;
-  }
 
   @include e(batchtoolbar) {
+    display: none;
     margin: getCssVar(spacing, tight) 0;
+    
+    @include when('show') {
+      display: block;
+    }
+  }
+
+  @include b(control-list-content) {
+    flex-grow: 1;
   }
 }
 
@@ -140,6 +147,12 @@ $control-list-group-style2: (
 @include b(control-list-scroll) {
   height: 100%;
   overflow: auto;
+  @include when(reverse-scroll) {
+    .#{bem(control-list, layout-flex)} {
+      display: flex;
+      flex-direction: column-reverse
+    }
+  }
 }
 
 @include b(control-list-group-content) {

@@ -63,6 +63,21 @@ export default {
           id: 'refreshmode',
         },
         {
+          caption: '列界面行为组',
+          appViewId: 'web.master_gantt_column_uiaction_group',
+          id: 'column_uiaction_group',
+        },
+        {
+          caption: '动态界面行为组',
+          appViewId: 'web.master_gantt_column_dy_uiaction_group_exp',
+          id: 'dy_uiaction_group',
+        },
+        {
+          caption: '指定展开图标列',
+          appViewId: 'web.master_gantt_column_expand_icon',
+          id: 'column_expand_icon',
+        },
+        {
           caption: '事件及调用',
           appViewId: 'web.master_gantt_event_and_call',
           id: 'event_and_call',

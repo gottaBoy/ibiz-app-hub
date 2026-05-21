@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Component, defineAsyncComponent } from 'vue';
 
 function calcAppViewId(tag: string): string {
@@ -26,9 +27,7 @@ export async function getAppViewComponent(
     case 'master_child_appc_view2':
       return defineAsyncComponent(
         () =>
-          import(
-            './master/master-child-appc-view-2/master-child-appc-view-2.vue'
-          ),
+          import('./master/master-child-appc-view-2/master-child-appc-view-2.vue'),
       );
     case 'welcome_appc':
       return defineAsyncComponent(
@@ -42,9 +41,7 @@ export async function getAppViewComponent(
     case 'master_child_appc_view3':
       return defineAsyncComponent(
         () =>
-          import(
-            './master/master-child-appc-view-3/master-child-appc-view-3.vue'
-          ),
+          import('./master/master-child-appc-view-3/master-child-appc-view-3.vue'),
       );
     case 'admin_appc':
       return defineAsyncComponent(() => import('./admin-appc/admin-appc.vue'));

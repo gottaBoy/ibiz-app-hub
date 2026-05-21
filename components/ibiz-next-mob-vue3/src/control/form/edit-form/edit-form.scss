@@ -1,3 +1,50 @@
+$control-edit-form: (
+  // 边距
+  spacing-topright-top: calc(#{getCssVar(view-page-caption, line-height)} + 2 * #{getCssVar(spacing, tight)}),
+  spacing-topright-right: 0px,
+  spacing-bottomright-bottom: 0px,
+  spacing-bottomright-right: 0px,
+  spacing-middleright-top: 50%,
+  spacing-middleright-right: 0px,
+);
+
 @include b(control-edit-form) {
   width: 100%;
+  height: 100%;
+  @include e(anchor) {
+    @include set-component-css-var('control-edit-form', $control-edit-form);
+
+    position: relative;
+
+    .van-index-anchor {
+      padding: 0;
+    }
+
+    // 右侧
+    @include m(middleright) {
+      .van-index-bar__sidebar {
+        top: getCssVar('control-edit-form', 'spacing-middleright-top');
+        right: getCssVar('control-edit-form', 'spacing-middleright-right');
+      }
+    }
+
+    // 右下角
+    @include m(bottomright) {
+      .van-index-bar__sidebar {
+        top: auto;
+        right: getCssVar('control-edit-form', 'spacing-bottomright-right');
+        bottom: getCssVar('control-edit-form', 'spacing-bottomright-bottom');
+        transform: none;
+      }
+    }
+
+    // 右上角
+    @include m(topright) {
+      .van-index-bar__sidebar {
+        top: getCssVar('control-edit-form', 'spacing-topright-top');
+        right: getCssVar('control-edit-form', 'spacing-topright-right');
+        transform: none;
+      }
+    }
+  }
 }

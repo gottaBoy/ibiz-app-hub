@@ -1,0 +1,32 @@
+$md-advaned-searchform: (
+  spacing-content-padding: getCssVar(spacing, base),
+  spacing-footer-padding: getCssVar(spacing, base),
+);
+@include b('md-advaned-searchform') {
+  @include set-component-css-var(
+    'md-advaned-searchform',
+    $md-advaned-searchform
+  );
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  @include e('searchform') {
+    flex: 1;
+    overflow: auto;
+    padding: getCssVar(md-advaned-searchform, spacing-content-padding);
+
+    &.#{bem(control-searchform)} {
+      background-color: getCssVar(control-search-form-bg-color);
+    }
+  }
+  @include e('footer') {
+    flex: none;
+    padding: getCssVar(md-advaned-searchform, spacing-footer-padding);
+    display: flex;
+    justify-content: space-between;
+    .van-button {
+      width: 48%;
+    }
+  }
+}

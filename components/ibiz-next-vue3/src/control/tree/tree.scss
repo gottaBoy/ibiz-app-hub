@@ -97,6 +97,7 @@ $control-treeview-tree: (
   }
   @include e(icon) {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     width: getCssVar(control-treeview-node, icon-width);
     height: getCssVar(control-treeview-node, icon-height);

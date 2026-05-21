@@ -1,3 +1,4 @@
+import { isNil } from 'ramda';
 import { RuntimeError } from '@ibiz-template/core';
 import {
   ViewController,
@@ -35,7 +36,7 @@ export class EditViewEngine extends DEMainViewEngine {
    *   >}
    * @memberof EditViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEEditView,
     IEditViewState,
     IEditViewEvent
@@ -177,7 +178,11 @@ export class EditViewEngine extends DEMainViewEngine {
         const data = event.data[0];
         this.view.state.srfactiveviewdata = data;
         if (Object.prototype.hasOwnProperty.call(data, 'srfreadonly')) {
-          this.view.context.srfreadonly = data.srfreadonly;
+          if (data.srfreadonly) {
+            this.view.context.srfreadonly = true;
+          } else if (isNil(this.view.context.srfreadonly)) {
+            this.view.context.srfreadonly = false;
+          }
         }
         evt.emit('onDataChange', { ...event, actionType: 'LOAD' });
       });

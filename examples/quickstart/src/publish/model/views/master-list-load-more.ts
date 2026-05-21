@@ -127,7 +127,7 @@ export default {
         },
       ],
       pagingMode: 3,
-      pagingSize: 10,
+      pagingSize: 5,
       hasWFDataItems: true,
       showHeader: true,
       navViewPos: 'NONE',

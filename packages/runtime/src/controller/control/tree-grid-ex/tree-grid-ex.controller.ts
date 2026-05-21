@@ -2,6 +2,9 @@ import {
   IDETreeColumn,
   IDETreeGridEx,
   IDETreeDataSetNode,
+  IDEUIActionGroup,
+  IDETreeNodeFieldColumn,
+  IDETreeNodeUAColumn,
 } from '@ibiz/model-core';
 import {
   RuntimeError,
@@ -30,7 +33,7 @@ import {
 } from './tree-grid-ex-column';
 import { TreeGridExRowState } from './tree-grid-ex-row.state';
 import { Srfuf } from '../../../service';
-import { calcDeCodeNameById } from '../../../model';
+import { calcDeCodeNameById, calcUIActionGroup } from '../../../model';
 import { TreeGridExNotifyState } from '../../constant';
 import { handleAllSettled } from '../../../utils';
 import { ControllerEvent, getDefaultValue, isValueChange } from '../../utils';
@@ -197,6 +200,36 @@ export class TreeGridExController<
   protected async initService(): Promise<void> {
     this.service = new TreeGridExService(this.model);
     await this.service.init(this.context);
+  }
+
+  /**
+   * @description 初始化界面行为组
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof TreeGridExController
+   */
+  protected async initUIActions(): Promise<void> {
+    await super.initUIActions();
+    // 收集所有遍历过程中的异步任务
+    const asyncTasks: Promise<IDEUIActionGroup>[] = [];
+    // 属性列界面行为组与操作列界面行为组
+    this.model.detreeNodes?.forEach(node => {
+      if (node.detreeNodeColumns?.length) {
+        node.detreeNodeColumns.forEach(
+          (column: IDETreeNodeFieldColumn | IDETreeNodeUAColumn) => {
+            if (column.deuiactionGroup) {
+              const task = calcUIActionGroup(
+                column.deuiactionGroup,
+                this.context,
+                this.params,
+              );
+              asyncTasks.push(task);
+            }
+          },
+        );
+      }
+    });
+    await Promise.all(asyncTasks);
   }
 
   /**

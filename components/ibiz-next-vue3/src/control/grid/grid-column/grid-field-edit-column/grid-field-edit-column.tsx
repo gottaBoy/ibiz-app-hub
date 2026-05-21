@@ -6,6 +6,7 @@ import {
   computed,
   PropType,
   nextTick,
+  renderSlot,
 } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { RuntimeError } from '@ibiz-template/core';
@@ -113,6 +114,35 @@ export const GridFieldEditColumn = defineComponent({
   },
   render() {
     const val = this.row.data[this.c.fieldName];
+    let content = null;
+    const editorSlot = `${this.controller.model.codeName}_editor`;
+    if (this.$slots[editorSlot]) {
+      content = renderSlot(this.$slots, editorSlot!, {
+        class: this.ns.e('editor'),
+        value: val,
+        data: this.row.data,
+        controller: this.c.editor,
+        overflowMode: this.c.grid.overflowMode,
+        onChange: this.rowDataChange,
+        onInfoTextChange: this.onInfoTextChange,
+        title: this.tooltip,
+        ...this.editorProps,
+        ...this.attrs,
+      });
+    } else if (this.c.editorProvider) {
+      content = h(resolveComponent(this.c.editorProvider.gridEditor), {
+        class: this.ns.e('editor'),
+        value: val,
+        data: this.row.data,
+        controller: this.c.editor,
+        overflowMode: this.c.grid.overflowMode,
+        onChange: this.rowDataChange,
+        onInfoTextChange: this.onInfoTextChange,
+        title: this.tooltip,
+        ...this.editorProps,
+        ...this.attrs,
+      });
+    }
 
     return (
       <iBizGridEditItem
@@ -129,19 +159,7 @@ export const GridFieldEditColumn = defineComponent({
           ...this.gridEditItemProps,
         }}
       >
-        {this.c.editorProvider &&
-          h(resolveComponent(this.c.editorProvider.gridEditor), {
-            class: this.ns.e('editor'),
-            value: val,
-            data: this.row.data,
-            controller: this.c.editor,
-            overflowMode: this.c.grid.overflowMode,
-            onChange: this.rowDataChange,
-            onInfoTextChange: this.onInfoTextChange,
-            title: this.tooltip,
-            ...this.editorProps,
-            ...this.attrs,
-          })}
+        {content}
       </iBizGridEditItem>
     );
   },

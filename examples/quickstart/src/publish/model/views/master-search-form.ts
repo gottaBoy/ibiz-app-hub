@@ -44,6 +44,11 @@ export default {
           id: 'filter',
         },
         {
+          caption: '转换参数模式',
+          appViewId: 'web.master_search_form_convertparammode',
+          id: 'filterparamconvertmode',
+        },
+        {
           caption: '自动搜索',
           appViewId: 'web.master_searchform_auto',
           id: 'auto_search',

@@ -31,6 +31,8 @@ export class DynaAuthGuard extends AuthGuard {
       );
       const tempApp = await helper.getAppModel();
       await this.initEnvironment(tempApp);
+      // 注册路由导航完成关闭模态类视图
+      ibiz.appUtil.registerAutoCloseOnNavEnd();
       const app = await ibiz.hub.getAppAsync(ibiz.env.appId);
       await AppHooks.initedApp.call({ context, app });
       const appModel = app.model;

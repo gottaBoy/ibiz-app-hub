@@ -29,7 +29,7 @@ type IAppDEMultiDataExpView = IAppDEExplorerView & IAppDEMultiDataView;
  * @extends {ViewEngineBase}
  */
 export class ExpViewEngine extends MDViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEMultiDataExpView,
     IExpViewState,
     IExpViewEvent

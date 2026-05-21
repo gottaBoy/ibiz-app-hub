@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, PropType, resolveComponent } from 'vue';
+import { defineComponent, h, PropType, resolveComponent } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import './form-item.scss';
 import { IDEFormItem } from '@ibiz/model-core';
@@ -37,6 +37,7 @@ export const FormItem = defineComponent({
     let editor = null;
     const editMode = this.controller.editor?.model?.editorParams?.editMode;
     const editorProps = {
+      style: this.controller.editor?.style,
       value: this.controller.value,
       data: this.controller.data,
       controller: this.controller.editor,

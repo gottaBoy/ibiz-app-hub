@@ -1,29 +1,32 @@
 import {
-  useControlController,
-  useNamespace,
   IBizIcon,
+  useNamespace,
+  IBizControlShell,
+  useControlController,
 } from '@ibiz-template/vue3-util';
 import {
-  computed,
-  defineComponent,
-  PropType,
+  h,
+  App,
   ref,
   VNode,
-  h as vueH,
+  computed,
+  PropType,
   createApp,
-  App,
   onUnmounted,
+  defineComponent,
 } from 'vue';
-import { IDETree } from '@ibiz/model-core';
+import { isNil } from 'ramda';
+import { IDETree, IDETreeNode } from '@ibiz/model-core';
 import {
-  IControlProvider,
-  ITreeController,
   ITreeNodeData,
   TreeController,
+  IControlProvider,
+  getControlPanel,
 } from '@ibiz-template/runtime';
 import { debounce } from 'lodash-es';
 import { createUUID } from 'qx-util';
 import { VsTreeComponent } from '@ibiz-template-package/vs-tree-ex';
+import { createVueApp } from '../../mob-app/create-vue-app';
 import './tree.scss';
 
 export const TreeControl = defineComponent({
@@ -59,9 +62,13 @@ export const TreeControl = defineComponent({
      * @default true
      */
     singleSelect: { type: Boolean, default: true },
+    /**
+     * @description 是否是导航内的（即树导航里的树）
+     */
+    navigational: { type: Boolean, default: undefined },
   },
   setup() {
-    const c = useControlController<TreeController>(
+    const c: TreeController = useControlController<TreeController>(
       (...args) => new TreeController(...args),
     );
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
@@ -85,9 +92,15 @@ export const TreeControl = defineComponent({
     // 启用面包屑功能
     const breadcrumb = ref(true);
 
+    // 隐藏显示面包屑
+    const hiddenBreadcrumb = ref(false);
+
+    const isHeaderStyle =
+      c.crumbShowMode === 'HEADERSTYLE' || c.state.navigational;
+
     // 创建图标节点
     const createIconNode = (customProps: IData) => {
-      const iop = vueH(IBizIcon, customProps);
+      const iop = h(IBizIcon, customProps);
       const vueApp = createApp(iop);
       const dom = document.createElement('span');
       vueApp.mount(dom);
@@ -107,6 +120,7 @@ export const TreeControl = defineComponent({
           : '';
         return {
           _id: node._id,
+          id: node._id,
           _uuid: node._uuid,
           _leaf: node._leaf,
           _text: node._text,
@@ -133,22 +147,40 @@ export const TreeControl = defineComponent({
     });
 
     /**
-     * 根据id查找树节点数据对象
-     * @export
-     * @param {string} key (数据的_uuid 或者 _id)
-     * @param {ITreeController} c
-     * @return {*}  {(ITreeNodeData | undefined)}
+     * @description 查找节点模型
+     * @param {string} key
+     * @returns {*}  {(IDETreeNode | undefined)}
      */
-    function findNodeData(
-      key: string,
-      controller: ITreeController,
-    ): ITreeNodeData | undefined {
-      const find = controller.state.items.find(item => item._id === key);
-      if (find) {
-        return find;
+    const findNodeModel = (key: string): IDETreeNode | undefined => {
+      const nodeData = c.getNodeData(key);
+      if (nodeData) return c.getNodeModel(nodeData._nodeId);
+    };
+
+    /**
+     * @description 查找节点视图布局面板
+     * @param {string} key
+     * @returns {*}
+     */
+    const findNodeLayoutPanel = (key: string) => {
+      const nodeData = c.getNodeData(key);
+      if (nodeData) {
+        const nodeModel = c.getNodeModel(nodeData._nodeId);
+        const layoutPanel = nodeModel ? getControlPanel(nodeModel) : undefined;
+        if (layoutPanel) return { nodeData, layoutPanel };
       }
-      return controller.state.items.find(item => item._uuid === key);
-    }
+    };
+
+    /**
+     * @description 更新vs树，防止树节点数据加载完后选中数据丢失
+     */
+    const updateUI = () => {
+      if (treeRef.value) {
+        treeRef.value.tree.tree.store.checkedKeys = checkedKeys.value;
+        treeRef.value.tree.tree.store.setDefaultChecked();
+        const list = treeRef.value.tree.tree.store.breadcrumb?.list || [];
+        hiddenBreadcrumb.value = list.length < 2;
+      }
+    };
 
     /**
      * 触发节点加载数据
@@ -162,13 +194,10 @@ export const TreeControl = defineComponent({
       callback: (nodes: IData[]) => void,
     ) => {
       // 没加载前拦截
-      if (!c.state.isLoaded) {
-        return;
-      }
-
+      if (!c.state.isLoaded) return;
       // 加载时拦截点击事件
       let nodes: ITreeNodeData[];
-      const nodeData = findNodeData(item.data._uuid, c)!;
+      const nodeData = c.getNodeData(item.data._uuid)!;
       // 有搜索值为搜索框搜索,必须请求后台数据过滤
       if (nodeData && nodeData._children && !c.state.query) {
         ibiz.log.debug('节点展开加载-本地', nodeData);
@@ -185,6 +214,7 @@ export const TreeControl = defineComponent({
         return;
       }
       callback(toElNodes(nodes));
+      updateUI();
     };
 
     /**
@@ -193,13 +223,11 @@ export const TreeControl = defineComponent({
      * @param {ITreeNodeData} nodeData
      */
     const onNodeCheck = (event: MouseEvent, opts: IData) => {
-      if (c.state.singleSelect) {
-        return;
-      }
       const { originData } = opts;
+      if (c.state.singleSelect || originData._disableSelect) return;
       // 选中相关处理
       const { selectedData } = c.state;
-      const nodeData = findNodeData(originData._uuid, c)!;
+      const nodeData = c.getNodeData(originData._uuid)!;
       // 选中里没有则添加，有则删除
       const filterArr = selectedData.filter(
         (item: IData) => item._id !== nodeData._id,
@@ -214,9 +242,6 @@ export const TreeControl = defineComponent({
     const onNodeClick = (event: MouseEvent, opts: IData) => {
       event.stopPropagation();
       const { originData } = opts;
-      if (!originData._leaf) {
-        return;
-      }
       onNodeCheck(event, opts);
       c.onTreeNodeClick(originData, event);
     };
@@ -226,15 +251,28 @@ export const TreeControl = defineComponent({
       c.state.mobExpandedKey = data._uuid || '';
     };
 
+    // 面包屑回退按钮点击事件
+    const handleCrumbBack = (_e: MouseEvent, crumbItem?: IData) => {
+      _e.preventDefault();
+      _e.stopPropagation();
+
+      const breads = crumbItem?.parent.list;
+      const prevIndex = breads.length - 2;
+      const prevNode = breads[prevIndex];
+      if (!prevNode) return;
+      const store = prevNode.store;
+      const _data = prevNode.store?.data;
+      breads.splice(prevIndex + 1);
+      store.update();
+      handleExpandedLastKey(_data);
+    };
+
     // 搜索
     const debounceSearch = debounce(async () => {
       if (treeRef.value) {
         // 获取最后展开的节点
-        const breadcrumbList =
-          treeRef.value?.tree?.tree?.store?.breadcrumb?.list;
-        const breadcrumbListLast = breadcrumbList
-          ? breadcrumbList[breadcrumbList.length - 1]
-          : null;
+        const list = treeRef.value?.tree?.tree?.store?.breadcrumb?.list;
+        const breadcrumbListLast = list ? list[list.length - 1] : null;
         if (breadcrumbListLast) {
           breadcrumbListLast.childNodes = [];
           treeRef.value?.tree?.tree?.store?.nodesChange([]);
@@ -291,23 +329,74 @@ export const TreeControl = defineComponent({
       }
     };
 
+    /**
+     * @description 绘制节点
+     * @param {HTMLDivElement} dom 父dom元素
+     * @param {IData} opts 配置
+     * @returns {*}
+     */
+    const renderNode = (dom: HTMLDivElement, opts: IData) => {
+      const { originData } = opts;
+      const nodeLayoutPanel = findNodeLayoutPanel(originData._id);
+      if (nodeLayoutPanel) {
+        const { nodeData, layoutPanel } = nodeLayoutPanel;
+        const nodePanel = h(IBizControlShell, {
+          data: nodeData,
+          modelData: layoutPanel,
+          context: c.context,
+          params: c.params,
+        });
+        const vueApp = createVueApp(nodePanel);
+        vueApp.mount(dom);
+        vueApps.push(vueApp);
+        return dom;
+      }
+    };
+
     const renderContent = (
-      h: (tag: string, opt: IData) => VNode,
+      _h: (tag: string, opt: IData) => VNode,
       opts: IData,
     ) => {
+      // 添加节点样式表
+      const { loadingEl, originData } = opts;
+      const nodeModel = findNodeModel(originData._id);
+      if (loadingEl && nodeModel?.sysCss?.cssName)
+        loadingEl.parentNode.parentNode.classList.add(
+          `${nodeModel.sysCss.cssName}`,
+        );
       if (c.state.singleSelect) handleSingleSelect(opts);
-      const { originData } = opts;
-      if (!originData._leaf) {
-        return h('div', {
-          text: ibiz.i18n.t('control.tree.subordinate'),
-          className: 'tree-button',
-          click: (e: Event, _opts: IData) => {
-            _opts.store.breadcrumb.list.push(_opts);
-            _opts.setExpand(true);
-            handleExpandedLastKey(originData);
-          },
-        });
+
+      const children: HTMLElement[] = [];
+
+      // 添加计数器
+      if (nodeModel?.counterId) {
+        const count = c.state.counterData[nodeModel.counterId];
+        if (!(isNil(count) || (nodeModel.counterMode === 1 && count === 0))) {
+          const child = document.createElement('div');
+          child.className = `ibiz-badge tree-counter ${ns.is('mob', true)}`;
+          child.innerText = count > 99 ? `${99}+` : count;
+          children.push(child);
+        }
       }
+
+      // 非叶子节点添加展开图标
+      if (!originData._leaf) {
+        const child = document.createElement('i');
+        child.className = 'van-icon van-icon-arrow';
+        children.push(child);
+      }
+
+      // 节点内容区绘制
+      return _h('div', {
+        className: `tree-button ${ns.b('node-expanded-btn')}`,
+        click: (e: Event, _opts: IData) => {
+          if (originData._leaf) return;
+          _opts.store.breadcrumb.list.push(_opts);
+          _opts.setExpand(true);
+          handleExpandedLastKey(originData);
+        },
+        children,
+      });
     };
 
     const customNodeClick = (event: MouseEvent, opts: IData) => {
@@ -322,17 +411,27 @@ export const TreeControl = defineComponent({
       // 继承父状态
       checkInherit: false,
       // 不能选择父节点
-      nocheckParent: true,
+      nocheckParent: false,
       rootName: c.model.detreeNodes?.find(item => item.rootNode)?.name,
+      virtual: {
+        showCount: 30, // 虚拟列表显示数量，太少时会导致虚拟列表无法滚动
+      },
+      renderNode,
       renderContent,
       customNodeClick,
-    };
+    } as IParams;
 
     if (breadcrumb.value) {
       Object.assign(options, {
         breadcrumb: {
           el: `#breadcrumb${uuid}`,
           link: (node: IData, data: IData) => {
+            const list = node.store?.breadcrumb?.list || [];
+            if (list.length < 2) {
+              hiddenBreadcrumb.value = true;
+              return null;
+            }
+            hiddenBreadcrumb.value = false;
             const content = document.createElement('span');
             const textDom = document.createElement('span');
             textDom.innerText = data.name;
@@ -347,9 +446,60 @@ export const TreeControl = defineComponent({
             content.onclick = () => handleExpandedLastKey.bind(this)(data);
             return content;
           },
+          separator: '>',
         },
       });
+
+      if (isHeaderStyle) {
+        Object.assign(options.breadcrumb, {
+          icon: (...args: IParams[]) => {
+            const crumbItem = args[2];
+            const content = document.createElement('span');
+            const iconDom = document.createElement('i');
+            iconDom.className = 'van-icon van-icon-arrow-left';
+            content.className = `${ns.bem('header', 'crumb', 'back-btn')}`;
+            content.appendChild(iconDom);
+            content.onclick = (_e: MouseEvent) =>
+              handleCrumbBack.bind(this)(_e, crumbItem);
+            return content;
+          },
+        });
+      }
     }
+
+    /**
+     * 滚动事件
+     * - 加载更多
+     */
+    const onScroll = debounce(
+      async (event: MouseEvent) => {
+        const { mobExpandedKey } = c.state;
+        // 当前展开节点默认是根节点
+        const expandNodeKey = mobExpandedKey || c.state.rootNodes[0]._uuid;
+        const nodeData = c.getNodeData(expandNodeKey);
+        if (!nodeData) return;
+        const infoItems = c.getLoadMoreInfoItems(nodeData._id);
+        if (!infoItems) return;
+        const result = infoItems.some(infoItem => {
+          return infoItem.curPage < infoItem.totalPage - 1;
+        });
+        const { scrollTop, clientHeight, scrollHeight } = event.target as IData;
+        // 滚动到底部且还有下一页数据时
+        if (result && scrollTop + clientHeight >= scrollHeight - 10) {
+          const childern = toElNodes(await c.loadNodes(nodeData, true));
+          // 如果不显示根节点并且当前展开是根节点时 nodeKey为 undefined
+          const nodeKey =
+            !c.model.rootVisible && !mobExpandedKey
+              ? undefined
+              : mobExpandedKey;
+          const node = treeRef.value.getNodeById(nodeKey);
+          // 在父节点上添加子数据
+          childern.forEach(child => node.append(child));
+        }
+      },
+      300,
+      { leading: true },
+    );
 
     onUnmounted(() => {
       // 卸载绘制的图标节点
@@ -362,27 +512,28 @@ export const TreeControl = defineComponent({
     return {
       c,
       ns,
-      treeRefreshKey,
-      treeData,
-      options,
-      breadcrumb,
-      checkedKeys,
       uuid,
+      options,
       treeRef,
+      treeData,
+      breadcrumb,
+      currentVal,
+      checkedKeys,
+      treeRefreshKey,
+      hiddenBreadcrumb,
+      isHeaderStyle,
+      onInput,
+      loadData,
+      onScroll,
       onNodeCheck,
       onNodeClick,
-      loadData,
       treeDataFormat,
-      currentVal,
-      onInput,
     };
   },
   render() {
     const slots: IData = {
       searchbar: () => {
-        if (!this.c.enableQuickSearch) {
-          return null;
-        }
+        if (!this.c.enableQuickSearch) return null;
         return (
           <van-search
             modelValue={this.c.state.query}
@@ -396,40 +547,55 @@ export const TreeControl = defineComponent({
     };
     const key = this.c.controlPanel ? 'tree' : 'default';
     slots[key] = () => {
-      return [
+      const content = [
         this.breadcrumb && (
-          <van-sticky>
-            <div
-              id={`breadcrumb${this.uuid}`}
-              class={[
-                this.ns.b('header'),
-                this.ns.is('no-root', !this.c.model.rootVisible),
-              ]}
-            ></div>
-          </van-sticky>
+          <div
+            class={[
+              this.ns.be('header', 'container'),
+              this.ns.is('hidden', this.hiddenBreadcrumb),
+            ]}
+          >
+            <van-sticky>
+              <div
+                id={`breadcrumb${this.uuid}`}
+                class={[
+                  this.ns.b('header'),
+                  this.ns.is('no-root', !this.treeData.length),
+                  this.ns.is('header-style', this.isHeaderStyle),
+                ]}
+              ></div>
+            </van-sticky>
+          </div>
         ),
         this.c.state.isCreated && this.c.state.isLoaded && (
           <vs-tree
             show-line
             ref='treeRef'
-            key={this.treeRefreshKey}
-            class={[this.ns.b('content')]}
             lazy={true}
-            strictLeaf={true}
-            options={this.options}
-            show-checkbox={!this.c.state.singleSelect}
             showIcon={true}
+            strictLeaf={true}
             data={this.treeData}
+            options={this.options}
             highlightCurrent={true}
+            key={this.treeRefreshKey}
+            class={this.ns.b('content')}
             checkedKeys={this.checkedKeys}
-            format={this.treeDataFormat}
+            expandKeys={this.c.state.expandedKeys}
+            show-checkbox={!this.c.state.singleSelect}
             load={this.loadData}
+            onScroll={this.onScroll}
             onCheck={this.onNodeCheck}
+            format={this.treeDataFormat}
           ></vs-tree>
         ),
       ];
+      return <div class={this.ns.b('container')}>{content}</div>;
     };
-    return <iBizControlBase controller={this.c}>{slots}</iBizControlBase>;
+    return (
+      <iBizControlBase v-loading={this.c.state.isLoading} controller={this.c}>
+        {slots}
+      </iBizControlBase>
+    );
   },
 });
 

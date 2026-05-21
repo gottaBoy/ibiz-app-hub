@@ -1,27 +1,27 @@
 import { PlatformType } from '../constant';
 
-const ua = window.navigator.userAgent.toLowerCase();
+export const ua = window.navigator.userAgent.toLowerCase();
 
 // android平台
-function isAndroid(): boolean {
+export function isAndroid(): boolean {
   return /Android|Adr/i.test(ua);
 }
 
 // ios平台
-function isIos(): boolean {
+export function isIos(): boolean {
   return /iPhone|iPod|iPad/i.test(ua);
 }
 // 微信生态
-function isWeChat(): boolean {
+export function isWeChat(): boolean {
   return /MicroMessenger/i.test(ua);
 }
 
 // 钉钉环境
-function isDingDing(): boolean {
+export function isDingDing(): boolean {
   return /DingTalk/i.test(ua);
 }
 // 微信小程序
-function isWxMp(): boolean {
+export function isWxMp(): boolean {
   return (
     /miniProgram/i.test(ua) ||
     (window as IData).__wxjs_environment === 'miniprogram'

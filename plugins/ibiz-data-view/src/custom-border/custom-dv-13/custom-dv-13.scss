@@ -11,7 +11,7 @@ $style-13: (
     @include e(border-svg) {
       @include m(container) {
         position: absolute;
-        top: 0;
+        top: 8px;
         left: 0;
         width: 100%;
         height: calc(100% - getCssVar(style-13,'offsetY'));

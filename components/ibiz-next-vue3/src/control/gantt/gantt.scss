@@ -187,6 +187,47 @@
   .#{bem('tree-grid-ex-edit-column', 'editor')} {
     min-height: 32px;
   }
+
+  .#{bem(tree-grid-ex-field-column)} {
+    // 存在行为组时，单元格内容垂直居中显示
+    @include when(has-action) {
+      .#{bem(tree-grid-ex-field-column-text-container)} {
+        overflow: hidden;
+      }
+      .#{bem(tree-grid-ex-field-column, text)} {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .#{bem(tree-grid-ex-field-column-toolbar-container)} {
+        flex-shrink: 1;
+        overflow: hidden;
+      }
+    }
+  }
+
+  // 显示列界面行为项
+  .xg-root .xg-table-body .xg-table-row {
+    .#{bem(action-toolbar,item)} {
+      &.is-expand {
+        display: inline-flex;
+        opacity: 1;
+      }
+    }
+
+    &:hover {
+      .#{bem(action-toolbar,item)} {
+        display: inline-flex;
+        opacity: 1;
+      }
+    
+      .#{bem(action-toolbar,separator)} {
+        display: inline-flex;
+        opacity: 1;
+      }
+    }
+  }
+
 }
 
 .xg-view-toolbar-switch-action {

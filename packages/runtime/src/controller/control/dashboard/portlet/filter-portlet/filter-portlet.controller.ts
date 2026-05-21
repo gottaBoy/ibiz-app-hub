@@ -1,4 +1,5 @@
 import { IDBFilterPortletPart, IDBPortletPart } from '@ibiz/model-core';
+import { recursiveIterate } from '@ibiz-template/core';
 import { PortletPartController } from '../portlet-part/portlet-part.controller';
 import { FilterPortletState } from './filter-portlet-part.state';
 import {
@@ -12,6 +13,7 @@ import {
   SearchCondEx2filterNode,
 } from '../../../search-bar';
 import {
+  filterDEDQConditions2SearchConds,
   filterPortletByConfig,
   filterPortletByID,
   generateCacheKy,
@@ -101,11 +103,36 @@ export class FilterPortletController
       this.filterConfig =
         customDashboard.portletFilter[this.model.id!]?.config || {};
       const cacheSearchConds = localStorage.getItem(this.searchCondCacheKey);
-      this.searchConds = cacheSearchConds
-        ? JSON.parse(cacheSearchConds)
-        : customDashboard.portletFilter[this.model.id!]?.searchconds;
+      this.searchConds =
+        cacheSearchConds && cacheSearchConds !== 'undefined'
+          ? JSON.parse(cacheSearchConds)
+          : customDashboard.portletFilter[this.model.id!]?.searchconds;
+      // 如果没有自定义条件，存在预置条件，则界面需绘制预置条件
       if (this.searchConds) {
         this.state.filterNode = SearchCondEx2filterNode(this.searchConds);
+      } else if (this.model.filterDEDQConditions) {
+        const modelSearchConds = filterDEDQConditions2SearchConds(
+          this.model.filterDEDQConditions,
+        );
+        if (modelSearchConds && modelSearchConds.length > 0) {
+          const tempFieldSearchConds: ISearchCondEx[] = [];
+          recursiveIterate(
+            modelSearchConds[0],
+            (item: ISearchCondEx) => {
+              if (item.condtype === 'DEFIELD') {
+                tempFieldSearchConds.push(item);
+              }
+            },
+            {
+              childrenFields: ['searchconds'],
+            },
+          );
+          this.state.filterNode = SearchCondEx2filterNode({
+            condop: 'AND',
+            condtype: 'GROUP',
+            searchconds: tempFieldSearchConds,
+          });
+        }
       }
     }
   }
@@ -136,7 +163,12 @@ export class FilterPortletController
     const items: IDBPortletPart[] = [];
     Object.values(this.dashboard.portlets).forEach(
       (portlet: IPortletController) => {
-        if (portlet.model && portlet.model.portletType !== 'FILTER') {
+        if (
+          portlet.model &&
+          portlet.model.portletType !== 'FILTER' &&
+          portlet.model.portletType !== 'RAWITEM' &&
+          portlet.model.portletType !== 'CONTAINER'
+        ) {
           items.push(portlet.model as IDBPortletPart);
         }
       },

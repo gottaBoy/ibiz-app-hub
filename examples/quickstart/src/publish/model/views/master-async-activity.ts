@@ -2,7 +2,7 @@ export default {
   deviewCodeName: 'async_activity',
   deviewId: 'be327ab0b7a764cac2567f9df400d345',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

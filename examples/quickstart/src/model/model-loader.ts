@@ -2,6 +2,7 @@ import {
   IAppBICube,
   IAppBIReport,
   IAppBIScheme,
+  IAppCodeList,
   IAppDataEntity,
   IAppView,
   IApplication,
@@ -467,4 +468,6 @@ export class ModelLoader implements ModelLoaderProvider {
         break;
     }
   }
+
+  mergeSubAppCodeList(codeList: IAppCodeList): void {}
 }

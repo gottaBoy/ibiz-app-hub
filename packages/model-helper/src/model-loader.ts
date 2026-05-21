@@ -7,6 +7,7 @@ import {
   IAppBICube,
   IAppBIReport,
   ISubAppRef,
+  IAppCodeList,
 } from '@ibiz/model-core';
 import { ModelHelper } from './model-helper';
 
@@ -78,5 +79,9 @@ export class ModelLoader implements ModelLoaderProvider {
     type: 'APP' | 'VIEW' | 'CTRL' | 'APPENTITY' | 'APPBIREPORT',
   ): Promise<IModel | undefined> {
     return this.helper.translationModelToDsl(data, type);
+  }
+
+  mergeSubAppCodeList(codeList: IAppCodeList): void {
+    this.helper.mergeSubAppCodeList(codeList);
   }
 }

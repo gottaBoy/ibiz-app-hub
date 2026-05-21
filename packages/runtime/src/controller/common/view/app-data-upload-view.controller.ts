@@ -1,4 +1,5 @@
 import { IAppView } from '@ibiz/model-core';
+import { SelectFileOpts } from '@ibiz-template/core';
 import {
   IAppDataUploadViewState,
   IViewController,
@@ -56,16 +57,18 @@ export class AppDataUploadViewController<
 
   /**
    * 选中导入文件并导入
+   * @param {SelectFileOpts} [fileOpts]
    * @author lxm
    * @date 2024-04-16 03:54:19
    * @return {*}
    */
-  async selectAndImport(): Promise<ImportDataResult> {
+  async selectAndImport(fileOpts?: SelectFileOpts): Promise<ImportDataResult> {
     const result = await selectAndImport({
       appDataEntity: this.state.appDataEntity,
       dataImport: this.state.deDataImport,
       context: this.context,
       params: this.params,
+      fileOpts,
     });
     // 异步导入的时候直接关闭视图
     if (result.isAsync === true) {

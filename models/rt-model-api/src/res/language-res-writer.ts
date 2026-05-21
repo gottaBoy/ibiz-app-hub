@@ -7,6 +7,7 @@ export class LanguageResWriter extends ModelObjectWriter {
 
     //let iPSLanguageRes = src
 
+    _.w(d, 'codeName', s);
     _.w(d, 'defaultContent', s);
     _.w(d, 'lanResTag', s);
     _.w(d, 'lanResType', s);

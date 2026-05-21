@@ -13,8 +13,9 @@ import { usePopstateListener } from '../../../util';
  * 移动端数据选择
  * @primary
  * @description  使用van-field组件和van-popup组件，用于在弹出列表中选择单项数据的场景。支持编辑器类型包含：`移动端数据选择`
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
- * @ignoreemits  infoTextChange | enter
+ * @ignoreemits  blur | focus | infoTextChange | enter
  */
 export const IBizPicker = defineComponent({
   name: 'IBizPicker',
@@ -97,13 +98,50 @@ export const IBizPicker = defineComponent({
       emit('change', targetData[c.textName]);
     };
 
+    /**
+     * @description 计算选中项数据
+     * @returns {*}  {IData[]}
+     */
+    const calcSelectItem = (): IData[] => {
+      const selectItems: IData[] = [];
+      if (curValue.value) {
+        const selectItem = {
+          srfkey: props.data[c.valueItem],
+          srfmajortext: curValue.value,
+          ...(c.model.valueType === 'OBJECT' &&
+          props.value &&
+          c.objectValueField
+            ? (props.value as IData)[c.objectValueField as string]
+            : {}),
+        };
+        if (c.deACMode && c.dataItems.length)
+          c.dataItems.forEach((item: IData) =>
+            Object.assign(selectItem, {
+              [item.appDEFieldId]: props.data[item.id],
+            }),
+          );
+        selectItems.push(selectItem);
+      }
+      return selectItems;
+    };
+
     // 打开数据选择视图
     const openPickUpView = async (e: MouseEvent) => {
       e.stopPropagation();
       if (props.disabled || props.readonly) {
         return;
       }
-      const res = await c.openPickUpView(props.data);
+      const res = await c.openPickUpView(
+        props.data,
+        JSON.stringify(calcSelectItem()),
+      );
+
+      // 单选时可通过选择视图清空选中数据
+      if (res && !res[0]) {
+        // eslint-disable-next-line no-use-before-define
+        onClear();
+      }
+
       if (res && res[0]) {
         await handleDataSelect(res[0]);
       }
@@ -229,7 +267,7 @@ export const IBizPicker = defineComponent({
 
     // 点击关闭
     const onClose = () => {
-      showPicker.value = true;
+      showPicker.value = false;
     };
 
     // 点击清除按钮
@@ -284,6 +322,13 @@ export const IBizPicker = defineComponent({
           {items.value.length !== 0 &&
             items.value.map((item: IData) => {
               if (item[c.textName]?.indexOf(searchValue.value) < 0) return;
+
+              let selected =
+                (item[c.textName] || item.srfmajortext) === curValue.value;
+              if (c.valueItem) {
+                selected =
+                  (item[c.keyName] || item.srfkey) === props.data[c.valueItem];
+              }
               return (
                 <div
                   class={ns.bem('pop', 'list', 'item')}
@@ -297,17 +342,15 @@ export const IBizPicker = defineComponent({
                     style={
                       item?.color || item?.bkcolor
                         ? ns.cssVarBlock({
-                            'select-option-item-color': `${item.color || ''}`,
-                            'select-option-item-bkcolor': `${
-                              item.bkcolor || ''
-                            }`,
+                            'pop-color-item': `${item.color || ''}`,
+                            'pop-color-item-bg': `${item.bkcolor || ''}`,
                           })
                         : ''
                     }
                   >
                     {item[c.textName]}
                   </div>
-                  {item.srfkey && item.srfkey === props.data[c.valueItem] && (
+                  {selected && (
                     <van-icon
                       class={ns.bem('pop', 'list', 'selected')}
                       name='success'
@@ -335,6 +378,10 @@ export const IBizPicker = defineComponent({
       showPicker.value = false;
     };
 
+    const onPopClose = () => {
+      searchValue.value = '';
+    };
+
     // 监听popstate事件
     usePopstateListener(closeDrawer);
 
@@ -360,12 +407,13 @@ export const IBizPicker = defineComponent({
       openPicker,
       renderPopHeader,
       renderPopContent,
+      onPopClose,
     };
   },
   render() {
     if (this.readonly) {
       return (
-        <div class={(this.ns.b(), this.ns.m('readonly'))}>
+        <div class={[this.ns.b(), this.ns.m('readonly')]}>
           {this.value || ''}
         </div>
       );
@@ -418,6 +466,7 @@ export const IBizPicker = defineComponent({
           position='bottom'
           teleport='body'
           style={{ height: '50%' }}
+          onClose={this.onPopClose}
         >
           <div class={this.ns.b('pop')}>
             {this.renderPopHeader()}

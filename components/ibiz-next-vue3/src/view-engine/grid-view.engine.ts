@@ -12,7 +12,7 @@ import {
 import { IAppDEGridView } from '@ibiz/model-core';
 
 export class GridViewEngine extends MDViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEGridView,
     IGridViewState,
     IGridViewEvent

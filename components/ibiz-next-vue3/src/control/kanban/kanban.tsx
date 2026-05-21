@@ -518,6 +518,9 @@ export const KanbanControl = defineComponent({
                     {c.model.groupUIActionGroup &&
                       group.groupActionGroupState && (
                         <iBizActionToolbar
+                          direction='vertical'
+                          placement='right-start'
+                          teleported={false}
                           actionDetails={
                             c.model.groupUIActionGroup!.uiactionGroupDetails
                           }
@@ -714,6 +717,7 @@ export const KanbanControl = defineComponent({
         </div>
         {this.c.state.enablePagingBar && (
           <iBizPagination
+            mode={this.c.paginationMode}
             size={this.c.state.size}
             total={this.c.state.total}
             curPage={this.c.state.curPage}

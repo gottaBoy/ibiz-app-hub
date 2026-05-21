@@ -27,4 +27,10 @@ export interface IFormDetailController
    * @memberof IFormDetailController
    */
   formStateNotify(state: FormNotifyState): Promise<void>;
+
+  /**
+   * @description 销毁方法
+   * @memberof IApiFormDetailController
+   */
+  destroy(): void;
 }

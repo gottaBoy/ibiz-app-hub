@@ -1,15 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router } from 'vue-router';
 import {
-  IAiChatParam,
-  IApiViewController,
   IAppUtil,
   IAuthResult,
+  getDeACMode,
+  IAiChatParam,
+  IApiViewController,
+  calcDeCodeNameById,
 } from '@ibiz-template/runtime';
-import { IChatMessage, RuntimeError } from '@ibiz-template/core';
-import { route2routePath, routePath2string } from '@ibiz-template/vue3-util';
+import { IChatMessage } from '@ibiz-template/core';
+import {
+  route2routePath,
+  routePath2string,
+  useUIStore,
+} from '@ibiz-template/vue3-util';
 
 export class AppUtil implements IAppUtil {
   /**
@@ -26,6 +33,45 @@ export class AppUtil implements IAppUtil {
    * @param {Router} router
    */
   constructor(protected router: Router) {}
+
+  /**
+   * @description 注册导航结束事件
+   * @param {(form: string, to: string) => void} callBack
+   * @memberof AppUtil
+   */
+  registerEventOnNavEnd(callBack: (form: string, to: string) => void): void {
+    this.router.afterEach((form, to) => {
+      if (callBack) callBack(form.fullPath, to.fullPath);
+    });
+  }
+
+  /**
+   * @description 注册路由导航完成关闭模态类视图
+   * @returns {*}  {void}
+   * @memberof AppUtil
+   */
+  registerAutoCloseOnNavEnd(): void {
+    if (!ibiz.config.common.autoCloseModalView || !this.router) return;
+    this.router.afterEach(() => {
+      if (this.viewCacheCenter.size === 0) return;
+      const cacheViews = [...this.viewCacheCenter.values()];
+      const validModalViews = cacheViews.filter((view: IData) => {
+        return (
+          view &&
+          view.state.isDestroyed === false &&
+          view.modal &&
+          view.modal.viewUsage === 2
+        );
+      });
+      if (validModalViews.length === 0) return;
+      setTimeout(() => {
+        validModalViews.forEach(
+          (view: IApiViewController) =>
+            view && view.closeView && view.closeView(),
+        );
+      }, 0);
+    });
+  }
 
   /**
    * @description 路由是否初始化构建完成
@@ -228,8 +274,81 @@ export class AppUtil implements IAppUtil {
    * @return {*}  {Promise<IChatMessage[]>}
    * @memberof AppUtil
    */
-  async openAiChat(params: IAiChatParam): Promise<IChatMessage[]> {
-    throw new RuntimeError(ibiz.i18n.t('app.noSupport'));
+  async openAiChat(chartParams: IAiChatParam): Promise<IChatMessage[]> {
+    const {
+      data,
+      view,
+      ctrl,
+      params,
+      context,
+      appDEACModeId,
+      appDataEntityId,
+    } = chartParams;
+    const deACMode = await getDeACMode(
+      appDEACModeId,
+      appDataEntityId,
+      context.srfappid,
+    );
+    if (!deACMode) return Promise.resolve([]);
+    const chatInstance = await ibiz.aiChatUtil.getAIChat();
+    const appDataEntityName = calcDeCodeNameById(appDataEntityId!);
+    let topicId = `mob@${appDataEntityId}@${appDEACModeId}@`;
+    topicId += context[appDataEntityName]
+      ? context[appDataEntityName]
+      : 'default';
+    const sessionid = ibiz.aiChatUtil.getChatSessionId('TOPIC', topicId);
+    const topicCaption = `[${deACMode.logicName}]${data?.srfmajortext || ''}`;
+    const tempParams = { ...params, ...{ srfactag: deACMode.codeName } };
+    const { zIndex } = useUIStore();
+    const containerZIndex = zIndex.increment();
+    const { containerOptions, topicOptions, chatOptions } =
+      await ibiz.aiChatUtil.getUIActionExAIChatParams(
+        context,
+        params,
+        data,
+        deACMode,
+        { chatInstance, view, ctrl },
+      );
+    const resourceOptions = await ibiz.aiChatUtil.getAIResourceOptions(
+      context,
+      params,
+    );
+    return new Promise(resolve => {
+      chatInstance.create({
+        mode: 'TOPIC',
+        resourceOptions,
+        containerOptions: {
+          zIndex: containerZIndex,
+          enableBackFill: false,
+          ...containerOptions,
+        },
+        topicOptions: {
+          appid: ibiz.env.appId,
+          id: topicId,
+          caption: topicCaption,
+          url: window.location.hash.substring(1),
+          type: context.srftopicpath || 'default',
+          ...topicOptions,
+        },
+        chatOptions: {
+          caption: deACMode.logicName,
+          context: { ...context },
+          params: tempParams,
+          appDataEntityId,
+          sessionid,
+          // 扩展参数
+          ...chatOptions,
+          // 关闭回调
+          closed: (
+            context: IContext,
+            params: IParams,
+            messages: IChatMessage[],
+          ) => {
+            resolve(messages);
+          },
+        },
+      });
+    });
   }
 
   /**
@@ -246,7 +365,7 @@ export class AppUtil implements IAppUtil {
    *   }}
    * @memberof AppUtil
    */
-  route2routeObject(isRouteModal?: boolean): {
+  route2routeObject(isRouteModal: boolean = false): {
     appContext?: IParams;
     pathNodes: {
       viewName: string;
@@ -255,7 +374,10 @@ export class AppUtil implements IAppUtil {
       srfnav?: string;
     }[];
   } {
-    const routePath = route2routePath(this.router.currentRoute.value as any);
+    const routePath = route2routePath(
+      this.router.currentRoute.value as any,
+      isRouteModal,
+    );
     return routePath;
   }
 

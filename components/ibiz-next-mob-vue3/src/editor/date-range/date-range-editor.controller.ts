@@ -32,6 +32,9 @@ export class DateRangeEditorController extends EditorController<IDateRange> {
     if (this.editorParams?.SHOWMODE === 'CALENDAR') {
       this.showmode = 'CALENDAR';
     }
+    if (this.editorParams?.showmode === 'CALENDAR') {
+      this.showmode = 'CALENDAR';
+    }
   }
 
   /**
@@ -55,5 +58,22 @@ export class DateRangeEditorController extends EditorController<IDateRange> {
       default:
         return 'YYYY-MM-DD hh:mm:ss';
     }
+  }
+
+  /**
+   * 值格式化
+   *
+   * @readonly
+   * @type {(string | undefined)}
+   * @memberof DateRangeEditorController
+   */
+  get valueFormat(): string | undefined {
+    if (this.model.dateTimeFormat) {
+      return this.model.dateTimeFormat;
+    }
+    if (super.valueFormat) {
+      return super.valueFormat;
+    }
+    return this.getFormatByType();
   }
 }

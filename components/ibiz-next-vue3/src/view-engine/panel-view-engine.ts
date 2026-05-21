@@ -15,7 +15,7 @@ export class PanelViewEngine extends ViewEngineBase {
    * @type {ViewController<IAppView, IPanelViewState, IPanelViewEvent>}
    * @memberof PanelViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppView,
     IPanelViewState,
     IPanelViewEvent

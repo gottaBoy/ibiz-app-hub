@@ -268,7 +268,7 @@ export class WizardPanelController
     }
     const wizardForm = this.model.dewizard.dewizardForms.find(
       (form: IDEWizardForm) => {
-        return form.stepTag === tag;
+        return form.formTag === tag;
       },
     );
     if (!wizardForm) {
@@ -316,6 +316,7 @@ export class WizardPanelController
         );
         if (activeForm) {
           this.state.activeFormTag = activeForm.formTag!;
+          this.tagHistory.push(activeForm.formTag!);
         }
       }
     }

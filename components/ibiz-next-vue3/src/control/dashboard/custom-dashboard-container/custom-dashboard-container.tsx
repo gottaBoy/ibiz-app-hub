@@ -71,7 +71,7 @@ export const CustomDashboardContainer: ReturnType<typeof defineComponent> =
       const getPortletModelByCodeName = (
         codeName: string,
       ): IDBPortletPart | undefined => {
-        const app = ibiz.hub.getApp(ibiz.env.appId);
+        const app = ibiz.hub.getApp(props.dashboard.model.appId);
         if (app.model.appPortlets) {
           const appPortlet = app.model.appPortlets.find(portlet => {
             return portlet.control?.codeName === codeName;
@@ -120,10 +120,17 @@ export const CustomDashboardContainer: ReturnType<typeof defineComponent> =
             return element.portletType === 'FILTER';
           },
         );
+        const noFilterModels = props.dashboard.model.controls?.filter(
+          (element: IModel) => {
+            return element.portletType !== 'FILTER';
+          },
+        );
         if (args.model && args.model.length > 0) {
           await props.dashboard.initPortlets(args.model);
         } else if (filterModels && filterModels.length > 0) {
+          // 未定制看板布局、存在过滤器模型时，先将过滤器初始化完成后再刷新受影响的门户部件
           await props.dashboard.initPortlets(filterModels);
+          await props.dashboard.initPortlets(noFilterModels || []);
         }
         await props.dashboard.initPortletsConfig(args.config);
       };

@@ -44,8 +44,7 @@ export const CustomDV12 = defineComponent({
     let domObserver: MutationObserver | null;
     const id = createUUID();
     const filterId = `borderr-box-12-filterId-${id}`;
-    const backgroundColor = 'var(--ibiz-screen-dashboard-custom-dv-bg)';
-
+    const backgroundColor = `var(${ns.cssVarName('screen-dashboard-custom-dv-bg')})`;
     /**
      *  初始化宽高
      * @param resize

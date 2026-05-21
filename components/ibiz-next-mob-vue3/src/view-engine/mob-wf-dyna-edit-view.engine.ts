@@ -19,7 +19,7 @@ import { WFActionButtonController } from '../panel-component/wf-action-button';
 import { MobEditViewEngine } from './mob-edit-view.engine';
 
 export class MobWFDynaEditViewEngine extends MobEditViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEMobWFDynaEditView,
     IWFDynaEditViewState,
     IWFDynaEditViewEvent

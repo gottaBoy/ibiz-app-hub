@@ -135,6 +135,10 @@ export default defineComponent({
       return props.controller.state.propertyData;
     });
 
+    const getAppID = (): string => {
+      return props.controller.context.srfappid || ibiz.env.appId;
+    };
+
     /**
      * 初始化界面行为
      *
@@ -143,11 +147,11 @@ export default defineComponent({
       for (let index = 0; index < items.value.length; index++) {
         const item = items.value[index];
         if (!uiActions.value.has(item.codename)) {
-          item.parampsdeuiactiontag = await calcUIActionTag(item);
+          item.parampsdeuiactiontag = await calcUIActionTag(item, getAppID());
           if (item.parampsdeuiactiontag) {
             const action = await getUIActionById(
               item.parampsdeuiactiontag,
-              ibiz.env.appId,
+              getAppID(),
             );
             if (action) {
               uiActions.value.set(item.codename, action);
@@ -274,6 +278,7 @@ export default defineComponent({
       const field = await getSchemaField(
         item,
         props.controller.state.schemaFields,
+        getAppID(),
       );
       if (field) {
         overlay = ibiz.overlay.createPopover(
@@ -314,6 +319,7 @@ export default defineComponent({
       const field = await getSchemaField(
         item,
         props.controller.state.schemaFields,
+        getAppID(),
       );
       overlay = ibiz.overlay.createPopover(
         (modal: IModal) =>
@@ -436,7 +442,7 @@ export default defineComponent({
           valueType: 'SIMPLE',
           editable: true,
           id: 'srfperiod',
-          appId: ibiz.env.appId,
+          appId: getAppID(),
         },
         allowEmpty: false,
         codeName: 'srfperiod',
@@ -446,10 +452,10 @@ export default defineComponent({
         layoutPos: {
           colMD: 24,
           layout: 'TABLE_24COL',
-          appId: ibiz.env.appId,
+          appId: getAppID(),
         },
         id: 'srfperiod',
-        appId: ibiz.env.appId,
+        appId: getAppID(),
       };
     };
 
@@ -479,7 +485,7 @@ export default defineComponent({
       const result = await UIActionUtil.exec(
         item.parampsdeuiactiontag,
         params,
-        ibiz.env.appId,
+        getAppID(),
       );
       if (!result.cancel && result.data) {
         actionPop.value.visible = false;
@@ -538,6 +544,7 @@ export default defineComponent({
           const field = await getSchemaField(
             item,
             props.controller.state.schemaFields,
+            getAppID(),
           );
           if (field) {
             item.value = {
@@ -1197,6 +1204,7 @@ export default defineComponent({
     const renderItemActoins = (item: IData) => {
       const actions: Array<JSX.Element | undefined> = [];
       // 界面行为
+      // eslint-disable-next-line no-shadow
       const uiActions = renderUIAction(item);
       if (item.pssysbicubemeasureid) {
         // 指标

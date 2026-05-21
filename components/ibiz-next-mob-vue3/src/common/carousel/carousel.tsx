@@ -1,5 +1,5 @@
 import { defineComponent, PropType } from 'vue';
-import { useNamespace } from '@ibiz-template/vue3-util';
+import { useNamespace, useFilterAttribute } from '@ibiz-template/vue3-util';
 import './carousel.scss';
 import { ISysImage } from '@ibiz/model-core';
 import { IIcon } from '@ibiz-template/runtime';
@@ -49,7 +49,7 @@ export const IBizCarousel = defineComponent({
           lazy-render
           show-indicators={this.showIndicators}
           touchable={this.touchable}
-          {...this.attrs}
+          {...useFilterAttribute(this.$attrs)}
         >
           {this.images &&
             this.images.map(image => {

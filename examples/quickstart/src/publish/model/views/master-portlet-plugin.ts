@@ -40,6 +40,34 @@ export default {
       showBusyIndicator: true,
       controls: [
         {
+          rawItem: {
+            contentType: 'INFO',
+            sysCss: {
+              cssName: 'portlet-plugin-info',
+            },
+            rawContent:
+              "{title:'门户部件插件可自定义门户部件内容的绘制，当标准逻辑无法满足门户部件绘制要求时，可以通过门户部件插件来实现。示例：在门户部件外围添加红色的边框，凸显内部的自定义内容，详情参见https://gitee.com/iBizModeling/ibiz-plugin-example/tree/main/packages/portlet-plugin'}",
+            id: 'dashboard_rawitem1',
+          },
+          layoutPos: {
+            colMD: 24,
+            layout: 'TABLE_24COL',
+          },
+          portletType: 'RAWITEM',
+          title: '直接内容',
+          autoLoad: true,
+          showBusyIndicator: true,
+          codeName: 'portlet_plugin_dashboard_rawitem1',
+          controlType: 'PORTLET',
+          appDataEntityId: 'web.master',
+          controlParam: {},
+          sysCss: {
+            cssName: 'portlet-plugin-info',
+          },
+          name: 'dashboard_rawitem1',
+          id: 'portlet_plugin_dashboard_rawitem1',
+        },
+        {
           layoutPos: {
             colMD: 24,
             layout: 'TABLE_24COL',
@@ -69,7 +97,7 @@ export default {
       controlParam: {
         id: 'dashboard',
       },
-      modelId: '8948e2154d6e1195bceb13fcc19908eb',
+      modelId: 'c19124d6b43094c8b32c3dc68602cd4e',
       modelType: 'PSSYSDASHBOARD',
       name: 'dashboard',
       id: 'web.master.dashboard2',

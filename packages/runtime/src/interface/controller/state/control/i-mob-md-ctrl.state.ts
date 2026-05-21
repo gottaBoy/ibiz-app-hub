@@ -2,7 +2,7 @@ import { ControlVO } from '../../../../service';
 import { IApiMobMDCtrlRowState, IApiMobMdCtrlState } from '../../../api';
 import { IButtonContainerState } from '../../common';
 import { IMobMDCtrlController } from '../../controller';
-import { IListState } from './i-list.state';
+import { IMDControlState } from './i-md-control.state';
 
 /**
  * @description 多数据视图行状态接口
@@ -37,10 +37,10 @@ export interface IMobMDCtrlRowState extends IApiMobMDCtrlRowState {
  * @description 移动端多数据部件状态接口
  * @export
  * @interface IMobMdCtrlState
- * @extends {IListState}
+ * @extends {IMDControlState}
  * @extends {IApiMobMdCtrlState}
  */
-export interface IMobMdCtrlState extends IListState, IApiMobMdCtrlState {
+export interface IMobMdCtrlState extends IMDControlState, IApiMobMdCtrlState {
   /**
    * @description 多数据视图行数据
    * @type {IMobMDCtrlRowState[]}

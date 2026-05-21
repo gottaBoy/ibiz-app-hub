@@ -44,24 +44,29 @@ export const FormButton = defineComponent({
           this.ns.b(),
           this.ns.m(this.modelData.codeName),
           this.ns.is('loading', this.controller.state.loading),
+          this.ns.is('readonly', this.controller.state.readonly),
           ...this.controller.containerClass,
         ]}
       >
         <van-button
           size='small'
-          type={convertBtnType(this.modelData.buttonStyle)}
+          type={convertBtnType(this.modelData)}
           onClick={this.controller.onClick.bind(this.controller)}
           loading={this.controller.state.loading}
           disabled={this.controller.state.disabled}
         >
           <div class={this.ns.b('content')}>
-            <iBizIcon
-              class={this.ns.bm('content', 'icon')}
-              icon={this.modelData.sysImage}
-            />
-            <span class={this.ns.bm('content', 'caption')}>
-              {this.modelData.showCaption ? this.captionText : null}
-            </span>
+            {this.modelData.sysImage ? (
+              <iBizIcon
+                class={this.ns.bm('content', 'icon')}
+                icon={this.modelData.sysImage}
+              />
+            ) : null}
+            {this.modelData.showCaption ? (
+              <span class={this.ns.bm('content', 'caption')}>
+                {this.captionText}
+              </span>
+            ) : null}
           </div>
         </van-button>
       </div>

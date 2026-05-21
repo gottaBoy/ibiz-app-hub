@@ -12,6 +12,7 @@ import {
   IApiOptViewCall,
 } from '@ibiz-template/runtime';
 import { IAppDEEditView } from '@ibiz/model-core';
+import { isNil } from 'ramda';
 
 export class OptViewEngine extends ViewEngineBase {
   /**
@@ -21,7 +22,7 @@ export class OptViewEngine extends ViewEngineBase {
    * @type {ViewController<IAppDEEditView, IOptViewState, IOptViewEvent>}
    * @memberof OptViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEEditView,
     IOptViewState,
     IOptViewEvent
@@ -113,7 +114,11 @@ export class OptViewEngine extends ViewEngineBase {
       const data = event.data[0];
       this.view.state.srfactiveviewdata = data;
       if (Object.prototype.hasOwnProperty.call(data, 'srfreadonly')) {
-        this.view.context.srfreadonly = data.srfreadonly;
+        if (data.srfreadonly) {
+          this.view.context.srfreadonly = true;
+        } else if (isNil(this.view.context.srfreadonly)) {
+          this.view.context.srfreadonly = false;
+        }
       }
       formDataStateChange(event);
     });

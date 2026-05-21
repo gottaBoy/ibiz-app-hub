@@ -10,3 +10,4 @@ export { RenewParamNode } from './renew-param-node/renew-param-node';
 export { CopyParamNode } from './copy-param-node/copy-param-node';
 export { SortParamNode } from './sort-param-node/sort-param-node';
 export { AppendParamNode } from './append-param-node/append-param-node';
+export { DebugParamNode } from './debug-param-node/debug-param-node';

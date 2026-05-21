@@ -1,0 +1,106 @@
+@include b('bi-number-report') {
+  width: 100%;
+  height: 100%;
+
+  @include e('content') {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    @include m('number-text') {
+      cursor: pointer;
+    }
+
+    @include m('yoy') {
+      display: flex;
+    }
+
+    @include m('qoq') {
+      display: flex;
+    }
+
+    @include m('compare-number') {
+      display: flex;
+      align-items: baseline;
+      width: 150px;
+    }
+
+    @include m('yoy-value') {
+      display: none;
+      margin-left: 10px;
+
+      @include when('show') {
+        display: block;
+      }
+    }
+
+    @include m('yoy-lastyearMonth') {
+      display: none;
+      flex: 1;
+      margin-left: 10px;
+
+      @include when('show') {
+        display: block;
+      }
+    }
+
+    @include m('qoq-lastMonth') {
+      display: none;
+      flex: 1;
+      margin-left: 10px;
+
+      @include when('show') {
+        display: block;
+      }
+    }
+
+    @include m('qoq-value') {
+      display: none;
+      margin-left: 10px;
+
+      @include when('show') {
+        display: block;
+      }
+    }
+
+    @include m('yoy-yoyTotal') {
+      display: none;
+      @include when('show') {
+        display: block;
+      }
+    }
+    @include m('qoq-qoqTotal') {
+      display: none;
+      @include when('show') {
+        display: block;
+      }
+    }
+  }
+
+  @include e('down') {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+
+    svg {
+      color: getCssVar(color, danger, active);
+    }
+  }
+
+  @include e('up') {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+
+    svg {
+      color: getCssVar(color, success, light, active);
+    }
+  }
+}

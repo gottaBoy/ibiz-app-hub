@@ -1,4 +1,9 @@
-import { IDEEditFormItem, IDEForm, IDEFormDetail } from '@ibiz/model-core';
+import {
+  IDEForm,
+  IDEFormItem,
+  IDEFormDetail,
+  IDEEditFormItem,
+} from '@ibiz/model-core';
 import { recursiveIterate } from '@ibiz-template/core';
 import { clone, isNil, isNotNil } from 'ramda';
 import { ControlService, ControlVO, UIMapField } from '../../../../service';
@@ -43,7 +48,9 @@ export class FormService<
     // 递归所有的表单项，设置默认值
     recursiveIterate(
       this.model,
-      (item: IDEEditFormItem) => {
+      (item: IDEFormItem, parent: IDEFormDetail) => {
+        // 重复器中的子表单属性项不应挂在主表单中
+        if (parent.detailType === 'MDCTRL') return true;
         if (item.detailType === 'FORMITEM') {
           const { createDVT, createDV, updateDVT, updateDV, valueFormat } =
             item;
@@ -70,6 +77,7 @@ export class FormService<
       },
       {
         childrenFields: ['deformPages', 'deformTabPages', 'deformDetails'],
+        isBreak: true,
       },
     );
   }
@@ -104,7 +112,9 @@ export class FormService<
     // 初始化表单属性key和界面key映射
     recursiveIterate(
       this.model,
-      (item: IDEFormDetail) => {
+      (item: IDEFormDetail, parent: IDEFormDetail) => {
+        // 重复器中的子表单属性项不应挂在主表单中
+        if (parent.detailType === 'MDCTRL') return true;
         if (item.detailType === 'FORMITEM' || item.detailType === 'MDCTRL') {
           const formItem = item as IDEEditFormItem;
           const uiKey = formItem.id!.toLowerCase();
@@ -121,6 +131,7 @@ export class FormService<
       },
       {
         childrenFields: ['deformPages', 'deformTabPages', 'deformDetails'],
+        isBreak: true,
       },
     );
   }

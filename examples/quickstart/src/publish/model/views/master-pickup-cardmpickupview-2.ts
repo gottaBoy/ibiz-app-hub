@@ -1,4 +1,5 @@
 export default {
+  openMode: 'POPUPMODAL',
   deviewCodeName: 'Pickup_cardmpickupview2',
   deviewId: '6877021404a82544a718aa1445072671',
   appWFId: 'workflow',

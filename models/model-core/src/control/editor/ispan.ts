@@ -24,6 +24,13 @@ export interface ISpan extends ICodeListEditor, ITextBase {
   precision?: number;
 
   /**
+   * 小数点位数[SCALE]
+   * @type {number}
+   * 来源  getScale
+   */
+  scale?: number;
+
+  /**
    * 支持链接视图[LINKVIEW]
    * @type {boolean}
    * 来源  isEnableLinkView

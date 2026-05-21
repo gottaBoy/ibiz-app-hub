@@ -43,6 +43,11 @@ export default {
           id: 'repeater_table_sort',
         },
         {
+          caption: '重复器_表格样式2',
+          appViewId: 'web.master_editform_repeater_table2',
+          id: 'repeater_table_style2',
+        },
+        {
           caption: '重复器-表单',
           appViewId: 'web.master_editform_repeater_form',
           id: 'repeater_form',

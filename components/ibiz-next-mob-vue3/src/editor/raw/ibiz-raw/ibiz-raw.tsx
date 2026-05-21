@@ -11,8 +11,8 @@ import './ibiz-raw.scss';
  * 直接内容
  * @primary
  * @description 用于绘制配置的直接内容，如HTML内容、视频内容、图片内容等。支持编辑器类型包含：`直接内容`
- * @editorparams {name:contenttype,parameterType:string,defaultvalue:TEXT,description:内容类型}
- * @editorparams {name:template,parameterType:string,description:配置的handlerBars模版，用于将组件输入参数中的value值解析并转换为HTML内容，实现动态内容的渲染}
+ * @editorparams {name:contenttype,parameterType:'IMAGE' | 'TEXT' | 'RAW' | 'HEADING1' | 'HEADING2' | 'HEADING3' | 'HEADING4' | 'HEADING5' | 'HEADING6' | 'PARAGRAPH' | 'HTML' | 'VIDEO' | 'DIVIDER' | 'INFO' | 'WARNING' | 'ERROR' | 'MARKDOWN' | 'PLACEHOLDER',defaultvalue:'TEXT',description:定义组件展示的内容类型。包含`IMAGE`（图片）、`TEXT`（文本）、`RAW`（直接内容）、`HEADING1`-`HEADING6`（各级标题）、`PARAGRAPH`（段落）、`HTML`（Html内容）、`VIDEO`（视频）、`DIVIDER`（分割线）、`INFO`（常规提示）、`WARNING`（警告提示）、`ERROR`（错误提示）、`MARKDOWN`（Markdown内容）、`PLACEHOLDER`（占位）}
+ * @editorparams {name:template,parameterType:string,description:配置的handlerBars模板内容，用于将组件输入参数中的value值解析并转换为HTML内容，实现动态内容的渲染}
  * @ignoreprops  autoFocus | overflowMode
  * @ignoreemits  infoTextChange | enter
  */

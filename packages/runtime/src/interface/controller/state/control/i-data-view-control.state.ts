@@ -24,4 +24,17 @@ export interface IDataViewControlState
    * @memberof IDataViewControlState
    */
   groupActionGroupState?: IButtonContainerState;
+
+  /**
+   * @description 多数视图可设置排序的数据项集合（移动端使用）
+   * @type {Array<{
+   *     value: string;
+   *     label: string;
+   *   }>}
+   * @memberof IDataViewControlState
+   */
+  sortDelistItems: Array<{
+    value: string;
+    label: string;
+  }>;
 }

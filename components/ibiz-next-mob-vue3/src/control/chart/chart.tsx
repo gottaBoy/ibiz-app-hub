@@ -5,10 +5,15 @@ import {
   onMounted,
   PropType,
   ref,
+  watch,
 } from 'vue';
 import { IDEChart } from '@ibiz/model-core';
 import { init } from 'echarts';
-import { ChartController, IControlProvider } from '@ibiz-template/runtime';
+import {
+  ChartController,
+  ControlVO,
+  IControlProvider,
+} from '@ibiz-template/runtime';
 import './chart.scss';
 
 const ChartControl = defineComponent({
@@ -40,11 +45,48 @@ const ChartControl = defineComponent({
      * @default true
      */
     loadDefault: { type: Boolean, default: true },
+    /**
+     * @description 是否是简单模式，即直接传入数据，不加载数据
+     */
+    isSimple: { type: Boolean, required: false },
+    /**
+     * @description 简单模式下传入的数据
+     */
+    data: { type: Array<IData>, required: false },
   },
-  setup() {
+  setup(props) {
     const c = useControlController((...args) => new ChartController(...args));
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
     const chartRef = ref();
+
+    // 本地数据模式
+    const initSimpleData = (): void => {
+      if (!props.data) {
+        return;
+      }
+      c.state.items = (props.data as IData[]).map(item => new ControlVO(item));
+      c.afterLoad({}, c.state.items);
+    };
+
+    c.evt.on('onCreated', async () => {
+      if (props.isSimple) {
+        initSimpleData();
+        c.state.isSimple = true;
+        c.state.isLoaded = true;
+      }
+    });
+
+    watch(
+      () => props.data,
+      () => {
+        if (props.isSimple) {
+          initSimpleData();
+        }
+      },
+      {
+        deep: true,
+      },
+    );
 
     // 容器大小变化监听器
     let resizeObserver: ResizeObserver;

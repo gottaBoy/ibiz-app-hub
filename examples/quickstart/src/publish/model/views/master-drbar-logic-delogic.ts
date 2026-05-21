@@ -36,7 +36,7 @@ export default {
         {
           caption: '默认',
           name: '默认',
-          id: 'a0aa99ad32515d58406',
+          id: 'nocache_refreshmode',
         },
       ],
       showTitle: true,
@@ -47,13 +47,13 @@ export default {
       editItemCaption: '基本信息',
       dedrctrlItems: [
         {
-          dedrbarGroupId: 'a0aa99ad32515d58406',
+          dedrbarGroupId: 'nocache_refreshmode',
           caption: '区划',
           appViewId: 'web.region_grid_view',
           id: 'region',
         },
         {
-          dedrbarGroupId: 'a0aa99ad32515d58406',
+          dedrbarGroupId: 'nocache_refreshmode',
           caption: '分类',
           enableMode: 'DELOGIC',
           appViewId: 'web.category_grid_view',
@@ -61,7 +61,7 @@ export default {
           id: 'category',
         },
         {
-          dedrbarGroupId: 'a0aa99ad32515d58406',
+          dedrbarGroupId: 'nocache_refreshmode',
           caption: '主数据',
           enableMode: 'DELOGIC',
           appViewId: 'web.master_main_grid',

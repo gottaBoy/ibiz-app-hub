@@ -19,20 +19,37 @@ import {
   nextTick,
   PropType,
   onMounted,
-  onUnmounted,
   defineComponent,
 } from 'vue';
 import { createUUID } from 'qx-util';
 import {
-  AppCounter,
   ViewCallTag,
   formatSeparator,
   IControlProvider,
   AppMenuController,
+  ScriptFactory,
 } from '@ibiz-template/runtime';
 import { useRoute } from 'vue-router';
 import { MenuDesign } from './custom-menu-design/custom-menu-design';
 import './app-menu.scss';
+
+/**
+ * @description 绘制成员的attrs
+ * @param {IAppMenu} model
+ * @param {IParams} params
+ * @returns {*}  {IParams}
+ */
+function renderAttrs(model: IAppMenu, params: IParams): IParams {
+  const attrs: IParams = {};
+  model.controlAttributes?.forEach(item => {
+    if (item.attrName && item.attrValue) {
+      attrs[item.attrName!] = ScriptFactory.execSingleLine(item.attrValue!, {
+        ...params,
+      });
+    }
+  });
+  return attrs;
+}
 
 /**
  * 递归生成菜单数据，递给 element 的 Menu 组件
@@ -243,11 +260,92 @@ function renderMenuItem(
 }
 
 /**
- * 绘制子菜单
- * @author lxm
- * @date 2022-08-16 14:08:29
+ * @description 绘制分组菜单（菜单样式为扩展视图1时呈现）
  * @param {IData} subMenu
- * @returns {*}
+ * @param {boolean} collapse
+ * @param {Namespace} ns
+ * @param {AppMenuController} c
+ * @param {IData} counterData
+ * @param {IData[]} saveConfigs
+ * @param {string[]} hideSeparator
+ * @returns {*}  {(VNode | undefined)}
+ */
+function renderGroupmenu(
+  subMenu: IData,
+  collapse: boolean,
+  ns: Namespace,
+  c: AppMenuController,
+  counterData: IData,
+  saveConfigs: IData[],
+  hideSeparator: string[],
+): VNode | undefined {
+  if (
+    !c.state.menuItemsState[subMenu.key].visible ||
+    !getMenuCustomVisible(subMenu.key, saveConfigs, hideSeparator)
+  )
+    return;
+  return (
+    <el-menu-item-group
+      title={subMenu.label}
+      class={[ns.b('groupmenu'), `${subMenu.sysCss?.cssName || ''}`]}
+    >
+      {{
+        title: () => {
+          const provider = c.itemProviders[subMenu.key];
+          if (provider && provider.renderText)
+            return renderByProvider(subMenu.key, c);
+          return [
+            <iBizIcon class={ns.e('icon')} icon={subMenu.image}></iBizIcon>,
+            subMenu.label,
+            counterData[subMenu.counterId] != null ? (
+              <iBizBadge
+                class={ns.e('counter')}
+                value={counterData[subMenu.counterId]}
+              />
+            ) : null,
+          ];
+        },
+        default: () =>
+          subMenu.children.map((item: IData) => {
+            if (item.children) {
+              return renderGroupmenu(
+                item,
+                collapse,
+                ns,
+                c,
+                counterData,
+                saveConfigs,
+                hideSeparator,
+              );
+            }
+            return renderMenuItem(
+              false,
+              item,
+              collapse,
+              ns,
+              c,
+              counterData,
+              saveConfigs,
+              hideSeparator,
+            );
+          }),
+      }}
+    </el-menu-item-group>
+  );
+}
+
+/**
+ * @description 绘制子菜单
+ * - 应用菜单样式为 扩展视图1 且从第二层菜单开始子菜单以分组样式呈现
+ * @param {boolean} isFirst
+ * @param {IData} subMenu
+ * @param {boolean} collapse
+ * @param {Namespace} ns
+ * @param {AppMenuController} c
+ * @param {IData} counterData
+ * @param {IData[]} saveConfigs
+ * @param {string[]} hideSeparator
+ * @returns {*}  {(VNode | undefined)}
  */
 function renderSubmenu(
   isFirst: boolean,
@@ -259,12 +357,21 @@ function renderSubmenu(
   saveConfigs: IData[],
   hideSeparator: string[],
 ): VNode | undefined {
-  if (!c.state.menuItemsState[subMenu.key].visible) {
+  if (
+    !c.state.menuItemsState[subMenu.key].visible ||
+    !getMenuCustomVisible(subMenu.key, saveConfigs, hideSeparator)
+  )
     return;
-  }
-  if (!getMenuCustomVisible(subMenu.key, saveConfigs, hideSeparator)) {
-    return;
-  }
+  if (c.model.appMenuStyle === 'EXTVIEW1' && !isFirst)
+    return renderGroupmenu(
+      subMenu,
+      collapse,
+      ns,
+      c,
+      counterData,
+      saveConfigs,
+      hideSeparator,
+    );
   return (
     <el-sub-menu
       class={[ns.b('submenu'), `${subMenu.sysCss?.cssName || ''}`]}
@@ -272,6 +379,7 @@ function renderSubmenu(
       teleported={true}
       popper-class={[
         ns.b('popup-container'),
+        ns.be('popup-container', c.model.appMenuStyle?.toLowerCase()),
         ns.b(`${c.model.codeName!.toLowerCase()}--popper`),
         `${
           c.model.sysCss?.cssName ? `${c.model.sysCss?.cssName}--popper` : ''
@@ -369,7 +477,9 @@ export const AppMenuControl = defineComponent({
     currentPath: { type: String },
   },
   setup(props) {
-    const c = useControlController((...args) => new AppMenuController(...args));
+    const c: AppMenuController = useControlController(
+      (...args) => new AppMenuController(...args),
+    );
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
     const menus = ref<IData[]>(getMenus(c.model.appMenuItems!));
 
@@ -381,9 +491,6 @@ export const AppMenuControl = defineComponent({
     const defaultOpens: Ref<string[]> = ref([]);
     // 路由对象
     const route = useRoute();
-    // 计数器数据
-    let counter: AppCounter | null = null;
-    const counterData = ref<IData>({});
 
     const key = ref(createUUID());
 
@@ -442,17 +549,10 @@ export const AppMenuControl = defineComponent({
       );
     }
 
-    const fn = (data: IData) => {
-      counterData.value = data;
-    };
-
     c.evt.on('onCreated', async () => {
       saveConfigs.value = c.saveConfigs;
-      const allItems = c.getAllItems();
       // 默认激活的菜单项
-      const defaultActiveMenuItem = allItems.find(item => {
-        return item.openDefault && !item.hidden;
-      });
+      const defaultActiveMenuItem = c.getDefaultOpenMenuItem();
       if (
         defaultActiveMenuItem &&
         !route?.params.view2 &&
@@ -465,7 +565,7 @@ export const AppMenuControl = defineComponent({
         defaultActive.value = activeMenu ? activeMenu.id! : '';
       }
       // 默认展开的菜单项数组
-      const defaultOpensArr = allItems.filter(item => {
+      const defaultOpensArr = c.getAllItems().filter(item => {
         return item.expanded && !item.hidden;
       });
       if (defaultOpensArr.length > 0) {
@@ -479,22 +579,6 @@ export const AppMenuControl = defineComponent({
         c.state.menuItemsState,
         saveConfigs.value,
       );
-    });
-
-    c.evt.on('onMounted', async () => {
-      // 计数器相关
-      const counterRefId = c.model.appCounterRefId;
-      if (counterRefId) {
-        counter = c.getCounter(counterRefId);
-        if (counter) {
-          counter.onChange(fn);
-        }
-      }
-    });
-
-    onUnmounted(() => {
-      counter?.offChange(fn);
-      counter?.destroy();
     });
 
     const menuMode = computed(() => {
@@ -588,24 +672,23 @@ export const AppMenuControl = defineComponent({
     };
 
     return {
-      menuRef,
-      menus,
       c,
-      key,
-      onClick,
       ns,
-      hasScroll,
-      defaultActive,
-      defaultOpens,
+      key,
+      menus,
+      menuRef,
       menuMode,
-      counterData,
+      hasScroll,
       saveConfigs,
-      configSaves,
-      configReset,
+      defaultOpens,
+      defaultActive,
+      hideSeparator,
       isShowCollapse,
       enableCustomized,
+      onClick,
       ellipsisSvg,
-      hideSeparator,
+      configSaves,
+      configReset,
     };
   },
   render() {
@@ -614,8 +697,9 @@ export const AppMenuControl = defineComponent({
         ref='menuRef'
         class={[
           this.ns.b(),
-          this.ns.b(`${this.c.model.codeName!.toLowerCase()}`),
           this.ns.m(this.menuMode),
+          this.ns.b(`${this.c.model.codeName!.toLowerCase()}`),
+          this.ns.b(this.c.model.appMenuStyle?.toLowerCase()),
           this.ns.is('collapse', this.collapse),
           this.ns.is('show-collapse', this.isShowCollapse),
           this.ns.is('show-menu-design', this.enableCustomized),
@@ -632,7 +716,7 @@ export const AppMenuControl = defineComponent({
               this.ns.b(`${this.c.model.codeName!.toLowerCase()}--popper`),
               `${
                 this.c.model.sysCss?.cssName
-                  ? `${this.c.model.sysCss?.cssName}--popper`
+                  ? `${this.c.model.sysCss.cssName}--popper`
                   : ''
               }`,
             ]}
@@ -646,6 +730,9 @@ export const AppMenuControl = defineComponent({
             ellipsis-icon={() => this.ellipsisSvg()}
             ellipsis={this.menuMode === 'horizontal'}
             {...this.$attrs}
+            {...renderAttrs(this.c.model, {
+              ...this.c.getEventArgs(),
+            })}
           >
             {{
               default: () => {
@@ -657,7 +744,7 @@ export const AppMenuControl = defineComponent({
                       this.collapse,
                       this.ns,
                       this.c,
-                      this.counterData,
+                      this.c.state.counterData,
                       this.saveConfigs,
                       this.hideSeparator,
                     );
@@ -668,7 +755,7 @@ export const AppMenuControl = defineComponent({
                     this.collapse,
                     this.ns,
                     this.c,
-                    this.counterData,
+                    this.c.state.counterData,
                     this.saveConfigs,
                     this.hideSeparator,
                   );

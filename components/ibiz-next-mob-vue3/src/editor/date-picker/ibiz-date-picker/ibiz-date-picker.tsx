@@ -1,5 +1,12 @@
 /* eslint-disable no-nested-ternary */
-import { ref, watch, defineComponent, onMounted, Ref } from 'vue';
+import {
+  ref,
+  watch,
+  defineComponent,
+  onMounted,
+  Ref,
+  onBeforeUnmount,
+} from 'vue';
 import {
   getDatePickerProps,
   getEditorEmits,
@@ -16,6 +23,7 @@ import { usePopstateListener } from '../../../util';
  * 移动端时间选择器
  * @primary
  * @description  基于rolldate的轻量时间选择器，默认时间格式为年月日-时分秒，可通过配置值格式化串来格式化日期。支持编辑器类型包含: `移动端时间选择器`、`移动端时间选择器（YYYY-MM-DD HH）`、`移动端时间选择器（YYYY-MM-DD HH:mm）`、`移动端时间选择器（HH:mm:ss）`、`移动端时间选择器（HH:mm）`、`移动端时间选择器（YYYY-MM-DD）`、`移动端时间选择器（YYYY-MM-DD HH:mm:ss）`
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
  * @ignoreemits  infoTextChange | enter
  */
@@ -151,6 +159,10 @@ export const IBizDatePicker = defineComponent({
           },
         });
       }
+    });
+
+    onBeforeUnmount(() => {
+      closeDrawer();
     });
 
     return {

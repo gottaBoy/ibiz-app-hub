@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'quick_search',
   deviewId: '6e04146dd2a9b1435f48cc78b14277c1',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

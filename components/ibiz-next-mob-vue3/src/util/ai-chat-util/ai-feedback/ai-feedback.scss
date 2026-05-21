@@ -1,0 +1,101 @@
+$ai-feedback: (
+  // 颜色
+  'color-header-close-icon': getCssVar(color, text, 3),
+  'color-group-title': getCssVar(color, text, 2),
+  'color-description-input-border': getCssVar(color, border),
+  // 间距
+  'spacing-padding': getCssVar('spacing', 'base'),
+  'spacing-group-title-padding': getCssVar('spacing', 'tight') 0,
+  'spacing-group-item-padding': getCssVar('spacing', 'tight'),
+  'spacing-description-title-padding': getCssVar('spacing', 'tight') 0,
+  'spacing-description-input-padding': getCssVar('spacing', 'extra-tight'),
+  // 宽高
+  'height-max-height': 90vh,
+  'height-content-max-height': 70vh,
+  'height-header-min-height': getCssVar('height-control', 'default'),
+  'width-group-item': 50%,
+  // 字体大小
+  'font-header-font-size': getCssVar('font-size', 'header', 6),
+  'font-header-close-icon-font-size': getCssVar('font-size', 'header', 3),
+  'font-content-font-size': getCssVar('font-size', 'regular'),
+  // 圆角
+  'radius-description-input-border-radius': getCssVar(border, radius, small),
+  // 其他
+  'gap': getCssVar('spacing', 'base-tight'),
+  'gap-footer': getCssVar('spacing', 'tight')
+);
+
+@include b(ai-feedback) {
+  @include set-component-css-var('ai-feedback', $ai-feedback);
+
+  display: flex;
+  flex-direction: column;
+  gap: getCssVar('ai-feedback', 'gap');
+  max-height: getCssVar('ai-feedback', 'height-max-height');
+  padding: getCssVar('ai-feedback', 'spacing-padding');
+  overflow-y: hidden;
+  @include e('header') {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: getCssVar('ai-feedback', 'height-header-min-height');
+    font-size: getCssVar('ai-feedback', 'font-header-font-size');
+    @include m('close-icon') {
+      font-size: getCssVar('ai-feedback', 'font-header-close-icon-font-size');
+      color: getCssVar('ai-feedback', 'color-header-close-icon');
+      cursor: pointer;
+    }
+  }
+  @include e(content) {
+    max-height: getCssVar('ai-feedback', 'height-content-max-height');
+    overflow-y: auto;
+    font-size: getCssVar('ai-feedback', 'font-content-font-size');
+    .#{bem('ai-feedback', 'group')} {
+      &:first-child .#{bem('ai-feedback','group','title')} {
+        padding-top: 0;
+      }
+    }
+  }
+  @include e(group) {
+    @include m(title) {
+      padding: getCssVar('ai-feedback', 'spacing-group-title-padding');
+      color: getCssVar('ai-feedback', 'color-group-title');
+    }
+    @include m('container') {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    @include m(item) {
+      width: getCssVar('ai-feedback', 'width-group-item');
+      padding: getCssVar('ai-feedback', 'spacing-group-item-padding');
+    }
+  }
+
+  @include e(description) {
+    @include m(title) {
+      padding: getCssVar('ai-feedback', 'spacing-description-title-padding');
+    }
+    @include m(input) {
+      border: 1px solid
+        getCssVar('ai-feedback', 'color-description-input-border');
+      border-radius: getCssVar(
+        'ai-feedback',
+        'radius-description-input-border-radius'
+      );
+
+      &.van-cell {
+        padding: getCssVar('ai-feedback', 'spacing-description-input-padding');
+        font-size: inherit;
+      }
+    }
+  }
+  @include e(footer) {
+    display: flex;
+    gap: getCssVar('ai-feedback', 'gap-footer');
+    justify-content: space-between;
+
+    @include m(button) {
+      flex: 1;
+    }
+  }
+}

@@ -39,7 +39,7 @@ export function useClickOutside(
 
   watch(
     elRef,
-    (newVal, oldVal) => {
+    (newVal: IData, oldVal) => {
       if (newVal !== oldVal) {
         if (isNil(newVal)) {
           destroy();

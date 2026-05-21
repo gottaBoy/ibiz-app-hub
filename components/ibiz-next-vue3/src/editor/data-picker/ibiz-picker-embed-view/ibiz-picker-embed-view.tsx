@@ -45,7 +45,7 @@ export const IBizPickerEmbedView = defineComponent({
 
     // 克隆的视图参数
     const cloneParams = computed(() => {
-      return { ...params.value };
+      return { checkstrictly: true, ...params.value };
     });
 
     // 监听表单数据，发生变化时重写计算视图参数

@@ -1,18 +1,29 @@
 $portlet-layout: (
-  header-height: rem(40px),
-  header-padding: 0 getCssVar(spacing, base),
-  header-margin: 0,
-  bg-color: getCssVar(color, bg, 1),
-  header-bg-color: transparent,
-  header-border-bottom: rem(1px) solid getCssVar(color, border),
-  caption-max-width: rem(300px),
-  caption-font-weight: 600,
-  caption-font-size: getCssVar(font-size, header, 5),
-  caption-color: getCssVar(color, text, 1),
-  content-bg-color: transparent,
-  content-padding: 0 0 getCssVar(border-radius, medium),
-  content-margin: 0,
-  border-radius: getCssVar(border-radius, medium),
+  // 颜色
+  color-bg-color: getCssVar(color, bg, 1),
+  color-header-bg-color: getCssVar(color, bg, 0),
+  color-caption-color: getCssVar(color, text, 1),
+  color-content-bg-color: transparent,
+
+  // 宽高
+  height-header-height: rem(50px),
+  width-caption-max-width: rem(300px),
+  
+  // 边距
+  spacing-header-padding: 0 getCssVar(spacing, base),
+  spacing-header-margin: 0,
+  spacing-content-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
+  spacing-content-margin: 0,
+
+  // 字体大小
+  font-caption-fontWeight: getCssVar(font-weight, regular),
+  font-caption-fontSize: getCssVar(font-size, header-6),
+
+  // 圆角
+  radius-border-radius: getCssVar(border-radius, medium),
+
+  // 其他
+  header-border-bottom: rem(1px) solid getCssVar(color, border)
 );
 
 @include b(portlet-layout) {
@@ -20,31 +31,44 @@ $portlet-layout: (
 
   width: 100%;
   height: 100%;
-  background-color: getCssVar(portlet-layout, bg-color);
-  border-radius: getCssVar(portlet-layout, border-radius);
+  background-color: getCssVar(portlet-layout, color-bg-color);
+  border-radius: getCssVar(portlet-layout, radius-border-radius);
 
   // 标题样式
   @include e(caption) {
-    max-width: getCssVar(portlet-layout, caption-max-width);
+    max-width: getCssVar(portlet-layout, width-caption-max-width);
 
     @include e(caption-text) {
-      font-size: getCssVar(portlet-layout, caption-font-size);
-      font-weight: getCssVar(portlet-layout, caption-font-weight);
-      color: getCssVar(portlet-layout, caption-color);
+      overflow: hidden;
+      font-size: getCssVar(portlet-layout, font-caption-fontSize);
+      font-weight: getCssVar(portlet-layout, font-caption-fontWeight);
+      color: getCssVar(portlet-layout, color-caption-color);
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
   @include e(toolbar) {
-    height: 100%;
     display: flex;
     align-items: center;
-  } 
+    height: 100%;
+  }
 
   // 无头部时的样式
   @include when(no-header) {
-    >.#{bem(portlet-layout-content)} {
+    > .#{bem(portlet-layout-content)} {
       height: 100%;
+      padding: 0;
     }
+  }
+
+  .van-index-anchor {
+    padding: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    background: inherit;
   }
 }
 
@@ -52,18 +76,37 @@ $portlet-layout: (
 @include b(portlet-layout-header) {
   @include flex(row, space-between);
 
-  height: getCssVar(portlet-layout, header-height);
-  padding: getCssVar(portlet-layout, header-padding);
-  margin: getCssVar(portlet-layout, header-margin);
-  line-height: getCssVar(portlet-layout, header-height);
-  background-color: getCssVar(portlet-layout, header-bg-color);
+  @include when(custom) {
+    position: relative;
 
+    @include e(left) {
+      z-index: 1;
+    }
+
+    @include e(right) {
+      z-index: 1;
+    }
+
+    @include e(bg) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  height: getCssVar(portlet-layout, height-header-height);
+  padding: getCssVar(portlet-layout, spacing-header-padding);
+  margin: getCssVar(portlet-layout, spacing-header-margin);
+  line-height: getCssVar(portlet-layout, height-header-height);
+  background-color: getCssVar(portlet-layout, color-header-bg-color);
 }
 
 // 内容区样式
 @include b(portlet-layout-content) {
-  height: calc(100% - getCssVar(portlet-layout, header-height));
-  padding: getCssVar(portlet-layout, content-padding);
-  margin: getCssVar(portlet-layout, content-margin);
-  background-color: getCssVar(portlet-layout, content-bg-color);
+  height: calc(100% - getCssVar(portlet-layout, height-header-height));
+  padding: getCssVar(portlet-layout, spacing-content-padding);
+  margin: getCssVar(portlet-layout, spacing-content-margin);
+  background-color: getCssVar(portlet-layout, color-content-bg-color);
 }

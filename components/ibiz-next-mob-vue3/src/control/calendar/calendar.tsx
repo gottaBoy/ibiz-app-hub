@@ -1,17 +1,29 @@
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
-import { computed, defineComponent, PropType, Ref, ref, VNode } from 'vue';
+import {
+  Ref,
+  ref,
+  VNode,
+  watch,
+  PropType,
+  computed,
+  defineComponent,
+} from 'vue';
 import { ILayoutPanel, ISysCalendar } from '@ibiz/model-core';
 import {
-  CalendarController,
-  ICalendarItemData,
   IControlProvider,
+  ICalendarItemData,
+  CalendarController,
 } from '@ibiz-template/runtime';
 import dayjs from 'dayjs';
+import { debounce } from 'lodash-es';
+import isBetween from 'dayjs/plugin/isBetween';
 import VueHashCalendar from 'vue3-hash-calendar';
 import 'vue3-hash-calendar/es/index.css';
 import { getCurSelectDayDate, getCurSelectMonthDate } from './date-util';
-import './calendar.scss';
 import { usePopstateListener } from '../../util';
+import './calendar.scss';
+
+dayjs.extend(isBetween);
 
 export const CalendarControl = defineComponent({
   name: 'IBizCalendarControl',
@@ -54,6 +66,26 @@ export const CalendarControl = defineComponent({
 
     const loadItems: Ref<ICalendarItemData[]> = ref([]);
 
+    // 当前日历显示类型
+    const currentType = ref(c.model.calendarStyle);
+
+    /**
+     * 无限滚动元素
+     */
+    const infiniteScroll = ref<HTMLDivElement>();
+
+    /**
+     * 禁用加载更多
+     */
+    const disabledLodeMore = computed(() => {
+      if (c.model.calendarStyle !== 'TIMELINE' || c.state.isLoading)
+        return true;
+      const result = !Object.values(c.loadMoreItems).some(
+        item => item.curPage < item.totalPage,
+      );
+      return result;
+    });
+
     // 显示底部弹窗
     const visible = ref<boolean>(false);
 
@@ -65,8 +97,8 @@ export const CalendarControl = defineComponent({
 
     // 存储月加载缓存
     const markDateItems: Ref<IData> = ref({});
-    //  加载的标记数据
 
+    //  加载的标记数据
     const loadMarkerItems: Ref<IData[]> = ref([]);
 
     const setMarkDate = (date: Date) => {
@@ -128,67 +160,45 @@ export const CalendarControl = defineComponent({
       };
     };
 
-    /**
-     * markerDate实际数据
-     *
-     * @author zk
-     * @date 2023-08-08 11:08:29
-     * @param {ICalendarItemData} data
-     * @return {*}  {IData}
-     */
-    const markerData = computed((): IData => {
-      // 过滤同一天数据 并且 是不同日历项类型
-      const filterSameDayAndUniqueType = (
-        itemData: IData,
-        index: number,
-        arr: IData[],
-      ) => {
-        const dateString = dayjs(new Date(itemData.beginTime)).format(
-          'YYYY-MM-DD',
-        );
-        // 判断属性 beginTime 是否在同一天 itemType 是否重复
-        const isSameDayAndUniqueType =
-          arr.findIndex(
-            item =>
-              dateString ===
-                dayjs(new Date(item.beginTime)).format('YYYY-MM-DD') &&
-              item.itemType === itemData.itemType,
-          ) === index;
-        return isSameDayAndUniqueType;
-      };
-
-      const date = Object.values(markDateItems.value)
-        .flat()
-        .filter(filterSameDayAndUniqueType)
-        .map(item => {
-          const _date = new Date(item.beginTime);
-          return {
-            date: item.beginTime,
-            type: item.itemType,
-            day: _date.getDate(),
-            month: _date.getMonth(),
-            year: _date.getFullYear(),
-            data: item,
-          };
-        });
-      return date;
-    });
-
-    c.evt.on('onMounted', () => {
-      loadMarkerData(c.state.selectedDate || new Date());
-      loadData(c.state.selectedDate || new Date());
-    });
-
-    const dateChange = (newDate: Date) => {
+    const dateChange = async (newDate: Date) => {
       c.state.selectedDate = newDate;
-      loadData(c.state.selectedDate);
+      await loadData(c.state.selectedDate);
       const items = markDateItems.value[dayjs(newDate).format('YYYY-MM')];
       // 加载过当前月份的marker则不加载
-      if (items) {
-        return;
-      }
-      loadMarkerData(c.state.selectedDate);
+      if (items) return;
+      await loadMarkerData(c.state.selectedDate);
     };
+
+    /**
+     * @description 处理滚动加载
+     * @returns {*}  {Promise<void>}
+     */
+    const handleScrollLoad = async (): Promise<void> => {
+      if (!infiniteScroll.value || disabledLodeMore.value) return;
+      const scrollTop = infiniteScroll.value.scrollTop;
+      const scrollHeight = infiniteScroll.value.scrollHeight;
+      const clientHeight = infiniteScroll.value.clientHeight;
+      // 滚动到底部加载更多
+      if (scrollHeight - scrollTop - clientHeight < 10)
+        await c.load({ isLoadMore: true });
+    };
+
+    watch(
+      () => c.state.selectedDate,
+      (newVal: Date | undefined, oldVal: Date | undefined) => {
+        if (
+          newVal &&
+          dayjs(newVal).format('YYYY-MM-DD') !==
+            dayjs(oldVal).format('YYYY-MM-DD')
+        ) {
+          calendar.value?.reset(c.state.selectedDate);
+        }
+      },
+      {
+        deep: true,
+        immediate: true,
+      },
+    );
 
     // 自定义选择日期
     const onCustom = () => {
@@ -211,6 +221,7 @@ export const CalendarControl = defineComponent({
       calendar.value.reset(time);
       visible.value = false;
     };
+
     const closeDrawer = () => {
       visible.value = false;
     };
@@ -218,35 +229,97 @@ export const CalendarControl = defineComponent({
     // 监听popstate事件
     usePopstateListener(closeDrawer);
 
+    /**
+     * @description 通过日期计算标记
+     * @param {IData} time
+     */
+    const calcMarkerByDate = (time: IData) => {
+      const date = dayjs()
+        .set('year', time.year)
+        .set('month', time.month)
+        .set('date', time.day);
+      // 根据时间范围过滤
+      const markers: ICalendarItemData[] = Object.values(markDateItems.value)
+        .flat()
+        .filter(item =>
+          date.isBetween(item.beginTime, item.endTime, 'D', '[]'),
+        );
+      // 相同类型的只要一条
+      const map: Map<string, ICalendarItemData> = new Map();
+      markers.forEach(item => {
+        if (!map.has(item.itemType)) map.set(item.itemType, item);
+      });
+      return Array.from(map.values());
+    };
+
+    /**
+     * 滑动方向变化
+     *
+     * @param {('left' | 'right' | 'up' | 'down')} direction
+     */
+    const handleSlidechange = (direction: 'left' | 'right' | 'up' | 'down') => {
+      if (currentType.value === 'WEEK') {
+        if (direction === 'left') {
+          // 跳到下一周（7天后）, 不能直接调用内置的上一周方法，如果跨月，同样会出现时间计算错误问题，需要自己计算时间，通过重置时间方法进行触发自动定位跳转
+          const nextweek = dayjs(c.state.selectedDate).add(7, 'day');
+          // 延迟执行，需要等动画执行完毕后再设置时间，触发自动定位，不然还是会显示异常
+          setTimeout(() => {
+            calendar.value.reset(nextweek.toDate());
+          }, 500);
+        }
+        if (direction === 'right') {
+          // 上一周，同上不能使用默认的问题，需要自己计算时间，通过时间定位方法进行跳转
+          const lastweek = dayjs(c.state.selectedDate).subtract(7, 'day');
+          setTimeout(() => {
+            calendar.value.reset(lastweek.toDate());
+          }, 500);
+        }
+      }
+    };
+
+    /**
+     * 日历展示类型切换
+     *
+     * @param {string} type
+     */
+    const onCalendarTypeChange = (type: string) => {
+      currentType.value = type.toUpperCase();
+    };
+
     return {
       c,
       ns,
-      markerData,
-      loadItems,
       visible,
       calendar,
+      loadItems,
       currentDate,
-      onConfirm,
-      calcItemStyle,
-      dateChange,
-      onCustom,
+      infiniteScroll,
+      disabledLodeMore,
+      currentType,
       toDay,
+      onCustom,
+      onConfirm,
+      dateChange,
+      closeDrawer,
+      calcItemStyle,
+      handleScrollLoad,
+      calcMarkerByDate,
+      handleSlidechange,
+      onCalendarTypeChange,
     };
   },
   render() {
     const renderMarker = (date: IData): VNode[] => {
-      const arr = this.markerData.filter(
-        (item: IData) =>
-          item.day === date.day &&
-          item.month === date.month &&
-          item.year === date.year,
-      );
-      return arr.map((item: IData) => {
-        const style = this.calcItemStyle(item.data);
+      const markers = this.calcMarkerByDate(date);
+      return markers.map(item => {
+        const style = this.calcItemStyle(item);
         return (
           <div
-            class={[this.ns.em('mark', 'item'), this.ns.em('mark', item.type)]}
             style={style}
+            class={[
+              this.ns.em('mark', 'item'),
+              this.ns.em('mark', item.itemType),
+            ]}
           ></div>
         );
       });
@@ -264,6 +337,7 @@ export const CalendarControl = defineComponent({
       });
       const itemClass = [
         this.ns.b('item'),
+        this.ns.bm('item', 'panel'),
         this.ns.is('active', findIndex !== -1),
       ];
       return (
@@ -286,7 +360,10 @@ export const CalendarControl = defineComponent({
     };
 
     // 绘制默认列表项
-    const renderDefaultItem = (item: ICalendarItemData): VNode => {
+    const renderDefaultItem = (
+      item: ICalendarItemData,
+      isLink: boolean = true,
+    ): VNode => {
       // 是否选中数据
       const findIndex = this.c.state.selectedData.findIndex(data => {
         return data.deData.srfkey === item.deData.srfkey;
@@ -300,7 +377,7 @@ export const CalendarControl = defineComponent({
         <van-cell
           class={itemClass}
           key={item.deData.srfkey}
-          is-link
+          is-link={isLink}
           title={item.text || ''}
           onClick={() => this.c.onRowClick(item)}
         ></van-cell>
@@ -355,7 +432,10 @@ export const CalendarControl = defineComponent({
     // 绘制顶部工具栏
     const renderHeaderToolbar = () => {
       return (
-        <div class={this.ns.b('header-toolbar')}>
+        <div
+          class={this.ns.b('header-toolbar')}
+          onClick={evt => evt.stopPropagation()}
+        >
           <div class={this.ns.be('header-toolbar', 'select-day')}>
             {dayjs(this.c.state.selectedDate).format('YYYY年MM月DD日')}
           </div>
@@ -377,66 +457,151 @@ export const CalendarControl = defineComponent({
       );
     };
 
+    // 绘制默认日历内容
+    const renderCalendarContent = (): VNode[] => {
+      return [
+        <div class={this.ns.b('content')}>
+          <VueHashCalendar
+            ref='calendar'
+            pickerType='date'
+            onChange={date => this.dateChange(date)}
+            default-datetime={this.c.state.selectedDate}
+            scroll-change-date={this.currentType !== 'WEEK'} // 周的时候滑动不改变值
+            show-week-view={this.c.model.calendarStyle === 'WEEK'}
+            onSlidechange={this.handleSlidechange}
+            onCalendarTypeChange={this.onCalendarTypeChange}
+          >
+            {{
+              day: ({ date }: { extendAttr: IData; date: IData }): VNode => {
+                return (
+                  <div class={this.ns.e('day')}>
+                    <span>{date?.day}</span>
+                    <div class={this.ns.e('mark')}>{renderMarker(date)}</div>
+                  </div>
+                );
+              },
+              action: () => {
+                return renderHeaderToolbar();
+              },
+            }}
+          </VueHashCalendar>
+        </div>,
+        <div class={this.ns.b('footer')}>
+          <van-tabs>
+            {this.c.model.sysCalendarItems?.map(calendarItem => {
+              let label = calendarItem.name!;
+              if (calendarItem.nameLanguageRes) {
+                label = ibiz.i18n.t(
+                  calendarItem.nameLanguageRes.lanResTag!,
+                  calendarItem.name,
+                );
+              }
+              return (
+                <van-tab
+                  title={label}
+                  title-class={this.ns.be('footer', 'tab-item')}
+                  title-style={{
+                    [`--${this.ns.b()}-tab-bg`]: calendarItem.bkcolor,
+                  }}
+                >
+                  <van-list>
+                    {renderCalendarListByItemType(calendarItem.itemType!)}
+                  </van-list>
+                </van-tab>
+              );
+            })}
+          </van-tabs>
+        </div>,
+        <van-popup
+          close-on-popstate={true}
+          v-model:show={this.visible}
+          style={{ height: 'auto' }}
+          teleport='body'
+          position='bottom'
+        >
+          <van-date-picker
+            v-model={this.currentDate}
+            onConfirm={this.onConfirm}
+            onCancel={this.closeDrawer}
+            title={ibiz.i18n.t('control.calendar.pickerDate')}
+          />
+        </van-popup>,
+      ];
+    };
+
+    // 绘制时光轴
+    const renderTimeLine = (): VNode | undefined => {
+      if (this.c.state.items.length === 0) return renderNoData();
+      const groupMap = new Map<string | number, ICalendarItemData[]>();
+      const groups: IData[] = [];
+
+      this.c.state.items.forEach(item => {
+        const value = item[this.c.groupTimeField];
+        if (value) {
+          if (!groupMap.has(value)) groupMap.set(value, []);
+          groupMap.get(value)!.push(item);
+        }
+      });
+
+      groupMap.forEach((children, key) => {
+        groups.push({
+          key: `${key}`,
+          caption: key
+            ? dayjs(key).format(this.c.timelineCaptionFormat)
+            : `${key}`,
+          children,
+        });
+      });
+
+      return (
+        <div
+          ref='infiniteScroll'
+          class={this.ns.b('timeline')}
+          onScroll={debounce(this.handleScrollLoad, 300)}
+        >
+          {groups.map(item => {
+            return (
+              <div class={this.ns.be('timeline', 'item')}>
+                <div class={this.ns.bem('timeline', 'item', 'timespan')}>
+                  {item.caption}
+                </div>
+                {item.children.map((child: ICalendarItemData) => {
+                  const model = this.c.model.sysCalendarItems?.find(
+                    (calendarItems: IData) => {
+                      return child.itemType === calendarItems.itemType;
+                    },
+                  );
+                  const style: IData = {};
+                  if (model?.bkcolor) {
+                    Object.assign(style, {
+                      [`--${this.ns.b()}-timeline-item-bg-color`]:
+                        model.bkcolor,
+                    });
+                  }
+                  return (
+                    <div
+                      class={this.ns.bem('timeline', 'item', 'content')}
+                      style={style}
+                    >
+                      {model?.layoutPanel
+                        ? renderPanelItem(child, model.layoutPanel)
+                        : renderDefaultItem(child, false)}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      );
+    };
+
     return (
       this.c.state.isCreated && (
         <iBizControlBase controller={this.c}>
-          <div class={this.ns.b('content')}>
-            <VueHashCalendar
-              ref='calendar'
-              show-week-view={true}
-              pickerType='date'
-              onChange={date => {
-                this.dateChange(date);
-              }}
-            >
-              {{
-                day: ({ date }: { extendAttr: IData; date: IData }): VNode => {
-                  return (
-                    <div class={this.ns.e('day')}>
-                      <span>{date?.day}</span>
-                      <div class={this.ns.e('mark')}>{renderMarker(date)}</div>
-                    </div>
-                  );
-                },
-                action: () => {
-                  return renderHeaderToolbar();
-                },
-              }}
-            </VueHashCalendar>
-          </div>
-          <div class={this.ns.b('footer')}>
-            <van-tabs>
-              {this.c.model.sysCalendarItems?.map(calendarItem => {
-                let label = calendarItem.name!;
-                if (calendarItem.nameLanguageRes) {
-                  label = ibiz.i18n.t(
-                    calendarItem.nameLanguageRes.lanResTag!,
-                    calendarItem.name,
-                  );
-                }
-                return (
-                  <van-tab title={label}>
-                    <van-list>
-                      {renderCalendarListByItemType(calendarItem.itemType!)}
-                    </van-list>
-                  </van-tab>
-                );
-              })}
-            </van-tabs>
-          </div>
-          <van-popup
-            close-on-popstate={true}
-            v-model:show={this.visible}
-            style={{ height: '70%' }}
-            teleport='body'
-            position='bottom'
-          >
-            <van-date-picker
-              v-model={this.currentDate}
-              onConfirm={this.onConfirm}
-              title={ibiz.i18n.t('control.calendar.pickerDate')}
-            />
-          </van-popup>
+          {this.c.model.calendarStyle === 'TIMELINE'
+            ? renderTimeLine()
+            : renderCalendarContent()}
         </iBizControlBase>
       )
     );

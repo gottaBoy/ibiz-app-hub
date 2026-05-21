@@ -1,4 +1,5 @@
 import { IViewConfig } from '@ibiz-template/runtime';
+import report_quick_create_view from './report-quick-create-view';
 import master_list_view from './master-list-view';
 import master_drbar_event_and_call from './master-drbar-event-and-call';
 import master_drbar_ability from './master-drbar-ability';
@@ -6,6 +7,7 @@ import master_logic_plugin from './master-logic-plugin';
 import master_tree_select from './master-tree-select';
 import master_editor_date_range from './master-editor-date-range';
 import master_tree_grid_ex_rowedit from './master-tree-grid-ex-rowedit';
+import master_codelist_federation from './master-codelist-federation';
 import master_kanban_dyna_visible from './master-kanban-dyna-visible';
 import master_tree_refreshmode from './master-tree-refreshmode';
 import master_calendar_rightnav_timeline from './master-calendar-rightnav-timeline';
@@ -16,6 +18,7 @@ import master_toolbar_base from './master-toolbar-base';
 import master_ctrl_event_trigger from './master-ctrl-event-trigger';
 import region_meditpanel_event_and_call from './region-meditpanel-event-and-call';
 import master_form_event_tab_exp_view from './master-form-event-tab-exp-view';
+import master_bi_report_multi_stack_strip from './master-bi-report-multi-stack-strip';
 import master_theme_plugin from './master-theme-plugin';
 import master_editform_anchor from './master-editform-anchor';
 import master_editor_spanlink from './master-editor-spanlink';
@@ -30,6 +33,8 @@ import master_kanban_swimlane_groupstyle2 from './master-kanban-swimlane-groupst
 import top_menu from './top-menu';
 import master_counter_exp_grid from './master-counter-exp-grid';
 import master_card_grid_layout from './master-card-grid-layout';
+import master_simple_page_grid_view from './master-simple-page-grid-view';
+import master_ctrl_engine_ctrl from './master-ctrl-engine-ctrl';
 import master_calendar_contextmenu_day from './master-calendar-contextmenu-day';
 import master_calendar_nav_week from './master-calendar-nav-week';
 import master_kanban_base_exp from './master-kanban-base-exp';
@@ -55,7 +60,9 @@ import master_panel_searchbuttons from './master-panel-searchbuttons';
 import master_drbar_count from './master-drbar-count';
 import category_grid_design from './category-grid-design';
 import master_calendar_exp_view from './master-calendar-exp-view';
+import master_editform_repeater_table2 from './master-editform-repeater-table-2';
 import master_kanban_draggable_edit from './master-kanban-draggable-edit';
+import master_treegridex_column_dy_uiaction_group from './master-treegridex-column-dy-uiaction-group';
 import master_editor_markdown from './master-editor-markdown';
 import psde_logic_edit_view from './psde-logic-edit-view';
 import region_tree_grid_eventtabexpview from './region-tree-grid-eventtabexpview';
@@ -85,9 +92,11 @@ import master_edit_view from './master-edit-view';
 import master_treegridex_nav_bottom from './master-treegridex-nav-bottom';
 import master_drbar_counter_disabled from './master-drbar-counter-disabled';
 import master_editor_dropdown_list from './master-editor-dropdown-list';
+import master_bi_report_multi_partition_line from './master-bi-report-multi-partition-line';
 import master_chart_grid_tab_exp_view from './master-chart-grid-tab-exp-view';
 import master_chart_exp_view_line from './master-chart-exp-view-line';
 import master_calendar_layout_month from './master-calendar-layout-month';
+import master_remaining_height_edit_view from './master-remaining-height-edit-view';
 import master_editor_switch from './master-editor-switch';
 import master_ui_action_backend from './master-ui-action-backend';
 import master_tree_appgloable_datasource from './master-tree-appgloable-datasource';
@@ -98,6 +107,7 @@ import master_data_picker_embed_view from './master-data-picker-embed-view';
 import master_grid_edit_cell from './master-grid-edit-cell';
 import master_card_empty from './master-card-empty';
 import master_list_empty from './master-list-empty';
+import master_ctrl_engine_search from './master-ctrl-engine-search';
 import master_kanban_group_draggable from './master-kanban-group-draggable';
 import master_list_rowdetail_nav from './master-list-rowdetail-nav';
 import master_calendar_logic_event from './master-calendar-logic-event';
@@ -112,6 +122,8 @@ import detail_meditpanel_embed from './detail-meditpanel-embed';
 import master_calendar_rightnav_month from './master-calendar-rightnav-month';
 import master_kanban_codelist_group from './master-kanban-codelist-group';
 import master_drtab_logic_script from './master-drtab-logic-script';
+import master_panel_field_injection from './master-panel-field-injection';
+import master_list_ext_view3_group_style2 from './master-list-ext-view-3-group-style-2';
 import master_wizard_event_tab_exp_view from './master-wizard-event-tab-exp-view';
 import master_ui_logic_link from './master-ui-logic-link';
 import master_wizard_state from './master-wizard-state';
@@ -119,6 +131,8 @@ import master_data_dashboard_carousel_grid from './master-data-dashboard-carouse
 import master_card_refreshmode_exp from './master-card-refreshmode-exp';
 import master_view_msg_pos from './master-view-msg-pos';
 import master_tabexppanel_base from './master-tabexppanel-base';
+import master_grid_column_render from './master-grid-column-render';
+import master_kanban_dy_uiaction_group_exp from './master-kanban-dy-uiaction-group-exp';
 import master_pickup_edit_view from './master-pickup-edit-view';
 import master_kanban_swimlane_enablegrouphidden from './master-kanban-swimlane-enablegrouphidden';
 import master_card_layout_exp from './master-card-layout-exp';
@@ -152,6 +166,7 @@ import master_kanban_page from './master-kanban-page';
 import master_grid_view from './master-grid-view';
 import master_de_action_plugin from './master-de-action-plugin';
 import master_kanban_cache_refreshmode from './master-kanban-cache-refreshmode';
+import master_tree_dy_uiaction_group from './master-tree-dy-uiaction-group';
 import master_de_logic_params from './master-de-logic-params';
 import master_horizontal_chart from './master-horizontal-chart';
 import region_tree_grid_noheader from './region-tree-grid-noheader';
@@ -183,6 +198,7 @@ import master_count_searchbar from './master-count-searchbar';
 import master_calendar_cache_tab_exp_view from './master-calendar-cache-tab-exp-view';
 import master_tab_exp_view from './master-tab-exp-view';
 import func_demo from './func-demo';
+import region_treegrid_dy_uiaction_group_exp from './region-treegrid-dy-uiaction-group-exp';
 import region_list_navparam_list_exp_view from './region-list-navparam-list-exp-view';
 import region_tree_grid_event from './region-tree-grid-event';
 import master_tree_counter_disabled from './master-tree-counter-disabled';
@@ -190,6 +206,7 @@ import master_list_paging_load from './master-list-paging-load';
 import region_treegrid_column_uiaction_group from './region-treegrid-column-uiaction-group';
 import master_calendar_layout_day from './master-calendar-layout-day';
 import master_calendar_nav_param_tab_exp_view from './master-calendar-nav-param-tab-exp-view';
+import master_dashboard_chart from './master-dashboard-chart';
 import master_card_built_in_toolbar_exp from './master-card-built-in-toolbar-exp';
 import master_panel_attr from './master-panel-attr';
 import master_grid_export from './master-grid-export';
@@ -210,11 +227,14 @@ import master_toolbar from './master-toolbar';
 import region_grid_navparam_grid_exp_view from './region-grid-navparam-grid-exp-view';
 import master_searchbar from './master-searchbar';
 import master_chart_group_mode_tab_exp_view from './master-chart-group-mode-tab-exp-view';
+import ua_group_detail_edit_view from './ua-group-detail-edit-view';
 import master_calendar_daterange from './master-calendar-daterange';
+import master_kanban_swimlane_dy_uiaction_group_embed from './master-kanban-swimlane-dy-uiaction-group-embed';
 import master_drtab_counter_disabled from './master-drtab-counter-disabled';
 import master_calendar_showmode from './master-calendar-showmode';
 import master_calendar_multiple_data_week from './master-calendar-multiple-data-week';
 import master_editor_date_picker from './master-editor-date-picker';
+import master_card_batchtoolbarmode from './master-card-batchtoolbarmode';
 import master_card_default_style from './master-card-default-style';
 import master_view_open_mode from './master-view-open-mode';
 import master_codelist_tabexpview from './master-codelist-tabexpview';
@@ -230,10 +250,12 @@ import master_list_load_more from './master-list-load-more';
 import master_counter_plugin from './master-counter-plugin';
 import master_data_picker_select_view from './master-data-picker-select-view';
 import master_ui_logic_advanced from './master-ui-logic-advanced';
+import master_de_action_expand_edit_view from './master-de-action-expand-edit-view';
 import master_grid_view_read from './master-grid-view-read';
 import master_card_showmode_exp from './master-card-showmode-exp';
 import master_calendar from './master-calendar';
 import master_pickup_grid_view from './master-pickup-grid-view';
+import master_full_code_slot_custom_view from './master-full-code-slot-custom-view';
 import master_kanban_cssandicon from './master-kanban-cssandicon';
 import region_tree_grid_enable from './region-tree-grid-enable';
 import master_drtab_left from './master-drtab-left';
@@ -248,6 +270,7 @@ import master_chart_nav_param_chart_exp_view from './master-chart-nav-param-char
 import master_searchform_auto from './master-searchform-auto';
 import master_tree_cascadeselectedit from './master-tree-cascadeselectedit';
 import master_editor_html from './master-editor-html';
+import master_grid_column_dy_uiaction_group from './master-grid-column-dy-uiaction-group';
 import master_tree_parent_datasource from './master-tree-parent-datasource';
 import master_calendar_week from './master-calendar-week';
 import master_pivottable from './master-pivottable';
@@ -263,21 +286,26 @@ import master_drtab_bottom from './master-drtab-bottom';
 import master_card_navexp_exp from './master-card-navexp-exp';
 import region_tree_grid_call from './region-tree-grid-call';
 import master_grid_localsort from './master-grid-localsort';
+import region_treegrid_dy_uiaction_group from './region-treegrid-dy-uiaction-group';
 import master_default_date_calendar_view_custom from './master-default-date-calendar-view-custom';
 import master_data_dashboard from './master-data-dashboard';
+import master_formitem_update from './master-formitem-update';
 import master_list_auto_group from './master-list-auto-group';
 import region_tree_grid_rightnav from './region-tree-grid-rightnav';
 import master_cache_tab_exp_view from './master-cache-tab-exp-view';
+import master_panelitem_render from './master-panelitem-render';
 import region_m_pickup_view2 from './region-m-pickup-view-2';
 import region_tree_grid_defaultsort from './region-tree-grid-defaultsort';
 import master_chart_view from './master-chart-view';
 import master_kanban_group_action from './master-kanban-group-action';
 import master_drtab from './master-drtab';
+import master_ctrl_expansion from './master-ctrl-expansion';
 import master_list_group_action from './master-list-group-action';
 import master_wizard_view from './master-wizard-view';
 import detail_detail_mdctrl_view from './detail-detail-mdctrl-view';
 import region_list_tab_cache_tab_exp_view from './region-list-tab-cache-tab-exp-view';
 import master_drtab_logic from './master-drtab-logic';
+import master_bi_report_multi_partition_bar from './master-bi-report-multi-partition-bar';
 import master_editor_slider from './master-editor-slider';
 import master_calendar_contextmenu_month from './master-calendar-contextmenu-month';
 import master_card_event_call from './master-card-event-call';
@@ -285,22 +313,27 @@ import master_grid_nav_detail from './master-grid-nav-detail';
 import master_card_cache_refreshmode from './master-card-cache-refreshmode';
 import master_gantt_draggablesort from './master-gantt-draggablesort';
 import ps_core_prd_func_redirect_view from './ps-core-prd-func-redirect-view';
+import region_treegrid_attr from './region-treegrid-attr';
 import master_list_format from './master-list-format';
 import master_tree_embed_pickup from './master-tree-embed-pickup';
 import master_chart_bar from './master-chart-bar';
 import master_list_base from './master-list-base';
 import master_ui_action_datatarget from './master-ui-action-datatarget';
 import master_kanban_swimlane_group_action from './master-kanban-swimlane-group-action';
+import master_treegridex_column_expand_icon from './master-treegridex-column-expand-icon';
 import master_app_portal_demo_grid_view from './master-app-portal-demo-grid-view';
 import master_ui_logic_tabexpview from './master-ui-logic-tabexpview';
 import master_editor_input_number from './master-editor-input-number';
 import master_card_base_data_view_exp_view from './master-card-base-data-view-exp-view';
+import ua_group_detail_grid_view from './ua-group-detail-grid-view';
 import master_tree_grid_ex_celledit from './master-tree-grid-ex-celledit';
 import master_grid_group_auto from './master-grid-group-auto';
+import master_tree_quicksearch_exp_view from './master-tree-quicksearch-exp-view';
 import master_map_built_in_nav from './master-map-built-in-nav';
 import master_tree_search from './master-tree-search';
 import pswfversiondesign from './pswfversiondesign';
 import region_tree_grid_logictabexpview from './region-tree-grid-logictabexpview';
+import master_bi_report_scatter from './master-bi-report-scatter';
 import master_layout_view from './master-layout-view';
 import master_list_logic_base from './master-list-logic-base';
 import master_pickup_treempickupview2 from './master-pickup-treempickupview-2';
@@ -316,6 +349,7 @@ import master_ui_action_refresh from './master-ui-action-refresh';
 import master_calendar_multiple_data_month from './master-calendar-multiple-data-month';
 import region_tree_grid_disablecolcustom from './region-tree-grid-disablecolcustom';
 import master_editform_group_close_mode from './master-editform-group-close-mode';
+import master_grid_column_slot from './master-grid-column-slot';
 import master_calendar_mixin from './master-calendar-mixin';
 import master_kanban_event_base from './master-kanban-event-base';
 import master_chart_exp_quick_search_chart_exp_view from './master-chart-exp-quick-search-chart-exp-view';
@@ -323,11 +357,14 @@ import master_grid_css from './master-grid-css';
 import master_panel_cssandicon from './master-panel-cssandicon';
 import master_calendar_rightnav_day from './master-calendar-rightnav-day';
 import master_list_base_exp from './master-list-base-exp';
+import ps_core_prd_func_info_view from './ps-core-prd-func-info-view';
 import master_tree_picker from './master-tree-picker';
 import master_event_ability from './master-event-ability';
 import master_tree_nav_right from './master-tree-nav-right';
+import master_screen_comp_tab_exp_view from './master-screen-comp-tab-exp-view';
 import region_meditpanel_row from './region-meditpanel-row';
 import master_chart from './master-chart';
+import master_data_dashboard_status from './master-data-dashboard-status';
 import master_tab_nav from './master-tab-nav';
 import master_counter_drbar from './master-counter-drbar';
 import master_completion_date_chart from './master-completion-date-chart';
@@ -342,7 +379,6 @@ import master_grid_toolbar_quick from './master-grid-toolbar-quick';
 import master_week_nav_param_calendar_exp_view from './master-week-nav-param-calendar-exp-view';
 import master_editor_rate from './master-editor-rate';
 import about_modal_hidden_close from './about-modal-hidden-close';
-import ps_core_prd_func_edit_view from './ps-core-prd-func-edit-view';
 import master_chart_event from './master-chart-event';
 import region_meditpanel_event from './region-meditpanel-event';
 import master_counter_toolbar from './master-counter-toolbar';
@@ -390,9 +426,10 @@ import master_usr9345_grid_view from './master-usr-9345-grid-view';
 import master_view_message_close_mode from './master-view-message-close-mode';
 import master_calendar_contextmenu_user from './master-calendar-contextmenu-user';
 import master_card_bottom_nav from './master-card-bottom-nav';
+import master_gantt_column_expand_icon from './master-gantt-column-expand-icon';
 import master_form_validatemode from './master-form-validatemode';
 import ps_core_prd_func_installed_grid_view from './ps-core-prd-func-installed-grid-view';
-import master_tree_counter from './master-tree-counter';
+import master_tree_count from './master-tree-count';
 import master_navparam_groupmode_exp from './master-navparam-groupmode-exp';
 import master_calendar_contextmenu from './master-calendar-contextmenu';
 import master_kanban_built_in_toolbar_exp from './master-kanban-built-in-toolbar-exp';
@@ -410,9 +447,11 @@ import region_pickup_view2 from './region-pickup-view-2';
 import master_search_form_event from './master-search-form-event';
 import master_grid_span from './master-grid-span';
 import master_grid_newrow_group_auto from './master-grid-newrow-group-auto';
+import master_kanban_dy_uiaction_group from './master-kanban-dy-uiaction-group';
 import master_group_bar_chart_exp_view from './master-group-bar-chart-exp-view';
 import master_card_mixin_showmode from './master-card-mixin-showmode';
 import master_card_batchtoolbar from './master-card-batchtoolbar';
+import master_kanban_dy_uiaction_group_embed from './master-kanban-dy-uiaction-group-embed';
 import master_tree_grid_ex_nodetabexpview from './master-tree-grid-ex-nodetabexpview';
 import master_data_transfer_picker from './master-data-transfer-picker';
 import master_pickup_cardpickupview2 from './master-pickup-cardpickupview-2';
@@ -447,30 +486,38 @@ import master_map_base from './master-map-base';
 import master_list_group_style2 from './master-list-group-style-2';
 import master_map_event from './master-map-event';
 import master_editor_span from './master-editor-span';
+import master_bi_report_dashboard from './master-bi-report-dashboard';
 import about_drawer_hidden_close from './about-drawer-hidden-close';
 import master_editform_repeater_form from './master-editform-repeater-form';
 import master_drtab_postion from './master-drtab-postion';
 import master_gantt_contextmenu from './master-gantt-contextmenu';
 import master_kanban_row_layout from './master-kanban-row-layout';
+import region_treegrid_column_expand from './region-treegrid-column-expand';
 import master_editform_repeater_table from './master-editform-repeater-table';
 import master_grid from './master-grid';
 import master_map_tooltip_style from './master-map-tooltip-style';
+import master_tree_searchphseparator from './master-tree-searchphseparator';
 import master_action_plugin from './master-action-plugin';
 import master_grid_mixin from './master-grid-mixin';
+import master_list_ext_view3 from './master-list-ext-view-3';
 import master_tree_grid_ex_css from './master-tree-grid-ex-css';
 import master_treeview from './master-treeview';
+import master_app_expand_tab_exp_view from './master-app-expand-tab-exp-view';
 import master_tree_datasource_exp from './master-tree-datasource-exp';
 import master_tree_event from './master-tree-event';
 import master_editform_repeater_form_defaultvalue from './master-editform-repeater-form-defaultvalue';
 import master_editform_repeater_table_sort from './master-editform-repeater-table-sort';
 import master_chart_nav_exp from './master-chart-nav-exp';
 import master_calendar_bottomnav_multiple_data from './master-calendar-bottomnav-multiple-data';
+import master_kanban_simple_page from './master-kanban-simple-page';
 import region_tree_grid_require from './region-tree-grid-require';
 import master_chart_exp_tab_exp_view from './master-chart-exp-tab-exp-view';
 import master_editor_autocomplete from './master-editor-autocomplete';
+import ps_core_prd_func_setting_edit_view from './ps-core-prd-func-setting-edit-view';
 import master_wizard_hiddenstepbar from './master-wizard-hiddenstepbar';
 import master_tree_custom_datasource from './master-tree-custom-datasource';
 import master_teleport_placeholder_list from './master-teleport-placeholder-list';
+import master_form_dy_uiaction_group from './master-form-dy-uiaction-group';
 import master_view_event_trigger from './master-view-event-trigger';
 import master_grid_attachment_column_file_preview from './master-grid-attachment-column-file-preview';
 import master_drtab_logic2 from './master-drtab-logic-2';
@@ -480,13 +527,16 @@ import region_meditpanel_top from './region-meditpanel-top';
 import master_enable_cache_tree_exp_view from './master-enable-cache-tree-exp-view';
 import master_toolbar_item_plugin from './master-toolbar-item-plugin';
 import master_card_group_action from './master-card-group-action';
+import master_bi_report_number from './master-bi-report-number';
 import master_kanban_swimlane_draggable_exp from './master-kanban-swimlane-draggable-exp';
 import master_pickup_cardmpickupview2 from './master-pickup-cardmpickupview-2';
 import psde_logic_all_log_grid_view from './psde-logic-all-log-grid-view';
+import master_bi_report_pie from './master-bi-report-pie';
 import master_chart_multiple_sequences from './master-chart-multiple-sequences';
 import master_base_chart_series from './master-base-chart-series';
 import master_list_call from './master-list-call';
 import master_calendar_refreshmode_nocache from './master-calendar-refreshmode-nocache';
+import master_list_simple_page from './master-list-simple-page';
 import master_kanban from './master-kanban';
 import master_gantt_disabled_sliderdraggable from './master-gantt-disabled-sliderdraggable';
 import master_workflow_design_grid from './master-workflow-design-grid';
@@ -504,11 +554,15 @@ import report_bi_report_content_panel_view from './report-bi-report-content-pane
 import master_upload_image_cropping from './master-upload-image-cropping';
 import master_panel_data_container from './master-panel-data-container';
 import master_gantt_event_and_call from './master-gantt-event-and-call';
+import master_editor_expansion from './master-editor-expansion';
+import master_logic_expand_tab_exp_view from './master-logic-expand-tab-exp-view';
 import master_list_draggable_edit from './master-list-draggable-edit';
 import comment_list_view from './comment-list-view';
 import master_map_view from './master-map-view';
+import master_decoration_dashboard_view from './master-decoration-dashboard-view';
 import master_gantt from './master-gantt';
 import master_treeview_cssandicon from './master-treeview-cssandicon';
+import region_treegrid_dy_uiaction_group_embed from './region-treegrid-dy-uiaction-group-embed';
 import app_wf_step_trace_view from './app-wf-step-trace-view';
 import master_grid_export_back from './master-grid-export-back';
 import master_comment_display from './master-comment-display';
@@ -525,6 +579,7 @@ import master_stackbar_right_nav from './master-stackbar-right-nav';
 import master_editor_check_box from './master-editor-check-box';
 import master_calendar_logic_call from './master-calendar-logic-call';
 import master_list_cache_refreshmode from './master-list-cache-refreshmode';
+import master_list_dy_uiaction_group from './master-list-dy-uiaction-group';
 import master_list_nav_bottom from './master-list-nav-bottom';
 import master_page_redirect_view from './master-page-redirect-view';
 import region_tree_grid_wrap from './region-tree-grid-wrap';
@@ -534,6 +589,8 @@ import master_pie_bottom_nav from './master-pie-bottom-nav';
 import master_tree_grid_ex_nocacherefresh from './master-tree-grid-ex-nocacherefresh';
 import master_gantt_refreshmode_cache from './master-gantt-refreshmode-cache';
 import panel_appdatauploadview from './panel-appdatauploadview';
+import master_screen_button from './master-screen-button';
+import master_search_form_convertparammode from './master-search-form-convertparammode';
 import master_list_roll_load from './master-list-roll-load';
 import master_kanban_enablefullscreen_exp from './master-kanban-enablefullscreen-exp';
 import master_pickup_cardmpickupview from './master-pickup-cardmpickupview';
@@ -541,34 +598,48 @@ import region_tree_grid_autowidth from './region-tree-grid-autowidth';
 import region_meditpanel_editview from './region-meditpanel-editview';
 import master_calendar_nav_multiple_data_nav from './master-calendar-nav-multiple-data-nav';
 import master_grid_dfvalue from './master-grid-dfvalue';
+import master_grid_property_injection from './master-grid-property-injection';
 import master_calendar_multiple_data from './master-calendar-multiple-data';
 import master_codelist_dsconditions from './master-codelist-dsconditions';
 import master_list_only_data from './master-list-only-data';
+import master_bi_report_multi_bar from './master-bi-report-multi-bar';
+import master_dashboard_render from './master-dashboard-render';
 import master_tree_grid_ex_cacherefresh from './master-tree-grid-ex-cacherefresh';
 import master_codelist_css from './master-codelist-css';
+import master_bi_report_area from './master-bi-report-area';
 import master_gantt_month from './master-gantt-month';
 import master_portlet_plugin from './master-portlet-plugin';
+import region_tree_grid_simple_page from './region-tree-grid-simple-page';
 import master_ui_logic_node_base from './master-ui-logic-node-base';
+import master_card_dy_uiaction_group_embed from './master-card-dy-uiaction-group-embed';
 import master_editor_radio_list from './master-editor-radio-list';
 import psdelogiclogicdesign from './psdelogiclogicdesign';
 import master_card_logic_call from './master-card-logic-call';
+import master_gantt_column_dy_uiaction_group from './master-gantt-column-dy-uiaction-group';
 import master_tree_grid_ex_event from './master-tree-grid-ex-event';
+import master_file_preview_view from './master-file-preview-view';
 import master_grid_sort_ban from './master-grid-sort-ban';
 import master_calendar_nav_day from './master-calendar-nav-day';
 import master_teleport_placeholder_toolbar_grid from './master-teleport-placeholder-toolbar-grid';
 import master_kanban_enablegrouphidden_exp from './master-kanban-enablegrouphidden-exp';
+import about_mob_about10 from './about-mob-about-10';
+import master_tree_dy_uiaction_group_exp from './master-tree-dy-uiaction-group-exp';
 import master_kanban_swimlane_description from './master-kanban-swimlane-description';
 import master_calendar_refreshmode_cache from './master-calendar-refreshmode-cache';
 import region_tree_grid_actioncol from './region-tree-grid-actioncol';
 import master_gantt_week from './master-gantt-week';
 import master_form_ability_edit_view from './master-form-ability-edit-view';
+import master_editor_field_injection from './master-editor-field-injection';
 import master_tree_contextmenurightclickinvoke from './master-tree-contextmenurightclickinvoke';
 import master_default_date_tab_exp_view from './master-default-date-tab-exp-view';
 import region_pickup_tree_view from './region-pickup-tree-view';
 import region_tree_grid_backendcolupdate from './region-tree-grid-backendcolupdate';
 import master_panel_panel_container_image from './master-panel-panel-container-image';
 import master_grid_nav_right from './master-grid-nav-right';
+import master_editor_dashboard_view from './master-editor-dashboard-view';
 import master_kanban_item_action from './master-kanban-item-action';
+import master_grid_column_update from './master-grid-column-update';
+import master_form_enablejsonschema from './master-form-enablejsonschema';
 import master_ui_action_cssandicon from './master-ui-action-cssandicon';
 import master_pickup_gridpickupview_pickup_grid_view from './master-pickup-gridpickupview-pickup-grid-view';
 import master_data from './master-data';
@@ -579,6 +650,7 @@ import master_pickup_treempickupview from './master-pickup-treempickupview';
 import master_tree_common_action from './master-tree-common-action';
 import master_grid_newrow_group_codelist from './master-grid-newrow-group-codelist';
 import master_list_ext_view2 from './master-list-ext-view-2';
+import master_batch_action_edit_view from './master-batch-action-edit-view';
 import master_list_showmode_exp from './master-list-showmode-exp';
 import master_toolbar_group from './master-toolbar-group';
 import master_calendar_contextmenu_multiple_data from './master-calendar-contextmenu-multiple-data';
@@ -611,6 +683,8 @@ import master_pickup_treepickupview2 from './master-pickup-treepickupview-2';
 import region_tree_grid_view from './region-tree-grid-view';
 import master_grid_action_column from './master-grid-action-column';
 import master_editform_hover_tab_exp_view from './master-editform-hover-tab-exp-view';
+import master_grid_column_dy_uiaction_group_embed from './master-grid-column-dy-uiaction-group-embed';
+import master_bi_report_multi_strip from './master-bi-report-multi-strip';
 import master_tree_selectpickup from './master-tree-selectpickup';
 import master_usr8928_chart_view from './master-usr-8928-chart-view';
 import master_panel_panel_item_render2 from './master-panel-panel-item-render-2';
@@ -625,6 +699,7 @@ import category_form_design_edit from './category-form-design-edit';
 import region_tree_grid_rowedit from './region-tree-grid-rowedit';
 import master_info_view from './master-info-view';
 import region_tree_grid_captionwidth from './region-tree-grid-captionwidth';
+import master_custom_btn_dashboard_view from './master-custom-btn-dashboard-view';
 import master_grid_agg from './master-grid-agg';
 import master_grid_toolbar_batch from './master-grid-toolbar-batch';
 import master_kanban_swimlane_enablefullscreen from './master-kanban-swimlane-enablefullscreen';
@@ -632,11 +707,15 @@ import master_card_item_action from './master-card-item-action';
 import master_map_animation from './master-map-animation';
 import master_tree_grid_ex_eventtabexpview from './master-tree-grid-ex-eventtabexpview';
 import master_chart_funnel_plot from './master-chart-funnel-plot';
+import master_calendar_dy_uiaction_group_embed from './master-calendar-dy-uiaction-group-embed';
 import extend_log_info_view from './extend-log-info-view';
+import master_data_view_simple_page from './master-data-view-simple-page';
 import master_tree_allsearch from './master-tree-allsearch';
 import master_ui_action_pickupview from './master-ui-action-pickupview';
+import master_treegridex_column_dy_uiaction_group_exp from './master-treegridex-column-dy-uiaction-group-exp';
 import master_line_bar_chart_exp_view from './master-line-bar-chart-exp-view';
 import master_scatter_right_nav from './master-scatter-right-nav';
+import master_grid_column_dy_uiaction_group_exp from './master-grid-column-dy-uiaction-group-exp';
 import master_panel_view_message from './master-panel-view-message';
 import master_wf_dyna_edit_view3 from './master-wf-dyna-edit-view-3';
 import master_tree_node_newedit from './master-tree-node-newedit';
@@ -646,6 +725,7 @@ import master_card_paging_load from './master-card-paging-load';
 import master_count_flowdrtab from './master-count-flowdrtab';
 import master_usr1225_edit_view from './master-usr-1225-edit-view';
 import master_async_activity from './master-async-activity';
+import master_treegridex_column_dy_uiaction_group_embed from './master-treegridex-column-dy-uiaction-group-embed';
 import master_tab_ctrl_federation from './master-tab-ctrl-federation';
 import master_map_fullscreen from './master-map-fullscreen';
 import region_pickup_grid_view from './region-pickup-grid-view';
@@ -653,7 +733,9 @@ import master_panel_grid_container from './master-panel-grid-container';
 import master_list_nav_right from './master-list-nav-right';
 import master_counter_tabexppanel from './master-counter-tabexppanel';
 import region_edit_view3 from './region-edit-view-3';
+import master_de_logic_advanced from './master-de-logic-advanced';
 import master_edit_view from './master-edit-view';
+import master_tree_dy_uiaction_group_embed from './master-tree-dy-uiaction-group-embed';
 import master_form_info from './master-form-info';
 import master_chart_scatter from './master-chart-scatter';
 import master_chart_ability from './master-chart-ability';
@@ -671,6 +753,8 @@ import master_drbar_logic_script from './master-drbar-logic-script';
 import master_form_layout from './master-form-layout';
 import master_upload_file_upload from './master-upload-file-upload';
 import master_searchbar_hight from './master-searchbar-hight';
+import master_grid_attachment_column_enablenoaccess from './master-grid-attachment-column-enablenoaccess';
+import master_grid_attachment_column_osscat from './master-grid-attachment-column-osscat';
 import master_grid_logic_ctrl_event from './master-grid-logic-ctrl-event';
 import master_data_mpicker from './master-data-mpicker';
 import master_list_sort_exp from './master-list-sort-exp';
@@ -681,9 +765,11 @@ import master_no_cache_tree_exp_view from './master-no-cache-tree-exp-view';
 import master_wizard_view_style from './master-wizard-view-style';
 import master_grid_base from './master-grid-base';
 import master_grid_nav_inside from './master-grid-nav-inside';
+import master_bi_report_table from './master-bi-report-table';
 import master_chart_annular from './master-chart-annular';
 import master_tree_base from './master-tree-base';
 import master_kanban_order_group_draggable from './master-kanban-order-group-draggable';
+import master_screen_editor from './master-screen-editor';
 import master_tabexppanel_bottom from './master-tabexppanel-bottom';
 import master_pie_nav_right from './master-pie-nav-right';
 import master_grid_refresh_cache from './master-grid-refresh-cache';
@@ -696,11 +782,14 @@ import region_grid_message from './region-grid-message';
 import master_calendar_exp_view_quick_search from './master-calendar-exp-view-quick-search';
 import master_chart_grid_view_base from './master-chart-grid-view-base';
 import region_tree_grid_localagg from './region-tree-grid-localagg';
+import master_calendar_dy_uiaction_group from './master-calendar-dy-uiaction-group';
 import master_panel_nav_pos from './master-panel-nav-pos';
+import master_kanban_swimlane_dy_uiaction_group from './master-kanban-swimlane-dy-uiaction-group';
 import master_map_picker from './master-map-picker';
 import master_chart_event_tab from './master-chart-event-tab';
 import master_quick_create_popper from './master-quick-create-popper';
 import master_editor_cascader from './master-editor-cascader';
+import master_list_batchtoolbarmode from './master-list-batchtoolbarmode';
 import master_list_dyna_visible from './master-list-dyna-visible';
 import master_chart_group_year from './master-chart-group-year';
 import region_tree_grid_colfilter from './region-tree-grid-colfilter';
@@ -713,7 +802,9 @@ import master_card_base_exp from './master-card-base-exp';
 import master_card_onlydata_showmode from './master-card-onlydata-showmode';
 import master_wizard_srfnextform from './master-wizard-srfnextform';
 import master_ui_logic_plugin from './master-ui-logic-plugin';
+import region_tree_grid_batchtoolbarmode from './region-tree-grid-batchtoolbarmode';
 import master_chart_exp_cache_tab_exp_view from './master-chart-exp-cache-tab-exp-view';
+import master_grid_batchtoolbarmode from './master-grid-batchtoolbarmode';
 import master_searchform_layout from './master-searchform-layout';
 import master_nav_param_area_chart_exp_view from './master-nav-param-area-chart-exp-view';
 import master_form_ctrl_federation from './master-form-ctrl-federation';
@@ -722,6 +813,7 @@ import master_panel_item_plugin from './master-panel-item-plugin';
 import master_panel_counter_exp from './master-panel-counter-exp';
 import master_coop_pos from './master-coop-pos';
 import master_panel_panel_item_render from './master-panel-panel-item-render';
+import master_card_dy_uiaction_group_exp from './master-card-dy-uiaction-group-exp';
 import region_tree_grid_celledit from './region-tree-grid-celledit';
 import category_pickup_view from './category-pickup-view';
 import master_list_ctrlstyle_exp from './master-list-ctrlstyle-exp';
@@ -730,6 +822,7 @@ import master_search_form from './master-search-form';
 import master_save_all from './master-save-all';
 import about from './about';
 import master_kaban_format from './master-kaban-format';
+import master_bi_report_multi_line from './master-bi-report-multi-line';
 import master_kanban_swimlane_nocache_refreshmode from './master-kanban-swimlane-nocache-refreshmode';
 import master_chart_group_quar from './master-chart-group-quar';
 import master_calendar_day from './master-calendar-day';
@@ -741,6 +834,7 @@ import master_chart_group_code_list from './master-chart-group-code-list';
 import master_html_view from './master-html-view';
 import breadcrumb from './breadcrumb';
 import region_tree_grid_toolbartabexpview from './region-tree-grid-toolbartabexpview';
+import master_ui_action_expand_data_view from './master-ui-action-expand-data-view';
 import master_editform_mdctrl_list from './master-editform-mdctrl-list';
 import master_user_custom_calendar_exp_view from './master-user-custom-calendar-exp-view';
 import activity_history_list_view from './activity-history-list-view';
@@ -759,6 +853,7 @@ import master_list_item_action from './master-list-item-action';
 import master_editform_mdctrl_card from './master-editform-mdctrl-card';
 import master_view_plugin from './master-view-plugin';
 import master_default_date_calendar_view_week from './master-default-date-calendar-view-week';
+import master_ctrl_slot_grid_view from './master-ctrl-slot-grid-view';
 import region_tree_grid_align from './region-tree-grid-align';
 import master_drtab_ability from './master-drtab-ability';
 import master_tree_deaction_datasource from './master-tree-deaction-datasource';
@@ -766,8 +861,10 @@ import master_counter_drtab from './master-counter-drtab';
 import master_toolbar_counter from './master-toolbar-counter';
 import master_gantt_logic_event from './master-gantt-logic-event';
 import master_calendar_tab_exp_view from './master-calendar-tab-exp-view';
+import master_list_dy_uiaction_group_exp from './master-list-dy-uiaction-group-exp';
 import region_list_exp_view from './region-list-exp-view';
 import report_baseinfo_edit_view from './report-baseinfo-edit-view';
+import master_report_exp from './master-report-exp';
 import psde_logic_tree_exp_view from './psde-logic-tree-exp-view';
 import master_card_dyna_logic_exp from './master-card-dyna-logic-exp';
 import master_enable_edit_view from './master-enable-edit-view';
@@ -786,8 +883,10 @@ import master_kanban_group_exp from './master-kanban-group-exp';
 import master_searchbar_storage from './master-searchbar-storage';
 import master_form_item_event_edit_view from './master-form-item-event-edit-view';
 import master_card_format from './master-card-format';
+import master_calendar_dy_uiaction_group_exp from './master-calendar-dy-uiaction-group-exp';
 import master_p_icker_singletabexpview from './master-p-icker-singletabexpview';
 import master_cache_data_view_exp_view from './master-cache-data-view-exp-view';
+import master_bi_report_radar from './master-bi-report-radar';
 import master_list_default_showmode from './master-list-default-showmode';
 import master_calendar_rightnav_week from './master-calendar-rightnav-week';
 import master_calendar_month from './master-calendar-month';
@@ -826,26 +925,33 @@ import master_list_quicktoolbar from './master-list-quicktoolbar';
 import psde_logic_global_flow_grid_view from './psde-logic-global-flow-grid-view';
 import master_kanban_batchtoolbar from './master-kanban-batchtoolbar';
 import master_editor_code from './master-editor-code';
+import master_gantt_column_dy_uiaction_group_embed from './master-gantt-column-dy-uiaction-group-embed';
+import master_screen_border_dashboard_view from './master-screen-border-dashboard-view';
 import master_pickup_muleditview from './master-pickup-muleditview';
 import region_data_view_exp_view from './region-data-view-exp-view';
 import master_stackbar_bottom_nav from './master-stackbar-bottom-nav';
 import master_calendar_contextmenu_timeline from './master-calendar-contextmenu-timeline';
 import master_codelist_num from './master-codelist-num';
+import master_gantt_column_uiaction_group from './master-gantt-column-uiaction-group';
 import master_card_load_more from './master-card-load-more';
 import master_kanban_auto_group from './master-kanban-auto-group';
 import master_teleport_placeholder_toolbar from './master-teleport-placeholder-toolbar';
 import master_calendar_event_call from './master-calendar-event-call';
 import master_bar_right_nav from './master-bar-right-nav';
+import master_ctrl_engine from './master-ctrl-engine';
 import master_codelist_field from './master-codelist-field';
 import master_list_sort_draggable from './master-list-sort-draggable';
+import master_treegridex_attr from './master-treegridex-attr';
 import master_calendar_contextmenu_week from './master-calendar-contextmenu-week';
 import master_kanban_swimlane_lane_draggable from './master-kanban-swimlane-lane-draggable';
 import master_list_codelist_group from './master-list-codelist-group';
+import master_view_expansion from './master-view-expansion';
 import master_redirect_view from './master-redirect-view';
 import master_kanban_refreshmode_exp from './master-kanban-refreshmode-exp';
 import master_gantt_refreshmode_nocache from './master-gantt-refreshmode-nocache';
 import master_tree_topsession_datasource from './master-tree-topsession-datasource';
 import master_editform_mdctrl_table from './master-editform-mdctrl-table';
+import master_card_dy_uiaction_group from './master-card-dy-uiaction-group';
 import master_form_base from './master-form-base';
 import master_editor_input_ip from './master-editor-input-ip';
 import master_list_default_sort from './master-list-default-sort';
@@ -866,6 +972,7 @@ import master_card_logic from './master-card-logic';
 import master_calendar_nav_month from './master-calendar-nav-month';
 import master_chart_grid_mul_series from './master-chart-grid-mul-series';
 import master_panel_nav_pos_view from './master-panel-nav-pos-view';
+import master_rewrite_predefined_comp from './master-rewrite-predefined-comp';
 import master_codelist_type from './master-codelist-type';
 import master_panel_button from './master-panel-button';
 import master_map_dyna_style from './master-map-dyna-style';
@@ -891,10 +998,12 @@ import master_codelist_tree from './master-codelist-tree';
 import region_tree_grid_defaultval from './region-tree-grid-defaultval';
 import master_drbar_logic_delogic from './master-drbar-logic-delogic';
 import master_map_item_style from './master-map-item-style';
+import master_bi_report_intersection_table from './master-bi-report-intersection-table';
 import region_info_view from './region-info-view';
 import master_bar_chart_exp_view from './master-bar-chart-exp-view';
 import master_card_roll_load from './master-card-roll-load';
 import master_grid_grouprowmode_exp from './master-grid-grouprowmode-exp';
+import master_calendar_timeline_loadmore from './master-calendar-timeline-loadmore';
 import master_card_sort_draggable from './master-card-sort-draggable';
 import master_calendar_layout_timeline from './master-calendar-layout-timeline';
 import master_calendar_bottomnav_day from './master-calendar-bottomnav-day';
@@ -912,6 +1021,7 @@ import master_kanban_swimlane_quicktoolbar from './master-kanban-swimlane-quickt
 import master_grid_layout from './master-grid-layout';
 import master_kanban_ctrl_event from './master-kanban-ctrl-event';
 import region_tree_grid_layouttabexpview from './region-tree-grid-layouttabexpview';
+import master_bi_report_multi_stack_bar from './master-bi-report-multi-stack-bar';
 import region_tree_grid_rowedittabexpview from './region-tree-grid-rowedittabexpview';
 import report_all_report_grid_view from './report-all-report-grid-view';
 import master_kanban_swimlane_refreshmode from './master-kanban-swimlane-refreshmode';
@@ -935,6 +1045,7 @@ import master_chart_stacked_column from './master-chart-stacked-column';
 import master_list from './master-list';
 import master_drtab_more from './master-drtab-more';
 import master_card_auto_group from './master-card-auto-group';
+import master_list_dy_uiaction_group_embed from './master-list-dy-uiaction-group-embed';
 import region_tree_grid_disablesort from './region-tree-grid-disablesort';
 import master_global_plugin from './master-global-plugin';
 import master_calendar_exp_view_cache from './master-calendar-exp-view-cache';
@@ -961,6 +1072,7 @@ import master_tabexppanel from './master-tabexppanel';
 import master_grid_group from './master-grid-group';
 import master_gantt_base from './master-gantt-base';
 import master_call_view_ability from './master-call-view-ability';
+import master_toolbar_logic_js_demo from './master-toolbar-logic-js-demo';
 import master_nav_param_scatter_chart_exp_view from './master-nav-param-scatter-chart-exp-view';
 import category_workflow_design_grid from './category-workflow-design-grid';
 import master_pickup_treepickupcontrolview from './master-pickup-treepickupcontrolview';
@@ -977,6 +1089,7 @@ import category_grid_view from './category-grid-view';
 import master_list_page from './master-list-page';
 import master_card_sort_group_draggable from './master-card-sort-group-draggable';
 import master_list_event_call_exp from './master-list-event-call-exp';
+import master_edit_form_item_slot from './master-edit-form-item-slot';
 import master_panel_media from './master-panel-media';
 import master_calendar_view from './master-calendar-view';
 import master_panel_text from './master-panel-text';
@@ -988,6 +1101,7 @@ import master_tabexppanel_right from './master-tabexppanel-right';
 import master_base_calendar_exp_view from './master-base-calendar-exp-view';
 import master_calendar_refreshmode from './master-calendar-refreshmode';
 import master_pickup_editview2 from './master-pickup-editview-2';
+import master_gantt_column_dy_uiaction_group_exp from './master-gantt-column-dy-uiaction-group-exp';
 import master_pickup_multabexpview from './master-pickup-multabexpview';
 import master_grid_view from './master-grid-view';
 import master_card_width_height from './master-card-width-height';
@@ -995,6 +1109,7 @@ import master_entity_field_grid from './master-entity-field-grid';
 import master_card_new from './master-card-new';
 import admin_index from './admin-index';
 import master_calendar_rightnav_multiple_data from './master-calendar-rightnav-multiple-data';
+import master_model_expand_grid_view from './master-model-expand-grid-view';
 import region_tree_grid_exporttabexpview from './region-tree-grid-exporttabexpview';
 import master_tree_loadmore from './master-tree-loadmore';
 import master_searchbar_ability from './master-searchbar-ability';
@@ -1004,14 +1119,21 @@ import category_edit_view from './category-edit-view';
 import master_chart_regional from './master-chart-regional';
 import master_wizard_base from './master-wizard-base';
 import report_edit_view from './report-edit-view';
+import master_grid_column_editor_expand from './master-grid-column-editor-expand';
 import master_calendar_bottomnav_user from './master-calendar-bottomnav-user';
 import master_searchbar_ph from './master-searchbar-ph';
+import master_screen_component from './master-screen-component';
+import master_editor_slot from './master-editor-slot';
 import master_tree_grid_ex_rowedittabexpview from './master-tree-grid-ex-rowedittabexpview';
 import master_counter from './master-counter';
 import master_tree_eventcall from './master-tree-eventcall';
 import master_card_pagingbar from './master-card-pagingbar';
 
 export async function initViewConfig(): Promise<void> {
+  ibiz.hub.config.view.set(
+    'web.report_quick_create_view',
+    report_quick_create_view as IViewConfig,
+  );
   ibiz.hub.config.view.set(
     'web.master_list_view',
     master_list_view as IViewConfig,
@@ -1039,6 +1161,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_tree_grid_ex_rowedit',
     master_tree_grid_ex_rowedit as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_codelist_federation',
+    master_codelist_federation as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_kanban_dyna_visible',
@@ -1079,6 +1205,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_form_event_tab_exp_view',
     master_form_event_tab_exp_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_bi_report_multi_stack_strip',
+    master_bi_report_multi_stack_strip as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_theme_plugin',
@@ -1132,6 +1262,14 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_card_grid_layout',
     master_card_grid_layout as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_simple_page_grid_view',
+    master_simple_page_grid_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_ctrl_engine_ctrl',
+    master_ctrl_engine_ctrl as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_calendar_contextmenu_day',
@@ -1231,8 +1369,16 @@ export async function initViewConfig(): Promise<void> {
     master_calendar_exp_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_editform_repeater_table2',
+    master_editform_repeater_table2 as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_kanban_draggable_edit',
     master_kanban_draggable_edit as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_treegridex_column_dy_uiaction_group',
+    master_treegridex_column_dy_uiaction_group as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_editor_markdown',
@@ -1351,6 +1497,10 @@ export async function initViewConfig(): Promise<void> {
     master_editor_dropdown_list as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_bi_report_multi_partition_line',
+    master_bi_report_multi_partition_line as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_chart_grid_tab_exp_view',
     master_chart_grid_tab_exp_view as IViewConfig,
   );
@@ -1361,6 +1511,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_calendar_layout_month',
     master_calendar_layout_month as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_remaining_height_edit_view',
+    master_remaining_height_edit_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_editor_switch',
@@ -1401,6 +1555,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_list_empty',
     master_list_empty as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_ctrl_engine_search',
+    master_ctrl_engine_search as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_kanban_group_draggable',
@@ -1459,6 +1617,14 @@ export async function initViewConfig(): Promise<void> {
     master_drtab_logic_script as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_panel_field_injection',
+    master_panel_field_injection as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_list_ext_view3_group_style2',
+    master_list_ext_view3_group_style2 as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_wizard_event_tab_exp_view',
     master_wizard_event_tab_exp_view as IViewConfig,
   );
@@ -1485,6 +1651,14 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_tabexppanel_base',
     master_tabexppanel_base as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_grid_column_render',
+    master_grid_column_render as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_kanban_dy_uiaction_group_exp',
+    master_kanban_dy_uiaction_group_exp as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_pickup_edit_view',
@@ -1616,6 +1790,10 @@ export async function initViewConfig(): Promise<void> {
     master_kanban_cache_refreshmode as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_tree_dy_uiaction_group',
+    master_tree_dy_uiaction_group as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_de_logic_params',
     master_de_logic_params as IViewConfig,
   );
@@ -1731,6 +1909,10 @@ export async function initViewConfig(): Promise<void> {
   );
   ibiz.hub.config.view.set('web.func_demo', func_demo as IViewConfig);
   ibiz.hub.config.view.set(
+    'web.region_treegrid_dy_uiaction_group_exp',
+    region_treegrid_dy_uiaction_group_exp as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.region_list_navparam_list_exp_view',
     region_list_navparam_list_exp_view as IViewConfig,
   );
@@ -1757,6 +1939,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_calendar_nav_param_tab_exp_view',
     master_calendar_nav_param_tab_exp_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_dashboard_chart',
+    master_dashboard_chart as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_card_built_in_toolbar_exp',
@@ -1836,8 +2022,16 @@ export async function initViewConfig(): Promise<void> {
     master_chart_group_mode_tab_exp_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.ua_group_detail_edit_view',
+    ua_group_detail_edit_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_calendar_daterange',
     master_calendar_daterange as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_kanban_swimlane_dy_uiaction_group_embed',
+    master_kanban_swimlane_dy_uiaction_group_embed as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_drtab_counter_disabled',
@@ -1854,6 +2048,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_editor_date_picker',
     master_editor_date_picker as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_card_batchtoolbarmode',
+    master_card_batchtoolbarmode as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_card_default_style',
@@ -1916,6 +2114,10 @@ export async function initViewConfig(): Promise<void> {
     master_ui_logic_advanced as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_de_action_expand_edit_view',
+    master_de_action_expand_edit_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_grid_view_read',
     master_grid_view_read as IViewConfig,
   );
@@ -1930,6 +2132,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_pickup_grid_view',
     master_pickup_grid_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_full_code_slot_custom_view',
+    master_full_code_slot_custom_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_kanban_cssandicon',
@@ -1986,6 +2192,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_editor_html',
     master_editor_html as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_grid_column_dy_uiaction_group',
+    master_grid_column_dy_uiaction_group as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_tree_parent_datasource',
@@ -2048,12 +2258,20 @@ export async function initViewConfig(): Promise<void> {
     master_grid_localsort as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.region_treegrid_dy_uiaction_group',
+    region_treegrid_dy_uiaction_group as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_default_date_calendar_view_custom',
     master_default_date_calendar_view_custom as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_data_dashboard',
     master_data_dashboard as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_formitem_update',
+    master_formitem_update as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_list_auto_group',
@@ -2066,6 +2284,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_cache_tab_exp_view',
     master_cache_tab_exp_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_panelitem_render',
+    master_panelitem_render as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.region_m_pickup_view2',
@@ -2085,6 +2307,10 @@ export async function initViewConfig(): Promise<void> {
   );
   ibiz.hub.config.view.set('web.master_drtab', master_drtab as IViewConfig);
   ibiz.hub.config.view.set(
+    'web.master_ctrl_expansion',
+    master_ctrl_expansion as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_list_group_action',
     master_list_group_action as IViewConfig,
   );
@@ -2103,6 +2329,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_drtab_logic',
     master_drtab_logic as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_bi_report_multi_partition_bar',
+    master_bi_report_multi_partition_bar as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_editor_slider',
@@ -2133,6 +2363,10 @@ export async function initViewConfig(): Promise<void> {
     ps_core_prd_func_redirect_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.region_treegrid_attr',
+    region_treegrid_attr as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_list_format',
     master_list_format as IViewConfig,
   );
@@ -2157,6 +2391,10 @@ export async function initViewConfig(): Promise<void> {
     master_kanban_swimlane_group_action as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_treegridex_column_expand_icon',
+    master_treegridex_column_expand_icon as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_app_portal_demo_grid_view',
     master_app_portal_demo_grid_view as IViewConfig,
   );
@@ -2173,12 +2411,20 @@ export async function initViewConfig(): Promise<void> {
     master_card_base_data_view_exp_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.ua_group_detail_grid_view',
+    ua_group_detail_grid_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_tree_grid_ex_celledit',
     master_tree_grid_ex_celledit as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_grid_group_auto',
     master_grid_group_auto as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_tree_quicksearch_exp_view',
+    master_tree_quicksearch_exp_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_map_built_in_nav',
@@ -2195,6 +2441,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.region_tree_grid_logictabexpview',
     region_tree_grid_logictabexpview as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_bi_report_scatter',
+    master_bi_report_scatter as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_layout_view',
@@ -2257,6 +2507,10 @@ export async function initViewConfig(): Promise<void> {
     master_editform_group_close_mode as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_grid_column_slot',
+    master_grid_column_slot as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_calendar_mixin',
     master_calendar_mixin as IViewConfig,
   );
@@ -2285,6 +2539,10 @@ export async function initViewConfig(): Promise<void> {
     master_list_base_exp as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.ps_core_prd_func_info_view',
+    ps_core_prd_func_info_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_tree_picker',
     master_tree_picker as IViewConfig,
   );
@@ -2297,10 +2555,18 @@ export async function initViewConfig(): Promise<void> {
     master_tree_nav_right as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_screen_comp_tab_exp_view',
+    master_screen_comp_tab_exp_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.region_meditpanel_row',
     region_meditpanel_row as IViewConfig,
   );
   ibiz.hub.config.view.set('web.master_chart', master_chart as IViewConfig);
+  ibiz.hub.config.view.set(
+    'web.master_data_dashboard_status',
+    master_data_dashboard_status as IViewConfig,
+  );
   ibiz.hub.config.view.set('web.master_tab_nav', master_tab_nav as IViewConfig);
   ibiz.hub.config.view.set(
     'web.master_counter_drbar',
@@ -2353,10 +2619,6 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.about_modal_hidden_close',
     about_modal_hidden_close as IViewConfig,
-  );
-  ibiz.hub.config.view.set(
-    'web.ps_core_prd_func_edit_view',
-    ps_core_prd_func_edit_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_chart_event',
@@ -2547,6 +2809,10 @@ export async function initViewConfig(): Promise<void> {
     master_card_bottom_nav as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_gantt_column_expand_icon',
+    master_gantt_column_expand_icon as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_form_validatemode',
     master_form_validatemode as IViewConfig,
   );
@@ -2555,8 +2821,8 @@ export async function initViewConfig(): Promise<void> {
     ps_core_prd_func_installed_grid_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
-    'web.master_tree_counter',
-    master_tree_counter as IViewConfig,
+    'web.master_tree_count',
+    master_tree_count as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_navparam_groupmode_exp',
@@ -2627,6 +2893,10 @@ export async function initViewConfig(): Promise<void> {
     master_grid_newrow_group_auto as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_kanban_dy_uiaction_group',
+    master_kanban_dy_uiaction_group as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_group_bar_chart_exp_view',
     master_group_bar_chart_exp_view as IViewConfig,
   );
@@ -2637,6 +2907,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_card_batchtoolbar',
     master_card_batchtoolbar as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_kanban_dy_uiaction_group_embed',
+    master_kanban_dy_uiaction_group_embed as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_tree_grid_ex_nodetabexpview',
@@ -2775,6 +3049,10 @@ export async function initViewConfig(): Promise<void> {
     master_editor_span as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_bi_report_dashboard',
+    master_bi_report_dashboard as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.about_drawer_hidden_close',
     about_drawer_hidden_close as IViewConfig,
   );
@@ -2795,6 +3073,10 @@ export async function initViewConfig(): Promise<void> {
     master_kanban_row_layout as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.region_treegrid_column_expand',
+    region_treegrid_column_expand as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_editform_repeater_table',
     master_editform_repeater_table as IViewConfig,
   );
@@ -2802,6 +3084,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_map_tooltip_style',
     master_map_tooltip_style as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_tree_searchphseparator',
+    master_tree_searchphseparator as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_action_plugin',
@@ -2812,12 +3098,20 @@ export async function initViewConfig(): Promise<void> {
     master_grid_mixin as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_list_ext_view3',
+    master_list_ext_view3 as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_tree_grid_ex_css',
     master_tree_grid_ex_css as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_treeview',
     master_treeview as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_app_expand_tab_exp_view',
+    master_app_expand_tab_exp_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_tree_datasource_exp',
@@ -2844,6 +3138,10 @@ export async function initViewConfig(): Promise<void> {
     master_calendar_bottomnav_multiple_data as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_kanban_simple_page',
+    master_kanban_simple_page as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.region_tree_grid_require',
     region_tree_grid_require as IViewConfig,
   );
@@ -2856,6 +3154,10 @@ export async function initViewConfig(): Promise<void> {
     master_editor_autocomplete as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.ps_core_prd_func_setting_edit_view',
+    ps_core_prd_func_setting_edit_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_wizard_hiddenstepbar',
     master_wizard_hiddenstepbar as IViewConfig,
   );
@@ -2866,6 +3168,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_teleport_placeholder_list',
     master_teleport_placeholder_list as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_form_dy_uiaction_group',
+    master_form_dy_uiaction_group as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_view_event_trigger',
@@ -2904,6 +3210,10 @@ export async function initViewConfig(): Promise<void> {
     master_card_group_action as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_bi_report_number',
+    master_bi_report_number as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_kanban_swimlane_draggable_exp',
     master_kanban_swimlane_draggable_exp as IViewConfig,
   );
@@ -2914,6 +3224,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.psde_logic_all_log_grid_view',
     psde_logic_all_log_grid_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_bi_report_pie',
+    master_bi_report_pie as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_chart_multiple_sequences',
@@ -2930,6 +3244,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_calendar_refreshmode_nocache',
     master_calendar_refreshmode_nocache as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_list_simple_page',
+    master_list_simple_page as IViewConfig,
   );
   ibiz.hub.config.view.set('web.master_kanban', master_kanban as IViewConfig);
   ibiz.hub.config.view.set(
@@ -2997,6 +3315,14 @@ export async function initViewConfig(): Promise<void> {
     master_gantt_event_and_call as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_editor_expansion',
+    master_editor_expansion as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_logic_expand_tab_exp_view',
+    master_logic_expand_tab_exp_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_list_draggable_edit',
     master_list_draggable_edit as IViewConfig,
   );
@@ -3008,10 +3334,18 @@ export async function initViewConfig(): Promise<void> {
     'web.master_map_view',
     master_map_view as IViewConfig,
   );
+  ibiz.hub.config.view.set(
+    'web.master_decoration_dashboard_view',
+    master_decoration_dashboard_view as IViewConfig,
+  );
   ibiz.hub.config.view.set('web.master_gantt', master_gantt as IViewConfig);
   ibiz.hub.config.view.set(
     'web.master_treeview_cssandicon',
     master_treeview_cssandicon as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.region_treegrid_dy_uiaction_group_embed',
+    region_treegrid_dy_uiaction_group_embed as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.app_wf_step_trace_view',
@@ -3078,6 +3412,10 @@ export async function initViewConfig(): Promise<void> {
     master_list_cache_refreshmode as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_list_dy_uiaction_group',
+    master_list_dy_uiaction_group as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_list_nav_bottom',
     master_list_nav_bottom as IViewConfig,
   );
@@ -3114,6 +3452,14 @@ export async function initViewConfig(): Promise<void> {
     panel_appdatauploadview as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_screen_button',
+    master_screen_button as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_search_form_convertparammode',
+    master_search_form_convertparammode as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_list_roll_load',
     master_list_roll_load as IViewConfig,
   );
@@ -3142,6 +3488,10 @@ export async function initViewConfig(): Promise<void> {
     master_grid_dfvalue as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_grid_property_injection',
+    master_grid_property_injection as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_calendar_multiple_data',
     master_calendar_multiple_data as IViewConfig,
   );
@@ -3154,12 +3504,24 @@ export async function initViewConfig(): Promise<void> {
     master_list_only_data as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_bi_report_multi_bar',
+    master_bi_report_multi_bar as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_dashboard_render',
+    master_dashboard_render as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_tree_grid_ex_cacherefresh',
     master_tree_grid_ex_cacherefresh as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_codelist_css',
     master_codelist_css as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_bi_report_area',
+    master_bi_report_area as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_gantt_month',
@@ -3170,8 +3532,16 @@ export async function initViewConfig(): Promise<void> {
     master_portlet_plugin as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.region_tree_grid_simple_page',
+    region_tree_grid_simple_page as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_ui_logic_node_base',
     master_ui_logic_node_base as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_card_dy_uiaction_group_embed',
+    master_card_dy_uiaction_group_embed as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_editor_radio_list',
@@ -3186,8 +3556,16 @@ export async function initViewConfig(): Promise<void> {
     master_card_logic_call as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_gantt_column_dy_uiaction_group',
+    master_gantt_column_dy_uiaction_group as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_tree_grid_ex_event',
     master_tree_grid_ex_event as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_file_preview_view',
+    master_file_preview_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_grid_sort_ban',
@@ -3204,6 +3582,14 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_kanban_enablegrouphidden_exp',
     master_kanban_enablegrouphidden_exp as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.about_mob_about10',
+    about_mob_about10 as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_tree_dy_uiaction_group_exp',
+    master_tree_dy_uiaction_group_exp as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_kanban_swimlane_description',
@@ -3224,6 +3610,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_form_ability_edit_view',
     master_form_ability_edit_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_editor_field_injection',
+    master_editor_field_injection as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_tree_contextmenurightclickinvoke',
@@ -3250,8 +3640,20 @@ export async function initViewConfig(): Promise<void> {
     master_grid_nav_right as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_editor_dashboard_view',
+    master_editor_dashboard_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_kanban_item_action',
     master_kanban_item_action as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_grid_column_update',
+    master_grid_column_update as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_form_enablejsonschema',
+    master_form_enablejsonschema as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_ui_action_cssandicon',
@@ -3289,6 +3691,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_list_ext_view2',
     master_list_ext_view2 as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_batch_action_edit_view',
+    master_batch_action_edit_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_list_showmode_exp',
@@ -3416,6 +3822,14 @@ export async function initViewConfig(): Promise<void> {
     master_editform_hover_tab_exp_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_grid_column_dy_uiaction_group_embed',
+    master_grid_column_dy_uiaction_group_embed as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_bi_report_multi_strip',
+    master_bi_report_multi_strip as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_tree_selectpickup',
     master_tree_selectpickup as IViewConfig,
   );
@@ -3469,6 +3883,10 @@ export async function initViewConfig(): Promise<void> {
     region_tree_grid_captionwidth as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_custom_btn_dashboard_view',
+    master_custom_btn_dashboard_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_grid_agg',
     master_grid_agg as IViewConfig,
   );
@@ -3497,8 +3915,16 @@ export async function initViewConfig(): Promise<void> {
     master_chart_funnel_plot as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_calendar_dy_uiaction_group_embed',
+    master_calendar_dy_uiaction_group_embed as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.extend_log_info_view',
     extend_log_info_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_data_view_simple_page',
+    master_data_view_simple_page as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_tree_allsearch',
@@ -3509,12 +3935,20 @@ export async function initViewConfig(): Promise<void> {
     master_ui_action_pickupview as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_treegridex_column_dy_uiaction_group_exp',
+    master_treegridex_column_dy_uiaction_group_exp as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_line_bar_chart_exp_view',
     master_line_bar_chart_exp_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_scatter_right_nav',
     master_scatter_right_nav as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_grid_column_dy_uiaction_group_exp',
+    master_grid_column_dy_uiaction_group_exp as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_panel_view_message',
@@ -3553,6 +3987,10 @@ export async function initViewConfig(): Promise<void> {
     master_async_activity as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_treegridex_column_dy_uiaction_group_embed',
+    master_treegridex_column_dy_uiaction_group_embed as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_tab_ctrl_federation',
     master_tab_ctrl_federation as IViewConfig,
   );
@@ -3581,8 +4019,16 @@ export async function initViewConfig(): Promise<void> {
     region_edit_view3 as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_de_logic_advanced',
+    master_de_logic_advanced as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_edit_view',
     master_edit_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_tree_dy_uiaction_group_embed',
+    master_tree_dy_uiaction_group_embed as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_form_info',
@@ -3653,6 +4099,14 @@ export async function initViewConfig(): Promise<void> {
     master_searchbar_hight as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_grid_attachment_column_enablenoaccess',
+    master_grid_attachment_column_enablenoaccess as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_grid_attachment_column_osscat',
+    master_grid_attachment_column_osscat as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_grid_logic_ctrl_event',
     master_grid_logic_ctrl_event as IViewConfig,
   );
@@ -3693,6 +4147,10 @@ export async function initViewConfig(): Promise<void> {
     master_grid_nav_inside as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_bi_report_table',
+    master_bi_report_table as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_chart_annular',
     master_chart_annular as IViewConfig,
   );
@@ -3703,6 +4161,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_kanban_order_group_draggable',
     master_kanban_order_group_draggable as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_screen_editor',
+    master_screen_editor as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_tabexppanel_bottom',
@@ -3753,8 +4215,16 @@ export async function initViewConfig(): Promise<void> {
     region_tree_grid_localagg as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_calendar_dy_uiaction_group',
+    master_calendar_dy_uiaction_group as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_panel_nav_pos',
     master_panel_nav_pos as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_kanban_swimlane_dy_uiaction_group',
+    master_kanban_swimlane_dy_uiaction_group as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_map_picker',
@@ -3771,6 +4241,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_editor_cascader',
     master_editor_cascader as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_list_batchtoolbarmode',
+    master_list_batchtoolbarmode as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_list_dyna_visible',
@@ -3821,8 +4295,16 @@ export async function initViewConfig(): Promise<void> {
     master_ui_logic_plugin as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.region_tree_grid_batchtoolbarmode',
+    region_tree_grid_batchtoolbarmode as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_chart_exp_cache_tab_exp_view',
     master_chart_exp_cache_tab_exp_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_grid_batchtoolbarmode',
+    master_grid_batchtoolbarmode as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_searchform_layout',
@@ -3857,6 +4339,10 @@ export async function initViewConfig(): Promise<void> {
     master_panel_panel_item_render as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_card_dy_uiaction_group_exp',
+    master_card_dy_uiaction_group_exp as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.region_tree_grid_celledit',
     region_tree_grid_celledit as IViewConfig,
   );
@@ -3884,6 +4370,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_kaban_format',
     master_kaban_format as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_bi_report_multi_line',
+    master_bi_report_multi_line as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_kanban_swimlane_nocache_refreshmode',
@@ -3925,6 +4415,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.region_tree_grid_toolbartabexpview',
     region_tree_grid_toolbartabexpview as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_ui_action_expand_data_view',
+    master_ui_action_expand_data_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_editform_mdctrl_list',
@@ -3996,6 +4490,10 @@ export async function initViewConfig(): Promise<void> {
     master_default_date_calendar_view_week as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_ctrl_slot_grid_view',
+    master_ctrl_slot_grid_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.region_tree_grid_align',
     region_tree_grid_align as IViewConfig,
   );
@@ -4024,12 +4522,20 @@ export async function initViewConfig(): Promise<void> {
     master_calendar_tab_exp_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_list_dy_uiaction_group_exp',
+    master_list_dy_uiaction_group_exp as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.region_list_exp_view',
     region_list_exp_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.report_baseinfo_edit_view',
     report_baseinfo_edit_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_report_exp',
+    master_report_exp as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.psde_logic_tree_exp_view',
@@ -4101,12 +4607,20 @@ export async function initViewConfig(): Promise<void> {
     master_card_format as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_calendar_dy_uiaction_group_exp',
+    master_calendar_dy_uiaction_group_exp as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_p_icker_singletabexpview',
     master_p_icker_singletabexpview as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_cache_data_view_exp_view',
     master_cache_data_view_exp_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_bi_report_radar',
+    master_bi_report_radar as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_list_default_showmode',
@@ -4261,6 +4775,14 @@ export async function initViewConfig(): Promise<void> {
     master_editor_code as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_gantt_column_dy_uiaction_group_embed',
+    master_gantt_column_dy_uiaction_group_embed as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_screen_border_dashboard_view',
+    master_screen_border_dashboard_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_pickup_muleditview',
     master_pickup_muleditview as IViewConfig,
   );
@@ -4279,6 +4801,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_codelist_num',
     master_codelist_num as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_gantt_column_uiaction_group',
+    master_gantt_column_uiaction_group as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_card_load_more',
@@ -4301,12 +4827,20 @@ export async function initViewConfig(): Promise<void> {
     master_bar_right_nav as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_ctrl_engine',
+    master_ctrl_engine as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_codelist_field',
     master_codelist_field as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_list_sort_draggable',
     master_list_sort_draggable as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_treegridex_attr',
+    master_treegridex_attr as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_calendar_contextmenu_week',
@@ -4319,6 +4853,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_list_codelist_group',
     master_list_codelist_group as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_view_expansion',
+    master_view_expansion as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_redirect_view',
@@ -4339,6 +4877,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_editform_mdctrl_table',
     master_editform_mdctrl_table as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_card_dy_uiaction_group',
+    master_card_dy_uiaction_group as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_form_base',
@@ -4419,6 +4961,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_panel_nav_pos_view',
     master_panel_nav_pos_view as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_rewrite_predefined_comp',
+    master_rewrite_predefined_comp as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_codelist_type',
@@ -4521,6 +5067,10 @@ export async function initViewConfig(): Promise<void> {
     master_map_item_style as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_bi_report_intersection_table',
+    master_bi_report_intersection_table as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.region_info_view',
     region_info_view as IViewConfig,
   );
@@ -4535,6 +5085,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_grid_grouprowmode_exp',
     master_grid_grouprowmode_exp as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_calendar_timeline_loadmore',
+    master_calendar_timeline_loadmore as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_card_sort_draggable',
@@ -4603,6 +5157,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.region_tree_grid_layouttabexpview',
     region_tree_grid_layouttabexpview as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_bi_report_multi_stack_bar',
+    master_bi_report_multi_stack_bar as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.region_tree_grid_rowedittabexpview',
@@ -4689,6 +5247,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_card_auto_group',
     master_card_auto_group as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_list_dy_uiaction_group_embed',
+    master_list_dy_uiaction_group_embed as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.region_tree_grid_disablesort',
@@ -4795,6 +5357,10 @@ export async function initViewConfig(): Promise<void> {
     master_call_view_ability as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_toolbar_logic_js_demo',
+    master_toolbar_logic_js_demo as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_nav_param_scatter_chart_exp_view',
     master_nav_param_scatter_chart_exp_view as IViewConfig,
   );
@@ -4859,6 +5425,10 @@ export async function initViewConfig(): Promise<void> {
     master_list_event_call_exp as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_edit_form_item_slot',
+    master_edit_form_item_slot as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_panel_media',
     master_panel_media as IViewConfig,
   );
@@ -4903,6 +5473,10 @@ export async function initViewConfig(): Promise<void> {
     master_pickup_editview2 as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_gantt_column_dy_uiaction_group_exp',
+    master_gantt_column_dy_uiaction_group_exp as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_pickup_multabexpview',
     master_pickup_multabexpview as IViewConfig,
   );
@@ -4926,6 +5500,10 @@ export async function initViewConfig(): Promise<void> {
   ibiz.hub.config.view.set(
     'web.master_calendar_rightnav_multiple_data',
     master_calendar_rightnav_multiple_data as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_model_expand_grid_view',
+    master_model_expand_grid_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.region_tree_grid_exporttabexpview',
@@ -4964,12 +5542,24 @@ export async function initViewConfig(): Promise<void> {
     report_edit_view as IViewConfig,
   );
   ibiz.hub.config.view.set(
+    'web.master_grid_column_editor_expand',
+    master_grid_column_editor_expand as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
     'web.master_calendar_bottomnav_user',
     master_calendar_bottomnav_user as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_searchbar_ph',
     master_searchbar_ph as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_screen_component',
+    master_screen_component as IViewConfig,
+  );
+  ibiz.hub.config.view.set(
+    'web.master_editor_slot',
+    master_editor_slot as IViewConfig,
   );
   ibiz.hub.config.view.set(
     'web.master_tree_grid_ex_rowedittabexpview',

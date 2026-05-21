@@ -1,21 +1,24 @@
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
-import { computed, defineComponent, PropType, ref } from 'vue';
-import { debounce } from 'lodash-es';
-import { IDEMobMDCtrl, IUIActionGroup } from '@ibiz/model-core';
+import { defineComponent, PropType, ref } from 'vue';
+import {
+  IDEMobMDCtrl,
+  IDETBUIActionItem,
+  IUIActionGroup,
+} from '@ibiz/model-core';
 import {
   IControlProvider,
-  IMobMDCtrlRowState,
   MDCtrlController,
+  IMobMDCtrlRowState,
+  getAllUIActionItems,
 } from '@ibiz-template/runtime';
-import { useListRender } from '../list-render-util';
-import { usePagination } from '../../../util';
+import { convertBtnType, useListRender, usePagination } from '../../../util';
 import './md-ctrl.scss';
 
 export const MDCtrlControl = defineComponent({
   name: 'IBizMDCtrlControl',
   props: {
     /**
-     * @description 移动端多数据模型数据
+     * @description 移动端多数据部件模型数据
      */
     modelData: { type: Object as PropType<IDEMobMDCtrl>, required: true },
     /**
@@ -46,144 +49,109 @@ export const MDCtrlControl = defineComponent({
      */
     selectedData: { type: Object as PropType<IData[]>, required: false },
     /**
-     * @description 模式，值为LIST：列表模式呈现加载数据，值为SELECT：呈现数据时显示勾选图标
+     * @description 选择模式，值为SELECT时，列表项显示勾选图标
+     * @default 'LIST'
      */
-    mode: { type: String, default: 'LIST' },
+    mode: { type: String as PropType<'LIST' | 'SELECT'>, default: 'LIST' },
     /**
      * @description 是否默认加载数据
      * @default true
      */
     loadDefault: { type: Boolean, default: true },
+    /**
+     * @description 是否是简单模式，即直接传入数据，不加载数据
+     */
+    isSimple: { type: Boolean, required: false },
+    /**
+     * @description 简单模式下传入的数据
+     */
+    data: { type: Array<IData>, required: false },
   },
-  setup(props) {
+  setup(props, { slots }) {
     const c = useControlController((...args) => new MDCtrlController(...args));
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
-    const { renderItem, renderNoData, renderLoadMore } = useListRender(
-      props,
-      c,
-      ns,
-    );
-
-    const isUpdating = ref(false);
-
-    // 不分页 0 分页栏 1 滚动加载 2 加载更多 3
-    // 是否可以加载更多
-    const isLodeMoreDisabled = computed(() => {
-      if (c.model.enablePagingBar === true) {
-        return true;
-      }
-      if (c.model.pagingMode !== 2) {
-        return true;
-      }
-      return (
-        c.state.items.length >= c.state.total ||
-        c.state.isLoading ||
-        c.state.total <= c.state.size
-      );
-    });
+    const {
+      enableLoadMore,
+      renderItem,
+      renderNoData,
+      renderAddItem,
+      renderScrollList,
+      renderGroup,
+    } = useListRender(props, c, ns, slots);
 
     const { onPageChange } = usePagination(c);
 
-    // 列表项集合
-    const delistItems = computed(() => {
-      const data: { value: string; label: string }[] = [];
-      c.model.delistItems?.forEach((item: IParams) => {
-        if (item.enableSort) {
-          data.push({
-            value: item.id,
-            label: ibiz.i18n.t(
-              item?.capLanguageRes?.lanResTag || '',
-              item.caption || item?.capLanguageRes?.defaultContent,
-            ),
-          });
-        }
-      });
-      return data;
-    });
-
-    // 排序值
-    const sortVal = computed(() => {
-      if (c.state.sortQuery) {
-        const [key, order] = c.state.sortQuery.split(',');
-        return { key, order };
-      }
-      return null;
-    });
-
-    // 处理排序配置回调
-    const onSortChange = (sort: { key: string; order: 'asc' | 'desc' }) => {
-      c.setSort(sort.key, sort.order);
-      c.load({ isInitialLoad: true });
-    };
-
-    // 加载更多
-    const debounceLoadMore = debounce(async () => {
-      c.loadMore();
-    }, 500);
-    const onLoadMore = () => {
-      debounceLoadMore();
-    };
-
-    // 添加动画帧，反正加载多次
-    c.evt.on('onLoadSuccess', () => {
-      isUpdating.value = true;
-      window.requestAnimationFrame(() => {
-        isUpdating.value = false;
-      });
-    });
-
-    // 是否显示数据伸缩图标
-    // 如果未开启分组，并且加载模式为【加载更多】，并且已经加载过一次更多，则为 true
-    const showCollapseOrExpandIcon = computed(() => {
-      return !c.model.enableGroup && c.model.pagingMode === 3;
-    });
-
     // 左滑界面行为组
-    const leftSlidingActionGroup = c.model.deuiactionGroup;
+    const leftSlidingActionGroup = ref();
     // 右滑界面行为组
-    const rightSlidingActionGroup = c.model.deuiactionGroup2;
+    const rightSlidingActionGroup = ref();
+
+    c.evt.on('onCreated', () => {
+      // 适配动态界面行为组
+      leftSlidingActionGroup.value = c.model.deuiactionGroup;
+      rightSlidingActionGroup.value = c.model.deuiactionGroup2;
+    });
+
+    // 按钮样式转换
+    const btnType = (item: IDETBUIActionItem) => {
+      const _type = convertBtnType(item);
+      return _type === 'default' ? 'primary' : _type;
+    };
 
     // 绘制滑动行为组
     const renderSlidingActionGroup = (group: IUIActionGroup, data: IData) => {
-      const groupDetails = group.uiactionGroupDetails || [];
-      if (!groupDetails || groupDetails.length === 0) {
-        return null;
-      }
+      const groupDetails = getAllUIActionItems(group.uiactionGroupDetails);
+      if (!groupDetails || groupDetails.length === 0) return null;
       const row = c.state.rows.find(
         (rowData: IMobMDCtrlRowState) => data.srfkey === rowData.data.srfkey,
       )!;
       const btnContainer = row.uaColStates[group.id!];
       return groupDetails.map(detail => {
-        const btn = btnContainer[detail.id!];
-        if (btn.visible === false) {
-          return null;
-        }
-        return (
-          <van-button
-            square
-            type='primary'
-            text={detail.caption}
-            disabled={btn.disabled || btn.loading}
-            onClick={(e: MouseEvent) => c.onActionClick(detail, row, e)}
-          />
-        );
+        // 只绘制行为按钮，不绘制行为组按钮
+        if (!detail.uiactionId) return null;
+        const btn = btnContainer?.[detail.id!];
+        const _type = btnType(detail);
+        if (btn?.visible)
+          return (
+            <van-button
+              square
+              type={_type}
+              disabled={btn.disabled || btn.loading}
+              onClick={(e: MouseEvent) => c.onActionClick(detail, row, e)}
+            >
+              <iBizInfoItem
+                icon={
+                  detail.showIcon && (detail as IData).sysImage
+                    ? (detail as IData).sysImage
+                    : null
+                }
+                label={detail.showCaption ? detail.caption : null}
+              />
+            </van-button>
+          );
+        return null;
       });
     };
 
     // 绘制默认列表项
     const renderDefaultItem = (data: IData) => {
       const isItemSliding = !!(
-        leftSlidingActionGroup || rightSlidingActionGroup
+        leftSlidingActionGroup.value || rightSlidingActionGroup.value
       );
       if (isItemSliding) {
         return (
           <van-swipe-cell key={data.srfkey} class={ns.b('slider-item')}>
             {{
-              left: rightSlidingActionGroup
-                ? () => renderSlidingActionGroup(rightSlidingActionGroup, data)
+              left: rightSlidingActionGroup.value
+                ? () =>
+                    renderSlidingActionGroup(
+                      rightSlidingActionGroup.value,
+                      data,
+                    )
                 : null,
-              right: leftSlidingActionGroup
-                ? () => renderSlidingActionGroup(leftSlidingActionGroup, data)
+              right: leftSlidingActionGroup.value
+                ? () =>
+                    renderSlidingActionGroup(leftSlidingActionGroup.value, data)
                 : null,
               default: () => {
                 return renderItem(data);
@@ -196,79 +164,56 @@ export const MDCtrlControl = defineComponent({
     };
 
     const renderDefault = () => {
-      return c.state.items.map((item: IData) => {
-        return renderDefaultItem(item);
-      });
-    };
-
-    const renderGroup = () => {
-      return c.state.groups.map(group => {
-        return (
-          <div title={group.caption}>
-            <div class={ns.b('group-caption')}> {group.caption}</div>
-            {group.children.map(item => {
-              return renderDefaultItem(item.data);
-            })}
-          </div>
-        );
-      });
-    };
-
-    // 绘制卡片内容
-    const renderMDContent = () => {
-      return (
-        <van-list
-          class={[
-            ns.e('content'),
-            ns.is('show-underLine', c.model.controlStyle !== 'EXTVIEW1'),
-          ]}
-          loading={c.state.isLoading}
-          finished={
-            isLodeMoreDisabled.value || c.state.isLoading || isUpdating.value
-          }
-          immediate-check={false}
-          onLoad={() => onLoadMore()}
-        >
-          {c.model.groupMode !== 'NONE' ? renderGroup() : renderDefault()}
-        </van-list>
+      const result = [];
+      result.push(
+        ...c.state.items.map((item: IData) => {
+          return renderDefaultItem(item);
+        }),
       );
+      if (c.enableNew) {
+        result.push(renderAddItem());
+      }
+      return result;
+    };
+
+    const renderGroupChildren = (children: IData[]) => {
+      return children.map(item => {
+        return renderDefaultItem(item.data);
+      });
+    };
+
+    // 绘制列表内容
+    const renderMDContent = () => {
+      // eslint-disable-next-line no-shadow
+      const slots = c.enableGroup
+        ? renderGroup({ children: renderGroupChildren })
+        : renderDefault();
+      return renderScrollList(slots);
     };
 
     return {
       c,
       ns,
+      enableLoadMore,
       renderMDContent,
       renderNoData,
-      showCollapseOrExpandIcon,
       onPageChange,
-      renderLoadMore,
-      sortVal,
-      delistItems,
-      onSortChange,
     };
   },
   render() {
-    const enablePagingBar =
-      this.c.model.enablePagingBar && this.c.model.pagingMode === 1;
+    const enablePagingBar = this.c.model.enablePagingBar;
 
     return (
       <iBizControlBase
         controller={this.c}
         class={[
+          this.ns.is('scroll', enablePagingBar),
           this.ns.is(
             'enable-page',
-            enablePagingBar || this.showCollapseOrExpandIcon,
+            enablePagingBar || this.c.model.pagingMode === 3,
           ),
         ]}
       >
-        {this.delistItems.length > 0 && (
-          <iBizMdCtrlSetting
-            class={this.ns.e('setting')}
-            listItems={this.delistItems}
-            sort={this.sortVal}
-            onSortChange={this.onSortChange}
-          ></iBizMdCtrlSetting>
-        )}
         {this.c.state.isCreated &&
           (this.c.state.rows.length > 0
             ? this.renderMDContent()
@@ -284,7 +229,6 @@ export const MDCtrlControl = defineComponent({
             onChange={this.onPageChange}
           ></van-pagination>
         ) : null}
-        {this.showCollapseOrExpandIcon && this.renderLoadMore()}
       </iBizControlBase>
     );
   },

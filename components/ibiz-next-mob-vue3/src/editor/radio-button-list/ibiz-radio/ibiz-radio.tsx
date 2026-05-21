@@ -4,6 +4,7 @@ import {
   getRadioProps,
   useFocusAndBlur,
   useNamespace,
+  useFilterAttribute,
 } from '@ibiz-template/vue3-util';
 import './ibiz-radio.scss';
 import { RadioButtonListEditorController } from '../radio-button-list.controller';
@@ -12,8 +13,9 @@ import { RadioButtonListEditorController } from '../radio-button-list.controller
  * 移动端单选项列表
  * @primary
  * @description 使用van-radio-group组件和van-radio组件，用于在一组备选项中进行单选的场景。支持编辑器类型包含：`移动端单选项列表`
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
- * @ignoreemits  infoTextChange | enter
+ * @ignoreemits  blur | focus | infoTextChange | enter
  */
 export const IBizRadio = defineComponent({
   name: 'IBizRadio',
@@ -91,7 +93,7 @@ export const IBizRadio = defineComponent({
             class={this.ns.e('group')}
             v-model={this.currentVal}
             direction='horizontal'
-            {...this.$attrs}
+            {...useFilterAttribute(this.$attrs)}
           >
             {this.items.map((_item, index: number) => (
               <van-radio

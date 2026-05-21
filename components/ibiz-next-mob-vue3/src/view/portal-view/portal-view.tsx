@@ -46,6 +46,8 @@ export const PortalView = defineComponent({
           const crtlProps = {
             context: this.c.context,
             params: this.c.params,
+            provider: this.c.providers[slotKey],
+            modelData: ctrl,
           };
           if (this.c.slotProps[slotKey]) {
             Object.assign(crtlProps, this.c.slotProps[slotKey]);
@@ -63,7 +65,6 @@ export const PortalView = defineComponent({
             slots[slotKey] = () => {
               const comp = resolveComponent(provider.component) as string;
               return h(comp, {
-                modelData: ctrl,
                 ...crtlProps,
               });
             };

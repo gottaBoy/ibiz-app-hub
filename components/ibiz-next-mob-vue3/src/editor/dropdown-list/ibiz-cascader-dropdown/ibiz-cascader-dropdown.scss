@@ -1,0 +1,63 @@
+$cascader-dropdown: (
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+
+  // 字体
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+);
+
+@include b(cascader-dropdown) {
+  @include set-component-css-var(cascader-dropdown, $cascader-dropdown);
+
+  height: 100%;
+  font-size: getCssVar(cascader-dropdown, font-fontSize);
+  line-height: getCssVar(cascader-dropdown, font-lineHeight);
+  color: getCssVar(cascader-dropdown, color);
+
+  --van-field-input-text-color: #{getCssVar(cascader-dropdown, color)};
+  --van-cell-text-color: #{getCssVar(cascader-dropdown, color)};
+  --van-cell-value-color: #{getCssVar(cascader-dropdown, color)};
+  --van-cell-line-height: #{getCssVar(cascader-dropdown, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(cascader-dropdown, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(cascader-dropdown, font-fontSize)};
+  --van-field-input-disabled-text-color: #{getCssVar(cascader-dropdown, color-disabled)};
+
+  input::placeholder {
+    color: getCssVar(cascader-dropdown, color-placeholder);
+    -webkit-text-fill-color: getCssVar(cascader-dropdown, color-placeholder);
+  }
+
+  .van-field {
+    &::after {
+      display: none;
+    }
+  }
+
+  .van-cell--clickable:active {
+    background-color: transparent;
+  }
+
+  @include m(disabled) {
+    color: getCssVar(cascader-dropdown, color-disabled);
+
+    --van-field-input-disabled-text-color: #{getCssVar(cascader-dropdown, color-disabled)};
+  }
+
+  @include m(readonly) {
+    --van-field-input-text-color: #{getCssVar(cascader-dropdown, color-readonly)};
+
+    color: getCssVar(cascader-dropdown, color-readonly);
+  }
+
+  input {
+    text-align: getCssVar(cascader-dropdown, font-textAlign);
+  }
+  &.#{bem('cascader-dropdown','','readonly')} {
+    text-align: getCssVar(cascader-dropdown, font-textAlign);
+  }
+}

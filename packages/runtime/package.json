@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/runtime",
-  "version": "0.7.41-alpha.21",
+  "version": "0.7.41-alpha.77",
   "description": "运行时逻辑库",
   "type": "module",
   "main": "out/index.js",
@@ -56,7 +56,7 @@
   },
   "peerDependencies": {
     "@ibiz-template/core": "^0.7.0",
-    "@ibiz/model-core": "^0.1.79",
+    "@ibiz/model-core": "^0.1.84",
     "async-validator": "^4.2.5",
     "dayjs": "^1.11.7",
     "echarts": "^5.4.3",

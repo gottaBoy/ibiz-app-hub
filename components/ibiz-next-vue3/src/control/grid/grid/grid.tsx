@@ -18,6 +18,7 @@ import {
   defineComponent,
   resolveComponent,
   VNodeArrayChildren,
+  Slots,
 } from 'vue';
 import {
   IDEGrid,
@@ -211,6 +212,7 @@ export function renderColumn(
   model: IDEGridColumn,
   renderColumns: IDEGridColumn[],
   index: number,
+  slots: Readonly<Slots>,
 ): VNode | null {
   const { codeName: columnName, width } = model;
 
@@ -219,6 +221,15 @@ export function renderColumn(
   const columnState = c.state.columnStates.find(
     item => item.key === columnName,
   )!;
+
+  // 如果配置有展开图标列且显示，则仅有图标展开列的type为default
+  let type = 'default';
+  const expandiconcolumn = c.controlParams.expandiconcolumn?.toLowerCase();
+  const expandColumnSatate = c.state.columnStates.find(
+    item => expandiconcolumn && item.key.toLowerCase() === expandiconcolumn,
+  );
+  if (expandColumnSatate && !expandColumnSatate.hidden)
+    type = columnName?.toLowerCase() === expandiconcolumn ? 'default' : '';
 
   // 如果没有配置自适应列，则最后一列变为自适应列
   const widthFlexGrow =
@@ -231,21 +242,22 @@ export function renderColumn(
   // 表格列自定义
   return (
     <el-table-column
-      className={`${model.columnType?.toLowerCase()} ${model.columnType?.toLowerCase()}-${columnName}`}
-      label={model.caption}
+      type={type}
       prop={columnName}
-      {...{ [widthName]: tempWidth }}
+      label={model.caption}
       fixed={columnState.fixed}
+      {...{ [widthName]: tempWidth }}
       sortable={
         model.enableSort ? c.model.sortMode === 'LOCAL' || 'custom' : false
       }
+      align={model.align?.toLowerCase() || 'center'}
       sortMethod={(a: IData, b: IData) => {
         const fieldName = model.id!.toLowerCase();
         if (a[fieldName] < b[fieldName] || !a[fieldName]) return -1;
         if (a[fieldName] > b[fieldName] || !b[fieldName]) return 1;
         return 0;
       }}
-      align={model.align?.toLowerCase() || 'center'}
+      className={`${model.columnType?.toLowerCase()} ${model.columnType?.toLowerCase()}-${columnName}`}
     >
       {{
         header: ({ column }: IData) => {
@@ -281,15 +293,19 @@ export function renderColumn(
               }
             }
             const comp = resolveComponent(c.providers[columnName!].component);
-            return h(comp, {
-              controller: columnC,
-              row: rowState,
-              key: elRow.tempsrfkey + columnName,
-              attrs: renderAttrs(model, {
-                ...c.getEventArgs(),
-                data: rowState.data,
-              }),
-            });
+            return h(
+              comp,
+              {
+                controller: columnC,
+                row: rowState,
+                key: elRow.tempsrfkey + columnName,
+                attrs: renderAttrs(model, {
+                  ...c.getEventArgs(),
+                  data: rowState.data,
+                }),
+              },
+              slots,
+            );
           }
           return null;
         },
@@ -304,6 +320,7 @@ export function renderChildColumn(
   model: IDEGridColumn,
   renderColumns: IDEGridColumn[],
   index: number,
+  slots: Readonly<Slots>,
 ): VNode | null {
   if (model.columnType === 'GROUPGRIDCOLUMN') {
     const childColumns =
@@ -331,14 +348,14 @@ export function renderChildColumn(
           },
           default: (): VNodeArrayChildren => {
             return childColumns.map((column, index2) => {
-              return renderChildColumn(c, column, renderColumns, index2);
+              return renderChildColumn(c, column, renderColumns, index2, slots);
             });
           },
         }}
       </el-table-column>
     );
   }
-  return renderColumn(c, model, renderColumns, index);
+  return renderColumn(c, model, renderColumns, index, slots);
 }
 
 export const GridControl = defineComponent({
@@ -479,12 +496,7 @@ export const GridControl = defineComponent({
         return;
       }
       return (
-        <div
-          class={[
-            ns.b('batch-toolbar'),
-            ns.is('show', c.state.selectedData.length > 0),
-          ]}
-        >
+        <div class={[ns.b('batch-toolbar'), ns.is('show', c.showBatchToolbar)]}>
           <div class={ns.b('batch-toolbar-content')}>
             <div class={ns.b('batch-toolbar-text')}>
               {ibiz.i18n.t('control.common.itemsSelected', {
@@ -512,9 +524,10 @@ export const GridControl = defineComponent({
         return renderSlot(slots, model.id!, {
           model,
           data: c.state.items,
+          controller: c.columns[model.codeName!],
         });
       }
-      return renderChildColumn(c, model, renderColumns.value, index);
+      return renderChildColumn(c, model, renderColumns.value, index, slots);
     };
 
     // 绘制拖动图标列
@@ -545,6 +558,7 @@ export const GridControl = defineComponent({
                       <path
                         d='M1 2a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM1 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z'
                         id='drag-icon-air'
+                        fill='currentColor'
                       ></path>
                     </g>
                   </g>
@@ -778,6 +792,7 @@ export const GridControl = defineComponent({
           }
           {this.c.state.enablePagingBar && (
             <iBizPagination
+              mode={this.c.paginationMode}
               total={state.total}
               curPage={state.curPage}
               size={state.size}

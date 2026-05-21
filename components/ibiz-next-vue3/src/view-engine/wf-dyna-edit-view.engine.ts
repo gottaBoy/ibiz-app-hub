@@ -26,7 +26,7 @@ export class WFDynaEditViewEngine extends EditViewEngine {
    * @type {ViewController<IAppDEWFDynaEditView, IWFDynaEditViewState, IWFDynaEditViewEvent>}
    * @memberof WFDynaEditViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEWFDynaEditView,
     IWFDynaEditViewState,
     IWFDynaEditViewEvent
@@ -275,7 +275,7 @@ export class WFDynaEditViewEngine extends EditViewEngine {
     // *没有工作流操作视图的，自己提交工作流
     if (!submitView) {
       await this.form.wfSubmit({ viewParam: newParams });
-      await this.view.closeView();
+      await this.view.closeView({ ok: true, data: this.form.getData() });
       return;
     }
 
@@ -289,7 +289,7 @@ export class WFDynaEditViewEngine extends EditViewEngine {
 
     // 提交视图正常关闭后关闭当前视图
     if (result.ok) {
-      await this.view.closeView();
+      await this.view.closeView({ ok: true, data: this.form.getData() });
     }
   }
 }

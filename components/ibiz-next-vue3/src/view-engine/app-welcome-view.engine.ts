@@ -13,7 +13,7 @@ import { IAppView } from '@ibiz/model-core';
  * @extends {ViewEngineBase}
  */
 export class AppWelcomeViewEngine extends ViewEngineBase {
-  protected declare view: ViewController<IAppView, IViewState, IViewEvent>;
+  declare protected view: ViewController<IAppView, IViewState, IViewEvent>;
 
   async onCreated(): Promise<void> {
     await super.onCreated();

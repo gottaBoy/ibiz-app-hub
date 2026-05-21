@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'Usr2893DataViewExpView',
   deviewId: '115f478b24151ee083b914c81a2ef2b6',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

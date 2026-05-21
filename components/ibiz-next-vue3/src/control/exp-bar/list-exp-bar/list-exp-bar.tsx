@@ -1,12 +1,12 @@
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import { defineComponent, PropType, VNode } from 'vue';
 import { IListExpBar } from '@ibiz/model-core';
-import './list-exp-bar.scss';
 import {
-  ExpBarControlController,
   IControlProvider,
+  ExpBarControlController,
 } from '@ibiz-template/runtime';
 import { useExpBarRender, useWatchRouteChange } from '../render-util';
+import './list-exp-bar.scss';
 
 export const ListExpBarControl = defineComponent({
   name: 'IBizListExpBarControl',
@@ -65,7 +65,7 @@ export const ListExpBarControl = defineComponent({
     if (isCreated) {
       if (XDataModel) {
         // 列表自己绘制，要传递额外的参数
-        const key = this.c.controlPanel ? XDataModel.name! : 'default';
+        const key = this.c.controlPanel ? 'listexpbar_list' : 'default';
         slots[key] = (): VNode => {
           return (
             <iBizControlShell

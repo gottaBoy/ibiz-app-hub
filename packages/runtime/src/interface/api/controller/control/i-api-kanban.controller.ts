@@ -1,5 +1,4 @@
 import { IDEKanban } from '@ibiz/model-core';
-import { IApiData } from '@ibiz-template/core';
 import { IApiKanbanState } from '../../state';
 import { IApiDataViewControlController } from './i-api-data-view-control.controller';
 
@@ -15,6 +14,7 @@ import { IApiDataViewControlController } from './i-api-data-view-control.control
  * @ctrlparams {"name":"mdctrlrefreshmode","title":"刷新模式","defaultvalue":"'cache'","parameterType":"'nocache' | 'cache'","description":"多数据部件刷新模式，当值为 'cache'，部件刷新时保留选中数据；当值为 'nocache'，部件刷新时清空选中数据","effectPlatform":"web"}
  * @ctrlparams {"name":"enablefullscreen","title":"是否启用全屏功能","defaultvalue": "true","parameterType":"boolean","description":"该参数用于设置看板是否启用全屏功能","effectPlatform":"web"}
  * @ctrlparams {"name":"enablegrouphidden","title":"是否启用隐藏分组功能","defaultvalue": "false","parameterType":"boolean","description":"该参数用于设置看板是否启用隐藏分组功能","effectPlatform":"web"}
+ * @ctrlparams {"name":"paginationmode","title":"分页显示模式","defaultvalue":"'default'","parameterType":"'default'|'simple'","description":"表格分页显示模式，当值为 default 时，显示完整的分页组件，值为 simple 时，显示简略版的分页组件，仅包含总条数，当前页，上一页和下一页","effectPlatform":"web"}
  * @template T
  * @template S
  */
@@ -24,9 +24,9 @@ export interface IApiKanbanController<
 > extends IApiDataViewControlController<T, S> {
   /**
    * @description 全屏
-   * @param {IApiData} container
+   * @param {HTMLElement} container 容器元素
    * @returns {*}  {boolean}
    * @memberof IApiKanbanController
    */
-  onFullScreen(container: IApiData): boolean;
+  onFullScreen(container: HTMLElement): boolean;
 }

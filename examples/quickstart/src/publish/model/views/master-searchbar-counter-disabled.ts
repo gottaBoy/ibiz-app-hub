@@ -9,7 +9,7 @@ export default {
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
-  caption: '搜索栏_计数器禁用',
+  caption: '搜索栏_计数器动态禁用',
   codeName: 'master_searchbar_counter_disabled',
   appDataEntityId: 'web.master',
   appViewMsgGroupId: 'disable_counter',
@@ -21,6 +21,27 @@ export default {
       layout: 'FLEX',
     },
     rootPanelItems: [
+      {
+        rawItem: {
+          rawItemParams: [
+            {
+              key: 'position',
+              value: 'TOP',
+            },
+          ],
+          predefinedType: 'VIEWMSG_POS',
+          id: 'viewmsg_pos',
+        },
+        caption: '视图消息占位',
+        itemStyle: 'DEFAULT',
+        itemType: 'RAWITEM',
+        layoutPos: {
+          shrink: 1,
+          layout: 'FLEX',
+        },
+        showCaption: true,
+        id: 'viewmsg_pos',
+      },
       {
         actionGroupExtractMode: 'ITEM',
         panelItems: [
@@ -181,7 +202,7 @@ export default {
         logicTrigger: 'VIEWEVENT',
         logicType: 'SCRIPT',
         scriptCode:
-          "view.ctx.evt.on('onRegister', (name, ctrl) => {\r\n   if (name === 'searchbar') {\r\n      ctrl?.disableCounter();\r\n      console.log('部件注册成功事件触发调用部件禁用计数器能力');\r\n   }\r\n})",
+          "view.ctx.evt.on('onRegister', (name, ctrl) => {\r\n   if (name === 'searchbar') {\r\n      ctrl.disableCounter?.();\r\n      console.log('部件注册成功事件触发后，调用禁用部件计数器能力');\r\n   }\r\n})",
         builtinLogic: true,
         id: 'disable_counter',
       },
@@ -316,7 +337,7 @@ export default {
         capLanguageRes: {
           lanResTag: 'DE.LNAME.MASTER',
         },
-        caption: '搜索栏_计数器禁用',
+        caption: '搜索栏_计数器动态禁用',
         codeName: 'searchbar_counter_disabled_captionbar',
         controlType: 'CAPTIONBAR',
         appDataEntityId: 'web.master',
@@ -334,7 +355,7 @@ export default {
     modelType: 'PSSYSVIEWLAYOUTPANEL',
     id: 'layoutpanel',
   },
-  title: '搜索栏_计数器禁用',
+  title: '搜索栏_计数器动态禁用',
   viewStyle: 'DEFAULT',
   viewType: 'DEGRIDVIEW',
   enableDP: true,

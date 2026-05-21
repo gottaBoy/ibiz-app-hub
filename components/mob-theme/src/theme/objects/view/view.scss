@@ -1,0 +1,13 @@
+// 视图级样式 
+:root {
+    // 页面标题样式
+    #{getCssVarName(view-page-caption,font-size)}:getCssVar('font-size', 'header-5');
+    #{getCssVarName(view-page-caption,font-weight)}:getCssVar(font-weight, bold);
+    #{getCssVarName(view-page-caption,line-height)}: rem(26px);
+    #{getCssVarName(view-page-caption,color)}:getCssVar(color, text, 0);
+    #{getCssVarName(view-page-caption,text-align)}:center;
+
+    // 视图消息
+    #{getCssVarName(view-message,padding)}:#{getCssVar('spacing', 'extra-tight')} #{getCssVar('spacing', 'tight')};
+}
+ 

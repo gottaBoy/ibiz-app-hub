@@ -13,8 +13,9 @@ import { usePopstateListener } from '../../../util';
  * 移动端下拉列表（单选）
  * @primary
  * @description  使用van-field组件和van-popup组件，用于在弹出的选择列表中选择单条数据的场景。支持编辑器类型包含：`移动端下拉列表（单选）`
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
- * @ignoreemits  infoTextChange | enter
+ * @ignoreemits  blur | focus | infoTextChange | enter
  */
 export const IBizDropdown = defineComponent({
   name: 'IBizDropdown',
@@ -75,11 +76,13 @@ export const IBizDropdown = defineComponent({
     watch(
       () => props.value,
       newVal => {
-        if (newVal || newVal === null) {
+        if (newVal !== undefined) {
           curValue.value = newVal;
           if (newVal === null) {
             curValue.value = '';
           }
+        } else {
+          curValue.value = '';
         }
       },
       { immediate: true },
@@ -89,7 +92,7 @@ export const IBizDropdown = defineComponent({
       const index = items.value.findIndex(
         // 不匹配类型 兼容数值属性配置字符串代码表
         // eslint-disable-next-line eqeqeq
-        (item: IData) => item.value == curValue.value,
+        (item: IData) => item.value === curValue.value,
       );
       if (index !== -1) {
         return items.value[index].text;
@@ -201,17 +204,18 @@ export const IBizDropdown = defineComponent({
                     style={
                       item?.color || item?.bkcolor
                         ? ns.cssVarBlock({
-                            'select-option-item-color': `${item.color || ''}`,
-                            'select-option-item-bkcolor': `${
-                              item.bkcolor || ''
-                            }`,
+                            'pop-color-item': `${item.color || ''}`,
+                            'pop-color-item-bg': `${item.bkcolor || ''}`,
                           })
                         : ''
                     }
                   >
+                    {item.sysImage && (
+                      <iBizIcon icon={item.sysImage}></iBizIcon>
+                    )}
                     {item.text}
                   </div>
-                  {item.value && item.value === curValue.value && (
+                  {item.value === curValue.value && (
                     <van-icon
                       class={ns.bem('pop', 'list', 'selected')}
                       name='success'
@@ -239,6 +243,16 @@ export const IBizDropdown = defineComponent({
       showPicker.value = false;
     };
 
+    const refreshCodeList = () => {
+      c.loadCodeList(props.data!).then((codeList: readonly IData[]) => {
+        items.value = codeList;
+      });
+    };
+
+    const onPopClose = () => {
+      searchValue.value = '';
+    };
+
     // 监听popstate事件
     usePopstateListener(closeDrawer);
 
@@ -257,6 +271,8 @@ export const IBizDropdown = defineComponent({
       getCodeListItem,
       renderPopHeader,
       renderPopContent,
+      refreshCodeList,
+      onPopClose,
     };
   },
 
@@ -275,9 +291,9 @@ export const IBizDropdown = defineComponent({
           style={
             codeListItem?.color || codeListItem?.bkcolor
               ? this.ns.cssVarBlock({
-                  'readonly-text-item-color': `${codeListItem.color || ''}`,
-                  'select-option-item-color': `${codeListItem.color || ''}`,
-                  'select-option-item-bkcolor': `${codeListItem.bkcolor || ''}`,
+                  'color-readonly': `${codeListItem.color || ''}`,
+                  'color-item': `${codeListItem.color || ''}`,
+                  'color-item-bg': `${codeListItem.bkcolor || ''}`,
                 })
               : ''
           }
@@ -305,15 +321,14 @@ export const IBizDropdown = defineComponent({
             onClick={() => {
               if (!this.disabled) {
                 this.showPicker = true;
+                this.refreshCodeList();
               }
             }}
             style={
               optionValue?.color || optionValue?.bkcolor
                 ? this.ns.cssVarBlock({
-                    'select-option-item-color': `${optionValue.color || ''}`,
-                    'select-option-item-bkcolor': `${
-                      optionValue.bkcolor || ''
-                    }`,
+                    'color-item': `${optionValue.color || ''}`,
+                    'color-item-bg': `${optionValue.bkcolor || ''}`,
                   })
                 : ''
             }
@@ -350,6 +365,7 @@ export const IBizDropdown = defineComponent({
             close-on-popstate={true}
             position='bottom'
             style={{ height: '80%' }}
+            onClose={this.onPopClose}
           >
             <div class={this.ns.b('pop')}>
               {this.renderPopHeader()}

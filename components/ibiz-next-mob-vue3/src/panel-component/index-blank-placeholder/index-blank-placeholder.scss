@@ -1,0 +1,14 @@
+// 默认样式
+@include b(index-blank-placeholder) {
+  width: 100%;
+  height: 100%;
+
+  > .#{bem('row')} {
+    height: 100%;
+    overflow: hidden auto;
+  }
+
+  @include when(hidden) {
+    display: none;
+  }
+}

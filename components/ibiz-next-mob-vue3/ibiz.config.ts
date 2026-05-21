@@ -49,5 +49,6 @@ export default defineConfig({
     '@ibiz-template/vue3-util',
     '@ibiz-template/model-helper',
     '@floating-ui/dom',
+    '@ibiz-template-plugin/ibiz-mob-ai-chat',
   ],
 });

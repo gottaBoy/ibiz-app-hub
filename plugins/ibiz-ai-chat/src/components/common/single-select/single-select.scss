@@ -1,0 +1,122 @@
+@include b('chat-single-select') {
+  position: relative;
+  min-width: 90px;
+  max-width: 60%;
+  font-size: getCssVar('font-size', 'regular');
+  line-height: 28px;
+
+  @include e('button') {
+    display: flex;
+    gap: getCssVar('spacing', 'extra', 'tight');
+    align-items: center;
+    min-height: getCssVar('height-control', 'default');
+    padding: getCssVar('spacing', 'extra-tight') getCssVar('spacing', 'tight');
+    line-height: 1.1;
+    cursor: pointer;
+
+    @include m('border') {
+      border: 1px solid getCssVar('ai-chat', 'border-color');
+      border-radius: getCssVar('border-radius', 'extra-small');
+
+      &:hover {
+        border-color: getCssVar('ai-chat', 'background-color-2');
+      }
+      @include when('focus') {
+        border-color: getCssVar('ai-chat', 'hover-background-color');
+
+        &:hover {
+          border-color: getCssVar('ai-chat', 'hover-background-color');
+        }
+      }
+    }
+
+    @include m('caption') {
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @include m('icon') {
+      display: inline-flex;
+      flex-shrink: 0;
+      align-items: center;
+
+      .icon {
+        font-size: 1.2em;
+      }
+    }
+
+    @include m('suffix') {
+      .icon {
+        fill: none;
+      }
+    }
+  }
+
+  @include e('dropdown') {
+    position: absolute;
+    bottom: calc(100% + getCssVar('spacing', 'extra-tight'));
+    left: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: auto;
+    padding: getCssVar('spacing', 'extra-tight') 0;
+    overflow: hidden;
+    background-color: getCssVar('color', 'bg', '2');
+    border: 1px solid getCssVar('ai-chat', 'border-color');
+    border-radius: getCssVar('border-radius', 'small');
+    box-shadow: getCssVar('shadow', 'elevated');
+
+    @include m('search') {
+      flex-shrink: 0;
+      padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'base-tight');
+    }
+
+    @include m('list') {
+      position: relative;
+      flex-grow: 1;
+      min-height: 70px;
+      max-height: 240px;
+      padding: 0;
+      margin: 0;
+      overflow-y: auto;
+    }
+
+    @include m('item') {
+      padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'base-tight');
+      overflow: hidden;
+      line-height: 16px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+
+      &:hover {
+        background-color: getCssVar('color', 'fill', '0');
+      }
+
+      @include when('active') {
+        color: getCssVar('ai-chat', 'hover-color');
+        background-color: getCssVar('ai-chat', 'hover-background-color');
+      }
+    }
+  }
+
+  @include e('empty') {
+    display: flex;
+    flex-direction: column;
+    gap: getCssVar('spacing', 'tight');
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'base-tight');
+
+    svg {
+      width: 5em !important;
+      height: 5em !important;
+    }
+  }
+}

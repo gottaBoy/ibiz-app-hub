@@ -32,7 +32,7 @@ export interface IApiButtonContainerState {
   /**
    * @description 更新子的状态
    * @param {IApiContext} context 上下文
-   * @param {IApiData} [data] 后台数据，可能不存在
+   * @param {IApiData} [data] 实体数据
    * @param {string} [appDeId] 实体标识
    * @returns {*}  {Promise<void>}
    * @memberof IApiButtonContainerState

@@ -19,6 +19,8 @@ export class PanelItemState implements IPanelItemState {
 
   declare keepAlive: boolean;
 
+  counterData: IData = {};
+
   layout: ILayoutState = {
     width: '',
     height: '',

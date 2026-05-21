@@ -1,11 +1,40 @@
+$number-range-picker: (
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  color-clear: var(--van-field-clear-icon-color),
+
+  // 字体
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-clear-fontSize: var(--van-field-clear-icon-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+
+  // 清除按钮样式
+  clear-display: getCssVar(editor, default, required-style),
+);
+
 @include b(number-range-picker) {
+  @include set-component-css-var(number-range-picker, $number-range-picker);
+
   width: 100%;
+  font-size: getCssVar(number-range-picker, font-fontSize);
+  line-height: getCssVar(number-range-picker, font-lineHeight);
+  color: getCssVar(number-range-picker, color);
+
+  --van-field-input-text-color: #{getCssVar(number-range-picker, color)};
+  --van-cell-text-color: #{getCssVar(number-range-picker, color)};
+  --van-cell-value-color: #{getCssVar(number-range-picker, color)};
+  --van-cell-line-height: #{getCssVar(number-range-picker, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(number-range-picker, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(number-range-picker, font-fontSize)};
+  --van-field-input-disabled-text-color: #{getCssVar(number-range-picker, color-disabled)};
 
   @include flex(row, center, center);
 
   .van-field {
     flex: 1;
-    font-size: getCssVar('form-item', 'font-size');
 
     &::after {
       display: none;
@@ -14,24 +43,28 @@
 
   .van-field__control {
     text-align: center;
+  }
 
+  input::placeholder {
+    color: getCssVar(number-range-picker, color-placeholder);
+    -webkit-text-fill-color: getCssVar(number-range-picker, color-placeholder);
   }
 
   @include m(disabled) {
-    --van-field-input-text-color: #{getCssVar('form-item', 'disabled-color')};
+    --van-field-input-disabled-text-color: #{getCssVar(number-range-picker, color-disabled)};
 
-    color: getCssVar('form-item', 'disabled-color');
+    color: getCssVar(number-range-picker, color-disabled);
   }
 
   @include m(readonly) {
-    --van-field-input-text-color: #{getCssVar('form-item', 'readonly-color')};
+    --van-field-input-text-color: #{getCssVar(number-range-picker, color-readonly)};
 
-    color: getCssVar('form-item', 'disabled-color');
+    color: getCssVar(number-range-picker, color-readonly);
   }
 
   @include e('clear-icon'){
-    display: getCssVar(form-item-container,required-style);
-    font-size: getCssVar(font-size,header,4);
-    opacity: 0.3;
+    display: getCssVar(number-range-picker, clear-display);
+    font-size: getCssVar(number-range-picker, font-clear-fontSize);
+    color: getCssVar(number-range-picker, color-clear);
   }
 }

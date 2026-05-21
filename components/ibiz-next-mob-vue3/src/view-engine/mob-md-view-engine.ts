@@ -21,7 +21,7 @@ import { IAppDEMobMDView, IDEListItem } from '@ibiz/model-core';
  * @extends {MDViewEngine}
  */
 export class MobMDViewEngine extends MDViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEMobMDView,
     IListViewState,
     IListViewEvent

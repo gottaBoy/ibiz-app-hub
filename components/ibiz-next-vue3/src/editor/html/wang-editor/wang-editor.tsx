@@ -14,7 +14,6 @@ import {
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import { IEditorConfig, IToolbarConfig } from '@wangeditor/editor';
 import type { IDomEditor } from '@wangeditor/editor';
-import { createUUID } from 'qx-util';
 import { isNil } from 'ramda';
 import {
   getEditorEmits,
@@ -22,18 +21,12 @@ import {
   useNamespace,
   useUIStore,
 } from '@ibiz-template/vue3-util';
-import {
-  IBizContext,
-  IChatMessage,
-  IPortalAsyncAction,
-  StringUtil,
-  awaitTimeout,
-} from '@ibiz-template/core';
-import { SysUIActionTag, UIActionUtil } from '@ibiz-template/runtime';
+import { IChatMessage, awaitTimeout } from '@ibiz-template/core';
 import { ElMessageBox } from 'element-plus';
-import { AxiosProgressEvent } from 'axios';
+import { MenuItem } from '@imengyu/vue3-context-menu';
 import { HtmlEditorController } from '../html-editor.controller';
-import { calcAiToolbarItemsByAc } from '../../../util';
+import { hoverbarKeysEx } from './module';
+import { genDefaultToolbarKeys } from './config';
 import './wang-editor.scss';
 
 type InsertFnType = (_url: string, _alt: string, _href: string) => void;
@@ -45,7 +38,7 @@ type InsertFnType = (_url: string, _alt: string, _href: string) => void;
  * @primary
  * @editorparams {"name":"enableedit","parameterType":"boolean","defaultvalue":true,"description":"当该值为 true 时，会显示代码编辑器顶部的工具栏，并且只有点击编辑按钮后才能开启代码编辑功能，否则编辑框默认处于不可编辑状态，常用于需要控制编辑权限的场景"}
  * @editorparams {"name":"enablefullscreen","parameterType":"boolean","defaultvalue":false,"description":"若该值为 true ，会显示代码编辑器顶部的工具栏，并且点击工具栏中的全屏按钮后，编辑框将全屏显示，方便在较大的视野下进行代码编辑工作"}
- * @editorparams {"name":"srfaiappendcurdata","parameterType":"boolean","defaultvalue":false,"description":"在打开AI功能时，该参数用于判断是否传入对象参数，主要用于在请求历史记录时，附加当前参数"}
+ * @editorparams {"name":"srfaiappendcurdata","parameterType":"boolean","defaultvalue":false,"description":"在打开AI功能时，该参数用于判断是否传入对象参数，主要用于在请求历史记录时，附加当前参数，打开AI行内聊天时默认为true"}
  * @editorparams {"name":"srfaiappendcurcontent","parameterType":"string","description":"在打开AI功能时，如果该参数存在值，会将其传入编辑内容作为用户消息，主要用于在请求历史记录后，附加当前编辑内容作为用户消息"}
  * @editorparams {"name":"uploadparams","parameterType":"string","description":"上传参数，图片或文件上传时，用于计算上传路径"}
  * @editorparams {"name":"exportparams","parameterType":"string","description":"下载参数，图片或文件下载时，用于计算下载路径"}
@@ -54,6 +47,27 @@ type InsertFnType = (_url: string, _alt: string, _href: string) => void;
  * @editorparams {"name":"readonly","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否为只读态"}
  * @editorparams {"name":"appentitytag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所属实体。该参数值会作为验证下载权限的依据。配置格式为（应用代码名称.实体代码名称），示例：web.master"}
  * @editorparams {"name":"datafieldtag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所关联的数据属性。完成配置后，将自动从容器数据（涵盖表单数据、表格行数据、面板数据）、上下文环境以及视图参数中获取该属性的实际值，将其作为验证下载权限的依据"}
+ * @editorparams {"name":"autoquestion","parameterType":"boolean","defaultvalue":true,"description": "在打开AI功能时历史数据最后一个项是用户消息（USER）时是否自动提问，当打开AI行内聊天时是否自动提问"}
+ * @editorparams {"name":"autofill","parameterType":"boolean","defaultvalue":false,"description": "用于AI聊天，AI回答完成之后是否触发回填，默认关闭"}
+ * @editorparams {"name":"openmode","parameterType":"'default' | 'minimize' | 'autoexpand'","description": "用于AI聊天，AI窗口的打开模式，minimize：默认最小化窗口；autoexpand：默认最小化窗口，当提问完成后自动展开窗口"}
+ * @editorparams {"name":"autoclose","parameterType":"{mode:'minimize' | 'close' | 'closetime',duration?:number}","description": "用于AI聊天，在提问完成后，设置AI窗口的自动关闭模式。其中 mode 设为 minimize 时窗口会最小化，设为 close 时窗口会直接关闭，设为 closetime 时窗口会根据 duration 配置的值延时关闭。duration配置单位为秒（s），默认值为 3 秒"}
+ * @editorparams {"name":"inlineaichatheight","parameterType":"number","defaultvalue":300,"description":"用于指定AI行内聊天框高度"}
+ * @editorparams {"name":"enableaiminimize","parameterType":"boolean","description":"用于控制ai聊天窗口是否启用最小化，优先级大于全局参数enableAIMinimize"}
+ * @editorparams {"name":"inlinecompletionmode","parameterType":"'sync' | 'async'","defaultvalue":"async", "description":"用于AI行内聊天，控制请求方式是同步还是异步"}
+ * @editorparams {"name":"enablenoaccess","parameterType":"boolean","defaultvalue":"false", "description":"是否启用无权限模式，若启用无权限模式，上传文件夹需拼接'$'字符，也不需要计算下载凭证"}
+ * @editorparams {"name":"globaldownloadprifix","parameterType":"boolean","defaultvalue":"false", "description":"是否使用全局文件下载前缀，若启用，则以global作为前缀"}
+ * @editorparams {"name":"srfaiappendresource","parameterType":"string", "description":"AI聊天默认附加资源数据"}
+ * @editorparams {"name":"srfmode","parameterType":"string", "description":"指定AI聊天自定义模式"}
+ * @editorparams {"name":"srfenableaiagentchange","parameterType":"boolean","defaultvalue":true, "description":"指定AI聊天智能体是否可切换"}
+ * @editorparams {"name":"srfaiagent","parameterType":"string", "description":"指定AI聊天默认智能体"}
+ * @editorparams {"name":"summarymaxtokens","parameterType":"number","defaultvalue":"30", "description":"AI聊天标题摘要最大字符数,仅话题标题模式为summary时生效"}
+ * @editorparams {"name":"srfenableknowledgebaseselect","parameterType":"boolean","defaultvalue":true, "description":"AI聊天是否启用知识库选择，若未启用则不显示知识库图标"}
+ * @editorparams {"name":"srfenablerecallconfigsetting","parameterType":"boolean","defaultvalue":true, "description":"AI聊天是否启用自定义召回配置，若未启用则不显示召回配置图标"}
+ * @editorparams {"name":"rerankdefaultvalue","parameterType":"0 | 1 | 2","defaultvalue":"2", "description":"AI聊天召回重排默认值，0:禁用;1:启用;2:自动，仅在启用自定义召回配置和当前智能体召回重排无值时生效"}
+ * @editorparams {"name":"maxchunksdefaultvalue","parameterType":"number","defaultvalue":"10", "description":"AI聊天最大召回数量默认值，仅在启用自定义召回配置和当前智能体最大召回数量无值时生效"}
+ * @editorparams {"name":"chunkthresholddefaultvalue","parameterType":"number","defaultvalue":"0.4", "description":"AI聊天召回相似度阈值默认值，仅在启用自定义召回配置和当前智能体召回相似度阈值无值时生效"}
+ * @editorparams {"name":"srfaichunkview","parameterType":"string", "description":"知识切片视图，用于定义AI交谈打开目标知识切片视图"}
+ * @editorparams {"name":"srfaichunkentity","parameterType":"string", "description":"知识切片实体，用于定义AI交谈打开知识切片视图数据主键key"}
  * @ignoreprops autoFocus | overflowMode
  * @ignoreemits enter | infoTextChange
  */
@@ -61,10 +75,10 @@ const IBizHtml = defineComponent({
   name: 'IBizHtml',
   props: getHtmlProps<HtmlEditorController>(),
   emits: getEditorEmits(),
-  setup(props, { emit }) {
+  setup(props, { emit, slots }) {
     const ns = useNamespace('html');
 
-    const c = props.controller!;
+    const c: HtmlEditorController = props.controller!;
 
     // HTML ref
     const htmlContent = ref();
@@ -109,6 +123,9 @@ const IBizHtml = defineComponent({
     // 是否全屏
     const isFullScreen = ref(false);
 
+    // 是否启用无权限
+    let enableNoAccess = false;
+
     const editorModel = c.model;
     if (editorModel.editorParams) {
       if (editorModel.editorParams.enableEdit) {
@@ -137,6 +154,9 @@ const IBizHtml = defineComponent({
           editorModel.editorParams.enablefullscreen,
         );
       }
+      if (editorModel.editorParams.enablenoaccess) {
+        enableNoAccess = c?.editorParams?.enablenoaccess === 'true';
+      }
     }
 
     if (props.readonly) {
@@ -151,12 +171,19 @@ const IBizHtml = defineComponent({
      * @returns {*}  {string}
      */
     const getDownloadUrl = (data: IData, file: IData): string => {
-      const editorParams = { ...c.editorParams };
+      const editorParams: IData = { ...c.editorParams, enableNoAccess };
       if (editorParams.exportparams) {
         editorParams.exportParams = JSON.parse(editorParams.exportparams);
       }
       if (file && file.folder) {
         editorParams.osscat = file.folder;
+      }
+      if (editorParams.globaldownloadprifix) {
+        editorParams.globalDownloadPrifix =
+          editorParams.globaldownloadprifix === 'true';
+      } else {
+        editorParams.globalDownloadPrifix =
+          ibiz.config.common.globalDownloadPrifix;
       }
       const urls = ibiz.util.file.calcFileUpDownUrl(
         c.context,
@@ -172,7 +199,7 @@ const IBizHtml = defineComponent({
       () => props.data,
       newVal => {
         if (newVal) {
-          const editorParams = { ...c.editorParams };
+          const editorParams: IData = { ...c.editorParams, enableNoAccess };
           if (editorParams.uploadparams) {
             editorParams.uploadParams = JSON.parse(editorParams.uploadparams);
           }
@@ -215,13 +242,13 @@ const IBizHtml = defineComponent({
       return url;
     };
 
+    const toolbarKeys = genDefaultToolbarKeys();
+    if (c.chatCompletion) toolbarKeys.unshift(...['aichart', '|']);
+
     // 工具栏配置
     const toolbarConfig: Partial<IToolbarConfig> = {
       excludeKeys: ['group-video', 'emotion'],
-      insertKeys: {
-        index: 60,
-        keys: c.chatCompletion ? ['emoji', '|', 'aichart'] : ['emoji'],
-      },
+      toolbarKeys,
     };
 
     // 编辑器配置
@@ -272,7 +299,11 @@ const IBizHtml = defineComponent({
           // 单个文件上传成功之后
           onSuccess(file: File, res: IData) {
             // 启用传入下载凭证成功后设置下载票据
-            if (ibiz.config.common.enableDownloadTicket && res.ticket) {
+            if (
+              ibiz.config.common.enableDownloadTicket &&
+              !enableNoAccess &&
+              res.ticket
+            ) {
               ibiz.util.file.setDownloadTicket(res.id, res.ticket);
             }
             console.log(`${file.name} 上传成功`, res);
@@ -294,7 +325,7 @@ const IBizHtml = defineComponent({
             let url = downloadUrl.replace('%fileId%', res.id);
             const alt = res.filename;
             // 从 res 中找到 url alt href ，然后插入图片
-            if (ibiz.config.common.enableDownloadTicket) {
+            if (ibiz.config.common.enableDownloadTicket && !enableNoAccess) {
               const downloadTicket = await ibiz.util.file.getDownloadTicket(
                 c.context,
                 c.params,
@@ -322,145 +353,48 @@ const IBizHtml = defineComponent({
           parseLinkUrl: customParseLinkUrl, // 也支持 async 函数
         },
       },
+      hoverbarKeys: hoverbarKeysEx,
     };
 
     // 组件销毁时，也及时销毁编辑器，重要！
     onBeforeUnmount(() => {
       const editor = editorRef.value;
       if (editor == null) return;
-
       editor.destroy();
     });
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let chatInstance: any;
 
     const onClickAI = async () => {
       const appDataEntityId = c.model.appDataEntityId;
       if (!appDataEntityId || !c.deACMode) return;
-      const {
-        contentToolbarItems,
-        footerToolbarItems,
-        questionToolbarItems,
-        otherToolbarItems,
-      } = calcAiToolbarItemsByAc(c.deACMode);
       const { zIndex } = useUIStore();
       const containerZIndex = zIndex.increment();
-      const module = await import('@ibiz-template-plugin/ai-chat');
-      chatInstance = module.chat || module.default.chat;
-      let id: string = '';
-      let abortController: AbortController;
+      chatInstance = await ibiz.aiChatUtil.getAIChat();
+      const { containerOptions, chatOptions } =
+        await ibiz.aiChatUtil.getEditorExAIChatParams(
+          c.editorParams,
+          c.context,
+          c.params,
+          props.data,
+          c.deACMode,
+          { chatInstance, view: c.view, ctrl: c.ctrl },
+        );
+      const resourceOptions = await ibiz.aiChatUtil.getAIResourceOptions(
+        c.context,
+        c.params,
+      );
       chatInstance.create({
+        resourceOptions,
         containerOptions: {
           zIndex: containerZIndex,
+          ...containerOptions,
         },
         chatOptions: {
           caption: c.deACMode.logicName,
           context: { ...c.context },
           params: { ...c.params, srfactag: c.deACMode.codeName },
           appDataEntityId,
-          contentToolbarItems: contentToolbarItems as any,
-          footerToolbarItems: footerToolbarItems as any,
-          questionToolbarItems: questionToolbarItems as any,
-          otherToolbarItems: otherToolbarItems as any,
-          // 编辑器参数srfaiappendcurdata，是否传入对象参数，用于历史查询传参
-          appendCurData:
-            c.editorParams.srfaiappendcurdata === 'true'
-              ? props.data
-              : undefined,
-          // 编辑器参数srfaiappendcurcontent，传入编辑内容作为用户消息,获取历史数据后附加
-          appendCurContent: c.editorParams.srfaiappendcurcontent
-            ? StringUtil.fill(
-                c.editorParams.srfaiappendcurcontent,
-                c.context,
-                c.params,
-                props.data,
-              )
-            : undefined,
-          question: async (
-            aiChat: any,
-            ctx: IContext,
-            param: IParams,
-            other: IParams,
-            arr: IChatMessage[],
-          ) => {
-            id = createUUID();
-            abortController = new AbortController();
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            try {
-              await deService.aiChatSse(
-                (msg: IPortalAsyncAction) => {
-                  // 20: 持续回答中，消息会持续推送。同一个消息 id 会显示在同一个框内
-                  if (msg.actionstate === 20 && msg.actionresult) {
-                    aiChat.addMessage({
-                      messageid: id,
-                      state: msg.actionstate,
-                      type: 'DEFAULT',
-                      role: 'ASSISTANT',
-                      content: msg.actionresult as string,
-                    });
-                  }
-                  // 30: 回答完成，包含具体所有消息内容。直接覆盖之前的临时拼接消息
-                  else if (msg.actionstate === 30 && msg.actionresult) {
-                    const result = JSON.parse(msg.actionresult as string);
-                    const choices = result.choices;
-                    if (choices && choices.length > 0) {
-                      aiChat.replaceMessage({
-                        messageid: id,
-                        state: msg.actionstate,
-                        type: 'DEFAULT',
-                        role: 'ASSISTANT',
-                        content: choices[0].content || '',
-                      });
-                    }
-                  }
-                  // 40: 回答报错，展示错误信息
-                  else if (msg.actionstate === 40) {
-                    aiChat.replaceMessage({
-                      messageid: id,
-                      state: msg.actionstate,
-                      type: 'ERROR',
-                      role: 'ASSISTANT',
-                      content: msg.actionresult as string,
-                    });
-                  }
-                },
-                abortController,
-                ctx,
-                param,
-                {
-                  messages: arr,
-                },
-              );
-            } catch (error) {
-              aiChat.replaceMessage({
-                messageid: id,
-                state: 40,
-                type: 'ERROR',
-                role: 'ASSISTANT',
-                content: (error as IData).message || ibiz.i18n.t('app.aiError'),
-              });
-              abortController?.abort();
-            } finally {
-              // 标记当前消息已经交互完成
-              aiChat.completeMessage(id, true);
-              return true;
-            }
-          },
-          abortQuestion: async (aiChat: any) => {
-            abortController?.abort();
-            await aiChat.stopMessage({
-              messageid: id,
-              state: 30,
-              type: 'DEFAULT',
-              role: 'ASSISTANT',
-              content: '',
-            });
-            // 标记当前消息已经交互完成
-            await aiChat.completeMessage(id, true);
-          },
+          ...chatOptions,
           action: ((action: string, message: IChatMessage) => {
             if (action === 'backfill') {
               if (hasEnableEdit.value) {
@@ -469,133 +403,7 @@ const IBizHtml = defineComponent({
                 emit('change', message.realcontent);
               }
             }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
           }) as any,
-          history: async (ctx: IContext, param: IParams, other: IParams) => {
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            const historyData = other.appendCurData ? other.appendCurData : {};
-            const result = await deService.aiChatHistory(
-              ctx,
-              param,
-              historyData,
-            );
-            if (result.data && Array.isArray(result.data)) {
-              let preMsg: IData | undefined;
-              result.data.forEach(item => {
-                if (item.role === 'TOOL') {
-                  if (preMsg && item.content) {
-                    chatInstance.aiChat!.updateRecommendPrompt(
-                      preMsg as any,
-                      item.content,
-                    );
-                  }
-                } else {
-                  const msg = {
-                    messageid: createUUID(),
-                    state: 30,
-                    type: 'DEFAULT',
-                    role: item.role,
-                    content: item.content,
-                    completed: true,
-                  } as const;
-                  preMsg = msg;
-                  chatInstance.aiChat!.addMessage(msg);
-                }
-              });
-            }
-            return true;
-          },
-          recommendPrompt: async (
-            ctx: IContext,
-            param: IParams,
-            other: IParams,
-          ) => {
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            const result = await deService.aiChatRecommendPrompt(
-              ctx,
-              param,
-              other.message,
-            );
-            if (result.ok && result.data) {
-              const choices = result.data.choices;
-              if (choices && choices.length > 0) {
-                return choices[0];
-              }
-              return null;
-            }
-            return null;
-          },
-          uploader: {
-            onUpload: async (
-              file: File,
-              reportProgress: (progress: number) => void,
-              options?: IData,
-            ) => {
-              const fileMeata = ibiz.util.file.calcFileUpDownUrl(
-                options?.context || c.context,
-                options?.params || c.params,
-                {},
-              );
-              const fielUploadHeaders = ibiz.util.file.getUploadHeaders();
-              const formData = new FormData();
-              formData.append('file', file);
-              const res = await ibiz.net.axios({
-                url: fileMeata.uploadUrl,
-                method: 'post',
-                headers: fielUploadHeaders,
-                data: formData,
-                onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-                  const percent =
-                    (progressEvent.loaded / progressEvent.total!) * 100;
-                  reportProgress(percent);
-                },
-              });
-              return res.data;
-            },
-          },
-          extendToolbarClick: async (
-            event: MouseEvent,
-            source: IData,
-            context: IData,
-            params: IData,
-            data: IData,
-          ) => {
-            const result = await UIActionUtil.exec(
-              source.id,
-              {
-                view: c.view,
-                ctrl: c.ctrl,
-                context: IBizContext.create(context),
-                params,
-                data: [data],
-                event,
-              },
-              source.appId,
-            );
-            if (result.closeView) {
-              // 修复编辑器失焦后，调整数据后直接点击关闭按钮导致无法触发自动保存
-              // params.view.modal.ignoreDismissCheck = true;
-              c.view.closeView({ ok: true });
-            } else if (result.refresh) {
-              switch (result.refreshMode) {
-                case 1:
-                  c.view.callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                case 2:
-                  c.view.parentView?.callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                case 3:
-                  c.view.getTopView()?.callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                default:
-              }
-            }
-            return result;
-          },
         },
       });
     };
@@ -606,15 +414,42 @@ const IBizHtml = defineComponent({
       editorRef.value = editor; // 记录 editor 实例，重要！
       c.onCreated(editorRef.value);
       editor.setHtml(valueHtml.value);
-      // 配置菜单
-      // setTimeout(() => {
-      //   const toolbar = DomEditor.getToolbar(editor);
-      //   const curToolbarConfig = toolbar?.getConfig();
-      //   console.log(curToolbarConfig?.toolbarKeys); // 当前菜单排序和分组
-      // }, 3000);
-
       editor.on('aiClick', () => {
         onClickAI();
+      });
+      editor.on('lineAiClick', () => {
+        const container = editor.getEditableContainer();
+        const hoverToolbar = container.querySelector('.w-e-hover-bar');
+        if (!hoverToolbar) {
+          return;
+        }
+        const { offsetLeft, offsetTop, offsetHeight } =
+          hoverToolbar as HTMLElement;
+        const items: MenuItem[] = ibiz.inLineAIUtil.calcContextMenus(
+          c.deACMode,
+          (tag: string) => {
+            c.doInLineAIUIAction(tag, c.model.appId);
+          },
+        );
+        if (items.length === 0) return;
+        const editorBoundingClientRect = editor
+          .getEditableContainer()
+          .getBoundingClientRect();
+        const { zIndex } = useUIStore();
+        const popoverZIndex = zIndex.increment();
+        ibiz.inLineAIUtil.showContextMenus(
+          // 编辑器的左侧距离+选区距离编辑器左侧距离
+          editorBoundingClientRect.x + offsetLeft,
+          // 编辑器的上方距离+选区距离编辑器上方距离+悬浮工具栏高度
+          editorBoundingClientRect.y + offsetTop + offsetHeight,
+          items,
+          {
+            zIndex: popoverZIndex,
+            onClose: () => {
+              zIndex.decrement();
+            },
+          },
+        );
       });
     };
     // 编辑器内容、选区变化时的回调函数
@@ -752,6 +587,7 @@ const IBizHtml = defineComponent({
                   entries[0].contentRect.height +
                   (height !== 0 ? 300 : 0)
                 }px`,
+                'toolbar-height': `${height}px`,
               };
               cssVars.value = ns.cssVarBlock(tempCssVars);
               lastToolbarHeight = height;
@@ -919,7 +755,14 @@ const IBizHtml = defineComponent({
     // 绘制编辑器内容
     const renderEditorContent = () => {
       return (
-        <div class={ns.b('content')} ref='htmlContent' style={cssVars.value}>
+        <div
+          class={[ns.b('content'), ns.is('editing', !readonlyState.value)]}
+          ref='htmlContent'
+          style={cssVars.value}
+        >
+          {slots.editorSwitchMenu ? (
+            <div class={ns.b('menu')}>{slots.editorSwitchMenu()}</div>
+          ) : null}
           <Toolbar
             ref='toolbarRef'
             editor={editorRef.value}
@@ -989,12 +832,15 @@ const IBizHtml = defineComponent({
     };
   },
   render() {
+    const isShowEditorSwitchMenu = !!this.$slots.editorSwitchMenu;
     return !this.isFullScreen ? (
       <div
         class={[
           this.ns.b(),
           { [this.ns.b('editor-readonly')]: this.readonlyState },
           this.ns.is('show-ai', true),
+          this.ns.is('enable-edit', !this.readonly && !this.disabled),
+          this.ns.is('show-editor-switch-menu', isShowEditorSwitchMenu),
         ]}
       >
         {this.renderHeaserToolbar()}
@@ -1006,13 +852,17 @@ const IBizHtml = defineComponent({
         v-model={this.isFullScreen}
         width='80%'
         top='10vh'
-        class={this.ns.b('dialog-full-screen')}
+        class={[
+          this.ns.b('dialog-full-screen'),
+          this.ns.is('editing', !this.readonlyState),
+        ]}
         onClose={() => this.changeFullScreenState()}
       >
         <div
           class={[
             this.ns.b(),
             { [this.ns.b('editor-readonly')]: this.readonlyState },
+            this.ns.is('show-editor-switch-menu', isShowEditorSwitchMenu),
           ]}
         >
           {this.renderHeaserToolbar()}

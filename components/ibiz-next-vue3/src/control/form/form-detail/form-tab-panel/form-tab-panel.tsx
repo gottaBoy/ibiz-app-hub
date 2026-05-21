@@ -1,19 +1,11 @@
-import {
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  PropType,
-  reactive,
-  ref,
-  VNode,
-} from 'vue';
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { defineComponent, PropType, ref, VNode } from 'vue';
 import { useController, useNamespace } from '@ibiz-template/vue3-util';
 import './form-tab-panel.scss';
 import { IDEFormTabPanel } from '@ibiz/model-core';
 import {
   FormTabPanelController,
   FormTabPageController,
-  AppCounter,
 } from '@ibiz-template/runtime';
 
 export const FormTabPanel = defineComponent({
@@ -28,71 +20,62 @@ export const FormTabPanel = defineComponent({
       required: true,
     },
   },
-  setup(props, { slots }) {
+  setup(props) {
     const ns = useNamespace('form-tab-panel');
     useController(props.controller);
+    const popoverVisible = ref(false);
 
-    // 计数器
-    let counter: AppCounter | null = null;
-
-    // 计数器数据
-    const counterData = reactive<IData>({});
-
-    // 计数器ID
-    const counterRefId = ref('');
-
-    const onTabClick = (tabIns: IData, event: MouseEvent) => {
-      props.controller.onTabChange(tabIns.props.name);
-
+    const triggerClick = (key: string, event: MouseEvent) => {
       // 触发对应FormTabPage的点击事件
-      const pageC = props.controller.form.details[
-        tabIns.props.name
-      ] as FormTabPageController;
+      const pageC = props.controller.form.details[key] as FormTabPageController;
       if (pageC) {
         pageC.onClick(event);
       }
     };
 
-    const fn = (data: IData) => {
-      counterData.value = data;
+    const onTabClick = (tabIns: IData, event: MouseEvent) => {
+      props.controller.onTabChange(tabIns.props.name);
+      triggerClick(tabIns.props.name, event);
     };
 
-    onMounted(() => {
-      // 计数器相关
-      const defaultSlots: VNode[] = slots.default?.() || [];
-      for (let i = 0; i < defaultSlots.length; i++) {
-        const slot: VNode = defaultSlots[i];
-        const pagePropsC = slot.props?.controller as
-          | FormTabPageController
-          | undefined;
-        if (
-          pagePropsC &&
-          pagePropsC.model &&
-          pagePropsC.model.appCounterRefId
-        ) {
-          counterRefId.value = pagePropsC.model.appCounterRefId;
-          break;
-        }
-      }
-      if (counterRefId.value) {
-        counter = props.controller.getCounter(counterRefId.value);
-        if (counter) {
-          counter.onChange(fn);
-        }
-      }
-    });
+    const onPopoverClick = (key: string, event: MouseEvent) => {
+      props.controller.selectTab(key);
+      popoverVisible.value = false;
+      triggerClick(key, event);
+    };
 
-    onUnmounted(() => {
-      counter?.offChange(fn);
-    });
+    const renderAllTabContent = () => {
+      return (
+        <div class={ns.be('tab-panel-container-style2', 'content')}>
+          {props.modelData.deformTabPages?.map(page => {
+            return (
+              <div
+                class={[
+                  ns.be('tab-panel-container-style2', 'tab-item-content'),
+                  ns.is('active', page.id === props.controller.state.activeTab),
+                ]}
+                onClick={(event: MouseEvent) =>
+                  onPopoverClick(page.codeName!, event)
+                }
+                title={page.caption}
+              >
+                {page.caption}
+              </div>
+            );
+          })}
+        </div>
+      );
+    };
 
     return {
       ns,
+      popoverVisible,
       onTabClick,
-      counterData,
+      renderAllTabContent,
     };
   },
   render() {
+    const isStyle2 = this.modelData.detailStyle === 'STYLE2';
     const defaultSlots: VNode[] = this.$slots.default?.() || [];
     const renderItemText = (c: FormTabPageController) => {
       return (
@@ -102,7 +85,7 @@ export const FormTabPanel = defineComponent({
         </span>
       );
     };
-    return (
+    const tabContent = (
       <el-tabs
         class={[
           this.ns.b(),
@@ -113,6 +96,7 @@ export const FormTabPanel = defineComponent({
           ...this.controller.containerClass,
         ]}
         model-value={this.controller.state.activeTab}
+        v-loading={this.controller.state.loading && !isStyle2}
         onTabClick={this.onTabClick}
       >
         {defaultSlots.map(slot => {
@@ -136,7 +120,7 @@ export const FormTabPanel = defineComponent({
                 default: (): VNode => slot,
                 label: (): JSX.Element => {
                   const value = c.model.counterId
-                    ? this.counterData.value[c.model.counterId]
+                    ? this.controller.state.counterData[c.model.counterId]
                     : undefined;
                   return c.model.counterId ? (
                     <el-badge
@@ -148,6 +132,7 @@ export const FormTabPanel = defineComponent({
                             (c.model.counterMode === 1 && value <= 0),
                         ),
                       ]}
+                      data-value={value}
                       value={value}
                       hidden={
                         (!value && value !== 0) ||
@@ -167,6 +152,47 @@ export const FormTabPanel = defineComponent({
         })}
       </el-tabs>
     );
+    if (this.modelData.detailStyle === 'STYLE2') {
+      return (
+        <div
+          class={this.ns.b('tab-panel-container-style2')}
+          v-loading={this.controller.state.loading}
+        >
+          {tabContent}
+          <el-popover
+            trigger='click'
+            placement='top-end'
+            v-model:visible={this.popoverVisible}
+            popper-class={this.ns.be('tab-panel-container-style2', 'popover')}
+          >
+            {{
+              reference: () => {
+                return (
+                  <div
+                    class={this.ns.be('tab-panel-container-style2', 'select')}
+                  >
+                    <div
+                      class={this.ns.bem(
+                        'tab-panel-container-style2',
+                        'select',
+                        'title',
+                      )}
+                    >
+                      {ibiz.i18n.t('control.form.formTabPnel.all')}
+                    </div>
+                    <ion-icon name='caret-down-outline'></ion-icon>
+                  </div>
+                );
+              },
+              default: () => {
+                return this.renderAllTabContent();
+              },
+            }}
+          </el-popover>
+        </div>
+      );
+    }
+    return tabContent;
   },
 });
 export default FormTabPanel;

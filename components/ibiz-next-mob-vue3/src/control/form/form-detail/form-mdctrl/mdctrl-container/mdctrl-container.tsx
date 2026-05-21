@@ -1,4 +1,4 @@
-import { PropType, computed, defineComponent } from 'vue';
+import { PropType, defineComponent } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import './mdctrl-container.scss';
 
@@ -29,11 +29,6 @@ export const MDCtrlContainer = defineComponent({
   setup(props, { emit }) {
     const ns = useNamespace('mdctrl-container');
 
-    /** 是否显示操作按钮 */
-    const showActions = computed(() => {
-      return props.enableCreate || props.enableDelete;
-    });
-
     const renderAddBtn = (index?: number, showButton: boolean = true) => {
       if (!props.enableCreate) {
         return null;
@@ -52,42 +47,7 @@ export const MDCtrlContainer = defineComponent({
       );
     };
 
-    const renderRemoveBtn = (item: IData, index: number) => {
-      if (!props.enableDelete) {
-        return null;
-      }
-      if (ibiz.config.form.mdCtrlConfirmBeforeRemove) {
-        return (
-          <van-button
-            class={[ns.e('remove'), ns.e('btn')]}
-            size='small'
-            onClick={() => {
-              emit('removeClick', item, index);
-            }}
-          >
-            {ibiz.i18n.t('app.delete')}
-          </van-button>
-        );
-      }
-      return (
-        <van-button
-          class={[ns.e('remove'), ns.e('btn')]}
-          type='danger'
-          size='small'
-          onClick={() => {
-            emit('removeClick', item, index);
-          }}
-        >
-          {ibiz.i18n.t('app.delete')}
-        </van-button>
-      );
-    };
-
-    const renderActionBtn = (item: IData, index: number) => {
-      return [renderAddBtn(index, false), renderRemoveBtn(item, index)];
-    };
-
-    return { ns, showActions, renderAddBtn, renderRemoveBtn, renderActionBtn };
+    return { ns, renderAddBtn };
   },
   render() {
     return (
@@ -104,11 +64,32 @@ export const MDCtrlContainer = defineComponent({
                 <div class={this.ns.be('item-header', 'caption')}>
                   {this.caption || ''}
                 </div>
-                <div class={this.ns.be('item-header', 'action')}>
-                  {this.renderActionBtn(item, index)}
-                </div>
               </div>
-              <div class={this.ns.b('item-content')}>{formComponent}</div>
+              <div class={this.ns.b('item-content')}>
+                <van-swipe-cell>
+                  {{
+                    default: () => {
+                      return formComponent;
+                    },
+                    right: () => {
+                      if (!this.enableDelete) {
+                        return;
+                      }
+                      return (
+                        <van-button
+                          class={this.ns.be('item-content', 'remove-btn')}
+                          type='danger'
+                          text={ibiz.i18n.t('app.delete')}
+                          square={true}
+                          onClick={() => {
+                            this.$emit('removeClick', item, index);
+                          }}
+                        />
+                      );
+                    },
+                  }}
+                </van-swipe-cell>
+              </div>
             </div>
           );
         })}

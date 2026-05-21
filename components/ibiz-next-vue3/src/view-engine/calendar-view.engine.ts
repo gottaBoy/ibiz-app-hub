@@ -9,7 +9,7 @@ import {
 import { IAppDECalendarView } from '@ibiz/model-core';
 
 export class CalendarViewEngine extends MDViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDECalendarView,
     ICalendarViewState,
     ICalendarViewEvent

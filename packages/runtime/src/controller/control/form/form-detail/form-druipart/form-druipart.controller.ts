@@ -4,9 +4,9 @@ import { createUUID, notNilEmpty } from 'qx-util';
 import { SysUIActionTag, ViewCallTag } from '../../../../../constant';
 import {
   IAppDEService,
-  IFormDruipartController,
-  IMDControlController,
   IViewController,
+  IMDControlController,
+  IFormDruipartController,
 } from '../../../../../interface';
 import { convertNavData } from '../../../../../utils';
 import { FormNotifyState } from '../../../../constant';
@@ -97,42 +97,41 @@ export class FormDRUIPartController
     Object.assign(this.state.layout.extraStyle, {
       overflow: 'auto',
     });
-
+    const { appViewId, refreshItems, paramItem, appId, needSave } = this.model;
     // 初始化关联刷新项
-    if (this.model.refreshItems) {
-      let strArr = this.model.refreshItems.split(';');
+    if (refreshItems) {
+      let strArr = refreshItems.split(';');
       strArr = strArr.filter(item => !!item); // 去除空字符串
       this.refreshItems.push(...strArr);
     }
 
     // 初始化参数项名称
-    if (this.model.paramItem) {
-      this.paramItem = this.model.paramItem;
-    }
+    if (paramItem) this.paramItem = paramItem;
 
     // 是否同步子界面数据服务(1.要求模型源于子应用、2.当前关系界面设置同时保存)
-    this.isNeedSyncEmbed =
-      this.model.appId !== ibiz.env.appId && !!this.model.needSave;
+    this.isNeedSyncEmbed = appId !== ibiz.env.appId && !!needSave;
 
     // 初始化子界面数据服务
-    const embedView = await ibiz.hub.getAppView(this.model.appViewId!);
-    const app = ibiz.hub.getApp(embedView.appId);
-    const tempContext = this.context.clone();
-    tempContext.srfappid = embedView.appId;
-    if (embedView.appDataEntityId) {
-      this.embedDataService = await app.deService.getService(
-        tempContext,
-        embedView.appDataEntityId,
-      );
-    }
-    // 主表单保存之前
-    (this.form as EditFormController).evt.on('onBeforeSave', async () => {
-      // 处理子应用同实体表单合并关系界面（手动触发子数据保存、再将子数据同步到主表单）
-      if (this.isNeedSyncEmbed && this.embedView && this.embedDataService) {
-        await this.saveEmbedViewData();
-        await this.SyncEmbedDataToForm();
+    if (appViewId) {
+      const embedView = await ibiz.hub.getAppView(appViewId);
+      const app = ibiz.hub.getApp(embedView.appId);
+      const tempContext = this.context.clone();
+      tempContext.srfappid = embedView.appId;
+      if (embedView.appDataEntityId) {
+        this.embedDataService = await app.deService.getService(
+          tempContext,
+          embedView.appDataEntityId,
+        );
       }
-    });
+      // 主表单保存之前
+      (this.form as EditFormController).evt.on('onBeforeSave', async () => {
+        // 处理子应用同实体表单合并关系界面（手动触发子数据保存、再将子数据同步到主表单）
+        if (this.isNeedSyncEmbed && this.embedView && this.embedDataService) {
+          await this.saveEmbedViewData();
+          await this.SyncEmbedDataToForm();
+        }
+      });
+    }
   }
 
   /**

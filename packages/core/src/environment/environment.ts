@@ -23,6 +23,7 @@ export const Environment: IEnvironment = {
   // 配置示例 DefaultOSSCat=cat
   downloadFileUrl: '/ibizutil/download/{cat}',
   uploadFileUrl: '/ibizutil/upload/{cat}',
+  defaultOSSCat: '',
   casLoginUrl: '',
   loginMode: LoginMode.DEFAULT,
   menuPermissionMode: MenuPermissionMode.MIXIN,
@@ -54,4 +55,10 @@ export const Environment: IEnvironment = {
   aMapSecurityJsCode: '',
   aMapKey: '',
   runContainer: 'DYNAENGINE',
+  mobWeChatAppId: '',
+  isPortalApp: false,
+  isEnableMobLoading: false,
+  mobLoadingCaption: '',
+  mobLoadingDescription: '',
+  mobLoadingBackground: '',
 };

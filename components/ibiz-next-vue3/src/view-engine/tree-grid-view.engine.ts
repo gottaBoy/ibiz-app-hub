@@ -11,7 +11,7 @@ import { RuntimeError } from '@ibiz-template/core';
 import { GridViewEngine } from './grid-view.engine';
 
 export class TreeGridViewEngine extends GridViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDETreeGridView,
     ITreeGridViewState,
     ITreeGridViewEvent

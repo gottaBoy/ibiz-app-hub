@@ -287,6 +287,9 @@ export class DEServiceUtil implements IApiDEServiceUtil {
     if (service) {
       service.local.clear();
     }
+    if (context.srfskipcleartmpres === true) {
+      return;
+    }
     // 根据关系清理掉子实体的临时数据缓存
     const uiDomain = ibiz.uiDomainManager.get(context.srfsessionid);
     if (uiDomain) {

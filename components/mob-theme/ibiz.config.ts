@@ -16,13 +16,16 @@ export default defineConfig({
           format: 'system',
           dir: 'dist',
           entryFileNames: '[name].system.min.js',
-          sourcemap: true,
+          sourcemap: false,
         },
       ],
     },
   ],
   theme: {
-    prefix: `@import "@ibiz-template/theme/style/global.scss";`,
+    prefix: `@import "${path.resolve(
+      cwd,
+      'node_modules/@ibiz-template/theme/style/global.scss',
+    )}";`,
     output: ['es', 'lib'],
   },
   external: [],

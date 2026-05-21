@@ -8,7 +8,7 @@ import {
 import { IAppDEMapView } from '@ibiz/model-core';
 
 export class MapViewEngine extends MDViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEMapView,
     IMapViewState,
     IMapViewEvent

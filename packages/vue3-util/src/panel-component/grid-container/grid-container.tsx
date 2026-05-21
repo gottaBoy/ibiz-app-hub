@@ -105,7 +105,11 @@ export const GridContainer = defineComponent({
     }
 
     return (
-      <iBizRow class={this.classArr} layout={this.layoutModel}>
+      <iBizRow
+        class={this.classArr}
+        layout={this.layoutModel}
+        v-loading={this.controller.state.loading}
+      >
         {defaultSlots.map(slot => {
           const props = slot.props as IData;
           if (!props || !props.controller) {

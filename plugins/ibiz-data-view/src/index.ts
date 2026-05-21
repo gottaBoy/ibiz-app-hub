@@ -11,7 +11,7 @@ import { IBizCarouselGrid } from './carousel-grid';
 import { IBizPercentPond } from './percent-pond';
 import { IBizCustomButton } from './custom-button';
 import { IBizWaterLevelPond } from './water-level-pond';
-import { IBizCustomImageSearchBox } from './custom-image-search-box';
+import { IBizCustomSearchBox } from './custom-search-box';
 import { IBizTaggedWall } from './tagged-wall';
 
 // 自定义边框
@@ -56,7 +56,7 @@ export default {
     _app.use(IBizPercentPond);
     _app.use(IBizCustomButton);
     _app.use(IBizWaterLevelPond);
-    _app.use(IBizCustomImageSearchBox);
+    _app.use(IBizCustomSearchBox);
     _app.use(IBizTaggedWall);
 
     // 自定义边框

@@ -13,9 +13,10 @@ import { PickerEditorController } from '../picker-editor.controller';
  * 移动端数据选择（下拉视图）
  * @primary
  * @description  使用van-field组件和van-button组件，点击按钮后弹出一个模态来呈现配置的选择视图。支持编辑器类型包含：`移动端数据选择（下拉视图）`
- * @editorparams {name:multiple,title:多选,description:是否多选,parameterType:boolean,default:true}
+ * @editorparams {name:multiple,parameterType:boolean,defaultvalue:false,description:是否多选}
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
- * @ignoreemits  infoTextChange | enter
+ * @ignoreemits  blur | focus | infoTextChange | enter
  */
 export const IBizPickerSelectView = defineComponent({
   name: 'IBizPickerSelectView',
@@ -60,8 +61,8 @@ export const IBizPickerSelectView = defineComponent({
     watch(
       () => props.value,
       newVal => {
+        valueText.value = (newVal as string) || '';
         if (singleSelect.value) {
-          valueText.value = (newVal as string) || '';
           if (!props.data || !c.valueItem || !props.data[c.valueItem]) {
             ibiz.log.error('值项异常');
           } else {

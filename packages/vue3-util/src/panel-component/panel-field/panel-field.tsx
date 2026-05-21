@@ -41,6 +41,7 @@ export const PanelField = defineComponent({
         ns.b(),
         ns.m(id),
         ns.is('error', !!props.controller.state.error),
+        ns.is('mob', window.Environment && window.Environment.isMob),
       ];
       result.push(...props.controller.containerClass);
       return result;
@@ -90,9 +91,7 @@ export const PanelField = defineComponent({
     return (
       <div
         class={this.classArr}
-        onClick={() => {
-          this.controller.onClick();
-        }}
+        onClick={event => this.controller.onClick(event)}
       >
         {editor}
         {this.controller.state.error && (

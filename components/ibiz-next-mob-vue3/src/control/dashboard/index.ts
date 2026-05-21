@@ -9,6 +9,10 @@ import {
   IBizListPortlet,
   IBizViewPortlet,
   PortletLayout,
+  IBizRawItemPortlet,
+  IBizChartPortlet,
+  IBizHtmlPortlet,
+  IBizActionBarPortlet,
 } from './portlet';
 
 export * from './dashboard.provider';
@@ -27,6 +31,10 @@ export const IBizDashboardControl = withInstall(
     v.use(IBizMenuPortlet);
     v.use(IBizListPortlet);
     v.use(IBizViewPortlet);
+    v.use(IBizRawItemPortlet);
+    v.use(IBizChartPortlet);
+    v.use(IBizHtmlPortlet);
+    v.use(IBizActionBarPortlet);
   },
 );
 

@@ -179,4 +179,17 @@ export interface IEditFormEvent extends IFormEvent {
       args: FormMDCtrlRepeaterController;
     };
   };
+
+  /**
+   * @description 表单操作完成事件，用于外部调用
+   * @type {{
+   *     event: EventBase;
+   *     emitArgs: PartialWithObject<EditFormEvent, EventBase>;
+   *   }}
+   * @memberof IEditFormEvent
+   */
+  onFinish: {
+    event: EventBase;
+    emitArgs: PartialWithObject<EditFormEvent, EventBase>;
+  };
 }

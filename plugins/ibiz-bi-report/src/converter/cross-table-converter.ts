@@ -479,7 +479,7 @@ export class CrossTableConverter extends BaseConverter {
     this.measures = appBIReportMeasures;
     this.getDimension(appBIReportDimensions);
     const input = {
-      appId: ibiz.env.appId,
+      appId: data.appId || ibiz.env.appId,
       appDataEntityId,
       caption: data!.name,
       value: appBIReportMeasures[0].measureTag,

@@ -31,7 +31,7 @@ export class LoginViewEngine extends ViewEngineBase {
    *   >}
    * @memberof LoginViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppView,
     IAppLoginViewState,
     IAppLoginViewEvent

@@ -1,6 +1,6 @@
 /* stylelint-disable selector-class-pattern */
 $screen-dashboard: (
-    'text-color': var(--ibiz-color-primary-text),
+    'text-color': #000,
     'bg-color': transparent,
     'primary-color': #144082,
     'primary-active-color': #559dff,
@@ -36,12 +36,12 @@ $screen-dashboard: (
     }
 
     .ibiz-portlet-layout {
-        --ibiz-portlet-layout-header-bg-color: getCssVar('screen-dashboard', 'bg-color');
-        --ibiz-portlet-layout-content-bg-color: getCssVar('screen-dashboard', 'bg-color');
+        --ibiz-portlet-layout-header-bg-color: #{getCssVar('screen-dashboard', 'bg-color')};
+        --ibiz-portlet-layout-content-bg-color: #{getCssVar('screen-dashboard', 'bg-color')};
     }
 
     .ibiz-view {
-        --ibiz-view-bg-color: getCssVar('screen-dashboard', 'bg-color');
+        --ibiz-view-bg-color: #{getCssVar('screen-dashboard', 'bg-color')};
     }
 
     .#{bem(no-data)}{
@@ -53,14 +53,14 @@ $screen-dashboard: (
     }
 
     .ibiz-control-grid {
-        --ibiz-control-grid-row-bg-color: getCssVar('screen-dashboard', 'bg-color');
-        --ibiz-control-grid-row-bg-color-2: getCssVar('screen-dashboard', 'bg-color');
-        --ibiz-control-grid-row-hover-color: getCssVar('screen-dashboard', 'bg-color');
-        --ibiz-control-grid-header-bg-color: getCssVar('screen-dashboard', 'bg-color');
+        --ibiz-control-grid-row-bg-color: #{getCssVar('screen-dashboard', 'bg-color')};
+        --ibiz-control-grid-row-bg-color-2: #{getCssVar('screen-dashboard', 'bg-color')};
+        --ibiz-control-grid-row-hover-color: #{getCssVar('screen-dashboard', 'bg-color')};
+        --ibiz-control-grid-header-bg-color: #{getCssVar('screen-dashboard', 'bg-color')};
 
         .el-table {
-            --el-table-header-bg-color: getCssVar('screen-dashboard', 'bg-color');
-            --el-table-current-row-bg-color: getCssVar('screen-dashboard', 'bg-color');
+            --el-table-header-bg-color: #{getCssVar('screen-dashboard', 'bg-color')};
+            --el-table-current-row-bg-color: #{getCssVar('screen-dashboard', 'bg-color')};
         }
     }
 }

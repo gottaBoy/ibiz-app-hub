@@ -6,7 +6,7 @@ export default {
   deviewCodeName: 'form_ctrl_federation',
   deviewId: 'c37ba8aa223bb1c903b4573573d92618',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
@@ -18,6 +18,15 @@ export default {
       engineCat: 'VIEW',
       engineType: 'EditView',
       id: 'engine',
+    },
+  ],
+  appViewNavContexts: [
+    {
+      rawValue: true,
+      key: 'MASTER',
+      value: 'sample',
+      name: 'MASTER',
+      id: 'master',
     },
   ],
   controls: [
@@ -224,6 +233,49 @@ export default {
               },
               showCaption: true,
               id: 'group1',
+            },
+            {
+              dataRelationTag: 'form_relation_federation',
+              deformTabPages: [
+                {
+                  layout: {
+                    columnCount: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  deformDetails: [
+                    {
+                      appViewId: 'web.welcome',
+                      parentDataJO: {
+                        srfparentdename: 'MASTER',
+                        SRFPARENTTYPE: 'CUSTOM',
+                      },
+                      codeName: 'tabpanel1_app_item_druipart',
+                      detailStyle: 'DEFAULT',
+                      detailType: 'DRUIPART',
+                      layoutPos: {
+                        colMD: 24,
+                        layout: 'TABLE_24COL',
+                      },
+                      showCaption: true,
+                      id: 'tabpanel1_app_item_druipart',
+                    },
+                  ],
+                  caption: '主应用表单分页',
+                  codeName: 'tabpanel1_app_item',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'TABPAGE',
+                  showCaption: true,
+                  id: 'tabpanel1_app_item',
+                },
+              ],
+              codeName: 'tabpanel1',
+              detailStyle: 'DEFAULT',
+              detailType: 'TABPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              id: 'tabpanel1',
             },
             {
               dataType: 25,

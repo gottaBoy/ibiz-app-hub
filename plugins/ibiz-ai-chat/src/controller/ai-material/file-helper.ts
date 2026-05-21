@@ -22,17 +22,22 @@ export class FileHelper extends MaterialHelper {
   ): Promise<void> {
     const uploader = this.aiChat.opts.uploader;
     const {
-      multiple,
+      folder,
       accept,
       maxSize,
+      multiple,
+      onError,
       onSelect,
       onUpload,
       onSuccess,
-      onError,
+      onDownLoad,
       onProgress,
+      globalDownloadPrifix,
     } = uploader;
 
     const fileUploadOptions: FileUploaderOptions<object> = {
+      folder,
+      globalDownloadPrifix,
       multiple: multiple || true,
       accept: accept || '*/*',
       maxSize: maxSize || 5 * 1024 * 1024,
@@ -40,7 +45,7 @@ export class FileHelper extends MaterialHelper {
         onSelect?.(files);
         if (files.length > 0) {
           files.forEach(file => {
-            const material = this.buildMaterialObject(file);
+            const material = this.buildMaterialObject(folder, file);
             Object.assign(material.metadata, { state: 'uploading' });
             this.aiChat.addMaterial(material);
           });
@@ -55,6 +60,7 @@ export class FileHelper extends MaterialHelper {
           params: this.aiChat.params,
         });
       },
+      onDownLoad,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onSuccess: (result: any, file: File) => {
         const material = {
@@ -63,6 +69,7 @@ export class FileHelper extends MaterialHelper {
           data: {
             id: result.id,
             name: result.name,
+            folder,
           },
           metadata: {
             ext: result.ext,
@@ -72,13 +79,14 @@ export class FileHelper extends MaterialHelper {
             size: result.size,
             filesize: result.filesize,
             state: 'successed',
+            folder,
           },
         };
         this.aiChat.replaceMaterial(file.name, material);
         onSuccess?.(result, file);
       },
       onError: (error: Error, file: File) => {
-        const material = this.buildMaterialObject(file);
+        const material = this.buildMaterialObject(folder, file);
         Object.assign(material.metadata, { state: 'failed' });
         this.aiChat.replaceMaterial(file.name, material);
         onError?.(error, file);
@@ -94,24 +102,24 @@ export class FileHelper extends MaterialHelper {
 
   /**
    * 构建素材对象
-   *
-   * @author tony001
-   * @date 2025-02-28 15:02:12
-   * @param {File} file
-   * @return {*}  {IMaterial}
+   * @param folder
+   * @param file
+   * @returns
    */
-  buildMaterialObject(file: File): IMaterial {
+  buildMaterialObject(folder: string, file: File): IMaterial {
     return {
       id: file.name,
       type: 'ossfile',
       data: {
         name: file.name,
         id: file.name,
+        folder,
       },
       metadata: {
         size: file.size,
         type: file.type,
         lastModified: file.lastModified,
+        folder,
       },
     };
   }

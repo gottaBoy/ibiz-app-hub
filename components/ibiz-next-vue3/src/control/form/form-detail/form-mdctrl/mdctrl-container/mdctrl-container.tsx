@@ -217,9 +217,11 @@ export const MDCtrlContainer = defineComponent({
           </div>
           {formComponent}
           {renderRemoveBtn(item, index)}
-          <div class={ns.be('item', 'right')}>
-            {index === 0 && props.enableCreate && renderAddBtn()}
-          </div>
+          {props.enableCreate && (
+            <div class={ns.be('item', 'right')}>
+              {index === 0 && renderAddBtn()}
+            </div>
+          )}
         </div>
       );
     };

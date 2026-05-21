@@ -14,6 +14,7 @@ import {
   calcDeCodeNameById,
   IApiMDCustomViewCall,
   IMDCustomViewState,
+  ISearchBarController,
 } from '@ibiz-template/runtime';
 import {
   IControl,
@@ -24,7 +25,7 @@ import {
 import { clone } from 'lodash-es';
 
 export class MDCustomViewEngine extends ViewEngineBase {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDECustomView,
     IMDCustomViewState,
     IViewEvent
@@ -37,6 +38,17 @@ export class MDCustomViewEngine extends ViewEngineBase {
    * @memberof MDCustomViewEngine
    */
   controls: IControl[] = [];
+
+  /**
+   * @description 获取分页搜索视图上移的搜索栏控制器
+   * @readonly
+   * @protected
+   * @type {ISearchBarController}
+   * @memberof MDCustomViewEngine
+   */
+  protected get tabSearchBar(): ISearchBarController {
+    return this.view.getController('tabsearchbar') as ISearchBarController;
+  }
 
   /**
    * 视图created生命周期执行逻辑
@@ -59,6 +71,35 @@ export class MDCustomViewEngine extends ViewEngineBase {
   async onMounted(): Promise<void> {
     await super.onMounted();
     this.calcToolbarState = this.calcToolbarState.bind(this);
+
+    // 搜索表单搜索触发加载
+    if (this.searchForm) {
+      this.searchForm.evt.on('onSearch', () => {
+        this.reLoad();
+      });
+    }
+
+    // 搜索栏搜索触发加载
+    if (this.searchBar) {
+      this.searchBar.evt.on('onSearch', () => {
+        this.reLoad();
+      });
+    }
+
+    // 搜索表单搜索触发加载
+    if (this.tabSearchForm) {
+      this.tabSearchForm.evt.on('onSearch', () => {
+        this.reLoad();
+      });
+    }
+
+    // 搜索栏搜索触发加载
+    if (this.tabSearchBar) {
+      this.tabSearchBar.evt.on('onSearch', () => {
+        this.reLoad();
+      });
+    }
+
     this.controls.forEach(ctrl => {
       const control = this.view.getController(
         ctrl.name!,
@@ -72,7 +113,37 @@ export class MDCustomViewEngine extends ViewEngineBase {
       control?.evt.on('onRefreshSuccess', evt =>
         this.calcToolbarButtonState(ctrl, evt.data[0], evt),
       );
+      control?.evt.on('onBeforeLoad', () => {
+        control.state.searchParams = this.getSearchParams();
+      });
     });
+  }
+
+  /**
+   * @description 获取搜索相关的查询参数
+   * @protected
+   * @returns {*}  {IParams}
+   * @memberof MDCustomViewEngine
+   */
+  protected getSearchParams(): IParams {
+    const params: IParams = {};
+    // 有搜索表单的整合相关参数
+    if (this.searchForm) {
+      Object.assign(params, this.searchForm.getFilterParams());
+    }
+    // 有搜索栏的整合相关参数
+    if (this.searchBar) {
+      Object.assign(params, this.searchBar.getFilterParams());
+    }
+    // 有搜索表单的整合相关参数
+    if (this.tabSearchForm) {
+      Object.assign(params, this.tabSearchForm.getFilterParams());
+    }
+    // 有搜索栏的整合相关参数
+    if (this.tabSearchBar) {
+      Object.assign(params, this.tabSearchBar.getFilterParams());
+    }
+    return params;
   }
 
   /**
@@ -132,6 +203,21 @@ export class MDCustomViewEngine extends ViewEngineBase {
       return this.newData(args!);
     }
     return super.call(key, args);
+  }
+
+  /**
+   * @description 视图重新加载
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof MDCustomViewEngine
+   */
+  protected async reLoad(): Promise<void> {
+    if (this.view.state.xdatacontrolname) {
+      const xDataCtrl = this.view.getController(
+        this.view.state.xdatacontrolname,
+      ) as IMDControlController;
+      await xDataCtrl?.load({ isInitialLoad: true });
+    }
   }
 
   /**

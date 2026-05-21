@@ -81,7 +81,7 @@ export interface IApiGridColumnController {
 
   /**
    * @description 解析获取脚本代码html
-   * @param {IApiGridRowState} row 行状态
+   * @param {IApiGridRowState} row 行数据状态
    * @returns {*}  {(Promise<string | undefined>)}
    * @memberof IApiGridColumnController
    */

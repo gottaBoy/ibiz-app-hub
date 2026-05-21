@@ -3,7 +3,7 @@
     :context="props.context"
     :params="props.params"
     :modal="props.modal"
-    :model-data="model"
+    :model-data="viewModel"
   >
   </i-biz-html-view>
 </template>
@@ -18,4 +18,6 @@ interface Props {
   modal?: IModal;
 }
 const props = withDefaults(defineProps<Props>(), {});
+
+const viewModel = props.model;
 </script>

@@ -1,11 +1,16 @@
+$mob-async-action: (
+  spacing-title-padding: rem(8px) 0,
+  font-title-fontSize: rem(20px),
+);
 @include b(mob-async-action) {
+  @include set-component-css-var('mob-async-action', $mob-async-action);
   position: relative;
   height: 100%;
 
-  @include e(title){
+  @include e(title) {
     width: 100%;
-    padding: rem(8px) 0;
-    font-size: rem(20px);
+    padding: getCssVar('mob-async-action', 'spacing-title-padding');
+    font-size: getCssVar('mob-async-action', 'font-title-fontSize');
     text-align: center;
   }
 }

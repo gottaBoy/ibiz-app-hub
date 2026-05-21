@@ -4,6 +4,8 @@ import {
   IWizardViewState,
   IWizardViewEvent,
   IWizardPanelController,
+  IApiMobWizardViewCall,
+  SysUIActionTag,
 } from '@ibiz-template/runtime';
 import { IAppDEWizardView } from '@ibiz/model-core';
 
@@ -15,7 +17,7 @@ export class MobWizardViewEngine extends ViewEngineBase {
    * @type {ViewController<IAppDEWizardView, IWizardViewState, IWizardViewEvent>}
    * @memberof MobWizardViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEWizardView,
     IWizardViewState,
     IWizardViewEvent
@@ -53,5 +55,28 @@ export class MobWizardViewEngine extends ViewEngineBase {
     this.wizardPanel.evt.on('onFinishSuccess', _event => {
       this.view.closeView({ ok: true, data: [] });
     });
+  }
+
+  async call(
+    key: keyof IApiMobWizardViewCall,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+    args: any,
+  ): Promise<IData | null | undefined> {
+    if (key === SysUIActionTag.REFRESH) {
+      await this.refresh();
+      return null;
+    }
+    return super.call(key, args);
+  }
+
+  /**
+   * 刷新当前激活表单的数据
+   *
+   * @protected
+   * @return {*}  {Promise<void>}
+   * @memberof MobWizardViewEngine
+   */
+  protected async refresh(): Promise<void> {
+    await (this.wizardPanel as IData)?.activeFormController?.load();
   }
 }

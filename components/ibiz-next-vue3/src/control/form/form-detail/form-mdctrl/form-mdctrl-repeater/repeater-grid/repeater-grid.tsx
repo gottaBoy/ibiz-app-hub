@@ -7,6 +7,7 @@ import {
   onUnmounted,
   defineComponent,
   resolveComponent,
+  VNodeArrayChildren,
 } from 'vue';
 import Sortable from 'sortablejs';
 import {
@@ -20,6 +21,7 @@ import { createUUID } from 'qx-util';
 import { useCtx, useNamespace } from '@ibiz-template/vue3-util';
 import { recursiveIterate, showTitle } from '@ibiz-template/core';
 import { IDEFormDetail, IDEFormItem } from '@ibiz/model-core';
+import { useLoadMore } from '../form-mdctrl-repeater.util';
 import './repeater-grid.scss';
 
 export const RepeaterGrid: ReturnType<typeof defineComponent> = defineComponent(
@@ -39,7 +41,13 @@ export const RepeaterGrid: ReturnType<typeof defineComponent> = defineComponent(
       const formItems: IDEFormItem[] = [];
       const tableRef = ref();
       const tableKey = ref(createUUID());
-
+      const chunkSize = props.controller.model.ctrlParams?.chunkSize
+        ? Number(props.controller.model.ctrlParams?.chunkSize)
+        : 100;
+      const { renderItems, loadMore, updateTotalItems } = useLoadMore(
+        props.controller.value as IData[],
+        chunkSize,
+      );
       // 遍历所有的项，如果有逻辑的话加入
       recursiveIterate(
         props.controller.repeatedForm,
@@ -118,6 +126,7 @@ export const RepeaterGrid: ReturnType<typeof defineComponent> = defineComponent(
               });
             }
           }
+          updateTotalItems(newVal || []);
         },
         { immediate: true, deep: true },
       );
@@ -198,11 +207,15 @@ export const RepeaterGrid: ReturnType<typeof defineComponent> = defineComponent(
         tableRef,
         tableKey,
         formItems,
+        renderItems,
         formControllers,
         renderRemoveBtn,
+        loadMore,
       };
     },
     render() {
+      const tableHeight = this.controller.model.layoutPos?.height;
+      const heightObject = tableHeight ? { height: tableHeight } : {};
       return (
         <div class={this.ns.b()}>
           {this.controller.enableCreate && (
@@ -220,120 +233,147 @@ export const RepeaterGrid: ReturnType<typeof defineComponent> = defineComponent(
             key={this.tableKey}
             show-header={true}
             class={this.ns.e('table')}
-            data={this.controller.value}
+            data={this.renderItems}
             cell-class-name={({ columnIndex }: IData) => {
               const shouldShowIndex = this.controller.enableSort
                 ? columnIndex === 1
                 : columnIndex === 0;
               return shouldShowIndex ? this.ns.b('index') : '';
             }}
+            {...heightObject}
           >
-            {this.controller.enableSort && (
-              <el-table-column width={26} type='default'>
-                {{
-                  default: () => (
-                    <svg
-                      viewBox='0 0 16 16'
-                      xmlns='http://www.w3.org/2000/svg'
-                      height='1em'
-                      width='1em'
-                      class={this.ns.e('drag-icon')}
-                      preserveAspectRatio='xMidYMid meet'
-                      focusable='false'
-                    >
-                      <g stroke-width='1' fill-rule='evenodd'>
-                        <g transform='translate(5 1)' fill-rule='nonzero'>
-                          <path d='M1 2a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM1 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z'></path>
-                        </g>
-                      </g>
-                    </svg>
+            {{
+              default: (): VNodeArrayChildren => {
+                return [
+                  this.controller.enableSort && (
+                    <el-table-column width={26} type='default'>
+                      {{
+                        default: () => (
+                          <svg
+                            viewBox='0 0 16 16'
+                            xmlns='http://www.w3.org/2000/svg'
+                            height='1em'
+                            width='1em'
+                            class={this.ns.e('drag-icon')}
+                            preserveAspectRatio='xMidYMid meet'
+                            focusable='false'
+                          >
+                            <g stroke-width='1' fill-rule='evenodd'>
+                              <g transform='translate(5 1)' fill-rule='nonzero'>
+                                <path d='M1 2a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM1 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z'></path>
+                              </g>
+                            </g>
+                          </svg>
+                        ),
+                      }}
+                    </el-table-column>
                   ),
-                }}
-              </el-table-column>
-            )}
-            <el-table-column type='index' width={66} align='center'>
-              {{
-                default: (opts: IData) => {
-                  const { $index } = opts;
-                  if (!this.controller.enableDelete) {
-                    return <span>{$index + 1}</span>;
-                  }
-                  return [
-                    this.renderRemoveBtn($index),
-                    <span class={this.ns.be('index', 'text')}>
-                      {$index + 1}
-                    </span>,
-                  ];
-                },
-              }}
-            </el-table-column>
-            {this.formItems.length > 0 &&
-              this.formItems.map(item => {
-                const width = item.labelWidth;
-                let columnWidth = '';
-                if (typeof width === 'number') {
-                  columnWidth = `${width}px`;
-                }
-                return (
-                  <el-table-column
-                    label={item.caption}
-                    prop={item.id}
-                    width={columnWidth}
-                    align='center'
-                  >
+                  <el-table-column type='index' width={66} align='center'>
                     {{
                       default: (opts: IData) => {
                         const { $index } = opts;
-                        const formC = toRaw(
-                          this.formControllers[$index],
-                        ) as EditFormController;
-                        if (!formC || !formC.state.isLoaded) {
-                          return (
-                            <div>
-                              {ibiz.i18n.t(
-                                'control.form.repeaterGrid.absentOrLoad',
-                              )}
-                            </div>
-                          );
+                        if (!this.controller.enableDelete) {
+                          return <span>{$index + 1}</span>;
                         }
-                        const formItemC = formC.formItems.find(
-                          x => x.name === item.id,
-                        )!;
-
-                        let editor = null;
-                        if (!formItemC.editorProvider) {
-                          editor = (
-                            <not-supported-editor modelData={item.editor} />
-                          );
-                        } else {
-                          const component = resolveComponent(
-                            formItemC.editorProvider.formEditor,
-                          );
-                          editor = h(component, {
-                            value: formItemC.value,
-                            data: formItemC.data,
-                            controller: formItemC.editor,
-                            disabled: formItemC.state.disabled,
-                            readonly: formItemC.state.readonly,
-                            onChange: (val: unknown, name?: string): void => {
-                              formItemC.setDataValue(val, name);
-                            },
-                          });
-                        }
-
-                        return (
-                          <iBizGridEditItem
-                            error={formItemC.state.error}
-                            required={formItemC.state.required}
-                          >
-                            {editor}
-                          </iBizGridEditItem>
-                        );
+                        return [
+                          this.renderRemoveBtn($index),
+                          <span class={this.ns.be('index', 'text')}>
+                            {$index + 1}
+                          </span>,
+                        ];
                       },
                     }}
-                  </el-table-column>
-                );
-              })}
+                  </el-table-column>,
+                  this.formItems.length > 0 &&
+                    this.formItems.map(item => {
+                      // 重复器表格列自适应（表单项label宽度配置为1）
+                      const width = item.labelWidth;
+                      let widthName = 'width';
+                      let columnWidth = '';
+                      if (typeof width === 'number') {
+                        if (width === 1) {
+                          widthName = 'min-width';
+                        }
+                        columnWidth = `${width}px`;
+                      }
+                      return (
+                        <el-table-column
+                          label={item.caption}
+                          prop={item.id}
+                          {...{ [widthName]: columnWidth }}
+                          align='center'
+                        >
+                          {{
+                            default: (opts: IData) => {
+                              const { $index } = opts;
+                              const formC = toRaw(
+                                this.formControllers[$index],
+                              ) as EditFormController;
+                              if (!formC || !formC.state.isLoaded) {
+                                return (
+                                  <div>
+                                    {ibiz.i18n.t(
+                                      'control.form.repeaterGrid.absentOrLoad',
+                                    )}
+                                  </div>
+                                );
+                              }
+                              const formItemC = formC.formItems.find(
+                                x => x.name === item.id,
+                              )!;
+
+                              let editor = null;
+                              if (!formItemC.editorProvider) {
+                                editor = (
+                                  <not-supported-editor
+                                    modelData={item.editor}
+                                  />
+                                );
+                              } else {
+                                const component = resolveComponent(
+                                  formItemC.editorProvider.formEditor,
+                                );
+                                editor = h(component, {
+                                  value: formItemC.value,
+                                  data: formItemC.data,
+                                  controller: formItemC.editor,
+                                  disabled: formItemC.state.disabled,
+                                  readonly: formItemC.state.readonly,
+                                  onChange: (
+                                    val: unknown,
+                                    name?: string,
+                                  ): void => {
+                                    formItemC.setDataValue(val, name);
+                                  },
+                                });
+                              }
+
+                              return (
+                                <iBizGridEditItem
+                                  error={formItemC.state.error}
+                                  required={formItemC.state.required}
+                                >
+                                  {editor}
+                                </iBizGridEditItem>
+                              );
+                            },
+                          }}
+                        </el-table-column>
+                      );
+                    }),
+                ];
+              },
+              append: () => {
+                return [
+                  tableHeight && (
+                    <div
+                      v-infinite-scroll={() => this.loadMore()}
+                      infinite-scroll-distance={20}
+                    ></div>
+                  ),
+                ];
+              },
+            }}
           </el-table>
         </div>
       );

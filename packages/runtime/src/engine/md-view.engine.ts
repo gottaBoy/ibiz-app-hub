@@ -27,7 +27,7 @@ import { ViewEngineBase } from './view-base.engine';
  * @extends {ViewEngineBase}
  */
 export class MDViewEngine extends ViewEngineBase {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEMultiDataView,
     IMDViewState,
     IMDViewEvent
@@ -469,23 +469,49 @@ export class MDViewEngine extends ViewEngineBase {
    */
   protected getSearchParams(): IParams {
     const params: IParams = {};
-    // 有搜索表单的整合相关参数
-    if (this.searchForm) {
-      Object.assign(params, this.searchForm.getFilterParams());
-    }
     // 有搜索栏的整合相关参数
     if (this.searchBar) {
       Object.assign(params, this.searchBar.getFilterParams());
     }
     // 有搜索表单的整合相关参数
-    if (this.tabSearchForm) {
-      Object.assign(params, this.tabSearchForm.getFilterParams());
+    if (this.searchForm) {
+      const resultParams = this.searchForm.getFilterParams();
+      Object.assign(params, this.handleSearchParams(params, resultParams));
     }
     // 有搜索栏的整合相关参数
     if (this.tabSearchBar) {
       Object.assign(params, this.tabSearchBar.getFilterParams());
     }
+    // 有搜索表单的整合相关参数
+    if (this.tabSearchForm) {
+      const resultParams = this.tabSearchForm.getFilterParams();
+      Object.assign(params, this.handleSearchParams(params, resultParams));
+    }
     return params;
+  }
+
+  /**
+   * @description 处理搜索参数
+   * @protected
+   * @param {IParams} params
+   * @param {IParams} newParams
+   * @returns {*}  {IParams}
+   * @memberof MDViewEngine
+   */
+  protected handleSearchParams(params: IParams, newParams: IParams): IParams {
+    const _params = { ...newParams };
+    if (params.searchconds && newParams.searchconds) {
+      Object.assign(_params, {
+        searchconds: [
+          {
+            condop: 'AND',
+            condtype: 'GROUP',
+            searchconds: [...params.searchconds, ...newParams.searchconds],
+          },
+        ],
+      });
+    }
+    return _params;
   }
 
   /**

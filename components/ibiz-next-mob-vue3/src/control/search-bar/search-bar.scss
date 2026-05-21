@@ -1,34 +1,237 @@
-$control-searchbar: (margin: getCssVar(spacing, tight),
-  padding: getCssVar(spacing, tight) getCssVar(spacing, base),
-  height:rem(36px),
+$control-searchbar: (
+  color-bg: getCssVar(color, bg, 1),
+  spacing-margin: getCssVar(spacing, tight),
+  spacing-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
+  spacing-filter-margin: 0 0 0 getCssVar('spacing', 'tight'),
+  font-filter-fontSize: getCssVar('font-size', 'header-4'),
+  height-filter: getCssVar('height-control', 'default'),
+  spacing-filter-padding: getCssVar(spacing, tight) getCssVar(spacing, tight)
+    getCssVar(spacing, tight) getCssVar(spacing, base),
+  spacing-icon-gap: getCssVar(spacing, extra-tight),
+  // 快速分组
+  color-group-item-text: getCssVar(color, text, 1),
+  color-group-item-bg: getCssVar(color, fill, 1),
+  color-group-item-selected-bg: getCssVar(color, primary),
+  color-group-item-selected-text: getCssVar(color, white),
+  spacing-group-item-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
+  spacing-group-item-gap: getCssVar(spacing, tight),
+  spacing-group-item-margin: getCssVar(spacing, extra-tight)
+    getCssVar(spacing, tight) 0 0,
+  radius-group-item: getCssVar(border-radius, full),
 );
 
+$control-searchbar-quick-search: (
+  height: getCssVar('height-control', 'default'),
+  radius: getCssVar(border-radius, small),
+  spacing-icon: 0 getCssVar('spacing', 'tight') 0 0,
+);
+
+$control-searchbar-dropdown: (
+  color-bg: getCssVar(color, bg, 1),
+  // 历史搜索
+  color-item-bg: getCssVar(color, fill, 1),
+  spacing-padding: getCssVar(spacing, base),
+  spacing-gap: getCssVar(spacing, tight),
+  spacing-history-header-padding: getCssVar(spacing, tight) 0,
+  spacing-clear-gap: getCssVar(spacing, extra-tight),
+  spacing-history-footer-padding: getCssVar(spacing, tight)
+    getCssVar(spacing, tight) 0,
+  spacing-history-item-padding: getCssVar(spacing, extra-tight)
+    getCssVar(spacing, base),
+  spacing-history-item-margin: getCssVar(spacing, extra-tight),
+  spacing-history-item-gap: getCssVar(spacing, tight),
+  font-history-item-line-height: getCssVar(spacing, loose),
+  radius-history-item: getCssVar(border-radius, full),
+  border: getCssVar('border-thickness', 'control') solid
+    getCssVar(color, border),
+);
+
+// 搜索输入框样式
 @include b(control-searchbar-quick-search) {
+  @include set-component-css-var(
+    control-searchbar-quick-search,
+    $control-searchbar-quick-search
+  );
   width: 100%;
+  background-color: transparent;
+  height: getCssVar(control-searchbar-quick-search, height);
+  padding: 0;
+
+  .van-search__content {
+    border-radius: getCssVar(control-searchbar-quick-search, radius);
+  }
+  .van-field__left-icon {
+    margin: getCssVar(control-searchbar-quick-search, spacing-icon);
+  }
 }
 
 @include b(control-searchbar) {
   @include set-component-css-var(control-searchbar, $control-searchbar);
   display: flex;
   align-items: center;
+  background-color: getCssVar(control-searchbar, color-bg);
+  padding: getCssVar(control-searchbar, spacing-padding);
 
+  // 高级搜索按钮
   @include e(filter) {
     flex: none;
     border: none;
-    font-size: getCssVar(width-icon, large);
-  }
+    font-size: getCssVar(control-searchbar, font-filter-fontSize);
+    height: getCssVar(control-searchbar, height-filter);
+    margin: getCssVar(control-searchbar, spacing-filter-margin);
 
-  .van-search {
-    --van-search-background: #{getCssVar(color, bg, 1)};
-    --van-search-padding:#{getCssVar(control-searchbar, padding)};
-    --van-search-input-height:#{getCssVar(control-searchbar, height)};
-
-    .van-field__left-icon {
-      margin-right: getCssVar('spacing', 'tight');
+    .van-button__text {
+      display: flex;
+      align-items: center;
     }
   }
 
-  .van-search__content {
-    border-radius: getCssVar(border-radius, small);
+  @include e('action-sheet') {
+    @include m('item') {
+      @include when('selected') {
+        color: getCssVar(color, primary);
+      }
+    }
+  }
+
+  // 适配高级搜索按钮需调整边距
+  @include when(enable-filter) {
+    padding: getCssVar(control-searchbar, spacing-filter-padding);
+  }
+}
+
+@include b('control-searchbar-container') {
+  width: 100%;
+  height: 100%;
+  display: block;
+  padding: 0;
+}
+
+@include b('control-searchbar-dropdown') {
+  @include set-component-css-var(
+    control-searchbar-dropdown,
+    $control-searchbar-dropdown
+  );
+  background-color: getCssVar(control-searchbar-dropdown, color-bg);
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  gap: getCssVar(control-searchbar-dropdown, spacing-gap);
+  width: 100vw;
+  z-index: 999;
+  padding: getCssVar(control-searchbar-dropdown, spacing-padding);
+  border-top: getCssVar(control-searchbar-dropdown, border);
+  border-bottom: getCssVar(control-searchbar-dropdown, border);
+}
+
+@include b('control-searchbar-history') {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  @include e('header') {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: space-between;
+    padding: getCssVar(
+      control-searchbar-dropdown,
+      spacing-history-header-padding
+    );
+    @include m('title') {
+      font-weight: bold;
+    }
+    @include m('clear') {
+      display: flex;
+      gap: getCssVar(control-searchbar-dropdown, spacing-clear-gap);
+      align-items: center;
+    }
+  }
+  @include e('content') {
+    display: flex;
+    flex: 1;
+    flex-flow: wrap;
+    gap: getCssVar(control-searchbar-dropdown, spacing-history-item-gap);
+    overflow: auto;
+    @include m('item') {
+      position: relative;
+      display: inline-flex;
+      flex-shrink: 0;
+      max-width: 100%;
+    }
+    @include m('item-text') {
+      max-width: 100%;
+      padding: getCssVar(
+        control-searchbar-dropdown,
+        spacing-history-item-padding
+      );
+      margin-top: getCssVar(
+        control-searchbar-dropdown,
+        spacing-history-item-margin
+      );
+      overflow: hidden;
+      line-height: getCssVar(
+        control-searchbar-dropdown,
+        font-history-item-line-height
+      );
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      background-color: getCssVar(control-searchbar-dropdown, color-item-bg);
+      border-radius: getCssVar(control-searchbar-dropdown, radius-history-item);
+    }
+    @include m('item-remove') {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+  @include e('footer') {
+    --van-divider-margin: 0;
+
+    flex-shrink: 0;
+    padding: getCssVar(
+      control-searchbar-dropdown,
+      spacing-history-footer-padding
+    );
+    text-align: center;
+  }
+}
+
+@include b('control-searchbar-quick-group') {
+  padding: getCssVar(control-searchbar, spacing-padding);
+  display: flex;
+  gap: getCssVar(control-searchbar, spacing-group-item-gap);
+  flex-flow: wrap;
+  @include e('item') {
+    user-select: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    height: max-content;
+    line-height: 1.5;
+    margin-top: getCssVar(control-searchbar, spacing-margin);
+    color: getCssVar(control-searchbar, color-group-item-text);
+    background-color: getCssVar(control-searchbar, color-group-item-bg);
+    padding: getCssVar(control-searchbar, spacing-group-item-padding);
+    border-radius: getCssVar(control-searchbar, radius-group-item);
+    font-size: 1rem;
+    ion-icon {
+      margin-right: getCssVar(control-searchbar, spacing-icon-gap);
+    }
+    @include when('selected') {
+      color: getCssVar(control-searchbar, color-group-item-selected-text);
+      background-color: getCssVar(
+        'control-searchbar',
+        'color-group-item-selected-bg'
+      );
+    }
+  }
+  @include e('more'){
+    display: flex;
+    align-items: center;
+  }
+  @include e('more-text'){
+    display: inline-block;
   }
 }

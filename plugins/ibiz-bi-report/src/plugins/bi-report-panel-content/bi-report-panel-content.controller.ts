@@ -96,6 +96,10 @@ export class BIReportPanelContentController extends PanelItemController {
    */
   appBICube?: IAppBICubeData;
 
+  get appId(): string {
+    return this.context.srfappid || ibiz.env.appId;
+  }
+
   /**
    * 创建面板状态对象
    *
@@ -168,7 +172,7 @@ export class BIReportPanelContentController extends PanelItemController {
     }
     const tempContext = clone(this.context);
     tempContext.pssysbicube = `${appBISchemeId}.${appBICubeId}`;
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.appId);
     const res = await app.deService.exec(
       'pssysbicube',
       'get',
@@ -193,7 +197,7 @@ export class BIReportPanelContentController extends PanelItemController {
       ...this.panel.params,
       ...{ n_pssysbicubeid_eq: this.context.pssysbicube, size: 1000 },
     };
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.appId);
     const res = await app.deService.exec(
       'pssysbicubemeasure',
       'fetchdefault',
@@ -217,7 +221,7 @@ export class BIReportPanelContentController extends PanelItemController {
       ...this.panel.params,
       ...{ n_pssysbicubeid_eq: this.context.pssysbicube, size: 1000 },
     };
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.appId);
     const res = await app.deService.exec(
       'pssysbicubedimension',
       'fetchdefault',
@@ -241,7 +245,7 @@ export class BIReportPanelContentController extends PanelItemController {
     if (!appDataEntityId) {
       return;
     }
-    const jsonSchema = await getSchemaByEntity(appDataEntityId);
+    const jsonSchema = await getSchemaByEntity(appDataEntityId, this.appId);
     if (!jsonSchema) {
       return;
     }
@@ -249,7 +253,7 @@ export class BIReportPanelContentController extends PanelItemController {
     if (Array.isArray(schemaFields)) {
       const appDataEntity = await ibiz.hub.getAppDataEntity(
         appDataEntityId,
-        this.context.srfappid,
+        this.appId,
       );
       if (appDataEntity) {
         schemaFields.forEach(item => {
@@ -284,7 +288,11 @@ export class BIReportPanelContentController extends PanelItemController {
     ];
     const fields = await Promise.all(
       items.map(async item => {
-        const field = await getSchemaField(item, this.state.schemaFields);
+        const field = await getSchemaField(
+          item,
+          this.state.schemaFields,
+          this.appId,
+        );
         if (field) {
           this.state.fieldIconMap.set(
             field.appDEFieldId,
@@ -321,7 +329,11 @@ export class BIReportPanelContentController extends PanelItemController {
     ];
     const fields = await Promise.all(
       items.map(async item => {
-        const field = await getSchemaField(item, this.state.schemaFields);
+        const field = await getSchemaField(
+          item,
+          this.state.schemaFields,
+          this.appId,
+        );
         if (field) {
           this.state.conditionFieldMap.set(field.appDEFieldId, item);
         }
@@ -543,7 +555,7 @@ export class BIReportPanelContentController extends PanelItemController {
     const tempContext: IContext = clone(this.panel.context);
     Object.assign(tempContext, { pssysbireport: tempContext[this.reportKey] });
     this.context = tempContext;
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.appId);
     try {
       this.panel.view.startLoading();
       const res = await app.deService.exec(
@@ -553,6 +565,27 @@ export class BIReportPanelContentController extends PanelItemController {
         this.panel.params,
       );
       if (res.data) {
+        // 修正appid，适配多应用场景
+        const appId = res.data.pssysappid;
+        if (appId) {
+          const mainApp = ibiz.hub.getApp(ibiz.env.appId);
+          // 主应用上下文的srfappid应该等于主应用appId
+          if (appId === mainApp.id && this.context.srfappid !== mainApp.appId) {
+            this.context.srfappid = mainApp.appId;
+          } else {
+            // 子应用上下文的srfappid应该等于子应用id
+            const targetApp = mainApp.model.subAppRefs?.find(subAppRef => {
+              return subAppRef.id?.endsWith(appId);
+            });
+            if (
+              targetApp &&
+              targetApp.id &&
+              targetApp.id !== this.context.srfappid
+            ) {
+              this.context.srfappid = targetApp.id;
+            }
+          }
+        }
         const tempConfig = await ibiz.util.biReport.translateDEReportToConfig(
           res.data,
         );
@@ -635,6 +668,7 @@ export class BIReportPanelContentController extends PanelItemController {
     const tempContext = clone(this.context);
     Object.assign(tempContext, { pssysbireport: '__UNKNOWN__' });
     const params: IData = await ibiz.util.biReport.translateDataToAppBIReport({
+      context: tempContext,
       reportTag: this.config.reportTag,
       selectChartType,
       selectCubeId: this.config.selectCubeId,
@@ -643,7 +677,7 @@ export class BIReportPanelContentController extends PanelItemController {
       style: propertyData.style,
       extend: propertyData.extend,
     });
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.appId);
     const res = await app.deService.exec(
       'pssysbireport',
       'compileappbireport',
@@ -656,6 +690,7 @@ export class BIReportPanelContentController extends PanelItemController {
         'APPBIREPORT',
       );
       (result as IData).appBISchemeId = this.config.selectedSchemeId;
+      result.appId = this.appId;
       return result as IAppBIReport;
     }
   }

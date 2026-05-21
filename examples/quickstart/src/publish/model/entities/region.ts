@@ -106,7 +106,7 @@ export default {
   appDEDataExports: [
     {
       codeName: 'DataExport',
-      maxRowCount: 1000,
+      maxRowCount: 65535,
       dedataExportItems: [
         {
           capLanguageRes: {
@@ -365,6 +365,24 @@ export default {
       name: 'TOOLTIP',
       id: 'tooltip',
     },
+    {
+      codeName: 'start_time',
+      logicName: '开始时间',
+      predefinedType: 'NONE',
+      stdDataType: 5,
+      valueFormat: 'YYYY-MM-DD HH:mm:ss',
+      name: 'START_TIME',
+      id: 'start_time',
+    },
+    {
+      codeName: 'end_time',
+      logicName: '结束时间',
+      predefinedType: 'NONE',
+      stdDataType: 5,
+      valueFormat: 'YYYY-MM-DD HH:mm:ss',
+      name: 'END_TIME',
+      id: 'end_time',
+    },
   ],
   appDELogics: [
     {
@@ -615,6 +633,28 @@ export default {
           type: 'SIMPLE',
           allowEmpty: true,
           id: 'tooltip',
+        },
+        {
+          codeName: 'start_time',
+          jsonFormat: 'yyyy-MM-dd HH:mm:ss',
+          logicName: '开始时间',
+          appDEFieldId: 'start_time',
+          sourceType: 'DEFIELD',
+          stdDataType: 5,
+          type: 'SIMPLE',
+          allowEmpty: true,
+          id: 'start_time',
+        },
+        {
+          codeName: 'end_time',
+          jsonFormat: 'yyyy-MM-dd HH:mm:ss',
+          logicName: '结束时间',
+          appDEFieldId: 'end_time',
+          sourceType: 'DEFIELD',
+          stdDataType: 5,
+          type: 'SIMPLE',
+          allowEmpty: true,
+          id: 'end_time',
         },
       ],
       sourceType: 'DE',

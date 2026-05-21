@@ -50,7 +50,7 @@ export const WFStepTrace = defineComponent({
                     <div class={this.ns.b('task-item')}>
                       <van-field
                         readonly
-                        v-model={task.type}
+                        v-model={task.taskName}
                         label={ibiz.i18n.t(
                           'panelComponent.wfStepTrace.processingSteps',
                         )}
@@ -67,13 +67,24 @@ export const WFStepTrace = defineComponent({
                     </div>
                     <div class={this.ns.b('task-item')}>
                       <van-field
-                        v-model={task.taskName}
+                        v-model={task.type}
                         readonly
                         label={ibiz.i18n.t(
                           'panelComponent.wfStepTrace.submissionPath',
                         )}
                       />
                     </div>
+                    {task.fullmessage && (
+                      <div class={this.ns.b('task-item')}>
+                        <van-field
+                          v-model={task.fullmessage}
+                          readonly
+                          label={ibiz.i18n.t(
+                            'panelComponent.wfStepTrace.processInformation',
+                          )}
+                        />
+                      </div>
+                    )}
                   </div>
                 </van-step>
               );

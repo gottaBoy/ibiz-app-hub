@@ -140,3 +140,29 @@ export function isEmptyVNode(nodes: VNode[] | VNode): boolean {
   }
   return nodes.length === 1 && nodes[0] === EmptyVNode;
 }
+
+/**
+ * @description 过滤attr中指定属性，如果存在自定义过滤回调，则不针对filterKeys的值进行过滤
+ * @export
+ * @param {Record<string, string>} attrs 所有属性
+ * @param {(key: string) => boolean} [filter] 自定义过滤回调
+ * @param {string[]} [filterKeys=['class', 'style']] 需要过滤掉的属性
+ * @returns {*}  {Record<string, string>}
+ */
+export function useFilterAttribute(
+  attrs: Record<string, string>,
+  filter?: (key: string) => boolean,
+  filterKeys: string[] = ['class', 'style'],
+): Record<string, string> {
+  const result: Record<string, string> = {};
+  Object.keys(attrs).forEach(key => {
+    if (filter) {
+      if (filter(key)) {
+        result[key] = attrs[key];
+      }
+    } else if (!filterKeys.includes(key)) {
+      result[key] = attrs[key];
+    }
+  });
+  return result;
+}

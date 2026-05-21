@@ -1,26 +1,73 @@
+$color-picker: (
+  width-picker: getCssVar(spacing, base-loose),
+  height-picker: getCssVar(spacing, base-loose),
+  color: getCssVar(editor, default, text-color),
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  gap: getCssVar(spacing, tight),
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
+
 @include b(color-picker) {
+  @include set-component-css-var(color-picker, $color-picker);
+
   position: relative;
   display: flex;
   flex-direction: row;
-  justify-content: getCssVar(form-item-container, editor-align);
+  align-items: center;
+  justify-content: getCssVar(color-picker, flex-justify-content);
   height: 100%;
-  padding-right: rem(40px);
+  font-size: getCssVar(color-picker, font-fontSize);
+  line-height: getCssVar(color-picker, font-lineHeight);
+  color: getCssVar(color-picker, color);
+
+  --van-field-input-text-color: #{getCssVar(color-picker, color)};
+  --van-cell-text-color: #{getCssVar(color-picker, color)};
+  --van-cell-value-color: #{getCssVar(color-picker, color)};
+  --van-cell-line-height: #{getCssVar(color-picker, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(color-picker, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(color-picker, font-fontSize)};
+  --van-field-input-disabled-text-color: #{getCssVar(color-picker, color-disabled)};
+
+  input::placeholder {
+    color: getCssVar(color-picker, color-placeholder);
+    -webkit-text-fill-color: getCssVar(color-picker, color-placeholder);
+  }
+
+  input::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
   
+  @include e('color') {
+    &.van-field {
+      flex-grow: 1;
+      &::after {
+        display: none;
+      }
+    }
+  }
+
   @include e('picker') {
     &.van-field {
-      position: absolute;
-      right: 0;
-      width: getCssVar(spacing, loose);
-      height: getCssVar(spacing, loose);
+      flex-shrink: 0;
       padding: 0;
-      margin-right: getCssVar(spacing, tight)
+      margin-left: getCssVar(color-picker, gap);
+      background-color: transparent;
+    }
+
+    .van-field__control {
+      width: getCssVar(color-picker, width-picker);
+      height: getCssVar(color-picker, height-picker);
     }
   }
 
   @include e(item) {
     display: inline-block;
     width: auto;
-    padding-right: getCssVar(spacing, extra-loose);
     color: inherit;
 
     .van-field__value {
@@ -29,8 +76,12 @@
 
       .van-field__control {
         color: inherit;
-        text-align: center;
+        text-align: getCssVar(color-picker, font-textAlign);
       }
     }
+  }
+  
+  @include m(readonly) {
+    padding-right: 0;
   }
 }

@@ -2,7 +2,7 @@ import {
   IApiFormGroupPanelState,
   IButtonContainerState,
 } from '../../../../../interface';
-import { FormDetailState } from '../form-detail/form-detail.state';
+import { FormContainerState } from '../form-container';
 
 /**
  * 表单分组状态
@@ -14,7 +14,7 @@ import { FormDetailState } from '../form-detail/form-detail.state';
  * @extends {FormContainerState}
  */
 export class FormGroupPanelState
-  extends FormDetailState
+  extends FormContainerState
   implements IApiFormGroupPanelState
 {
   /**

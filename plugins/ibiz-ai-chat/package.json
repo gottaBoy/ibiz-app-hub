@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template-plugin/ai-chat",
-  "version": "0.0.29",
+  "version": "0.0.60",
   "description": "iBiz AI交互框插件",
   "main": "dist/index.es.js",
   "module": "dist/index.es.js",
@@ -30,12 +30,22 @@
   "dependencies": {
     "@ibiz-template/scss-utils": "^0.0.2",
     "@preact/signals": "^1.2.1",
+    "@tiptap/core": "^3.11.1",
+    "@tiptap/extension-document": "^3.11.1",
+    "@tiptap/extension-file-handler": "^3.11.1",
+    "@tiptap/extension-image": "^3.11.1",
+    "@tiptap/extension-paragraph": "^3.11.1",
+    "@tiptap/extension-text": "^3.11.1",
+    "@tiptap/extensions": "^3.11.1",
+    "@tiptap/pm": "^3.11.1",
     "autosize": "^6.0.1",
     "cherry-markdown": "^0.8.26",
     "interactjs": "^1.10.19",
+    "qx-util": "^0.4.8",
     "path-browserify": "^1.0.1",
     "preact": "^10.18.1",
     "react-tabs": "^6.0.2",
+    "lodash-es": "^4.17.21",
     "vite-plugin-libcss": "^1.1.1"
   },
   "devDependencies": {
@@ -75,6 +85,7 @@
   },
   "peerDependencies": {
     "cherry-markdown": "^0.8.26",
-    "interactjs": "^1.10.19"
+    "interactjs": "^1.10.19",
+    "qx-util": "^0.4.8"
   }
 }

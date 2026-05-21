@@ -631,7 +631,7 @@ export const DataViewControl = defineComponent({
       });
       if (!ctrlModel) return;
       return (
-        <div class={ns.e('batchtoolbar')}>
+        <div class={[ns.e('batchtoolbar'), ns.is('show', c.showBatchToolbar)]}>
           <iBizToolbarControl
             modelData={ctrlModel}
             context={c.context}
@@ -776,6 +776,7 @@ export const DataViewControl = defineComponent({
       if (c.state.enablePagingBar && c.model.pagingMode === 1)
         return (
           <iBizPagination
+            mode={c.paginationMode}
             class={ns.e('pagination')}
             total={c.state.total}
             curPage={c.state.curPage}

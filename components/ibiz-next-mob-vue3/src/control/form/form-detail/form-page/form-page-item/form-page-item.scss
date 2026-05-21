@@ -1,8 +1,9 @@
-$form-page-item: ('margin': 0 0 getCssVar('spacing', 'tight') 0,
+$form-page-item: (
+    radius: getCssVar('border-radius', 'small'),
 );
 
 @include b(form-page-item) {
     @include set-component-css-var('form-page-item', $form-page-item);
 
-    border-radius: getCssVar('border-radius', 'small');
+    border-radius: getCssVar('form-page-item', 'radius');
 }

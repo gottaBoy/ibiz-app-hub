@@ -1,12 +1,12 @@
 @include b(unknown-message) {
   display: flex;
+  justify-content: flex-end;
   padding: 6px 10px;
-  justify-content: end;
 
   @include e(content) {
+    width: max-content;
     padding: 10px 16px;
     color: #000;
-    width: max-content;
     background-color: #ccc;
     border-radius: #{getCssVar('ai-chat', 'border-radius')};
   }

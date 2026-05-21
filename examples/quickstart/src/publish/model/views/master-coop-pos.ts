@@ -6,7 +6,7 @@ export default {
   deviewCodeName: 'coop_pos',
   deviewId: 'c9be89cb478664d27b07cab60cf71fd9',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
@@ -112,6 +112,10 @@ export default {
                   {
                     rawItem: {
                       rawItemParams: [
+                        {
+                          key: 'enablenoaccess',
+                          value: 'true',
+                        },
                         {
                           key: 'showmode',
                           value: 'avatar',

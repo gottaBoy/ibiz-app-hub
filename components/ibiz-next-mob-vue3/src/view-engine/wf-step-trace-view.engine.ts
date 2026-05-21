@@ -10,7 +10,7 @@ import { IAppDEWFDynaEditView } from '@ibiz/model-core';
 import { WFStepTraceController } from '../panel-component/wf-step-trace';
 
 export class WFStepTraceViewEngine extends ViewEngineBase {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEWFDynaEditView,
     IWFStepTraceViewState,
     IWFStepTraceViewEvent

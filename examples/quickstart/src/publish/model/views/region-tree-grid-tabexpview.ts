@@ -4,7 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'TreeGrid_tabexpview',
   deviewId: '97ad4ca68fc9d3e51b80f930a10d7328',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.REGION',
   },
@@ -42,6 +42,11 @@ export default {
           id: 'sort',
         },
         {
+          caption: '简略分页栏',
+          appViewId: 'web.region_tree_grid_simple_page',
+          id: 'simplepage',
+        },
+        {
           caption: '操作列',
           appViewId: 'web.region_tree_grid_actioncol',
           id: 'actioncol',
@@ -50,6 +55,11 @@ export default {
           caption: '列界面行为组',
           appViewId: 'web.region_treegrid_column_uiaction_group',
           id: 'uiaction_group',
+        },
+        {
+          caption: '动态界面行为组',
+          appViewId: 'web.region_treegrid_dy_uiaction_group_exp',
+          id: 'dy_uiaction_group',
         },
         {
           caption: '行展开',
@@ -112,6 +122,11 @@ export default {
           id: 'percent',
         },
         {
+          caption: '注入属性',
+          appViewId: 'web.region_treegrid_attr',
+          id: 'attr',
+        },
+        {
           caption: '换行模式',
           appViewId: 'web.region_tree_grid_wrap',
           id: 'wrap',
@@ -120,6 +135,16 @@ export default {
           caption: '刷新模式',
           appViewId: 'web.region_tree_grid_refreshtabexpview',
           id: 'refresh',
+        },
+        {
+          caption: '批操作工具栏显示模式',
+          appViewId: 'web.region_tree_grid_batchtoolbarmode',
+          id: 'batchtoolbarmode',
+        },
+        {
+          caption: '指定展开图标列',
+          appViewId: 'web.region_treegrid_column_expand',
+          id: 'column_expand_icon',
         },
       ],
       dataRelationTag: 'DataRelation7',

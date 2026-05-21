@@ -25,10 +25,7 @@ export const InternalMessageJSON = defineComponent({
 
     const jsonContent = computed(() => {
       if (props.message.content && props.message.content_type === 'JSON') {
-        return JSON.parse(props.message.content) as {
-          html?: string;
-          redirecturl?: string;
-        };
+        return JSON.parse(props.message.content) as IData;
       }
       return null;
     });
@@ -69,6 +66,54 @@ export const InternalMessageJSON = defineComponent({
     if (this.jsonContent?.html) {
       content = (
         <div class={this.ns.e('content')} v-html={this.jsonContent.html}></div>
+      );
+    } else if (this.jsonContent?.todoid) {
+      content = (
+        <div class={this.ns.e('content')}>
+          <div class={this.ns.e('card')}>
+            <div class={this.ns.em('card', 'avatar')}>
+              {this.jsonContent.createmanname.substring(0, 2)}
+            </div>
+            <div class={this.ns.em('card', 'content')}>
+              <div class={[this.ns.e('todo'), this.ns.em('todo', 'header')]}>
+                <span class={this.ns.em('todo', 'person')}>
+                  {this.jsonContent.createmanname}
+                </span>
+                <span class={this.ns.em('todo', 'action')}>
+                  {this.jsonContent.todostate === 'ACTIVE'
+                    ? ibiz.i18n.t(
+                        'panelComponent.userMessage.internalMessageJson.todo',
+                      )
+                    : ibiz.i18n.t(
+                        'panelComponent.userMessage.internalMessageJson.done',
+                      )}
+                </span>
+              </div>
+              <div class={[this.ns.e('todo'), this.ns.em('todo', 'content')]}>
+                <span class={this.ns.em('todo', 'title')}>
+                  {this.jsonContent.title}
+                </span>
+                <span class={this.ns.em('todo', 'step')}>
+                  {this.jsonContent.param05}
+                </span>
+                <van-tag type='primary' class={this.ns.em('todo', 'state')}>
+                  {this.jsonContent.todostatetext}
+                </van-tag>
+              </div>
+              <div class={[this.ns.e('todo'), this.ns.em('todo', 'footer')]}>
+                <span class={this.ns.em('todo', 'date')}>
+                  {this.jsonContent.todostate === 'ACTIVE'
+                    ? this.jsonContent.createdate
+                    : this.jsonContent.processdate}
+                </span>
+                <span class={this.ns.em('todo', 'separate')}>·</span>
+                <span class={this.ns.em('todo', 'name')}>
+                  {this.jsonContent.param04}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       );
     } else {
       content = (

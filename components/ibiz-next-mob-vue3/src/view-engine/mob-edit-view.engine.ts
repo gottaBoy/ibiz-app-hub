@@ -23,7 +23,7 @@ export class MobEditViewEngine extends ViewEngineBase {
   /**
    * 视图控制器
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEEditView,
     IEditViewState,
     IEditViewEvent
@@ -318,5 +318,22 @@ export class MobEditViewEngine extends ViewEngineBase {
     );
     // 刷新预定义todo实体数据
     ibiz.mc.command.send({ srfdecodename: 'SysTodo' }, 'OBJECTUPDATED');
+  }
+
+  /**
+   * @description 取消变更
+   * @param {({
+   *       targetState: 'INIT' | 'UNDO' | 'REDO';
+   *     })} [_args={ targetState: 'INIT' }] 目标状态，初始化状态|撤销上一步操作|重做下一步操作
+   * @returns {*}  {Promise<void>}
+   * @memberof MobEditViewEngine
+   */
+  async cancelChanges(
+    _args: {
+      targetState: 'INIT' | 'UNDO' | 'REDO';
+    } = { targetState: 'INIT' },
+  ): Promise<void> {
+    await super.cancelChanges(_args);
+    await this.form.cancelChanges(_args.targetState);
   }
 }

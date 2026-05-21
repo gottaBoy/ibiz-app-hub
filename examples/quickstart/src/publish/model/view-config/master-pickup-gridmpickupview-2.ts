@@ -1,7 +1,7 @@
 export default {
   id: 'web.master_pickup_gridmpickupview2',
   codeName: 'master_pickup_gridmpickupview2',
-  openMode: 'INDEXVIEWTAB',
+  openMode: 'POPUPMODAL',
   viewType: 'DEMPICKUPVIEW2',
   width: 0,
   height: 0,

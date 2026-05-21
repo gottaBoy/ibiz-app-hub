@@ -303,6 +303,37 @@ export class EditorController<T extends IEditor = IEditor>
         (item: IEditorItem) => item.id !== this.model.id,
       );
     }
+
+    this.initExtraParams();
+  }
+
+  /**
+   * @description 初始化额外参数
+   * @protected
+   * @memberof FormItemController
+   */
+  protected initExtraParams(): void {
+    // 额外参数
+    const extraParams = {};
+
+    // 是否隐藏无值的单位
+    let emptyHiddenUnit = true;
+    if ((this.parent as IData)?.emptyHiddenUnit === false) {
+      emptyHiddenUnit = (this.parent as IData)?.emptyHiddenUnit;
+    }
+    // 编辑器参数优先级最高
+    const { EMPTYHIDDENUNIT, emptyhiddenunit } = this.editorParams;
+    if (EMPTYHIDDENUNIT) {
+      emptyHiddenUnit = Object.is(EMPTYHIDDENUNIT, 'true');
+    }
+    if (emptyhiddenunit) {
+      emptyHiddenUnit = Object.is(emptyhiddenunit, 'true');
+    }
+    Object.assign(extraParams, {
+      emptyHiddenUnit,
+    });
+
+    this.extraParams = extraParams;
   }
 
   /**

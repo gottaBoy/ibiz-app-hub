@@ -1,37 +1,47 @@
 $internal-message: (
-  loading-warp-bg-color: linear-gradient(90deg,getCssVar(color, primary, light, hover),getCssVar(color, primary)),
+  // 间距
+  spacing-short-content-margin-bottom: getCssVar('spacing', 'tight'),
+  spacing-caption: getCssVar(spacing, tight),
+  spacing-status-margin-right: getCssVar('spacing', 'tight'),
+  // 宽度
+  width-internal-message-width: rem(50px),
+  width-internal-message-center: rem(342px),
+  // 字体
+  font-caption-fontSize: getCssVar(font-weight, bold),
+  font-internal-message-fontSize: getCssVar(font-size, header-3),
 );
 
 @include b(internal-message) {
   @include set-component-css-var('internal-message', $internal-message);
   @include flex(row, space-between, center);
 
-  @include e(caption){
-    margin-bottom: getCssVar('spacing', 'tight');
-    font-weight: getCssVar(font-weight, bold);
+  @include e(caption) {
+    margin-bottom: getCssVar(internal-message, spacing-caption);
+    font-weight: getCssVar(internal-message, font-caption-fontSize);
   }
 
-  @include e(short-content){
-    margin-bottom: getCssVar('spacing', 'tight');
+  @include e(short-content) {
+    margin-bottom: getCssVar(
+      internal-message,
+      spacing-short-content-margin-bottom
+    );
   }
 
-  @include e(status){
-    margin-right: getCssVar('spacing', 'tight');
+  @include e(status) {
+    margin-right: getCssVar(internal-message,spacing-status-margin-right);
   }
-
 }
 
 @include b(internal-message-left) {
   flex-grow: 0;
   flex-shrink: 0;
   align-self: flex-start;
-  width: 50px;
-  font-size: getCssVar(font-size,header-3);
+  width: getCssVar(internal-message, width-internal-message-width);
+  font-size: getCssVar(internal-message, font-internal-message-fontSize);
   text-align: center;
 }
 
-
 @include b(internal-message-center) {
   flex-grow: 1;
-  width: 342px;
+  width: getCssVar(internal-message, width-internal-message-center);
 }

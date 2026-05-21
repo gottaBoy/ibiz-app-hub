@@ -9,8 +9,7 @@ import {
 } from '@ibiz-template/vue3-util';
 import { ref, VNode, watch, PropType, computed, defineComponent } from 'vue';
 import { IDEList, ILayoutPanel, IUIActionGroupDetail } from '@ibiz/model-core';
-import { isNil } from 'lodash-es';
-import { createUUID } from 'qx-util';
+import { isNil, debounce } from 'lodash-es';
 import {
   ControlVO,
   ListController,
@@ -69,21 +68,31 @@ export const ListControl = defineComponent({
     loadDefault: { type: Boolean, default: true },
   },
   setup(props) {
-    const c = useControlController((...args) => new ListController(...args));
+    const c: ListController = useControlController(
+      (...args) => new ListController(...args),
+    );
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
 
     useControlPopoverzIndex(c);
 
     const { onPageChange, onPageRefresh, onPageSizeChange } = usePagination(c);
 
-    // 是否可以加载更多
-    const isLodeMoreDisabled = computed(() => {
-      if (c.model.enablePagingBar === true) {
-        return true;
-      }
-      if (c.model.pagingMode !== 2) {
-        return true;
-      }
+    /**
+     * 无限滚动元素
+     */
+    const infiniteScroll = ref<IData>();
+
+    /**
+     * 是否为反向滚动条
+     */
+    const reverseScroll = c.model.controlStyle === 'EXTVIEW3';
+
+    /**
+     * 禁用加载更多
+     */
+    const disabledLodeMore = computed(() => {
+      if (c.model.enablePagingBar === true) return true;
+      if (c.model.pagingMode !== 2) return true;
       return (
         c.state.items.length >= c.state.total ||
         c.state.isLoading ||
@@ -102,28 +111,6 @@ export const ListControl = defineComponent({
         (c.model.pagingMode === 2 || c.model.pagingMode === 3)
       );
     });
-    // 无限滚动元素
-    const infiniteScroll = ref<IData>();
-    // 无限滚动元素标识
-    const infiniteScrollKey = ref<string>(createUUID());
-
-    watch(
-      () => c.state.curPage,
-      () => {
-        if (
-          c.state.curPage === 1 &&
-          (c.model.pagingMode === 2 || c.model.pagingMode === 3)
-        ) {
-          infiniteScrollKey.value = createUUID();
-          const containerEl =
-            infiniteScroll.value?.ElInfiniteScroll?.containerEl;
-          if (containerEl) {
-            containerEl.lastScrollTop = 0;
-            containerEl.scrollTop = 0;
-          }
-        }
-      },
-    );
 
     let cacheInfo: Partial<IDragChangeInfo> | null = null;
 
@@ -176,10 +163,45 @@ export const ListControl = defineComponent({
       }
     });
 
-    // 平滑滚动到顶部
-    const scrollToTop = () => {
+    /**
+     * @description 平滑滚动到顶部
+     */
+    const scrollToTop = (): void => {
       infiniteScroll.value?.scrollTo({ top: 0, behavior: 'smooth' });
     };
+
+    /**
+     * @description 处理滚动加载
+     * @returns {*}  {Promise<void>}
+     */
+    const handleScrollLoad = async (): Promise<void> => {
+      if (!infiniteScroll.value || disabledLodeMore.value) return;
+      const scrollTop = infiniteScroll.value.scrollTop;
+      const scrollHeight = infiniteScroll.value.scrollHeight;
+      const clientHeight = infiniteScroll.value.clientHeight;
+      if (!reverseScroll && scrollHeight - scrollTop - clientHeight < 10) {
+        // 滚动到底部加载更多
+        await c.loadMore();
+      } else if (reverseScroll && scrollTop < 10) {
+        // 滚动到顶部部加载更多
+        await c.loadMore();
+        // 恢复滚动位置，保持用户体验连续性
+        const newScrollHeight = infiniteScroll.value.scrollHeight;
+        infiniteScroll.value.scrollTop =
+          scrollTop + (newScrollHeight - scrollHeight);
+      }
+    };
+
+    c.evt.on('onLoadSuccess', evt => {
+      if (evt.isInitialLoad && reverseScroll) {
+        setTimeout(() => {
+          if (!infiniteScroll.value) return;
+          const scrollHeight = infiniteScroll.value.scrollHeight;
+          const clientHeight = infiniteScroll.value.clientHeight;
+          infiniteScroll.value.scrollTop = scrollHeight + clientHeight;
+        }, 100);
+      }
+    });
 
     c.evt.on('onScrollToTop', () => {
       scrollToTop();
@@ -233,13 +255,9 @@ export const ListControl = defineComponent({
     watch(
       () => props.data,
       () => {
-        if (props.isSimple) {
-          initSimpleData();
-        }
+        if (props.isSimple) initSimpleData();
       },
-      {
-        deep: true,
-      },
+      { deep: true },
     );
 
     // 绘制项布局面板
@@ -494,46 +512,42 @@ export const ListControl = defineComponent({
      * 绘制分组样式2项
      * @return {*}  {VNode[]}
      */
-    const renderGroupStyle2 = (): VNode[] => {
-      return c.state.groups?.map(group => {
-        return (
-          <div class={[ns.b('group-style2')]}>
-            <div class={ns.be('group-style2', 'header')}>
-              <div class={ns.bem('group-style2', 'header', 'title')}>
-                {showTitle(group.caption)}
-              </div>
-            </div>
-            <div class={ns.be('group-style2', 'content')}>
-              {group.children.length > 0 ? (
-                renderListItems(group.children)
-              ) : (
-                <div class={ns.bem('group-style2', 'content', 'empty')}>
-                  {ibiz.i18n.t('app.noData')}
+    const renderGroupStyle2 = (): VNode => {
+      return (
+        <div
+          class={[ns.e('layout-flex'), ns.em('layout-flex', 'group-style2')]}
+        >
+          {c.state.groups?.map(group => {
+            return (
+              <div class={[ns.b('group-style2')]}>
+                <div class={ns.be('group-style2', 'header')}>
+                  <div class={ns.bem('group-style2', 'header', 'title')}>
+                    {showTitle(group.caption)}
+                  </div>
                 </div>
-              )}
-            </div>
-          </div>
-        );
-      });
+                <div class={ns.be('group-style2', 'content')}>
+                  {group.children.length > 0 ? (
+                    renderListItems(group.children)
+                  ) : (
+                    <div class={ns.bem('group-style2', 'content', 'empty')}>
+                      {ibiz.i18n.t('app.noData')}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
     };
 
     // 绘制列表内容
     const renderListContent = (): VNode => {
-      if (c.state.enableGroup && !c.state.isSimple) {
-        if (c.model.groupStyle === 'STYLE2') {
-          return (
-            <div
-              class={[
-                ns.b('content'),
-                ns.b('scroll'),
-                ns.b('group-style2-content'),
-              ]}
-            >
-              {renderGroupStyle2()}
-            </div>
-          );
-        }
-
+      if (
+        c.state.enableGroup &&
+        !c.state.isSimple &&
+        c.model.groupStyle !== 'STYLE2'
+      ) {
         return (
           <el-collapse
             v-model={c.state.expandedKeys}
@@ -555,24 +569,28 @@ export const ListControl = defineComponent({
       }
       return (
         <div
+          ref='infiniteScroll'
           class={[
             ns.b('scroll'),
             ns.b('content'),
-            ns.is('show-underLine', c.model.controlStyle !== 'EXTVIEW1'),
+            ns.is('reverse-scroll', reverseScroll),
+            ns.is(
+              'show-underLine',
+              c.model.controlStyle !== 'EXTVIEW1' &&
+                c.model.groupStyle !== 'STYLE2',
+            ),
           ]}
-          v-infinite-scroll={(): Promise<void> => c.loadMore()}
-          infinite-scroll-distance={10}
-          infinite-scroll-disabled={isLodeMoreDisabled.value}
-          ref={'infiniteScroll'}
-          key={infiniteScrollKey.value}
+          onScroll={debounce(handleScrollLoad, 300)}
         >
-          {renderListItems(
-            isCollapse.value
-              ? c.state.items.slice(0, c.state.size)
-              : c.state.items,
-            undefined,
-            !c.enableEditOrder,
-          )}
+          {c.state.enableGroup && c.model.groupStyle === 'STYLE2'
+            ? renderGroupStyle2()
+            : renderListItems(
+                isCollapse.value
+                  ? c.state.items.slice(0, c.state.size)
+                  : c.state.items,
+                undefined,
+                !c.enableEditOrder,
+              )}
         </div>
       );
     };
@@ -624,7 +642,7 @@ export const ListControl = defineComponent({
       });
       if (!ctrlModel) return;
       return (
-        <div class={ns.e('batchtoolbar')}>
+        <div class={[ns.e('batchtoolbar'), ns.is('show', c.showBatchToolbar)]}>
           <iBizToolbarControl
             modelData={ctrlModel}
             context={c.context}
@@ -678,41 +696,39 @@ export const ListControl = defineComponent({
     // 当为点击加载时，页面底部会有一个继续加载按钮图标，点击时就会继续加载后续数据，直到完全加载完数据后，[加载更多]图标会隐藏，
     // 折叠图标会显示，点击折叠图标会折叠数据，折叠后,显示展开图标，点击展开图标，已加载的数据会完整显示
     const renderCollapseExpandIcon = () => {
-      let icon = null;
-      const loadMore = !(
-        c.state.items.length >= c.state.total || c.state.total <= c.state.size
-      );
-      if (showCollapseOrExpandIcon.value) {
-        if (c.model.pagingMode === 2) {
-          if (isCollapse.value) {
-            icon = downIcon();
-          } else if (c.state.items.length > c.state.size) {
-            icon = upIcon();
-          }
-        }
-        if (c.model.pagingMode === 3) {
-          if (isCollapse.value) {
-            icon = downIcon();
-          } else if (loadMore) {
-            icon = loadMoreIcon();
-          } else if (c.state.isCreated && c.state.items.length > c.state.size) {
-            icon = upIcon();
-          }
-        }
+      if (!showCollapseOrExpandIcon.value) return null;
+
+      const { pagingMode } = c.model;
+      const { items, total, size, isCreated } = c.state;
+      const hasMoreItems = items.length < total && total > size;
+      const exceedsInitialSize = items.length > size;
+
+      if (pagingMode === 2) {
+        if (isCollapse.value) return reverseScroll ? upIcon() : downIcon();
+        if (exceedsInitialSize) return reverseScroll ? downIcon() : upIcon();
       }
-      return icon;
+
+      if (pagingMode === 3) {
+        if (isCollapse.value) return reverseScroll ? upIcon() : downIcon();
+        if (hasMoreItems) return loadMoreIcon();
+        if (isCreated && exceedsInitialSize)
+          return reverseScroll ? downIcon() : upIcon();
+      }
+
+      return null;
     };
 
     return {
       c,
       ns,
+      reverseScroll,
       infiniteScroll,
-      renderListContent,
       renderNoData,
-      renderBatchToolBar,
       onPageChange,
       onPageRefresh,
       onPageSizeChange,
+      renderListContent,
+      renderBatchToolBar,
       renderCollapseExpandIcon,
     };
   },
@@ -726,6 +742,7 @@ export const ListControl = defineComponent({
         this.renderBatchToolBar(),
         this.c.state.enablePagingBar && this.c.model.pagingMode === 1 ? (
           <iBizPagination
+            mode={this.c.paginationMode}
             class={this.ns.e('pagination')}
             total={this.c.state.total}
             curPage={this.c.state.curPage}
@@ -742,9 +759,10 @@ export const ListControl = defineComponent({
     return (
       <iBizControlNavigation controller={this.c}>
         <iBizControlBase
-          class={[this.ns.is('enable-page', !!this.c.state.enablePagingBar)]}
           controller={this.c}
+          class={[this.ns.is('enable-page', !!this.c.state.enablePagingBar)]}
         >
+          {this.reverseScroll && this.renderCollapseExpandIcon()}
           {content}
           {this.c.state.enableNavView && this.c.state.showNavIcon ? (
             !this.c.state.showNavView ? (
@@ -763,7 +781,7 @@ export const ListControl = defineComponent({
               ></ion-icon>
             )
           ) : null}
-          {this.renderCollapseExpandIcon()}
+          {!this.reverseScroll && this.renderCollapseExpandIcon()}
         </iBizControlBase>
       </iBizControlNavigation>
     );

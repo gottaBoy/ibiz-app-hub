@@ -221,6 +221,7 @@ export class ControlController<
     this.state.disabled = false;
     this.state.maskOption = { mode: 'BLANK' };
     this.state.zIndex = undefined;
+    this.state.isCounterDisabled = false;
   }
 
   protected async onCreated(): Promise<void> {
@@ -253,8 +254,10 @@ export class ControlController<
     }
 
     // 监听实体数据变更
-    this.onDEDataChange = this.onDEDataChange.bind(this);
-    ibiz.mc.command.change.on(this.onDEDataChange);
+    if (this.controlParams.ignoremcmsg !== 'true') {
+      this.onDEDataChange = this.onDEDataChange.bind(this);
+      ibiz.mc.command.change.on(this.onDEDataChange);
+    }
   }
 
   protected async onMounted(): Promise<void> {
@@ -265,7 +268,9 @@ export class ControlController<
   }
 
   protected async onDestroyed(): Promise<void> {
-    ibiz.mc.command.change.off(this.onDEDataChange);
+    if (this.controlParams.ignoremcmsg !== 'true') {
+      ibiz.mc.command.change.off(this.onDEDataChange);
+    }
     await super.onDestroyed();
     if (this.scheduler) {
       this.scheduler.destroy();
@@ -680,5 +685,13 @@ export class ControlController<
       );
     }
     this.state.maskOption = options;
+  }
+
+  /**
+   * @description 禁用部件计数器
+   * @memberof ControlController
+   */
+  disableCounter(): void {
+    this.state.isCounterDisabled = true;
   }
 }

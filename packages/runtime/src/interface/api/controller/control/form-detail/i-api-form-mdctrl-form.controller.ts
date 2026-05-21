@@ -31,13 +31,6 @@ export interface IApiFormMDCtrlFormController extends IApiFormMDCtrlController {
   deName: string;
 
   /**
-   * @description 编辑表单服务
-   * @type {IApiData}
-   * @memberof IApiFormMDCtrlFormController
-   */
-  service: IApiData;
-
-  /**
    * @description 数据集合
    * @type {IApiData[]}
    * @memberof IApiFormMDCtrlFormController
@@ -60,7 +53,7 @@ export interface IApiFormMDCtrlFormController extends IApiFormMDCtrlController {
 
   /**
    * @description 删除数据
-   * @param {string} id
+   * @param {string} id 数据标识
    * @returns {*}  {Promise<void>}
    * @memberof IApiFormMDCtrlFormController
    */

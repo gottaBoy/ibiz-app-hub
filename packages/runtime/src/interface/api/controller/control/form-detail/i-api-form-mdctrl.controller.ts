@@ -68,8 +68,8 @@ export interface IApiFormMDCtrlController extends IApiFormDetailController {
 
   /**
    * @description 执行界面行为
-   * @param {IUIActionGroupDetail} detail
-   * @param {MouseEvent} event
+   * @param {IUIActionGroupDetail} detail 界面行为组成员模型
+   * @param {MouseEvent} event 鼠标事件
    * @returns {*}  {Promise<void>}
    * @memberof IApiFormMDCtrlController
    */

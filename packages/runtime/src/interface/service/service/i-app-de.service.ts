@@ -99,6 +99,18 @@ export interface IAppDEService extends IApiAppDEService {
   ): Promise<IHttpResponse>;
 
   /**
+   * @description 获取 AI 聊天会话摘要
+   * @param context
+   * @param params
+   * @param data
+   */
+  aiChatChatDigest(
+    context: IContext,
+    params?: IParams,
+    data?: IData,
+  ): Promise<IHttpResponse>;
+
+  /**
    * @description 获取 AI 聊天会话历史记录
    * @param {IContext} context
    * @param {IParams} [params]
@@ -110,6 +122,20 @@ export interface IAppDEService extends IApiAppDEService {
     context: IContext,
     params?: IParams,
     data?: IData,
+  ): Promise<IHttpResponse>;
+
+  /**
+   * @description 取消 AI 聊天会话
+   * @param context
+   * @param params
+   * @param data
+   * @returns {*}  {Promise<IHttpResponse>}
+   * @memberof IAppDEService
+   */
+  aiChatCancel(
+    context: IContext,
+    params: IParams,
+    data: IData,
   ): Promise<IHttpResponse>;
 
   /**

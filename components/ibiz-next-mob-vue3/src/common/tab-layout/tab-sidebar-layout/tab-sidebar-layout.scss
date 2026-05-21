@@ -1,0 +1,66 @@
+$tab-sidebar-layout: (
+  // Color
+  color-bg: getCssVar(color, bg, 0),
+  color-item-bg: getCssVar(color, bg, 0),
+  // Width/Height
+  width-tab-sidebar-layout: rem(90px),
+  height-tab-sidebar-layout: 100%,
+  height-tab-item: getCssVar('height-control', 'default'),
+  width-badge-min-width: rem(20px),
+  // Spacing
+  spacing-padding: getCssVar('spacing', 'tight') 0,
+  spacing-sidebar-item-padding: getCssVar('spacing', 'tight')
+    getCssVar('spacing', 'tight'),
+);
+@include b(tab-sidebar-layout) {
+  @include set-component-css-var('tab-sidebar-layout', $tab-sidebar-layout);
+
+  width: getCssVar(tab-sidebar-layout, width-tab-sidebar-layout);
+  height: getCssVar(tab-sidebar-layout, height-tab-sidebar-layout);
+  padding: getCssVar(tab-sidebar-layout, spacing-padding);
+  background-color: getCssVar(tab-sidebar-layout, color-bg);
+
+  @include e('tab-item') {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: getCssVar(tab-sidebar-layout, height-tab-item);
+    .#{bem(info-item)} {
+      display: inline-flex;
+      max-width: 100%;
+    }
+    .#{bem(info-item, label)} {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @include when('long-label') {
+      &:has(.#{bem(info-item, badge)}) {
+        max-width: calc(
+          100% - #{getCssVar(tab-sidebar-layout, width-badge-min-width)}
+        );
+      }
+    }
+  }
+
+  .van-sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: getCssVar(tab-sidebar-layout, spacing-sidebar-item-padding);
+    overflow: unset;
+
+    &:not(.van-sidebar-item--select) {
+      background-color: getCssVar(tab-sidebar-layout, color-item-bg);
+    }
+
+    &.van-sidebar-item--select {
+      background-color: getCssVar(tab-sidebar-layout, color-bg-active);
+    }
+  }
+
+  .van-sidebar-item__text {
+    width: 100%;
+    height: 100%;
+  }
+}

@@ -19,6 +19,7 @@ export default {
       id: 'engine',
     },
   ],
+  appViewMsgGroupId: 'vmgroup277',
   controls: [
     {
       dedrtabPages: [

@@ -128,6 +128,16 @@ $picker: (
         background-color: getCssVar(picker, empty-bg-color);
       }
     }
+    li:has(.#{bem(picker__loadmore)}) {
+      padding: 0;
+    }
+  }
+
+  @include e(loadmore) { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: getCssVar(color, link);
   }
 
   @include e(suffix) {

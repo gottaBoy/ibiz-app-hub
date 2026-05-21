@@ -13,7 +13,13 @@ import {
   IAppDataEntity,
   IControlRender,
   IDEUIActionGroupDetail,
+  IUIActionGroupDetail,
+  IAppDEUIActionGroupDetail,
+  IDEUIActionGroup,
+  ISysImage,
+  ISysCss,
 } from '@ibiz/model-core';
+import { createUUID, isArray } from 'qx-util';
 import { PredefinedControlRender } from '../../constant';
 
 /**
@@ -247,6 +253,244 @@ export function getCtrlTeleportParams(control: IControl): {
 }
 
 /**
+ * @description 计算图标模型对象
+ * @param {string} appId
+ * @param {string} [_str]
+ * @returns {*}  {(ISysImage | undefined)}
+ */
+const calcSysImage = (appId: string, _str?: string): ISysImage | undefined => {
+  if (!_str) return undefined;
+
+  // 默认为FontAwesome
+  return {
+    cssClass: _str,
+    glyph: `${createUUID()}@FontAwesome`,
+    appId,
+  };
+};
+
+/**
+ * @description 计算
+ * @param {string} appId
+ * @param {string} [_str]
+ * @returns {*}  {(ISysCss | undefined)}
+ */
+const calcSysCss = (appId: string, _str?: string): ISysCss | undefined => {
+  if (!_str) return undefined;
+
+  return {
+    cssName: _str,
+    appId,
+  };
+};
+
+/**
+ * @description 计算单个动态界面行为组项数据
+ * @export
+ * @param {IData} refUIActionGroup
+ * @param {IContext} context
+ * @param {IParams} params
+ * @returns {*}  {Promise<IAppDEUIActionGroupDetail[]>}
+ */
+export async function calcDyUiactionGroup(
+  refUIActionGroup: IData,
+  context: IContext,
+  params: IParams,
+): Promise<IAppDEUIActionGroupDetail[]> {
+  const {
+    appId,
+    detailAppDataEntityId,
+    detailAppDEDataSetId,
+    // 界面行为标记
+    uiactionTagAppDEFieldId,
+    // 文本属性
+    textAppDEFieldId,
+    // 提示值属性
+    tipsAppDEFieldId,
+    // 可见逻辑属性
+    visibleScriptAppDEFieldId,
+    // 图标样式属性
+    iconClsAppDEFieldId,
+    // 样式表属性
+    clsAppDEFieldId,
+    // 按钮样式属性
+    buttonStyleAppDEFieldId,
+    // 行为级别属性
+    actionLevelAppDEFieldId,
+    // 启用逻辑属性
+    enableScriptAppDEFieldId,
+  } = refUIActionGroup;
+
+  const details: IAppDEUIActionGroupDetail[] = [];
+  try {
+    if (detailAppDEDataSetId && detailAppDataEntityId) {
+      const response = await ibiz.hub
+        .getApp(appId)
+        .deService.exec(
+          detailAppDataEntityId,
+          detailAppDEDataSetId,
+          context,
+          params,
+        );
+      if (response.ok && isArray(response.data)) {
+        response.data.forEach((_item: IData) => {
+          const action: IAppDEUIActionGroupDetail = {
+            uiactionId: _item[uiactionTagAppDEFieldId],
+            caption: _item[textAppDEFieldId],
+            tooltip: _item[tipsAppDEFieldId],
+            visibleScriptCode: _item[visibleScriptAppDEFieldId],
+            sysImage: calcSysImage(appId, _item[iconClsAppDEFieldId]),
+            sysCss: calcSysCss(appId, _item[clsAppDEFieldId]),
+            buttonStyle: _item[buttonStyleAppDEFieldId],
+            actionLevel: _item[actionLevelAppDEFieldId],
+            enableScriptCode: _item[enableScriptAppDEFieldId],
+            // 适配显示逻辑
+            showCaption: !!_item[textAppDEFieldId],
+            showIcon: !!_item[iconClsAppDEFieldId],
+            detailType: 'DEUIACTION',
+            itemType: 'DEUIACTION',
+            id: `${createUUID()}`,
+            appId,
+          } as IAppDEUIActionGroupDetail;
+
+          // 界面行为标识不能为空
+          if (action.uiactionId) details.push(action);
+        });
+      }
+    }
+  } catch (error) {
+    ibiz.log.error(error);
+  }
+  return details;
+}
+
+/**
+ * @description 处理界面行为组（替换动态行为组模型为实际的行为项集合）
+ * @export
+ * @param {IUIActionGroupDetail[]} uiactionGroupDetails
+ * @param {IContext} context
+ * @param {IParams} params
+ * @returns {*}  {Promise<IUIActionGroupDetail[]>}
+ */
+export async function calcUIActionDetails(
+  uiactionGroupDetails: IUIActionGroupDetail[],
+  context: IContext,
+  params: IParams,
+): Promise<IUIActionGroupDetail[]> {
+  // 筛选需要替换的项（保留原始索引）
+  const refActionDetails: { detail: IData; index: number }[] = [];
+  uiactionGroupDetails.forEach((detail: IData, index: number) => {
+    // 过滤静态界面行为组
+    if (
+      detail.detailType === 'DEUIACTIONGROUP' &&
+      detail.refUIActionGroup?.dynamicMode === 1 &&
+      !detail.refUIActionGroup?.uiactionGroupDetails
+    ) {
+      refActionDetails.push({ detail, index });
+    }
+  });
+
+  // 批量执行异步任务，获取所有动态界面行为组数据
+  const asyncTasks: Promise<IUIActionGroupDetail[]>[] = [];
+  refActionDetails.forEach(({ detail }) => {
+    const { refUIActionGroup } = detail;
+    const task = calcDyUiactionGroup(refUIActionGroup, context, params);
+    asyncTasks.push(task);
+  });
+
+  // 将模型数据合并至引用界面行为组对象
+  const actionGroupDataList = await Promise.all(asyncTasks);
+  refActionDetails.forEach(({ index }, i) => {
+    const _uiactionGroupDetails = actionGroupDataList[i];
+    Object.assign((uiactionGroupDetails[index] as IData).refUIActionGroup, {
+      uiactionGroupDetails: _uiactionGroupDetails,
+    });
+  });
+
+  return uiactionGroupDetails;
+}
+
+/**
+ * @description 递归获取所有界面行为项（处理多层嵌套的动态行为组、替换动态行为组模型为实际的行为项集合）
+ * @export
+ * @param {IDEUIActionGroupDetail[]} details
+ * @param {IContext} context
+ * @param {IParams} params
+ * @returns {*}  {Promise<IDEUIActionGroupDetail[]>}
+ */
+export async function calcAllUIActionDetails(
+  details: IDEUIActionGroupDetail[],
+  context: IContext,
+  params: IParams,
+): Promise<IDEUIActionGroupDetail[]> {
+  const actions: IDEUIActionGroupDetail[] = [];
+  // 收集所有遍历过程中的异步任务
+  const asyncTasks: Promise<IDEUIActionGroupDetail[]>[] = [];
+  const addAction = (items: IDEUIActionGroupDetail[]) => {
+    if (!isArray(items) || !items?.length) return;
+    const task = calcUIActionDetails(items, context, params);
+    asyncTasks.push(task);
+    items.forEach(item => {
+      if (item.detailType === 'DEUIACTIONGROUP') {
+        if (item.refUIActionGroup?.uiactionGroupDetails?.length)
+          addAction(item.refUIActionGroup!.uiactionGroupDetails);
+      }
+    });
+  };
+  addAction(details || []);
+
+  const allActionDetails = await Promise.all(asyncTasks);
+  allActionDetails.forEach(_details => {
+    _details.forEach(detail => {
+      actions.push(detail);
+    });
+  });
+
+  return actions;
+}
+
+/**
+ * @description 处理界面行为组，动态界面行为组需请求数据并生成成员项模型
+ * @export
+ * @param {IDEUIActionGroup} uiactionGroup
+ * @param {IContext} context
+ * @param {IParams} params
+ * @returns {*}  {Promise<IDEUIActionGroup>}
+ */
+export async function calcUIActionGroup(
+  uiactionGroup: IDEUIActionGroup,
+  context: IContext,
+  params: IParams,
+): Promise<IDEUIActionGroup> {
+  if (uiactionGroup.dynamicMode === 1 && !uiactionGroup.uiactionGroupDetails) {
+    // 实体数据集模式
+    const uiactionGroupDetails = await calcDyUiactionGroup(
+      uiactionGroup,
+      context,
+      params,
+    );
+    Object.assign(uiactionGroup, {
+      uiactionGroupDetails,
+    });
+  } else {
+    // 静态模式
+    // 收集所有遍历过程中的异步任务
+    const asyncTasks: Promise<IUIActionGroupDetail[]>[] = [];
+    if (uiactionGroup?.uiactionGroupDetails) {
+      const task = calcAllUIActionDetails(
+        uiactionGroup.uiactionGroupDetails,
+        context,
+        params,
+      );
+      asyncTasks.push(task);
+    }
+    await Promise.all(asyncTasks);
+  }
+
+  return uiactionGroup;
+}
+
+/**
  * @description 获取所有的界面行为项模型集合
  * @export
  * @param {IDEUIActionGroupDetail[]} details
@@ -258,11 +502,10 @@ export function getAllUIActionItems(
   const actions: IDEUIActionGroupDetail[] = [];
   const addAction = (items: IDEUIActionGroupDetail[]) => {
     items.forEach(item => {
+      actions.push(item);
       if (item.detailType === 'DEUIACTIONGROUP') {
         const childrenDetails = item.refUIActionGroup?.uiactionGroupDetails;
         if (childrenDetails?.length) addAction(childrenDetails);
-      } else {
-        actions.push(item);
       }
     });
   };

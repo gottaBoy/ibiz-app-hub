@@ -3,7 +3,7 @@ import { EditFormController, IControlProvider } from '@ibiz-template/runtime';
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import { IDEEditForm } from '@ibiz/model-core';
 import { debounce } from 'lodash-es';
-import { defineComponent, PropType, reactive, ref, watch } from 'vue';
+import { defineComponent, PropType, reactive, Ref, ref, watch } from 'vue';
 import './edit-form.scss';
 
 export const EditFormControl: ReturnType<typeof defineComponent> =
@@ -63,6 +63,9 @@ export const EditFormControl: ReturnType<typeof defineComponent> =
 
       const filter = ref<undefined | string>(undefined);
 
+      // 所有启用了锚点的表单项
+      const anchorList: Ref<IData[]> = ref([]);
+
       if (props.isSimple) {
         if (props.simpleDataIndex || props.simpleDataIndex === 0) {
           c.setSimpleDataIndex(props.simpleDataIndex);
@@ -99,6 +102,7 @@ export const EditFormControl: ReturnType<typeof defineComponent> =
           const detail = c.details[key];
           detail.state = reactive(detail.state);
         });
+        anchorList.value = c.anchorData;
       });
 
       const handleInput = debounce(
@@ -110,12 +114,18 @@ export const EditFormControl: ReturnType<typeof defineComponent> =
         { leading: true },
       );
 
-      return { c, ns, filter, handleInput };
+      return {
+        c,
+        ns,
+        filter,
+        handleInput,
+        anchorList,
+      };
     },
 
     render() {
-      const { enableItemFilter } = this.c.model;
-      return (
+      const { enableItemFilter, showFormNavBar } = this.c.model;
+      const content = (
         <div class={[this.ns.b(), this.ns.is('item-filter', enableItemFilter)]}>
           {enableItemFilter && (
             <van-search
@@ -130,5 +140,25 @@ export const EditFormControl: ReturnType<typeof defineComponent> =
           </iBizFormControl>
         </div>
       );
+      if (showFormNavBar) {
+        const { navBarSysCss, navBarPos } = this.c.model;
+        const items = this.anchorList.filter(
+          (item: IData) => item.pageId === this.c.state.activeTab,
+        );
+        return (
+          <van-index-bar
+            index-list={items.map(x => x.title)}
+            sticky={false}
+            class={[
+              this.ns.e('anchor'),
+              navBarSysCss,
+              this.ns.em('anchor', navBarPos?.toLowerCase()),
+            ]}
+          >
+            {content}
+          </van-index-bar>
+        );
+      }
+      return content;
     },
   });

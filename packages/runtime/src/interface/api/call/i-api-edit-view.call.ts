@@ -148,7 +148,7 @@ export interface IApiEditViewCall extends IApiViewCall {
     args: undefined;
   };
   /**
-   * @description 展开
+   * @description 展开表单分组，srfcollapsetag: 表单分组标识，srfgroupid: 表单分组标识，优先取srfcollapsetag参数
    * @type {{
    *     args: { params: { srfcollapsetag?: string; srfgroupid?: string } };
    *   }}
@@ -158,7 +158,7 @@ export interface IApiEditViewCall extends IApiViewCall {
     args: { params: { srfcollapsetag?: string; srfgroupid?: string } };
   };
   /**
-   * @description 折叠
+   * @description 收缩表单分组，srfcollapsetag: 表单分组标识，srfgroupid: 表单分组标识，优先取srfcollapsetag参数
    * @type {{
    *     args: { params: { srfcollapsetag?: string; srfgroupid?: string } };
    *   }}

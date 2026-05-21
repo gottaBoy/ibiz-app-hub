@@ -52,3 +52,4 @@ export type { IApiWFEditViewState } from './i-api-wf-edit-view.state';
 export type { IApiWFStepTraceViewState } from './i-api-wf-step-trace-view.state';
 export type { IApiWizardViewState } from './i-api-wizard-view.state';
 export type { IApiMDCustomViewState } from './i-api-md-custom-view.state';
+export type { IApiHtmlViewState } from './i-api-html-view.state';

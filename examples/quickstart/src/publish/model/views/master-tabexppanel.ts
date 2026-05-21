@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'tabexppanel',
   deviewId: 'd08f9949cb129e49a5e66625ca684aa0',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
@@ -38,7 +38,7 @@ export default {
           id: 'count',
         },
         {
-          caption: '计数器禁用',
+          caption: '计数器动态禁用',
           appViewId: 'web.master_tabexppanel_counter_disabled',
           id: 'counter_disabled',
         },

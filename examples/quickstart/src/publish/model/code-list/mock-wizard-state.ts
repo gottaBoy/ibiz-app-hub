@@ -6,6 +6,7 @@ export default {
   codeItems: [
     {
       codeName: 'step2',
+      color: '#EB3D3D',
       text: '步骤2',
       value: 'step2',
       id: 'step2',

@@ -425,6 +425,13 @@ export default {
         errorText: '错误提示(ERROR)',
         defaultText: '直接内容',
       },
+      formTabPnel: {
+        all: '全部',
+      },
+      compositeFormItemEx: {
+        confirmTitle: '温馨提示',
+        confirmDesc: '当前填写的内容切换后将被清空，请确认是否继续？',
+      },
     },
     gantt: {
       complete: '完成量',
@@ -477,7 +484,7 @@ export default {
     },
     toolbar: {
       exportExcel: {
-        exportAll: '导出全部(最大导出1000行)',
+        exportAll: '导出全部(最大导出{maxRowCount}行)',
         expCurrentPage: '导出当前页',
         expCurrentSelect: '导出当前选中',
         page: '页',
@@ -610,6 +617,7 @@ export default {
       cancel: '取消',
       fullscreen: '全屏',
       minimize: '最小化',
+      loadMore: '加载更多',
     },
     cascader: {
       ibizCascader: {
@@ -618,6 +626,11 @@ export default {
     },
     code: {
       readOnlyPrompt: '当前为只读模式，不可编辑',
+      noEditorArea: '未找到编辑器内容区域',
+      noSelStart: '未获取到当前选中区域的起始位置',
+      noEditorRect: '未获取到编辑器DOM节点的位置信息',
+      noSelCoords: '未计算出选中位置的滚动可视坐标',
+      editorNotInit: '编辑器未初始化',
     },
     dateRange: {
       rangeSeparator: '至',
@@ -654,6 +667,7 @@ export default {
     markdown: {
       uploadJsonFormatErr: '配置uploadparams没有按标准JSON格式',
       exportJsonFormatErr: '配置exportparams没有按标准JSON格式',
+      edit: '编辑',
     },
     notSupportedEditor: {
       unsupportedType: '未支持的编辑器类型 - {type}',
@@ -665,6 +679,7 @@ export default {
     },
     textBox: {
       warningMessage: 'ip格式验证未通过，第{num}段ip重置回旧值',
+      openAiChat: '打开AI聊天',
     },
     upload: {
       uploadFiles: '上传文件',
@@ -758,6 +773,16 @@ export default {
         successImport: '成功导入数: ',
         ImportFailed: '导入失败数: ',
       },
+      asyncActionResult: {
+        noMessage: '无处理内容',
+        taskName: '任务名称:',
+        taskState: '任务状态:',
+        finished: '已完成',
+        processing: '执行中',
+        beginTime: '开始执行时间:',
+        endTime: '结束执行时间:',
+        exeResult: '执行结果:',
+      },
       asyncDataExport: {
         exportDetailPrompt: '导出数据详情-{name}',
         excuteTime: '执行时间',
@@ -774,13 +799,18 @@ export default {
       internalMessageJson: {
         jumpToView: '跳转到视图',
         missingHtml: '数据的content里缺少html',
-        todoContent: '{createmanname}于{processdate}完成',
+        todo: '给你分配了流程任务',
+        done: '完成流程任务',
       },
       internalMessageTab: {
         noSupportType: '站内消息类型{type}暂未支持',
         notificationYet: '暂无通知',
         loadMore: '加载更多({length})',
         onlyShowUnread: '只显示未读',
+      },
+      internalMessageGroup: {
+        expand: '展开',
+        collapse: '收起',
       },
     },
     customSetting: {
@@ -815,6 +845,61 @@ export default {
     appModal: {
       prev: '上一个记录',
       next: '下一个记录',
+    },
+    inlineAiUtil: {
+      regenerate: '重新生成',
+      insertText: '插入文本',
+      replaceText: '替换文本',
+      copyText: '复制文本',
+      info: '内容由 AI 生成，请仔细甄别。',
+      stopEdit: '终止编辑',
+      warningTitle: '确认中止',
+      warningDesc: '确认中止创作吗？',
+      thinking: '深度思考中',
+      thinked: '已深度思考',
+      collapseToolCall: '收起工具调用',
+      expandToolCall: '展开全部 {number} 个工具调用',
+      error: '发生错误',
+      copy: '已复制',
+    },
+    aiChartUtil: {
+      feedback: '反馈',
+      description: '描述',
+      regardingIssue: '针对问题',
+      understandProblem: '不理解问题',
+      forgotContext: '遗忘了上文',
+      notFollowingRequire: '不遵循要求',
+      regardingResponse: '针对回答效果',
+      incorrectAswer: '回答错误',
+      logicalConfusion: '逻辑混乱',
+      poorTimeliness: '时效性差',
+      poorReadability: '可读性差',
+      incompleteAnswer: '回答不完整',
+      unprofessional: '回答笼统不专业',
+      report: '举报',
+      pornographicVulgar: '色情低俗',
+      politicallySensitive: '政治敏感',
+      illegalCriminal: '违法犯罪',
+      discriminationPrejudice: '歧视或偏见回答',
+      violationPrivacy: '侵犯隐私',
+      contentInfringement: '内容侵权',
+      placeholder: '请输入',
+    },
+    screenShotUtil: {
+      prepareCanvas: '准备画布中...',
+      small: '小',
+      medium: '中',
+      big: '大',
+      brush: '画笔',
+      rect: '矩形',
+      circle: '圆形',
+      mosaic: '马赛克',
+      text: '文本注释',
+      arrow: '箭头',
+      drawdown: '回撤',
+    },
+    printPreviewUtil: {
+      title: '打印预览',
     },
   },
   // runTime

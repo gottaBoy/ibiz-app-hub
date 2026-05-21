@@ -1,12 +1,12 @@
-import { PanelItemState } from '@ibiz-template/runtime';
+import { PanelContainerState } from '@ibiz-template/runtime';
 
 /**
  * @description 单项数据容器状态
  * @export
  * @class SingleDataContainerState
- * @extends {PanelItemState}
+ * @extends {PanelContainerState}
  */
-export class SingleDataContainerState extends PanelItemState {
+export class SingleDataContainerState extends PanelContainerState {
   /**
    * @description 单项数据容器数据
    * @exposedoc

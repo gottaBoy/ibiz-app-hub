@@ -37,3 +37,4 @@ export type { IApiMobTabSearchViewCall } from './i-api-mob-tab-search-view.call'
 export type { IApiMobWFDynaActionViewCall } from './i-api-mob-wf-dyna-action-view.call';
 export type { IApiMobWFDynaEditViewCall } from './i-api-mob-wf-dyna-edit-view.call';
 export type { IApiMobWFDynaStartViewCall } from './i-api-mob-wf-dyna-start-view.call';
+export type { IApiMobWizardViewCall } from './i-api-mob-wizard-view.call';

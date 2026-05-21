@@ -1,5 +1,5 @@
 window.Environment = {
-  appVersion: '0.0.50',
+  appVersion: '0.7.41-alpha.37',
   // 是否为开发模式
   dev: false,
   // 日志输出级别, 支持: TRACE、DEBUG、INFO、WARN、ERROR、SILENT
@@ -16,4 +16,5 @@ window.Environment = {
   enableMqtt: false,
   mqttUrl: '/portal/mqtt/mqtt',
   environmentTag: 'development',
+  // isLocalModel: true,
 };

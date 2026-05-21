@@ -74,13 +74,12 @@ export class CenterController implements IDevToolController {
   }
 
   /**
-   * 已打开的配置平台标签页
-   * @author lxm
-   * @date 2024-01-29 03:49:08
+   * @description 已打开的配置平台标签页Map
    * @protected
-   * @type {Window}
+   * @type {Map<string, Window>}
+   * @memberof CenterController
    */
-  protected studioWindow: Window | null = null;
+  protected windowMap: Map<string, Window> = new Map();
 
   /**
    * 初始化
@@ -305,10 +304,12 @@ export class CenterController implements IDevToolController {
     }
     const url = new URL(this.config.studioBaseUrl);
     const { origin, pathname, hash } = url;
-    if (this.studioWindow && !this.studioWindow.closed) {
+    const appid = view.model.appId;
+    const studioWindow = this.windowMap.get(appid);
+    if (studioWindow && !studioWindow.closed) {
       if (this.config.v9Mode) {
         // 已经打开的窗口用postMessage发送并切换页面
-        this.studioWindow.postMessage(
+        studioWindow.postMessage(
           {
             type: 'IBzOpenAppView',
             context: {
@@ -320,7 +321,7 @@ export class CenterController implements IDevToolController {
         );
       } else {
         // 已经打开的窗口用postMessage发送并切换页面
-        this.studioWindow.postMessage(
+        studioWindow.postMessage(
           {
             type: 'IBzOpenAppView',
             context: {
@@ -330,14 +331,29 @@ export class CenterController implements IDevToolController {
           '*',
         );
       }
-      this.studioWindow.focus();
+      studioWindow.focus();
     } else if (this.config.v9Mode) {
-      const openUrl = `${origin}${pathname}${hash}srfredirectview=psappviewsettingredirectview;psappview=${viewId}`;
-      this.studioWindow = window.open(openUrl, '_blank');
+      let baseUrl = `${origin}${pathname}${hash}`;
+      if (!hash.includes('psdevslnsys')) {
+        const app = ibiz.hub.getApp(view.model.appId);
+        if (!app.model.devSlnSysId) {
+          ibiz.message.error('未配置系统标识，请联系管理员！');
+          return;
+        }
+        baseUrl = `${origin}${pathname}${hash}psdevslnsys=${app.model.devSlnSysId}/modelingindex/`;
+      }
+      const openUrl = `${baseUrl}srfredirectview=psappviewsettingredirectview;psappview=${viewId}`;
+      const targetWindow = window.open(openUrl, '_blank');
+      if (targetWindow) {
+        this.windowMap.set(appid, targetWindow);
+      }
     } else {
       const paramStr = `?mode=redirect_appview&psctrlid=${viewId}`;
       const openUrl = `${origin}${pathname}${paramStr}${hash}`;
-      this.studioWindow = window.open(openUrl, '_blank');
+      const targetWindow = window.open(openUrl, '_blank');
+      if (targetWindow) {
+        this.windowMap.set(appid, targetWindow);
+      }
     }
   }
 

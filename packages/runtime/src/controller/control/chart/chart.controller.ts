@@ -488,7 +488,7 @@ export class ChartController
         this.setActive(activeData);
       }
     });
-    if (this.state.optionsReady) {
+    if (this.state.optionsReady && this.chart) {
       this.updateChart();
     }
   }
@@ -523,9 +523,10 @@ export class ChartController
    */
   async updateChart(): Promise<void> {
     if (!this.chart) {
-      throw new RuntimeError(
+      ibiz.log.error(
         ibiz.i18n.t('runtime.controller.control.chart.noInitialised'),
       );
+      return;
     }
     if (!this.options) {
       throw new RuntimeError(
@@ -546,6 +547,42 @@ export class ChartController
     if (this.chart) {
       this.chart.resize();
     }
+  }
+
+  /**
+   * @description 跳转第一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof ChartController
+   */
+  async goToFirstPage(): Promise<IData[]> {
+    return [];
+  }
+
+  /**
+   * @description 跳转上一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof ChartController
+   */
+  async goToPreviousPage(): Promise<IData[]> {
+    return [];
+  }
+
+  /**
+   * @description 跳转下一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof ChartController
+   */
+  async goToNextPage(): Promise<IData[]> {
+    return [];
+  }
+
+  /**
+   * @description 跳转最后一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof ChartController
+   */
+  async goToLastPage(): Promise<IData[]> {
+    return [];
   }
 
   protected async onDestroyed(): Promise<void> {

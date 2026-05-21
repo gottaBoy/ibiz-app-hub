@@ -19,7 +19,7 @@ import { IAppDEMobMDView } from '@ibiz/model-core';
  * @extends {MDViewEngine}
  */
 export class MobDataViewEngine extends MDViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEMobMDView,
     IDataViewState,
     IDataViewEvent

@@ -3,6 +3,7 @@ import { FormMDCtrlRepeaterController } from '@ibiz-template/runtime';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { RepeaterSingleForm } from './repeater-single-form/repeater-single-form';
 import { RepeaterMultiForm } from './repeater-multi-form/repeater-multi-form';
+import { RepeaterGrid } from './repeater-grid/repeater-grid';
 
 export const FormMDCtrlRepeater = defineComponent({
   name: 'IBizFormMDCtrlRepeater',
@@ -38,6 +39,14 @@ export const FormMDCtrlRepeater = defineComponent({
             controller={this.controller}
             onChange={this.onDataChange}
           ></RepeaterSingleForm>
+        );
+      case 'Grid':
+        return (
+          <RepeaterGrid
+            class={classNames}
+            controller={this.controller}
+            onChange={this.onDataChange}
+          ></RepeaterGrid>
         );
       default:
         return (

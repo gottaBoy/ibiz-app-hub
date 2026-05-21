@@ -156,6 +156,19 @@ export default {
           id: 'fill_value9',
         },
         {
+          codeName: 'fill_value30',
+          defiupdateDetails: [
+            {
+              id: 'value30',
+            },
+          ],
+          scriptCode:
+            "return {value30: data.formitem30 != null ? data.formitem30 : ''};",
+          customCode: true,
+          showBusyIndicator: true,
+          id: 'fill_value30',
+        },
+        {
           codeName: 'fill_value12',
           defiupdateDetails: [
             {
@@ -206,6 +219,19 @@ export default {
           customCode: true,
           showBusyIndicator: true,
           id: 'fill_value',
+        },
+        {
+          codeName: 'fill_value28',
+          defiupdateDetails: [
+            {
+              id: 'value28',
+            },
+          ],
+          scriptCode:
+            "return {value28: data.formitem28 != null ? data.formitem28 : ''};",
+          customCode: true,
+          showBusyIndicator: true,
+          id: 'fill_value28',
         },
         {
           codeName: 'fill_value11',
@@ -1598,6 +1624,110 @@ export default {
                   enableCond: 3,
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
+                  deformItemUpdateId: 'fill_value30',
+                  editor: {
+                    editorParams: {
+                      osscat: 'cat',
+                      mode: 'file',
+                    },
+                    editorStyle: 'SIGNATURE',
+                    editorType: 'TEXTBOX',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem30',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem30',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colLG: 12,
+                    colMD: 12,
+                    colSM: 12,
+                    colXS: 12,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem30',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'LEFT',
+                  labelWidth: 130,
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    editorType: 'SPAN',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'value30',
+                  },
+                  allowEmpty: true,
+                  caption: '当前值',
+                  codeName: 'value30',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colLG: 12,
+                    colMD: 12,
+                    colSM: 12,
+                    colXS: 12,
+                    layout: 'TABLE_24COL',
+                  },
+                  showCaption: true,
+                  id: 'value30',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用osscat参数指定签名图片上传下载的OSS参数，用于计算上传路径和下载路径。当前编辑器上传下载的OSS参数为cat',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem15',
+                  },
+                  codeName: 'rawitem15',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem15',
+                },
+              ],
+              caption: 'OSS参数',
+              codeName: 'grouppanel14',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel14',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
                   deformItemUpdateId: 'fill_value12',
                   editor: {
                     editorParams: {
@@ -1691,6 +1821,111 @@ export default {
               },
               showCaption: true,
               id: 'grouppanel11',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  deformItemUpdateId: 'fill_value28',
+                  editor: {
+                    editorParams: {
+                      enablenoaccess: 'true',
+                      osscat: 'cat',
+                      mode: 'file',
+                    },
+                    editorStyle: 'SIGNATURE',
+                    editorType: 'TEXTBOX',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem28',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem28',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colLG: 12,
+                    colMD: 12,
+                    colSM: 12,
+                    colXS: 12,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem28',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'LEFT',
+                  labelWidth: 130,
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    editorType: 'SPAN',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'value28',
+                  },
+                  allowEmpty: true,
+                  caption: '当前值',
+                  codeName: 'value28',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colLG: 12,
+                    colMD: 12,
+                    colSM: 12,
+                    colXS: 12,
+                    layout: 'TABLE_24COL',
+                  },
+                  showCaption: true,
+                  id: 'value28',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      "说明：使用enablenoaccess参数可启用无权限模式，启用后将不再计算下载授权凭证，且若上传路径中包含文件夹名称，该名称末尾会自动拼接 '$' 字符",
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem14',
+                  },
+                  codeName: 'rawitem14',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem14',
+                },
+              ],
+              caption: '启用无权限模式',
+              codeName: 'grouppanel15',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel15',
             },
             {
               dataType: 25,

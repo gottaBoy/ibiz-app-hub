@@ -1,13 +1,13 @@
 import { IApiButtonContainerState } from '../../common';
-import { IApiFormDetailContainerState } from './i-api-form-detail-container.state';
+import { IApiFormContainerState } from './i-api-form-container.state';
 
 /**
  * @description 表单分组状态
  * @export
  * @interface IApiFormGroupPanelState
- * @extends {IApiFormDetailContainerState}
+ * @extends {IApiFormContainerState}
  */
-export interface IApiFormGroupPanelState extends IApiFormDetailContainerState {
+export interface IApiFormGroupPanelState extends IApiFormContainerState {
   /**
    * @description 界面行为组状态
    * @type {(IApiButtonContainerState | null)}

@@ -4,15 +4,7 @@ import {
   useControlController,
   useNamespace,
 } from '@ibiz-template/vue3-util';
-import {
-  defineComponent,
-  onUnmounted,
-  PropType,
-  Ref,
-  ref,
-  VNode,
-  watch,
-} from 'vue';
+import { defineComponent, PropType, VNode, watch } from 'vue';
 import { IAppDETabExplorerView, ITabExpPanel } from '@ibiz/model-core';
 import './tab-exp-panel.scss';
 import {
@@ -52,22 +44,6 @@ export const TabExpPanelControl = defineComponent({
       (...args) => new TabExpPanelController(...args),
     );
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
-
-    const counterData: Ref<IData> = ref({});
-
-    const fn = (counter: IData): void => {
-      counterData.value = counter;
-    };
-
-    c.evt.on('onCreated', () => {
-      if (c.counter) {
-        c.counter.onChange(fn, true);
-      }
-    });
-
-    onUnmounted(() => {
-      c.counter?.offChange(fn);
-    });
 
     const handleTabChange = (): void => {
       c.handleTabChange();
@@ -112,12 +88,11 @@ export const TabExpPanelControl = defineComponent({
       c,
       ns,
       tabPosition,
-      counterData,
       handleTabChange,
     };
   },
   render() {
-    const { isCreated, tabPages } = this.c.state;
+    const { isCreated, tabPages, counterData } = this.c.state;
     return (
       <iBizControlBase controller={this.c}>
         {isCreated && (
@@ -128,7 +103,7 @@ export const TabExpPanelControl = defineComponent({
           >
             {tabPages.map(tab => {
               const counterNum = tab.counterId
-                ? this.counterData[tab.counterId]
+                ? counterData[tab.counterId]
                 : undefined;
               return (
                 <el-tab-pane

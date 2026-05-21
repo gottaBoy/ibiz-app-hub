@@ -1,12 +1,12 @@
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import { defineComponent, PropType, VNode } from 'vue';
 import { IChartExpBar } from '@ibiz/model-core';
-import './chart-exp-bar.scss';
 import {
-  ChartExpBarController,
   IControlProvider,
+  ChartExpBarController,
 } from '@ibiz-template/runtime';
 import { useExpBarRender, useWatchRouteChange } from '../render-util';
+import './chart-exp-bar.scss';
 
 export const ChartExpBarControl = defineComponent({
   name: 'IBizChartExpBarControl',
@@ -64,7 +64,7 @@ export const ChartExpBarControl = defineComponent({
     };
     if (isCreated) {
       if (XDataModel) {
-        const key = this.c.controlPanel ? XDataModel.name! : 'default';
+        const key = this.c.controlPanel ? 'chartexpbar_chart' : 'default';
         slots[key] = (): VNode => {
           return (
             <iBizControlShell

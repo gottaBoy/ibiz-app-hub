@@ -47,7 +47,7 @@ export const PanelButtonList = defineComponent({
   },
   render() {
     const { state } = this.controller;
-    if (state.visible) {
+    if (state.visible)
       return (
         <iBizButtonList
           class={[this.ns.b(), ...this.controller.containerClass]}
@@ -57,7 +57,6 @@ export const PanelButtonList = defineComponent({
           onClick={this.handleClick}
         ></iBizButtonList>
       );
-    }
     return null;
   },
 });

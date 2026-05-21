@@ -137,6 +137,20 @@ export default {
       },
       {
         actionGroupExtractMode: 'ITEM',
+        panelItems: [
+          {
+            caption: '表格',
+            itemStyle: 'DEFAULT',
+            itemType: 'CTRLPOS',
+            layoutPos: {
+              grow: 1,
+              shrink: 1,
+              layout: 'FLEX',
+            },
+            showCaption: true,
+            id: 'grid',
+          },
+        ],
         predefinedType: 'VIEWCONTENT',
         layout: {
           layout: 'FLEX',

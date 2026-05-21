@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IAppViewEngine } from '@ibiz/model-core';
-import { IViewEngine } from '../interface/engine';
+import { ICtrlEngine, IViewEngine } from '../interface/engine';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type NewEngine = (...args: any[]) => IViewEngine;
+
+type NEWCtrlEngine = (...args: any[]) => ICtrlEngine;
 
 /**
  * 引擎工厂
@@ -21,6 +23,13 @@ export class EngineFactory {
   protected viewEngines = new Map<string, NewEngine>();
 
   /**
+   * @description 部件引擎classMap
+   * @protected
+   * @memberof EngineFactory
+   */
+  protected ctrlEngines = new Map<string, NEWCtrlEngine>();
+
+  /**
    * 注册视图引擎
    * @author lxm
    * @date 2023-04-25 07:40:23
@@ -32,6 +41,16 @@ export class EngineFactory {
   }
 
   /**
+   * @description 注册部件引擎
+   * @param {string} key
+   * @param {NEWCtrlEngine} engine
+   * @memberof EngineFactory
+   */
+  registerCtrl(key: string, engine: NEWCtrlEngine): void {
+    this.ctrlEngines.set(key, engine);
+  }
+
+  /**
    * 注销视图引擎
    * @author lxm
    * @date 2023-04-25 07:40:32
@@ -39,6 +58,15 @@ export class EngineFactory {
    */
   unRegister(key: string): void {
     this.viewEngines.delete(key);
+  }
+
+  /**
+   * @description 注销部件引擎
+   * @param {string} key
+   * @memberof EngineFactory
+   */
+  unRegisterCtrl(key: string): void {
+    this.ctrlEngines.delete(key);
   }
 
   /**
@@ -61,6 +89,32 @@ export class EngineFactory {
     // 存在则执行，生成对象
     if (func) {
       return func(...args);
+    }
+    ibiz.log.error(
+      ibiz.i18n.t('runtime.engine.correspondingEngine', { key }),
+      model,
+    );
+  }
+
+  /**
+   * @description 获取部件引擎
+   * @param {IAppViewEngine} model
+   * @param {...Parameters<NEWCtrlEngine>} args
+   * @returns {*}  {(ICtrlEngine | undefined)}
+   * @memberof EngineFactory
+   */
+  getCtrlEngine(
+    model: IAppViewEngine,
+    ...args: Parameters<NEWCtrlEngine>
+  ): ICtrlEngine | undefined {
+    const { engineType, engineCat } = model;
+
+    const key = `${engineCat}_${engineType}`;
+    const func = this.ctrlEngines.get(key);
+
+    // 存在则执行，生成对象
+    if (func) {
+      return func(model, ...args);
     }
     ibiz.log.error(
       ibiz.i18n.t('runtime.engine.correspondingEngine', { key }),

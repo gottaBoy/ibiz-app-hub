@@ -1,0 +1,44 @@
+@include b(chat-editor) {
+  .ProseMirror {
+    height: 6em;
+    padding: 6px;
+    overflow: hidden auto;
+    font-size: 16px;
+    color: #{getCssVar('ai-chat', 'color')};
+    background-color: #{getCssVar('ai-chat', 'background-color')};
+    outline: none;
+
+    // 设置滚动条样式
+    &::-webkit-scrollbar {
+      width: getCssVar('ai-chat', 'scroll-bar-width');
+      height: getCssVar('ai-chat', 'scroll-bar-height');
+    }
+
+    // 滚动条轨道
+    &::-webkit-scrollbar-thumb {
+      background-color: getCssVar(color, fill, 2);
+      border-radius: getCssVar('ai-chat', 'scroll-bar-radius');
+    }
+
+    p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+    padding: 2px;
+    user-select: auto;
+  }
+
+  @include m(disabled) {
+    cursor: not-allowed;
+
+    > div {
+      pointer-events: none;
+    }
+  }
+}
+

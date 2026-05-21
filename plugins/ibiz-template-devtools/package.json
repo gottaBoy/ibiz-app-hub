@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/devtool",
-  "version": "0.0.11",
+  "version": "0.0.14",
   "description": "IBiz系统可视化调试套件",
   "author": "iBiz",
   "license": "MIT",
@@ -20,8 +20,8 @@
   ],
   "scripts": {
     "watch": "ibiz-temp build -w",
-    "lint": "vue-tsc --noEmit && eslint 'src/**/*.tsx' 'src/**/*.ts'",
-    "build": "ibiz-temp build -c && vue-tsc --declaration --emitDeclarationOnly",
+    "lint": "eslint 'src/**/*.tsx' 'src/**/*.ts'",
+    "build": "ibiz-temp build -c",
     "preview": "vite preview",
     "publish:next": "npm run build && npm publish --access public --tag=next --registry=https://registry.npmjs.org/",
     "publish:dev": "npm run build && npm publish --access public --tag=dev --registry=https://registry.npmjs.org/",

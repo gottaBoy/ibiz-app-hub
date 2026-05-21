@@ -10,3 +10,4 @@ export * from './form-tab-page/index';
 export * from './form-tab-panel/index';
 export * from './form-button-list/index';
 export * from './form-iframe';
+export * from './form-container';

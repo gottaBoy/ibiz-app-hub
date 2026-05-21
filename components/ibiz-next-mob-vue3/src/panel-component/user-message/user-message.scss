@@ -1,56 +1,86 @@
+$user-message: (
+  // 颜色
+  'color-item-bg-color': getCssVar(color, border),
+  'color-load-more-text': getCssVar(color, link),
+  // 间距
+  'spacing-icons-read-padding': 0 rem(12px),
+  'spacing-van-tabs-padding-right': rem(40px),
+  'spacing-content-item-padding': calc(
+      #{getCssVar(spacing, base-tight)} + #{getCssVar(spacing, super-tight)}
+    ),
+  'spacing-content-item-bottom': calc(
+      0px - #{getCssVar(spacing, base-tight)} - #{getCssVar(spacing, super-tight)}
+    ),
+  // 高度
+  'height-item-after': rem(1px),
+  'height-load-more': rem(40px),
+  'height-tab-header-height': getCssVar(height-control-large),
+  'height-icons-read': rem(40px),
+  
+);
 @include b(user-message) {
+  @include set-component-css-var('user-message', $user-message);
   position: relative;
   height: 100%;
-    @include e(content) {
-        display: flex;
-        flex-direction: column;
+
+  @include e(content) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: auto;
+  }
+
+  @include e(item) {
+    padding: getCssVar(user-message, spacing-content-item-padding);
+
+    &::after {
+      position: relative;
+      bottom: getCssVar(user-message, spacing-content-item-bottom);
+      left: 0rem;
+      display: block;
+      width: 100%;
+      height: getCssVar(user-message, height-item-after);
+      content: '';
+      background-color: getCssVar(user-message, color-item-bg-color);
+    }
+  }
+
+  @include e(load-more) {
+    @include flex(row, center, center);
+
+    height: getCssVar(user-message, height-load-more);
+    flex: none;
+    color: getCssVar(user-message, color-load-more-text);
+    cursor: pointer;
+  }
+
+  @include e(nodata) {
+    height: 100%;
+    @include flex(row, center, center);
+  }
+
+  @include e(icons-read) {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 9;
+    height: getCssVar(user-message, height-icons-read);
+    padding: getCssVar(user-message, spacing-icons-read-padding);
+  }
+
+  .van-tabs {
+    height: 100%;
+
+    .van-tabs__content {
+      height: calc(100% - getCssVar(user-message, height-tab-header-height));
+
+      > div {
         height: 100%;
-        overflow: auto;
-    }
-    @include e(item) {
-        padding: 0.875rem;
-
-        &::after {
-            position: relative;
-            bottom: -0.875rem;
-            left: 1rem;
-            display: block;
-            width: calc(100% - 2rem);
-            height: rem(1px);
-            content: '';
-            background-color: getCssVar(color, border);
-        }
-    }
-    @include e(load-more) {
-        @include flex(row, center, center);
-
-        height: rem(40px);
-        flex: none;
-        color: getCssVar(color, link);
-        cursor: pointer;
-    }
-    @include e(nodata) {
-      height: 100%;
-      @include flex(row, center, center);
-    }
-    @include e(icons-read) {
-      position: absolute;
-      right: 0;
-      top: 0;
-      z-index: 9;
-      height: rem(40px);
-      padding: 0 rem(12px);
-    }
-    .van-tabs {
-      height: 100%;
-      .van-tabs__content {
-        height: calc(100% - var(--van-tabs-line-height));
-        >div {
-          height: 100%;
-        }
       }
     }
-    .van-tabs__wrap {
-      padding-right: rem(40px);
-    }
+  }
+
+  .van-tabs__wrap {
+    padding-right: getCssVar(user-message, spacing-van-tabs-padding-right);
+  }
 }

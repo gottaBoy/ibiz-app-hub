@@ -86,12 +86,25 @@ export class FormButtonController
    * @param {IData} data
    */
   calcDetailDisabled(data: IData): void {
-    super.calcDetailDisabled(data);
+    let { disabled } = this.dynaLogicResult;
+
+    // 上层计算为启用时计算预定义项启用逻辑
+    if (disabled !== true && this.form.scheduler) {
+      const itemEnable = this.form.scheduler.triggerItemEnable(this.model.id!, {
+        data: [data],
+      });
+      if (itemEnable !== undefined) {
+        disabled = !itemEnable;
+      }
+    }
+
+    if (disabled !== true && this.actionState) {
+      disabled = this.actionState.disabled;
+    }
+
     // 表单项与界面行为都有权限时才有权限
-    if (this.actionState) {
-      this.state.disabled = !!(
-        this.state.disabled || this.actionState.disabled
-      );
+    if (disabled !== undefined) {
+      this.state.disabled = disabled;
     }
   }
 
@@ -101,10 +114,28 @@ export class FormButtonController
    * @param {IData} data
    */
   calcDetailVisible(data: IData): void {
-    super.calcDetailVisible(data);
-    // 表单项与界面行为都有权限时才有权限
-    if (this.actionState) {
-      this.state.visible = !!(this.state.visible && this.actionState.visible);
+    let { visible } = this.dynaLogicResult;
+
+    // 上层计算为显示时计算预定义项显示逻辑
+    if (visible !== false && this.form.scheduler) {
+      const itemVIsible = this.form.scheduler.triggerItemVisible(
+        this.model.id!,
+        {
+          data: [data],
+        },
+      );
+      if (itemVIsible !== undefined) {
+        visible = itemVIsible;
+      }
+    }
+
+    if (visible !== false && this.actionState) {
+      visible = this.actionState.visible;
+    }
+
+    // 有值的时候才会去修改state
+    if (visible !== undefined) {
+      this.state.visible = visible;
     }
   }
 

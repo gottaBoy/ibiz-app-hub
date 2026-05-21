@@ -4,7 +4,7 @@ export default {
   deviewCodeName: 'tree_ctrl_federation',
   deviewId: '0c905d97c001734e9f6cbe4e3056381d',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

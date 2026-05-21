@@ -32,6 +32,9 @@ export class DropDownListEditorProvider implements IEditorProvider {
       case 'EMOJI_PICKER':
         componentName = 'IBizEmojiPicker';
         break;
+      case 'MOBDROPDOWNLIST_CASCADER':
+        componentName = 'IBizCascaderDropdown';
+        break;
       default:
         break;
     }

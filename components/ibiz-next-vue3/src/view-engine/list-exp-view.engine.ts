@@ -25,7 +25,7 @@ export class ListExpViewEngine extends ExpViewEngine {
    *   >}
    * @memberof ListExpViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEListExplorerView,
     IListExpViewState,
     IListExpViewEvent

@@ -12,4 +12,14 @@ export { FullscreenUtil } from './fullscreen/fullscreen-util';
 export * from './store';
 export { usePopstateListener } from './use-popstate-util/use-popstate-util';
 export { QrcodeUtil } from './qrcode-util/qrcode-util';
-export { convertBtnType } from './button-util/button-util';
+export {
+  convertBtnType,
+  calcPopoverPlacement,
+} from './button-util/button-util';
+export { useListRender } from './list-util/list-render-util';
+export {
+  splitPathToSegments,
+  validateRouteSegments,
+} from './user-route-util/user-route-util';
+export { AIChatUtil } from './ai-chat-util/ai-chat-util';
+export { PrintPreviewUtil } from './print-preview-util/print-preview-util';

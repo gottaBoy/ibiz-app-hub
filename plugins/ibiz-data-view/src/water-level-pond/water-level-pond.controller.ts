@@ -2,6 +2,7 @@
 import { EditorController } from '@ibiz-template/runtime';
 import { ISlider } from '@ibiz/model-core';
 import { toNumber } from 'lodash-es';
+import { useNamespace } from '@ibiz-template/vue3-util';
 import Wave from './wave';
 import { fade } from '../util';
 
@@ -111,6 +112,12 @@ export class WaterLevelPondController extends EditorController<ISlider> {
    */
   public maxItem: string = '';
 
+  /**
+   * @description 样式名
+   * @memberof WaterLevelPondController
+   */
+  public ns = useNamespace('water-level-pond');
+
   protected async onInit(): Promise<void> {
     super.onInit();
     if (this.model.precision) {
@@ -162,9 +169,7 @@ export class WaterLevelPondController extends EditorController<ISlider> {
     // 高清适配
     this.calcScale(canvas);
     this.nowRange = 0;
-    const primaryColor = this.getThemeVar(
-      '--ibiz-screen-dashboard-primary-color',
-    );
+    const primaryColor = this.getThemeVar(this.ns.cssVarName('color-primary'));
     const color = fade(primaryColor, this.waveOpacity);
     this.wave = new Wave({
       canvasWidth: this.canvasWidth, // 轴长
@@ -247,9 +252,7 @@ export class WaterLevelPondController extends EditorController<ISlider> {
     const r = size / 2;
     const lineWidth = 4;
     const cR = r - lineWidth;
-    const borderColor = this.getThemeVar(
-      '--ibiz-screen-dashboard-border-color',
-    );
+    const borderColor = this.getThemeVar(this.ns.cssVarName('color-border'));
     ctx.lineWidth = lineWidth;
     ctx.beginPath();
     ctx.arc(this.canvasWidth / 2, this.canvasHeight / 2, cR, 0, 2 * Math.PI);
@@ -272,9 +275,7 @@ export class WaterLevelPondController extends EditorController<ISlider> {
       this.canvasWidth - 2 * padding,
       this.canvasHeight - 2 * padding,
     );
-    const borderColor = this.getThemeVar(
-      '--ibiz-screen-dashboard-border-color',
-    );
+    const borderColor = this.getThemeVar(this.ns.cssVarName('color-border'));
     ctx.strokeStyle = borderColor;
     ctx.lineWidth = 2;
     ctx.closePath();

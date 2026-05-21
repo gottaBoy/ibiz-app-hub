@@ -3,10 +3,13 @@
     :context="props.context"
     :params="props.params"
     :modal="props.modal"
-    :model-data="model"
+    :model-data="viewModel"
   >
     <template #grid="slotProps">
       <i-biz-grid-control v-bind="slotProps" />
+    </template>
+    <template #searchform="slotProps">
+      <i-biz-search-form-control v-bind="slotProps" />
     </template>
   </i-biz-view>
 </template>
@@ -21,4 +24,6 @@ interface Props {
   modal?: IModal;
 }
 const props = withDefaults(defineProps<Props>(), {});
+
+const viewModel = props.model;
 </script>

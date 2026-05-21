@@ -24,7 +24,7 @@ export class ReportViewEngine extends ViewEngineBase {
    *   >}
    * @memberof EditViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEReportView,
     IReportViewState,
     IReportViewEvent

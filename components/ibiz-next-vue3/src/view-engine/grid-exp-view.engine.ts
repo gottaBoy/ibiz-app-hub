@@ -25,7 +25,7 @@ export class GridExpViewEngine extends ExpViewEngine {
    *   >}
    * @memberof GridExpViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEGridExplorerView,
     IGridExpViewState,
     IGridExpViewEvent

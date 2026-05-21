@@ -10,6 +10,10 @@ export class DEUILogicWriter extends ModelObjectWriter {
     _.w(d, 'codeName', s);
     _.w(d, 'defaultParamName', s);
     _.w(d, 'logicName', s);
+    _.w(d, 'logicTag', s);
+    _.w(d, 'logicTag2', s);
+    _.w(d, 'logicTag3', s);
+    _.w(d, 'logicTag4', s);
     _.v(
       d,
       'deuilogicNodes',

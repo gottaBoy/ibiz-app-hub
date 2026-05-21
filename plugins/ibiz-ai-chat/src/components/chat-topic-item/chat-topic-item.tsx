@@ -3,7 +3,14 @@ import { useRef, useState } from 'preact/hooks'; // 引入 useState
 import { useComputed, useSignal } from '@preact/signals';
 import { ChatTopic } from '../../entity';
 import { Namespace } from '../../utils';
-import { LinkSvg, MoreSvg, RemoveSvg, RenameSvg } from '../../icons'; // 引入 SVG 图标
+import {
+  TopSvg,
+  LinkSvg,
+  MoreSvg,
+  NoTopSvg,
+  RemoveSvg,
+  RenameSvg,
+} from '../../icons'; // 引入 SVG 图标
 import { Popup } from '../popup/popup';
 import { AiTopicController } from '../../controller';
 import './chat-topic-item.scss';
@@ -53,14 +60,14 @@ export const ChatTopicItem = (props: ChatTopicItemProps) => {
    * @param {MouseEvent} event
    */
   const handleAction = (actionId: string, event: MouseEvent) => {
-    if (actionId === 'DELETE') {
-      onAction('DELETE', event);
-    } else if (actionId === 'RENAME') {
+    if (actionId === 'RENAME') {
       isEditMode.value = true;
       // 必须延迟100毫秒聚焦
       setTimeout(() => {
         ref.current?.focus();
       }, 100);
+    } else {
+      onAction(actionId, event);
     }
     setIsPopupOpen(false);
   };
@@ -120,7 +127,14 @@ export const ChatTopicItem = (props: ChatTopicItemProps) => {
             className={ns.em('caption', 'editor')}
           />
         ) : (
-          <span className={ns.em('caption', 'text')}>{topic.caption}</span>
+          <div className={ns.em('caption', 'readonly')}>
+            <span className={ns.em('caption', 'text')}>{topic.caption}</span>
+            {topic.isTop ? (
+              <span className={ns.em('caption', 'icon')}>
+                <TopSvg />
+              </span>
+            ) : null}
+          </div>
         )}
       </div>
       {!isEditMode.value && (
@@ -134,7 +148,13 @@ export const ChatTopicItem = (props: ChatTopicItemProps) => {
           </span>
           {!active.value ? (
             <Popup
+              triggerMode='click'
               actions={[
+                {
+                  id: 'PINNED',
+                  caption: topic.isTop ? '取消置顶' : '置顶',
+                  icon: topic.isTop ? <NoTopSvg /> : <TopSvg />,
+                },
                 { id: 'RENAME', caption: '重命名', icon: <RenameSvg /> },
                 { id: 'DELETE', caption: '删除话题', icon: <RemoveSvg /> },
               ]}

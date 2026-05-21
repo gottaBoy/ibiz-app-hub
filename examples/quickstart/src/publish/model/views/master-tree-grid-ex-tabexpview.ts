@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'TreeGridEx_tabexpview',
   deviewId: '93a9c4bad6677f1d624f2ffbf373ba15',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
@@ -38,6 +38,11 @@ export default {
           id: 'uiaction_group',
         },
         {
+          caption: '动态界面行为组',
+          appViewId: 'web.master_treegridex_column_dy_uiaction_group_exp',
+          id: 'dy_uiaction_group',
+        },
+        {
           caption: '子节点',
           appViewId: 'web.master_tree_grid_ex_nodetabexpview',
           id: 'node',
@@ -58,9 +63,19 @@ export default {
           id: 'css',
         },
         {
+          caption: '注入属性',
+          appViewId: 'web.master_treegridex_attr',
+          id: 'attr',
+        },
+        {
           caption: '刷新模式',
           appViewId: 'web.master_tree_grid_ex_refreshtabexpview',
           id: 'refresh',
+        },
+        {
+          caption: '指定展开图标列',
+          appViewId: 'web.master_treegridex_column_expand_icon',
+          id: 'column_expand_icon',
         },
         {
           caption: '事件及调用',

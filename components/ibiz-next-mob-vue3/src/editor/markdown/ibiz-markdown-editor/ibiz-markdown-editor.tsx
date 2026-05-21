@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   defineComponent,
   nextTick,
@@ -15,7 +16,7 @@ import {
 } from '@ibiz-template/vue3-util';
 import { createUUID } from 'qx-util';
 import Cherry from 'cherry-markdown';
-import { CoreConst, getAppCookie } from '@ibiz-template/core';
+import { CoreConst, getAppCookie, IChatMessage } from '@ibiz-template/core';
 import { MarkDownEditorController } from '../markdown-editor.controller';
 import './ibiz-markdown-editor.scss';
 
@@ -23,10 +24,14 @@ import './ibiz-markdown-editor.scss';
  * 移动端Markdown编辑框
  * @primary
  * @description 基于cherry-markdown深度定制可扩展的Markdown编辑器，用于Markdown文档编辑。支持编辑器类型包含：`移动端Markdown编辑框`
- * @editorparams {name:uploadparams,parameterType:IData,defaultvalue:{},description:上传参数}
- * @editorparams {name:exportparams,parameterType:IData,defaultvalue:{},description:下载参数}
+ * @editorparams {name:uploadparams,parameterType:string,description:上传参数，图片或文件上传时，用于计算上传路径}
+ * @editorparams {name:exportparams,parameterType:string,description:下载参数，图片或文件下载时，用于计算下载路径}
+ * @editorparams {name:osscat,parameterType:string,description:用于计算上传和下载路径的OSS参数}
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
+ * @editorparams {"name":"enablenoaccess","parameterType":"boolean","defaultvalue":"false", "description":"是否启用无权限模式，若启用无权限模式，上传文件夹需拼接'$'字符，也不需要计算下载凭证"}
+ * @editorparams {"name":"globaldownloadprifix","parameterType":"boolean","defaultvalue":"false", "description":"是否使用全局文件下载前缀，若启用，则以global作为前缀"}
  * @ignoreprops  autoFocus | overflowMode
- * @ignoreemits  infoTextChange | enter
+ * @ignoreemits  blur | focus | infoTextChange | enter
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const IBizMarkDown: any = defineComponent({
@@ -77,11 +82,22 @@ const IBizMarkDown: any = defineComponent({
       () => props.data,
       newVal => {
         if (newVal) {
+          const editorParams: IData = {
+            ...c.editorParams,
+            enableNoAccess: c.enableNoAccess,
+            globalDownloadPrifix: c.globalDownloadPrifix,
+          };
+          if (editorParams.uploadparams) {
+            editorParams.uploadParams = JSON.parse(editorParams.uploadparams);
+          }
+          if (editorParams.exportparams) {
+            editorParams.exportParams = JSON.parse(editorParams.exportparams);
+          }
           const urls = ibiz.util.file.calcFileUpDownUrl(
             c.context,
             c.params,
             newVal,
-            c.editorParams,
+            editorParams,
           );
           uploadUrl.value = urls.uploadUrl;
           downloadUrl.value = urls.downloadUrl;
@@ -97,7 +113,18 @@ const IBizMarkDown: any = defineComponent({
         file,
         headers.value,
       );
-      const url = downloadUrl.value.replace('%fileId%', data.fileid);
+      let url = downloadUrl.value.replace('%fileId%', data.fileid);
+      if (ibiz.config.common.enableDownloadTicket && !c.enableNoAccess) {
+        const downloadTicket = await ibiz.util.file.getDownloadTicket(
+          c.context,
+          c.params,
+          props.data || {},
+          { fileId: data.fileid },
+          c.downloadTicketParams,
+        );
+        if (downloadTicket && downloadTicket.ticket)
+          url = downloadUrl.value.replace('%fileId%', downloadTicket.ticket);
+      }
       callback(url);
     };
 
@@ -120,6 +147,9 @@ const IBizMarkDown: any = defineComponent({
     };
     const setCherryContent2 = (val: string) => {
       editorPreview.value?.setMarkdown(val, true);
+      // 修复ios中光标错位
+      editor.value?.refreshPreviewer();
+      editorPreview.value?.refreshPreviewer();
     };
     watch(
       () => props.value,
@@ -151,6 +181,50 @@ const IBizMarkDown: any = defineComponent({
     // 图片加载回调
     const beforeImageMounted = (e: string, src: string) => {
       return { [e]: src };
+    };
+
+    // AI 聊天实例
+    let chatInstance: any;
+
+    const handleAIClick = async () => {
+      const appDataEntityId = c.model.appDataEntityId;
+      if (!appDataEntityId || !c.deACMode) return;
+      const { zIndex } = useUIStore();
+      const containerZIndex = zIndex.increment();
+      chatInstance = await ibiz.aiChatUtil.getAIChat();
+      const { containerOptions, chatOptions } =
+        await ibiz.aiChatUtil.getEditorExAIChatParams(
+          c.editorParams,
+          c.context,
+          c.params,
+          props.data || {},
+          c.deACMode,
+          { chatInstance, view: c.view, ctrl: c.ctrl },
+        );
+      const resourceOptions = await ibiz.aiChatUtil.getAIResourceOptions(
+        c.context,
+        c.params,
+      );
+      chatInstance.create({
+        resourceOptions,
+        containerOptions: {
+          // vant组件层级为2000+，此处需添加2000
+          zIndex: containerZIndex + 2000,
+          ...containerOptions,
+        },
+        chatOptions: {
+          caption: c.deACMode.logicName,
+          context: { ...c.context },
+          params: { ...c.params, srfactag: c.deACMode.codeName },
+          appDataEntityId,
+          ...chatOptions,
+          action: (action: string, message: IChatMessage) => {
+            if (action === 'backfill') {
+              emit('change', message.realcontent);
+            }
+          },
+        },
+      });
     };
 
     const editorOpts = {
@@ -203,8 +277,28 @@ const IBizMarkDown: any = defineComponent({
           },
           'settings',
         ],
+        customMenu: {
+          ai: Cherry.createMenuHook('AI聊天', {
+            icon: {
+              type: 'svg',
+              content: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" height="1em" width="1em" preserveAspectRatio="xMidYMid meet" focusable="false" class="cherry-menu-AIChart">
+                <g id="aae1.Base基础/1.icon图标/2.normal/ai-star" stroke-width="1" fill-rule="evenodd">
+                  <path d="M5.817 1.53l3.158 8.797h.054v.152l1.443 4.021-1.402.001-1.041-2.982H2.495l-1.03 2.982L0 14.5 4.671 1.533l1.146-.003zm7.86 5.424V14.5h-1.213V6.954h1.212zM5.248 3.549l-2.342 6.778h4.706L5.249 3.55zM13.046 0c.075 0 .147.02.204.071a.318.318 0 01.094.181l.064.273c.097.417.17.727.255.968.084.24.177.4.31.523.134.124.318.218.599.306.281.088.65.166 1.15.265a.358.358 0 01.195.095c.056.057.083.13.083.213a.289.289 0 01-.083.21.362.362 0 01-.197.094c-.528.093-.918.167-1.214.255-.295.088-.485.187-.621.324-.137.138-.23.324-.31.606-.08.283-.145.651-.23 1.147a.329.329 0 01-.093.184.293.293 0 01-.206.075.308.308 0 01-.207-.072.322.322 0 01-.1-.188l-.006-.033c-.085-.486-.149-.845-.228-1.12-.079-.274-.17-.452-.305-.585-.135-.133-.323-.23-.618-.32s-.683-.168-1.21-.273a.353.353 0 01-.2-.096.29.29 0 01-.08-.208c0-.079.023-.153.079-.211a.35.35 0 01.2-.097c.5-.098.869-.176 1.15-.263.282-.087.465-.18.597-.302.132-.12.224-.278.306-.511.082-.236.151-.539.244-.947l.071-.312a.312.312 0 01.102-.183.311.311 0 01.205-.069z" id="aae形状结合"></path>
+                </g>
+              </svg>`,
+            },
+            onClick: () => {
+              handleAIClick();
+              return null;
+            },
+          }),
+        },
       },
     };
+
+    if (c.chatCompletion) {
+      editorOpts.toolbars.toolbar.unshift('ai');
+    }
 
     // 默认编辑态
     const editorInit = () => {
@@ -243,6 +337,7 @@ const IBizMarkDown: any = defineComponent({
       newVal => {
         theme.value = newVal;
         editor.value?.setTheme(theme.value);
+        editorPreview.value?.setTheme(theme.value);
       },
     );
 

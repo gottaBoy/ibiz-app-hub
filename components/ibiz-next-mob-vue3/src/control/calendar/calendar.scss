@@ -1,42 +1,46 @@
 $control-calendar: (
-  text-color: getCssVar(color-text-0),
-  hover-bg-color: getCssVar(color, fill, 0),
-  active-bg-color: getCssVar(color, fill, 0),
-  border-color: getCssVar(color, primary, active),
-  font-size: getCssVar(font-size, small),
-  item-padding: getCssVar(spacing, tight),
-  border-radius: getCssVar(border-radius, small),
-  margin: getCssVar(spacing, extra-tight),
-  item-margin: getCssVar(spacing, tight) 0,
+  // 颜色
+  color-text-color: getCssVar(color-text-0),
+  color-mark-color: getCssVar(color, danger),
+  color-header-caption-bg: getCssVar(color, bg, 1),
+  color-toolbar-color: getCssVar(color, primary),
+  color-toolbar-bg: getCssVar(color, bg, 1),
+  color-calendar-bg: getCssVar(color, bg, 1),
+  color-calendar-main-color: getCssVar(color, primary),
+  color-calendar-color: getCssVar(color, text, 0),
+  color-calendar-disabled-color: getCssVar(color, disabled, text),
+  color-calendar-active-color: getCssVar(color, primary),
+  color-calendar-active-bg: getCssVar(color, primary, light, default),
+  color-timeline-item-bg-color: getCssVar(color, border),
+  color-tab-bg: transparent,
+  // 字体大小
+  font-calendar-item-fontSize: getCssVar(font-size, small),
+  font-timeline-item-fontSize: getCssVar(width-icon, small),
+  font-header-caption-fontWeight: getCssVar(font-weight, bold),
+  // 间距
+  spacing-item-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
+  spacing-item-border-gap: getCssVar(spacing, tight),
+  spacing-header-caption-padding: getCssVar(spacing, base) getCssVar(spacing, tight),
+  spacing-toolbar-gap: getCssVar(spacing, base),
+  spacing-timeline-item-padding: getCssVar(spacing, base),
+  spacing-timeline-item-margin: 0 0 getCssVar(spacing, base) 0,
+  spacing-timeline-padding: getCssVar(spacing, base),
+  spacing-timeline-timespan-padding: getCssVar(spacing, extra-tight) getCssVar(spacing, tight),
+  spacing-timeline-item-content-margin: getCssVar(spacing, base),
+  // 宽高
+  height-mark-height: getCssVar(spacing, tight),
+  width-mark-width: getCssVar(spacing, tight),
+  // 圆角
+  radius-timeline-item-border-radius: getCssVar(spacing, tight),
+  // 其他
+  item-border: 1px solid getCssVar(color, border),  
 );
 
 @include b(control-calendar) {
   @include set-component-css-var(control-calendar, $control-calendar);
 
-  --van-cell-right-icon-color: var(--van-gray-6);
-  --van-padding-md: #{getCssVar(spacing, tight)};
-
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-
-  .calendar_day {
-    padding: getCssVar('spacing', 'extra-tight') 0;
-  }
-
-  @include e(calendar-item) {
-    display: flex;
-    gap: getCssVar(spacing, tight);
-    align-items: center;
-    padding: getCssVar(control-calendar, item-padding);
-  }
-
-  @include e(icon) {
-    width: rem(10px);
-    height: rem(10px);
-    border-radius: 50%;
-  }
 
   @include e(day) {
     position: relative;
@@ -51,73 +55,80 @@ $control-calendar: (
     @include flex(row);
 
     position: absolute;
-    bottom: rem(-4px);
+    bottom: 0;
     left: 0;
-    flex-grow: 1;
     justify-content: space-around;
     width: 100%;
 
     @include m((item)) {
-      width: rem(4px);
-      height: rem(4px);
-      background-color: red;
-      border-radius: rem(50px);
+      width: getCssVar(control-calendar, width-mark-width);
+      height: getCssVar(control-calendar, height-mark-height);
+      background-color: getCssVar(control-calendar, color-mark-color);
+      border-radius: 50%;
     }
   }
 
   @include b(control-calendar-item) {
-    @include set-component-css-var(control-calendar, $control-calendar);
-
-    // width: calc(100% - getCssVar(control-calendar, item-margin) * 2);
     height: auto;
+    padding: getCssVar(control-calendar, spacing-item-padding);
 
     // 默认项样式 不渗透到布局面板
     @include m(default) {
-      padding: getCssVar(control-calendar, item-padding);
       overflow: hidden;
-      font-size: getCssVar(control-calendar, font-size);
-      line-height: 25px;
-      color: getCssVar(control-calendar, text-color);
+      font-size: getCssVar(control-calendar, font-calendar-item-fontSize);
+      color: getCssVar(control-calendar, color-text-color);
       text-overflow: ellipsis;
       white-space: nowrap;
-      cursor: pointer;
+    }
+    @include m(panel) {
+      position: relative;
+      &::after {
+        position: absolute;
+        content: " ";
+        pointer-events: none;
+        right: getCssVar(control-calendar, spacing-item-border-gap);
+        bottom: 0;
+        left: getCssVar(control-calendar, spacing-item-border-gap);
+        border-bottom: getCssVar(control-calendar, item-border);
+      }
+    }
+  }
+
+
+  // 日历插件样式
+  .hash-calendar {
+    --hash-calendar-main-font-color: #{getCssVar(control-calendar, color-calendar-color)};
+    --hash-calendar-main-color: #{getCssVar(control-calendar, color-calendar-main-color)};
+    --hash-calendar-disabled-font-color: #{getCssVar(control-calendar, color-calendar-disabled-color)};
+    .calendar_content {
+      background-color: getCssVar(control-calendar, color-calendar-bg);
+    }
+    .calendar_week,.calendar_group_li {
+      background-color: getCssVar(control-calendar, color-calendar-bg);
+    }
+    .calendar_day_checked {
+      color: getCssVar(control-calendar, color-calendar-active-color);
+      background-color: getCssVar(control-calendar, color-calendar-active-bg);
     }
   }
 }
 
-@include b(control-calendar-content) {
-  width: 100%;
-}
-
-@include b(control-calendar-date-text) {
-  @include set-component-css-var(control-calendar, $control-calendar);
-
-  padding: getCssVar(control-calendar, item-padding);
-  margin-top: 0;
-}
-
-@include b(control-calendar-day) {
-  height: fit-content;
-}
-
-@include b(control-calendar-content-header) {
-  @include set-component-css-var(control-calendar, $control-calendar);
-
-  display: flex;
-  gap: getCssVar(control-calendar, item-padding);
-  align-items: center;
-}
-
 @include b(control-calendar-footer) {
-  flex-grow: 1;
+  flex: auto;
   min-height: 0;
 
   .van-tabs {
     height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .van-tabs__wrap {
+    flex: none;
   }
 
   .van-tabs__content {
-    height: calc(100% - var(--van-tabs-line-height));
+    flex: auto;
     overflow-y: auto;
   }
 
@@ -125,28 +136,27 @@ $control-calendar: (
   .van-list {
     height: 100%;
   }
-}
 
-@include b(control-calendar-title) {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .van-field {
-    width: 50%;
-  }
-
-  input {
-    font-weight: 100;
-    text-align: inherit;
-    background-color: transparent;
-    border: rem(1px) getCssVar(color, border) solid;
-    box-shadow: none;
-  }
-  span {
-    top: 0;
-    left: 0;
+  @include e('tab-item') {
+    .van-tab__text {
+      position: relative;
+      overflow: visible;
+      &::before {
+        content:'';
+        width: 100%;
+        height: rem(3px);
+        bottom: rem(-8px);
+        border-radius: rem(3px);
+        transform: translateY(-50%);
+        background-color: getCssVar(control-calendar, color-tab-bg);
+        position: absolute;
+      }
+    }
+    &.van-tab--active {
+      .van-tab__text::before {
+        content: unset;
+      }
+    }
   }
 }
 
@@ -154,18 +164,42 @@ $control-calendar: (
   width: 100%;
   display: flex;
   @include e('select-day') {
-    padding: getCssVar(spacing, base) getCssVar(spacing, tight);
-    background-color: getCssVar(color, bg, 1);
-    border-radius: 2px;
-    font-weight: getCssVar(font-weight, bold);
+    padding: getCssVar(control-calendar, spacing-header-caption-padding);
+    background-color: getCssVar(control-calendar, color-header-caption-bg);
+    font-weight: getCssVar(control-calendar, font-header-caption-fontWeight);
   }
   @include e('switch-toolbar') {
-    flex: 1;
+    flex: auto;
     align-items: center;
     display: flex;
-    justify-content: end;
-    color: getCssVar(color, primary);
-    gap: getCssVar(spacing, base);
-    padding-right: getCssVar(spacing, base);
+    justify-content: flex-end;
+    color: getCssVar(control-calendar, color-toolbar-color);
+    gap: getCssVar(control-calendar, spacing-toolbar-gap);
+    padding-right: getCssVar(control-calendar, spacing-toolbar-gap);
+    background-color: getCssVar(control-calendar, color-toolbar-bg);
+  }
+}
+
+// 时间轴样式
+@include b(control-calendar-timeline) {
+  @include set-component-css-var(control-calendar, $control-calendar);
+  padding: getCssVar(control-calendar, spacing-timeline-padding);
+  overflow: auto;
+  
+  @include e(item) {
+    margin: getCssVar(control-calendar, spacing-timeline-item-margin);
+    @include m('timespan') {
+      width: auto;
+      display: inline-block;
+      padding: getCssVar(control-calendar, spacing-timeline-timespan-padding);
+      border-radius: getCssVar(control-calendar, radius-timeline-item-border-radius);
+      background-color: getCssVar(control-calendar, color-timeline-item-bg-color);
+    }
+    @include m('content'){
+      margin-top: getCssVar(control-calendar, spacing-timeline-item-content-margin);
+    }
+    .#{bem(control-calendar-item)}{
+      padding: 0;
+    }
   }
 }

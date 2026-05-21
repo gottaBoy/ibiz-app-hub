@@ -1,5 +1,12 @@
 /* eslint-disable no-new */
-import { computed, defineComponent, onMounted, Ref, ref } from 'vue';
+import {
+  computed,
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  Ref,
+  ref,
+} from 'vue';
 import {
   getEditorEmits,
   getDateRangeProps,
@@ -16,11 +23,12 @@ import { IBizDateRangeCalendar } from '../../../common/date-range-picker/date-ra
  * 移动端时间范围选择器
  * @primary
  * @description  基于rolldate的轻量时间范围选择器，类型为CALENDAR时，使用van-calendar组件，默认支持年月日的时间范围选择。支持编辑器类型包含: `移动端时间范围选择器`、`移动端时间范围选择器（YYYY-MM-DD）`
- * @editorparams {name:SHOWMODE,parameterType:'DEFAULT' | 'CALENDAR',defaultvalue:'DEFALUIT',description:显示模式，值为CALENDAR时，使用日历组件来选择日期范围，值为DEFAULT时，绘制两个时间选择器来绘制日期范围}
- * @editorparams {name:rangeSeparator,parameterType:string,defaultvalue:'~',description:选择范围时的分隔符}
- * @editorparams {name:valueSeparator,parameterType:string,defaultvalue:'',description:值分割符}
- * @editorparams {name:startPlaceHolder,parameterType:string,defaultvalue:'',description:选择范围开始占位提示}
- * @editorparams {name:endPlaceHolder,parameterType:string,defaultvalue:'',description:选择范围结束占位提示}
+ * @editorparams {name:showmode,parameterType:'DEFAULT' | 'CALENDAR',defaultvalue:'DEFAULT',description:显示模式，值为CALENDAR时，使用日历组件来选择日期范围，值为DEFAULT时，绘制两个时间选择器来选择日期范围}
+ * @editorparams {name:rangeseparator,parameterType:string,defaultvalue:'~',description:选择范围时的分隔符}
+ * @editorparams {"name":"valueseparator","parameterType":"string","defaultvalue":"','","description":"值分隔符，用于分割转换字符串为开始时间和结束时间"}
+ * @editorparams {name:startplaceholder,parameterType:string,defaultvalue:'',description:选择范围开始占位提示}
+ * @editorparams {name:endplaceholder,parameterType:string,defaultvalue:'',description:选择范围结束占位提示}
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
  * @ignoreemits  infoTextChange | enter
  */
@@ -45,6 +53,11 @@ export const IBizDateRangePicker = defineComponent({
 
     // 分钟按指定数分隔
     const minStep = 1;
+
+    // 时间选择器实例
+    const startRollDateInstance: Ref<IData | null> = ref(null);
+    const endRollDateInstance: Ref<IData | null> = ref(null);
+
     // 数据
     let items: string[] = [];
     // 时间选择器文本
@@ -86,14 +99,26 @@ export const IBizDateRangePicker = defineComponent({
       if (editorModel.editorParams.valueSeparator) {
         valueSeparator = editorModel.editorParams.valueSeparator;
       }
+      if (editorModel.editorParams.valueseparator) {
+        valueSeparator = editorModel.editorParams.valueseparator;
+      }
       if (editorModel.editorParams.startPlaceHolder) {
         startPlaceHolder = editorModel.editorParams.startPlaceHolder;
+      }
+      if (editorModel.editorParams.startplaceholder) {
+        startPlaceHolder = editorModel.editorParams.startplaceholder;
       }
       if (editorModel.editorParams.endPlaceHolder) {
         endPlaceHolder = editorModel.editorParams.endPlaceHolder;
       }
+      if (editorModel.editorParams.endplaceholder) {
+        endPlaceHolder = editorModel.editorParams.endplaceholder;
+      }
       if (editorModel.editorParams.rangeSeparator) {
         rangeSeparator = editorModel.editorParams.rangeSeparator;
+      }
+      if (editorModel.editorParams.rangeseparator) {
+        rangeSeparator = editorModel.editorParams.rangeseparator;
       }
     }
 
@@ -166,7 +191,11 @@ export const IBizDateRangePicker = defineComponent({
       }
       startDate.value = items[0];
       if (items.length === 2) {
-        emit('change', items.join(valueSeparator));
+        if (items.findIndex(item => !!item) === -1) {
+          emit('change', '');
+        } else {
+          emit('change', items.join(valueSeparator));
+        }
       }
       if (refFormItem.value) {
         const valueName = refFormItem.value[index];
@@ -201,7 +230,7 @@ export const IBizDateRangePicker = defineComponent({
       };
       const el = startEditorRef.value;
       if (el) {
-        new RollDate({
+        startRollDateInstance.value = new RollDate({
           el,
           value: startFormatValue.value,
           confirm: (value: string) => {
@@ -216,7 +245,7 @@ export const IBizDateRangePicker = defineComponent({
       }
       const el2 = endEditorRef.value;
       if (el2) {
-        new RollDate({
+        endRollDateInstance.value = new RollDate({
           el: el2,
           value: endFormatValue.value,
           confirm: (value: string) => {
@@ -234,6 +263,8 @@ export const IBizDateRangePicker = defineComponent({
     const closeDrawer = () => {
       startEditorRef.value?.hide?.();
       endEditorRef.value?.hide?.();
+      startRollDateInstance.value?.hide?.();
+      endRollDateInstance.value?.hide?.();
     };
 
     // 监听popstate事件
@@ -255,6 +286,10 @@ export const IBizDateRangePicker = defineComponent({
       });
       show.value = false;
     };
+
+    onBeforeUnmount(() => {
+      closeDrawer();
+    });
 
     // 绘制模态打开
     const renderCalendarMode = () => {

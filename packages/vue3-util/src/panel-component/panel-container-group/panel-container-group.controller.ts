@@ -1,4 +1,4 @@
-import { PanelItemController } from '@ibiz-template/runtime';
+import { PanelContainerController } from '@ibiz-template/runtime';
 import { IPanelContainer } from '@ibiz/model-core';
 import { PanelContainerGroupState } from './panel-container-group.state';
 
@@ -7,9 +7,9 @@ import { PanelContainerGroupState } from './panel-container-group.state';
  *
  * @export
  * @class PanelContainerGroupController
- * @extends {PanelItemController}
+ * @extends {PanelContainerController}
  */
-export class PanelContainerGroupController extends PanelItemController<IPanelContainer> {
+export class PanelContainerGroupController extends PanelContainerController<IPanelContainer> {
   /**
    * @description 状态
    * @exposedoc

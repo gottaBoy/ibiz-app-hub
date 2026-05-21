@@ -1,12 +1,15 @@
 $control-form: (
-  'bg-color': getCssVar(color, bg, 1)
+  'color-bg': getCssVar(color, bg, 1)
 );
 
 @include b(control-form) {
   @include set-component-css-var('control-form', $control-form);
-}
 
-@include b(control-form) {
   width: 100%;
-  background-color: #{getCssVar('control-form', 'bg-color')};
+  background-color: #{getCssVar('control-form', 'color-bg')};
+
+  >.#{bem('form-page-header')} >.van-tabs__content >.van-tab__panel{
+    height: 100%;
+    overflow: auto;
+  }
 }

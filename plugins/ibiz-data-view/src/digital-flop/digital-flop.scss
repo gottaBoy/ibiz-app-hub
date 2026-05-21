@@ -1,12 +1,12 @@
 $digital-flop: (
-    'text-color': getCssVar(screen-dashboard, text-color),
+    'text-color': getCssVar(color, primary, text),
     'font-weight': 700,
-    'text-align': 'center',
-    'item-bg': getCssVar(screen-dashboard, primary-color),
+    'font-size': getCssVar(font-size, regular),
+    'item-bg': getCssVar(color, primary),
     'item-gap': 8px,
     'item-text-align': 'center',
-    'item-height': 32px,
-    'item-width': 32px,
+    'height': 32px,
+    'width': 32px,
     'item-border-radius': 4px,
 );
 
@@ -20,14 +20,15 @@ $digital-flop: (
     width: 100%;
     height: 100%;
     @include e(item) {
+        display: flex;
         flex: none;
-        width: getCssVar('digital-flop', 'item-width');
-        height: getCssVar('digital-flop', 'item-height');
+        align-items: center;
+        justify-content: center;
+        width: getCssVar('digital-flop', 'width');
+        height: getCssVar('digital-flop', 'height');
         font-size: getCssVar('digital-flop', 'font-size');
         font-weight: getCssVar('digital-flop', 'font-weight');
-        line-height: getCssVar('digital-flop', 'item-height');
         color: getCssVar('digital-flop', 'text-color');
-        text-align: getCssVar('digital-flop', 'item-text-align');
         background-color: getCssVar('digital-flop', 'item-bg');
         border-radius: getCssVar('digital-flop', 'item-border-radius');
 

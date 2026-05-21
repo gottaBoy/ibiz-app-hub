@@ -2,6 +2,7 @@ import {
   IAppBICube,
   IAppBIReport,
   IAppBIScheme,
+  IAppCodeList,
   IAppDataEntity,
   IAppView,
   IApplication,
@@ -124,6 +125,11 @@ export class AppHub implements IAppHubService {
   protected drcontrols: Map<string, IModel[]> = new Map();
 
   /**
+   * 子应用分页导航面板模型
+   */
+  protected subAppTabExpPanels: Map<string, IModel[]> = new Map();
+
+  /**
    * 子应用界面行为组模型
    *
    * @author tony001
@@ -181,6 +187,15 @@ export class AppHub implements IAppHubService {
    * @type {Map<string, Map<string, IModel>>}
    */
   protected plugins: Map<string, Map<string, IModel>> = new Map();
+
+  /**
+   * 子应用代码表清单，key为应用标识，值为key为代码表标识，value为代码表模型对象MAP
+   *
+   * @author tony001
+   * @protected
+   * @type {Map<string, Map<string, IAppCodeList>>}
+   */
+  protected codeLists: Map<string, Map<string, IAppCodeList>> = new Map();
 
   /**
    * hub配置信息服务
@@ -331,6 +346,19 @@ export class AppHub implements IAppHubService {
   }
 
   /**
+   * 注册子应用分页导航面板模型
+   * @param appId
+   * @param model
+   */
+  registerSubAppTabExpPanel(appId: string, model: IModel): void {
+    if (!this.subAppTabExpPanels.has(appId)) {
+      this.subAppTabExpPanels.set(appId, []);
+    }
+    const targetAppTabExpPanels = this.subAppTabExpPanels.get(appId);
+    targetAppTabExpPanels?.push(model);
+  }
+
+  /**
    * 注册子应用界面行为组
    *
    * @author tony001
@@ -459,6 +487,21 @@ export class AppHub implements IAppHubService {
       return Array.from(result.values());
     }
     return [];
+  }
+
+  /**
+   * 注册子应用代码表
+   *
+   * @author tony001
+   * @param {string} appId
+   * @param {IAppCodeList} model
+   */
+  registerSubAppCodeList(appId: string, model: IAppCodeList): void {
+    if (!this.codeLists.has(appId)) {
+      this.codeLists.set(appId, new Map());
+    }
+    const map = this.codeLists.get(appId)!;
+    map.set(model.codeListTag!, model);
   }
 
   /**
@@ -625,6 +668,21 @@ export class AppHub implements IAppHubService {
   }
 
   /**
+   * @description 根据分页导航面板的唯一标识（uniqueTag）获取模型
+   * @param tag
+   * @param appId
+   */
+  getSubAppTabExpPanel(tag: string, appId: string): IModel | undefined {
+    if (!this.subAppTabExpPanels.has(appId)) {
+      return undefined;
+    }
+    const targetAppTabExpPanels = this.subAppTabExpPanels.get(appId);
+    return targetAppTabExpPanels!.find(item => {
+      return item.uniqueTag === tag;
+    });
+  }
+
+  /**
    * 根据界面行为组标识和子应用标识获取模型
    *
    * @author tony001
@@ -754,6 +812,22 @@ export class AppHub implements IAppHubService {
       return entity;
     }
     throw new RuntimeError(ibiz.i18n.t('runtime.service.noFound', { id }));
+  }
+
+  /**
+   * 根据代码表标识获取子应用代码表
+   *
+   * @author tony001
+   * @param {string} id
+   * @param {string} [appId=ibiz.env.appId]
+   * @return {*}  {Promise<IAppCodeList>}
+   */
+  getSubAppCodeList(
+    id: string,
+    appId: string = ibiz.env.appId,
+  ): IAppCodeList | undefined {
+    const targetCodeListMap = this.codeLists.get(appId);
+    return targetCodeListMap?.get(id);
   }
 
   /**
@@ -921,5 +995,16 @@ export class AppHub implements IAppHubService {
     ibiz.hub.getAllApps().forEach(app => {
       app.destroy();
     });
+  }
+
+  /**
+   * 合并子应用代码表
+   * @param codeList
+   */
+  mergeSubAppCodeList(codeList: IAppCodeList): void {
+    if (!this.modelLoaderProvider) {
+      throw new RuntimeError(ibiz.i18n.t('runtime.utils.firstregister'));
+    }
+    this.modelLoaderProvider.mergeSubAppCodeList(codeList);
   }
 }

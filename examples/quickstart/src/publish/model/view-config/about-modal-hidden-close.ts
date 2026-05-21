@@ -4,7 +4,7 @@ export default {
   openMode: 'POPUPMODAL',
   viewType: 'DECUSTOMVIEW',
   width: 600,
-  height: 400,
+  height: 430,
   appDataEntityId: 'web.about',
   redirectView: false,
   modalOption: {

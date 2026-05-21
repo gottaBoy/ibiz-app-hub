@@ -51,6 +51,18 @@ export default {
       id: 'master',
     },
   ],
+  appViewNavParams: [
+    {
+      key: 'uniqueid',
+      value: 'srfuniqueid',
+      id: 'uniqueid',
+    },
+    {
+      key: 'curtime',
+      value: 'srfcurtime',
+      id: 'curtime',
+    },
+  ],
   appViewParams: [
     {
       key: 'SRFRENEWSESSION',

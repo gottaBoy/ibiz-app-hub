@@ -9,7 +9,7 @@ import {
   V7AuthService,
 } from './service';
 import { AppHub } from './app-hub';
-import { EngineFactory } from './engine';
+import { EngineFactory, installCtrlEngine } from './engine';
 import { GlobalUtil } from './global';
 import { presetUIActionProvider } from './ui-action';
 import { installLogicSchedule } from './logic-scheduler';
@@ -56,6 +56,8 @@ export function install(): void {
   installLogicSchedule();
   // 注册搭载平台适配器
   installPlatformProvider();
+  // 注册部件引擎
+  installCtrlEngine();
   // 搭载平台  - 先注册 后挂载
   ibiz.platform = getPlatformProvider();
   // 初始化第三方认证服务

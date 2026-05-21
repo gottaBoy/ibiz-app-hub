@@ -12,6 +12,8 @@ export default {
     retract: '收起',
     close: '关闭',
     search: '搜索',
+    confirm: '确认',
+    cancel: '取消',
   },
   // 组件
   component: {
@@ -33,7 +35,7 @@ export default {
       symbols: '符号',
       flags: '旗帜',
     },
-    mdCtrlSetting: {
+    mdSortSetting: {
       confirm: '确定',
       sort: '排序',
       asc: '升序',
@@ -63,14 +65,17 @@ export default {
   // 部件
   control: {
     common: {
-      loadMore: '加载更多',
+      loadMore: '加载更多...',
+      loadFinish: '我已经到底啦',
+      loadError: '加载失败，点击重新加载',
+      addbtn: '新增',
     },
-    dataView: { end: '我已经到底啦~' },
     appmenu: {
       more: '更多',
       bottomNav: '底部导航',
       customNav: '自定义导航',
       save: '保存',
+      noData: '暂无数据',
     },
     form: {
       noSupportDetailType:
@@ -101,11 +106,14 @@ export default {
         search: '查询',
         reset: '重置',
       },
+      repeaterGrid: {
+        index: '序号',
+        noData: '暂无数据',
+      },
     },
     list: {
       expand: '展开',
       selectedData: '选中数据',
-      end: '我已经到底啦~',
     },
     searchBar: {
       confirm: '确认',
@@ -120,6 +128,12 @@ export default {
       property: '属性',
       and: '且',
       or: '或',
+      expand: '展开',
+      collapse: '收起',
+      history: '历史记录',
+      clear: '清除',
+      more: '更多',
+      cancel: '取消',
     },
     toolbar: {
       noSupportType: '工具栏项类型：{itemType}暂不支持',
@@ -136,6 +150,12 @@ export default {
       today: '今天',
       pickerDate: '选择日期',
       customPicker: '请选择日期',
+    },
+    dashboard: {
+      customLayout: '自定义布局',
+      save: '保存',
+      showList: '显示清单',
+      hiddenList: '隐藏清单',
     },
   },
   // 编辑器
@@ -155,6 +175,7 @@ export default {
       ibizCascader: {
         title: '标题{index}',
       },
+      noData: '暂无数据',
     },
     datePicker: {
       title: '选择日期',
@@ -172,6 +193,9 @@ export default {
       noSupportTreePicker: '暂未支持树形下拉选择',
       confirm: '确定',
     },
+    mapPicker: {
+      searchPlaceholder: '请输入关键字选择地点',
+    },
     markdown: {
       uploadJsonFormatErr: '配置uploadparams没有按标准JSON格式',
       exportJsonFormatErr: '配置exportparams没有按标准JSON格式',
@@ -188,6 +212,7 @@ export default {
       uploadJsonFormatErr: '配置uploadparams没有按标准JSON格式',
       exportJsonFormatErr: '配置exportparams没有按标准JSON格式',
       cancelUpload: '取消上传',
+      compressError: '图片压缩失败',
     },
     emojiPicker: {
       addEmoji: '添加表情',
@@ -248,6 +273,7 @@ export default {
       processingSteps: '处理环节',
       processingPersonnel: '处理人',
       submissionPath: '提交路径',
+      processInformation: '处理信息',
     },
     userMessage: {
       notice: '通知',
@@ -276,6 +302,8 @@ export default {
       internalMessageJson: {
         jumpToView: '跳转到视图',
         missingHtml: '数据的content里缺少html',
+        todo: '给你分配了流程任务',
+        done: '完成流程任务',
       },
       internalMessageTab: {
         noSupportType: '站内消息类型{type}暂未支持',
@@ -283,6 +311,11 @@ export default {
         loadMore: '加载更多({length})',
         onlyShowUnread: '只显示未读',
       },
+    },
+    themeToggling: {
+      auto: '跟随系统',
+      light: '亮色主题',
+      dark: '暗色主题',
     },
   },
   // 工具
@@ -301,6 +334,32 @@ export default {
       insecureContextError:
         '只有在安全的情况下才允许访问摄像头。使用HTTPS或localhost而不是HTTP。',
     },
+    aiChartUtil: {
+      feedback: '反馈',
+      description: '描述',
+      regardingIssue: '针对问题',
+      understandProblem: '不理解问题',
+      forgotContext: '遗忘了上文',
+      notFollowingRequire: '不遵循要求',
+      regardingResponse: '针对回答效果',
+      incorrectAswer: '回答错误',
+      logicalConfusion: '逻辑混乱',
+      poorTimeliness: '时效性差',
+      poorReadability: '可读性差',
+      incompleteAnswer: '回答不完整',
+      unprofessional: '回答笼统不专业',
+      report: '举报',
+      pornographicVulgar: '色情低俗',
+      politicallySensitive: '政治敏感',
+      illegalCriminal: '违法犯罪',
+      discriminationPrejudice: '歧视或偏见回答',
+      violationPrivacy: '侵犯隐私',
+      contentInfringement: '内容侵权',
+      placeholder: '请输入',
+    },
+    printPreviewUtil: {
+      title: '打印预览',
+    },
   },
   // 视图
   view: {
@@ -313,6 +372,12 @@ export default {
     password: '密码',
     login: '登录',
     thirdAuthFail: '第三方授权登录失败',
+    downloading: '下载中...',
+    downloadSuccess: '下载成功！',
+    downloadFailed: '下载失败！',
+    noSupportDownload: '不支持下载该文件，请点击右上角使用浏览器打开下载！',
+    immediatelyDownload: '立即下载',
+    reDownload: '重新下载',
   },
   // 视图引擎
   viewEngine: {

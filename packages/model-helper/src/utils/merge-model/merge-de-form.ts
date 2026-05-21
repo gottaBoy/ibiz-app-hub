@@ -248,3 +248,79 @@ export function mergeAppDEForm(
   if (subAppMergeItems.size === 0) return;
   mergeSubAppFormItems(dst, subAppMergeItems);
 }
+
+/**
+ * 获取存在基于数据关系部件构建的分页部件的数据关系标识
+ * @param form 表单模型
+ * @returns 数据关系标识集合
+ */
+export function getFormdataRelationTags(form: IDEForm | undefined): string[] {
+  const dataRelationTags: string[] = [];
+  if (!form) return dataRelationTags;
+  recursiveIterate(
+    form,
+    (item: IModel) => {
+      if (item.detailType === 'TABPANEL' && item.dataRelationTag) {
+        dataRelationTags.push(item.dataRelationTag);
+      }
+    },
+    {
+      childrenFields: CHILDRENFIELDS,
+    },
+  );
+  return dataRelationTags;
+}
+
+/**
+ * @description 合并存在数据关系标识的表单分页部件，子应用表单codename和主应用表单表单分页部件数据关系标识相同
+ * @export
+ * @param {string} dataRelationTag 数据关系标识
+ * @param {(IDEForm | undefined)} dst 主应用表单模型
+ * @param {(IDEForm | undefined)} src 子应用表单模型
+ * @returns {*}  {void}
+ */
+export function mergeFormDRTabpanel(
+  dataRelationTag: string,
+  dst: IDEForm | undefined,
+  src: IDEForm | undefined,
+): void {
+  if (!dataRelationTag || !dst || !src) return;
+  // 基于数据标识获取子应用表单分页部件
+  let srcTabpanel: IModel | undefined;
+  recursiveIterate(
+    src,
+    (item: IModel) => {
+      if (
+        item.detailType === 'TABPANEL' &&
+        item.dataRelationTag === dataRelationTag
+      ) {
+        srcTabpanel = item;
+        return true;
+      }
+    },
+    {
+      childrenFields: CHILDRENFIELDS,
+    },
+  );
+  // 将子应用表单分页部件合并到主应用表单分页部件中
+  if (srcTabpanel) {
+    recursiveIterate(
+      dst,
+      (item: IModel) => {
+        if (
+          item.detailType === 'TABPANEL' &&
+          item.dataRelationTag === dataRelationTag
+        ) {
+          const detailName = getFormDetailMatchField(item, CHILDRENFIELDS);
+          if (detailName && item[detailName] && srcTabpanel![detailName]) {
+            item[detailName].push(...srcTabpanel![detailName]);
+            return true;
+          }
+        }
+      },
+      {
+        childrenFields: CHILDRENFIELDS,
+      },
+    );
+  }
+}

@@ -93,6 +93,7 @@ async function computePos(
         bottom: '',
         [staticSide]: '-4px',
       });
+      arrEl.setAttribute('data-placement', placement);
     }
   }
 }

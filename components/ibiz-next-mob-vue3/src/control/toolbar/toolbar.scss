@@ -1,129 +1,136 @@
 $control-toolbar: (
-  'item-margin': 0 rem(4px),
-  'icon-margin': 0 rem(5px) 0 0,
-  'icon-max-width': rem(16px),
-  'icon-max-height': rem(16px),
-  'icon-font-size': rem(20px),
-  'toolbar-bottom-padding': getCssVar('spacing', 'base-tight'),
-);
-$control-toolbar-embed: (
-  'item-height': rem(21px),
-  'item-line-height': rem(21px),
-  'bg-color': transparent,
-);
-$control-toolbar-popover: (
-  'icon-font-size': rem(14px),
+  width-icon-min-width: 1em,
+  height-bottom-item: getCssVar('height-control', 'large'),
+  color-disabled-text: getCssVar(color, disabled, text),
+  color-disabled-bg: getCssVar(color, disabled, bg),
+  spacing-gap: getCssVar('spacing', 'tight'),
+  spacing-badge-margin: 0 0 0 getCssVar('spacing', 'extra-tight'),
+  spacing-bottom-padding: getCssVar('spacing', 'base-tight')
+    getCssVar('spacing', 'base'),
+  font-fontSize: getCssVar('font-size', 'regular'),
+  font-left-fontSize: getCssVar('font-size', 'header-6'),
+  font-right-fontSize: getCssVar('font-size', 'header-6')
 );
 
 @include b('control-toolbar') {
   @include set-component-css-var('control-toolbar', $control-toolbar);
 
   display: flex;
+  flex-wrap: wrap;
+  gap: getCssVar('control-toolbar', 'spacing-gap');
   height: 100%;
 
+  // 项容器样式
   @include e('item') {
     display: flex;
     align-items: center;
-    margin: getCssVar('control-toolbar', 'item-margin');
   }
 
-  @include e('item-left') {
-    margin-left: 0;
-
-    .van-button {
-      border: none;
-
-      ion-icon {
-        font-size: getCssVar('control-toolbar', 'icon-font-size');
-      }
-
-      .van-button__text {
-        display: flex;
-        align-items: center;
-      }
-    }
-  }
-
-  @include e('item-right') {
-    margin-right: 0;
-
-    .van-button {
-      border: none;
-
-      ion-icon {
-        font-size: getCssVar('control-toolbar', 'icon-font-size');
-      }
-
-      .van-button__text {
-        display: flex;
-        align-items: center;
-        gap: getCssVar(spacing, extra, tight);
-      }
-    }
-  }
-
-  @include e('popover') {
-    --ibiz-color-bg-0: #{var(--van-popover-light-text-color)};
-
-    .van-popover__action--disabled:active,
-    .van-popover__action--disabled {
-      color: getCssVar(color, disabled-text) !important;
-      background-color: getCssVar(color, disabled-bg);
-    }
-  }
-
-  @include e('popover-item') {
-    @include set-component-css-var(
-      'control-toolbar-popover',
-      $control-toolbar-popover
-    );
+  // 分组项容器样式
+  @include e('group') {
     display: flex;
     align-items: center;
-    gap: getCssVar(spacing, extra, tight);
-    .ibiz-icon {
-      width: getCssVar('control-toolbar-popover', 'icon-font-size');
-      height: getCssVar('control-toolbar-popover', 'icon-font-size');
-      display: flex;
-      align-items: center;
-      * {
-        width: getCssVar('control-toolbar-popover', 'icon-font-size');
-        height: getCssVar('control-toolbar-popover', 'icon-font-size');
-      }
+  }
+
+  // 行为组展开模式
+  // 首项+分组展开项容器样式
+  @include e('group-itemx') {
+    display: flex;
+    align-items: center;
+
+    .van-button:nth-child(1) {
+      border-right-color: transparent;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .van-button:nth-child(2) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
     }
   }
 
-  @include e('item-separator') {
-    @include no-repeat;
+  .van-button__text {
+    display: flex;
+    align-items: center;
   }
 
-  @include b('control-toolbar-mobnavrightmenu') {
-    @include e('item') {
-      margin-right: 0;
-    }
+  // 工具栏项内容样式（分组项、行为项）
+  .#{bem(control-toolbar-item)} {
+    #{getCssVarName('info-item', 'spacing-badge-margin')}: getCssVar(
+      'control-toolbar',
+      'spacing-badge-margin'
+    );
+    font-size: getCssVar('control-toolbar', 'font-fontSize');
+    white-space: nowrap;
   }
 }
 
+// 左侧工具栏样式
+@include b('control-toolbar-left') {
+  .van-button {
+    border: none;
+  }
+  .#{bem(control-toolbar-item)} {
+    font-size: getCssVar('control-toolbar', 'font-left-fontSize');
+  }
+}
+
+// 右侧工具栏样式
 @include b('control-toolbar-right') {
   justify-content: flex-end;
+
+  .van-button {
+    border: none;
+  }
+
+  .#{bem(control-toolbar-item)} {
+    font-size: getCssVar(
+      'control-toolbar',
+      'font-right-fontSize'
+    );
+  }
 }
 
+// 底部工具栏样式
 @include b('control-toolbar-bottom') {
   display: flex;
-  padding: getCssVar('control-toolbar', 'toolbar-bottom-padding');
+  padding: getCssVar('control-toolbar', 'spacing-bottom-padding');
 
   .#{bem(control-toolbar, item)} {
     flex: 1;
 
-    --van-button-default-height: #{rem(40px)};
+    &:nth-child(1) {
+      margin-left: 0;
+    }
 
-    button {
+    .van-button {
       width: 100%;
+      height: getCssVar('control-toolbar', 'height-bottom-item');
     }
+  }
+}
 
-    .van-button__text {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
+// 工具栏分组列表模态框样式
+@include b('toolbar-group-list') {
+  @include set-component-css-var('control-toolbar', $control-toolbar);
+}
+
+// 自定义模态框样式
+@include b('control-toolbar-float-toolbar-modal') {
+  &.#{bem(popover)} {
+    background-color: unset;
+    border: none;
+    box-shadow: unset;
+  }
+}
+
+
+// 分组气泡样式
+@include b('toolbar-group-modal-popover') { 
+  &.#{bem(popover)} {
+    overflow: hidden;
+    border: none;
+    border-radius: getCssVar(border, radius, medium);
   }
 }

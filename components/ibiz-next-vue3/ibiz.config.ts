@@ -20,7 +20,10 @@ export default defineConfig({
   eslint: false,
   stylelint: false,
   theme: {
-    prefix: `@import "@ibiz-template/theme/style/global.scss";`,
+    prefix: `@import "${path.resolve(
+      cwd,
+      'node_modules/@ibiz-template/theme/style/global.scss',
+    )}";`,
   },
   isCustomElement: tag => tag.startsWith('ion-'),
   external: [

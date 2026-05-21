@@ -64,7 +64,7 @@ export default defineComponent({
       name: 'AppView',
       id: 'AppView',
       viewType: 'DECUSTOMVIEW',
-      appId: ibiz.env.appId,
+      appId: props.context?.srfappid || ibiz.env.appId,
     };
     provide(
       'ctx',

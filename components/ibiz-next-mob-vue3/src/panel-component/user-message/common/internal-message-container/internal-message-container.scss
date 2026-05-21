@@ -1,37 +1,57 @@
+$internal-message-container: (
+  // 颜色
+  color-unread-tag-bg: getCssVar(color, danger),
+  color-toolbar-button-hover: getCssVar(color, primary),
+  // 间距
+  spacing-unread-tag-top: getCssVar('spacing', 'tight'),
+  spacing-unread-tag-right: getCssVar('spacing', 'tight'),
+  spacing-click-tag: getCssVar('spacing', 'extra-tight'),
+  spacing-toolbar-button-margin-left: getCssVar('spacing', 'tight'),
+  spacing-toolbar-padding: getCssVar('spacing', 'tight'),
+  // 宽高
+  width-unread-tag: getCssVar('width-icon', 'extra-small'),
+  height-unread-tag: getCssVar('width-icon', 'extra-small'),
+  // 字体
+  font-click-tag-fontSize: getCssVar('font-size', 'header-5'),
+  // 圆角
+  radius-unread-tag: getCssVar(border, radius, circle),
+);
 @include b(internal-message-container) {
+  @include set-component-css-var(
+    internal-message-container,
+    $internal-message-container
+  );
   position: relative;
 
-  @include m(clickable){
+  @include m(clickable) {
     cursor: pointer;
   }
 
-  @include e(unread-tag){
+  @include e(unread-tag) {
     position: absolute;
-    top: getCssVar('spacing', 'tight');
-    right: getCssVar('spacing', 'tight');
+    top: getCssVar(internal-message-container, spacing-unread-tag-top);
+    right: getCssVar(internal-message-container, spacing-unread-tag-right);
     display: none;
     align-self: flex-start;
-    width: getCssVar('width-icon', 'extra-small');
-    height: getCssVar('width-icon', 'extra-small');
-    background-color: getCssVar(color, danger);
-    border-radius: getCssVar(border, radius, circle);
+    width: getCssVar(internal-message-container, width-unread-tag);
+    height: getCssVar(internal-message-container, height-unread-tag);
+    background-color: getCssVar(internal-message-container, color-unread-tag-bg);
+    border-radius: getCssVar(internal-message-container, radius-unread-tag);
   }
 
-  @include e(click-tag){
+  @include e(click-tag) {
     position: absolute;
     top: 50%;
-    right: getCssVar('spacing', 'extra-tight');
-    font-size: getCssVar('font-size', 'header-5');
+    right: getCssVar(internal-message-container, spacing-click-tag);
+    font-size: getCssVar(internal-message-container, font-click-tag-fontSize);
     transform: translateY(-50%);
-  }  
-
-  @include m(unread){
-    @include e(unread-tag){
-      display: block;
-    }
-
   }
 
+  @include m(unread) {
+    @include e(unread-tag) {
+      display: block;
+    }
+  }
 }
 
 @include b(internal-message-container-toolbar) {
@@ -39,14 +59,14 @@
   top: 0;
   right: 0;
   display: none;
-  padding: getCssVar('spacing', 'tight');
+  padding: getCssVar(internal-message-container, spacing-toolbar-padding);
 
-  @include e(button){
-    margin-left: getCssVar('spacing', 'tight');
+  @include e(button) {
+    margin-left: getCssVar(internal-message-container, spacing-toolbar-button-margin-left);
     cursor: pointer;
 
-    &:hover{
-      color: getCssVar(color,primary);
+    &:hover {
+      color: getCssVar(internal-message-container, color-toolbar-button-hover);
     }
   }
 }

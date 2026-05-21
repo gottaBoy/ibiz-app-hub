@@ -1,11 +1,11 @@
 export default {
-  tabLayout: 'FLOW_NOHEADER',
+  tabLayout: 'TOP',
   loadDefault: true,
   showDataInfoBar: true,
   deviewCodeName: 'tab_ctrl_federation',
   deviewId: 'a33f81b51e2506201c55372c60e02438',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

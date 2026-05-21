@@ -5,9 +5,11 @@ import { mergeDeepRight } from 'ramda';
 const IterateOpts = {
   /** 子集合属性数组 */
   childrenFields: ['children'],
+  /** 是否跳出当前操作 */
+  isBreak: false,
 };
 
-const BreakError = new Error('中断操作');
+const ReturnError = new Error('中断操作');
 /**
  * @description 获取子属性集合
  * @param {IData} parent
@@ -47,14 +49,17 @@ function _recursiveIterate(
   const { childrenFields } = mergeDeepRight(IterateOpts, opts || {});
   const children = getChildField(parent, childrenFields);
   if (children?.length) {
-    for (const child of children) {
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
       // 递归自身的子成员
-      const isBreak = callback(child, parent);
-      // 如果回调返回true则退出
-      if (isBreak) {
-        throw BreakError;
+      const result = callback(child, parent);
+      // 回调返回true若未启用跳出当次操作则退出，启用跳出当次操作则跳出本次循环
+      if (result) {
+        if (opts?.isBreak) {
+          break;
+        }
+        throw ReturnError;
       }
-
       // 递归孙的成员
       recursiveIterate(child, callback, opts);
     }
@@ -97,7 +102,7 @@ export function recursiveIterate(
   try {
     _recursiveIterate(parent, callback, opts);
   } catch (error) {
-    if (error !== BreakError) {
+    if (error !== ReturnError) {
       throw error;
     }
   }
@@ -118,11 +123,15 @@ export function _recursiveExecute(
   const { childrenFields } = mergeDeepRight(IterateOpts, opts || {});
   const children = getChildFieldObj(parent, childrenFields);
   if (children) {
-    for (const child of Object.values(children)) {
-      const isBreak = callback(child, parent);
-      // 如果回调返回true则退出
-      if (isBreak) {
-        throw BreakError;
+    for (let i = 0; i < Object.values(children).length; i++) {
+      const child = Object.values(children)[i];
+      const result = callback(child, parent);
+      // 回调返回true若未启用跳出当次操作则退出，启用跳出当次操作则跳出本次循环
+      if (result) {
+        if (opts?.isBreak) {
+          break;
+        }
+        throw ReturnError;
       }
       // 递归孙的成员
       _recursiveExecute(child, callback, opts);
@@ -145,7 +154,7 @@ export function recursiveExecute(
   try {
     _recursiveExecute(parent, callback, opts);
   } catch (error) {
-    if (error !== BreakError) {
+    if (error !== ReturnError) {
       throw error;
     }
   }

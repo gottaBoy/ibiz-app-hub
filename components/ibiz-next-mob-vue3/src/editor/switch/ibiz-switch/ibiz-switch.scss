@@ -1,7 +1,18 @@
+$switch: (
+  min-height: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  // 其它
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
+
 @include b('switch') {
-  width: 100%;
-  height: 100%;
+  @include set-component-css-var(switch, $switch);
+
   display: flex;
   flex-direction: row;
-  justify-content: getCssVar(form-item-container, editor-align);
+  align-items: center;
+  justify-content: getCssVar(switch, flex-justify-content);
+  width: 100%;
+  height: 100%;
+  min-height: getCssVar(switch, min-height);
 }

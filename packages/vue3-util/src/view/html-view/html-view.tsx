@@ -1,11 +1,12 @@
-import { StringUtil } from '@ibiz-template/core';
 import { IAppDEHtmlView } from '@ibiz/model-core';
-import { ViewController, getErrorViewProvider } from '@ibiz-template/runtime';
+import {
+  HtmlViewController,
+  getErrorViewProvider,
+} from '@ibiz-template/runtime';
 import {
   h,
   ref,
   PropType,
-  computed,
   onBeforeMount,
   defineComponent,
   resolveComponent,
@@ -24,7 +25,10 @@ export const HtmlView = defineComponent({
   },
   setup() {
     const ns = useNamespace('view');
-    const c = useViewController((...args) => new ViewController(...args));
+    const c = useViewController(
+      (model, ...args) =>
+        new HtmlViewController(model as IAppDEHtmlView, ...args),
+    );
     // 视图部件模型在viewlayoutPanel里面。
     const controls = c.model.viewLayoutPanel?.controls || c.model.controls;
     const { viewType, sysCss, codeName } = c.model;
@@ -38,14 +42,8 @@ export const HtmlView = defineComponent({
     ];
     const isLoading = ref(false);
 
-    const url = computed(() => {
-      const { htmlUrl } = c.model as IAppDEHtmlView;
-      if (htmlUrl) return StringUtil.fill(htmlUrl, c.context, c.params);
-      return '';
-    });
-
     onBeforeMount(() => {
-      if (url.value) {
+      if (c.state.htmlUrl) {
         isLoading.value = true;
       }
     });
@@ -54,13 +52,18 @@ export const HtmlView = defineComponent({
       isLoading.value = false;
     };
 
-    return { c, ns, controls, viewClassNames, url, isLoading, onLoad };
+    return { c, ns, controls, viewClassNames, isLoading, onLoad };
   },
   render() {
-    if (this.url) {
+    if (!this.c.state.isCreated) return;
+
+    if (this.c.state.htmlUrl) {
       return (
         <div class={this.viewClassNames} v-loading={this.isLoading}>
-          <iframe src={this.url} onLoad={() => this.onLoad()}></iframe>
+          <iframe
+            src={this.c.state.htmlUrl}
+            onLoad={() => this.onLoad()}
+          ></iframe>
         </div>
       );
     }

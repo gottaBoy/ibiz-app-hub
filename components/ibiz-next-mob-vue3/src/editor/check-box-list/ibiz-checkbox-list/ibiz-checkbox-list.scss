@@ -1,15 +1,25 @@
-$checkbox-list: ('padding': getCssVar('spacing', 'tight') 0,
-  'gap':getCssVar('spacing', 'tight'),
+$checkbox-list: (
+  color: getCssVar(editor, default, text-color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  gap: getCssVar(spacing, tight),
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
 );
 
 @include b('checkbox-list') {
   @include set-component-css-var('checkbox-list', $checkbox-list);
 
   display: flex;
-  justify-content: getCssVar(form-item-container, editor-align);
+  justify-content: getCssVar(checkbox-list, flex-justify-content);
   height: 100%;
-  padding: getCssVar('checkbox-list', 'padding');
+  font-size: getCssVar(checkbox-list, font-fontSize);
+  line-height: getCssVar(checkbox-list, font-lineHeight);
+  color: getCssVar(checkbox-list, color);
 
+  --van-checkbox-size: #{getCssVar(checkbox-list, font-fontSize)};
 
   .van-checkbox-group {
     height: 100%;
@@ -24,11 +34,19 @@ $checkbox-list: ('padding': getCssVar('spacing', 'tight') 0,
   }
 
   @include e('text') {
-    font-size: getCssVar('form-item', 'font-size');
-    color: getCssVar('form-item', 'text-color');
+    font-size: getCssVar(checkbox-list, font-fontSize);
+    line-height: getCssVar(checkbox-list, font-lineHeight);
+    color: getCssVar(checkbox-list, color);
+  }
+
+  @include m(disabled) {
+    @include e('text') {
+      color: getCssVar(checkbox-list, color-disabled);
+    }
   }
 
   @include m(readonly) {
-    color: getCssVar('form-item', 'readonly-color');
+    color: getCssVar(checkbox-list, color-readonly);
+    text-align: getCssVar(checkbox-list, font-textAlign);
   }
 }

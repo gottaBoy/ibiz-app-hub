@@ -9,6 +9,7 @@ import {
   ITextItem,
   IUnkownItem,
 } from '@ibiz/model-core';
+import { isBase64, isBase64Image, isSvg } from '@ibiz-template/core';
 import './rawitem.scss';
 import { parseHtml } from '../../util';
 
@@ -64,6 +65,16 @@ export const IBizRawItem = defineComponent({
       return reg.test(imgUrl);
     };
 
+    // 判断传入是否为图标图片路径
+    const isImagePath = (content: string) => {
+      return (
+        isImg(content) ||
+        isBase64Image(content) ||
+        isBase64(content) ||
+        isSvg(content)
+      );
+    };
+
     // 判断传入是否为html字符
     const isHtmlStr = (str: string) => {
       try {
@@ -106,7 +117,7 @@ export const IBizRawItem = defineComponent({
       // 图片类型
       if (rawItemType.value === 'IMAGE') {
         if (props.content && typeof props.content === 'string') {
-          if (isImg(props.content)) {
+          if (isImagePath(props.content)) {
             rawItemContent.value = { imagePath: props.content };
           } else {
             rawItemContent.value = { cssClass: props.content };
@@ -316,6 +327,10 @@ export const IBizRawItem = defineComponent({
       return null;
     };
 
-    return <div class={this.ns.b()}>{renderContent()}</div>;
+    return (
+      <div class={this.ns.b()} title={this.rawItem?.rawItem?.tooltip}>
+        {renderContent()}
+      </div>
+    );
   },
 });

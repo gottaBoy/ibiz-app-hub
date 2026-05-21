@@ -44,7 +44,7 @@ export interface IApiPortletState extends IApiColState {
   class: IApiPortletClass;
 
   /**
-   * @description 上下文
+   * @description 应用上下文
    * @type {IApiContext}
    * @memberof IApiPortletState
    */

@@ -1,7 +1,6 @@
 $ai-chat: (
   // 标准态
   'color': #3b3b3b,
-  'icon-color': #3b3b3b,
   'border-color': #e5e5e5,
   'background-color': #fff,
   'background-color-light': #f8fafb,
@@ -10,7 +9,6 @@ $ai-chat: (
   // 悬浮态
   'hover-color': #3b3b3b,
   'hover-background-color': #e9e9e9,
-  'hover-border-color': #e5e5e5,
   // 默认圆角
   'border-radius': 5px,
   // 样式2
@@ -22,8 +20,45 @@ $ai-chat: (
   'scroll-bar-radius': 4px,
 );
 
+$dark-ai-chat: (
+  // 标准态
+  'color': getCssVar(color, text, 0),
+  'border-color': getCssVar(color, border),
+  'background-color': getCssVar(color, bg, 0),
+  'background-color-light': getCssVar(color, bg, 1),
+  // 禁用态
+  'disabled-color': getCssVar(color, disabled, text),
+  // 悬浮态
+  'hover-color': getCssVar(
+    color,
+    primary,
+    active,
+    text
+  ),
+  'hover-background-color': getCssVar(
+    color,
+    bg,
+    2
+  ),
+  // 默认圆角
+  'border-radius': 5px,
+  // 样式2
+  'color-2': getCssVar(color, white),
+  'background-color-2': getCssVar(color, primary),
+  'hover-background-color-2': getCssVar(
+    color,
+    primary,
+    active
+  ),
+  'scroll-bar-width': 8px,
+  'scroll-bar-height': 8px,
+  'scroll-bar-radius': 4px,
+);
+
 @include b(chat-container) {
   @include set-component-css-var('ai-chat', $ai-chat);
+
+  color: getCssVar('ai-chat', 'color');
 
   @include e(dialog) {
     position: absolute;
@@ -33,19 +68,22 @@ $ai-chat: (
     background-color: #{getCssVar('ai-chat', 'background-color')};
     border: 1px solid #{getCssVar('ai-chat', 'border-color')};
     border-radius: #{getCssVar('ai-chat', 'border-radius')};
-  
+
     * {
       box-sizing: border-box;
     }
-  
+
     svg {
       display: inline-block;
-      width: 1em;
-      height: 1em;
-      font-size: 1.5em; /* 设置字体大小 */
+      width: 16px;
+      height: 16px;
+      font-size: 1.5em;
+
+      /* 设置字体大小 */
       vertical-align: middle;
       fill: currentcolor;
     }
+
     @include when(hidden) {
       display: none;
     }
@@ -53,7 +91,7 @@ $ai-chat: (
 
   @include e(toolbar) {
     position: absolute;
-    bottom: 118px;
+    bottom: 162px;
     left: 50%;
     gap: 8px 4px;
     justify-content: center;
@@ -61,8 +99,9 @@ $ai-chat: (
     min-height: 48px;
     margin: 0;
     transform: translateX(-50%);
+
     @include when(has-materials) {
-      bottom: 180px;
+      bottom: 222px;
     }
   }
 
@@ -74,6 +113,12 @@ $ai-chat: (
   *::-webkit-scrollbar-thumb {
     border-radius: getCssVar('ai-chat', 'scroll-bar-radius');
   }
+}
+
+@include b(pop) {
+  @include set-component-css-var('ai-chat', $ai-chat);
+
+  color: getCssVar('ai-chat', 'color');
 }
 
 @include b(chat-container-header) {
@@ -122,7 +167,6 @@ $ai-chat: (
 
 @include b(chat-container-main__left) {
   flex-shrink: 0;
-  width: 200px;
   height: 100%;
   border-right: 1px solid #{getCssVar('ai-chat', 'border-color')};
 }
@@ -132,7 +176,6 @@ $ai-chat: (
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: calc(100% - 200px);
   height: 100%;
 
   .#{bem(chat-messages)} {
@@ -157,4 +200,44 @@ $ai-chat: (
   flex-shrink: 0;
   padding: 3px 6px;
   border-top: 1px solid #{getCssVar('ai-chat', 'border-color')};
+}
+
+@include b(chat-container-main__loading) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 60px);
+  height: 100%;
+  padding: 20px;
+}
+
+@include b(chat-container-main__spinner) {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 16px;
+  border: 4px solid #{getCssVar('ai-chat', 'background-color')};;
+  border-top: 4px solid #{getCssVar('ai-chat', 'hover-background-color')};;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+:root.dark {
+  @include b(chat-container) {
+    @include set-component-css-var('ai-chat', $dark-ai-chat);
+  }
+
+  @include b(pop) {
+    @include set-component-css-var('ai-chat', $dark-ai-chat);
+  }
 }

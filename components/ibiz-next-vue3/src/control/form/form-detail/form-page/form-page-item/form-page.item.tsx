@@ -35,6 +35,7 @@ export const IBizFormPageItem = defineComponent({
           ...this.controller.containerClass,
         ]}
         layout={this.modelData.layout}
+        v-loading={this.controller.state.loading}
       >
         {defaultSlots.map(slot => {
           const props = slot.props as IData;

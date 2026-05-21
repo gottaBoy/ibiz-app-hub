@@ -2,7 +2,7 @@ import { IDashboard, IDBPortletPart } from '@ibiz/model-core';
 import { IDashboardEvent } from '../../event';
 import { IDashboardState } from '../../state';
 import { IControlController } from './i-control.controller';
-import { ICustomDesign } from '../../common';
+import { ICustomDesign, IMobCustomDesign } from '../../common';
 import { IApiDashboardController } from '../../../api';
 import { IViewController } from '../view';
 import { IPortletController } from './portlet';
@@ -48,6 +48,20 @@ export interface IDashboardController
    * @return {*}  {(ICustomDesign | undefined)}
    */
   getCustomDashboard(): ICustomDesign | undefined;
+
+  /**
+   * @description 设置移动端自定义数据看板部件控制器
+   * @param {IMobCustomDesign} mobCustomDashboard
+   * @memberof IDashboardController
+   */
+  setMobCustomDashboard(mobCustomDashboard: IMobCustomDesign): void;
+
+  /**
+   * @description 获取移动端自定义数据看板部件控制器
+   * @returns {*}  {(IMobCustomDesign | undefined)}
+   * @memberof IDashboardController
+   */
+  getMobCustomDashboard(): IMobCustomDesign | undefined;
 
   /**
    * @description 加载动态

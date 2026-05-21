@@ -1,44 +1,50 @@
 /* stylelint-disable custom-property-pattern */
-@include b('panel-button'){
-    @include when('custon-btn'){
-      padding: 0;
-    }
+@include b('panel-button') {
+  @include when('custon-btn') {
+    padding: 0;
   }
-  @include b('panel-button-custon-btn'){
-    position:relative;
+  @include e('raw-item') {
+    position: relative;
+    color: var(#{getCssVarName(panel-button-svg-color)}, getCssVar(screen-dashboard, primary-color));
+  }
+}
+@include b('panel-button-custon-btn') {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: getCssVar(spacing-tight);
+  color: var(#{getCssVarName(panel-button-svg-color)}, getCssVar(screen-dashboard, text-color));
+  text-align: center;
+  cursor: pointer;
+
+  > svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+
+  .dv-button-svg {
+    display: block;
+    flex: 1 1 0%;
     width: 100%;
     height: 100%;
-    padding: getCssVar(spacing-tight);
-    color: var(--svgColor,getCssVar(screen-dashboard,text-color));
-    text-align: center;
-    cursor: pointer;
-
-    >svg{
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
-
-    .dv-button-svg {
-      display: block;
-      flex: 1 1 0%;
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(var(--svgBorderColor, getCssVar(screen-dashboard,primary-color)) 0 0 2px);
-    }
-
-    .dv-button-svg-bg {
-      opacity: var(--svgBgOpacity);
-      fill: var(--svgBgColor,getCssVar(screen-dashboard,primary-color));
-      stroke: transparent;
-      stroke-width: 0;
-    }
-
-    .dv-button-svg-line {
-      fill: transparent;
-      stroke: var(--svgColor,getCssVar(screen-dashboard,primary-color));
-      stroke-width: 2;
-      vector-effect: non-scaling-stroke;
-    }
+    filter: drop-shadow(
+      var(#{getCssVarName(panel-button-svg-border-color)}, getCssVar(screen-dashboard, primary-color)) 0 0 2px
+    );
   }
+
+  .dv-button-svg-bg {
+    opacity: getCssVar(panel-button-svg-bg-opacity);
+    fill: var(#{getCssVarName(panel-button-svg-bg-color)}, getCssVar(screen-dashboard, primary-color));
+    stroke: transparent;
+    stroke-width: 0;
+  }
+
+  .dv-button-svg-line {
+    fill: transparent;
+    stroke: var(#{getCssVarName(panel-button-svg-color)}, getCssVar(screen-dashboard, primary-color));
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+}

@@ -11,3 +11,4 @@ export * from './i-global-tree-config';
 export * from './i-global-common-config';
 export * from './i-global-flow-drtab-config';
 export * from './i-global-mob-config';
+export * from './i-global-img-cpmpress-config';

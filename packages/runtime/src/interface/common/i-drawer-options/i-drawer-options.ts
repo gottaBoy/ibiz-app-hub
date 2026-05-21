@@ -25,4 +25,10 @@ export interface IDrawerOptions {
    * @type {('left' | 'right' | 'top' | 'bottom')}
    */
   placement?: 'left' | 'right' | 'top' | 'bottom';
+  /**
+   * @description 抽屉的透传属性配置
+   * @type {IParams}
+   * @memberof IDrawerOptions
+   */
+  attrs?: IParams;
 }

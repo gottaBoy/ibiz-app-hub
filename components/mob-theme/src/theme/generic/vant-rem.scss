@@ -1,0 +1,505 @@
+:root {
+  --van-padding-base: 0.25rem;
+  --van-padding-xs: 0.5rem;
+  --van-padding-sm: 0.75rem;
+  --van-padding-md: 1rem;
+  --van-padding-lg: 1.5rem;
+  --van-padding-xl: 2rem;
+  --van-font-size-xs: 0.625rem;
+  --van-font-size-sm: 0.75rem;
+  --van-font-size-md: 0.875rem;
+  --van-font-size-lg: 1rem;
+  --van-line-height-xs: 0.875rem;
+  --van-line-height-sm: 1.125rem;
+  --van-line-height-md: 1.25rem;
+  --van-line-height-lg: 1.375rem;
+  --van-radius-sm: 0.125rem;
+  --van-radius-md: 0.25rem;
+  --van-radius-lg: 0.5rem;
+  --van-radius-max: 62.4375rem;
+  --van-action-bar-height: 3.125rem;
+  --van-badge-size: 1rem;
+  --van-badge-padding: 0 0.1875rem;
+  --van-badge-dot-size: 0.5rem;
+  --van-skeleton-image-size: 6rem;
+  --van-skeleton-image-radius: 1.5rem;
+  --van-tabbar-height: 3.125rem;
+  --van-tabbar-item-icon-size: 1.375rem;
+  --van-rate-icon-size: 1.25rem;
+  --van-notice-bar-height: 2.5rem;
+  --van-notice-bar-line-height: 1.5rem;
+  --van-notice-bar-icon-size: 1rem;
+  --van-notice-bar-icon-min-width: 1.5rem;
+  --van-nav-bar-height: 2.875rem;
+  --van-nav-bar-arrow-size: 1rem;
+  --van-floating-bubble-size: 3rem;
+  --van-floating-bubble-initial-gap: 1.5rem;
+  --van-floating-bubble-icon-size: 1.75rem;
+  --van-image-loading-icon-size: 2rem;
+  --van-image-error-icon-size: 2rem;
+  --van-back-top-size: 2.5rem;
+  --van-back-top-right: 1.875rem;
+  --van-back-top-bottom: 2.5rem;
+  --van-back-top-icon-size: 1.25rem;
+  --van-stepper-input-width: 2rem;
+  --van-stepper-input-height: 1.75rem;
+  --van-tag-radius: 0.125rem;
+  --van-tag-line-height: 1rem;
+  --van-tag-medium-padding: 0.125rem 0.375rem;
+  --van-card-thumb-size: 5.5rem;
+  --van-card-title-line-height: 1rem;
+  --van-cell-line-height: 1.5rem;
+  --van-cell-vertical-padding: 0.625rem;
+  --van-cell-icon-size: 1rem;
+  --van-contact-card-add-icon-size: 2.5rem;
+  --van-field-icon-size: 1.125rem;
+  --van-field-clear-icon-size: 1.125rem;
+  --van-field-error-message-font-size: 0.75rem;
+  --van-field-text-area-min-height: 3.75rem;
+  --van-field-word-limit-line-height: 1rem;
+  --van-search-padding: 0.625rem var(--van-padding-sm);
+  --van-search-input-height: 2.125rem;
+  --van-search-label-padding: 0 0.3125rem;
+  --van-action-bar-icon-width: 3rem;
+  --van-action-bar-icon-size: 1.125rem;
+  --van-loading-spinner-size: 1.875rem;
+  --van-pull-refresh-head-height: 3.125rem;
+  --van-pull-refresh-loading-icon-size: 1rem;
+  --van-number-keyboard-key-height: 3rem;
+  --van-number-keyboard-key-font-size: 1.75rem;
+  --van-number-keyboard-title-height: 2.125rem;
+  --van-list-text-line-height: 3.125rem;
+  --van-list-loading-icon-size: 1rem;
+  --van-switch-size: 1.625rem;
+  --van-switch-width: calc(1.8em + 0.25rem);
+  --van-switch-height: calc(1em + 0.25rem);
+  --van-switch-node-shadow: 0 0.1875rem 0.0625rem 0 rgb(0 0 0 / 5%);
+  --van-button-mini-height: 1.5rem;
+  --van-button-small-height: 2rem;
+  --van-button-normal-padding: 0 0.9375rem;
+  --van-button-large-height: 3.125rem;
+  --van-button-default-height: 2.75rem;
+  --van-button-loading-icon-size: 1.25rem;
+  --van-submit-bar-height: 3.125rem;
+  --van-submit-bar-button-width: 6.875rem;
+  --van-submit-bar-price-integer-font-size: 1.25rem;
+  --van-submit-bar-tip-icon-size: 0.75rem;
+  --van-submit-bar-button-height: 2.5rem;
+  --van-signature-content-height: 12.5rem;
+  --van-action-bar-button-height: 2.5rem;
+  --van-popup-round-radius: 1rem;
+  --van-popup-close-icon-size: 1.375rem;
+  --van-popup-close-icon-margin: 1rem;
+  --van-share-sheet-description-line-height: 1rem;
+  --van-share-sheet-icon-size: 3rem;
+  --van-share-sheet-cancel-button-height: 3rem;
+  --van-popover-arrow-size: 0.375rem;
+  --van-popover-action-width: 8rem;
+  --van-popover-action-height: 2.75rem;
+  --van-popover-action-icon-size: 1.25rem;
+  --van-popover-horizontal-action-height: 2.125rem;
+  --van-popover-horizontal-action-icon-size: 1rem;
+  --van-dialog-width: 20rem;
+  --van-dialog-radius: 1rem;
+  --van-dialog-header-line-height: 1.5rem;
+  --van-dialog-header-padding-top: 1.625rem;
+  --van-dialog-button-height: 3rem;
+  --van-dialog-round-button-height: 2.25rem;
+  --van-toast-icon-size: 2.25rem;
+  --van-toast-text-min-width: 6rem;
+  --van-toast-default-width: 5.5rem;
+  --van-toast-default-min-height: 5.5rem;
+  --van-action-sheet-header-height: 3rem;
+  --van-action-sheet-close-icon-size: 1.375rem;
+  --van-action-sheet-loading-icon-size: 1.375rem;
+  --van-swipe-indicator-size: 0.375rem;
+  --van-image-preview-close-icon-size: 1.375rem;
+  --van-uploader-size: 5rem;
+  --van-uploader-icon-size: 1.5rem;
+  --van-uploader-delete-icon-size: 0.875rem;
+  --van-uploader-file-icon-size: 1.25rem;
+  --van-uploader-mask-icon-size: 1.375rem;
+  --van-uploader-loading-icon-size: 1.375rem;
+  --van-tabs-line-height: 2.75rem;
+  --van-tabs-card-height: 1.875rem;
+  --van-tabs-bottom-bar-width: 2.5rem;
+  --van-tabs-bottom-bar-height: 0.1875rem;
+  --van-cascader-header-height: 3rem;
+  --van-cascader-title-line-height: 1.25rem;
+  --van-cascader-close-icon-size: 1.375rem;
+  --van-cascader-selected-icon-size: 1.125rem;
+  --van-cascader-tabs-height: 3rem;
+  --van-cascader-options-height: 24rem;
+  --van-picker-toolbar-height: 2.75rem;
+  --van-calendar-header-shadow: 0 0.125rem 0.625rem rgb(125 126 128 / 16%);
+  --van-calendar-header-title-height: 2.75rem;
+  --van-calendar-weekdays-height: 1.875rem;
+  --van-calendar-month-mark-font-size: 10rem;
+  --van-calendar-day-height: 4rem;
+  --van-calendar-day-margin-bottom: 0.25rem;
+  --van-calendar-selected-day-size: 3.375rem;
+  --van-calendar-confirm-button-height: 2.25rem;
+  --van-calendar-confirm-button-margin: 0.4375rem 0;
+  --van-checkbox-size: 1.25rem;
+  --van-coupon-content-height: 5.25rem;
+  --van-coupon-content-padding: 0.875rem 0;
+  --van-coupon-shadow: 0 0 0.25rem rgb(0 0 0 / 10%);
+  --van-coupon-head-width: 6rem;
+  --van-coupon-amount-font-size: 1.875rem;
+  --van-radio-size: 1.25rem;
+  --van-radio-dot-size: 0.5rem;
+  --van-contact-list-padding: var(--van-padding-sm) var(--van-padding-sm) 5rem;
+  --van-contact-list-edit-icon-size: 1rem;
+  --van-address-list-padding: var(--van-padding-sm) var(--van-padding-sm) 5rem;
+  --van-address-list-item-font-size: 0.8125rem;
+  --van-address-list-edit-icon-size: 1.25rem;
+  --van-barrage-font-size: 1rem;
+  --van-barrage-space: 0.625rem;
+  --van-cell-group-title-line-height: 1rem;
+  --van-circle-size: 6.25rem;
+  --van-empty-image-size: 10rem;
+  --van-empty-description-padding: 0 3.75rem;
+  --van-empty-bottom-margin-top: 1.5rem;
+  --van-coupon-list-field-padding: 0.3125rem 0 0.3125rem var(--van-padding-md);
+  --van-coupon-list-exchange-button-height: 2rem;
+  --van-coupon-list-close-button-height: 2.5rem;
+  --van-divider-line-height: 1.5rem;
+  --van-dropdown-menu-height: 3rem;
+  --van-dropdown-menu-shadow: 0 0.125rem 0.75rem rgb(100 101 102 / 12%);
+  --van-dropdown-menu-title-font-size: 0.9375rem;
+  --van-floating-panel-border-radius: 1rem;
+  --van-floating-panel-header-height: 1.875rem;
+  --van-floating-panel-bar-width: 1.25rem;
+  --van-floating-panel-bar-height: 0.1875rem;
+  --van-grid-item-icon-size: 1.75rem;
+  --van-index-anchor-line-height: 2rem;
+  --van-pagination-height: 2.5rem;
+  --van-pagination-item-width: 2.25rem;
+  --van-password-input-height: 3.125rem;
+  --van-password-input-font-size: 1.25rem;
+  --van-password-input-radius: 0.375rem;
+  --van-password-input-dot-size: 0.625rem;
+  --van-progress-height: 0.25rem;
+  --van-progress-pivot-padding: 0 0.3125rem;
+  --van-rolling-text-item-width: 0.9375rem;
+  --van-rolling-text-item-border-radius: 0rem;
+  --van-sidebar-width: 5rem;
+  --van-sidebar-padding: 1.25rem var(--van-padding-sm);
+  --van-sidebar-selected-border-width: 0.25rem;
+  --van-sidebar-selected-border-height: 1rem;
+  --van-tree-select-nav-item-padding: 0.875rem var(--van-padding-sm);
+  --van-tree-select-item-height: 3rem;
+  --van-tree-select-item-selected-size: 1rem;
+  --van-skeleton-avatar-size: 2rem;
+  --van-skeleton-paragraph-height: 1rem;
+  --van-slider-bar-height: 0.125rem;
+  --van-slider-button-width: 1.5rem;
+  --van-slider-button-height: 1.5rem;
+  --van-slider-button-shadow: 0 0.0625rem 0.125rem rgb(0 0 0 / 50%);
+  --van-step-icon-size: 0.75rem;
+  --van-step-circle-size: 0.3125rem;
+}
+
+.van-back-top {
+  box-shadow: 0 0.125rem 0.5rem rgb(0 0 0 / 12%);
+}
+
+.van-tag--mark::after {
+  width: 0.125rem;
+}
+
+.van-tag__close {
+  margin-left: 0.125rem;
+}
+
+.van-card__title {
+  max-height: 2rem;
+}
+
+.van-card__origin-price {
+  margin-left: 0.3125rem;
+}
+
+.van-card__tag {
+  top: 0.125rem;
+}
+
+.van-card__footer .van-button {
+  margin-left: 0.3125rem;
+}
+.van-contact-card__title {
+  margin-left: 0.3125rem;
+}
+.van-contact-card::before {
+  height: 0.125rem;
+  background-size: 5rem;
+}
+
+.van-field__label--required::before {
+  margin-right: 0.125rem;
+}
+.van-loading__line::before {
+  width: 0.125rem;
+}
+.van-number-keyboard {
+  padding-bottom: 1.375rem;
+}
+
+.van-number-keyboard--with-title {
+  border-radius: 1.25rem 1.25rem 0 0;
+}
+
+.van-number-keyboard__header {
+  padding-top: 0.375rem;
+}
+
+.van-number-keyboard__body {
+  padding: 0.375rem 0 0 0.375rem;
+}
+
+.van-key--large {
+  inset: 0 0.375rem 0.375rem 0;
+}
+
+.van-key__wrapper {
+  padding: 0 0.375rem 0.375rem 0;
+}
+
+.van-key__delete-icon {
+  width: 2rem;
+  height: 1.375rem;
+}
+
+.van-key__collapse-icon {
+  width: 1.875rem;
+  height: 1.5rem;
+}
+
+.van-switch__node {
+  top: 0.125rem;
+  left: 0.125rem;
+}
+
+.van-switch--on .van-switch__node {
+  transform: translate(calc(var(--van-switch-width) - var(--van-switch-node-size) - 0.25rem));
+}
+.van-contact-edit__switch-cell {
+  padding-top: 0.5625rem;
+  padding-bottom: 0.5625rem;
+  margin-top: 0.625rem;
+}
+.van-action-bar-button--first {
+  margin-left: 0.3125rem;
+}
+
+.van-action-bar-button--last {
+  margin-right: 0.3125rem;
+}
+@media (width <= 321px) {
+  .van-action-bar-button {
+    font-size: 0.8125rem;
+  }
+}
+
+
+.van-share-sheet__icon--link,
+.van-share-sheet__icon--poster,
+.van-share-sheet__icon--qrcode {
+  font-size: 1.625rem;
+}
+
+.van-share-sheet__icon--weapp-qrcode {
+  font-size: 1.75rem;
+}
+
+.van-share-sheet__icon--qq,
+.van-share-sheet__icon--weibo,
+.van-share-sheet__icon--wechat,
+.van-share-sheet__icon--wechat-moments {
+  font-size: 1.875rem;
+}
+.van-popover--light .van-popover__content {
+  box-shadow: 0 0.125rem 0.75rem rgb(50 50 51 / 12%);
+}
+.van-dialog__content--isolated {
+  min-height: 6.5rem;
+}
+
+.van-dialog__message {
+  padding: 1.625rem var(--van-dialog-message-padding);
+}
+
+.van-action-sheet__item,
+.van-action-sheet__cancel {
+  padding: 0.875rem var(--van-padding-md);
+}
+
+.van-action-sheet__description {
+  padding: 1.25rem var(--van-padding-md);
+}
+
+.van-image-preview__image .van-image__error-icon,
+.van-image-preview__image-wrap .van-image__error-icon {
+  font-size: 2.25rem;
+}
+.van-uploader__preview-delete--shadow {
+  border-radius: 0 0 0 0.75rem;
+}
+
+.van-uploader__mask-message {
+  margin-top: 0.375rem;
+}
+.van-tabs__nav--line {
+  padding-bottom: 0.9375rem;
+}
+
+.van-tabs__line {
+  bottom: 0.9375rem;
+}
+.van-cascader__option {
+  padding: 0.625rem var(--van-padding-md);
+}
+
+.van-cascader__options {
+  padding-top: 0.375rem;
+}
+.van-picker-group__tab-title {
+  margin-right: 1rem;
+}
+.van-calendar__popup .van-popup__close-icon {
+  top: 0.6875rem;
+}
+
+@media (width <= 350px) {
+  .van-calendar__top-info,
+  .van-calendar__bottom-info {
+    font-size: 0.5625rem;
+  }
+}
+
+.van-calendar__top-info {
+  top: 0.375rem;
+}
+
+.van-calendar__bottom-info {
+  bottom: 0.375rem;
+}
+.van-coupon__amount {
+  margin-bottom: 0.375rem;
+}
+
+.van-coupon__amount span:not(:empty) {
+  margin-left: 0.125rem;
+}
+
+.van-coupon__condition {
+  line-height: 1rem;
+}
+
+.van-coupon__name {
+  margin-bottom: 0.625rem;
+}
+
+.van-coupon--disabled .van-coupon-item__content {
+  height: calc(var(--van-coupon-content-height) - 0.625rem);
+}
+.van-contact-list__add {
+  height: 2.5rem;
+  margin: 0.3125rem 0;
+}
+.van-address-list__add {
+  height: 2.5rem;
+  margin: 0.3125rem 0;
+}
+
+.van-address-item__title {
+  padding-right: 2.75rem;
+}
+
+.van-coupon-list__field .van-field__body {
+  height: 2.125rem;
+  line-height: 2.125rem;
+}
+
+.van-coupon-list__exchange {
+  line-height: calc(var(--van-coupon-list-exchange-button-height) - 0.125rem);
+}
+
+.van-coupon-list .van-tabs__wrap {
+  box-shadow: 0 0.375rem 0.75rem -0.75rem var(--van-gray-6);
+}
+
+.van-coupon-list__list--with-bottom {
+  padding-bottom: 3.125rem;
+}
+
+.van-coupon-list__bottom {
+  padding: 0.3125rem var(--van-padding-md);
+}
+
+.van-dropdown-menu__title::after {
+  right: -0.25rem;
+  margin-top: calc(-0.275rem / 2 - 0.1375rem);
+  border: 0.275rem solid;
+}
+
+// 展开
+.van-dropdown-menu__title--active::after {
+  margin-top: calc(-0.275rem / 2);
+}
+
+.van-tree-select__item {
+  padding: 0 2rem 0 var(--van-padding-md);
+}
+
+.van-skeleton-title + .van-skeleton-paragraph {
+  margin-top: 1.25rem;
+}
+.van-steps--horizontal {
+  padding: 0.625rem 0.625rem 0;
+}
+
+.van-steps--horizontal .van-steps__items {
+  padding-bottom: 1.375rem;
+  margin: 0 0 0.625rem;
+}
+
+.van-step--horizontal:last-child:not(:first-child) .van-step__circle-container {
+  right: -0.5625rem;
+}
+
+.van-step--horizontal .van-step__circle-container {
+  top: 1.875rem;
+}
+
+.van-step--horizontal .van-step__title {
+  margin-left: 0.1875rem;
+}
+
+.van-step--horizontal .van-step__line {
+  top: 1.875rem;
+}
+
+.van-step--vertical {
+  padding: 0.625rem 0.625rem 0.625rem 0;
+}
+
+
+.van-step--vertical .van-step__circle-container {
+  top: 1.1875rem;
+  left: -0.9375rem;
+}
+
+.van-step--vertical .van-step__line {
+  top: 1rem;
+  left: -0.9375rem;
+}
+
+.van-stepper__input {
+  margin: 0 0.125rem;
+}
+
+.van-tabbar-item__icon img {
+  height: 1.25rem;
+}
+

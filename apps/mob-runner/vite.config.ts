@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-shadow */
 import { defineConfig } from 'vite';
 import path from 'path';
 import vue from '@vitejs/plugin-vue';
@@ -41,6 +39,7 @@ export default defineConfig({
       '@ibiz-template/vue3-util',
       '@ibiz-template/devtool',
       '@ibiz/model-core',
+      '@ibiz-template-plugin/ibiz-mob-ai-chat',
       'async-validator',
       'dayjs',
       'echarts',
@@ -88,6 +87,7 @@ export default defineConfig({
         '@ibiz-template/model-helper',
         '@ibiz-template/mob-vue3-components',
         '@ibiz-template/devtool',
+        '@ibiz-template-plugin/ibiz-mob-ai-chat',
         'vuedraggable',
       ],
     },

@@ -9,6 +9,13 @@ import { IDEFormTabPage } from './ideform-tab-page';
  */
 export interface IDEFormTabPanel extends IDEFormDetail {
   /**
+   * 实体数据关系标记
+   * @type {string}
+   * 来源  getDataRelationTag
+   */
+  dataRelationTag?: string;
+
+  /**
    * 分页集合
    *
    * @type {IDEFormTabPage[]}

@@ -30,14 +30,14 @@ export const MenuPortlet = defineComponent({
       this.ns.b(),
       this.ns.m(this.modelData.codeName),
     ];
-    const { context, params } = this.controller;
+    const { context } = this.controller;
     return (
       <iBizPortletLayout controller={this.controller} class={classArr}>
         {this.menu && (
           <iBizControlShell
             modelData={this.menu}
             context={context}
-            params={params}
+            params={{}}
           ></iBizControlShell>
         )}
       </iBizPortletLayout>

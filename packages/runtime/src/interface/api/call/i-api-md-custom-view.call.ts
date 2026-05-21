@@ -19,7 +19,7 @@ export interface IApiMDCustomViewCall extends IApiViewCall {
     args: undefined;
   };
   /**
-   * @description 打开编辑数据视图
+   * @description 打开编辑数据视图，data: 实体数据，event: 鼠标事件，context: 上下文参数，params: 视图参数
    * @type {{
    *     args: {
    *       data: IApiData[];
@@ -39,7 +39,7 @@ export interface IApiMDCustomViewCall extends IApiViewCall {
     };
   };
   /**
-   * @description 查看
+   * @description 查看，data: 实体数据，event: 鼠标事件，context: 上下文参数，params: 视图参数
    * @type {{
    *     args: {
    *       data: IApiData[];
@@ -59,7 +59,7 @@ export interface IApiMDCustomViewCall extends IApiViewCall {
     };
   };
   /**
-   * @description 打开新建数据视图
+   * @description 打开新建数据视图，data: 实体数据，event: 鼠标事件，copyMode: 是否是拷贝模式
    * @type {{
    *     args: {
    *       data: IApiData[];

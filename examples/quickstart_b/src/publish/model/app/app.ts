@@ -790,6 +790,7 @@ export default {
   pfstyle: '0.7.41-alpha.3',
   pftype: 'VUE_R7',
   pkgcodeName: 'web',
+  devSlnSysId: '0b0f46ae-af2d-2ad6-00e3-7704d4598b22',
   serviceCodeName: 'web',
   sysCodeName: 'quickstart_b',
   title: 'quickstart_b',

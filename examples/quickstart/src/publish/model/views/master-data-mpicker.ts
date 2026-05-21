@@ -138,8 +138,7 @@ export default {
               id: 'value',
             },
           ],
-          scriptCode:
-            'if (data.formitem != null) {\r\n    return {value:data.formitem};\r\n}',
+          scriptCode: 'return {value:data.formitem};',
           customCode: true,
           showBusyIndicator: true,
           name: '填充显示选取值',
@@ -152,8 +151,7 @@ export default {
               id: 'value1',
             },
           ],
-          scriptCode:
-            'if (data.formitem1 != null) {\r\n    return {value1:data.formitem1};\r\n}',
+          scriptCode: 'return {value1:data.formitem1};',
           customCode: true,
           showBusyIndicator: true,
           name: '填充显示选取值1',

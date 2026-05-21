@@ -1,0 +1,233 @@
+$map-picker: (
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-placeholder-color: getCssVar(editor, default, placeholder-color),
+  color-disabled-color: getCssVar(editor, disabled, text-color),
+  color-readonly-color: getCssVar(editor, readonly, text-color),
+  color-clear-btn-color: var(--van-field-clear-icon-color),
+  color-marker-text-color: getCssVar(color, white),
+  color-marker-text-bg-color: #3d93fd,
+
+  // 字体大小
+  font-map-fonSize: getCssVar(editor, default, font-size),
+  font-clear-btn-fontSize: var(--van-field-clear-icon-size),
+  font-marker-text-fontSize: rem(12px),
+    
+  // 行高
+  font-map-lineHeight: getCssVar(editor, default, line-height),
+
+  // 高度
+  height-search-result-container-max-height: 30vh,
+  height-footer-height: rem(70px),
+
+  // 圆角
+  radius-marker-text-border-radius: getCssVar(border-radius, small),
+
+  // 间隔
+  spacing-clear-btn-padding: 0 0 0 getCssVar('spacing', 'loose'),
+  spacing-search-padding: getCssVar('spacing', 'tight'),
+  spacing-search-input-padding-left: rem(36px),
+  spacing-search-input-padding-right: rem(24px),
+  spacing-search-result-container-bottom: rem(24px),
+  spacing-search-result-container-padding: 0 getCssVar('spacing', 'tight'),
+  spacing-footer-gap: getCssVar('spacing', 'base'),
+  spacing-footer-padding: 0 getCssVar('spacing', 'tight'),
+  spacing-marker-text-padding: rem(4px) rem(10px),
+  spacing-van-icon-clear-left: getCssVar('spacing', 'super-tight'),
+  spacing-map-marker-text-top: rem(-24px),
+
+  spacing-map-marker-text-transform: translateX(calc(-50% - #{rem(12.5px)} )),
+
+  // 文本对齐
+  text-align: getCssVar(editor, default, text-align),
+);
+
+@include b(map-picker) {
+  @include set-component-css-var(map-picker, $map-picker);
+
+  font-size: getCssVar(map-picker, font-map-fonSize);
+  line-height: getCssVar(map-picker, font-map-lineHeight);
+  color: getCssVar(map-picker, color);
+  text-align: getCssVar(map-picker, text-align);
+
+  --van-field-input-text-color: #{getCssVar(map-picker, color)};
+  --van-cell-text-color: #{getCssVar(map-picker, color)};
+  --van-cell-value-color: #{getCssVar(map-picker, color)};
+  --van-cell-line-height: #{getCssVar(map-picker, font-map-lineHeight)};
+  --van-cell-font-size: #{getCssVar(map-picker, font-map-fonSize)};
+  --van-cell-value-font-size: #{getCssVar(map-picker, font-map-fonSize)};
+  --van-field-input-disabled-text-color: #{getCssVar(map-picker, color-disabled-color)};
+
+  input::placeholder {
+    color: getCssVar(map-picker, color-placeholder-color);
+    -webkit-text-fill-color: getCssVar(map-picker, color-placeholder-color);
+  }
+  
+  @include m(readonly) {
+    height: auto;
+    overflow: auto;
+    line-height: getCssVar(map-picker, font-map-lineHeight);
+    color: getCssVar(map-picker, color-readonly-color);
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+}
+
+@include b(map-picker-popup) {
+  @include set-component-css-var(map-picker, $map-picker);
+
+  width: 100%;
+  height: 100%;
+
+  &.van-popup--bottom.van-popup--round {
+    border-radius: 0;
+  }
+}
+
+@include b(map-picker-input) {
+  .van-field__button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+
+    .van-button {
+      position: relative;
+      height: auto;
+      padding: getCssVar(map-picker, spacing-clear-btn-padding);
+      background-color: transparent;
+      border: none;
+
+      &::before {
+        display: none;
+      }
+    }
+
+    .van-icon-clear {
+      position: absolute;
+      left: getCssVar(map-picker, spacing-van-icon-clear-left);
+      font-size: getCssVar(map-picker, font-clear-btn-fontSize);
+      color: getCssVar(map-picker, color-clear-btn-color);
+    }
+  }
+}
+
+@include b(map-picker-popup-wrapper) {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+@include b(map-picker-popup-wrapper-content) {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+@include b(map-picker-popup-content-search) {
+  position: relative;
+  z-index: 999;
+  width: 100%;
+
+  .van-search {
+    padding: getCssVar(map-picker, spacing-search-padding);
+  }
+
+  .van-search__content {
+    position: relative;
+  }
+
+  .van-cell,
+  .van-cell__value {
+    position: static;
+  }
+
+  .van-cell__value,
+  .van-field__control,
+  .van-field__body {
+    height: 100%;
+  }
+
+  input {
+    position: absolute;
+    left: 0;
+    padding-right: getCssVar(map-picker, spacing-search-input-padding-right);
+    padding-left: getCssVar(map-picker, spacing-search-input-padding-left);
+    margin: 0;
+  }
+
+  .van-field__clear {
+    position: absolute;
+    right: getCssVar('spacing', 'extra-tight');
+  }
+}
+
+@include b(map-picker-popup-map) {
+  width: 100%;
+  height: 100%;
+}
+
+@include b(map-picker-popup-map-content) {
+  width: 100%;
+  height: 100%;
+}
+
+@include b(map-picker-popup-map-container) {
+  width: 100%;
+  height: 100%;
+}
+
+@include b(map-picker-popup-search-result-container) {
+  position: absolute;
+  bottom: getCssVar(map-picker, spacing-search-result-container-bottom);
+  left: 0;
+  display: block !important;
+  width: 100%;
+  padding: getCssVar(map-picker, spacing-search-result-container-padding);
+  overflow: hidden;
+
+  .amap_lib_placeSearch {
+    display: flex;
+    flex-direction: column;
+    border: none;
+  }
+
+  .amap_lib_placeSearch_list {
+    max-height: getCssVar(map-picker, height-search-result-container-max-height);
+    overflow-y: auto;
+  }
+
+  .amap_lib_placeSearch_page {
+    display: flex;
+    overflow-x: auto;
+  }
+}
+
+@include b(map-picker-popup-wrapper-footer) {
+  display: flex;
+  gap: getCssVar(map-picker, spacing-footer-gap);
+  align-items: center;
+  justify-content: space-between;
+  height: getCssVar(map-picker, height-footer-height);
+  padding: getCssVar(map-picker, spacing-footer-padding);
+
+  .van-button {
+    width: 50%;
+  }
+}
+
+@include b(map-picker-popup-map-marker-text) {
+  position: absolute;
+  top: getCssVar(map-picker, spacing-map-marker-text-top);
+  padding: getCssVar(map-picker, spacing-marker-text-padding);
+  font-size: getCssVar(map-picker, font-marker-text-fontSize);
+  color: getCssVar(map-picker, color-marker-text-color);
+  white-space: nowrap;
+  background-color: getCssVar(map-picker, color-marker-text-bg-color);
+  border-radius: getCssVar(map-picker, radius-marker-text-border-radius);
+  transform: getCssVar(map-picker, spacing-map-marker-text-transform);
+}

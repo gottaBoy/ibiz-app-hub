@@ -9,10 +9,11 @@ import { ISchemaField } from '../interface';
  */
 export async function calcUIActionTag(
   item: IData,
+  appId: string,
 ): Promise<string | undefined> {
   if (item.parampsdeuiactiontag) {
     const [actionId, deId] = item.parampsdeuiactiontag.split('@');
-    const entityModel = await ibiz.hub.getAppDataEntity(deId, ibiz.env.appId);
+    const entityModel = await ibiz.hub.getAppDataEntity(deId, appId);
     return `${actionId}@${entityModel.codeName}`;
   }
 }
@@ -29,6 +30,7 @@ export async function calcUIActionTag(
 export async function getSchemaField(
   item: IData,
   schemaFields: ISchemaField[],
+  appId: string,
 ): Promise<ISchemaField | undefined> {
   // 存在属性标识才计算，否则直接返回
   if (item.psdefid) {
@@ -38,10 +40,7 @@ export async function getSchemaField(
     let field = schemaFields.find(v => v.appDEFieldId === appDEFieldId);
     if (!field) {
       // 不存在则在实体关系中查找
-      const entityModel = await ibiz.hub.getAppDataEntity(
-        appDeId,
-        ibiz.env.appId,
-      );
+      const entityModel = await ibiz.hub.getAppDataEntity(appDeId, appId);
       const deRss = entityModel?.minorAppDERSs?.find(
         rs => rs.parentAppDEFieldId === appDEFieldId,
       );

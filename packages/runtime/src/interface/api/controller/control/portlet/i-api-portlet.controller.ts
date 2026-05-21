@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IApiData, IApiParams } from '@ibiz-template/core';
 import { IDBPortletPart, IUIActionGroupDetail } from '@ibiz/model-core';
 import { IApiPortletState } from '../../../state';
 import { IApiDashboardController } from '../i-api-dashboard.controller';
 import { IApiPortletContainerController } from './i-api-portlet-container.controller';
+import { IApiController } from '../../common';
 
 /**
  * @description 门户控制器基类接口
@@ -46,11 +48,11 @@ export interface IApiPortletController {
   params: IApiParams;
 
   /**
-   * @description  门户配置
-   * @type {IApiData}
+   * @description 门户配置，srftitle: 门户标题
+   * @type {{ srftitle?: string; [key: string]: any }}
    * @memberof IApiPortletController
    */
-  config: IApiData;
+  config: { srftitle?: string; [key: string]: any };
 
   /**
    * @description 容器类名集合
@@ -61,10 +63,10 @@ export interface IApiPortletController {
 
   /**
    * @description 内容控制器
-   * @type {(IApiData | undefined)}
+   * @type {(IApiController | undefined)}
    * @memberof IApiPortletController
    */
-  readonly contentController: IApiData | undefined;
+  readonly contentController: IApiController | undefined;
 
   /**
    * @description 内容元素
@@ -75,8 +77,8 @@ export interface IApiPortletController {
 
   /**
    * @description 触发界面行为
-   * @param {IUIActionGroupDetail} detail 项成员
-   * @param {MouseEvent} event 事件对象
+   * @param {IUIActionGroupDetail} detail 界面行为组成员模型
+   * @param {MouseEvent} event 鼠标事件
    * @param {IApiData[]} data 业务数据
    * @returns {*}  {Promise<void>}
    * @memberof IApiPortletController

@@ -21,7 +21,7 @@ export default {
         panelItems: [
           {
             rawItem: {
-              caption: '子应用C分页3',
+              caption: '子应用C分页4',
               halign: 'LEFT',
               renderMode: 'TEXT',
               valign: 'MIDDLE',
@@ -33,7 +33,7 @@ export default {
               predefinedType: 'STATIC_TEXT',
               id: 'static_text',
             },
-            caption: '子应用C分页3',
+            caption: '子应用C分页4',
             itemStyle: 'DEFAULT',
             itemType: 'RAWITEM',
             layoutPos: {
@@ -85,14 +85,15 @@ export default {
         id: 'child_appc_view3_captionbar',
       },
     ],
-    codeName: 'layoutpanel',
+    codeName: 'auto904119',
     controlType: 'VIEWLAYOUTPANEL',
     logicName: 'child_appc_view3',
     appDataEntityId: 'web.master',
     controlParam: {},
     modelId: '12c87cd817d7bf6ca0d78ab7387b1677',
     modelType: 'PSSYSVIEWLAYOUTPANEL',
-    id: 'layoutpanel',
+    name: 'layoutpanel',
+    id: 'auto904119',
   },
   title: '子应用C视图3',
   viewStyle: 'DEFAULT',

@@ -1,10 +1,31 @@
+/* stylelint-disable color-function-notation */
+/* stylelint-disable alpha-value-notation */
 /* stylelint-disable selector-class-pattern */
 $code: (
+  // Color
+  'color-text-editor-toolbar-bg': getCssVar(color, bg, 2),
+  'color-text-editor-toolbar-text': getCssVar(color, text, 0),
+  'color-text-editor-toolbar-item-bg-hover': getCssVar(color, primary, light, default),
+  'color-text-editor-toolbar-item-text-hover': getCssVar(color, primary),
+  // Height/Width
+  'height-text-editor-toolbar': 40px,
   'footer-toolbar-height': 36px,
   'footer-button-height': 36px,
+  // Spacing
+  'spacing-code-text-editor-toolbar-padding': getCssVar('spacing', 'extra-tight'),
+  'spacing-code-text-editor-toolbar-item-padding': getCssVar('spacing', 'extra-tight') getCssVar('spacing', 'tight'),
+  // Radius
+  'spacing-code-text-editor-toolbar-circle': getCssVar('border-radius', 'extra-small'),
+  'spacing-code-text-editor-toolbar-item-circle': getCssVar('border-radius', 'extra-small'),
+  // Other
+  'text-editor-toolbar-z-index': 1,
+  'text-editor-toolbar-left': 0,
+  'text-editor-toolbar-top': 0,
 );
 
 @include b(code) {
+  @include set-component-css-var('code', $code);
+
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -56,8 +77,6 @@ $code: (
 }
 
 @include b('code-footer') {
-  @include set-component-css-var('code', $code);
-
   display: flex;
   align-items: center;
   justify-content: end;
@@ -130,9 +149,6 @@ $code: (
 }
 
 @include b('code-editor-enable') {
-
-  @include set-component-css-var('code', $code);
-  
   .#{bem(code__box)} {
     height: 100%;
   }
@@ -182,4 +198,43 @@ $code: (
 
 @include b('code-footer-dialog') {
   margin-top: 0;
+}
+
+@include b('code-text-editor-toolbar') {
+  position: fixed;
+  top: getCssVar('code', 'text-editor-toolbar-top');
+  left: getCssVar('code', 'text-editor-toolbar-left');
+  z-index: getCssVar('code', 'text-editor-toolbar-z-index');
+  display: flex;
+  gap: getCssVar('spacing', 'tight');
+  height: getCssVar('code', 'height-text-editor-toolbar');
+  padding: getCssVar('code', 'spacing-code-text-editor-toolbar-padding');
+  font-size: getCssVar('font-size', 'regular');
+  color: getCssVar('code', 'color-text-editor-toolbar-text');
+  background-color: getCssVar('code', 'color-text-editor-toolbar-bg');
+  border-radius: getCssVar('code', 'spacing-code-text-editor-toolbar-circle');
+  box-shadow: getCssVar(shadow, elevated);
+
+  @include e('item') {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: getCssVar('code', 'spacing-code-text-editor-toolbar-item-padding');
+    cursor: pointer;
+    border-radius: getCssVar('code', 'spacing-code-text-editor-toolbar-item-circle');
+
+    &:hover {
+      color: getCssVar('code', 'color-text-editor-toolbar-item-text-hover');
+      background-color: getCssVar('code', 'color-text-editor-toolbar-item-bg-hover');
+    }
+  }
+}
+
+@include b(code) {
+  @include when('dark') {
+    #{getCssVarName('code-color-text-editor-toolbar-bg')}: rgba(53 54 60 / 100%);
+    #{getCssVarName('code-color-text-editor-toolbar-text')}: rgba(249, 249, 249, 1);
+    #{getCssVarName('code-color-text-editor-toolbar-item-bg-hover')}: rgba(255, 255, 255, 0.12);
+    #{getCssVarName('code-color-text-editor-toolbar-item-text-hover')}: rgba(249, 249, 249, 1);
+  }
 }

@@ -271,6 +271,7 @@ export const SwimlaneKanban = defineComponent({
           {showActionBar && (
             <el-dropdown
               trigger='click'
+              teleported={false}
               style={popperStyle}
               class={[
                 ns.em('header', 'action'),
@@ -294,6 +295,10 @@ export const SwimlaneKanban = defineComponent({
                   <div class={ns.em('header', 'toolbar')}>
                     {c.model.groupUIActionGroup && (
                       <iBizActionToolbar
+                        direction='vertical'
+                        placement='right-start'
+                        teleported={false}
+                        zIndex={c.state.zIndex}
                         actionDetails={
                           c.model.groupUIActionGroup.uiactionGroupDetails
                         }

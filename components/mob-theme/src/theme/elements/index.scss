@@ -33,3 +33,36 @@ div::-webkit-scrollbar {
 div::-webkit-scrollbar-thumb {
   background: getCssVar(color, tertiary, light, active);
 }
+
+// 小型移动设备
+@media screen and (min-width: 320px) {
+  html{
+    font-size: 12px;
+  }
+}
+// 中型移动设备
+@media screen and (min-width: 375px) {
+  html{
+    font-size: 14px;
+  }
+}
+// 大型移动设备
+@media screen and (min-width: 425px) {
+  html { font-size: 16px; }
+}
+// 平板电脑
+@media screen and (min-width: 768px) {
+  html { font-size: 18px; }
+}
+// 笔记本电脑
+@media screen and (min-width: 1024px) {
+  html {
+    font-size: 20px;
+  }
+}
+// 大型笔记本电脑
+@media screen and (min-width: 1440px) {
+  html {
+    font-size: 24px;
+  }
+}

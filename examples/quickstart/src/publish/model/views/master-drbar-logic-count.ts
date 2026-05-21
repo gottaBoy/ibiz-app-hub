@@ -37,7 +37,7 @@ export default {
         {
           caption: '默认',
           name: '默认',
-          id: 'a0aa99ad32515d58406',
+          id: 'nocache_refreshmode',
         },
       ],
       showTitle: true,
@@ -49,7 +49,7 @@ export default {
       appCounterRefId: 'd0a6e348d1ed8a3141d3466137925bc7',
       dedrctrlItems: [
         {
-          dedrbarGroupId: 'a0aa99ad32515d58406',
+          dedrbarGroupId: 'nocache_refreshmode',
           caption: '区划',
           counterId: 'grid',
           enableMode: 'COUNT_GT_ZERO',
@@ -57,7 +57,7 @@ export default {
           id: 'region',
         },
         {
-          dedrbarGroupId: 'a0aa99ad32515d58406',
+          dedrbarGroupId: 'nocache_refreshmode',
           caption: '分类',
           counterId: 'wf_status',
           enableMode: 'COUNT_GT_ZERO',
@@ -65,7 +65,7 @@ export default {
           id: 'category',
         },
         {
-          dedrbarGroupId: 'a0aa99ad32515d58406',
+          dedrbarGroupId: 'nocache_refreshmode',
           caption: '主数据',
           counterId: 'form',
           enableMode: 'COUNT_GT_ZERO',

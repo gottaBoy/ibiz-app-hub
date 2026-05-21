@@ -6,6 +6,27 @@ export default {
   },
   "rootPanelItems": [
     {
+      "rawItem": {
+        "rawItemParams": [
+          {
+            "key": "POSITION",
+            "value": "TOP"
+          }
+        ],
+        "predefinedType": "VIEWMSG_POS",
+        "id": "viewmsg_pos_top"
+      },
+      "caption": "视图消息占位",
+      "itemStyle": "DEFAULT",
+      "itemType": "RAWITEM",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "showCaption": true,
+      "id": "viewmsg_pos_top"
+    },
+    {
       "actionGroupExtractMode": "ITEM",
       "panelItems": [
         {
@@ -173,33 +194,36 @@ export default {
           "id": "panelpart"
         },
         {
-          "actionGroupExtractMode": "ITEM",
-          "panelItems": [
-            {
-              "caption": "分页导航",
-              "itemStyle": "DEFAULT",
-              "itemType": "CTRLPOS",
-              "layoutPos": {
-                "shrink": 1,
-                "layout": "FLEX"
-              },
-              "showCaption": true,
-              "id": "tabexppanel"
-            }
-          ],
-          "predefinedType": "ToolbarContainer",
-          "layout": {
-            "layout": "FLEX"
-          },
-          "dataRegionType": "INHERIT",
-          "caption": "容器",
+          "caption": "分页导航",
           "itemStyle": "DEFAULT",
-          "itemType": "CONTAINER",
+          "itemType": "CTRLPOS",
           "layoutPos": {
-            "shrink": 1,
+            "shrink": 0,
             "layout": "FLEX"
           },
-          "id": "view_toolbar_container2"
+          "showCaption": true,
+          "id": "tabexppanel"
+        },
+        {
+          "rawItem": {
+            "rawItemParams": [
+              {
+                "key": "POSITION",
+                "value": "BODY"
+              }
+            ],
+            "predefinedType": "VIEWMSG_POS",
+            "id": "viewmsg_pos_body"
+          },
+          "caption": "视图消息占位",
+          "itemStyle": "DEFAULT",
+          "itemType": "RAWITEM",
+          "layoutPos": {
+            "shrink": 0,
+            "layout": "FLEX"
+          },
+          "showCaption": true,
+          "id": "viewmsg_pos_body"
         }
       ],
       "layout": {
@@ -221,24 +245,121 @@ export default {
       "actionGroupExtractMode": "ITEM",
       "panelItems": [
         {
-          "rawItem": {
-            "predefinedType": "NAV_POS",
-            "id": "nav_pos"
+          "actionGroupExtractMode": "ITEM",
+          "layout": {
+            "layout": "FLEX"
           },
-          "caption": "导航区占位",
+          "dataRegionType": "INHERIT",
+          "caption": "容器",
           "itemStyle": "DEFAULT",
-          "itemType": "RAWITEM",
+          "itemType": "CONTAINER",
+          "layoutPos": {
+            "shrink": 0,
+            "layout": "FLEX"
+          },
+          "id": "view_tabexppanel_left"
+        },
+        {
+          "actionGroupExtractMode": "ITEM",
+          "panelItems": [
+            {
+              "actionGroupExtractMode": "ITEM",
+              "layout": {
+                "layout": "FLEX"
+              },
+              "dataRegionType": "INHERIT",
+              "caption": "容器",
+              "itemStyle": "DEFAULT",
+              "itemType": "CONTAINER",
+              "layoutPos": {
+                "shrink": 0,
+                "layout": "FLEX"
+              },
+              "id": "view_tabexppanel"
+            },
+            {
+              "actionGroupExtractMode": "ITEM",
+              "panelItems": [
+                {
+                  "rawItem": {
+                    "predefinedType": "NAV_POS",
+                    "id": "nav_pos"
+                  },
+                  "caption": "导航区占位",
+                  "itemStyle": "DEFAULT",
+                  "itemType": "RAWITEM",
+                  "layoutPos": {
+                    "grow": 1,
+                    "shrink": 1,
+                    "layout": "FLEX"
+                  },
+                  "showCaption": true,
+                  "id": "nav_pos"
+                }
+              ],
+              "layout": {
+                "layout": "FLEX"
+              },
+              "dataRegionType": "INHERIT",
+              "caption": "容器",
+              "itemStyle": "DEFAULT",
+              "itemType": "CONTAINER",
+              "layoutPos": {
+                "grow": 1,
+                "shrink": 1,
+                "layout": "FLEX"
+              },
+              "id": "view_content"
+            },
+            {
+              "actionGroupExtractMode": "ITEM",
+              "layout": {
+                "layout": "FLEX"
+              },
+              "dataRegionType": "INHERIT",
+              "caption": "容器",
+              "itemStyle": "DEFAULT",
+              "itemType": "CONTAINER",
+              "layoutPos": {
+                "shrink": 0,
+                "layout": "FLEX"
+              },
+              "id": "view_tabexppanel_bottom"
+            }
+          ],
+          "layout": {
+            "layout": "FLEX"
+          },
+          "dataRegionType": "INHERIT",
+          "caption": "容器",
+          "itemStyle": "DEFAULT",
+          "itemType": "CONTAINER",
           "layoutPos": {
             "grow": 1,
             "shrink": 1,
             "layout": "FLEX"
           },
-          "showCaption": true,
-          "id": "nav_pos"
+          "id": "container2"
+        },
+        {
+          "actionGroupExtractMode": "ITEM",
+          "layout": {
+            "layout": "FLEX"
+          },
+          "dataRegionType": "INHERIT",
+          "caption": "容器",
+          "itemStyle": "DEFAULT",
+          "itemType": "CONTAINER",
+          "layoutPos": {
+            "shrink": 0,
+            "layout": "FLEX"
+          },
+          "id": "view_tabexppanel_right"
         }
       ],
       "predefinedType": "Content",
       "layout": {
+        "dir": "row",
         "layout": "FLEX"
       },
       "dataRegionType": "INHERIT",
@@ -250,7 +371,39 @@ export default {
         "shrink": 1,
         "layout": "FLEX"
       },
-      "id": "view_content"
+      "id": "container"
+    },
+    {
+      "rawItem": {
+        "rawItemParams": [
+          {
+            "key": "POSITION",
+            "value": "BOTTOM"
+          }
+        ],
+        "predefinedType": "VIEWMSG_POS",
+        "id": "viewmsg_pos_bottom"
+      },
+      "caption": "视图消息占位",
+      "itemStyle": "DEFAULT",
+      "itemType": "RAWITEM",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "showCaption": true,
+      "id": "viewmsg_pos_bottom"
+    },
+    {
+      "caption": "工具栏",
+      "itemStyle": "DEFAULT",
+      "itemType": "CTRLPOS",
+      "layoutPos": {
+        "shrink": 1,
+        "layout": "FLEX"
+      },
+      "showCaption": true,
+      "id": "footertoolbar"
     }
   ],
   "layoutPanel": true,

@@ -1,17 +1,29 @@
-$mdctrl-container-header: (bg-color: transparent,
-  padding: getCssVar(spacing, tight) getCssVar(spacing, base),
-  border-color: getCssVar(color, border),
+$mdctrl-container-header: (
+  color-bg: getCssVar(color, bg, 0),
+  color-border: getCssVar(color, border),
+  spacing-padding: getCssVar(spacing, base),
 );
 
-$mdctrl-container-caption: (text-color: getCssVar(color, text, 2),
-  font-size: getCssVar(font-size, header-6),
-  font-weight: getCssVar(font-weight, regular),
-  height: rem(20px),
-  line-height: rem(20px),
+$mdctrl-container-caption: (
+  color-text: getCssVar(color, text, 2),
+  font-fontSize: getCssVar(font-size, header-6),
+  font-fontWeight: getCssVar(font-weight, regular),
+  font-lineHeight: getCssVar(font-size, header-5),
 );
-$mdctrl-container-button: (text-color: getCssVar(color, info),
-  font-size: getCssVar(font-size, header-6),
-  font-weight: getCssVar(font-weight, regular),
+$mdctrl-container-button: (
+  color-text: getCssVar(color, primary),
+  font-fontSize: getCssVar(font-size, header-6),
+  font-fontWeight: getCssVar(font-weight, regular),
+);
+
+$mdctrl-container-content: (
+  color-bg: getCssVar(color, bg, 1),
+);
+
+$mdctrl-container-footer: (
+  font-fontSize: getCssVar(font-size, header-5),
+  color-bg: getCssVar(color, bg, 1),
+  spacing-icon-gap: getCssVar(spacing, extra-tight),
 );
 
 
@@ -19,28 +31,11 @@ $mdctrl-container-button: (text-color: getCssVar(color, info),
   @include set-component-css-var('mdctrl-container-header', $mdctrl-container-header);
   @include set-component-css-var('mdctrl-container-caption', $mdctrl-container-caption);
   @include set-component-css-var('mdctrl-container-button', $mdctrl-container-button);
+  @include set-component-css-var('mdctrl-container-content', $mdctrl-container-content);
+  @include set-component-css-var('mdctrl-container-footer', $mdctrl-container-footer);
 
   display: flex;
   flex-direction: column;
-
-  @include e(btn) {
-    width: auto;
-    padding: 0;
-    margin-left: 10px;
-    font-size: getCssVar('mdctrl-container-button', 'font-size');
-    color: getCssVar('mdctrl-container-button', 'text-color');
-    background-color: transparent;
-    border: none;
-
-    &:active {
-      background-color: transparent;
-
-      // 清除激活样式
-      &::before {
-        opacity: 0;
-      }
-    }
-  }
 }
 
 @include b(mdctrl-container-item) {
@@ -54,71 +49,38 @@ $mdctrl-container-button: (text-color: getCssVar(color, info),
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: getCssVar('mdctrl-container-header', 'padding');
-    background-color: getCssVar('mdctrl-container-header', 'bg-color');
+    padding: getCssVar('mdctrl-container-header', 'spacing-padding');
+    background-color: getCssVar('mdctrl-container-header', 'color-bg');
 
     @include e(caption) {
       flex-grow: 1;
-      height: getCssVar('mdctrl-container-caption', 'height');
-      font-size: getCssVar('mdctrl-container-caption', 'font-size');
-      font-weight: getCssVar('mdctrl-container-caption', 'font-weight');
-      line-height: getCssVar('mdctrl-container-caption', 'line-height');
-      color: getCssVar('mdctrl-container-caption', 'text-color');
+      font-size: getCssVar('mdctrl-container-caption', 'font-fontSize');
+      font-weight: getCssVar('mdctrl-container-caption', 'font-fontWeight');
+      line-height: getCssVar('mdctrl-container-caption', 'font-lineHeight');
+      color: getCssVar('mdctrl-container-caption', 'color-text');
       @include utils-ellipsis;
-    }
-
-    @include e(action) {
-      --van-button-small-height: #{rem(20px)};
-
-      display: flex;
-      flex-grow: 1;
-      flex-shrink: 0;
-      justify-content: flex-end;
-      height: rem(20px);
-      line-height: rem(20px);
-      text-align: right;
     }
   }
 
   @include b(mdctrl-container-item-content) {
-    background-color: getCssVar(color, bg, 1);
+    background-color: getCssVar('mdctrl-container-content', 'color-bg');
+
+    @include e(remove-btn) {
+      height: 100%;
+    }
   }
-
-  @include b(form-page-item) {
-    --ibiz-form-page-item-gap: 0;
-  }
-
-}
-
-
-@include b(mdctrl-container-no-data) {
-  width: 100%;
-  @include flex(row, flex-end)
 }
 
 @include b(mdctrl-container-footer) {
-  color: red;
-
   .#{bem('mdctrl-container', 'btn')} {
     width: 100%;
-    padding: 0;
-    margin-left: 0;
-    font-size: getCssVar(font-size, header-5);
-    color: getCssVar('mdctrl-container-button', 'text-color');
-    background-color: getCssVar(color, bg, 1);
+    font-size: getCssVar('mdctrl-container-footer', 'font-fontSize');
+    color: getCssVar('mdctrl-container-button', 'color-text');
+    background-color: getCssVar('mdctrl-container-footer', 'color-bg');
     border: none;
 
-    &:active {
-      background-color: transparent;
-
-      // 清除激活样式
-      &::before {
-        opacity: .1;
-      }
-    }
-
     .van-icon {
-      margin-right: getCssVar(spacing, extra-tight);
+      margin-right: getCssVar('mdctrl-container-footer', 'spacing-icon-gap');
     }
   }
 }

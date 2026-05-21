@@ -10,15 +10,17 @@
 
     &:hover {
         color: #{getCssVar('ai-chat', 'hover-color')};
-        cursor: pointer;
         background-color: #{getCssVar('ai-chat', 'hover-background-color')};
         @include b(chat-input-material-item__icon) {
+            cursor: pointer;
             opacity: 1;
         }
     }
 
     @include when(disabled) {
-        pointer-events: none;
+        @include b(chat-input-material-item__icon) {
+            opacity: 0;
+        }
     }
 }
 

@@ -1,70 +1,176 @@
-$control-dataview: (text-color: getCssVar(color, text, 0),
-  item-padding: rem(10px),
-  padding: getCssVar(spacing, base-tight) getCssVar(spacing, base),
-  card-margin:getCssVar(spacing, base-tight),
-  item-margin: calc( getCssVar(spacing, base, tight) / 2 ),
-  pagination-height: var(--van-pagination-height),
+$control-dataview: (
+  // 颜色
+  color-text: getCssVar(color, text, 0),
+  color-bg: getCssVar(color, bg, 0),
+  color-item-active: getCssVar(color, primary, light, default),
+  color-group-bg: getCssVar(color, bg, 0),
+  color-group-text: getCssVar(color, text, 1),
+  // 间距
+  spacing-item-padding: getCssVar(spacing, base-tight) getCssVar(spacing, base),
+  spacing-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
+  spacing-item-gap: getCssVar(spacing, base, tight),
+  spacing-item-content-padding: getCssVar(spacing, extra, tight) 0 0 0,
+  spacing-group-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
+  // 字体
+  font-group-fontSize: getCssVar(font-size, header-6),
+  font-group-lineHeight: getCssVar(height-control, default),
+  // 其他
+  shadow: getCssVar(shadow, elevated),
 );
-
-@include b(control-dataview-item) {
-  padding: getCssVar(control-dataview, item-padding);
-  // 主题缺失，后续补充
-  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12);
-  background-color: getCssVar(control-dataview, item-bg-color);
-  color: getCssVar(control-dataview, item-font-color);
-  &:hover {
-    background-color: getCssVar(control-dataview,
-      item-hover-color
-    );
-  }
-  @include when(active) {
-    background-color: getCssVar(control-dataview,
-      item-active-color
-    );
-  }
-}
 
 @include b(control-dataview) {
   @include set-component-css-var(control-dataview, $control-dataview);
 
   height: 100%;
   --van-card-thumb-size: auto;
-  overflow: getCssVar(control, overflow);
+
+  @include e(content-container) {
+    height: 100%;
+    width: 100%;
+  }
 
   @include e(content) {
     display: flex;
     flex-wrap: wrap;
-    height: 100%;
-    width: 100%;
-    padding: getCssVar(control-dataview, padding);
+    max-height: 100%;
+    gap: getCssVar(control-dataview, spacing-item-gap);
+    overflow: getCssVar(control, overflow);
+    padding: getCssVar(control-dataview, spacing-padding);
 
-    &>*{
-      margin: getCssVar(control-dataview, item-margin);
+    .van-list__loading,.van-list__finished-text,.van-list__error-text {
+      width: 100%;
+    }
+  }
+
+  @include e(row) {
+    gap: 0;
+    margin: calc(-1 * getCssVar(control-dataview, spacing-item-gap)/ 2);
+    .#{bem(control-dataview, item-col)} {
+      padding: calc(getCssVar(control-dataview, spacing-item-gap) / 2);
+    }
+  }
+
+  @include when(enable-pagination) {
+    display: flex;
+    flex-direction: column;
+    .#{bem(control-dataview, content-container)} {
+      flex: auto;
+      height: 0;
+    }
+    .#{bem(control-dataview, pagination)} {
       flex: none;
     }
   }
 
-  .van-card:not(:first-child) {
-    margin-top: getCssVar(control-dataview, card-margin);
-  }
-
-  @include e(item-row) {
-    width: 100%;
-  }
-  @include e(item-col) {
-    margin: getCssVar(control-dataview, item-margin) 0;
-  }
-
-  @include when(enable-page) {
-    .#{bem(control-dataview, content)} {
-      height: calc(100% -  getCssVar(control-dataview, pagination-height));
+  // 分页模式固定出滚动条，且没有回到顶部按钮
+  @include when(scroll) {
+    #{getCssVarName(control, overflow)}: unset auto;
+    .#{bem(control-dataview, content-container)} {
+      overflow: auto;
     }
   }
 
-  @include e(load-more) {
-    @include flex(row, center, center);
-    height: getCssVar(control-dataview, pagination-height);
-    cursor: pointer;
-    color: getCssVar(color, link);
+  @include when(hidden-finished) {
+    // 启用分页时隐藏列表加载完成提示
+    .van-list__finished-text {
+      display: none;
+    }
+  }
+
+  @include when(enable-group) {
+    .#{bem(control-dataview, content)} {
+      padding: 0;
+    }
+    .#{bem(control-dataview-group, item)} {
+      padding: getCssVar(control-dataview, spacing-padding);
+    }
+  }
+
+  @include e(anchor) {
+    width: 100%;
+    .van-index-anchor {
+      padding: 0;
+    }
+  }
+}
+
+@include b(control-dataview-item) {
+  flex: none;
+  padding: getCssVar(control-dataview, spacing-item-padding);
+  box-shadow: getCssVar(control-dataview, shadow);
+  color: getCssVar(control-dataview, color-text);
+  background-color: getCssVar(control-dataview, color-bg);
+  width: 100%;
+  @include when(active) {
+    background-color: getCssVar(control-dataview, color-item-active);
+  }
+  >.van-card {
+    padding: 0;
+    background-color: transparent;
+    color: inherit;
+
+    .van-card__footer {
+      .van-button {
+        margin: 0;
+      }
+    }
+  }
+}
+
+@include b(control-dataview-item-content) {
+  padding: getCssVar(control-dataview, spacing-item-content-padding);
+  @include e(bottom) {
+    @include m(actions) {
+      justify-content: flex-end;
+    }
+  }
+}
+
+// 分组样式
+@include b('control-dataview-group') {
+  height: 100%;
+  width: 100%;
+  @include e('container') {
+    width: 100%;
+    height: 100%;
+  }
+
+  @include e(item) {
+    display: flex;
+    flex-direction: column;
+    gap: getCssVar(control-dataview, spacing-item-gap);
+  }
+
+  // 分组标题样式
+  @include e('caption') {
+    padding: getCssVar(control-dataview, spacing-group-padding);
+    font-size: getCssVar(control-dataview, font-group-fontSize);
+    line-height: getCssVar(control-dataview, font-group-lineHeight);
+    color: getCssVar(control-dataview, color-group-text);
+    background-color: getCssVar(control-dataview, color-group-bg);
+  }
+}
+
+// 快速工具栏样式
+@include b(control-dataview-quicktoolbar) {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// 兼容下拉视图刷新样式
+.#{bem(view-content-refresh)} {
+  .#{bem(control-dataview)}.is-enable-pagination {
+    position: relative;
+    .#{bem(control-dataview, content-container)} {
+      height: auto;
+    }
+    .#{bem(control-dataview, pagination)} {
+      position: sticky;
+      bottom: 0;
+      width: 100%;
+      background-color: getCssVar(color, bg, 1);
+    }
   }
 }

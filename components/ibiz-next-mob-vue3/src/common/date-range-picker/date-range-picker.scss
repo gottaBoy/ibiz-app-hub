@@ -1,13 +1,58 @@
+$date-range-picker: (
+  // 颜色
+  color-header-text: getCssVar(color, default),
+  color-header-bg: getCssVar(color, primary),
+  color-actions-text: getCssVar(color, white),
+  color-actions-save: getCssVar(color, fill, 4),
+  color-actions-save-select: getCssVar(color, white),
+  color-end-today-text: getCssVar(color, default),
+  color-select-today-text: getCssVar(color, default),
+  color-disabled-today-text: getCssVar(color, disabled, text),
+  color-today-text: getCssVar(color, primary),
+  color-today-border: getCssVar(color, primary),
+  // 间距
+  spacing-header-select-margin: getCssVar(spacing, base) 0
+  getCssVar(spacing, base),
+  spacing-select-range-gap: getCssVar(spacing, tight),
+  spacing-header-padding: 0 getCssVar(spacing, base),
+  spacing-select-range-margin: getCssVar(spacing, base) 0,
+  spacing-range-date-gap: getCssVar(spacing, tight),
+  spacing-range-date-icons: getCssVar(spacing, base),
+  spacing-single-text-margin: getCssVar(spacing, base) 0
+  getCssVar(spacing, base),
+  spacing-single-text-date-gap: getCssVar(spacing, tight),
+  spacing-date-text-gap: getCssVar(spacing, tight),
+  spacing-date-text-icons-gap: getCssVar(spacing, base),
+  spacing-custom-header-close-right: getCssVar(spacing, base),
+  spacing-today-padding: getCssVar(spacing, extra-tight),
+  spacing-single-text-date-margin: getCssVar(spacing, base) 0,
+  // 宽高
+  width-today: getCssVar(spacing, extra-loose),
+  height-today: getCssVar(spacing, extra-loose),
+  height-actions: rem(36px),
+  // 字体大小
+  font-single-placeholder-fontSize: getCssVar(font-size, small),
+  font-select-placeholder-fontSize: getCssVar(font-size, small),
+  font-single-text-date-fontSize: getCssVar(font-size, header-4),
+  font-select-range-fontSize: getCssVar(font-size, header-4),
+  font-close-fontSize: getCssVar(font-size, header-5),
+  font-today-bottom-info-fontSize: var(--van-calendar-info-font-size),
+  font-today-bottom-info-lineHeight: var(--van-calendar-info-line-height),
+  // 其他
+  border-today-border: rem(1px) solid getCssVar(date-range-picker, color-today-border),
+);
 @include b('calendar-date-range-picker') {
+  @include set-component-css-var('date-range-picker', $date-range-picker);
+
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   @include e('header') {
     flex-shrink: 0;
-    padding: 0 16px;
-    color: getCssVar(color, default);
-    background-color: getCssVar(color, primary);
+    padding: getCssVar(date-range-picker, spacing-header-padding);
+    color: getCssVar(date-range-picker, color-header-text);
+    background-color: getCssVar(date-range-picker, color-header-bg);
   }
   @include e('actions') {
     display: flex;
@@ -15,36 +60,36 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 36px;
-    color: getCssVar(color, white);
+    height: getCssVar(date-range-picker, height-actions);
+    color: getCssVar(date-range-picker, color-actions-text);
 
     @include m('close') {
-      font-size: getCssVar(font-size, header-5);
+      font-size: getCssVar(date-range-picker, font-close-fontSize);
     }
     @include m('save') {
-      color: getCssVar(color, fill, 4);
+      color: getCssVar(date-range-picker, color-actions-save);
       @include when('select') {
-        color: getCssVar(color, white);
+        color: getCssVar(date-range-picker, color-actions-save-select);
       }
     }
   }
   @include e('select') {
-    margin: getCssVar(spacing, base) 0 getCssVar(spacing, base);
+    margin: getCssVar(date-range-picker, spacing-header-select-margin);
     text-align: left;
     @include m('placeholder') {
-      font-size: getCssVar(font-size, small);
+      font-size: getCssVar(date-range-picker, font-select-placeholder-fontSize);
     }
     @include m('range') {
       display: flex;
-      gap: getCssVar(spacing, tight);
+      gap: getCssVar(date-range-picker, spacing-select-range-gap);
       align-items: center;
       justify-content: space-between;
-      margin: getCssVar(spacing, base) 0;
-      font-size: getCssVar(font-size, header-4);
+      margin: getCssVar(date-range-picker, spacing-select-range-margin);
+      font-size: getCssVar(date-range-picker, font-select-range-fontSize);
     }
     @include m('range-date') {
       display: flex;
-      gap: getCssVar(spacing, tight);
+      gap: getCssVar(date-range-picker, spacing-range-date-gap);
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
@@ -52,29 +97,29 @@
     }
     @include m('icons') {
       display: flex;
-      gap: getCssVar(spacing, base);
+      gap: getCssVar(date-range-picker, spacing-range-date-icons);
     }
   }
   @include e('content') {
     flex: 1;
   }
   @include e('single-text') {
-    margin: getCssVar(spacing, base) 0 getCssVar(spacing, base);
+    margin: getCssVar(date-range-picker, spacing-single-text-margin);
     text-align: left;
     @include m('placeholder') {
-      font-size: getCssVar(font-size, small);
+      font-size: getCssVar(date-range-picker, font-single-placeholder-fontSize);
     }
     @include m('date') {
       display: flex;
-      gap: getCssVar(spacing, tight);
+      gap: getCssVar(date-range-picker, spacing-single-text-date-gap);
       align-items: center;
       justify-content: space-between;
-      margin: getCssVar(spacing, base) 0;
-      font-size: getCssVar(font-size, header-4);
+      margin: getCssVar(date-range-picker, spacing-single-text-date-margin);
+      font-size: getCssVar(date-range-picker, font-single-text-date-fontSize);
     }
     @include m('date-text') {
       display: flex;
-      gap: getCssVar(spacing, tight);
+      gap: getCssVar(date-range-picker, spacing-date-text-gap);
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
@@ -82,8 +127,7 @@
     }
     @include m('icons') {
       display: flex;
-
-      gap: getCssVar(spacing, base);
+      gap: getCssVar(date-range-picker, spacing-date-text-icons-gap);
     }
   }
   @include e('custom-header') {
@@ -93,7 +137,7 @@
     width: 100%;
     @include m('close') {
       position: absolute;
-      right: getCssVar(spacing, base);
+      right: getCssVar(date-range-picker, spacing-custom-header-close-right);
     }
   }
   @include e('calendar-container') {
@@ -104,12 +148,12 @@
 }
 @include b('calendar-date-range-picker-calendar') {
   @include e('today') {
-    padding: 4px;
-    color: getCssVar(color, primary);
-    border: 1px solid getCssVar(color, primary);
+    padding: getCssVar(date-range-picker, spacing-today-padding);
+    color: getCssVar(date-range-picker, color-today-text);
+    border: getCssVar(date-range-picker, border-today-border);
     border-radius: 50%;
-    width: getCssVar(spacing, extra-loose);
-    height: getCssVar(spacing, extra-loose);
+    width: getCssVar(date-range-picker, width-today);
+    height: getCssVar(date-range-picker, height-today);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -118,14 +162,17 @@
       right: 0;
       bottom: 0;
       left: 0;
-      font-size: var(--van-calendar-info-font-size);
-      line-height: var(--van-calendar-info-line-height);
+      font-size: getCssVar(date-range-picker, font-today-bottom-info-fontSize);
+      line-height: getCssVar(
+        date-range-picker,
+        font-today-bottom-info-lineHeight
+      );
     }
   }
   .van-calendar__day--start,
   .van-calendar__day--end {
     @include e('today') {
-      color: getCssVar(color, default);
+      color: getCssVar(date-range-picker, color-end-today-text);
       .ibiz-calendar-date-range-picker-calendar__today--bottom-info {
         display: none;
       }
@@ -136,11 +183,11 @@
       height: 100%;
     }
     @include e('today') {
-      color: getCssVar(color, default);
+      color: getCssVar(date-range-picker, color-select-today-text);
     }
   }
   .van-calendar__day--disabled {
-    color: getCssVar(color, disabled, text);
+    color: getCssVar(date-range-picker, color-disabled-today-text);
     opacity: 0.7;
   }
 }

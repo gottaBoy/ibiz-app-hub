@@ -1,8 +1,8 @@
 import { computed, defineComponent, PropType } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
-import { $RandomColor, $Normal, getRandomColorFromArray } from '../util';
-import './tags.scss';
+import { $RandomColor, getRandomColorFromArray } from '../util';
 import { TaggedWallController } from './tagged-wall.controller';
+import './tags.scss';
 
 export const CustomTag = defineComponent({
   name: 'CustomTag',
@@ -24,13 +24,13 @@ export const CustomTag = defineComponent({
       }
       return $RandomColor();
     });
-
     const normalSize = computed(() => {
       if (props.controller.enableFontSizeRandom) {
-        return `${$Normal(props.controller.maxFontSize, props.controller.minFontSize)}px`;
+        return `${Math.random() * (props.controller.maxFontSize - props.controller.minFontSize) + props.controller.minFontSize}px`;
       }
       return `${props.controller.defaultFontSize}px`;
     });
+    console.log(props.controller, normalSize.value, 444);
 
     return {
       ns,

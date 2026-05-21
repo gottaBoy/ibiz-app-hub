@@ -15,7 +15,7 @@ export class KanbanViewEngine extends MDViewEngine {
    * @type {ViewController<IAppDEKanbanView, IKanbanViewState, IKanbanViewEvent>}
    * @memberof KanbanViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEKanbanView,
     IKanbanViewState,
     IKanbanViewEvent

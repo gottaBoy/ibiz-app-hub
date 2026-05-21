@@ -149,7 +149,11 @@ export class GridFieldColumnController
       columnEnableFilter &&
       filterEditor.editorType !== 'HIDDEN'
     ) {
-      this.filterEditorProvider = await getEditorProvider(filterEditor);
+      this.filterEditorProvider = await getEditorProvider(
+        filterEditor,
+        this.model,
+        this.grid.model,
+      );
       if (this.filterEditorProvider) {
         this.filterEditor = await this.filterEditorProvider.createController(
           filterEditor,
@@ -358,7 +362,7 @@ export class GridFieldColumnController
     const { aggField, aggMode, aggValueFormat, unitName, appCodeListId } =
       this.model;
     const fieldName = aggField || this.model.id!;
-    let aggValue: number;
+    let aggValue: number | string | void;
     // 存在代码表时不计算聚合
     if (appCodeListId) {
       return;
@@ -367,7 +371,8 @@ export class GridFieldColumnController
       if (!this.grid.state.remoteAggResult) {
         return;
       }
-      aggValue = this.grid.state.remoteAggResult[fieldName] || '';
+      aggValue = this.grid.state.remoteAggResult[fieldName];
+      if (isNil(aggValue)) aggValue = '';
     } else {
       // 无聚合配置的列，返回undefined
       if (isNil(aggMode) || aggMode === 'NONE') {

@@ -3,7 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'category_mgr',
   deviewId: 'd97f30f7a3dd4736af709f430c2e6ce5',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.CATEGORY',
   },

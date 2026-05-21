@@ -39,14 +39,14 @@ export interface IMessageCenter {
 
   /**
    * @description 订阅消息
-   * @param {(msg: IPortalMessage) => void} callback
+   * @param {(msg: IPortalMessage) => void} callback 回调函数
    * @memberof IMessageCenter
    */
   on(callback: (msg: IPortalMessage) => void): void;
 
   /**
    * @description 取消订阅
-   * @param {(msg: IPortalMessage) => void} callback
+   * @param {(msg: IPortalMessage) => void} callback 回调函数
    * @memberof IMessageCenter
    */
   off(callback: (msg: IPortalMessage) => void): void;

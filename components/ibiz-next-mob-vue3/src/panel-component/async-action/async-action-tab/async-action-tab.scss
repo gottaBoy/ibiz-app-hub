@@ -1,5 +1,9 @@
 $async-action-tab: (
-  load-more-height: 30px,
+  // 间距
+  spacing-action-tab-item-padding: getCssVar('spacing', 'tight') 0,
+  // 高度
+  height-load-more-height: rem(30px),
+  height-action-tab-item-min-height: rem(60px),
 );
 
 @include b(async-action-tab) {
@@ -10,19 +14,19 @@ $async-action-tab: (
   overflow: hidden auto;
 
   @include e(item){
-    min-height: 60px;
-    padding: getCssVar('spacing', 'tight') 0;
+    min-height: getCssVar(async-action-tab, action-tab-item-min-height);
+    padding: getCssVar(async-action-tab, spacing-action-tab-item-padding)
   }
 
   @include e(nodata){
     @include flex(row, center, center);
 
-    height: calc(100% - getCssVar(async-action-tab, load-more-height))
+    height: calc(100% - getCssVar(async-action-tab, height-load-more-height))
   }
 
   @include e(load-more){
-    height: getCssVar(async-action-tab, load-more-height);
-    line-height: getCssVar(async-action-tab, load-more-height);
+    height: getCssVar(async-action-tab, height-load-more-height);
+    line-height: getCssVar(async-action-tab, height-load-more-height);
     text-align: center;
 
     &:hover{

@@ -1,66 +1,123 @@
+$mpicker: (
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-icon: var(--van-field-right-icon-color),
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  readonly-color: getCssVar(editor, readonly, text-color),
+  color-active: getCssVar(color, primary, light, default),
+  // 间距
+  spacing-gap: getCssVar(spacing, extra-tight),
+  spacing-item-gap: 0 getCssVar(spacing, tight),
+  spacing-item-padding: 0 getCssVar(spacing, tight),
+  // 字体
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-icon-fontSize: getCssVar(font-size, header, 5),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  // 圆角
+  radius-item: getCssVar(border-radius, small),
+  // 其它
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
+
 /* mpicker 地址栏 */
 @include b(mpicker) {
-  .van-field {
-    font-size: getCssVar(form-item, font-size);
+  @include set-component-css-var(mpicker, $mpicker);
 
+  font-size: getCssVar(mpicker, font-fontSize);
+  line-height: getCssVar(mpicker, font-lineHeight);
+  color: getCssVar(mpicker, color);
+
+  --van-field-input-text-color: #{getCssVar(mpicker, color)};
+  --van-cell-text-color: #{getCssVar(mpicker, color)};
+  --van-cell-value-color: #{getCssVar(mpicker, color)};
+  --van-cell-line-height: #{getCssVar(mpicker, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(mpicker, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(mpicker, font-fontSize)};
+
+  .van-field {
     &::after {
       display: none;
     }
   }
 
   .van-field__right-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     button {
-      color: var(--van-field-right-icon-color);
+      height: getCssVar(mpicker, font-lineHeight);
+      padding: 0;
+      color: getCssVar(mpicker, color-icon);
       border: none;
     }
   }
 
-  .van-field__control--custom {
-    flex-wrap: wrap;
-  }
-
   .van-field__control {
-    gap: getCssVar(spacing, tight);
+    gap: getCssVar(mpicker, spacing-gap);
   }
 
-  input:disabled {
-    color: getCssVar(form-item, disabled-color);
-    background-color: getCssVar(form-item, disabled-bg-color);
-    border-color: getCssVar(form-item, disabled-border-color);
-    -webkit-text-fill-color: getCssVar(form-item, disabled-color);
+  @include e('placeholder') {
+    color: getCssVar(mpicker, color-placeholder);
   }
 
   @include e('pickup-search-icon'){
-    font-size: getCssVar(font-size,header,5);
     display: flex;
+    font-size: getCssVar(mpicker, font-icon-fontSize);
   }
 
   @include m(disabled) {
     pointer-events: none;
-    opacity: 0.8;
+
+    --van-field-input-text-color: #{getCssVar(mpicker, color-disabled)};
   }
 
   @include m(readonly) {
-    color: getCssVar(form-item, readonly-color);
-    -webkit-text-fill-color: getCssVar(form-item, readonly-color);
+    color: getCssVar(mpicker, readonly-color);
+    -webkit-text-fill-color: getCssVar(mpicker, readonly-color);
   }
 
   @include b(mpicker-select-item) {
     display: flex;
-    gap: getCssVar(spacing, tight);
+    gap: getCssVar(mpicker, spacing-item-gap);
     align-items: center;
     justify-content: space-between;
-    padding: getCssVar(spacing, tight);
-    background-color: getCssVar(color, disabled, bg);
-    border-radius: getCssVar('border-radius', 'small');
+    padding: getCssVar(mpicker, spacing-item-padding);
+    overflow: hidden;
+    font-size: getCssVar(mpicker, font-fontSize);
+    line-height: calc(getCssVar(mpicker, font-lineHeight) - getCssVar(mpicker, spacing-gap));
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background-color: getCssVar(mpicker, color-active);
+    border-radius: getCssVar(mpicker, radius-item);
+
+    @include e('text') {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @include e('close') {
+      flex-shrink: 0;
+    }
+
+    @include m('more') {
+      flex-shrink: 0;
+    }
+  }
+
+  .van-field__value {
+    width: 100%;
   }
 
   .van-field__control--custom {
     display: flex;
     flex-direction: row;
-    justify-content: getCssVar(form-item-container, editor-align);
+    justify-content: getCssVar(mpicker, flex-justify-content);
   }
   &.#{bem('mpicker','','readonly')}{
-      text-align: getCssVar(form-item-container, editor-align);
+    text-align: getCssVar(mpicker, font-textAlign);
   }
 }

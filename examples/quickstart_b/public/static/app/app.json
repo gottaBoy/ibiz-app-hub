@@ -8,6 +8,7 @@
   { "id": "web.admin_appb", "priority": -1 }
 ], 
 "allPSAppCodeLists":[
+  { "id": "mock__cl_status" }
 ], 
 "allPSAppDataEntities":[
   {"name": "ABOUT", "codeName": "about"},

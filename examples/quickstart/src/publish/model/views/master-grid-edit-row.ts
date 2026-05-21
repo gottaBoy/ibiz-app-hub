@@ -608,6 +608,9 @@ export default {
       logicName: '表格_行编辑_行',
       appDataEntityId: 'web.master',
       controlParam: {
+        ctrlParams: {
+          EDITSHOWMODE: 'row',
+        },
         id: 'grid',
       },
       modelId: 'cef34bfe54338cf8cc48e2b1a15629ae',

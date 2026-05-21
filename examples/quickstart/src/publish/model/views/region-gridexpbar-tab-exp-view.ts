@@ -4,7 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'gridexpbarTabExpView',
   deviewId: '9c915415993f0cca76e263caaac73a36',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.REGION',
   },

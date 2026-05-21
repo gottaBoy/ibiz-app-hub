@@ -1,4 +1,26 @@
 /**
+ * 自动关闭窗口，用于在提问完成时配置窗口关闭模式
+ *
+ * @export
+ * @interface IAutoClose
+ */
+export interface IAutoClose {
+  /**
+   * @description 模式
+   * - minimize：最小化；close：直接关闭；closetime：定时关闭
+   * @type {('minimize' | 'closetime' | 'close')}
+   */
+  mode: 'minimize' | 'close' | 'closetime';
+
+  /**
+   * @description 自动关闭延时时间，该值单位为秒（s），当 mode 值为closetime时生效
+   * @default 3
+   * @type {number}
+   */
+  duration?: number;
+}
+
+/**
  * 聊天窗口呈现配置
  *
  * @author chitanda
@@ -73,4 +95,27 @@ export interface IChatContainerOptions {
    * @type {boolean}
    */
   enableBackFill?: boolean;
+
+  /**
+   * 自动关闭
+   *
+   * @type {IAutoClose}
+   * @memberof IChatContainerOptions
+   */
+  autoClose?: IAutoClose;
+
+  /**
+   * @description AI窗口的打开模式
+   * - default：默认；minimize：最小化；autoexpand：自动展开
+   * @type {('default' | 'minimize' | 'autoexpand')}
+   * @memberof IChatContainerOptions
+   */
+  openMode?: 'default' | 'minimize' | 'autoexpand';
+
+  /**
+   * 是否允许最小化
+   *
+   * @type {boolean}
+   */
+  enableAIMinimize?: boolean;
 }

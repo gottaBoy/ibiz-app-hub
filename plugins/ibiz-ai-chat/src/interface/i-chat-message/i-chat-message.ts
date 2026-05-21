@@ -1,4 +1,7 @@
+import { IChatStep } from '../i-chat-step/i-chat-step';
 import { IChatSuggestion } from '../i-chat-suggestion/i-chat-suggestion';
+import { IChatToolCall } from '../i-chat-tool-call/i-chat-tool-call';
+import { IChatUIAction } from '../i-chat-uiaction/i-chat-uiaction';
 import { IPortalAsyncAction } from '../i-portal-async-action/i-portal-async-action';
 
 /**
@@ -45,6 +48,11 @@ export interface IChatMessage {
    * @type {string}
    */
   type: string | 'DEFAULT' | 'ERROR';
+
+  /**
+   * 消息状态,待处理|已发送|失败|用户取消
+   */
+  status: string | 'pending' | 'sent' | 'failed' | '	canceled';
 
   /**
    * 消息子类型
@@ -117,4 +125,56 @@ export interface IChatMessage {
    * @type {IChatSuggestion[]}
    */
   suggestions?: IChatSuggestion[];
+
+  /**
+   * 工具调用是否完成
+   * @type {boolean}
+   * @memberof IChatMessage
+   */
+  toolcallcompleted?: boolean;
+
+  /**
+   * @description 工具调用集合
+   * @type {IChatToolCall[]}
+   * @memberof IChatMessage
+   */
+  toolcalls?: IChatToolCall[];
+
+  /**
+   * @description 是否点赞
+   * @type {boolean}
+   * @memberof IChatMessage
+   */
+  islike?: '0' | '1';
+
+  /**
+   * @description 是否点踩
+   * @type {boolean}
+   * @memberof IChatMessage
+   */
+  isdislike?: '0' | '1';
+
+  /**
+   * @description 反馈内容
+   * @type {string}
+   * @memberof IChatMessage
+   */
+  feedbackcontent?: string;
+
+  /**
+   * @description 真实消息标识
+   * @type {string}
+   * @memberof IChatMessage
+   */
+  realmessageid?: string;
+
+  /**
+   * @description 聊天步骤
+   */
+  chatsteps?: IChatStep[];
+
+  /**
+   * @description 聊天UI操作
+   */
+  chatuiactions?: IChatUIAction[];
 }

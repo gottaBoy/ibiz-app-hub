@@ -32,3 +32,14 @@ export type { IHtml2canvasOption } from './i-html2canvas-util/i-html2canvas-opti
 export type { IQrcodeUtil } from './i-qrcode-util/i-qrcode-util';
 export type { IVoiceUtil } from './i-voice-util/i-voice-util';
 export type { IEncyptionUtil } from './i-encryption-uitl/i-encryption-uitl';
+export type {
+  IInLineAiChatOptions,
+  IInLineAIUtil,
+} from './i-inline-ai-util/i-inline-ai-util';
+export type {
+  IAIToolbarItem,
+  IAIChatUtil,
+} from './i-ai-chat-util/i-ai-chat-util';
+export type { IJsonUtil } from './i-json-util/i-json-util';
+export type { IScreenShotUtil } from './i-screen-shot-util/i-screen-shot-util';
+export type { IPrintPreviewUtil } from './i-print-preview-util/i-print-preview-util';

@@ -12,7 +12,6 @@ export interface IApiControlState extends IApiControllerState {
   /**
    * @description popover层级
    * @type {number}
-   * @default -
    * @memberof IApiControlState
    */
   zIndex?: number;
@@ -62,4 +61,11 @@ export interface IApiControlState extends IApiControllerState {
    * @memberof IApiControlState
    */
   maskOption: IApiMaskOption;
+
+  /**
+   * @description 是否禁用计数器
+   * @type {boolean}
+   * @memberof IApiControllerState
+   */
+  isCounterDisabled: boolean;
 }

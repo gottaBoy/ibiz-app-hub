@@ -7,4 +7,23 @@
     /* 兼容长单词换行 */
     white-space: pre-wrap;
   }
+
+  img {
+    max-width: 100%;
+  }
+
+  .cherry-previewer-codeBlock-hover-handler .cherry-copy-code-block {
+    color: getCssVar('ai-chat', 'color');
+    background-color: getCssVar('ai-chat', 'background-color');
+    border: none;
+
+    .ch-icon {
+      vertical-align: initial;
+    }
+
+    &:hover {
+      color: getCssVar('ai-chat', 'hover-color');
+      background-color: getCssVar('ai-chat', 'hover-background-color');
+    }
+  }
 }

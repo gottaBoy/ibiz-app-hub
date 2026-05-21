@@ -1,0 +1,48 @@
+@include b(ai-think) {
+  width: 100%;
+  height: auto;
+  font-size: getCssVar(font-size, small);
+  color: getCssVar(inline-ai-textarea-container, color-text-1);
+  @include e(header) {
+    display: flex;
+    gap: getCssVar(spacing, extra-tight);
+    align-items: center;
+    margin-bottom: getCssVar(spacing, tight);
+    cursor: pointer;
+
+    &:hover {
+      color: getCssVar(inline-ai-textarea-container, color-text-hove-1);
+    }
+    @include m(state-icon) {
+      display: flex;
+      align-items: center;
+      color: getCssVar(color, success);
+      @include when(loading) {
+        color: getCssVar(inline-ai-textarea-container, color-loading);
+      }
+    }
+    @include m(collapse-icon) {
+      display: flex;
+      align-items: center;
+    }
+  }
+  @include e(content) {
+    position: relative;
+    padding-left: getCssVar(spacing, tight);
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    transition:
+      height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 2px;
+      content: '';
+      background-color: getCssVar(inline-ai-textarea-container, color-border);
+    }
+  }
+}

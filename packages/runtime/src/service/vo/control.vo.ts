@@ -224,8 +224,10 @@ export class ControlVO {
     // 设置数据状态（新建与否）
     if (Object.prototype.hasOwnProperty.call(this.$origin, 'srfuf')) {
       this.$srfuf = this.$origin.srfuf;
+    } else {
+      this.$srfuf =
+        this.srfkey === this.tempsrfkey ? Srfuf.UPDATE : Srfuf.CREATE;
     }
-    this.$srfuf = this.srfkey === this.tempsrfkey ? Srfuf.UPDATE : Srfuf.CREATE;
     Object.defineProperty(this, 'srfuf', {
       get() {
         return this.$srfuf;

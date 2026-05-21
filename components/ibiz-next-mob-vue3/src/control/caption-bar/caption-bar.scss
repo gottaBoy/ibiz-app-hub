@@ -1,14 +1,21 @@
-$control-captionbar: (color: getCssVar('color', 'text', 0),
-  font-size: getCssVar('font-size', 'header-5'),
-  sub-main-font-size: getCssVar('font-size', 'header-6'),
-  font-weight: getCssVar('font-weight', 'bold'),
-  line-height: rem(26px),
-  text-align: center,
-  min-height: getCssVar('spacing', 'super-loose'),
-  sub-caption-font-size: getCssVar('font-size', 'regular'),
-  sub-caption-color: getCssVar('color', 'text', 2),
-  padding: getCssVar('spacing', 'tight') 0,
-  icon-width: rem(20px),
+$control-captionbar: (
+  // Color
+  color-page-caption: getCssVar('view-page-caption', 'color'),
+  color-sub-caption: getCssVar('color', 'text', 2),
+  // Font
+  font-page-caption-fontSize: getCssVar('view-page-caption', 'font-size'),
+  font-sub-caption-fontSize: getCssVar('font-size', 'regular'),
+  font-sub-main-fontSize: getCssVar('font-size', 'header-6'),
+  font-caption-fontWeight: getCssVar('view-page-caption', 'font-weight'),
+  font-caption-lineHeight: getCssVar('view-page-caption', 'line-height'),
+  font-caption-textAlign: getCssVar('view-page-caption', 'text-align'),
+  font-icon-width-fontSize: rem(20px),
+  // Spacing
+  spacing-padding: getCssVar('spacing', 'tight') 0,
+  spacing-margin-right: getCssVar('spacing', 'tight') 0,
+
+  // Height
+  height-min-height: getCssVar('spacing', 'super-loose')
 );
 
 @include b(control-captionbar) {
@@ -19,20 +26,18 @@ $control-captionbar: (color: getCssVar('color', 'text', 0),
   flex-direction: column;
   align-items: center;
   height: 100%;
-  min-height: getCssVar('control-captionbar', 'min-height');
-  padding: getCssVar('control-captionbar', 'padding');
+  min-height: getCssVar('control-captionbar', 'height-min-height');
+  padding: getCssVar('control-captionbar', 'spacing-padding');
 
   @include when(hasSub) {
-
     @include b(control-captionbar-caption) {
-      font-size: getCssVar('control-captionbar', 'sub-main-font-size');
+      font-size: getCssVar('control-captionbar', 'font-sub-main-fontSize');
     }
   }
 
-
   @include e(icon) {
     display: inline;
-    margin-right: getCssVar(spacing, tight);
+    margin-right: getCssVar('control-captionbar', 'spacing-margin-right');
   }
 
   @include b(control-captionbar-caption) {
@@ -41,20 +46,20 @@ $control-captionbar: (color: getCssVar('color', 'text', 0),
     justify-content: center;
     width: 100%;
     height: 100%;
-    font-size: getCssVar('control-captionbar', 'font-size');
-    font-weight: getCssVar('control-captionbar', 'font-weight');
-    line-height: getCssVar('control-captionbar', 'line-height');
-    color: getCssVar('control-captionbar', 'color');
-    text-align: getCssVar('control-captionbar', 'text-align');
+    font-size: getCssVar('control-captionbar', 'font-page-caption-fontSize');
+    font-weight: getCssVar('control-captionbar', 'font-caption-fontWeight');
+    line-height: getCssVar('control-captionbar', 'font-caption-lineHeight');
+    color: getCssVar('control-captionbar', 'color-page-caption');
+    text-align: getCssVar('control-captionbar', 'font-caption-textAlign');
 
-    >span {
+    > span {
       @include utils-ellipsis;
     }
 
     @include b(icon) {
       flex-shrink: 0;
-      width: getCssVar('control-captionbar', 'icon-width');
-      font-size: getCssVar('control-captionbar', 'icon-width');
+      width: getCssVar('control-captionbar', 'font-icon-width-fontSize');
+      font-size: getCssVar('control-captionbar', 'font-icon-width-fontSize');
     }
   }
 
@@ -67,8 +72,8 @@ $control-captionbar: (color: getCssVar('color', 'text', 0),
     justify-content: center;
     width: 100%;
     height: 100%;
-    font-size: getCssVar('control-captionbar', 'sub-caption-font-size');
-    color: getCssVar('control-captionbar', 'sub-caption-color');
-    text-align: getCssVar('control-captionbar', 'text-align');
+    font-size: getCssVar('control-captionbar', 'font-sub-caption-fontSize');
+    color: getCssVar('control-captionbar', 'color-sub-caption');
+    text-align: getCssVar('control-captionbar', 'font-text-align');
   }
 }

@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'drbar',
   deviewId: 'd2f34cf0f3da26accdfae59e5165de98',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
@@ -38,7 +38,7 @@ export default {
           id: 'count',
         },
         {
-          caption: '计数器禁用',
+          caption: '计数器动态禁用',
           appViewId: 'web.master_drbar_counter_disabled',
           id: 'disable_counter',
         },

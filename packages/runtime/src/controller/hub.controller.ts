@@ -55,16 +55,20 @@ export class HubController implements IApiAppHubController {
 
   /**
    * @description 变更密码
-   * @param {string} oldPwd
-   * @param {string} newPwd
-   * @param {(IData | undefined)} [opts]
+   * @param {string} oldPwd 旧密码
+   * @param {string} newPwd 新密码
+   * @param {{
+   *       surePwd: string; // 确认密码
+   *     }} [opts] 变更密码配置
    * @returns {*}  {Promise<IAuthResult>}
    * @memberof HubController
    */
   async changePwd(
     oldPwd: string,
     newPwd: string,
-    opts?: IData | undefined,
+    opts?: {
+      surePwd: string;
+    },
   ): Promise<IAuthResult> {
     const bol = await ibiz.appUtil.changePwd(oldPwd, newPwd, opts);
     return bol;

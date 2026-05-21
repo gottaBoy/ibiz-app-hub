@@ -386,7 +386,7 @@ export default {
         id: 'web.master.searchform_layout4',
       },
       {
-        searchButtonPos: 'RIGHT',
+        searchButtonPos: 'BOTTOM',
         searchButtonStyle: 'SEARCHONLY',
         deformPages: [
           {

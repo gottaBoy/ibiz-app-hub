@@ -1,11 +1,14 @@
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, h } from 'preact';
 import { ChatContainer } from '../../components';
-import { IContainerOptions } from '../../interface';
+import { IContainerOptions, IResourceOptions } from '../../interface';
 import { AiTopicController } from '../ai-topic/ai-topic.controller';
 import { AiChatController } from '../ai-chat/ai-chat.controller';
 import { ChatTopic } from '../../entity';
 import { IndexedDBUtil } from '../../utils';
 import { AIChatConst } from '../../constants';
+import { getChatSessionId } from '../../utils/util/util';
 
 /**
  * 聊天器控制器
@@ -37,14 +40,9 @@ export class ChatController {
   protected mode: 'DEFAULT' | 'TOPIC' = 'DEFAULT';
 
   /**
-   * 是否挂载ai话题
-   *
-   * @author tony001
-   * @date 2025-02-23 16:02:54
-   * @protected
-   * @type {boolean}
+   * 资源配置数据
    */
-  protected isMountedAiTopic: boolean = false;
+  resourceOptions!: IResourceOptions | undefined;
 
   /**
    * 容器配置备份
@@ -126,7 +124,11 @@ export class ChatController {
    * @return {*}  {Promise<AiChatController>}
    */
   async create(opts: IContainerOptions): Promise<AiChatController> {
-    await this.initIndexDB();
+    this.resourceOptions = opts.resourceOptions;
+    const resourceMode = opts.resourceOptions?.resourceMode || 'LOCAL';
+    if (resourceMode === 'LOCAL') {
+      await this.initIndexDB();
+    }
     this.backupChatOptions = opts;
     this.close();
     this.container = document.createElement('div');
@@ -134,64 +136,25 @@ export class ChatController {
     document.body.appendChild(this.container);
 
     const chatOptions = opts.chatOptions;
-    let topicOptions;
 
-    if (opts.mode && opts.mode === 'TOPIC') {
-      // 未挂载ai话题控制器先挂载
-      if (!this.isMountedAiTopic) {
-        await this.aiTopic.fetchHistory(opts.topicOptions!);
-        this.isMountedAiTopic = true;
-      }
-      // 更新当前话题
-      topicOptions = opts.topicOptions!;
-      Object.assign(topicOptions, {
-        aiChat: {
-          caption: chatOptions.caption,
-          context: chatOptions.context,
-          params: chatOptions.params,
-          appDataEntityId: chatOptions.appDataEntityId,
-          contentToolbarItems: chatOptions.contentToolbarItems,
-          footerToolbarItems: chatOptions.footerToolbarItems,
-          questionToolbarItems: chatOptions.questionToolbarItems,
-          otherToolbarItems: chatOptions.otherToolbarItems,
-          appendCurData: chatOptions.appendCurData,
-          appendCurContent: chatOptions.appendCurContent,
-        },
-      });
-      await this.aiTopic.updateCurrentTopic(topicOptions);
-    } else {
-      this.aiTopic.activedTopic.value = undefined;
-    }
-
-    Object.assign(chatOptions, {
-      topicId: topicOptions?.id,
-      topic: topicOptions,
-    });
-
-    const aiChat = new AiChatController(chatOptions);
-
-    this.aiTopicMap.set(`${topicOptions?.id}`, aiChat);
-
+    // 立即渲染初始加载状态
     render(
       h(ChatContainer, {
-        aiChat,
-        aiTopic: this.aiTopic,
         mode: opts.mode ? opts.mode : 'DEFAULT',
         containerOptions: opts.containerOptions,
         caption:
           opts.mode && opts.mode === 'TOPIC' ? 'AI助手' : chatOptions.caption,
-        enableBackFill: opts.containerOptions?.enableBackFill,
-        contentToolbarItems: chatOptions.contentToolbarItems,
-        footerToolbarItems: chatOptions.footerToolbarItems,
-        questionToolbarItems: chatOptions.questionToolbarItems,
+        autoClose: opts.containerOptions?.autoClose,
+        openMode: opts.containerOptions?.openMode,
+        hideTopicSidebar: opts.topicOptions?.hideTopicSidebar || false,
         close: () => {
           this.close();
-          if (chatOptions.closed) {
-            chatOptions.closed(chatOptions.context, chatOptions.params);
+          if (chatOptions && chatOptions.closed) {
+            chatOptions.closed(chatOptions.context, chatOptions.params, []);
           }
         },
         fullscreen: (target: boolean) => {
-          if (chatOptions.fullscreen) {
+          if (chatOptions && chatOptions.fullscreen) {
             chatOptions.fullscreen(
               target,
               chatOptions.context,
@@ -200,7 +163,7 @@ export class ChatController {
           }
         },
         minimize: (target: boolean) => {
-          if (chatOptions.minimize) {
+          if (chatOptions && chatOptions.minimize) {
             chatOptions.minimize(
               target,
               chatOptions.context,
@@ -208,10 +171,220 @@ export class ChatController {
             );
           }
         },
+        isLoading: true,
       }),
       this.container,
     );
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let topicOptions: any;
+
+    // 智能体清单(由内部获取，优化打开速度)
+    if (!chatOptions.aiAgentlist && chatOptions.fetchAgentList) {
+      chatOptions.aiAgentlist = await chatOptions.fetchAgentList();
+    }
+
+    if (
+      !chatOptions.aiknowledgeBasesList &&
+      chatOptions.fetchKnowledgeBaseList &&
+      chatOptions.enableKnowledgeBaseSelect
+    ) {
+      chatOptions.aiknowledgeBasesList =
+        await chatOptions.fetchKnowledgeBaseList();
+    } else {
+      chatOptions.aiknowledgeBasesList = [];
+    }
+
+    if (opts.mode && opts.mode === 'TOPIC') {
+      this.aiTopic.injectResourceOptions(opts.resourceOptions);
+      // 加载话题历史
+      await this.aiTopic.fetchHistory(opts.topicOptions!);
+      // 更新当前话题
+      topicOptions = opts.topicOptions!;
+      Object.assign(topicOptions, {
+        aiChat: {
+          caption: chatOptions.caption,
+          context: chatOptions.context,
+          params: chatOptions.params,
+          appDataEntityId: chatOptions.appDataEntityId,
+          sessionid: chatOptions.sessionid,
+          contentToolbarItems: chatOptions.contentToolbarItems,
+          footerToolbarItems: chatOptions.footerToolbarItems,
+          questionToolbarItems: chatOptions.questionToolbarItems,
+          otherToolbarItems: chatOptions.otherToolbarItems,
+          appendCurData: chatOptions.appendCurData,
+          appendCurContent: chatOptions.appendCurContent,
+          enableAIAgentChange: chatOptions.enableAIAgentChange,
+          activeAIAgentID: chatOptions.activeAIAgentID,
+          aiAgentlist: chatOptions.aiAgentlist,
+          srfMode: chatOptions.srfMode,
+          appendCurResource: chatOptions.appendCurResource,
+        },
+      });
+      // 同步历史参数
+      this.syncHistoryOptions(topicOptions, chatOptions, opts.resourceOptions);
+      await this.aiTopic.asyncTopic(topicOptions);
+    } else {
+      this.aiTopic.setActivedTopic(undefined);
+    }
+
+    Object.assign(chatOptions, {
+      topicId: topicOptions?.id,
+      topic: topicOptions,
+      aiTopic: this.aiTopic,
+    });
+
+    const aiChat = new AiChatController(chatOptions, this.resourceOptions);
+
+    this.aiTopicMap.set(`${topicOptions?.id}`, aiChat);
+
+    // 如果是临时会话
+    if (opts.mode && opts.mode === 'TOPIC' && this.aiTopic.isTempChat.value) {
+      this.aiTopic.enterTempChat();
+    } else {
+      render(
+        h(ChatContainer, {
+          aiChat,
+          aiTopic: this.aiTopic,
+          mode: opts.mode ? opts.mode : 'DEFAULT',
+          containerOptions: opts.containerOptions,
+          caption:
+            opts.mode && opts.mode === 'TOPIC' ? 'AI助手' : chatOptions.caption,
+          enableBackFill: opts.containerOptions?.enableBackFill,
+          contentToolbarItems: chatOptions.contentToolbarItems,
+          footerToolbarItems: chatOptions.footerToolbarItems,
+          questionToolbarItems: chatOptions.questionToolbarItems,
+          autoClose: opts.containerOptions?.autoClose,
+          openMode: opts.containerOptions?.openMode,
+          hideTopicSidebar: opts.topicOptions?.hideTopicSidebar || false,
+          close: () => {
+            this.close();
+            if (chatOptions.closed) {
+              chatOptions.closed(
+                chatOptions.context,
+                chatOptions.params,
+                aiChat.getAllMessages(),
+              );
+            }
+          },
+          fullscreen: (target: boolean) => {
+            if (chatOptions.fullscreen) {
+              chatOptions.fullscreen(
+                target,
+                chatOptions.context,
+                chatOptions.params,
+              );
+            }
+          },
+          minimize: (target: boolean) => {
+            if (chatOptions.minimize) {
+              chatOptions.minimize(
+                target,
+                chatOptions.context,
+                chatOptions.params,
+              );
+            }
+          },
+          isLoading: false,
+        }),
+        this.container,
+      );
+    }
+
     return aiChat;
+  }
+
+  /**
+   * 同步历史参数(历史激活标识、历史会话标识)
+   * @param topicOptions
+   * @param chatOptions
+   */
+  protected syncHistoryOptions(
+    topicOptions: Record<string, any>,
+    chatOptions: Record<string, any>,
+    resourceOptions: IResourceOptions,
+  ): void {
+    // 禁用存储
+    if (topicOptions.disableStorage) {
+      // 更正session标识
+      const sessionid = getChatSessionId('TEMP');
+      chatOptions.sessionid = sessionid;
+      topicOptions.aiChat.sessionid = sessionid;
+      // 更正话题标题
+      topicOptions.caption = '临时会话';
+      topicOptions.sourceCaption = '临时会话';
+      return;
+    }
+    // 计算激活话题
+    const currentTopic = this.aiTopic.getCurrentTopicByID(
+      topicOptions.id,
+    ) as ChatTopic;
+
+    // 附加排序和置顶字段
+    if (currentTopic) {
+      topicOptions.sequence = currentTopic.sequence;
+      topicOptions.isTop = currentTopic.isTop;
+    }
+
+    // 计算activeAIAgentID
+    if (
+      currentTopic &&
+      currentTopic.aiChat &&
+      currentTopic.aiChat.activeAIAgentID
+    ) {
+      chatOptions.activeAIAgentID = currentTopic.aiChat.activeAIAgentID;
+      topicOptions.aiChat.activeAIAgentID = currentTopic.aiChat.activeAIAgentID;
+    } else if (chatOptions.aiAgentlist && chatOptions.aiAgentlist.length > 0) {
+      if (!chatOptions.activeAIAgentID) {
+        const activeAIAgent = chatOptions.aiAgentlist.find(
+          (item: Record<string, any>) => item.default === 1,
+        );
+        if (activeAIAgent) {
+          chatOptions.activeAIAgentID = activeAIAgent.id;
+          topicOptions.aiChat.activeAIAgentID = activeAIAgent.id;
+        } else {
+          chatOptions.activeAIAgentID = chatOptions.aiAgentlist[0].id;
+          topicOptions.aiChat.activeAIAgentID = chatOptions.aiAgentlist[0].id;
+        }
+      }
+    }
+
+    // 计算缓存会话标识
+    if (currentTopic && currentTopic.aiChat && currentTopic.aiChat.sessionid) {
+      chatOptions.sessionid = currentTopic.aiChat.sessionid;
+      topicOptions.aiChat.sessionid = currentTopic.aiChat.sessionid;
+    }
+
+    // 计算话题标题
+    const resourceMode = resourceOptions.resourceMode;
+    if (resourceMode === 'LOCAL') {
+      if (topicOptions.captionMode !== 'default') {
+        topicOptions.sourceCaption = '新会话';
+        if (currentTopic && currentTopic.caption) {
+          topicOptions.caption = currentTopic.caption;
+        } else {
+          topicOptions.caption = '新会话';
+        }
+      } else {
+        topicOptions.sourceCaption = topicOptions.caption;
+      }
+      // 远程模式不需要覆盖远程标题
+    } else if (resourceMode === 'REMOTE') {
+      topicOptions.sourceCaption = topicOptions.caption;
+      if (currentTopic && currentTopic.caption) {
+        topicOptions.caption = currentTopic.caption;
+      }
+    }
+
+    // 附加标题是否计算完成
+    if (currentTopic) {
+      topicOptions.captionComputed = !!currentTopic.captionComputed;
+    }
+
+    // 计算话题真实标识
+    if (resourceMode === 'REMOTE' && currentTopic && currentTopic.realid) {
+      topicOptions.realid = currentTopic.realid;
+    }
   }
 
   /**
@@ -230,27 +403,34 @@ export class ChatController {
         caption: topic.aiChat.caption,
         context: topic.aiChat.context,
         params: topic.aiChat.params,
+        sessionid: topic.aiChat.sessionid,
         contentToolbarItems: topic.aiChat.contentToolbarItems,
         footerToolbarItems: topic.aiChat.footerToolbarItems,
         questionToolbarItems: topic.aiChat.questionToolbarItems,
         otherToolbarItems: topic.aiChat.otherToolbarItems,
         appendCurData: topic.aiChat.appendCurData,
         appendCurContent: topic.aiChat.appendCurContent,
+        aiAgentlist: topic.aiChat.aiAgentlist,
+        activeAIAgentID: topic.aiChat.activeAIAgentID,
+        enableAIAgentChange: topic.aiChat.enableAIAgentChange,
+        srfMode: topic.aiChat.srfMode,
+        appendCurResource: topic.aiChat.appendCurResource,
         appDataEntityId: topic.aiChat.appDataEntityId,
         topicId: topic.id,
         topic,
+        aiTopic: this.aiTopic,
         extendToolbarClick:
           this.backupChatOptions!.chatOptions.extendToolbarClick,
         recommendPrompt: this.backupChatOptions!.chatOptions.recommendPrompt,
+        chatDigest: this.backupChatOptions!.chatOptions.chatDigest,
+        openLinkView: this.backupChatOptions!.chatOptions.openLinkView,
       });
     }
-    let aiChat: AiChatController;
-    if (this.aiTopicMap.has(`${topic.id}`)) {
-      aiChat = this.aiTopicMap.get(`${topic.id}`)!;
-    } else {
-      aiChat = new AiChatController(opts);
-      this.aiTopicMap.set(`${topic.id}`, aiChat);
-    }
+    const aiChat: AiChatController = new AiChatController(
+      opts,
+      this.resourceOptions,
+    );
+    this.aiTopicMap.set(`${topic.id}`, aiChat);
     if (this.container) {
       render(null, this.container);
       render(
@@ -271,10 +451,14 @@ export class ChatController {
           contentToolbarItems: opts.contentToolbarItems,
           footerToolbarItems: opts.footerToolbarItems,
           questionToolbarItems: opts.questionToolbarItems,
+          autoClose: this.backupChatOptions?.containerOptions?.autoClose,
+          openMode: this.backupChatOptions?.containerOptions?.openMode,
+          hideTopicSidebar:
+            this.backupChatOptions?.topicOptions?.hideTopicSidebar || false,
           close: () => {
             this.close();
             if (opts.closed) {
-              opts.closed(opts.context, opts.params);
+              opts.closed(opts.context, opts.params, aiChat.getAllMessages());
             }
           },
           fullscreen: (target: boolean) => {
@@ -287,6 +471,7 @@ export class ChatController {
               opts.minimize(target, opts.context, opts.params);
             }
           },
+          isLoading: false,
         }),
         this.container,
       );
@@ -329,6 +514,9 @@ export class ChatController {
       this.container.remove();
       this.container = undefined;
     }
+    this.aiTopicMap.forEach(aiChat => {
+      aiChat.destroyed();
+    });
   }
 }
 

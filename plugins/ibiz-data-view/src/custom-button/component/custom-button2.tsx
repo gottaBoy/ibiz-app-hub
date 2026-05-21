@@ -8,7 +8,7 @@ export const CustomButton2 = defineComponent({
         viewBox='0 0 167 38'
         preserveAspectRatio='none'
         class='dv-button-svg'
-        fill="currentColor"
+        fill='currentColor'
       >
         <g style='transform: translate(2px, 2px);'>
           <g>

@@ -91,6 +91,7 @@ export const FormControl = defineComponent({
           model: detail,
           data: c.state.data,
           value: c.state.data[detailId],
+          controller: c.details[detailId],
         });
       }
 

@@ -131,7 +131,11 @@ export class GridFieldEditColumnController
         this.editItem.editor &&
         this.editItem.editor.editorType !== 'HIDDEN'
       ) {
-        this.editorProvider = await getEditorProvider(this.editItem.editor);
+        this.editorProvider = await getEditorProvider(
+          this.editItem.editor,
+          this.model,
+          this.grid.model,
+        );
         if (this.editorProvider) {
           this.editor = await this.editorProvider.createController(
             this.editItem.editor,

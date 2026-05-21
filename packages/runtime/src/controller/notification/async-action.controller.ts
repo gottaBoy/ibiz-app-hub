@@ -131,7 +131,9 @@ export class AsyncActionController implements IAsyncActionController {
     // 非结束状态的消息加一
     if (!this.finishedStates.includes(action.actionstate)) {
       this.doingNum += 1;
-      ibiz.notice.showDoingNotice({ num: this.doingNum });
+      if (ibiz.config.common.enableAsyncActionNotice) {
+        ibiz.notice.showDoingNotice({ num: this.doingNum });
+      }
     } else {
       this.noticeResult(action);
     }
@@ -156,7 +158,9 @@ export class AsyncActionController implements IAsyncActionController {
     if (this.finishedStates.includes(action.actionstate)) {
       this.doingNum -= 1;
       if (this.doingNum <= 0) {
-        ibiz.notice.closeDoingNotice();
+        if (ibiz.config.common.enableAsyncActionNotice) {
+          ibiz.notice.closeDoingNotice();
+        }
       }
       this.noticeResult(action);
     }
@@ -165,6 +169,8 @@ export class AsyncActionController implements IAsyncActionController {
   }
 
   protected noticeResult(action: IPortalAsyncAction): void {
-    ibiz.notice.showAsyncAction(action);
+    if (ibiz.config.common.enableAsyncActionNotice) {
+      ibiz.notice.showAsyncAction(action);
+    }
   }
 }

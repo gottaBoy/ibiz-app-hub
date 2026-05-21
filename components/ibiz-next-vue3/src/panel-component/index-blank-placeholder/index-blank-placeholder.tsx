@@ -77,9 +77,7 @@ export const IndexBlankPlaceholder = defineComponent({
     return (
       <div
         class={this.classArr}
-        onClick={() => {
-          this.controller.onClick();
-        }}
+        onClick={event => this.controller.onClick(event)}
       >
         {this.controller.model.cssStyle ? (
           <style type='text/css'>{this.controller.model.cssStyle}</style>

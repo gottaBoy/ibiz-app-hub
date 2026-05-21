@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-unsafe-optional-chaining */
 import { PropType, computed, defineComponent, h, ref, watch } from 'vue';
 import { IOverlayContainer } from '@ibiz-template/runtime';
 import { BIReportDesignController } from '../../../controller';
@@ -60,6 +62,7 @@ export default defineComponent({
             const field = await getSchemaField(
               item,
               props.controller.state.schemaFields || [],
+              props.controller.context.srfappid || ibiz.env.appId,
             );
             if (field) {
               fieldIconMap.value.set(

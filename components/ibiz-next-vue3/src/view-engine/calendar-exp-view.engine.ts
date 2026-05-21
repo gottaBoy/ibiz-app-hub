@@ -18,7 +18,7 @@ export class CalendarExpViewEngine extends ExpViewEngine {
    *   >}
    * @memberof CalendarExpViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDECalendarExplorerView,
     ICalendarExpViewState,
     ICalendarExpViewEvent

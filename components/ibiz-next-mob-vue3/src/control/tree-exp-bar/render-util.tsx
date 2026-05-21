@@ -29,8 +29,8 @@ export function useExpBarRender(
     c.load();
   }, 500);
 
-  const onInput = (value: string): void => {
-    c.state.query = value;
+  const onInput = (event: InputEvent): void => {
+    c.state.query = (event.target as IData)?.value;
     debounceSearch();
   };
 
@@ -78,7 +78,7 @@ export function useExpBarRender(
     }
 
     return (
-      <el-input
+      <van-field
         model-value={c.state.query}
         class={[ns.b('quick-search'), expBarNs.b('quick-search')]}
         placeholder={c.state.placeHolder}
@@ -89,7 +89,7 @@ export function useExpBarRender(
             return <ion-icon class={ns.e('search-icon')} name='search' />;
           },
         }}
-      </el-input>
+      </van-field>
     );
   };
 

@@ -12,6 +12,7 @@ import { IApiMaskOption } from '../common';
  * @export
  * @interface IApiControlController
  * @extends {IApiController<T, S>}
+ * @ctrlparams {"name":"ignoremcmsg","title":"是否忽略通知消息","parameterType":"boolean","defaultvalue":"undefined","description":"设置为true时，当前部件接受到数据变更通知消息时则不做处理，如：表单数据变更保存后，表格不会刷新当前数据"}
  * @template T
  * @template S
  */
@@ -89,9 +90,15 @@ export interface IApiControlController<
   disabled(options?: IApiMaskOption): void;
 
   /**
+   * @description 禁用部件计数器
+   * @memberof IApiControlController
+   */
+  disableCounter(): void;
+
+  /**
    * @description 触发实体数据变更的通知
-   * @param {('create' | 'update' | 'remove')} type
-   * @param {IApiData} data
+   * @param {('create' | 'update' | 'remove')} type 数据变更类型
+   * @param {IApiData} data 变更数据
    * @memberof IApiControlController
    */
   emitDEDataChange(type: 'create' | 'update' | 'remove', data: IApiData): void;

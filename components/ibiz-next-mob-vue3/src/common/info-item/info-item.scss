@@ -1,0 +1,74 @@
+$info-item: (
+  // Width/Height
+  height-icon-line-height: 1,
+  height-label-line-height: 1,
+  // Spacing
+  spacing-label-margin: 0 0 0 getCssVar('spacing', 'extra-tight'),
+  spacing-badge-margin: 0 0 0 getCssVar('spacing', 'tight'),
+  spacing-vertical-icon-wrapper-margin: 0 0 getCssVar('spacing', 'extra-tight')
+    0,
+  // Font
+  font-icon-font-size: inherit,
+  font-label-font-size: inherit,
+  // Other
+  icon-size: auto,
+  position-badge-top: 0px,
+  position-badge-left-offset: getCssVar('spacing', 'extra-tight'),
+  position-badge-left: calc(
+      100% - #{getCssVar(info-item, position-badge-left-offset)}
+    ),
+  transform-badge: translateY(-50%)
+);
+
+// 组件布局样式，字体与图标大小继承上层组件文本大小
+@include b(info-item) {
+  @include set-component-css-var('info-item', $info-item);
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  @include e('icon') {
+    &.#{bem(icon)},
+    &.#{bem(icon)} svg,
+    &.#{bem(icon)} img {
+      min-width: getCssVar(info-item, icon-size);
+      min-height: getCssVar(info-item, icon-size);
+      font-size: getCssVar(info-item, font-icon-font-size);
+      line-height: getCssVar(info-item, height-icon-line-height);
+    }
+    &.#{bem(icon)} + .#{bem(info-item, label)} {
+      margin: getCssVar(info-item, spacing-label-margin);
+    }
+  }
+
+  @include e('label') {
+    font-size: getCssVar(info-item, font-label-font-size);
+    line-height: getCssVar(info-item, height-label-line-height);
+    & + .#{bem(info-item, badge)} {
+      margin: getCssVar(info-item, spacing-badge-margin);
+    }
+  }
+
+  @include when('badge-float') {
+    @include e('badge') {
+      position: absolute;
+      top: getCssVar(info-item, position-badge-top);
+      left: getCssVar(info-item, position-badge-left);
+      margin: 0;
+      transform: getCssVar(info-item, transform-badge);
+    }
+  }
+
+  // 垂直布局样式
+  @include when('vertical') {
+    flex-direction: column;
+    @include e('icon-wrapper') {
+      &:has(.#{bem(icon)}) {
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin: getCssVar(info-item, spacing-vertical-icon-wrapper-margin);
+      }
+    }
+  }
+}

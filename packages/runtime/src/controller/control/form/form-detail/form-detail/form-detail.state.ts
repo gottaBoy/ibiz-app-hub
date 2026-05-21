@@ -81,6 +81,13 @@ export class FormDetailState implements IFormDetailState {
    */
   enableReadonly: boolean = true;
 
+  /**
+   * @description 计数器数据
+   * @type {IData}
+   * @memberof FormDetailState
+   */
+  counterData: IData = {};
+
   constructor(protected parent?: IFormDetailContainerState) {
     // 定义是否显示，set方法需要返回true,否则vue proxy报错
     let $visible: boolean = true;

@@ -43,8 +43,7 @@ export const CustomDV10 = defineComponent({
     const mergedColor = computed(() => {
       return deepMerge(defaultColor, props.color || []) as string[];
     });
-    const backgroundColor = 'var(--ibiz-screen-dashboard-custom-dv-bg)';
-    const offsety = ref(props.offsetY);
+    const backgroundColor = `var(${ns.cssVarName('screen-dashboard-custom-dv-bg')})`;    const offsety = ref(props.offsetY);
     const padding = ref(8);
     /**
      * 绘制边框svg

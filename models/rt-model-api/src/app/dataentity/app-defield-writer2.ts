@@ -26,6 +26,7 @@ export class AppDEFieldWriter2 extends ModelObjectWriter {
       c.s('res.LanguageRes[]', s, 'getQSPHPSLanguageRes'),
     );
     _.w(d, 'quickSearchPlaceHolder', s);
+    _.w(d, 'scale', s);
     _.w(d, 'stdDataType', s);
     _.w(d, 'stringLength', s, '', 0);
     _.w(d, 'valueFormat', s);

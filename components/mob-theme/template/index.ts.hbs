@@ -22,6 +22,7 @@ import DEMobPickupTreeView from './mob-view-layout-model-repository/mob-view-lay
 import DEMobPickupView from './mob-view-layout-model-repository/mob-view-layout-model-repository-de-mob-pickup-view-layout';
 import DEMobTabExpView from './mob-view-layout-model-repository/mob-view-layout-model-repository-de-mob-tab-exp-view-layout';
 import DEMobTabExpView9 from './mob-view-layout-model-repository/mob-view-layout-model-repository-de-mob-tab-exp-view-9-layout';
+import DEMobTabExpView_FLOW from './mob-view-layout-model-repository/mob-view-layout-model-repository-de-mob-tab-exp-view-layout-flow';
 import DEMobTreeView from './mob-view-layout-model-repository/mob-view-layout-model-repository-de-mob-tree-view-layout';
 import DEMobWFDynaEditView from './mob-view-layout-model-repository/mob-view-layout-model-repository-de-mob-wf-dyna-edit-view-layout';
 import DEMobWFDynaEditView3 from './mob-view-layout-model-repository/mob-view-layout-model-repository-de-mob-wf-dyna-edit-view-3-layout';
@@ -29,6 +30,7 @@ import DEMobWFDynaActionView from './mob-view-layout-model-repository/mob-view-l
 import DEMobWFDynaStartView from './mob-view-layout-model-repository/mob-view-layout-model-repository-de-mob-wf-dyna-start-view-layout';
 import DEMobWizardVIEW from './mob-view-layout-model-repository/mob-view-layout-model-repository-de-mob-wizard-view-layout';
 import DEMobTreeExpView from './mob-view-layout-model-repository/mob-view-layout-model-repository-de-mob-tree-exp-view-layout'
+import DEMobTabSearchView from './mob-view-layout-model-repository/mob-view-layout-model-repository-de-mob-tab-search-view-layout';
 import TreeExpBar from './control-layout/control-layout-model-repository-mob-tree-exp-bar-layout'
 import TreeView from './control-layout/control-layout-model-repository-mob-tree-layout';
 import AppLoginView from './app-login-view';
@@ -90,6 +92,8 @@ export function install(callBack: (key: string, model: any) => void): void {
   // 移动端实体分页导航视图
   callBack('DEMOBTABEXPVIEW_DEFAULT', DEMobTabExpView);
   callBack('DEMOBTABEXPVIEW9_DEFAULT', DEMobTabExpView9);
+  // 移动端实体分页导航视图（流式布局）
+  callBack('DEMOBTABEXPVIEW_FLOW', DEMobTabExpView_FLOW);
   // 移动端实体树视图
   callBack('DEMOBTREEVIEW_DEFAULT', DEMobTreeView);
   // 移动端实体工作流动态编辑视图
@@ -104,6 +108,8 @@ export function install(callBack: (key: string, model: any) => void): void {
   callBack('DEMOBWIZARDVIEW_DEFAULT', DEMobWizardVIEW);
   // 移动端实体树导航视图
   callBack('DEMOBTREEEXPVIEW_DEFAULT', DEMobTreeExpView);
+  // 移动端分页搜索视图
+  callBack('DEMOBTABSEARCHVIEW_DEFAULT', DEMobTabSearchView);
   // 树
   callBack('TREEVIEW_DEFAULT', TreeView);
 

@@ -11,7 +11,7 @@ import { IAppDEGridView } from '@ibiz/model-core';
 import { GridViewEngine } from './grid-view.engine';
 // todo 缺失 IAppDEPickupGridView
 export class PickupGridViewEngine extends GridViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEGridView,
     IPickupGridViewState,
     IPickupGridViewEvent

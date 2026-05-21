@@ -1,5 +1,7 @@
 $panel-container-group: (
   'bg-color': transparent,
+  'icon-padding-right':  getCssVar(spacing,tight),
+  'counter-padding-left': getCssVar(spacing, tight),
 );
 
 $panel-container-group-header: (
@@ -35,12 +37,44 @@ $panel-container-group-content: (
   @include e(caption) {
     @include utils-ellipsis;
 
+    display: flex;
+    align-items: center;
     font-size: getCssVar('panel-container-group-caption', 'font-size');
     font-weight: getCssVar('panel-container-group-caption', 'font-weight');
     color: getCssVar('panel-container-group-caption', 'text-color');
 
     @include m('icon'){
-      padding-right: getCssVar(spacing,tight);
+      padding-right: getCssVar('panel-container-group','icon-padding-right');
+    }
+  }
+
+  @include e(counter) {
+    margin-left: getCssVar('panel-container-group','counter-padding-left');
+  }
+
+  @include when(mob) {
+    #{getCssVarName('panel-container-group-header', 'height')}: rem(48px);
+    #{getCssVarName('panel-container-group-header', 'padding')}: getCssVar(spacing, base);
+    #{getCssVarName('panel-container-group-header', 'bg-color')}: getCssVar(color, bg, 0);
+    #{getCssVarName('panel-container-group-content', 'padding')}: rem(8px) rem(16px);
+    #{getCssVarName('panel-container-group-caption', 'text-color')}: getCssVar(color, text, 2);
+    #{getCssVarName('panel-container-group-caption', 'font-size')}: getCssVar(font-size, '5');
+    #{getCssVarName('panel-container-group-caption', 'font-weight')}: getCssVar(font-weight, regular);
+    #{getCssVarName('panel-container-group-content', 'bg-color')}: getCssVar(color, bg, 1);
+    #{getCssVarName('panel-container-group-caption', 'font-lineHeight')}: rem(16px);
+
+    @include e(caption) {
+      line-height: getCssVar('panel-container-group-caption', 'font-lineHeight');
+    }
+
+    @include b(panel-container-group-header) {
+      background-color: getCssVar('panel-container-group-header','bg-color');
+      border-bottom: none;
+    }
+
+    @include b(panel-container-group-content) {
+      padding: getCssVar('panel-container-group-content', 'padding');
+      background-color: getCssVar('panel-container-group-content', 'bg-color');
     }
   }
 }
@@ -74,6 +108,17 @@ $panel-container-group-content: (
   @include e(right) {
     text-align: right;
     @include flex(row, flex-end, center);
+  }
+
+  @include when('is-mob'){
+    .#{bem(panel-container-group-header,left)}{
+      flex-grow: 1;
+      width: auto;
+    }
+    .#{bem(panel-container-group-header,right)}{
+      flex-grow: 1;
+      width: auto;
+    }
   }
 }
 

@@ -5,7 +5,6 @@ import './digital-flop.scss';
 
 export const DigitalFlop = defineComponent({
   name: 'DigitalFlop',
-  // @ts-ignore
   props: getSpanProps<DigitalFlopController>(),
   setup(props) {
     const ns = useNamespace('digital-flop');
@@ -19,15 +18,24 @@ export const DigitalFlop = defineComponent({
       return '';
     });
 
+    const styles = computed(() => {
+      return {
+        [ns.cssVarBlockName('font-size')]: `${c.fontSize}px`,
+        [ns.cssVarBlockName('width')]: `${c.size}px`,
+        [ns.cssVarBlockName('height')]: `${c.size}px`,
+      };
+    });
+
     return {
       ns,
       c,
       curValue,
+      styles,
     };
   },
   render() {
     return (
-      <div class={this.ns.b()}>
+      <div class={this.ns.b()} style={this.styles}>
         {this.curValue.split('').map((value: string) => {
           return (
             <div

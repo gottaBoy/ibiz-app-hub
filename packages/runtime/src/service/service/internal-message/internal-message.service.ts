@@ -90,7 +90,7 @@ export class InternalMessageService implements IInternalMessageService {
    * @return {*}  {Promise<number>}
    */
   async getUnreadNum(): Promise<number> {
-    const res = await ibiz.net.post(`${this.baseUrl}/fetch_cur_receiver`, {
+    const fetchParams = {
       page: 0,
       size: 1,
       sort: 'timestamp,desc',
@@ -109,7 +109,20 @@ export class InternalMessageService implements IInternalMessageService {
           ],
         },
       ],
-    });
+    };
+    // 不是门户应用只查询当前系统数据
+    if (!ibiz.env.isPortalApp) {
+      fetchParams.searchconds[0].searchconds.push({
+        condop: 'EQ',
+        condtype: 'DEFIELD',
+        fieldname: 'system_tag',
+        value: ibiz.appData?.context.srfdcsystemid,
+      });
+    }
+    const res = await ibiz.net.post(
+      `${this.baseUrl}/fetch_cur_receiver`,
+      fetchParams,
+    );
     if (res.headers['x-total']) {
       return Number(res.headers['x-total']);
     }

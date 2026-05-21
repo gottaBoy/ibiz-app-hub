@@ -17,7 +17,7 @@ export class PickupViewEngine extends ViewEngineBase {
    * @type {ViewController<IAppDEPickupView, IPickupViewState, IPickupViewEvent>}
    * @memberof PickupViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEPickupView,
     IPickupViewState,
     IPickupViewEvent

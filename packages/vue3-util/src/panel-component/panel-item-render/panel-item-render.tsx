@@ -56,6 +56,12 @@ export const PanelItemRender = defineComponent({
     return { ns, classArr, htmlCode };
   },
   render() {
-    return <div class={this.classArr} v-html={this.htmlCode}></div>;
+    return (
+      <div
+        class={this.classArr}
+        v-html={this.htmlCode}
+        onClick={event => this.controller.onClick(event)}
+      ></div>
+    );
   },
 });

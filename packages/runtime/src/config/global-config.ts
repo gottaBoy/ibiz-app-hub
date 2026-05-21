@@ -14,6 +14,7 @@ import {
   IGlobalFlowDrtabConfig,
   IApiGlobalWaterMarkConfig,
   IGlobalMobConfig,
+  IGlobalImgCompressConfig,
 } from '../interface';
 
 /**
@@ -35,6 +36,7 @@ export class GlobalConfig implements IGlobalConfig {
     mobShowViewHeader: true,
     timeoutDuration: 5 * 60 * 1000,
     onlyShowDataInfo: false,
+    viewAccUserMode: 3,
   };
 
   // 全局表格配置
@@ -66,6 +68,10 @@ export class GlobalConfig implements IGlobalConfig {
     mobShowEditorBorder: false,
     emptyHiddenUnit: true,
     showTipsIcon: true,
+    validateMode: 'default',
+    srfCachePos: false,
+    srfCacheKeyTempl: '',
+    enableDynaFormJsonSchema: false,
   };
 
   // 全局看板配置
@@ -87,11 +93,13 @@ export class GlobalConfig implements IGlobalConfig {
   // 全局搜索表单配置
   searchform: IGlobalSearchFormConfig = {
     enableStoredFilters: true,
+    convertParamMode: 'default',
   };
 
   // 全局树配置
   tree: IGlobalTreeConfig = {
     contextMenuRightClickInvoke: true,
+    enableClickNav: false,
   };
 
   // 全局通用配置
@@ -100,6 +108,23 @@ export class GlobalConfig implements IGlobalConfig {
     emptyShowMode: 'DEFAULT',
     searchPhSeparator: '、',
     enableDownloadTicket: false,
+    batchToolbarMode: 'default',
+    mergeAppMenu: 'default',
+    enableAIMinimize: true,
+    aiChatTopicCaptionMode: 'default',
+    aiResourceMode: undefined,
+    enableAIAgentChange: true,
+    globalDownloadPrifix: false,
+    autoCloseModalView: false,
+    aiChatSummaryMaxTokens: 30,
+    enableKnowledgeBaseSelect: true,
+    enableRecallConfigSetting: true,
+    reRankDefaultValue: 2,
+    maxChunksDefaultValue: 10,
+    chunkThresholdDefaultValue: 0.1,
+    enableAsyncActionNotice: false,
+    aiChunkView: '',
+    aiChunkEntity: '',
   };
 
   // 全局分页流布局配置
@@ -151,5 +176,24 @@ export class GlobalConfig implements IGlobalConfig {
   mob: IGlobalMobConfig = {
     mobShowAppTitle: true,
     mobHomeRouteMode: 'default',
+    mobGetSignUrl: '',
+    mobGetSignMethod: 'post',
+    mobWeChatDebug: false,
+    showUploadLoading: false,
+    mobShowBackTop: false,
+    mobEnableStoredQuery: false,
+    toolbarShowMode: 'IMMEDIATE',
+    toolbarGroupShowMode: 'ACTIONSHEET',
+  };
+
+  /**
+   * @description 图片压缩配置
+   * @type {IGlobalImgCompressConfig}
+   * @memberof GlobalConfig
+   */
+  imgCompressConfig: IGlobalImgCompressConfig = {
+    limit: 1024,
+    quality: 0,
+    maxWidth: 1280,
   };
 }

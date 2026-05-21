@@ -12,6 +12,7 @@ export async function registerCodeList(
   const setCodeList = (model: IData) => {
     codeListService.setCodeList(model as IAppCodeList);
   };
+  setCodeList(await import('./code-list/mock-cl-status').then(m => m.default));
 }
 
 export async function getAppDataEntityModel(

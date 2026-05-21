@@ -640,7 +640,7 @@ export default class SignaturePad {
     const canvasWindow =
       window.document === this.canvas.ownerDocument
         ? window
-        : this.canvas.ownerDocument.defaultView ?? this.canvas.ownerDocument;
+        : (this.canvas.ownerDocument.defaultView ?? this.canvas.ownerDocument);
 
     return {
       addEventListener: canvasWindow.addEventListener.bind(

@@ -1,26 +1,37 @@
 $markdown: (
-  'width': 100%,
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-toolbar-bg: getCssVar(color, bg, 2),
+  color-previewer-bg: getCssVar(color, bg, 1),
+  color-active: getCssVar(editor, default, active-text-color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
 );
 
-
 @include b(markdown) {
+  @include set-component-css-var('markdown', $markdown);
   @include b(markdown-cherry) {
     @include set-component-css-var('markdown', $markdown);
 
-    width: getCssVar('markdown', 'width');
+    width: 100%;
 
     .cherry {
       width: 100%;
+      color: getCssVar('markdown', 'color');
     }
 
-    @include when('hidden'){
+    .cherry-previewer {
+      background-color: getCssVar(markdown, color-previewer-bg);
+    }
+
+    @include when('hidden') {
       display: hidden;
     }
   }
 
-  @include b(markdown-image-popup){
-    background-color: transparent;
+  @include b(markdown-image-popup) {
     overflow: visible;
+    background-color: transparent;
   }
 
   @include b(markdown-dialog) {
@@ -33,10 +44,45 @@ $markdown: (
     height: 100%;
     margin: 0;
     border-radius: 0;
+    text-align: left;
 
     .van-dialog__content {
       flex-grow: 1;
       height: calc(100% - #{rem(48px)});
+    }
+
+    // 重置背景颜色与边框颜色
+    .cherry,
+    .cherry-editor,
+    .cherry-toolbar,
+    .cherry-editor .CodeMirror,
+    .cherry-toolbar .cherry-toolbar-button:hover,
+    .cherry-floatmenu .cherry-toolbar-button:hover,
+    .cherry-dropdown .cherry-dropdown-item:hover {
+      background-color: transparent;
+      border: none;
+    }
+
+    // 工具栏及下拉框背景颜色
+    .cherry-floatmenu,
+    .cherry-toolbar,
+    .cherry-dropdown {
+      background-color: getCssVar(markdown, color-toolbar-bg);
+    }
+
+    // 工具栏与内容区的字体颜色
+    .cherry-toolbar .cherry-toolbar-button,
+    .cherry-editor .CodeMirror,
+    .cherry-editor .CodeMirror .CodeMirror-scroll span,
+    .cherry-dropdown .cherry-dropdown-item {
+      color: getCssVar('markdown', 'color');
+    }
+
+    // 工具栏激活颜色
+    .cherry-toolbar .cherry-toolbar-button:hover,
+    .cherry-floatmenu .cherry-toolbar-button:hover,
+    .cherry-dropdown .cherry-dropdown-item:hover {
+      color: getCssVar('markdown', 'color-active') !important;
     }
   }
 
@@ -56,7 +102,7 @@ $markdown: (
 
   .theme__light,
   .theme__dark {
-    color: getCssVar(form-item, text-color);
+    color: getCssVar('markdown', 'color');
   }
 
   .cherry-markdown h1,
@@ -88,20 +134,33 @@ $markdown: (
     max-width: 100%;
   }
 
+  .cherry.cherry--no-toolbar .cherry-previewer {
+    min-height: 100px;
+  }
+
+  .cherry-toolbar-button {
+    border: none;
+  }
+
+  // 修复设置工具栏弹框内容溢出
+  .cherry-dropdown[name="settings"] {
+    right: getCssVar(spacing, tight) !important;
+    left: auto !important;
+  }
+
   @include m(disabled) {
-    color: getCssVar('form-item', 'disabled-color');
+    color: getCssVar('markdown', 'color-disabled');
 
     .cherry {
-      color: getCssVar('form-item', 'disabled-color');
-
+      color: getCssVar('markdown', 'color-disabled');
     }
   }
 
   @include m(readonly) {
-    --van-field-input-text-color: #{getCssVar('form-item', 'readonly-color')};
+    --van-field-input-text-color: #{getCssVar('markdown', 'color-readonly')};
 
     .cherry {
-      color: getCssVar('form-item', 'readonly-color');
+      color: getCssVar('markdown', 'color-readonly');
     }
   }
 }

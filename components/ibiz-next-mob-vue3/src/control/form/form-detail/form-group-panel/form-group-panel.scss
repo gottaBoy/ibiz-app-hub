@@ -1,26 +1,30 @@
 $form-group: (
-  bg-color: getCssVar(color, bg, 1),
-  footer-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
-  show-more-color: getCssVar(color-primary),
-  padding: getCssVar(spacing-extra-tight),
+  color-bg: getCssVar(color, bg, 1),
+  color-more: getCssVar(color-primary),
+  color-loading-bg: rgba(var(#{getCssVarName(grey, 9)}), 0.1),
+  color-button: getCssVar(color, link),
+  spacing-padding: getCssVar(spacing-extra-tight),
+  spacing-footer-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
 );
 
 $form-group-header: (
-  bg-color: getCssVar(color, bg, 1),
-  padding: getCssVar(spacing, base) getCssVar(spacing, base) getCssVar(spacing, tight),
-  border-color: getCssVar(color, border),
+  color-bg: getCssVar(color, bg, 0),
+  color-border: getCssVar(color, border),
+  spacing-padding: getCssVar(spacing, base),
 );
 
 $form-group-caption: (
-  text-color: getCssVar(color, text, 2),
-  font-size: getCssVar(font-size, header-6),
-  font-weight: getCssVar(font-weight, regular),
+  color-text: getCssVar(color, text, 1),
+  spacing-icon-gap: getCssVar(spacing, tight),
+  font-fontSize: getCssVar(font-size, header-6),
+  font-fontWeight: getCssVar(font-weight, regular),
+  font-lineHeight: var(--van-cell-group-title-line-height),
 );
 
 $form-group-content: (
-  bg-color: getCssVar(color, bg, 1),
-  padding: getCssVar(spacing, tight),
-  margin: 0,
+  color-bg: getCssVar(color, bg, 1),
+  spacing-padding: 0,
+  spacing-margin: 0,
 );
 
 @include b(form-group) {
@@ -33,37 +37,60 @@ $form-group-content: (
 // 分组基础样式
 @include b(form-group) {
   overflow: hidden;
-  background-color: getCssVar('form-group', 'bg-color');
+  background-color: getCssVar('form-group', 'color-bg');
 
   // 分组标题
   @include e(caption) {
     @include utils-ellipsis;
 
-    font-size: getCssVar('form-group-caption', 'font-size');
-    font-weight: getCssVar('form-group-caption', 'font-weight');
-    color: getCssVar('form-group-caption', 'text-color');
+    font-size: getCssVar('form-group-caption', 'font-fontSize');
+    font-weight: getCssVar('form-group-caption', 'font-fontWeight');
+    line-height: getCssVar('form-group-caption', 'font-lineHeight');
+    color: getCssVar('form-group-caption', 'color-text');
+
+    @include m('icon') {
+      padding-right: getCssVar('form-group-caption', 'spacing-icon-gap');
+    }
   }
 
   // 工具栏
   @include e(toolbar) {
-    text-align: right;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: 0;
+  }
+
+  @include e(content) {
+    padding: getCssVar('form-group-content', 'spacing-padding');
   }
 
   @include m(style2) {
-    background-color: getCssVar(color, bg, 0);
-    padding: getCssVar('form-group', 'padding');
+    padding: getCssVar('form-group', 'spacing-padding');
+    background-color: getCssVar('form-group-header', 'color-bg');
+
     >.#{bem(form-group-header)} {
-      border-radius: getCssVar('border-radius', 'large') getCssVar('border-radius', 'large') 0 0;
+      background-color: getCssVar('form-group-content', 'color-bg');
+      border-bottom: 1px solid getCssVar('form-group-header', 'color-border');
     }
+
     .#{bem(form-group, content)} {
-      padding: getCssVar('border-radius', 'large') 0;
-      border-radius: getCssVar('border-radius', 'large');
-      background-color: getCssVar('form-group-content', 'bg-color');
+      background-color: getCssVar('form-group-content', 'color-bg');
     }
-    >.#{bem(form-group-header)} + .#{bem(form-group, content)} {
-      padding-top: 0;
-      border-radius: 0 0 getCssVar('border-radius', 'large') getCssVar('border-radius', 'large');
-    }
+  }
+
+  @include e(loading) {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: getCssVar('form-group', 'color-loading-bg');
+  }
+
+  @include when(loading) {
+    position: relative;
   }
 }
 
@@ -81,6 +108,10 @@ $form-group-content: (
   }
 
   @include when(collapse) {
+    >.#{bem(form-group-header)} {
+      border-bottom: none;
+    }
+
     >.#{bem(form-group__content)} {
       display: none;
     }
@@ -92,8 +123,8 @@ $form-group-content: (
   @include flex;
 
   align-items: center;
-  padding: getCssVar('form-group-header', 'padding');
-  background-color: getCssVar('form-group-header', 'bg-color');
+  padding: getCssVar('form-group-header', 'spacing-padding');
+  background-color: getCssVar('form-group-header', 'color-bg');
 
   @include e((left, right)) {
     display: inline-block;
@@ -108,7 +139,7 @@ $form-group-content: (
 
     .van-button {
       height: 100%;
-      color: getCssVar(color, link);
+      color: getCssVar('form-group', 'color-button');
       background: transparent;
       border: none;
     }
@@ -117,18 +148,18 @@ $form-group-content: (
 
 .#{bem('form-group', '', 'show-header')} {
   >.#{bem('form-group, content')} {
-    margin-bottom: getCssVar('form-group-content', 'margin');
-    background-color: getCssVar('form-group-content', 'bg-color');
+    margin-bottom: getCssVar('form-group-content', 'spacing-margin');
+    background-color: getCssVar('form-group-content', 'color-bg');
   }
 }
 
 // 分组底部
 @include b(form-group-footer) {
-  padding: getCssVar('form-group', 'footer-padding');
+  padding: getCssVar('form-group', 'spacing-footer-padding');
 
   @include e(show-more-button) {
     display: inline-block;
-    color: getCssVar('form-group', 'show-more-color');
+    color: getCssVar('form-group', 'color-more');
   }
 
 }

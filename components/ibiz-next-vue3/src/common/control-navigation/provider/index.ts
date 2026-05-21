@@ -3,6 +3,7 @@ import { NavgationBaseProvider } from './navigation-base.provider';
 import { CalendarNavigationProvider } from './calendar-navigation.provider';
 import { TreeNavigationProvider } from './tree-navigation.provider';
 import { MapNavigationProvider } from './map-navigation.provider';
+import { ChartNavigationProvider } from './chart-navigation.provider';
 
 /**
  * 获取部件导航适配器
@@ -20,5 +21,6 @@ export function getNavigationProvider(
   if (controlType === 'TREEVIEW' || controlType === 'TREEGRIDEX')
     return new TreeNavigationProvider(controller);
   if (controlType === 'MAP') return new MapNavigationProvider(controller);
+  if (controlType === 'CHART') return new ChartNavigationProvider(controller);
   return new NavgationBaseProvider(controller);
 }

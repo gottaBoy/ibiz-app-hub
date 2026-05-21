@@ -1,8 +1,25 @@
-@include b('control-treeexpbar'){
-    .vs-tree-inner{
-        width: 100%;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-     } 
+$control-treeexpbar: (
+  // Spacing
+  spacing-caption-padding: getCssVar(spacing, base),
+  spacing-toolbar-padding: getCssVar(spacing, base),
+);
+
+@include b('control-treeexpbar') {
+  @include set-component-css-var('control-treeexpbar', $control-treeexpbar);
+
+  .vs-tree-inner {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  @include b('control-treeexpbar-caption') {
+    padding: getCssVar(control-treeexpbar, spacing-caption-padding);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .#{bem(panel-ctrl-pos--treeexpbar_toolbar)}{
+    padding: getCssVar(control-treeexpbar, spacing-toolbar-padding);
+  } 
 }

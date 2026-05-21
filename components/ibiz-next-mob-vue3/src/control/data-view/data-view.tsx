@@ -1,5 +1,5 @@
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
-import { computed, defineComponent, PropType, ref, VNode } from 'vue';
+import { defineComponent, PropType, renderSlot, VNode } from 'vue';
 import {
   IDEDataView,
   ILayoutPanel,
@@ -9,7 +9,7 @@ import {
   DataViewControlController,
   IControlProvider,
 } from '@ibiz-template/runtime';
-import { usePagination } from '../../util';
+import { useListRender, usePagination } from '../../util';
 import './data-view.scss';
 
 export const DataViewControl = defineComponent({
@@ -42,36 +42,29 @@ export const DataViewControl = defineComponent({
      * @default true
      */
     loadDefault: { type: Boolean, default: true },
+    /**
+     * @description 是否是简单模式，即直接传入数据，不加载数据
+     */
+    isSimple: { type: Boolean, required: false },
+    /**
+     * @description 简单模式下传入的数据
+     */
+    data: { type: Array<IData>, required: false },
   },
-  setup(props) {
+  setup(props, { slots }) {
     const c = useControlController(
       (...args) => new DataViewControlController<IDEDataView>(...args),
     );
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
-    const active = ref([]);
-
-    // 是否可以加载更多
-    const isLodeMoreDisabled = computed(() => {
-      if (c.model.enablePagingBar === true) {
-        return true;
-      }
-      if (c.model.pagingMode !== 2) {
-        return true;
-      }
-      return (
-        c.state.items.length >= c.state.total ||
-        c.state.isLoading ||
-        c.state.total <= c.state.size
-      );
-    });
+    const {
+      enableLoadMore,
+      renderNoData,
+      renderAddItem,
+      renderScrollList,
+      renderGroup,
+    } = useListRender(props, c, ns, slots);
 
     const { onPageChange } = usePagination(c);
-
-    // 是否显示数据伸缩图标
-    // 如果未开启分组，并且加载模式为【加载更多】，并且已经加载过一次更多，则为 true
-    const showCollapseOrExpandIcon = computed(() => {
-      return !c.model.enableGroup && c.model.pagingMode === 3;
-    });
 
     // 绘制项布局面板
     const renderPanelItem = (item: IData, modelData: ILayoutPanel): VNode => {
@@ -82,7 +75,9 @@ export const DataViewControl = defineComponent({
           modelData={modelData}
           context={context}
           params={params}
-        ></iBizControlShell>
+        >
+          {slots}
+        </iBizControlShell>
       );
     };
 
@@ -113,29 +108,12 @@ export const DataViewControl = defineComponent({
       );
     };
 
-    const renderNoData = (): VNode | undefined => {
-      // 未加载不显示无数据
-      const { isLoaded } = c.state;
-      if (!isLoaded) {
-        return;
+    const renderDefaultItem = (item: IData) => {
+      if (slots.default) {
+        return renderSlot(slots, 'default', { item, controller: c });
       }
       return (
-        isLoaded && (
-          <iBizNoData
-            text={c.model.emptyText}
-            emptyTextLanguageRes={c.model.emptyTextLanguageRes}
-          ></iBizNoData>
-        )
-      );
-    };
-
-    const renderDefaultItem = (item: IData) => {
-      return (
-        <van-card
-          title={item.srfmajortext}
-          desc={item.content}
-          onClick={() => c.onRowClick(item)}
-        >
+        <van-card title={item.srfmajortext} desc={item.content}>
           {{
             footer: () => renderFooter(item),
           }}
@@ -151,7 +129,12 @@ export const DataViewControl = defineComponent({
         return data.srfkey === item.srfkey;
       });
       const panel = props.modelData.itemLayoutPanel;
-      const cardClass = [ns.b('item'), ns.is('active', findIndex !== -1)];
+      const itemSysCss = model.itemSysCss?.cssName || '';
+      const cardClass = [
+        ns.b('item'),
+        ns.is('active', findIndex !== -1),
+        itemSysCss,
+      ];
       const cardStyle = {};
       if (model.cardWidth) {
         Object.assign(cardStyle, {
@@ -166,10 +149,9 @@ export const DataViewControl = defineComponent({
       Object.assign(
         cardStyle,
         ns.cssVarBlock({
-          'item-bg-color': `${item.bgcolor || ''}`,
-          'item-font-color': `${item.fontcolor || ''}`,
-          'item-hover-color': `${item.hovercolor || ''}`,
-          'item-active-color': `${item.activecolor || ''}`,
+          'color-bg': `${item.bgcolor || ''}`,
+          'color-text': `${item.fontcolor || ''}`,
+          'color-item-active': `${item.activecolor || ''}`,
         }),
       );
       return (
@@ -183,12 +165,12 @@ export const DataViewControl = defineComponent({
       );
     };
 
-    const renderDefault = () => {
+    const renderContent = (items: IData[]) => {
       const { cardColMD } = c.model;
       if (cardColMD) {
         return (
-          <van-row class={[ns.e('item-row')]}>
-            {c.state.items.map(item => {
+          <van-row class={[ns.e('row')]}>
+            {items.map(item => {
               return (
                 <van-col span={cardColMD} class={[ns.e('item-col')]}>
                   {renderCard(item)}
@@ -198,69 +180,38 @@ export const DataViewControl = defineComponent({
           </van-row>
         );
       }
-      return c.state.items.map(item => {
-        return renderCard(item);
-      });
+      return [
+        ...items.map(item => {
+          return renderCard(item);
+        }),
+      ];
     };
 
-    const renderGroup = () => {
-      return (
-        <van-collapse v-model={active.value}>
-          {c.state.groups.map((group, index) => {
-            return (
-              <van-collapse-item title={group.caption} name={index}>
-                {group.children.map(item => {
-                  return renderCard(item);
-                })}
-              </van-collapse-item>
-            );
-          })}
-        </van-collapse>
-      );
-    };
-    // 绘制卡片内容
-    const renderMDContent = () => {
-      const model: IDEDataView = c.model;
-      return (
-        <van-list
-          class={[ns.b('scroll'), ns.e('content')]}
-          finished={isLodeMoreDisabled.value}
-          immediate-check={false}
-          onLoad={() => c.loadMore()}
-        >
-          {model.groupMode !== 'NONE' ? renderGroup() : renderDefault()}
-        </van-list>
-      );
-    };
-
-    // 加载更多
-    const loadMoreIcon = () => {
-      return (
-        <div class={ns.e('load-more')} onClick={() => c.loadMore()}>
-          {ibiz.i18n.t('control.common.loadMore')}
-        </div>
-      );
-    };
-
-    // 分页模式为点击加载时并且当前数量小于总数
-    const renderLoadMore = () => {
-      let icon = null;
-      const loadMore =
-        c.state.items.length < c.state.total && c.state.total > c.state.size;
-      if (showCollapseOrExpandIcon.value && loadMore) {
-        icon = loadMoreIcon();
+    const renderDefault = () => {
+      const result = [];
+      result.push(renderContent(c.state.items));
+      if (c.enableNew) {
+        result.push(renderAddItem());
       }
-      return icon;
+      return result;
+    };
+
+    // 绘制列表内容
+    const renderMDContent = () => {
+      // eslint-disable-next-line no-shadow
+      const slots = c.enableGroup
+        ? renderGroup({ children: renderContent })
+        : renderDefault();
+      return renderScrollList(slots);
     };
 
     return {
       c,
       ns,
-      showCollapseOrExpandIcon,
+      enableLoadMore,
       onPageChange,
       renderNoData,
       renderMDContent,
-      renderLoadMore,
     };
   },
   render() {
@@ -269,17 +220,18 @@ export const DataViewControl = defineComponent({
     return (
       <iBizControlBase
         class={[
-          this.ns.is(
-            'enable-page',
-            enablePagingBar || this.showCollapseOrExpandIcon,
-          ),
+          this.ns.is('scroll', enablePagingBar),
+          this.ns.is('enable-pagination', enablePagingBar),
+          this.ns.is('enable-group', this.c.enableGroup),
         ]}
         controller={this.c}
       >
-        {this.c.state.isCreated &&
-          (this.c.state.items.length > 0
-            ? this.renderMDContent()
-            : this.renderNoData())}
+        <div class={this.ns.e('content-container')}>
+          {this.c.state.isCreated &&
+            (this.c.state.items.length > 0
+              ? this.renderMDContent()
+              : this.renderNoData())}
+        </div>
         {enablePagingBar ? (
           <van-pagination
             class={this.ns.e('pagination')}
@@ -291,7 +243,6 @@ export const DataViewControl = defineComponent({
             onChange={this.onPageChange}
           ></van-pagination>
         ) : null}
-        {this.renderLoadMore()}
       </iBizControlBase>
     );
   },

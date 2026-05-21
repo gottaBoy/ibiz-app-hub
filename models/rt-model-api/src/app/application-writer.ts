@@ -103,6 +103,7 @@ export class ApplicationWriter extends ModelObjectWriter {
       'applicationLogics',
       c.m('app.ApplicationLogic[]', s, 'getPSApplicationLogics'),
     );
+    _.w(d, 'devSlnSysId', s, 'getPSDevSlnSysId');
     _.v(d, 'sysImage', c.s('res.SysImage[]', s, 'getPSSysImage'));
     _.w(d, 'serviceCodeName', s);
     _.w(d, 'subAppAccessKey', s);

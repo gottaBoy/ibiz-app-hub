@@ -8,7 +8,7 @@ import { IApiMDViewCall } from './i-api-md-view.call';
  */
 export interface IApiListViewCall extends IApiMDViewCall {
   /**
-   * @description 展开
+   * @description 展开列表分组，srfcollapsetag: 列表分组标识，srfgroup: 列表分组标识，优先取srfcollapsetag参数
    * @type {{
    *     args: { params: { srfcollapsetag?: string; srfgroup?: string } };
    *   }}
@@ -18,7 +18,7 @@ export interface IApiListViewCall extends IApiMDViewCall {
     args: { params: { srfcollapsetag?: string; srfgroup?: string } };
   };
   /**
-   * @description 折叠
+   * @description 收缩列表分组，srfcollapsetag: 列表分组标识，srfgroup: 列表分组标识，优先取srfcollapsetag参数
    * @type {{
    *     args: { params: { srfcollapsetag?: string; srfgroup?: string } };
    *   }}

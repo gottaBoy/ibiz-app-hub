@@ -156,9 +156,6 @@
   --el-button-disabled-bg-color: var(--el-fill-color-blank);
   --el-button-disabled-border-color: var(--el-border-color-light);
   --el-button-divide-border-color: #{getCssVar(color, border)};
-  --el-button-hover-text-color: var(--el-color-primary);
-  --el-button-hover-bg-color: var(--el-color-primary-light-9);
-  --el-button-hover-border-color: var(--el-color-primary-light-7);
   --el-button-active-text-color: var(--el-button-hover-text-color);
   --el-button-active-border-color: var(--el-color-primary);
   --el-button-active-bg-color: var(--el-button-hover-bg-color);
@@ -211,6 +208,10 @@
 
 .el-button [class*=el-icon]+span{
   margin-left: 0;
+}
+
+.el-button--text:not(.is-disabled):focus, .el-button--text:not(.is-disabled):hover {
+  color: #{getCssVar(color, primary, hover)};
 }
 
 // 按钮 end
@@ -397,6 +398,8 @@
 // 多选框
 .el-checkbox{
   --el-checkbox-disabled-input-fill: #{getCssVar(color, disabled, fill)};
+  --el-checkbox-disabled-checked-input-fill: #{getCssVar(color, disabled, fill)};
+  --el-checkbox-disabled-checked-input-border-color: #{getCssVar(color, border)};
 }
 
 .el-checkbox__label {
@@ -491,6 +494,8 @@
 
 .el-message-box {
   --el-messagebox-title-color: #{getCssVar(color, text, 0)};
+
+  white-space: pre-wrap;
 }
 
 .el-overlay {

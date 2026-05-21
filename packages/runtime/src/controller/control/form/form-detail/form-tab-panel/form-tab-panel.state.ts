@@ -1,15 +1,15 @@
 import { IApiFormTabPanelState } from '../../../../../interface';
-import { FormDetailState } from '../form-detail';
+import { FormContainerState } from '../form-container';
 
 /**
  * @description 表单分页部件状态
  * @export
  * @class FormTabPanelState
- * @extends {FormDetailState}
+ * @extends {FormContainerState}
  * @implements {IApiFormTabPanelState}
  */
 export class FormTabPanelState
-  extends FormDetailState
+  extends FormContainerState
   implements IApiFormTabPanelState
 {
   /**

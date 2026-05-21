@@ -143,7 +143,7 @@ export interface IAppDERS extends IModelObject {
 
   /**
    * 关系类型
-   * @description 值模式 [实体关系类型] {DER1N：1:N关系、 DERINHERIT：继承关系、 DERINDEX：索引关系、 DER11：1:1 关系、 DERMULINH：多继承关系（虚拟实体）、 DERCUSTOM：自定义关系、 DERAGGDATA：聚合数据关系 }
+   * @description 值模式 [实体关系类型] {DER1N：1:N关系、 DERINHERIT：继承关系、 DERINDEX：索引关系、 DER11：1:1 关系、 DERMULINH：多继承关系、 DERCUSTOM：自定义关系、 DERAGGDATA：聚合数据关系 }
    * @type {( string | 'DER1N' | 'DERINHERIT' | 'DERINDEX' | 'DER11' | 'DERMULINH' | 'DERCUSTOM' | 'DERAGGDATA')}
    * 来源  getRSType
    */

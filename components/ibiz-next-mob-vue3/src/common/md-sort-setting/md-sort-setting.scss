@@ -1,0 +1,152 @@
+$md-sort-setting: (
+  // 颜色
+  'color-active-bg-color': getCssVar('color', 'primary', 'light', 'default'),
+  'color-active-color': getCssVar('color', 'primary'),
+  'color-close-icon-color': getCssVar(color, text, 3),
+  'color-border-color': getCssVar('color', 'border'),
+  // 间距
+  'spacing-header-padding': getCssVar('spacing', 'base'),
+  'spacing-list-item-check-padding': 0 getCssVar('spacing', 'extra-tight') 0 0,
+  'spacing-list-item-margin': getCssVar('spacing', 'tight') 0,
+  'spacing-tabs-padding': 0 getCssVar('spacing', 'base'),
+  'spacing-bottom-btn-padding': 0 getCssVar('spacing', 'tight')
+    getCssVar('spacing', 'loose') getCssVar('spacing', 'tight'),
+  'spacing-tabs-margin': 0 0 getCssVar('spacing', 'tight') 0,
+  // 宽高
+  'height-tab-min-height': getCssVar('height', 'control', 'large'),
+  'height-list-item-height': getCssVar('height-control', 'default'),
+  'height-header-min-height': getCssVar('height-control', 'default'),
+  // 字体大小
+  'font-tab-fontWeight': getCssVar('font-weight', 'regular'),
+  'font-close-icon-fontSize': getCssVar('font-size', 'header', 3),
+  'font-header-fontSize': getCssVar('font-size', 'header', 6),
+  'font-van-tab-fontSize': getCssVar('font-size', 'regular'),
+  // 圆角
+  'radius-tab-desc-border-radius': 0 getCssVar('border-radius', 'small')
+    getCssVar('border-radius', 'small') 0,
+  'radius-tab-asc-border-radius': getCssVar('border-radius', 'small') 0 0
+    getCssVar('border-radius', 'small'),
+);
+
+@include b('md-sort-setting') {
+  @include e('content') {
+    @include set-component-css-var('md-sort-setting', $md-sort-setting);
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    @include m('header') {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: getCssVar('md-sort-setting', 'height-header-min-height');
+      padding: getCssVar('md-sort-setting', 'spacing-header-padding');
+      font-size: getCssVar('md-sort-setting', 'font-header-fontSize');
+    }
+
+    // 头部标签页样式
+    @include m('tabs') {
+      flex: 1;
+      padding: getCssVar('md-sort-setting', 'spacing-tabs-padding');
+      margin: getCssVar('md-sort-setting', 'spacing-tabs-margin');
+      overflow: hidden;
+
+      .van-tabs__line {
+        display: none;
+      }
+
+      .van-tab--line {
+        min-height: getCssVar('md-sort-setting', 'height-tab-min-height');
+        border: 1px solid getCssVar('md-sort-setting', 'color-border-color');
+        font-size: getCssVar('md-sort-setting', 'font-van-tab-fontSize');
+
+        &:nth-child(1) {
+          border-right: none;
+          border-radius: getCssVar(
+            'md-sort-setting',
+            'radius-tab-asc-border-radius'
+          );
+
+          &.van-tab--active {
+            border: 1px solid getCssVar('md-sort-setting', 'color-active-color');
+
+            & + .van-tab--line {
+              border-left: none;
+            }
+          }
+        }
+
+        &:nth-child(2) {
+          border-radius: getCssVar(
+            'md-sort-setting',
+            'radius-tab-desc-border-radius'
+          );
+        }
+
+        &.van-tab--active {
+          font-weight: getCssVar('md-sort-setting', 'font-tab-fontWeight');
+          color: getCssVar('md-sort-setting', 'color-active-color');
+          background-color: getCssVar(
+            'md-sort-setting',
+            'color-active-bg-color'
+          );
+          border-color: getCssVar('md-sort-setting', 'color-active-color');
+        }
+      }
+
+      .van-tabs__content {
+        height: 100%;
+        overflow-y: auto;
+
+        .van-cell::after {
+          right: 0;
+          left: 0;
+        }
+      }
+    }
+
+    // 底部确认按钮样式
+    @include m('bottom') {
+      padding: getCssVar('md-sort-setting', 'spacing-bottom-btn-padding');
+    }
+
+    // 关闭图标样式
+    @include m('icon') {
+      font-size: getCssVar('md-sort-setting', 'font-close-icon-fontSize');
+      color: getCssVar('md-sort-setting', 'color-close-icon-color');
+      cursor: pointer;
+    }
+  }
+
+  // 列表项样式
+  @include e('list-item') {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: getCssVar('md-sort-setting', 'height-list-item-height');
+    margin: getCssVar('md-sort-setting', 'spacing-list-item-margin');
+    overflow: hidden;
+    font-size: getCssVar('md-sort-setting', 'font-van-tab-fontSize');
+
+    @include m('icon') {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    @include m('text') {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @include when('check') {
+      padding: getCssVar('md-sort-setting', 'spacing-list-item-check-padding');
+      color: getCssVar('md-sort-setting', 'color-active-color');
+
+      svg {
+        fill: getCssVar('md-sort-setting', 'color-active-color');
+      }
+    }
+  }
+}

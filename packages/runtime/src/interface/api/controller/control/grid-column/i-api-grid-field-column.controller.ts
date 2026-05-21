@@ -39,7 +39,7 @@ export interface IApiGridFieldColumnController
 
   /**
    * @description 格式化值
-   * @param {unknown} value
+   * @param {unknown} value 属性值
    * @returns {*}  {string}
    * @memberof IApiGridFieldColumnController
    */
@@ -47,8 +47,8 @@ export interface IApiGridFieldColumnController
 
   /**
    * @description 打开链接视图
-   * @param {IApiGridRowState} row 行数据
-   * @param {MouseEvent} event 原生事件
+   * @param {IApiGridRowState} row 行数据状态
+   * @param {MouseEvent} event 鼠标事件
    * @returns {*}  {Promise<void>}
    * @memberof IApiGridFieldColumnController
    */
@@ -56,7 +56,7 @@ export interface IApiGridFieldColumnController
 
   /**
    * @description 触发表格列附加界面行为
-   * @param {IApiGridRowState} row 行数据
+   * @param {IApiGridRowState} row 行数据状态
    * @param {MouseEvent} event 鼠标事件
    * @returns {*}  {Promise<void>}
    * @memberof IApiGridFieldColumnController
@@ -65,8 +65,8 @@ export interface IApiGridFieldColumnController
 
   /**
    * @description 触发界面行为组点击事件
-   * @param {IUIActionGroupDetail} detail 界面行为组成员
-   * @param {IApiGridRowState} row 行数据
+   * @param {IUIActionGroupDetail} detail 界面行为组成员模型
+   * @param {IApiGridRowState} row 行数据状态
    * @param {MouseEvent} event 鼠标事件
    * @returns {*}  {Promise<void>}
    * @memberof IApiGridFieldColumnController

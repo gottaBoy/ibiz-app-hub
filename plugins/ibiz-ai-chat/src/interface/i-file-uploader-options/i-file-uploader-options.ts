@@ -8,6 +8,10 @@
  * @template T
  */
 export interface FileUploaderOptions<T> {
+  /** 文件上传目录 */
+  folder: string;
+  /** 是否启用全局下载文件前缀 */
+  globalDownloadPrifix: boolean;
   /** 允许的文件类型 */
   accept?: string;
   /** 最大文件大小（字节） */
@@ -22,6 +26,8 @@ export interface FileUploaderOptions<T> {
     reportProgress: (percent: number) => void,
     options?: object,
   ) => Promise<T>;
+  /** 文件下载处理函数 */
+  onDownLoad: (file: object, options?: object) => Promise<void>;
   /** 上传成功回调 */
   onSuccess?: (result: T, file: File) => void;
   /** 上传失败回调 */

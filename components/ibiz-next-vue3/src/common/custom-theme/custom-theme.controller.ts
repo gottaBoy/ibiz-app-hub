@@ -1,5 +1,6 @@
 import { clone } from 'ramda';
 import { reactive } from 'vue';
+import { useNamespace } from '@ibiz-template/vue3-util';
 import { predefineThemeVars } from './custom-theme-model';
 
 /**
@@ -100,6 +101,42 @@ export class CustomThemeController {
     this.model.forEach((item: IData) => {
       this.initModelMapping(item);
     });
+    const pluginTheme = ibiz.util.theme.pluginTheme;
+    pluginTheme.forEach(item => {
+      const ns = useNamespace('custom-theme');
+      const color = this.getRootCssVar(
+        ns.cssVarName('color-primary'),
+        item.themeTag!,
+      );
+      this.predefineType.push({
+        codeName: item.themeTag,
+        label: item.themeTag,
+        color,
+        isCustom: true,
+      });
+    });
+  }
+
+  /**
+   * @description 获取根节点样式变量
+   * @protected
+   * @param {string} name
+   * @param {string} themeTag
+   * @returns {*}  {(string | number)}
+   * @memberof CustomThemeController
+   */
+  protected getRootCssVar(name: string, themeTag: string): string | number {
+    const root = document.documentElement;
+    if (root.classList.contains(themeTag)) {
+      return this.getCssVar(name);
+    }
+    const className = root.className;
+    // 先改变根节点样式名获取变量后再还原
+    root.className = themeTag;
+    const color = this.getCssVar(name);
+    // 还原
+    root.className = className;
+    return color;
   }
 
   /**

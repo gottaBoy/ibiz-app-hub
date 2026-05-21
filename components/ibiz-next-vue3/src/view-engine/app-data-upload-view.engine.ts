@@ -15,7 +15,7 @@ import { IAppView } from '@ibiz/model-core';
  * @extends {ViewEngineBase}
  */
 export class AppDataUploadViewEngine extends ViewEngineBase {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppView,
     IAppDataUploadViewState,
     IViewEvent

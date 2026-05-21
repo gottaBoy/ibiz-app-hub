@@ -1,14 +1,25 @@
+$emoji-item: (
+  // 颜色
+  color-bg-color: getCssVar('color', 'bg', 0),
+  // 间距
+  spacing-padding: getCssVar('spacing', 'tight'),
+  // 圆角
+  radius-border-radius: getCssVar('border-radius', 'small'),
+);
+
 @include b('emoji-item') {
+  @include set-component-css-var(emoji-item, $emoji-item);
+
   box-sizing: content-box;
   display: flex;
   align-items: center;
   justify-self: center;
-  padding: getCssVar('spacing', 'tight');
+  padding: getCssVar('emoji-item', 'spacing-padding');
   overflow: hidden;
   cursor: pointer;
 
   &.is-border:hover {
-    background: getCssVar('color', 'bg', 0);
-    border-radius: getCssVar('border-radius', 'small');
+    background: getCssVar('emoji-item', 'color-bg-color');
+    border-radius: getCssVar('emoji-item', 'radius-border-radius');
   }
 }

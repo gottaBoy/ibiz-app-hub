@@ -32,7 +32,7 @@ export interface IApiDRTabController<
 
   /**
    * @description 设置激活项
-   * @param {string} name
+   * @param {string} name 项标识
    * @memberof IApiDRTabController
    */
   setActive(name: string): void;

@@ -13,6 +13,7 @@ import {
   RuntimeModelError,
 } from '@ibiz-template/core';
 import { createUUID } from 'qx-util';
+import { isNil, isUndefined } from 'lodash-es';
 import { DECache, DeMethodProcesser, calcResPath } from '../../utils';
 import { WorkFlowService } from '../work-flow/work-flow.service';
 import { Method } from './method/method';
@@ -172,7 +173,7 @@ export class DEService implements IAppDEService {
     }
 
     // 获取适配器
-    const provider = await getDEMethodProvider(model);
+    const provider = await getDEMethodProvider(model, this.model);
     if (!provider) {
       throw new ModelError(
         model,
@@ -356,7 +357,7 @@ export class DEService implements IAppDEService {
       path = `${path}/createdownloadticket/${srfkey}`;
     }
     const res = await this.app.net.get(path, params);
-    if (!res.data) {
+    if (isNil(res.data) || isUndefined(res.data)) {
       ibiz.log.error(ibiz.i18n.t('runtime.deAction.responseDataError'), res);
     }
     return res;
@@ -463,6 +464,26 @@ export class DEService implements IAppDEService {
   }
 
   /**
+   * 获取 AI 聊天会话摘要
+   * @param context
+   * @param params
+   * @param data
+   * @returns {*}  {Promise<IHttpResponse>}
+   */
+  aiChatChatDigest(
+    context: IContext,
+    params: IParams = {},
+    data: IData = {},
+  ): Promise<IHttpResponse> {
+    const app = ibiz.hub.getApp(this.model.appId);
+    const srfkey = context[this.model.codeName!.toLowerCase()];
+    const curPath = `/${this.model.deapicodeName2}/chatdigest${srfkey ? `/${srfkey}` : ''}`;
+    const resPath = calcResPath(context, this.model);
+    const path = resPath ? `/${resPath}${curPath}` : `${curPath}`;
+    return app.net.post(path, data, { srfactag: 'AIChat', ...params });
+  }
+
+  /**
    * 获取 AI 聊天会话历史记录
    *
    * @author chitanda
@@ -479,6 +500,26 @@ export class DEService implements IAppDEService {
   ): Promise<IHttpResponse> {
     const app = ibiz.hub.getApp(this.model.appId);
     const path = this.calcSsePath(context, true);
+    return app.net.post(path, data, { srfactag: 'AIChat', ...params });
+  }
+
+  /**
+   * 取消 AI 聊天会话
+   * @param context
+   * @param params
+   * @param data
+   * @return {*}  {Promise<IHttpResponse>}
+   */
+  aiChatCancel(
+    context: IContext,
+    params: IParams = {},
+    data: IData = {},
+  ): Promise<IHttpResponse> {
+    const app = ibiz.hub.getApp(this.model.appId);
+    const srfkey = context[this.model.codeName!.toLowerCase()];
+    const curPath = `/${this.model.deapicodeName2}/ssechatcompletion/cancel${srfkey ? `/${srfkey}` : ''}`;
+    const resPath = calcResPath(context, this.model);
+    const path = resPath ? `/${resPath}${curPath}` : `${curPath}`;
     return app.net.post(path, data, { srfactag: 'AIChat', ...params });
   }
 

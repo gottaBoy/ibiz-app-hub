@@ -1,10 +1,10 @@
-import { IListEvent } from './i-list.event';
+import { IMDControlEvent } from './i-md-control.event';
 
 /**
  * @description 移动端多数据部件事件
  * @primary
  * @export
  * @interface IMobMDCtrlEvent
- * @extends {IListEvent}
+ * @extends {IMDControlEvent}
  */
-export interface IMobMDCtrlEvent extends IListEvent {}
+export interface IMobMDCtrlEvent extends IMDControlEvent {}

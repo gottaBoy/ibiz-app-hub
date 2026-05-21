@@ -1,0 +1,64 @@
+@include b('internal-message-group') {
+  @include flex(column);
+
+  height: auto;
+
+  @include e('content') {
+    position: relative;
+    flex-shrink: 0;
+    min-height: 60px;
+    padding: getCssVar(spacing, tight);
+    cursor: pointer;
+
+    &:hover {
+      background-color: getCssVar(color, fill, 1);
+      .#{bem('internal-message-group', 'badge')} {
+        display: none;
+      }
+      .#{bem('internal-message-group', 'action', 'read')} {
+        display: block;
+      }
+    }
+  }
+
+  @include e('badge') {
+    color: getCssVar(color, white) !important;
+    background-color: getCssVar(color, danger) !important;
+  }
+
+  @include e('action') {
+    position: absolute;
+    top: getCssVar('spacing', 'tight');
+    right: getCssVar('spacing', 'tight');
+    display: flex;
+    gap: getCssVar('spacing', 'tight');
+    align-items: center;
+    width: 40px;
+    height: 18px;
+
+    @include m('item') {
+      cursor: pointer;
+
+      &:hover {
+        color: getCssVar(color, primary);
+      }
+    }
+
+    @include m('read') {
+      display: none;
+    }
+  }
+
+  @include e('children') {
+    flex-grow: 1;
+    padding-left: getCssVar('spacing', 'loose');
+    @include m('item') {
+      min-height: 60px;
+      padding: getCssVar(spacing, tight);
+
+      &:hover {
+        background-color: getCssVar(color, fill, 1);
+      }
+    }
+  }
+}

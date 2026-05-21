@@ -1,0 +1,104 @@
+@include b(chat-step-item) {
+    position: relative;
+    display: flex;
+    gap: 4px;
+    padding: 0 4px;
+    border: getCssVar(chat-step, border-color);
+
+    &:last-of-type {
+        @include e(icon) {
+            &::after {
+                display: none;
+            }
+        }
+    }
+
+    @include e(left) {
+        width: 20px;
+        padding: 4px;
+        font-size: getCssVar(chat-step, font-size);
+        line-height: 1;
+    }
+
+    @include e(icon) {
+        font-size: 12px;
+        line-height: 1.5;
+
+        &::after {
+            position: absolute;
+            inset-inline-start: 15px;
+            top: 26px;
+            height: calc(var(--ibiz-chat-step-item-height) - 26px);
+            content: "";
+            border-inline-start: 1px solid getCssVar(chat-step, disabled-color);
+        }
+    }
+
+    @include e(right) {
+        width: calc(100% - 20px);
+        min-height: 46px;
+        padding: 4px;
+        margin-bottom: 8px;
+        border-radius: 4px;
+
+        &.is-loadding {
+            background: linear-gradient(90deg, getCssVar(chat-step, hover-bg-color), getCssVar(chat-step, bg));
+            background-size: 400% 400%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    }
+
+    @include e(title) {
+        width: 100%;
+        overflow: hidden;
+        line-height: 1.5;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    @include e(content) {
+        width: 100%;
+        color: getCssVar(chat-step, disabled-color);
+        word-break: break-all;
+    }
+
+    @include e(content-text) {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        line-height: 1.5;
+        transition: all 0.25s ease;
+
+        &.expanded {
+            -webkit-line-clamp: unset;
+            display: block;
+        }
+    }
+
+    @include e(toggle-btn) {
+        padding: 0;
+        margin-top: 8px;
+        font-size: 13px;
+        color: getCssVar(chat-step, color);
+        cursor: pointer;
+        background: none;
+        border: none;
+
+    }
+
+}

@@ -1,6 +1,17 @@
+$emoji-category-label: (
+  // 颜色
+  color-text: getCssVar('color', 'text', 1),
+  // 字体大小
+  font-fontSize: getCssVar('font-size', 'regular'),
+  // 间距
+  spacing-padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'extra-tight'),
+);
+
 @include b('emoji-category-label') {
-  padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'extra-tight');
-  font-size: getCssVar('font-size', 'regular');
-  color: getCssVar('color', 'text', 3);
+  @include set-component-css-var(emoji-category-label, $emoji-category-label);
+
+  padding: getCssVar('emoji-category-label', 'spacing-padding');
+  font-size: getCssVar('emoji-category-label', 'font-fontSize');
+  color: getCssVar('emoji-category-label', 'color-text');
   text-transform: uppercase;
 }

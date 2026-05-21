@@ -1,27 +1,46 @@
+$emoji-categories: (
+  // 颜色
+  color-hover-color: getCssVar('color', 'primary'),
+  color-category-color: getCssVar('color', 'text', 1),
+  // 间距
+  spacing-padding: 0 getCssVar('spacing', 'base-loose'),
+  spacing-margin-bottom: getCssVar('spacing', 'tight'),
+  // 字体大小
+  font-category-fontSize: getCssVar('font-size', 'header-4'),
+  font-category-lineHeight: getCssVar('font-size', 'header-6'),
+  // 宽高
+  width-category-min-width: getCssVar('font-size', 'header-4'), 
+  height-category: getCssVar('height-control', 'large'),
+  // 边框
+  border-category-border-top: getCssVar('spacing', 'super-tight') solid getCssVar('color', 'primary'),
+);
+
 @include b('emoji-categories') {
+  @include set-component-css-var(emoji-categories, $emoji-categories);
+
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: getCssVar('height-control', 'large');
-  padding: 0 getCssVar('spacing', 'base-loose');
-  margin-bottom: getCssVar('spacing', 'tight');
+  height: getCssVar('emoji-categories', 'height-category');
+  padding: getCssVar('emoji-categories', 'spacing-padding');
+  margin-bottom: getCssVar('emoji-categories', 'spacing-margin-bottom');
   overflow-x: auto;
 
   @include e('category') {
     display: flex;
     align-items: center;
-    min-width: getCssVar('font-size', 'header-4');
+    min-width: getCssVar('emoji-categories', 'width-category-min-width');
     height: 100%;
-    font-size: getCssVar('font-size', 'header-4');
+    font-size: getCssVar('emoji-categories', 'font-category-fontSize');
     cursor: pointer;
 
     @include m('svg') {
-      line-height: getCssVar('font-size', 'header-6');
+      line-height: getCssVar('emoji-categories', 'font-category-lineHeight');
 
       svg {
-        fill: getCssVar('color', 'text', 3);
+        fill: getCssVar('emoji-categories', 'color-category-color');
       }
     }
 
@@ -35,15 +54,15 @@
         display: block;
         width: 100%;
         content: '';
-        border-top: getCssVar('spacing', 'super-tight') solid getCssVar('color', 'primary');
+        border-top: getCssVar('emoji-categories', 'border-category-border-top');
       }
     }
 
     &:hover {
-      color: getCssVar('color', 'primary');
+      color: getCssVar('emoji-categories', 'color-hover-color');
 
       svg {
-        fill: getCssVar('color', 'primary');
+        fill: getCssVar('emoji-categories', 'color-hover-color');
       }
     }
   }

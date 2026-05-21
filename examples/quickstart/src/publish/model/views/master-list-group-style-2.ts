@@ -90,7 +90,7 @@ export default {
       groupAppDEFieldId: 'create_time',
       groupStyle: 'STYLE2',
       minorSortDir: 'ASC',
-      minorSortAppDEFieldId: 'create_man',
+      minorSortAppDEFieldId: 'create_time',
       orderValueAppDEFieldId: 'px',
       delistDataItems: [
         {

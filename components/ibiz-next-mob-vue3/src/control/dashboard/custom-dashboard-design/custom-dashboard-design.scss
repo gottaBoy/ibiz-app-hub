@@ -1,0 +1,102 @@
+$custom-dashboard-design: (
+  // 颜色
+  color-save-btn-color: getCssVar(color, primary),
+  color-item-bg-color: getCssVar(color, bg, 0),
+
+  // 高度
+  height-item-height: getCssVar(height-control, large),
+
+  // 间距
+  spacing-padding: getCssVar(spacing, base),
+  spacing-header-padding: 0 0 getCssVar(spacing, tight),
+  spacing-item-padding: 0 getCssVar(spacing, base),
+  spacing-item-margin: getCssVar(spacing, tight) 0,
+  spacing-item-icon-margin-right: getCssVar(spacing, extra-tight),
+  spacing-item-checkbox-margin-left: getCssVar(spacing, extra-tight),
+
+  // 圆角
+  radius-item-border-radius: getCssVar(border, radius, medium),
+
+  // 字体大小
+  font-header-fontSize: getCssVar(font-size, header-5),
+  font-close-btn-fontSize: getCssVar(font-size, header-3),
+  font-item-fontSize: getCssVar(font-size, header-6),
+  font-header-title-fontWeight: getCssVar(font-weight, bold),
+
+);
+
+@include b(custom-dashboard-design) {
+  @include set-component-css-var('custom-dashboard-design', $custom-dashboard-design);
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: getCssVar(custom-dashboard-design, spacing-padding);
+}
+
+@include b(custom-dashboard-design-header) {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  padding: getCssVar(custom-dashboard-design, spacing-header-padding);
+  font-size: getCssVar(custom-dashboard-design, font-header-fontSize);
+
+  @include e(close-btn) {
+    flex-shrink: 0;
+    font-size: getCssVar(custom-dashboard-design, close-btn-fontSize);
+    cursor: pointer;
+  }
+
+  @include e(title) {
+    overflow: hidden;
+    font-weight: getCssVar(custom-dashboard-design, font-header-title-fontWeight);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include e(save-btn) {
+    flex-shrink: 0;
+    color: getCssVar(custom-dashboard-design, color-save-btn-color);
+    cursor: pointer;
+  }
+}
+
+@include b(custom-dashboard-design-content) {
+  flex: 1 1 0;
+  overflow: auto;
+}
+
+@include b(custom-dashboard-design-item) {
+  display: flex;
+  align-items: center;
+  height: getCssVar(custom-dashboard-design, height-item-height);
+  padding: getCssVar(custom-dashboard-design, spacing-item-padding);
+  margin: getCssVar(custom-dashboard-design, spacing-item-margin);
+  font-size: getCssVar(custom-dashboard-design, font-item-fontSize);
+  line-height: getCssVar(custom-dashboard-design, height-item-height);
+  background-color: getCssVar(custom-dashboard-design, color-item-bg-color);
+  border-radius: getCssVar(custom-dashboard-design, radius-item-border-radius);
+
+  @include e(icon) {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    width: 1em;
+    height: 1em;
+    margin-right: getCssVar(custom-dashboard-design, spacing-item-icon-margin-right);
+  }
+
+  @include e(text) {
+    flex: 1 1 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include e(checkbox) {
+    flex: 0 0 auto;
+    margin-left: getCssVar(custom-dashboard-design, spacing-item-checkbox-margin-left);
+  }
+}
+

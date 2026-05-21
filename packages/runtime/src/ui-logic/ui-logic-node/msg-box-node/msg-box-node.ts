@@ -69,6 +69,21 @@ export class MsgBoxNode extends UILogicNode {
         modalParams.showCancelButton = true;
         resultTags = ['yes', 'no'];
         break;
+      case 'YESNOCANCEL':
+        modalParams.confirmButtonText = ibiz.i18n.t('runtime.uiLogic.yes');
+        modalParams.cancelButtonText = ibiz.i18n.t('runtime.uiLogic.no');
+        modalParams.showConfirmButton = true;
+        modalParams.showCancelButton = true;
+        if (ibiz.env.isMob) {
+          modalParams.options = {
+            closeOnClickOverlay: true,
+          };
+        } else {
+          modalParams.options = {
+            distinguishCancelAndClose: true,
+          };
+        }
+        break;
       case 'OK':
         modalParams.confirmButtonText = ibiz.i18n.t(
           'runtime.uiLogic.determine',
@@ -103,6 +118,11 @@ export class MsgBoxNode extends UILogicNode {
       }),
     );
 
+    if (buttonsType === 'YESNOCANCEL') {
+      const result = await ibiz.modal.extendConfirm(modalParams);
+      ctx.setLastReturn(result);
+      return;
+    }
     const result = await ibiz.modal.confirm(modalParams);
     ctx.setLastReturn(resultTags[result ? 0 : 1]);
   }

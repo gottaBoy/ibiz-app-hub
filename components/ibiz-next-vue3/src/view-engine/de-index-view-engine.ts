@@ -16,7 +16,7 @@ export class DEIndexViewEngine extends EditViewEngine {
    * @type {ViewController<IAppView, IAppDEIndexViewState, IAppDEIndexViewEvent>}
    * @memberof DEIndexViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEIndexView,
     IDEIndexViewState,
     IDEIndexViewEvent

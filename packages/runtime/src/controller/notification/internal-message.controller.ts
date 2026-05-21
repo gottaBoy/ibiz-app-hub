@@ -98,25 +98,32 @@ export class InternalMessageController implements IInternalMessageController {
       page: this.page,
       size: this.size,
       sort: 'timestamp,desc',
-    };
-
-    // 是否只搜索未读
-    if (this.unreadOnly) {
-      fetchParams.searchconds = [
+      searchconds: [
         {
           condtype: 'GROUP',
           condop: 'AND',
           bnotmode: false,
-          searchconds: [
-            {
-              condop: 'EQ',
-              condtype: 'DEFIELD',
-              fieldname: 'status',
-              value: 'RECEIVED',
-            },
-          ],
+          searchconds: [],
         },
-      ];
+      ],
+    };
+    // 不是门户应用只查询当前系统数据
+    if (!ibiz.env.isPortalApp) {
+      fetchParams.searchconds[0].searchconds.push({
+        condop: 'EQ',
+        condtype: 'DEFIELD',
+        fieldname: 'system_id',
+        value: ibiz.appData?.context.srfsystemid,
+      });
+    }
+    // 是否只搜索未读
+    if (this.unreadOnly) {
+      fetchParams.searchconds[0].searchconds.push({
+        condop: 'EQ',
+        condtype: 'DEFIELD',
+        fieldname: 'status',
+        value: 'RECEIVED',
+      });
     }
 
     const res = await this.service.fetch(fetchParams);

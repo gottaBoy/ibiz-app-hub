@@ -1,26 +1,38 @@
-$control-treeview: ('text-color': getCssVar('color', 'text'),
-  'hover-bg-color': getCssVar('color', 'primary'),
-  'active-bg-color': getCssVar('color', 'primary'),
-  'padding': rem(10px),
-  'bg-color': getCssVar('color', 'bg', 2),
+$control-treeview: (
+  // Color
+  'color-text': getCssVar(color, text, 0),
+  'color-bg': getCssVar('color', 'bg', 0),
+  'color-border': getCssVar('color', 'border'),
+  'color-node-checkbox-active': getCssVar('color', 'primary'),
+  'color-node-checkbox-active-text': getCssVar('color', 'white'),
+  'color-node-primary-btn': getCssVar('color', 'primary'),
+  'color-node-active': getCssVar(color, primary, light, default),
+  'color-crumb-history-nav-text': getCssVar('color', 'primary'),
+  'color-crumb-container-bg': getCssVar('color', 'bg', 1),
+  // Width/Height
+  'height-node': getCssVar(height, control, large),
+  'height-crumb': getCssVar('height-control', 'large'),
+  'width-crumb-back-btn': rem(24px),
+  // Spacing
+  'spacing-node-padding': 0 getCssVar(spacing, base),
+  'spacing-node-icon-margin': 0 getCssVar(spacing, tight) 0 0,
+  'spacing-crumb-padding': 0 getCssVar(spacing, base),
+  'spacing-crumb-item-icon-margin': 0 getCssVar('spacing', 'extra-tight') 0 0,
+  'spacing-crumb-container-padding': 0 0 getCssVar(spacing, tight) 0,
+  'spacing-crumb-container-bottom-ph': getCssVar(spacing, tight),
+  // Other
+  'position-node-counter-right': getCssVar('spacing', 'base-loose'),
+  'position-crumb-icon-top': rem(3px),
+  'icon-node-icon-size': 1em,
+  'icon-crumb-item-icon-ph-size': 1em
 );
 
-$control-treeview-node: (
-  icon-height: getCssVar(spacing, base),
-  icon-width: getCssVar(spacing, base),
-  icon-margin-right: getCssVar(spacing, tight),
-);
-
-$control-treeview-crumb: (
-  icon-top: rem(3px),
-);
-
-@mixin icon{
+@mixin icon {
   display: inline-flex;
   align-items: center;
-  width: getCssVar(control-treeview-node, icon-width);
-  height: getCssVar(control-treeview-node, icon-height);
-  margin-right: getCssVar(control-treeview-node, icon-margin-right);
+  width: getCssVar(control-treeview, icon-node-icon-size);
+  height: getCssVar(control-treeview, icon-node-icon-size);
+  margin: getCssVar(control-treeview, spacing-node-icon-margin);
 
   > svg {
     width: 100%;
@@ -30,32 +42,78 @@ $control-treeview-crumb: (
 
 @include b(control-treeview) {
   @include set-component-css-var('control-treeview', $control-treeview);
-  @include set-component-css-var(control-treeview-node, $control-treeview-node);
 
   height: 100%;
-  padding: 0 getCssVar('control-treeview', 'padding');
-  background: getCssVar('control-treeview', 'bg-color');
+  background: getCssVar('control-treeview', 'color-bg');
 }
 
 @include b(control-treeview-content) {
-  @include set-component-css-var('control-treeview', $control-treeview);
-
   height: 100%;
 
   // 树节点
   .vs-tree-node {
     position: relative;
-    padding: getCssVar('control-treeview', 'padding');
+    padding: getCssVar('control-treeview', 'spacing-node-padding');
+    height: getCssVar('control-treeview', 'height-node');
+    line-height: getCssVar('control-treeview', 'height-node');
+    color: getCssVar(control-treeview, color-text);
+
+    // 修复节点点击后背景色改变
+    &:hover {
+      background-color: unset;
+    }
+
+    &.selected,
+    &.selected:hover {
+      background-color: getCssVar('control-treeview', 'color-node-active');
+    }
 
     .vs-tree-inner {
       display: flex;
       align-items: center;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .vs-tree-text {
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     .vs-icon-parent,
     .vs-icon-leaf {
       width: auto;
       margin-right: 0;
+
+      & > span {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    // 选项框样式
+    .vs-checkbox {
+      display: inline-flex;
+      align-items: center;
+    }
+    .vs-checkbox__inner,
+    .vs-radio__inner {
+      background-color: transparent;
+      border-color: getCssVar('control-treeview', 'color-border');
+    }
+
+    .vs-checkbox__original:checked ~ .vs-checkbox__inner {
+      background-color: getCssVar(
+        'control-treeview',
+        'color-node-checkbox-active'
+      );
+      border-color: getCssVar('control-treeview', 'color-node-checkbox-active');
+      &::after {
+        border-color: getCssVar(
+          'control-treeview',
+          'color-node-checkbox-active-text'
+        );
+      }
     }
 
     .#{bem(icon)} {
@@ -63,38 +121,47 @@ $control-treeview-crumb: (
     }
   }
 
-  .tree-button {
-    color: getCssVar('color', 'primary');
+  .#{bem(control-treeview-node-expanded-btn)} {
+    position: relative;
+    display: flex;
+    align-items: center;
+    .van-icon {
+      color: getCssVar('control-treeview', 'color-node-primary-btn');
+    }
+    .#{bem(badge)} {
+      position: absolute;
+      right: getCssVar('control-treeview', 'position-node-counter-right');
+    }
   }
 }
 
 // 面包屑导航
 @include b(control-treeview-header) {
-  @include set-component-css-var(control-treeview-node, $control-treeview-node);
-  @include set-component-css-var('control-treeview-crumb', $control-treeview-crumb);
   @include e('crumb') {
-    display: inline-flex;
-    align-items: center;
-    height: getCssVar('height-control', 'small');
     .#{bem(icon)} {
       @include icon;
 
-      margin-right: getCssVar('spacing', 'extra-tight');
+      margin: getCssVar('control-treeview', 'spacing-crumb-item-icon-margin');
     }
 
-    &>span {
+    & > span {
       &:has(svg),
       &:has(img) {
         position: relative;
-        .#{bem(icon)}{
+        .#{bem(icon)} {
           position: absolute;
-          top: getCssVar(control-treeview-crumb, icon-top);
+          top: getCssVar('control-treeview', 'position-crumb-icon-top');
         }
 
+        // 用于占位，放置高度塌陷
         &::after {
+          @include icon;
+
           display: inline-block;
-          width: getCssVar(control-treeview-node, icon-width);
-          margin-right: getCssVar('spacing', 'extra-tight');
+          margin: getCssVar(
+            'control-treeview',
+            'spacing-crumb-item-icon-margin'
+          );
           content: '\e710';
           opacity: 0;
         }
@@ -102,9 +169,101 @@ $control-treeview-crumb: (
     }
   }
 
-  @include when('no-root') {
-    &>span:has(.#{bem('control-treeview-header__crumb')}.is-root) {
+  // 适配面包屑高度在内容区滚动时始终为0px
+  @include e('container') {
+    height: auto;
+    padding: getCssVar('control-treeview', 'spacing-crumb-container-padding');
+    & > div,
+    .van-sticky {
+      height: auto !important;
+    }
+    &.is-hidden {
       display: none;
     }
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: getCssVar(
+        'control-treeview',
+        'spacing-crumb-container-bottom-ph'
+      );
+      left: 0;
+      background-color: getCssVar(
+        'control-treeview',
+        'color-crumb-container-bg'
+      );
+    }
   }
+
+  &.vs-breadcrumb {
+    height: getCssVar('control-treeview', 'height-crumb');
+    overflow: auto;
+    white-space: nowrap;
+    line-height: getCssVar('control-treeview', 'height-crumb');
+    padding: getCssVar('control-treeview', 'spacing-crumb-padding');
+
+    // 面包屑字体颜色
+    & > span,
+    & > span:last-child,
+    .vs-breadcrumb-separator {
+      color: getCssVar('control-treeview', 'color-crumb-history-nav-text');
+    }
+
+    & > span:not(:last-child),
+    & > span:not(:last-child):hover {
+      color: getCssVar(control-treeview, color-text);
+    }
+  }
+
+  // 导航内的（即树导航里的树）样式
+  @include when(header-style) {
+    & > span:not(:last-child) {
+      display: none;
+    }
+    & > span:last-child {
+      display: flex;
+      width: 100%;
+
+      // 返回按钮样式
+      .#{bem(control-treeview-header, crumb, back-btn)} {
+        display: inline-block;
+        width: getCssVar('control-treeview', 'width-crumb-back-btn');
+        color: getCssVar('control-treeview', 'color-crumb-history-nav-text');
+      }
+
+      // 面包屑文本与图标样式
+      .vs-breadcrumb-link {
+        flex: 1;
+        overflow: hidden;
+      }
+      .#{bem(control-treeview-header, crumb)} {
+        display: flex;
+        align-items: center;
+        & > span:first-child {
+          // 图标样式
+          display: flex;
+          align-items: center;
+          &::after {
+            display: none;
+          }
+          .#{bem(icon)} {
+            position: unset;
+          }
+        }
+        & > span:last-child {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          flex: 1;
+        }
+      }
+    }
+  }
+}
+
+@include b(control-treeview-container) {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }

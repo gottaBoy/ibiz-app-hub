@@ -1,0 +1,15 @@
+export default {
+  codeListTag: 'base__DynaCodeListIcon',
+  codeListType: 'DYNAMIC',
+  codeName: 'base__DynaCodeListIcon',
+  emptyText: '未定义',
+  iconClsAppDEFieldId: 'icon',
+  iconClsXAppDEFieldId: 'icon',
+  appDEDataSetId: 'fetch_default',
+  appDataEntityId: 'web.master',
+  textAppDEFieldId: 'name',
+  valueAppDEFieldId: 'id',
+  enableCache: true,
+  name: '动态代码表图标',
+  id: 'web.base__dynacodelisticon',
+};

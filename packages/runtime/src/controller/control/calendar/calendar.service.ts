@@ -3,6 +3,52 @@ import { ISysCalendar, ISysCalendarItem } from '@ibiz/model-core';
 import { clone } from 'ramda';
 import { ICalendarItemData } from '../../../interface';
 import { MDControlService, CalendarItemData } from '../../../service';
+/**
+ * @description 更多数据项
+ * @interface ILoadMoreItem
+ */
+export interface ILoadMoreItem {
+  /**
+   * @description 当前页
+   * @type {number}
+   * @memberof ILoadMoreItem
+   */
+  curPage: number;
+  /**
+   * @description 总页数
+   * @type {number}
+   * @memberof ILoadMoreItem
+   */
+  totalPage: number;
+  /**
+   * @description 日历项数据
+   * @type {ICalendarItemData[]}
+   * @memberof ILoadMoreItem
+   */
+  items: ICalendarItemData[];
+}
+
+/**
+ * @description 日历查询配置
+ * @export
+ * @interface CalendarFetchOpts
+ */
+export interface CalendarFetchOpts {
+  /**
+   * @description 是否加载更多
+   * - 时间轴类型日历默认启用
+   * @type {boolean}
+   * @memberof CalendarFetchOpts
+   */
+  isLoadMore?: boolean;
+
+  /**
+   * @description 排序属性
+   * @type {('beginTime' | 'endTime')}
+   * @memberof CalendarFetchOpts
+   */
+  sortField: 'beginTime' | 'endTime';
+}
 
 /**
  * 日历部件服务
@@ -14,6 +60,17 @@ import { MDControlService, CalendarItemData } from '../../../service';
  * @extends {MDControlService<ISysCalendar>}
  */
 export class CalendarService extends MDControlService<ISysCalendar> {
+  /**
+   * @description 加载更多信息数据
+   * @type {{
+   *     [modelId: string]: ILoadMoreItem;
+   *   }}
+   * @memberof CalendarService
+   */
+  loadMore: {
+    [modelId: string]: ILoadMoreItem;
+  } = {};
+
   /**
    * @description 删除单条数据
    * @param {string} appDataEntityId 实体标识
@@ -45,26 +102,27 @@ export class CalendarService extends MDControlService<ISysCalendar> {
    * @author zk
    * @date 2023-08-08 10:08:47
    * @param {IContext} context
-   * @param {IParams} [params={}]
+   * @param {IParams} params
    * @return {*}  Promise<ICalendarItemData[]>
    * @memberof CalendarService
    */
   async search(
     context: IContext,
-    params: IParams = {},
+    params: IParams,
+    opts?: CalendarFetchOpts,
   ): Promise<ICalendarItemData[]> {
     const { sysCalendarItems } = this.model;
-    if (!sysCalendarItems) {
-      return [];
-    }
+    if (!sysCalendarItems) return [];
+
     const promises = sysCalendarItems.map(
       async (item): Promise<IHttpResponse> => {
         const fetchAction = item.appDEDataSetId || 'fetchdefault';
         const tempContext = context.clone();
-        const tempParams: IParams = this.handleRequestParams(item, params);
-        if (item.maxSize) {
-          tempParams.size = item.maxSize;
-        }
+        const tempParams: IParams = this.handleRequestParams(
+          item,
+          params,
+          opts,
+        );
         return this.exec2(
           fetchAction,
           tempContext,
@@ -78,25 +136,32 @@ export class CalendarService extends MDControlService<ISysCalendar> {
     // 二维数组
     const twoDimensionalArray = resArray.map(
       (res: IHttpResponse, index: number) => {
-        return this.setCalendarConfigData(res.data as IData[], index);
+        return this.setCalendarConfigData(
+          res.data as IData[],
+          index,
+          Number(res.headers?.['x-total-pages']) || 0,
+          opts?.isLoadMore,
+        );
       },
     );
     return twoDimensionalArray.flat();
   }
 
   /**
-   * 设置日历项配置
-   *
-   * @author zk
-   * @date 2023-08-08 06:08:14
+   * @description 设置日历项配置
+   * @private
    * @param {IData[]} items
    * @param {number} index
-   * @return {*}  {ICalendarItemData[]}
+   * @param {number} totalPage
+   * @param {boolean} [isLoadMore=false]
+   * @returns {*}  {ICalendarItemData[]}
    * @memberof CalendarService
    */
   private setCalendarConfigData(
     items: IData[],
     index: number,
+    totalPage: number,
+    isLoadMore = false,
   ): ICalendarItemData[] {
     const { sysCalendarItems } = this.model;
     if (!sysCalendarItems) {
@@ -110,9 +175,25 @@ export class CalendarService extends MDControlService<ISysCalendar> {
         ibiz.i18n.t('runtime.controller.control.calendar.noFoundModel'),
       );
     }
-    return items.map(item => {
+    const itemType = calendarItem.itemType!;
+    this.loadMore[itemType] ??= {
+      curPage: 0,
+      totalPage: 0,
+      items: [],
+    };
+
+    const moreData = this.loadMore[itemType];
+    moreData.totalPage = totalPage;
+    const data = items.map(item => {
       return new CalendarItemData(calendarItem, item);
     });
+    if (isLoadMore) {
+      moreData.curPage += 1;
+      moreData.items.push(...data);
+    } else {
+      moreData.items = [...data];
+    }
+    return [...moreData.items];
   }
 
   /**
@@ -221,17 +302,18 @@ export class CalendarService extends MDControlService<ISysCalendar> {
   }
 
   /**
-   * 处理请求参数
-   *
+   * @description 处理请求参数
    * @private
    * @param {ISysCalendarItem} item
    * @param {IParams} params
-   * @return {*}  {IParams}
+   * @param {CalendarFetchOpts} [opts]
+   * @returns {*}  {IParams}
    * @memberof CalendarService
    */
   private handleRequestParams(
     item: ISysCalendarItem,
     params: IParams,
+    opts?: CalendarFetchOpts,
   ): IParams {
     const tempParams: IParams = clone(params);
     const { srfstartdate, srfenddate } = tempParams;
@@ -240,8 +322,23 @@ export class CalendarService extends MDControlService<ISysCalendar> {
         searchconds: this.getSearchConds(item, params),
       });
     }
+    const { maxSize, itemType, endTimeAppDEFieldId, beginTimeAppDEFieldId } =
+      item;
     delete tempParams.srfstartdate;
     delete tempParams.srfenddate;
+    tempParams.size = maxSize || 1000;
+    if (opts) {
+      const { isLoadMore, sortField } = opts;
+      if (isLoadMore) {
+        this.loadMore[itemType!] ??= {
+          curPage: 0,
+          totalPage: 0,
+          items: [],
+        };
+        tempParams.page = this.loadMore[itemType!].curPage;
+      }
+      tempParams.sort = `${sortField === 'beginTime' ? beginTimeAppDEFieldId?.toLowerCase() : endTimeAppDEFieldId?.toLowerCase()},desc`;
+    }
     return tempParams;
   }
 }

@@ -57,6 +57,10 @@ export class EditFormService<
     context: IContext,
     params: IParams = {},
   ): Promise<IHttpResponse<ControlVO>> {
+    // srfdefdata存在，则视图重绘，跳过当前界面域临时数据
+    if (params && params.srfdefdata) {
+      context.srfskipcleartmpres = true;
+    }
     const { args } = this.getLoadParams(params);
     let res = await this.exec(
       this.model.getDraftControlAction?.appDEMethodId || 'getdraft',
@@ -288,10 +292,10 @@ export class EditFormService<
       this.model,
       (item: IDEFormDetail, parent: IDEFormDetail) => {
         // 重复器中的子表单属性项不应挂在主表单中
-        if (
-          parent.detailType !== 'MDCTRL' &&
-          (item.detailType === 'FORMITEM' || item.detailType === 'MDCTRL')
-        ) {
+        if (parent.detailType === 'MDCTRL') {
+          return true;
+        }
+        if (item.detailType === 'FORMITEM' || item.detailType === 'MDCTRL') {
           const formItem = item as IDEEditFormItem;
           // 复合表单项
           if (formItem.compositeItem) {
@@ -314,6 +318,15 @@ export class EditFormService<
                 dataType: formItem.dataType,
                 isOneToMultiField: uiKeys && uiKeys.length > 1,
               });
+            } else if (
+              this.model.controlParam &&
+              this.model.controlParam.ctrlParams &&
+              this.model.controlParam.ctrlParams.enablerepeatedform === 'true'
+            ) {
+              // 重复器表单项没有属性绑定也存到origin里面
+              mapField = new UIMapField(uiKey, uiKey, {
+                isOriginField: true,
+              });
             } else {
               // 前台属性和没属性的表单项，或预置属性
               mapField = new UIMapField(uiKey, uiKey, {
@@ -326,6 +339,7 @@ export class EditFormService<
       },
       {
         childrenFields: ['deformPages', 'deformTabPages', 'deformDetails'],
+        isBreak: true,
       },
     );
   }

@@ -72,4 +72,11 @@ export interface IController<
    * @memberof IController
    */
   destroyed(): Promise<void>;
+
+  /**
+   * @description 当前视图上下文内有新的控制器产生时触发回调
+   * @param {(name: string, c: IController) => void} cb
+   * @memberof IController
+   */
+  listenNewController(cb: (name: string, c: IController) => void): void;
 }

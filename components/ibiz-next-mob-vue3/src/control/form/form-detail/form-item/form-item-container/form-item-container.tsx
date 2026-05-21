@@ -14,6 +14,7 @@ export const IBizFormItemContainer = defineComponent({
   },
   setup(props) {
     const ns = useNamespace('form-item-container');
+    const editorNs = useNamespace('editor');
     let labelAlign: 'right' | 'left' = 'left';
     let editorAlign: 'right' | 'left' = 'right';
     const c = props.controller;
@@ -80,18 +81,21 @@ export const IBizFormItemContainer = defineComponent({
         editorAlign = editorContentAlign;
       }
       const result: IData = {
-        'label-align': labelAlign,
-        'editor-align': editorAlign,
+        'font-textAlign': labelAlign,
       };
-      if (labelWidth !== 130) {
-        Object.assign(result, { 'label-width': `${labelWidth}px` });
+      if (labelWidth && labelWidth !== 130) {
+        // 宽度转换为rem，按照16px=1rem计算
+        Object.assign(result, { 'width-label': `${labelWidth / 16}rem` });
       }
-      if (hideClear) {
-        Object.assign(result, { 'required-style': 'none' });
-      } else {
-        Object.assign(result, { 'required-style': 'initial' });
-      }
-      return ns.cssVarBlock(result);
+      return {
+        ...ns.cssVarBlock(result),
+        ...editorNs.cssVarBlock({
+          'default-text-align': editorAlign,
+          'default-flex-justify-content':
+            editorAlign === 'right' ? 'flex-end' : 'flex-start',
+          'default-required-style': hideClear ? 'none' : 'initial',
+        }),
+      };
     });
 
     const handleClick = (e: MouseEvent) => {
@@ -99,6 +103,7 @@ export const IBizFormItemContainer = defineComponent({
     };
 
     const renderLabel = () => {
+      const { enableAnchor } = c.model;
       return (
         <van-popover
           class={ns.e('popover')}
@@ -142,7 +147,13 @@ export const IBizFormItemContainer = defineComponent({
                       icon={sysImage}
                     ></iBizIcon>
                   )}
-                  <span>{c.labelCaption}</span>
+                  {enableAnchor ? (
+                    <van-index-anchor index={c.labelCaption}>
+                      {c.labelCaption}
+                    </van-index-anchor>
+                  ) : (
+                    <span>{c.labelCaption}</span>
+                  )}
                 </div>
               );
             },

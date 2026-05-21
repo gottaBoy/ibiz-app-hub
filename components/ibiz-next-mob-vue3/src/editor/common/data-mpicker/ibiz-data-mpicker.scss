@@ -1,10 +1,19 @@
+$data-mpicker: (
+  // 颜色
+  color-cancel: getCssVar(color, text, 1),
+  color-confirm: getCssVar(color, primary),
+  // 间距
+  padding-toolbar: getCssVar(spacing, base-tight),
+  padding-item: getCssVar(spacing, base-tight),
+);
 @include b(data-mpicker) {
+  @include set-component-css-var(data-mpicker, $data-mpicker);
 
   @include b(data-mpicker-toolbar) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: getCssVar(spacing, base-tight);
+    padding: getCssVar(data-mpicker, padding-toolbar);
 
     button {
       padding: 0;
@@ -13,11 +22,11 @@
     }
 
     @include e(confirm) {
-      color: getCssVar(color, primary);
+      color: getCssVar(data-mpicker, color-confirm);
     }
 
     @include e(cancel) {
-      color: getCssVar(color, text, 3);
+      color: getCssVar(data-mpicker, color-cancel);
     }
   }
 
@@ -33,7 +42,7 @@
 
     .van-cell {
       justify-content: flex-end;
-      padding: getCssVar(spacing, base-tight);
+      padding: getCssVar(data-mpicker, padding-item);
     }
   }
 

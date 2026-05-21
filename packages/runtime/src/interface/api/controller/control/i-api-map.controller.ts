@@ -32,7 +32,7 @@ export interface IApiMapController<
 
   /**
    * @description 下钻
-   * @param {(string | number)} areaCode
+   * @param {(string | number)} areaCode 区域编码
    * @memberof IApiMapController
    */
   drillDown(areaCode: string | number): void;

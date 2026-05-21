@@ -1,6 +1,6 @@
 import { IApiData } from '@ibiz-template/core';
 import { IApiButtonContainerState } from '../common';
-import { IApiListState } from './i-api-list.state';
+import { IApiMDControlState } from './i-api-md-control.state';
 import { IApiMobMDCtrlController } from '../../controller';
 
 /**
@@ -36,9 +36,9 @@ export interface IApiMobMDCtrlRowState {
  * @primary
  * @export
  * @interface IApiMobMdCtrlState
- * @extends {IApiListState}
+ * @extends {IApiMDControlState}
  */
-export interface IApiMobMdCtrlState extends IApiListState {
+export interface IApiMobMdCtrlState extends IApiMDControlState {
   /**
    * @description 多数据视图行数据
    * @type {IApiMobMDCtrlRowState[]}
@@ -46,4 +46,17 @@ export interface IApiMobMdCtrlState extends IApiListState {
    * @memberof IApiMobMdCtrlState
    */
   rows: IApiMobMDCtrlRowState[];
+
+  /**
+   * @description 多数视图可设置排序的数据项集合
+   * @type {Array<{
+   *     value: string;
+   *     label: string;
+   *   }>}
+   * @memberof IApiMobMdCtrlState
+   */
+  sortDelistItems: Array<{
+    value: string;
+    label: string;
+  }>;
 }

@@ -441,9 +441,7 @@ export class PortletPartController<T extends IDBPortletPart = IDBPortletPart>
   protected calcDynaClass(data: IData): void {
     if (this.model.dynaClass) {
       const dynaClass = calcDynaClass(this.model.dynaClass, data);
-      if (dynaClass.length) {
-        this.state.class.containerDyna = dynaClass;
-      }
+      this.state.class.containerDyna = dynaClass;
     }
   }
 

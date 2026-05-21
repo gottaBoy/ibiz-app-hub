@@ -2,8 +2,8 @@
 import { defineComponent, PropType } from 'vue';
 import { IInternalMessage } from '@ibiz-template/core';
 import { useNamespace } from '@ibiz-template/vue3-util';
-import './internal-message-text.scss';
 import { InternalMessageTextProvider } from './internal-message-text.provider';
+import './internal-message-text.scss';
 
 export const InternalMessageText = defineComponent({
   name: 'IBizInternalMessageText',
@@ -19,6 +19,7 @@ export const InternalMessageText = defineComponent({
   },
   emits: {
     close: () => true,
+    read: () => true,
   },
   setup() {
     const ns = useNamespace('internal-message-text');
@@ -31,6 +32,7 @@ export const InternalMessageText = defineComponent({
         class={[this.ns.b()]}
         message={this.message}
         provider={this.provider}
+        onRead={() => this.$emit('read')}
         onClose={() => this.$emit('close')}
       >
         <div class={this.ns.e('caption')}>{title}</div>

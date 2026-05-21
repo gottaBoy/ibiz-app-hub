@@ -10,6 +10,7 @@ export class TextBoxWriter extends TextEditorWriter {
     _.w(d, 'maxValue', s);
     _.w(d, 'minValue', s);
     _.w(d, 'precision', s);
+    _.w(d, 'scale', s);
 
     super.onFillDSL(c, s, d);
   }

@@ -1,25 +1,39 @@
+$rawitem: (
+  'color-rawitem-color': getCssVar(editor, default, text-color),
+  'spacing-view-message-padding': getCssVar(view-message, padding),
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+);
 @include b(rawitem) {
+  @include set-component-css-var('rawitem', $rawitem);
+
   width: 100%;
   height: 100%;
-  font-size: getCssVar(font-size, regular);
-  color: getCssVar(editor, default, text-color);
+  font-size: getCssVar(rawitem, font-fontSize);
+  line-height: getCssVar(rawitem, font-lineHeight);
+  color: getCssVar(rawitem, color-rawitem-color);
+
+  @include e('video') {
+    video {
+      width: 100%;
+    }
+  }
+
+  @include e('html'){
+    overflow: auto;
+  }
 
   @include b(icon) {
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .van-notice-bar.info {
-    --van-notice-bar-text-color:#{getCssVar(color, primary)};
-    --van-notice-bar-background:#{getCssVar(color, primary, light, default)}
-  }
-
-  .van-notice-bar.warning {
-    --van-notice-bar-text-color: #{getCssVar(color, warning)};
-  }
-
-  .van-notice-bar.error {
-    --van-notice-bar-text-color: #{getCssVar(color, danger)};
-    --van-notice-bar-background: #{getCssVar(color, danger, light, default)};
+  &.#{bem(rawitem--info)},
+  &.#{bem(rawitem--warning)},
+  &.#{bem(rawitem--error)} {
+    padding: getCssVar(rawitem, spacing-view-message-padding);
   }
 }

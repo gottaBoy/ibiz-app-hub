@@ -27,12 +27,14 @@ import { getOriginData } from '../../utils';
 import { FilterPortletController } from './portlet';
 import { CustomDashboardController } from './custom-dashboard.controller';
 import {
+  deepFillSubAppId,
   filterPortletByConfig,
   filterPortletByID,
   generateCacheKy,
   getFilterSearchConds,
   getPortletModelByID,
 } from './dashboard.util';
+import { MobCustomDashboardController } from './mob-custom-dashboard.controller';
 
 /**
  * 数据看板部件控制器
@@ -83,6 +85,13 @@ export class DashboardController
    */
   customDashboard: CustomDashboardController | undefined;
 
+  /**
+   * @description 移动端自定义数据看板部件控制器
+   * @type {(MobCustomDashboardController | undefined)}
+   * @memberof DashboardController
+   */
+  mobCustomDashboard: MobCustomDashboardController | undefined;
+
   public enableAnchorCtrls: IData[] = [];
 
   /**
@@ -132,6 +141,26 @@ export class DashboardController
    */
   getCustomDashboard(): CustomDashboardController | undefined {
     return this.customDashboard;
+  }
+
+  /**
+   * @description 设置移动端自定义数据看板部件控制器
+   * @param {MobCustomDashboardController} mobCustomDashboard
+   * @memberof DashboardController
+   */
+  setMobCustomDashboard(
+    mobCustomDashboard: MobCustomDashboardController,
+  ): void {
+    this.mobCustomDashboard = mobCustomDashboard;
+  }
+
+  /**
+   * @description 获取移动端自定义数据看板部件控制器
+   * @returns {*}  {(MobCustomDashboardController | undefined)}
+   * @memberof DashboardController
+   */
+  getMobCustomDashboard(): MobCustomDashboardController | undefined {
+    return this.mobCustomDashboard;
   }
 
   /**
@@ -232,7 +261,7 @@ export class DashboardController
    * @return {*}  {Promise<IData[]>}
    */
   async loadAllDynaPortlet(): Promise<IData[]> {
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.model.appId);
     const result: IData[] = [];
     // 存在动态代码表标识
     if (this.controlParams.dynamiccodelist) {
@@ -288,7 +317,7 @@ export class DashboardController
    * @return {*}  {(Promise<IDBPortletPart | undefined>)}
    */
   async loadDynaPortletById(id: string): Promise<IDBPortletPart | undefined> {
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.model.appId);
     const tempContext = clone(this.context);
     Object.assign(tempContext, { psappportlet: id });
     const res = await app.deService.exec(
@@ -300,10 +329,21 @@ export class DashboardController
     this.dynaPortletMap.set(id, res.data);
     if (res && res.data && res.data.controlmodel) {
       const controlModel = JSON.parse(res.data.controlmodel);
-      return (await ibiz.hub.translationModelToDsl(
+      const result = (await ibiz.hub.translationModelToDsl(
         controlModel,
         'CTRL',
       )) as any;
+      const appId = res.data.pssysappid;
+      if (appId) {
+        const mainApp = ibiz.hub.getApp(ibiz.env.appId);
+        const targetApp = mainApp.model.subAppRefs?.find(subAppRef => {
+          return subAppRef.id?.endsWith(appId);
+        });
+        if (targetApp && targetApp.id) {
+          deepFillSubAppId(result, targetApp.id);
+        }
+      }
+      return result;
     }
   }
 
@@ -344,7 +384,12 @@ export class DashboardController
     }
     const items: IModel[] = [];
     Object.values(this.portlets).forEach((portlet: IPortletController) => {
-      if (portlet.model && portlet.model.portletType !== 'FILTER') {
+      if (
+        portlet.model &&
+        portlet.model.portletType !== 'FILTER' &&
+        portlet.model.portletType !== 'RAWITEM' &&
+        portlet.model.portletType !== 'CONTAINER'
+      ) {
         items.push(portlet.model);
       }
     });
@@ -388,7 +433,7 @@ export class DashboardController
     isNewFilter: boolean,
   ): Promise<void> {
     if (!this.customDashboard) return;
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.model.appId);
     // 新建
     if (isNewFilter) {
       // 仿真过滤器占位
@@ -420,7 +465,12 @@ export class DashboardController
     }
     // 设置缓存
     const searchCondCacheKey = generateCacheKy(this.context, this, model.id);
-    localStorage.setItem(searchCondCacheKey, JSON.stringify(searchconds));
+    if (searchconds) {
+      localStorage.setItem(searchCondCacheKey, JSON.stringify(searchconds));
+    } else {
+      localStorage.removeItem(searchCondCacheKey);
+    }
+
     // 存数
     const result = await this.customDashboard.saveCustomModelData(
       this.customDashboard.customModelData,
@@ -470,7 +520,7 @@ export class DashboardController
           portletFilterkeys.forEach((key: string) => {
             const filterParam = this.customDashboard!.portletFilter[key];
             const { config, searchconds } = filterParam;
-            const app = ibiz.hub.getApp(ibiz.env.appId);
+            const app = ibiz.hub.getApp(this.model.appId);
             const targetFilter = app.model.appPortlets?.find(
               (portletModel: IAppPortlet) => {
                 return portletModel.id === key;
@@ -575,7 +625,7 @@ export class DashboardController
       }
     }
     if (params.searchconds && params.searchconds.length > 0) {
-      result.params = params;
+      result.params = [params];
     }
     return result;
   }

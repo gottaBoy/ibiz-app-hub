@@ -1,4 +1,5 @@
 export default {
+  openMode: 'POPUPMODAL',
   deviewCodeName: 'Pickup_treempickupview2',
   deviewId: 'f47b5dabf27521868b1796ec9f32618c',
   appWFId: 'workflow',

@@ -54,6 +54,7 @@ export class ChartExpBarController
    * @protected
    */
   protected navByFirstItem(): void {
+    if (!this.xDataController) return;
     const data = this.getDefaultActiveData();
     if (!data) return this.clearNavigation();
     this.xDataController.setActive(data);
@@ -65,6 +66,7 @@ export class ChartExpBarController
    * @memberof ChartExpBarController
    */
   navDataByStack(): void {
+    if (!this.xDataController) return;
     // 根据栈数据查找最近的一次导航数据
     const preNav = this.navStack.find(nav => {
       return (

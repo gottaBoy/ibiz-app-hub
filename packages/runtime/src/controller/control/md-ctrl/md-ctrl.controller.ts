@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  IAppDEDataExport,
   IDEMobMDCtrl,
   IUIActionGroup,
   IUIActionGroupDetail,
 } from '@ibiz/model-core';
-import { RuntimeModelError } from '@ibiz-template/core';
-import { isNil } from 'ramda';
+import { RuntimeError, RuntimeModelError } from '@ibiz-template/core';
+import { clone, isNil, isNotNil } from 'ramda';
+import { createUUID } from 'qx-util';
 import {
   IMobMDCtrlEvent,
   IMobMDCtrlController,
@@ -15,19 +17,78 @@ import {
   IMDControlGroupState,
   CodeListItem,
   ISearchGroupData,
+  IExportColumn,
+  IApiExportParams,
 } from '../../../interface';
 import { MDCtrlService } from './md-ctrl.service';
 import { MobMDCtrlRowState } from './md-ctrl-row.state';
 import { MDControlController } from '../../common';
 import { ControlVO } from '../../../service';
 import { UIActionUtil } from '../../../ui-action';
-import { ButtonContainerState, UIActionButtonState } from '../../utils';
+import {
+  ButtonContainerState,
+  UIActionButtonState,
+  exportData,
+} from '../../utils';
+import { calcUIActionGroup, getAllUIActionItems } from '../../../model';
 
 export class MDCtrlController
   extends MDControlController<IDEMobMDCtrl, IMobMdCtrlState, IMobMDCtrlEvent>
   implements IMobMDCtrlController
 {
   declare service: MDCtrlService;
+
+  /**
+   * @description 启用分组
+   * @readonly
+   * @type {boolean}
+   * @memberof MDCtrlController
+   */
+  get enableGroup(): boolean {
+    return this.model.groupMode !== 'NONE';
+  }
+
+  /**
+   * 允许新建
+   *
+   * @readonly
+   * @type {boolean}
+   * @memberof MDCtrlController
+   */
+  get enableNew(): boolean {
+    return this.model.enableRowNew === true;
+  }
+
+  /**
+   * @description 分组时是否显示分组锚点导航
+   * @readonly
+   * @type {boolean}
+   * @memberof MDCtrlController
+   */
+  get showGroupAnchor(): boolean {
+    return this.enableGroup && this.controlParams.showgroupanchor === 'true';
+  }
+
+  /**
+   * @description 数据导出对象
+   * @type {(IAppDEDataExport | undefined)}
+   * @memberof MDCtrlController
+   */
+  dataExport: IAppDEDataExport | undefined;
+
+  /**
+   * @description 数据导出列
+   * @type {IExportColumn[]}
+   * @memberof MDCtrlController
+   */
+  allExportColumns: IExportColumn[] = [];
+
+  /**
+   * @description 数据导出代码表
+   * @type {Map<string, readonly CodeListItem[]>}
+   * @memberof MDCtrlController
+   */
+  allExportCodelistMap: Map<string, readonly CodeListItem[]> = new Map();
 
   protected initState(): void {
     super.initState();
@@ -36,6 +97,32 @@ export class MDCtrlController
     this.state.singleSelect = this.model.singleSelect === true;
     // 多数据默认激活值为1
     this.state.mdctrlActiveMode = 1;
+    this.state.size = this.model.pagingSize || 20;
+    this.initSortDelistItems();
+  }
+
+  /**
+   * @description 初始化排序配置项集合
+   * @protected
+   * @memberof MDCtrlController
+   */
+  protected initSortDelistItems(): void {
+    const sortDelistItems: Array<{
+      value: string;
+      label: string;
+    }> = [];
+    this.model.delistItems?.forEach((item: IParams) => {
+      if (item.enableSort) {
+        sortDelistItems.push({
+          value: item.id,
+          label: ibiz.i18n.t(
+            item?.capLanguageRes?.lanResTag || '',
+            item.caption || item?.capLanguageRes?.defaultContent,
+          ),
+        });
+      }
+    });
+    this.state.sortDelistItems = sortDelistItems;
   }
 
   /**
@@ -54,6 +141,34 @@ export class MDCtrlController
     await this.service.init(this.context);
     // 设置默认排序
     this.setSort();
+    await this.initExportData();
+  }
+
+  /**
+   * @description 初始化界面行为组
+   * @protected
+   * @memberof MDCtrlController
+   */
+  protected async initUIActions(): Promise<void> {
+    const { deuiactionGroup, deuiactionGroup2 } = this.model;
+
+    // 左滑界面行为组
+    if (deuiactionGroup) {
+      await calcUIActionGroup(
+        this.model.deuiactionGroup!,
+        this.context,
+        this.params,
+      );
+    }
+
+    // 右滑界面行为组
+    if (deuiactionGroup2) {
+      await calcUIActionGroup(
+        this.model.deuiactionGroup2!,
+        this.context,
+        this.params,
+      );
+    }
   }
 
   /**
@@ -65,7 +180,7 @@ export class MDCtrlController
   async loadMore(): Promise<void> {
     // 修复加载更多时，数据未加载成功 但是还是会继续加载的问题
     if (this.state.total > this.state.items.length && !this.state.isLoading) {
-      await this.load({ isLoadMore: true, silent: true });
+      await this.load({ isLoadMore: true });
     }
   }
 
@@ -200,13 +315,12 @@ export class MDCtrlController
     row: MobMDCtrlRowState,
     group: IUIActionGroup,
   ): Promise<void> {
-    if (!group!.uiactionGroupDetails?.length) {
+    if (!group!.uiactionGroupDetails?.length)
       ibiz.log.debug(
         ibiz.i18n.t('runtime.controller.control.grid.interfaceBehavior'),
       );
-    }
     const containerState = new ButtonContainerState();
-    const details = group!.uiactionGroupDetails || [];
+    const details = getAllUIActionItems(group!.uiactionGroupDetails);
     details.forEach(detail => {
       const actionid = detail.uiactionId;
       if (actionid) {
@@ -267,10 +381,18 @@ export class MDCtrlController
     if (groupAppDEFieldId) {
       const { items } = this.state;
       const groupMap: Map<string, MobMDCtrlRowState[]> = new Map();
+      const unclassified: IMDControlGroupState = {
+        key: createUUID(),
+        caption: ibiz.i18n.t('runtime.controller.common.md.unclassified'),
+        children: [],
+      };
       items.forEach((item: IData) => {
         const groupVal = item[groupAppDEFieldId];
+        // 分组无值默认归为未分类
         if (isNil(groupVal)) {
-          // 分组无值的不显示
+          unclassified.children.push(
+            new MobMDCtrlRowState(item as ControlVO, this),
+          );
           return;
         }
 
@@ -290,6 +412,8 @@ export class MDCtrlController
           children: [...value],
         });
       });
+      // 将未分类放到最后
+      if (unclassified.children.length) groups.push(unclassified);
       this.state.groups = groups;
     }
   }
@@ -338,7 +462,6 @@ export class MDCtrlController
       if (groupArr) {
         groupArr.push(new MobMDCtrlRowState(item as ControlVO, this));
       }
-      // 不在代码表里数据忽略
     });
 
     const groups: IMDControlGroupState[] = [];
@@ -381,5 +504,317 @@ export class MDCtrlController
    */
   scrollToTop(): void {
     throw new Error('Method not implemented.');
+  }
+
+  /**
+   * @description 获取部件默认排序模型
+   * @returns {*}  {({
+   *     minorSortAppDEFieldId: string | undefined;
+   *     minorSortDir: string | undefined;
+   *   })}
+   * @memberof MDCtrlController
+   */
+  getSortModel(): {
+    minorSortAppDEFieldId: string | undefined;
+    minorSortDir: string | undefined;
+  } {
+    return {
+      minorSortAppDEFieldId: this.model.minorSortAppDEFieldId,
+      minorSortDir: this.model.minorSortDir,
+    };
+  }
+
+  /**
+   * 新增按钮点击
+   *
+   * @memberof MDCtrlController
+   */
+  onClickNew(event: MouseEvent, group?: string | number): void {
+    const params = { ...this.params };
+    if (isNotNil(group)) {
+      Object.assign(params, { srfgroup: group });
+    }
+    UIActionUtil.execAndResolved(
+      'new',
+      {
+        context: this.context,
+        params,
+        data: [],
+        view: this.view,
+        ctrl: this,
+        event,
+      },
+      this.view.model.appId,
+    );
+  }
+
+  /**
+   * @description 初始化数据导出对象
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof MDCtrlController
+   */
+  protected async initExportData(): Promise<void> {
+    if (this.model.dedataExportId) {
+      this.dataExport = this.dataEntity.appDEDataExports?.find(dataExport => {
+        return dataExport.id === this.model.dedataExportId;
+      });
+      if (this.dataExport) {
+        this.allExportColumns = await this.findAllExportColumns(
+          this.dataExport,
+        );
+      }
+    }
+    if (this.allExportColumns.length) {
+      this.allExportColumns.forEach(exportColumn => {
+        if (exportColumn.codeListItems) {
+          this.allExportCodelistMap.set(
+            exportColumn.appDEFieldId!,
+            exportColumn.codeListItems,
+          );
+        }
+      });
+    }
+  }
+
+  /**
+   * @description 初始化数据导出列
+   * @param {IAppDEDataExport} dataExport
+   * @returns {*}  {Promise<IExportColumn[]>}
+   * @memberof MDCtrlController
+   */
+  async findAllExportColumns(
+    dataExport: IAppDEDataExport,
+  ): Promise<IExportColumn[]> {
+    const app = ibiz.hub.getApp(this.context.srfappid);
+    // 排除隐藏列
+    const exportColumnsPromises: Promise<IExportColumn>[] | undefined =
+      dataExport.dedataExportItems
+        ?.filter(item => !item.hidden)
+        .map(async item => {
+          const tempExportColumn: IExportColumn = { ...item };
+          if (item.codeListId) {
+            // 加载代码表模型
+            tempExportColumn.codeList = app.codeList.getCodeList(
+              item.codeListId,
+            );
+            tempExportColumn.codeListItems = await app.codeList.get(
+              item.codeListId,
+              this.context,
+            );
+          }
+          return tempExportColumn;
+        });
+    // 使用 Promise.all 等待所有 Promise 解析
+    if (exportColumnsPromises) {
+      return Promise.all(exportColumnsPromises);
+    }
+    return [];
+  }
+
+  /**
+   * @description 获取数据导出模型
+   * @returns {*}  {{ header: string[]; fields: string[] }}
+   * @memberof MDCtrlController
+   */
+  getDataExcelModel(): { header: string[]; fields: string[] } {
+    const { dedataExportId } = this.model;
+    const excelModel: { header: string[]; fields: string[] } = {
+      header: [],
+      fields: [],
+    };
+    if (dedataExportId) {
+      if (this.allExportColumns.length) {
+        excelModel.fields = this.allExportColumns.map(x => x.appDEFieldId!);
+        excelModel.header = this.allExportColumns.map(x => x.caption!);
+      }
+    }
+    return excelModel;
+  }
+
+  /**
+   * @description 加载数据(只加载数据 不做其他操作)
+   * @param {MDCtrlLoadParams} args
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof MDCtrlController
+   */
+  async loadData(args: MDCtrlLoadParams): Promise<IData[]> {
+    // *查询参数处理
+    const { context } = this.handlerAbilityParams(args);
+    const params = await this.getFetchParams(args?.viewParam);
+    let res;
+    // *发起请求
+    await this.startLoading();
+    try {
+      res = await this.service.fetch(context, params);
+    } finally {
+      await this.endLoading();
+    }
+    return res.data;
+  }
+
+  /**
+   * @description 获取导出数据
+   * @param {IApiExportParams} params
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof MDCtrlController
+   */
+  async getExportData(params: IApiExportParams): Promise<IData[]> {
+    const { type } = params;
+    let data: IData[] = [];
+    // 未指定类型时，默认导出当前页
+    if (!type || type === 'activatedPage') {
+      data = this.state.items.map(row => row);
+    } else if (type === 'maxRowCount' || type === 'customPage') {
+      const { size } = this.state;
+      const { startPage, endPage } = params;
+      const viewParam =
+        type === 'customPage' && startPage && endPage
+          ? {
+              page: 0,
+              offset: (startPage - 1) * size,
+              size: (endPage - startPage + 1) * size,
+            }
+          : { size: this.dataExport?.maxRowCount || 1000, page: 0 };
+      data = await this.loadData({ viewParam });
+    } else if (type === 'selectedRows') {
+      data = this.getData();
+    }
+    if (data.length === 0) {
+      throw new RuntimeError(
+        ibiz.i18n.t('runtime.controller.common.md.exported'),
+      );
+    }
+    return data;
+  }
+
+  /**
+   * @description 格式化导出数据
+   * @param {IData[]} data
+   * @param {string[]} fields
+   * @returns {*}  {IData[]}
+   * @memberof MDCtrlController
+   */
+  formatExcelData(data: IData[], fields: string[]): IData[] {
+    const cloneData = clone(
+      data.map(item => {
+        return fields.reduce((obj: IData, key: string) => {
+          obj[key] = item[key];
+          return obj;
+        }, {});
+      }),
+    );
+    cloneData.forEach(item => {
+      Object.keys(item).forEach((key: string) => {
+        let value = item[key];
+        if (this.allExportCodelistMap.get(key)) {
+          value =
+            this.allExportCodelistMap.get(key)!.find(x => x.value === item[key])
+              ?.text || value;
+        } else {
+          value = `${value != null ? value : ''}`;
+        }
+        item[key] = value;
+      });
+    });
+    return cloneData;
+  }
+
+  /**
+   * @description 执行后台导出
+   * @param {IApiExportParams} params
+   * @returns {*}  {Promise<void>}
+   * @memberof MDCtrlController
+   */
+  async excuteBackendExport(params: IApiExportParams): Promise<void> {
+    // 准备参数
+    const fetchParams = await this.getFetchParams({ ...this.params });
+    let tempParams: IParams = {};
+    const { type } = params;
+    if (!type || type === 'activatedPage') {
+      const { size, curPage } = this.state;
+      tempParams = {
+        page: curPage - 1,
+        size,
+      };
+    } else if (type === 'selectedRows') {
+      const selectedData = this.getData();
+      if (selectedData.length === 0) {
+        throw new RuntimeError(
+          ibiz.i18n.t('runtime.controller.common.md.exported'),
+        );
+      }
+      tempParams = {
+        page: 0,
+        srfkeys: selectedData.map(data => data.srfkey).join(','),
+      };
+    } else if (type === 'maxRowCount' || type === 'customPage') {
+      const { size } = this.state;
+      const { startPage, endPage } = params;
+      tempParams =
+        type === 'customPage' && startPage && endPage
+          ? {
+              page: 0,
+              offset: (startPage - 1) * size,
+              size: (endPage - startPage + 1) * size,
+            }
+          : { size: this.dataExport?.maxRowCount || 1000, page: 0 };
+    }
+    Object.assign(fetchParams, tempParams);
+    // 执行导出
+    const res = await this.service.exportData(
+      this.dataExport!,
+      this.context,
+      fetchParams,
+    );
+    if (res.status === 200) {
+      const fileName = ibiz.util.file.getFileName(res);
+      const blob = new Blob([res.data as Blob], {
+        type: 'application/vnd.ms-excel',
+      });
+      const elink = document.createElement('a');
+      elink.download = fileName;
+      elink.style.display = 'none';
+      elink.href = URL.createObjectURL(blob);
+      document.body.appendChild(elink);
+      elink.click();
+      URL.revokeObjectURL(elink.href); // 释放URL 对象
+      document.body.removeChild(elink);
+    } else {
+      throw new RuntimeError(
+        ibiz.i18n.t('runtime.controller.common.md.exportRequestFailed'),
+      );
+    }
+  }
+
+  /**
+   * @description 导出数据
+   * @param {{
+   *       event?: MouseEvent;
+   *       params?: IApiExportParams;
+   *     }} [args={}]
+   * @returns {*}  {Promise<void>}
+   * @memberof MDCtrlController
+   */
+  async exportData(
+    args: {
+      event?: MouseEvent;
+      params?: IApiExportParams;
+    } = {},
+  ): Promise<void> {
+    if (this.dataExport?.enableBackend) {
+      await this.excuteBackendExport(args.params || {});
+      return;
+    }
+    const { header, fields } = this.getDataExcelModel();
+    if (!header) {
+      throw new RuntimeError(
+        ibiz.i18n.t('runtime.controller.common.md.tabularColumns'),
+      );
+    }
+    const data = await this.getExportData(args.params || {});
+    const formatData = this.formatExcelData(data, fields);
+    const table = formatData.map(v => Object.values(v));
+    await exportData(header, table, this.model.logicName!);
   }
 }

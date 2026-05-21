@@ -30,7 +30,7 @@ export interface IApiGanttController<
 > extends IApiTreeGridEXController<T, S> {
   /**
    * @description 保存数据
-   * @param {IApiGanttNodeData} data
+   * @param {IApiGanttNodeData} data 甘特图节点数据
    * @returns {*}  {Promise<void>}
    * @memberof IApiGanttController
    */
@@ -44,8 +44,8 @@ export interface IApiGanttController<
   saveAll(): Promise<void>;
 
   /**
-   * @description 甘特图样式
-   * @param {IApiGanttStyle} style
+   * @description 设置甘特图样式
+   * @param {IApiGanttStyle} style 甘特图样式
    * @memberof IApiGanttController
    */
   setGanttStyle(style: IApiGanttStyle): void;

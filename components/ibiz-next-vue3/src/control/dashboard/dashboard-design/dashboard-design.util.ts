@@ -319,7 +319,7 @@ export function loadDefaultLayoutModel(
 ): IData[] {
   const { layoutRowH, layoutColNum } = customDashboard;
 
-  const app = ibiz.hub.getApp(ibiz.env.appId);
+  const app = ibiz.hub.getApp(dashboard.model.appId);
 
   /**
    * 递归门户部件

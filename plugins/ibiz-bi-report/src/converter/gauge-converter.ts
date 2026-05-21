@@ -29,7 +29,7 @@ export class GaugeConverter extends BaseConverter {
     if (!appDataEntityId || !model || !data) return;
     if (!data.appBIReportMeasures) return model;
     const input = {
-      appId: ibiz.env.appId,
+      appId: data.appId || ibiz.env.appId,
       appDataEntityId,
       caption: data.name,
       catalog: '$catalog',

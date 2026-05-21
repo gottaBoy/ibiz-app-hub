@@ -1,10 +1,15 @@
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
-import { defineComponent, PropType } from 'vue';
-import { ITabExpPanel } from '@ibiz/model-core';
+import { computed, defineComponent, h, PropType, resolveComponent } from 'vue';
+import {
+  IAppDETabExplorerView,
+  IDETabViewPanel,
+  ITabExpPanel,
+} from '@ibiz/model-core';
 import {
   IControlProvider,
   TabExpPanelController,
 } from '@ibiz-template/runtime';
+import './tab-exp-panel.scss';
 
 export const TabExpPanelControl = defineComponent({
   name: 'IBizTabExpPanelControl',
@@ -36,31 +41,68 @@ export const TabExpPanelControl = defineComponent({
       (...args) => new TabExpPanelController(...args),
     );
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
+
+    // 视图模型
+    const model = c.view?.model as IAppDETabExplorerView;
+    // 布局模式
+    const layoutMode = model?.tabLayout?.toLowerCase() || 'top';
+
     const onTabChange = (value: string) => {
       c.state.activeName = value;
       c.handleTabChange();
     };
 
+    // 分页绘制数据集合
+    const tabPages = computed(() => {
+      return c.state.tabPages.map(_tab => ({
+        id: _tab.tabTag,
+        text: _tab.caption,
+        icon: _tab.sysImage,
+        counter: _tab.counterId ? c.state.counterData[_tab.counterId] : null,
+      }));
+    });
+
     return {
       c,
       ns,
+      tabPages,
+      layoutMode,
       onTabChange,
     };
   },
   render() {
-    const { isCreated, tabPages } = this.c.state;
+    const { isCreated, activeName } = this.c.state;
+    if (!isCreated) {
+      return;
+    }
+
+    let solts = {};
+
+    if (this.layoutMode === 'flow' || this.layoutMode === 'flow_noheader') {
+      solts = {
+        groupContent: (tab: IData) => {
+          const target = this.c.model.controls?.find(
+            ctrl => ctrl.id === tab.id,
+          ) as IDETabViewPanel;
+          return h(resolveComponent('IBizViewShell'), {
+            context: this.context,
+            params: this.params,
+            viewId: target?.embeddedAppDEViewId,
+          });
+        },
+      };
+    }
+
     return (
-      isCreated && (
-        <van-tabs
-          class={[this.ns.b('header')]}
-          active={this.c.state.activeName}
-          onChange={this.onTabChange}
-        >
-          {tabPages.map(page => {
-            return <van-tab title={page.caption} name={page.tabTag}></van-tab>;
-          })}
-        </van-tabs>
-      )
+      <iBizTabLayout
+        class={this.ns.b()}
+        tabPages={this.tabPages}
+        layoutMode={this.layoutMode}
+        activeName={activeName}
+        onTabChange={this.onTabChange}
+      >
+        {solts}
+      </iBizTabLayout>
     );
   },
 });

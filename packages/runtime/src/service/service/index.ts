@@ -13,3 +13,4 @@ export { MarkOpenDataService } from './mark-open-data/mark-open-data.service';
 export { UtilService } from './util/util.service';
 export { ThirdAuthService } from './third-auth/third-auth.service';
 export { FileService } from './file/file.service';
+export { AIUtilService } from './util/ai-util.service';

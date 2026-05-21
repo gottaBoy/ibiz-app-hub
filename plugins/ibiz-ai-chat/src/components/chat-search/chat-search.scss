@@ -1,13 +1,13 @@
 @include b(chat-search) {
-  gap: 8px;
-  width: 100%;
   display: flex;
-  line-height: 32px;
-  border-radius: 1px;
-  padding: 1px 11px;
+  gap: 8px;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  padding: 1px 11px;
+  line-height: 32px;
   border: 1px solid #{getCssVar('ai-chat', 'border-color')};
+  border-radius: 1px;
 
   &:hover {
     border: 1px solid #{getCssVar('ai-chat', 'background-color-2')};
@@ -18,24 +18,24 @@
   }
 
   @include e(prefix) {
-    width: 14px;
-    height: 14px;
     display: flex;
     flex-shrink: 0;
-    font-size: 14px;
     align-items: center;
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
   }
 
   @include e(inner) {
-    padding: 0;
-    outline: 0;
     flex-grow: 1;
-    border: none;
-    height: 28px;
     min-width: 0;
-    color: inherit;
+    height: 28px;
+    padding: 0;
     padding-top: 2px;
     line-height: 28px;
+    color: inherit;
     background-color: initial;
+    border: none;
+    outline: 0;
   }
 }

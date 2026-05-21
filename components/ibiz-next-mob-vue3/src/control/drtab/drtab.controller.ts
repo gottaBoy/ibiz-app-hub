@@ -18,6 +18,7 @@ import {
 import { getNestedRoutePath } from '@ibiz-template/vue3-util';
 import { IDEDRCtrlItem, IDEDRTab } from '@ibiz/model-core';
 import { Router } from 'vue-router';
+import { createUUID } from 'qx-util';
 
 /**
  * 数据分页控制器
@@ -31,8 +32,9 @@ export class DRTabController
   extends ControlController<IDEDRTab, IDRTabState, IDRTabEvent>
   implements IDRTabController
 {
-  setActive(_name: string): void {
-    throw new Error('Method not implemented.');
+  setActive(name: string): void {
+    this.state.activeName = name;
+    this.handleTabChange();
   }
 
   /**
@@ -61,7 +63,7 @@ export class DRTabController
    * @memberof DRTabController
    */
   get form(): IEditFormController {
-    return this.view.getController('form') as IEditFormController;
+    return this.view?.getController('form') as IEditFormController;
   }
 
   /**
@@ -112,7 +114,8 @@ export class DRTabController
   protected initState(): void {
     super.initState();
     this.state.drTabPages = [];
-    this.state.hideEditItem = !Object.is(this.model.hideEditItem, false);
+    // 未配置时默认隐藏编辑项
+    this.state.hideEditItem = !!this.model.hideEditItem;
   }
 
   /**
@@ -134,6 +137,7 @@ export class DRTabController
    * @memberof DRTabController
    */
   protected async initCounter(): Promise<void> {
+    if (this.state.isCounterDisabled) return;
     // todo 接口更新后换
     const { appCounterRefs } = this.model as IData;
     const appCounterRef = appCounterRefs?.[0];
@@ -166,6 +170,7 @@ export class DRTabController
         }
         await this.calcDrTabPagesState();
         this.handleFormChange();
+        this.doDefaultSelect();
       });
       this.form.evt.on('onLoadDraftSuccess', () => {
         this.handleFormChange();
@@ -177,6 +182,57 @@ export class DRTabController
     this.initDRTabPages();
     if (!this.form) {
       await this.calcDrTabPagesState();
+    }
+    // 表单已经加载完成执行默认选中，否则加载完成事件里执行
+    if (this.form && this.form.state.isLoaded) {
+      this.doDefaultSelect();
+    }
+  }
+
+  /**
+   * @description 获取当前激活项
+   * @return {*}  {IDEDRCtrlItem | undefined}
+   * @memberof DRTabController
+   */
+  getActiveItem(): IDEDRCtrlItem | undefined {
+    return this.model.dedrtabPages?.find(
+      item => item.id === this.state.activeName,
+    );
+  }
+
+  /**
+   * @description 部件刷新
+   * @memberof DRTabController
+   */
+  refresh(): void {
+    const drBarItem = this.getActiveItem();
+
+    const isRoutePushed = false;
+    if (drBarItem) {
+      this.setVisible('navPos');
+      this.openNavPosView(drBarItem, isRoutePushed, {
+        key: `${drBarItem.id}-${createUUID()}`,
+      });
+    }
+  }
+
+  /**
+   * @description 处理第一次的默认选中
+   * @memberof DRTabController
+   */
+  doDefaultSelect(): void {
+    const viewForm = this.view.layoutPanel?.panelItems.view_form;
+    if (viewForm) {
+      viewForm.state.visible = false;
+      viewForm.state.keepAlive = false;
+    }
+
+    // 显示编辑项且激活表单时显示表单
+    if (
+      !this.state.hideEditItem &&
+      this.state.activeName === this.model.uniqueTag
+    ) {
+      this.setVisible('form');
     }
   }
 
@@ -276,9 +332,6 @@ export class DRTabController
           ? getNestedRoutePath(this.router.currentRoute.value, this.routeDepth!)
           : '',
       });
-      this.state.defaultName = '';
-    } else {
-      this.state.defaultName = dedrtabPages?.[0].id || '';
     }
 
     // 关系项
@@ -309,6 +362,7 @@ export class DRTabController
       });
     });
     this.state.drTabPages = drTabPages;
+    this.state.defaultName = drTabPages[0].tag;
     if ((this.view.state as IData).srfnav) {
       this.state.activeName = (this.view.state as IData).srfnav!;
     } else {
@@ -334,10 +388,11 @@ export class DRTabController
     if (drBarItem) {
       this.setVisible('navPos');
       this.openNavPosView(drBarItem, isRoutePushed);
+      this.evt.emit('onTabChange', { tab: drBarItem });
     } else {
       this.setVisible('form');
       if (this.routeDepth && this.state.drTabPages[0]) {
-        this.router.push(this.state.drTabPages[0].fullPath!);
+        this.router.replace(this.state.drTabPages[0].fullPath!);
       }
     }
   }
@@ -413,6 +468,7 @@ export class DRTabController
   async openNavPosView(
     drTabPages: IDEDRCtrlItem,
     isRoutePushed = false,
+    opts = {},
   ): Promise<void> {
     const { context, params } = this.prepareParams(drTabPages);
     this.navPos?.openView({
@@ -421,6 +477,10 @@ export class DRTabController
       params,
       viewId: drTabPages.appViewId,
       isRoutePushed,
+      modalOptions: {
+        replace: true,
+      },
+      ...opts,
     });
   }
 

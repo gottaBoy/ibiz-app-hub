@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'calendarTabExpView',
   deviewId: 'be64ce4d362f7461b40dfd025be82288',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

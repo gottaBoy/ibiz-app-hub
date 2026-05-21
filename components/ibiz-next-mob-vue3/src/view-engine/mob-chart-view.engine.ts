@@ -8,7 +8,7 @@ import {
 import { IAppDEChartView } from '@ibiz/model-core';
 
 export class MobChartViewEngine extends MDViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEChartView,
     IChartViewState,
     IChartViewEvent

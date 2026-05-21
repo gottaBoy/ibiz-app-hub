@@ -6,6 +6,27 @@ export default {
   },
   "rootPanelItems": [
     {
+      "rawItem": {
+        "rawItemParams": [
+          {
+            "key": "POSITION",
+            "value": "TOP"
+          }
+        ],
+        "predefinedType": "VIEWMSG_POS",
+        "id": "viewmsg_pos_top"
+      },
+      "caption": "视图消息占位",
+      "itemStyle": "DEFAULT",
+      "itemType": "RAWITEM",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "showCaption": true,
+      "id": "viewmsg_pos_top"
+    },
+    {
       "actionGroupExtractMode": "ITEM",
       "panelItems": [
         {
@@ -170,6 +191,27 @@ export default {
       "id": "panelpart"
     },
     {
+      "rawItem": {
+        "rawItemParams": [
+          {
+            "key": "POSITION",
+            "value": "BODY"
+          }
+        ],
+        "predefinedType": "VIEWMSG_POS",
+        "id": "viewmsg_pos_body"
+      },
+      "caption": "视图消息占位",
+      "itemStyle": "DEFAULT",
+      "itemType": "RAWITEM",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "showCaption": true,
+      "id": "viewmsg_pos_body"
+    },
+    {
       "actionGroupExtractMode": "ITEM",
       "panelItems": [
         {
@@ -201,26 +243,42 @@ export default {
       "id": "view_content"
     },
     {
+      "rawItem": {
+        "rawItemParams": [
+          {
+            "key": "POSITION",
+            "value": "BOTTOM"
+          }
+        ],
+        "predefinedType": "VIEWMSG_POS",
+        "id": "viewmsg_pos_bottom"
+      },
+      "caption": "视图消息占位",
+      "itemStyle": "DEFAULT",
+      "itemType": "RAWITEM",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "showCaption": true,
+      "id": "viewmsg_pos_bottom"
+    },
+    {
       "actionGroupExtractMode": "ITEM",
       "panelItems": [
         {
           "actionType": "UIACTION",
-          "buttonHeight": 40,
           "buttonStyle": "DEFAULT",
           "buttonType": "PANELBUTTON",
           "uiactionId": "view_cancelaction",
           "renderMode": "BUTTON",
           "tooltip": "取消",
           "caption": "取消",
-          "contentHeight": 40,
-          "height": 40,
           "itemStyle": "DEFAULT",
           "itemType": "BUTTON",
           "layoutPos": {
             "grow": 1,
             "shrink": 1,
-            "height": 40,
-            "heightMode": "PX",
             "layout": "FLEX",
             "spacingRight": "OUTERSMALL"
           },
@@ -229,22 +287,17 @@ export default {
         },
         {
           "actionType": "UIACTION",
-          "buttonHeight": 40,
           "buttonStyle": "PRIMARY",
           "buttonType": "PANELBUTTON",
           "uiactionId": "view_okaction",
           "renderMode": "BUTTON",
           "tooltip": "确定",
           "caption": "确定",
-          "contentHeight": 40,
-          "height": 40,
           "itemStyle": "PRIMARY",
           "itemType": "BUTTON",
           "layoutPos": {
             "grow": 1,
             "shrink": 1,
-            "height": 40,
-            "heightMode": "PX",
             "layout": "FLEX",
             "spacingLeft": "OUTERSMALL"
           },

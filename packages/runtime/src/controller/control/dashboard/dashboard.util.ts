@@ -105,13 +105,11 @@ export function getFilterSearchConds(
   filterDEDQConditions: IDEDQCondition[] | undefined,
 ): ISearchCondEx | undefined {
   let result: ISearchCondEx | undefined;
+  // 存在自定义条件时，以自定义条件为准；若无自定义条件，则以过滤器自带的默认过滤参数为准
   if (searchConds) {
     result = clone(searchConds) as ISearchCondEx;
-  }
-  if (filterDEDQConditions) {
-    if (!result || !(result as ISearchCondExGroup).searchconds) {
-      result = { condop: 'AND', condtype: 'GROUP', searchconds: [] };
-    }
+  } else if (filterDEDQConditions) {
+    result = { condop: 'AND', condtype: 'GROUP', searchconds: [] };
     const modelSearchConds =
       filterDEDQConditions2SearchConds(filterDEDQConditions);
     if (modelSearchConds && modelSearchConds.length > 0) {
@@ -232,4 +230,51 @@ export function filterPortletByConfig(
     effectivePortlets = items.filter(id => keys.includes(id));
   }
   return effectivePortlets;
+}
+
+/**
+ * 递归填充子门户部件的子应用标识
+ * @param model
+ * @param appId
+ */
+export function deepFillSubAppId(model: IModel, appId: string): void {
+  model.appId = appId;
+  const keys = Object.keys(model);
+  keys.forEach(key => {
+    const value = model[key];
+    if (value && typeof value === 'object') {
+      if (Array.isArray(value)) {
+        value.forEach(item => {
+          if (item && typeof item === 'object') {
+            deepFillSubAppId(item, appId);
+          }
+        });
+      } else {
+        deepFillSubAppId(value, appId);
+      }
+    }
+  });
+}
+
+/**
+ * 递归删除子门户部件的子应用标识
+ * @param model
+ */
+export function deepDeleteSubAppId(model: IModel): void {
+  delete model.appId;
+  const keys = Object.keys(model);
+  keys.forEach(key => {
+    const value = model[key];
+    if (value && typeof value === 'object') {
+      if (Array.isArray(value)) {
+        value.forEach(item => {
+          if (item && typeof item === 'object') {
+            deepDeleteSubAppId(item);
+          }
+        });
+      } else {
+        deepDeleteSubAppId(value);
+      }
+    }
+  });
 }

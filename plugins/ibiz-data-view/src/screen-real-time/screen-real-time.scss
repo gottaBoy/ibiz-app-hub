@@ -13,7 +13,6 @@ $screen-real-time: (
   display: flex;
   align-items: getCssVar('screen-real-time', 'align-items');
   height: getCssVar('screen-real-time', 'height');
-  padding-left: getCssVar('screen-real-time', 'padding-left');
   font-size: getCssVar('screen-real-time', 'font-size');
   color: getCssVar('screen-dashboard', 'primary-text-color');
   white-space: getCssVar('screen-real-time', 'white-space');

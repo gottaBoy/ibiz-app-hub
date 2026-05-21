@@ -4,7 +4,7 @@ import { AiChatController } from '../../../controller';
 import { IMaterial } from '../../../interface';
 import { Namespace } from '../../../utils';
 import './ossfile-material.scss';
-import { FileSvg } from '../../../icons';
+import { DownLoadSvg, FileSvg } from '../../../icons';
 
 export interface OssfileMaterialProps {
   controller: AiChatController;
@@ -15,8 +15,27 @@ const ns = new Namespace('ossfile-material');
 
 export const OssfileMaterial = (props: OssfileMaterialProps) => {
   const content = useComputed(() => (props.material.data as any).name);
-  const size = useComputed(() => (props.material.metadata as any).size);
-  const state = useComputed(() => {
+
+  // 文件大小格式化函数
+  const formatFileSize = (size: number): string => {
+    if (size >= 1024 * 1024) {
+      return `${(size / (1024 * 1024)).toFixed(2)}M`;
+    }
+    if (size >= 1024) {
+      return `${(size / 1024).toFixed(2)}K`;
+    }
+    return `${size}B`;
+  };
+
+  // 计算大小
+  const size = useComputed(() => {
+    const rawSize = (props.material.metadata as any).size;
+    return formatFileSize(rawSize);
+  });
+
+  const state = useComputed(() => (props.material.metadata as any).state);
+
+  const stateText = useComputed(() => {
     const tempState = (props.material.metadata as any).state;
     if (tempState === 'successed') {
       return '上传成功';
@@ -44,6 +63,15 @@ export const OssfileMaterial = (props: OssfileMaterialProps) => {
     }
   });
 
+  const downloadFile = () => {
+    const metadata = props.material.metadata;
+    const uploader = props.controller.opts.uploader;
+    uploader.onDownLoad(metadata, {
+      context: props.controller.context,
+      params: props.controller.params,
+    });
+  };
+
   return (
     <div className={ns.b()}>
       <div className={ns.b('left')}>
@@ -53,9 +81,20 @@ export const OssfileMaterial = (props: OssfileMaterialProps) => {
         <div className={ns.e('name')} title={content}>
           {content}
         </div>
-        <div className={ns.e('metadata')}>
-          <div>{size}B</div>
-          <div style={{ color: stateColor.value }}>{state}</div>
+        <div className={ns.b('metadata')}>
+          <div>{size}</div>
+          {state.value !== 'successed' && (
+            <div style={{ color: stateColor.value }}>{stateText}</div>
+          )}
+          {state.value === 'successed' && (
+            <div
+              className={ns.be('metadata', 'img')}
+              title='下载'
+              onClick={downloadFile}
+            >
+              <DownLoadSvg />
+            </div>
+          )}
         </div>
       </div>
     </div>

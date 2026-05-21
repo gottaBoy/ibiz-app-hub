@@ -671,7 +671,7 @@ function onPointerUp(_event: MouseEvent) {
     if (link) {
       EmitAddLink(
         link,
-        { from: linking.startRow.data, to: props.data!.data,relationType},
+        { from: linking.startRow.data, to: props.data!.data,relationType },
         (_link: LinkProps) => $links.addLink(_link, linking.startRow!, props.data!)
       );
     }

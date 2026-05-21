@@ -1,6 +1,4 @@
 window.Environment = {
-  aMapKey: '1399daaee6efa06a8b8bd8995933a57f',
-  aMapSecurityJsCode: 'b13eab492a0dc33e14d4c08ffc8a9a8b',
   accessStoreArea: 'LOCALSTORAGE',
   AppLabel: 'iBiz | QuickStart',
   customParams:
@@ -14,7 +12,7 @@ window.Environment = {
   enableAnonymous: true,
   mockDcSystemId: 'quickstart',
   appId: 'quickstart__web',
-  appVersion: '0.7.41-alpha.11',
+  appVersion: '0.7.41-rc.5',
   // 是否为开发模式
   dev: false,
   hub: true,

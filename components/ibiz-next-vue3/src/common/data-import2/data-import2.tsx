@@ -154,7 +154,7 @@ export const DataImport2 = defineComponent({
         }
         let columnMapData = columnData.fields;
         if (!columnData.fields) {
-          const res = await getImportSchema(columnData.id);
+          const res = await getImportSchema(columnData.id, props.context);
           if (res.status === 200 && res.data) {
             columnMapData = res.data.fields;
           }
@@ -240,6 +240,7 @@ export const DataImport2 = defineComponent({
             appDataEntity: props.appDataEntity,
             dataImport,
             data,
+            context: props.context,
           });
           if (resput.status === 200 && resput.ok) {
             columnMappingListMap.set(
@@ -262,6 +263,7 @@ export const DataImport2 = defineComponent({
             appDataEntity: props.appDataEntity,
             dataImport,
             data,
+            context: props.context,
           });
           if (res.status === 200 && res.ok) {
             columnMappingListMap.set(
@@ -291,6 +293,7 @@ export const DataImport2 = defineComponent({
             dataImport,
             fileId: fileid,
             schemaId: id,
+            context: props.context,
           });
           onCancelButtonClick();
         } else {
@@ -318,6 +321,7 @@ export const DataImport2 = defineComponent({
       const res = await fetchImportSchemas({
         appDataEntity: props.appDataEntity,
         dataImport,
+        context: props.context,
       });
       if (res.status === 200 && res.data) {
         res.data.forEach(item => {
@@ -528,6 +532,7 @@ export const DataImport2 = defineComponent({
                     options={this.options}
                     columnMappingListMap={this.columnMappingListMap}
                     listValue={this.listValue}
+                    context={this.context}
                     onListValueChange={this.listValueChange}
                     onColumnMappingListMapChange={
                       this.columnMappingListMapChange

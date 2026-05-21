@@ -2,6 +2,12 @@
     display: flex;
     width: 100%;
     height: 100%;
+
+    &:hover{
+        @include b(common-material-metadata__img) {
+            display: block;
+        }
+    }
 }
 
 @include b(common-material-left) {
@@ -23,15 +29,23 @@
     white-space: nowrap;
 }
 
-@include b(common-material__metadata) {
+@include b(common-material-metadata) {
     display: flex;
     gap: 8px;
     align-items: center;
+    justify-content: space-between;
+    height: 16px;
     font-size: 14px;
 
     > div{
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap; 
+    }
+
+    @include e(img) {
+        display: none;
+        padding-right: 16px;
+        cursor: pointer;
     }
 }

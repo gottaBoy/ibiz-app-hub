@@ -42,7 +42,39 @@ export const SearchFormControl = defineComponent({
       });
     });
 
-    return { c, ns };
+    // 搜索按钮
+    const renderSearch = () => {
+      return (
+        <van-button
+          class={ns.e('search')}
+          type='primary'
+          size='small'
+          onClick={() => c.onSearchButtonClick()}
+        >
+          {ibiz.i18n.t('control.form.searchForm.search')}
+        </van-button>
+      );
+    };
+
+    // 重置按钮
+    const renderReset = () => {
+      return (
+        <van-button
+          class={ns.e('reset')}
+          onClick={() => c.reset()}
+          size='small'
+        >
+          {ibiz.i18n.t('control.form.searchForm.reset')}
+        </van-button>
+      );
+    };
+
+    // 更多按钮
+    const renderAllBtns = () => {
+      return [renderSearch(), renderReset()];
+    };
+
+    return { c, ns, renderSearch, renderAllBtns };
   },
 
   render() {
@@ -52,27 +84,24 @@ export const SearchFormControl = defineComponent({
     }
     return (
       <iBizFormControl
-        class={this.ns.b()}
+        class={[
+          this.ns.b(),
+          this.ns.e(this.c.model.searchButtonPos?.toLowerCase()),
+        ]}
         controller={this.c}
         nativeOnkeyup={(e: KeyboardEvent) => this.c.onKeyUp(e)}
       >
         {{
           ...this.$slots,
           searchFooter: () => {
+            if (this.c.model.searchButtonStyle === 'NONE') {
+              return null;
+            }
             return (
-              <div class={this.ns.b('buttons')}>
-                <van-button
-                  class={this.ns.be('buttons', 'search')}
-                  onClick={() => this.c.onSearchButtonClick()}
-                >
-                  {ibiz.i18n.t('control.form.searchForm.search')}
-                </van-button>
-                <van-button
-                  class={this.ns.be('buttons', 'reset')}
-                  onClick={() => this.c.reset()}
-                >
-                  {ibiz.i18n.t('control.form.searchForm.reset')}
-                </van-button>
+              <div class={this.ns.e('buttons')}>
+                {this.c.model.searchButtonStyle === 'SEARCHONLY'
+                  ? this.renderSearch()
+                  : this.renderAllBtns()}
               </div>
             );
           },

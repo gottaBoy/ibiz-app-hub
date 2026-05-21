@@ -1,11 +1,28 @@
 $filter-tree: (
-  header-height: rem(42px),
-  font-size: getCssVar(font-size, header, 5),
-  font-weight: getCssVar(font-weight, bold),
-  line-height: 1.625rem,
-  icon-size: getCssVar(width-icon, extra-large),
+  width-type-popper: rem(80px),
+  color-readonly: getCssVar(color, text, 2),
+  spacing-header-padding: getCssVar(spacing, base),
+  spacing-content-padding: 0 getCssVar(spacing, base) 0 calc(getCssVar(spacing, base) + getCssVar(spacing, super, loose)),
+  spacing-footer-padding: getCssVar(spacing, base),
+  spacing-popup-padding: getCssVar(spacing, base),
+  spacing-item-padding: getCssVar(spacing, base),
+  spacing-footer-gap: getCssVar(spacing, super, loose),
+  spacing-type-offset: getCssVar(spacing, tight),
+  spacing-type-left-gap: calc(-1 * getCssVar(spacing, super, loose)),
+  spacing-type-item-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
+  font-fontSize: getCssVar(font-size, header, 5),
+  font-icon-fontSize: getCssVar(width-icon, extra-large),
+  font-lineHeight: getCssVar(font-size, header, 2),
+  font-fontWeight: getCssVar(font-weight, bold),
+  border: getCssVar('border-thickness', 'control') solid getCssVar(color, border),
+  radius: getCssVar(border-radius, medium),
 );
 
+@include b(filter-tree) {
+  @include e(popup) {
+    @include set-component-css-var('filter-tree', $filter-tree);
+  }
+}
 @include b(filter-tree) {
   @include set-component-css-var('filter-tree', $filter-tree);
   display: flex;
@@ -16,11 +33,9 @@ $filter-tree: (
     flex: none;
     align-items: center;
     justify-content: center;
-    height: getCssVar(filter-tree, header-height);
-    font-size: getCssVar(filter-tree, font-size);
-    font-weight: getCssVar(filter-tree, font-weight);
-    line-height: getCssVar(filter-tree, line-height);
-    padding: 0 var(--van-popup-close-icon-margin);
+    font-size: getCssVar(filter-tree, font-fontSize);
+    font-weight: getCssVar(filter-tree, font-fontWeight);
+    padding: getCssVar(filter-tree, spacing-header-padding);
   }
   @include e(title) {
     width: 100%;
@@ -31,54 +46,50 @@ $filter-tree: (
     display: flex;
     align-items: center;
     ion-icon {
-      font-size: getCssVar(filter-tree, icon-size);
+      font-size: getCssVar(filter-tree, font-icon-fontSize);
     }
   }
   @include e(content) {
     height: 100%;
     flex: auto;
-    padding-right: getCssVar(spacing, base);
-    padding-left: calc(getCssVar(spacing, base) + getCssVar(spacing, super, loose));
+    padding: getCssVar(filter-tree, spacing-content-padding);
   }
   @include e(footer) {
     flex: none;
-    padding: getCssVar(spacing, base);
+    padding: getCssVar(filter-tree, spacing-footer-padding);
     display: flex;
     justify-content: space-between;
     .van-button {
       width: 48%;
     }
   }
-  @include e(popup) {
-  }
   @include e(popup-content) {
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: getCssVar(spacing, base);
+    padding: getCssVar(filter-tree, spacing-popup-padding);
   }
   @include e(popup-caption) {
-    height: getCssVar(filter-tree, header-height);
-    font-size: getCssVar(filter-tree, font-size);
-    font-weight: getCssVar(filter-tree, font-weight);
-    line-height: getCssVar(filter-tree, line-height);
+    font-size: getCssVar(filter-tree, font-fontSize);
+    font-weight: getCssVar(filter-tree, font-fontWeight);
     text-align: center;
   }
   @include e(editor) {
-    padding: getCssVar(spacing, base);
+    padding: getCssVar(filter-tree, spacing-item-padding);
     display: flex;
     justify-content: space-between;
-    #{getCssVarName(form-item-container, editor-align)}: right;
   }
   @include e(group) {
     position: relative;
   }
   @include e(type) {
     position: absolute;
-    top: getCssVar(spacing, base);
-    left: rem(-40px);
+    top: getCssVar(filter-tree, spacing-item-padding);
+    left: getCssVar(filter-tree, spacing-type-left-gap);
+    line-height: getCssVar(filter-tree, font-lineHeight);
+    --van-dropdown-menu-title-line-height: #{getCssVar(filter-tree, font-lineHeight)};
     @include when (readonly) {
-      color: getCssVar(color, disabled, text);
+      color: getCssVar(filter-tree, color-readonly);
     }
     .van-dropdown-menu__bar {
       box-shadow: none;
@@ -89,37 +100,37 @@ $filter-tree: (
       padding-left: 0;
     }
     .van-dropdown-item__content {
-      width: 80px;
-      left: getCssVar(spacing, base);
-      border: 1px solid getCssVar(color, border);
-      border-radius: getCssVar(border-radius, medium);
+      width: getCssVar(filter-tree, width-type-popper);;
+      left: getCssVar(filter-tree, spacing-type-offset);
+      border: getCssVar(filter-tree, border);
+      border-radius: getCssVar(filter-tree, radius);
       .van-dropdown-item__option {
-        padding: getCssVar(spacing, tight) getCssVar(spacing, base);
+        padding: getCssVar(filter-tree, spacing-type-item-padding);
       }
     }
   }
   @include e(item) {
     display: flex;
-    padding: getCssVar(spacing, base) 0;
+    padding: getCssVar(filter-tree, spacing-item-padding) 0;
     flex-direction: column;
-    line-height: getCssVar(font-size, header, 2);
-    border-bottom: 1px solid getCssVar(color, border);
+    line-height: getCssVar(filter-tree, font-lineHeight);
+    border-bottom: getCssVar(filter-tree, border);
   }
   @include e(field) {
-    padding-right: getCssVar(spacing, base);
+    padding-right: getCssVar(filter-tree, spacing-item-padding);
   }
   @include e(condop) {
     flex: auto;
   }
   @include e(value) {
-    padding-right: getCssVar(spacing, base);
+    padding-right: getCssVar(filter-tree, spacing-item-padding);
   }
   @include e(item-header) {
     display: flex;
   }
   @include e(item-footer) {
     display: flex;
-    gap: getCssVar(spacing, super, loose);
+    gap: getCssVar(filter-tree, spacing-footer-gap);
     .van-button {
       width: 100%;
     }
@@ -127,13 +138,13 @@ $filter-tree: (
 }
 
 @include b(filter-field-select) {
-  padding: rem(16px);
+  padding: getCssVar(filter-tree, spacing-item-padding);
   .van-field__control {
     text-align: right;
   }
 }
 @include b(filter-mode-select) {
-  padding: rem(16px);
+  padding: getCssVar(filter-tree, spacing-item-padding);
   .van-field__control {
     text-align: right;
   }

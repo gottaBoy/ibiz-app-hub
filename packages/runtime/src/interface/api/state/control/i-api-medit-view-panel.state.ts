@@ -1,4 +1,4 @@
-import { IApiData } from '@ibiz-template/core';
+import { IApiContext, IApiData, IApiParams } from '@ibiz-template/core';
 import { IApiMDControlState } from './i-api-md-control.state';
 
 /**
@@ -40,21 +40,21 @@ export interface IApiPanelUiItem {
   id: string;
 
   /**
-   * @description 视图上下文
-   * @type {IApiData}
+   * @description 应用上下文
+   * @type {IApiContext}
    * @memberof IApiPanelUiItem
    */
-  context: IApiData;
+  context: IApiContext;
 
   /**
-   * @description  视图参数
-   * @type {IApiData}
+   * @description 视图参数
+   * @type {IApiParams}
    * @memberof IApiPanelUiItem
    */
-  params: IApiData;
+  params: IApiParams;
 
   /**
-   * @description 该项数据
+   * @description 编辑视图面板部件UI项数据
    * @type {IApiData}
    * @memberof IApiPanelUiItem
    */

@@ -39,6 +39,21 @@ export class CoopPosController extends PanelItemController<IPanelRawItem> {
    */
   public showMode: 'avatar' | 'default' = 'default';
 
+  /**
+   * 是否启用无权限
+   *
+   * @type {boolean}
+   * @memberof CoopPosController
+   */
+  public enableNoAccess: boolean = false;
+
+  /**
+   * @description 是否启用全局下载地址前缀
+   * @type {boolean}
+   * @memberof CoopPosController
+   */
+  public globalDownloadPrifix: boolean = false;
+
   protected createState(): CoopPosState {
     return new CoopPosState(this.parent?.state);
   }
@@ -47,6 +62,13 @@ export class CoopPosController extends PanelItemController<IPanelRawItem> {
     await super.onInit();
     this.handleRawItemParams();
     this.showMode = this.rawItemParams.showmode;
+    this.enableNoAccess = this.rawItemParams.enablenoaccess === 'true';
+    if (this.rawItemParams.globaldownloadprifix) {
+      this.globalDownloadPrifix =
+        this.rawItemParams.globaldownloadprifix === 'true';
+    } else {
+      this.globalDownloadPrifix = ibiz.config.common.globalDownloadPrifix;
+    }
     await this.getOperator();
   }
 
@@ -165,6 +187,11 @@ export class CoopPosController extends PanelItemController<IPanelRawItem> {
     const { downloadUrl } = ibiz.util.file.calcFileUpDownUrl(
       this.panel.context,
       this.panel.params,
+      {},
+      {
+        enableNoAccess: this.enableNoAccess,
+        globalDownloadPrifix: this.globalDownloadPrifix,
+      },
     );
     return downloadUrl.replace('%fileId%', urlConfig[0].id);
   }

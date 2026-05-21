@@ -9,6 +9,7 @@ import { FormNotifyState } from '../../../constant';
 import { FormController } from '../form/form.controller';
 import { SearchFormService } from './search-form.service';
 import { ConfigService, ControlVO } from '../../../../service';
+import { paramsToSearchconds } from '../../../../utils';
 
 /**
  * 搜索表单控制器
@@ -50,6 +51,19 @@ export class SearchFormController
    * @type {ConfigService}
    */
   config!: ConfigService;
+
+  /**
+   * @description 搜索过滤参数转换模式
+   * @readonly
+   * @type {('default' | 'searchconds')}
+   * @memberof SearchFormController
+   */
+  get convertparammode(): 'default' | 'searchconds' {
+    if (this.controlParams.convertparammode) {
+      return this.controlParams.convertparammode;
+    }
+    return ibiz.config.searchform.convertParamMode;
+  }
 
   protected initState(): void {
     super.initState();
@@ -145,13 +159,32 @@ export class SearchFormController
    */
   getFilterParams(): IParams {
     const filterParams: IParams = {};
-    Object.keys(this.state.data).forEach(key => {
-      const value = this.state.data[key];
-      // 排除空值
-      if (value !== null && value !== undefined && value !== '') {
-        filterParams[key] = value;
-      }
-    });
+    if (this.convertparammode === 'searchconds') {
+      const searchconds = paramsToSearchconds(this.state.data);
+      if (searchconds.length > 0)
+        Object.assign(filterParams, {
+          searchconds: [
+            {
+              condop: 'AND',
+              condtype: 'GROUP',
+              searchconds,
+            },
+          ],
+        });
+    } else {
+      Object.keys(this.state.data).forEach(key => {
+        const value = this.state.data[key];
+        // 排除空值
+        if (
+          value !== null &&
+          value !== undefined &&
+          value !== '' &&
+          key !== '$srfuf'
+        ) {
+          filterParams[key] = value;
+        }
+      });
+    }
     return filterParams;
   }
 

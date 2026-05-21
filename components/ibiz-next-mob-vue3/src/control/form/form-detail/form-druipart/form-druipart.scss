@@ -1,10 +1,14 @@
-$form-druipart: ('bg-color': getCssVar(color, bg, 1),
-  'padding': 0,
-  'border-radius': getCssVar('border-radius', 'small'));
-$form-druipart-caption: ('text-color': getCssVar(color, text, 0),
-  'font-size': getCssVar('font-size', 'header-6'),
-  'font-weight': getCssVar(font-weight, bold),
-  'padding': getCssVar(spacing, base),
+$form-druipart: (
+  'color-bg': getCssVar(color, bg, 1),
+  'spacing-padding': 0,
+  'radius-border': getCssVar('border-radius', 'small'),
+);
+$form-druipart-caption: (
+  'color-text': getCssVar(color, text, 0),
+  'spacing-padding': getCssVar(spacing, base),
+  'font-fontSize': getCssVar('font-size', 'header-6'),
+  'font-fontWeight': getCssVar(font-weight, bold),
+  'font-lineHeight': getCssVar('font-size', 'header-5'),
 );
 
 @include b(form-druipart) {
@@ -13,18 +17,19 @@ $form-druipart-caption: ('text-color': getCssVar(color, text, 0),
 
   width: 100%;
   height: 100%;
-  padding: getCssVar('form-druipart', 'padding');
-  background-color: getCssVar('form-druipart', 'bg-color');
-  border-radius: getCssVar('form-druipart', 'border-radius');
+  padding: getCssVar('form-druipart', 'spacing-padding');
+  background-color: getCssVar('form-druipart', 'color-bg');
+  border-radius: getCssVar('form-druipart', 'radius-border');
 
   // 标题
   @include e(caption) {
     @include utils-ellipsis;
 
-    padding: getCssVar('form-druipart-caption', 'padding');
-    font-size: getCssVar('form-druipart-caption', 'font-size');
-    font-weight: getCssVar('form-druipart-caption', 'font-weight');
-    color: getCssVar('form-druipart-caption', 'text-color');
+    padding: getCssVar('form-druipart-caption', 'spacing-padding');
+    font-size: getCssVar('form-druipart-caption', 'font-fontSize');
+    font-weight: getCssVar('form-druipart-caption', 'font-fontWeight');
+    line-height: getCssVar('form-druipart-caption', 'font-lineHeight');
+    color: getCssVar('form-druipart-caption', 'color-text');
   }
 
   // 关系界面下的视图不margin

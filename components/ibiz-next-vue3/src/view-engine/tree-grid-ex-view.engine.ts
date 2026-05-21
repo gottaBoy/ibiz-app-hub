@@ -10,7 +10,7 @@ import { IAppDETreeGridExView } from '@ibiz/model-core';
 import { TreeViewEngine } from './tree-view.engine';
 
 export class TreeGridExViewEngine extends TreeViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDETreeGridExView,
     ITreeGridExViewState,
     ITreeGridExViewEvent

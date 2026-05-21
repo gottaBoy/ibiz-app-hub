@@ -783,13 +783,6 @@ export default {
       fullCodeName: 'report_open_bi_report_panel_view',
       navigateContexts: [
         {
-          key: 'SRFDEFAULTTOROUTEDEPTH',
-          value: '3',
-          rawValue: true,
-          name: 'SRFDEFAULTTOROUTEDEPTH',
-          id: 'srfdefaulttoroutedepth',
-        },
-        {
           key: 'REPORT',
           value: 'report',
           name: 'REPORT',

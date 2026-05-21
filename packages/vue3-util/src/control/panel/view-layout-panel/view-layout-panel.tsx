@@ -155,6 +155,7 @@ export const ViewLayoutPanelControl = defineComponent({
           model: panelItem,
           data: c.data,
           value: c.data[panelItem.id!],
+          controller: panelItems[panelItem.id!],
         });
       }
       const component = resolveComponent(provider.component);

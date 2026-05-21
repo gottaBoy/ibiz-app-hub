@@ -1,5 +1,6 @@
 import { useNamespace, useCtx } from '@ibiz-template/vue3-util';
 import { ICaptionBar, IPanelContainer } from '@ibiz/model-core';
+import { IMobPlatformProvider } from '@ibiz-template/runtime';
 import { PropType, defineComponent } from 'vue';
 import './preset-view-header.scss';
 
@@ -30,7 +31,9 @@ export const IBizPresetViewHeader = defineComponent({
     };
   },
   render() {
-    if (!ibiz.config.view.mobShowViewHeader) {
+    if (
+      !(ibiz.platform as unknown as IMobPlatformProvider).getShowViewHeader()
+    ) {
       return;
     }
     return (

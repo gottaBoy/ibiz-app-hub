@@ -4,6 +4,7 @@ import {
   getRateProps,
   useFocusAndBlur,
   useNamespace,
+  useFilterAttribute,
 } from '@ibiz-template/vue3-util';
 import { toNumber } from 'lodash-es';
 import { RateEditorController } from '../rate-editor.controller';
@@ -13,7 +14,8 @@ import './ibiz-rate.scss';
  * 移动端评分器
  * @primary
  * @description 使用van-rate组件，用于给某些东西进行评分。支持编辑器类型包含：`移动端评分器`
- * @editorparams {name:maxValue,parameterType:number,defaultvalue:5,description:设置最大评分值，van-rate组件的count属性}
+ * @editorparams {name:maxvalue,parameterType:number,defaultvalue:5,description:设置最大评分值，van-rate组件的count属性}
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
  * @ignoreemits  infoTextChange | enter
  */
@@ -35,6 +37,9 @@ export const IBizRate = defineComponent({
     if (editorModel.editorParams) {
       if (editorModel.editorParams.maxValue) {
         max = toNumber(editorModel.editorParams.maxValue);
+      }
+      if (editorModel.editorParams.maxvalue) {
+        max = toNumber(editorModel.editorParams.maxvalue);
       }
     }
 
@@ -78,7 +83,7 @@ export const IBizRate = defineComponent({
           disabled={this.disabled || this.readonly}
           count={this.max}
           onChange={this.handleChange}
-          {...this.$attrs}
+          {...useFilterAttribute(this.$attrs)}
         ></van-rate>
       </div>
     );

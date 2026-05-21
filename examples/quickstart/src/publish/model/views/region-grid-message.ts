@@ -5,7 +5,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'grid_message',
   deviewId: '3f71d49532669ebd578cb3944ee09043',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.REGION',
   },

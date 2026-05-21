@@ -9,7 +9,6 @@ import {
   VNode,
   watch,
   PropType,
-  reactive,
   computed,
   defineComponent,
   onUnmounted,
@@ -61,12 +60,12 @@ export const DRTabControl = defineComponent({
     const router = useRouter();
     const controlRef = ref();
 
-    const counterData = reactive<IData>({});
+    const counterData = ref<IData>({});
 
     const { visibleItems, moreItems } = useAppDRTab(c, controlRef, counterData);
 
     const fn = (counter: IData): void => {
-      Object.assign(counterData, counter);
+      counterData.value = counter;
     };
 
     const tabPosition =
@@ -178,7 +177,7 @@ export const DRTabControl = defineComponent({
                   {activeTab.value?.caption}
                   {activeTab.value?.counterId && (
                     <iBizBadge
-                      value={counterData[activeTab.value.counterId]}
+                      value={counterData.value[activeTab.value.counterId]}
                       counterMode={activeTab.value.counterMode}
                     />
                   )}
@@ -204,7 +203,7 @@ export const DRTabControl = defineComponent({
                           <span class={'caption'}>{tab.caption}</span>
                           {tab.counterId && (
                             <iBizBadge
-                              value={counterData[tab.counterId]}
+                              value={counterData.value[tab.counterId]}
                               counterMode={tab.counterMode}
                             />
                           )}

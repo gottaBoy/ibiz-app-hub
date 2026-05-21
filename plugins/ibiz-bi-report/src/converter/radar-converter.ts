@@ -31,7 +31,7 @@ export class RadarConverter extends BaseConverter {
     if (!data || !model || !appDataEntityId) return;
     if (!data.appBIReportDimensions || !data.appBIReportMeasures) return model;
     const input = {
-      appId: ibiz.env.appId,
+      appId: data.appId || ibiz.env.appId,
       appDataEntityId,
       caption: data.name,
       catalog: data.appBIReportDimensions[0].dimensionTag!,
@@ -58,6 +58,7 @@ export class RadarConverter extends BaseConverter {
       appDataEntityId,
       caption: data.name,
       dimension: data.appBIReportDimensions[0],
+      appId: data.appId || ibiz.env.appId,
     });
     model.dechartSerieses.push(...models);
     if (data) {

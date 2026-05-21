@@ -10,7 +10,6 @@ import {
   FillSvg,
   ResetDialogueSvg,
   ClearDialogueSvg,
-  NewDialogueSvg,
 } from '../../icons';
 import { ContainerContext } from '../chat-container/chat-container';
 import { ChatMessage } from '../../entity';
@@ -65,12 +64,20 @@ export interface ChatToolbarProps {
    * @memberof ChatToolbarProps
    */
   mode: 'DEFAULT' | 'TOPIC';
+
+  /**
+   * 隐藏话题侧边栏
+   *
+   * @type {boolean}
+   * @memberof ChatToolbarProps
+   */
+  hideTopicSidebar: boolean;
 }
 
 const ns = new Namespace('chat-toolbar');
 
 export const ChatToolbar = (props: ChatToolbarProps) => {
-  const { controller, items = [], data, type, className, mode } = props;
+  const { controller, items = [], data, type, className } = props;
   const containerContext = useContext(ContainerContext);
 
   let toolbarItems: IChatToolbarItem[] = [];
@@ -100,19 +107,6 @@ export const ChatToolbar = (props: ChatToolbarProps) => {
             controller.clearTopic();
           },
         },
-        {
-          label: '新建对话',
-          title: '新建对话',
-          hidden: mode !== 'TOPIC',
-          icon: () => {
-            return <NewDialogueSvg />;
-          },
-          onClick: () => {
-            if (containerContext.newTopic) {
-              containerContext.newTopic();
-            }
-          },
-        },
       ],
     },
   ];
@@ -135,6 +129,9 @@ export const ChatToolbar = (props: ChatToolbarProps) => {
     {
       label: '删除',
       title: '删除',
+      hidden: (): boolean => {
+        return !data.realmessageid;
+      },
       icon: () => {
         return <DeleteSvg />;
       },

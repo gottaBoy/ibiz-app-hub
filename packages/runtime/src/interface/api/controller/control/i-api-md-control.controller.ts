@@ -111,7 +111,7 @@ export interface IApiMDControlController<
   loadMore(): Promise<void>;
   /**
    * @description 加载数据
-   * @param {IApiMDCtrlLoadParams} [args]
+   * @param {IApiMDCtrlLoadParams} [args] 加载参数
    * @returns {*}  {Promise<IApiData[]>}
    * @memberof IApiMDControlController
    */
@@ -119,7 +119,7 @@ export interface IApiMDControlController<
 
   /**
    * @description 删除数据
-   * @param {IApiMDCtrlRemoveParams} [args]
+   * @param {IApiMDCtrlRemoveParams} [args] 删除参数
    * @returns {*}  {Promise<void>}
    * @memberof IApiMDControlController
    */
@@ -147,8 +147,8 @@ export interface IApiMDControlController<
   getData(): IApiData[];
 
   /**
-   * @description 设置选中数据,设置的数据和已经选中的一样时会触发onSelectionChange事件
-   * @param {IApiData[]} selection
+   * @description 设置选中数据,设置的数据和已经选中的不一样时会触发onSelectionChange事件
+   * @param {IApiData[]} selection 数据集合
    * @param {boolean} isEmit 是否触发onSelectionChange事件
    * @memberof IApiMDControlController
    */
@@ -156,8 +156,8 @@ export interface IApiMDControlController<
 
   /**
    * @description 设置激活数据
-   * @param {IApiData} data
-   * @param {(MouseEvent | undefined)} [event]
+   * @param {IApiData} data 数据
+   * @param {(MouseEvent | undefined)} [event] 鼠标事件
    * @returns {*}  {Promise<void>}
    * @memberof IApiMDControlController
    */
@@ -209,14 +209,14 @@ export interface IApiMDControlController<
 
   /**
    * @description 设置选中数据
-   * @param {IApiData[]} items
+   * @param {IApiData[]} items 数据集合
    * @memberof IApiMDControlController
    */
   setSelectedData(items: IApiData[]): void;
 
   /**
    * @description 新建行
-   * @param {IApiMDCtrlLoadParams} [args]
+   * @param {IApiMDCtrlLoadParams} [args] 加载参数
    * @returns {*}  {Promise<void>}
    * @memberof IApiMDControlController
    */

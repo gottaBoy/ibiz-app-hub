@@ -34,7 +34,7 @@ export interface IApiPickupViewPanelController<
 
   /**
    * @description 设置选中数据
-   * @param {IApiData[]} items
+   * @param {IApiData[]} items 数据集合
    * @returns {*}  {Promise<void>}
    * @memberof IApiPickupViewPanelController
    */

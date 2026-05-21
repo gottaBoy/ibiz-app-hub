@@ -48,7 +48,11 @@ export const ScrollContainerItem = defineComponent({
     const defaultSlots: VNode[] = this.$slots.default?.() || [];
 
     return (
-      <iBizRow class={this.classArr} layout={{ layout: 'FLEX' }}>
+      <iBizRow
+        class={this.classArr}
+        layout={{ layout: 'FLEX' }}
+        v-loading={this.controller.state.loading}
+      >
         {defaultSlots.map(slot => {
           const props = slot.props as IData;
           if (!props || !props.controller) {

@@ -17,7 +17,6 @@ import './water-level-pond.scss';
 
 export const WaterLevelPond = defineComponent({
   name: 'WaterLevelPond',
-  // @ts-ignore
   props: getSliderProps<WaterLevelPondController>(),
   emits: getEditorEmits(),
   setup(props) {
@@ -29,11 +28,15 @@ export const WaterLevelPond = defineComponent({
 
     const canvas = ref(null);
 
-    const curValue = computed(() => {
-      let value: number = Number(props.value);
+    const maxValue = computed(() => {
       if (c.maxItem) {
-        value /= Number(props.data[c.maxItem]);
+        return props.data[c.maxItem];
       }
+      return 100;
+    });
+
+    const curValue = computed(() => {
+      const value: number = Number(props.value) / Number(maxValue.value);
       if (c.valueFormat) {
         return ibiz.util.text.format(value.toString(), c.valueFormat);
       }
@@ -43,10 +46,7 @@ export const WaterLevelPond = defineComponent({
     watch(
       () => props.value,
       () => {
-        let value: number = Number(props.value);
-        if (c.maxItem) {
-          value /= Number(props.data[c.maxItem]);
-        }
+        const value: number = Number(props.value) / Number(maxValue.value);
         c.setDate(value);
       },
       { immediate: true },

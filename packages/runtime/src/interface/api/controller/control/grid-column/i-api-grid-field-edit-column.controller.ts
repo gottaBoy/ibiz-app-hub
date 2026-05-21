@@ -33,21 +33,10 @@ export interface IApiGridFieldEditColumnController
   readonly valueItemName: string | undefined;
 
   /**
-   * 设置行属性的值
-   *
-   * @author lxm
-   * @date 2022-08-24 10:08:40
-   * @param {GridRowState} row 行状态控制器
-   * @param {unknown} value 要设置的值
-   * @param {string} name 要设置的表单数据的属性名称
-   * @param {boolean} ignore 忽略脏值检查
-   */
-
-  /**
    * @description 设置行属性的值
-   * @param {IApiGridRowState} row 行状态对象
+   * @param {IApiGridRowState} row 行数据状态
    * @param {unknown} value 要设置的值
-   * @param {string} [name] 要设置的表格数据的属性名称
+   * @param {string} [name] 要设置的行数据的属性名称
    * @param {boolean} [ignore] 忽略脏值检查，默认值为false
    * @returns {*}  {Promise<void>}
    * @memberof IApiGridFieldEditColumnController
@@ -61,7 +50,7 @@ export interface IApiGridFieldEditColumnController
 
   /**
    * @description 表格编辑项值规则校验（如果表格编辑项不显示则不校验直接返回true）
-   * @param {IApiGridRowState} row
+   * @param {IApiGridRowState} row 行数据状态
    * @returns {*}  {Promise<boolean>}
    * @memberof IApiGridFieldEditColumnController
    */

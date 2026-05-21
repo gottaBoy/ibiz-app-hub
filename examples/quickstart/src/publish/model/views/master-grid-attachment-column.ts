@@ -25,12 +25,22 @@ export default {
         {
           caption: '文件预览',
           appViewId: 'web.master_grid_attachment_column_file_preview',
-          id: 'grid_attachment_column_default',
+          id: 'default',
+        },
+        {
+          caption: 'OSS参数',
+          appViewId: 'web.master_grid_attachment_column_osscat',
+          id: 'osscat',
         },
         {
           caption: '下载启用鉴权',
           appViewId: 'web.master_grid_attachment_column_enabledownloadticket',
-          id: 'grid_attachment_column_enabledownloadticket',
+          id: 'enabledownloadticket',
+        },
+        {
+          caption: '启用无权限',
+          appViewId: 'web.master_grid_attachment_column_enablenoaccess',
+          id: 'enablenoaccess',
         },
       ],
       dataRelationTag: 'grid_attachment_column_DR',

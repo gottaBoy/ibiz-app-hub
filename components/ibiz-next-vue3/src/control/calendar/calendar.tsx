@@ -11,6 +11,7 @@ import {
   VNode,
   watch,
   PropType,
+  computed,
   defineComponent,
   resolveComponent,
 } from 'vue';
@@ -22,6 +23,7 @@ import {
   IDETBGroupItem,
   ISysCalendarItem,
   IDETBUIActionItem,
+  IUIActionGroupDetail,
 } from '@ibiz/model-core';
 import {
   IButtonState,
@@ -31,6 +33,7 @@ import {
   IButtonContainerState,
 } from '@ibiz-template/runtime';
 import dayjs from 'dayjs';
+import { debounce } from 'lodash-es';
 import { showTitle } from '@ibiz-template/core';
 import { MenuItem } from '@imengyu/vue3-context-menu';
 import CustomCalendar from './components/custom-calendar';
@@ -39,6 +42,7 @@ import {
   isTimeBetween,
   useCalendarLegend,
 } from './calendar-util';
+import { useContextMenu } from '../../util';
 import './calendar.scss';
 
 export const CalendarControl = defineComponent({
@@ -76,7 +80,7 @@ export const CalendarControl = defineComponent({
     loadDefault: { type: Boolean, default: true },
   },
   setup() {
-    const c = useControlController(
+    const c: CalendarController = useControlController(
       (...args) => new CalendarController(...args),
     );
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
@@ -88,6 +92,23 @@ export const CalendarControl = defineComponent({
     const curPopover = ref<IData>();
     const showDateRange = ref(c.controlParams.showmode === 'daterange');
     const showDateList = ref(c.controlParams.showmode === 'expand');
+
+    /**
+     * 无限滚动元素
+     */
+    const infiniteScroll = ref<HTMLDivElement>();
+
+    /**
+     * 禁用加载更多
+     */
+    const disabledLodeMore = computed(() => {
+      if (c.model.calendarStyle !== 'TIMELINE' || c.state.isLoading)
+        return true;
+      const result = !Object.values(c.loadMoreItems).some(
+        item => item.curPage < item.totalPage,
+      );
+      return result;
+    });
 
     // 月样式图例点击切换显示与隐藏
     const monthLegendClick = (_item: IData): void => {
@@ -141,6 +162,20 @@ export const CalendarControl = defineComponent({
         calcLegend();
       },
     );
+
+    /**
+     * @description 处理滚动加载
+     * @returns {*}  {Promise<void>}
+     */
+    const handleScrollLoad = async (): Promise<void> => {
+      if (!infiniteScroll.value || disabledLodeMore.value) return;
+      const scrollTop = infiniteScroll.value.scrollTop;
+      const scrollHeight = infiniteScroll.value.scrollHeight;
+      const clientHeight = infiniteScroll.value.clientHeight;
+      // 滚动到底部加载更多
+      if (scrollHeight - scrollTop - clientHeight < 10)
+        await c.load({ isLoadMore: true });
+    };
 
     // 气泡框对应显示日期
     const popoverValue = ref('');
@@ -318,6 +353,8 @@ export const CalendarControl = defineComponent({
       }
     });
 
+    const { calcUiactionGroup } = useContextMenu();
+
     /**
      * 计算上下文菜单组件配置项集合
      */
@@ -380,32 +417,19 @@ export const CalendarControl = defineComponent({
           }
           // 分组项配置界面行为组
           if (group.uiactionGroup && group.groupExtractMode) {
-            const menuItems = group.uiactionGroup.uiactionGroupDetails
-              ?.filter(detail => {
-                const detailState: IButtonState = menuState[detail.id!];
-                return detailState.visible;
-              })
-              .map(detail => {
-                const detailState: IButtonState = menuState[detail.id!];
-                const { sysImage } = detail as IData;
-                return {
-                  label: detail.showCaption ? detail.caption : undefined,
-                  icon: detail.showIcon ? (
-                    <iBizIcon icon={sysImage}></iBizIcon>
-                  ) : undefined,
-                  disabled: detailState.disabled,
-                  clickableWhenHasChildren: true,
-                  onClick: () => {
-                    ContextMenu.closeContextMenu();
-                    c.doUIAction(
-                      detail.uiactionId!,
-                      calendarData,
-                      evt,
-                      detail.appId,
-                    );
-                  },
-                };
-              });
+            const menuItems = calcUiactionGroup(
+              group.uiactionGroup,
+              menuState,
+              (detail: IUIActionGroupDetail) => {
+                ContextMenu.closeContextMenu();
+                c.doUIAction(
+                  detail.uiactionId!,
+                  calendarData,
+                  evt,
+                  detail.appId,
+                );
+              },
+            );
             switch (group.groupExtractMode) {
               case 'ITEMS':
                 menuItem.children = menuItems;
@@ -491,15 +515,18 @@ export const CalendarControl = defineComponent({
       ns,
       curPopover,
       calendarRef,
-      showDateRange,
-      showDateList,
-      popoverValue,
       legendItems,
+      popoverValue,
+      showDateList,
+      showDateRange,
+      infiniteScroll,
+      disabledLodeMore,
       selectDate,
       calcItemStyle,
+      handleScrollLoad,
+      monthLegendClick,
       calcCalendarItems,
       onNodeContextmenu,
-      monthLegendClick,
     };
   },
   render() {
@@ -910,7 +937,11 @@ export const CalendarControl = defineComponent({
      */
     const renderTimeLine = () => {
       return (
-        <div class={this.ns.b('timeline-content')}>
+        <div
+          ref='infiniteScroll'
+          class={this.ns.b('timeline-content')}
+          onScroll={debounce(this.handleScrollLoad, 300)}
+        >
           <el-timeline>
             {this.c.state.items.length > 0
               ? this.c.state.items.map((item: ICalendarItemData) => {
@@ -919,12 +950,16 @@ export const CalendarControl = defineComponent({
                       return item.itemType === calendarItems.itemType;
                     },
                   );
+                  const time = item[this.c.groupTimeField];
+                  const temptime = time
+                    ? dayjs(time).format(this.c.timelineCaptionFormat)
+                    : time;
                   return (
                     <el-timeline-item
                       key={item.id}
                       placement='top'
                       color={item.bkColor}
-                      timestamp={item.beginTime}
+                      timestamp={temptime}
                     >
                       {model?.layoutPanel
                         ? renderPanelItem(item, model.layoutPanel)

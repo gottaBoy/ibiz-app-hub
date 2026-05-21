@@ -6,7 +6,7 @@ export default {
   deviewCodeName: 'map_picker',
   deviewId: '463d3050d8e462233b799b38a1adfa18',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

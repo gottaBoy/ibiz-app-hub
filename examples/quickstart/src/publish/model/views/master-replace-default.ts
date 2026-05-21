@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'replace_default',
   deviewId: '2b2129f145b43b12fe5e350dd0577d41',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

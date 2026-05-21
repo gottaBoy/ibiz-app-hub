@@ -18,7 +18,7 @@ export interface IApiFormButtonListController extends IApiFormDetailController {
   /**
    * @description 处理按钮点击
    * @param {string} id 按钮组成员标识
-   * @param {MouseEvent} [event]
+   * @param {MouseEvent} [event] 鼠标事件
    * @returns {*}  {Promise<void>}
    * @memberof IApiFormButtonListController
    */
@@ -26,9 +26,9 @@ export interface IApiFormButtonListController extends IApiFormDetailController {
 
   /**
    * @description 执行界面行为
-   * @param {string} actionId
-   * @param {string} appId
-   * @param {MouseEvent} [event]
+   * @param {string} actionId 界面行为标识
+   * @param {string} appId 应用标识
+   * @param {MouseEvent} [event] 鼠标事件
    * @returns {*}  {Promise<void>}
    * @memberof IApiFormButtonListController
    */
@@ -40,8 +40,8 @@ export interface IApiFormButtonListController extends IApiFormDetailController {
 
   /**
    * @description 执行表单项更新
-   * @param {IDEFormButton} model
-   * @param {MouseEvent} [event]
+   * @param {IDEFormButton} model 表单按钮模型
+   * @param {MouseEvent} [event] 鼠标事件
    * @returns {*}  {Promise<void>}
    * @memberof IApiFormButtonListController
    */

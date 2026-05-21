@@ -1,4 +1,8 @@
-import { AppHooks, routerCallback } from '@ibiz-template/vue3-util';
+import {
+  AppHooks,
+  onRouteChange,
+  routerCallback,
+} from '@ibiz-template/vue3-util';
 import { Modal, ViewMode } from '@ibiz-template/runtime';
 import {
   defineComponent,
@@ -61,6 +65,18 @@ export default defineComponent({
           { ...context, ...ibiz.appData?.context } as IContext,
         );
       });
+      const parentWindow = window.parent;
+      if (parentWindow && parentWindow.postMessage) {
+        onRouteChange(() => {
+          parentWindow.postMessage(
+            {
+              type: 'onRouteChange',
+              url: window.location.href,
+            },
+            '*',
+          );
+        }, 1);
+      }
     });
 
     onBeforeUnmount(() => {

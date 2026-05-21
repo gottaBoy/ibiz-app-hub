@@ -31,9 +31,6 @@ export class InternalMessageDefaultProvider
     message: IInternalMessage,
     _event: MouseEvent,
   ): Promise<boolean> {
-    // 打开之前先标记已读
-    await ibiz.hub.notice.internalMessage.markRead(message);
-
     const redirectUrl = ibiz.env.isMob ? message.mobile_url : message.url;
     return this.openViewByUrl(redirectUrl);
   }

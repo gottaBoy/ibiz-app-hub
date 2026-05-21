@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-expressions */
+/* eslint-disable eqeqeq */
 import { plus, RuntimeModelError, toNumberOrNil } from '@ibiz-template/core';
 import {
   IDEChartSeries,
@@ -268,19 +269,13 @@ export class BaseSeriesGenerator<T extends IDEChartSeries = IDEChartSeries> {
     val: string | undefined,
     isExclude: boolean = false,
   ): string | undefined {
-    if (isNil(val)) {
-      return undefined;
-    }
-    if (isNil(codeListKey)) {
-      return val;
-    }
+    if (isNil(val)) return undefined;
+    if (isNil(codeListKey)) return val;
     const codeListItems = this.chartGenerator.codeListMap.get(codeListKey);
     if (codeListItems?.length) {
-      const find = codeListItems.find(x => x.value === val);
-      if (find) {
-        return find.text;
-      }
-      return '未定义';
+      const find = codeListItems.find(x => x.value == val);
+      if (find) return find.text;
+      return ibiz.i18n.t('runtime.common.undefined');
     }
     return isExclude ? undefined : val;
   }
@@ -439,9 +434,11 @@ export class BaseSeriesGenerator<T extends IDEChartSeries = IDEChartSeries> {
       // 不依照代码表排序
       const orginItem = Array.from(
         new Set(
-          data.map((_data: IData) => {
-            return _data[codename];
-          }),
+          data
+            .map((_data: IData) => {
+              return _data[codename];
+            })
+            .filter(val => !!val),
         ),
       );
       const cloneItem = clone(codeListItems);
@@ -911,7 +908,7 @@ export class BaseSeriesGenerator<T extends IDEChartSeries = IDEChartSeries> {
         dates.push(dayjs(date));
       });
     });
-
+    if (!dates.length) return;
     // 使用 dayjs 的 max() 和 min() 方法找出最大和最小日期
     const maxDate = dayjs.max(dates);
     const minDate = dayjs.min(dates);
@@ -1036,6 +1033,7 @@ export class BaseSeriesGenerator<T extends IDEChartSeries = IDEChartSeries> {
         dates.push(date);
       });
     });
+    if (!dates.length) return;
     // 补全每组缺失的日期值，防止横坐标绘制异常
     dates.forEach(date => {
       Object.keys(data).forEach(key => {

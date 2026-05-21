@@ -1,4 +1,4 @@
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { isNil } from 'ramda';
 import './pagination.scss';
@@ -26,6 +26,10 @@ export const IBizPagination = defineComponent({
     popperClass: {
       type: String,
       required: false,
+    },
+    mode: {
+      type: String as PropType<'default' | 'simple'>,
+      default: 'default',
     },
   },
   emits: ['change', 'pageSizeChange', 'pageRefresh'],
@@ -70,6 +74,36 @@ export const IBizPagination = defineComponent({
     };
   },
   render() {
+    if (this.mode === 'simple') {
+      return (
+        <div class={this.ns.b()}>
+          <el-pagination
+            class={this.ns.b('simple')}
+            page-size={this.size}
+            layout='slot, prev, pager, next'
+            background
+            total={this.total}
+            page-count={
+              !isNil(this.totalPages) && this.calcTotalPages === this.totalPages
+                ? this.calcTotalPages
+                : this.totalPages
+            }
+            current-page={this.curPage}
+            {...{
+              'onUpdate:currentPage': this.onPageChange,
+              'onUpdate:pageSize': this.onPageSizeChange,
+              onChange: this.inputChange,
+            }}
+          >
+            <span>
+              {ibiz.i18n.t('component.pagination.total')}&nbsp;
+              {this.total}
+              &nbsp;{ibiz.i18n.t('component.pagination.pieceData')}
+            </span>
+          </el-pagination>
+        </div>
+      );
+    }
     return (
       <div class={this.ns.b()}>
         <el-pagination

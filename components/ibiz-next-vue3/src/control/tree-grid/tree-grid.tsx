@@ -16,7 +16,11 @@ import {
 } from 'vue';
 import { recursiveIterate } from '@ibiz-template/core';
 import { IDEGridColumn, IDETreeGrid } from '@ibiz/model-core';
-import { IControlProvider, TreeGridController } from '@ibiz-template/runtime';
+import {
+  IControlProvider,
+  ScriptFactory,
+  TreeGridController,
+} from '@ibiz-template/runtime';
 import { useRowEditPopover } from '../grid/row-edit-popover/use-row-edit-popover';
 import {
   IGridProps,
@@ -26,6 +30,24 @@ import {
   useAppGridPagination,
 } from '../grid/grid';
 import { renderChildColumn } from '../grid/grid/grid';
+
+/**
+ * @description 绘制树表格的注入属性，表格列注入属性由表格中计算绘制
+ * @param {IDETreeGrid} model
+ * @param {IParams} params
+ * @returns {*}  {IParams}
+ */
+function renderAttrs(model: IDETreeGrid, params: IParams): IParams {
+  const attrs: IParams = {};
+  model.controlAttributes?.forEach(item => {
+    if (item.attrName && item.attrValue) {
+      attrs[item.attrName!] = ScriptFactory.execSingleLine(item.attrValue!, {
+        ...params,
+      });
+    }
+  });
+  return attrs;
+}
 
 export const TreeGridControl = defineComponent({
   name: 'IBizTreeGridControl',
@@ -231,12 +253,7 @@ export const TreeGridControl = defineComponent({
         return;
       }
       return (
-        <div
-          class={[
-            ns.b('batch-toolbar'),
-            ns.is('show', c.state.selectedData.length > 0),
-          ]}
-        >
+        <div class={[ns.b('batch-toolbar'), ns.is('show', c.showBatchToolbar)]}>
           <div class={ns.b('batch-toolbar-content')}>
             <div class={ns.b('batch-toolbar-text')}>
               {ibiz.i18n.t('control.common.itemsSelected', {
@@ -342,6 +359,9 @@ export const TreeGridControl = defineComponent({
                 this.c.state.showTreeGrid ? state.treeGirdData : this.tableData
               }
               {...this.$attrs}
+              {...renderAttrs(this.c.model, {
+                ...this.c.getEventArgs(),
+              })}
             >
               {{
                 empty: this.renderNoData,
@@ -369,6 +389,7 @@ export const TreeGridControl = defineComponent({
           )}
           {enablePagingBar && (
             <iBizPagination
+              mode={this.c.paginationMode}
               total={state.total}
               curPage={state.curPage}
               size={state.size}

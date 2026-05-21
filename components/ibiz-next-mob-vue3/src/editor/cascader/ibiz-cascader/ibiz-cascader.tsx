@@ -6,7 +6,7 @@ import {
 } from '@ibiz-template/vue3-util';
 import './ibiz-cascader.scss';
 import { clone } from 'ramda';
-import { calcDeCodeNameById } from '@ibiz-template/runtime';
+import { createUUID } from 'qx-util';
 import { CascaderEditorController } from '../cascader-editor.controller';
 import { IBizCommonRightIcon } from '../../common/right-icon/right-icon';
 import { usePopstateListener } from '../../../util';
@@ -15,10 +15,11 @@ import { usePopstateListener } from '../../../util';
  * 移动端级联选择器
  * @primary
  * @description 使用van-cascader组件，用于选择具有级联关系的数据。支持编辑器类型包含：`移动端级联选择器`
- * @editorparams {name:editorStyle,title:编辑器样式,parameterType:string,defaultvalue:default,description:值为default时，加载下级数据时，从节点的value属性获取值，否则从节点的data属性里的value上获取值}
- * @editorparams {name:separator,title:分割符,parameterType:string,defaultvalue:'/',description:用于拼接选择的值}
+ * @editorparams {name:editorstyle,parameterType:string,defaultvalue:'default',description:值为default时，加载下级数据时，从节点的value属性获取值，否则从节点的data属性里的value上获取值}
+ * @editorparams {name:separator,parameterType:string,defaultvalue:'/',description:分隔符，用于拼接选择的值}
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
- * @ignoreemits  infoTextChange | enter
+ * @ignoreemits  blur | focus | infoTextChange | enter
  */
 export const IBizCascader = defineComponent({
   name: 'IBizCascader',
@@ -30,6 +31,8 @@ export const IBizCascader = defineComponent({
     const c = props.controller!;
 
     const editorModel = c.model;
+
+    const cascaderKey = createUUID();
 
     // 关系表单项集合
     const valueItems: Ref<IData[]> = ref([]);
@@ -54,6 +57,9 @@ export const IBizCascader = defineComponent({
       if (editorModel.editorParams.editorStyle) {
         editorStyle = editorModel.editorParams.editorStyle;
       }
+      if (editorModel.editorParams.editorstyle) {
+        editorStyle = editorModel.editorParams.editorstyle;
+      }
       if (editorModel.editorParams.separator) {
         separator = editorModel.editorParams.separator;
       }
@@ -74,6 +80,7 @@ export const IBizCascader = defineComponent({
     // 搜索值
     const searchValue = ref('');
     const show = ref(false);
+    const isLoading = ref(false);
     const onClose = () => {
       show.value = false;
     };
@@ -89,17 +96,26 @@ export const IBizCascader = defineComponent({
     const handleQueryParams = async (index: number, value: string) => {
       const context = clone(c.context);
       const params = clone(c.params);
+      // 如果上级和下级具有父子关系，则根据关系字段添加查询参数
       if (index > 0) {
-        const valueItem = valueItems.value[index - 1];
-        Object.assign(context, {
-          [calcDeCodeNameById(valueItem.appDataEntityId)]: value,
-        });
+        const { appDataEntityId: parentAppDataEntityId } =
+          valueItems.value[index - 1];
+        const { appId, appDataEntityId: childAppDataEntityId } =
+          valueItems.value[index];
         const appDataEntity = await ibiz.hub.getAppDataEntity(
-          valueItem.appDataEntityId,
+          childAppDataEntityId,
+          appId,
         )!;
-        Object.assign(params, {
-          [`n_${appDataEntity.keyAppDEFieldId!.toLowerCase()}_eq`]: value,
-        });
+        const { minorAppDERSs } = appDataEntity;
+        if (minorAppDERSs) {
+          const appDeRSs = minorAppDERSs.find(
+            DERSs => DERSs.majorAppDataEntityId === parentAppDataEntityId,
+          );
+          if (appDeRSs && appDeRSs.parentAppDEFieldId)
+            Object.assign(params, {
+              [`n_${appDeRSs.parentAppDEFieldId!.toLowerCase()}_eq`]: value,
+            });
+        }
       }
       return { context, params };
     };
@@ -174,6 +190,7 @@ export const IBizCascader = defineComponent({
           ? node.data.value
           : null;
       const valueItem = valueItems.value[tabIndex];
+      isLoading.value = true;
       try {
         if (valueItem.appDataEntityId && valueItem.appDEDataSetId) {
           const { context, params } = await handleQueryParams(tabIndex, value);
@@ -213,11 +230,21 @@ export const IBizCascader = defineComponent({
             if (Object.is(editorStyle, 'default')) {
               fillTreeData(node, nodes);
             }
+          } else {
+            fillTreeData(node, [
+              {
+                value: `empty_${cascaderKey}`,
+                text: ibiz.i18n.t('editor.cascader.noData'),
+                disabled: true,
+                className: ns.e('empty'),
+              },
+            ]);
           }
         }
       } catch (error) {
         console.log(valueItem, '查询数据集失败');
       }
+      isLoading.value = false;
     };
 
     // 处理级联选择器值改变
@@ -297,6 +324,7 @@ export const IBizCascader = defineComponent({
       defaultCheckedKeys,
       searchValue,
       selectValue,
+      isLoading,
       onChange,
       onBlur,
       onFocus,
@@ -318,7 +346,7 @@ export const IBizCascader = defineComponent({
         {this.readonly && this.value}
         {!this.readonly && (
           <van-field
-            value={this.value}
+            modelValue={this.value}
             readonly
             disabled={this.disabled}
             placeholder={this.c.placeHolder}
@@ -342,6 +370,7 @@ export const IBizCascader = defineComponent({
         >
           <van-cascader
             v-model={this.selectValue}
+            class={[this.ns.e('content')]}
             title={this.c.placeHolder ? this.c.placeHolder : ' '}
             options={this.treeData}
             onClose={this.onClose}

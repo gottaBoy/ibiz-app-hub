@@ -1,12 +1,9 @@
-/* 向导 start */
+$control-wizard-panel: (
+  'spacing-footer-margin': getCssVar('spacing', 'loose') getCssVar('spacing', 'tight'),
+  'spacing-footer-gap': getCssVar('spacing', 'tight'),
+  'color-active': getCssVar('color', 'primary'),
+);
 
-$control-wizard-panel: ('header-height': 60px,
-  'footer-height': 40px,
-  margin: getCssVar('spacing', 'loose') getCssVar('spacing', 'tight'),
-  gap:getCssVar('spacing', 'tight'), );
-
-
-/* 向导 end */
 @include b(control-wizardpanel) {
   @include set-component-css-var('control-wizard-panel', $control-wizard-panel);
 
@@ -14,38 +11,27 @@ $control-wizard-panel: ('header-height': 60px,
   flex-direction: column;
   height: 100%;
 
+  .van-steps {
+    flex: none;
+  }
+  .van-step--process {
+    color: getCssVar('control-wizard-panel', 'color-active');
+  }
+
   @include e(form) {
     flex-grow: 1;
     overflow: auto;
   }
-
-  @include when(header) {
-    @include e(form) {
-      height: calc(100% - getCssVar('control-wizard-panel', 'footer-height') - getCssVar('control-wizard-panel', 'header-height'));
-    }
-  }
-}
-
-@include b(control-wizardpanel-header) {
-  height: getCssVar('control-wizard-panel', 'header-height');
 }
 
 
 @include b(control-wizardpanel-footer) {
   @include flex(row, flex-end, center);
 
-  gap: getCssVar('control-wizard-panel', 'gap');
-  height: getCssVar('control-wizard-panel', 'footer-height');
-  margin: getCssVar('control-wizard-panel', 'margin');
-
-
-  @include e(form) {
-    flex-grow: 1;
-    overflow: auto;
-  }
+  gap: getCssVar('control-wizard-panel', 'spacing-footer-gap');
+  margin: getCssVar('control-wizard-panel', 'spacing-footer-margin');
 
   button {
     flex-grow: 1;
-    height: 100%;
   }
 }

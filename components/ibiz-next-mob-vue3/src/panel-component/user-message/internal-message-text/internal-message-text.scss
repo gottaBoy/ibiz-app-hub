@@ -1,17 +1,32 @@
+$internal-message-text: (
+  spacing-caption-margin-bottom: getCssVar('spacing', 'tight'),
+  font-caption-fontWeight: getCssVar(font-weight, bold),
+  spacing-content-margin-bottom: getCssVar('spacing', 'tight'),
+  spacing-status-margin-right: getCssVar('spacing', 'tight'),
+);
 @include b(internal-message-text) {
+  @include set-component-css-var(
+    'internal-message-text',
+    $internal-message-text
+  );
   @include flex(column);
 
-  @include e(caption){
-    margin-bottom: getCssVar('spacing', 'tight');
-    font-weight: getCssVar(font-weight, bold);
+  @include e(caption) {
+    margin-bottom: getCssVar(
+      internal-message-text,
+      spacing-caption-margin-bottom
+    );
+    font-weight: getCssVar(internal-message-text, font-caption-fontWeight);
   }
 
-  @include e(content){
-    margin-bottom: getCssVar('spacing', 'tight');
+  @include e(content) {
+    margin-bottom: getCssVar(
+      internal-message-text,
+      spacing-content-margin-bottom
+    );
   }
 
-  @include e(status){
-    margin-right: getCssVar('spacing', 'tight');
+  @include e(status) {
+    margin-right: getCssVar(internal-message-text, spacing-status-margin-right);
   }
-
 }

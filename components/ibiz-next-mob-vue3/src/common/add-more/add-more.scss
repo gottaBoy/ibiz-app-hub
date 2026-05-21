@@ -1,0 +1,14 @@
+$add-more: (
+  color-bg: getCssVar(color, fill, 0),
+  color-text: getCssVar(color, primary),
+);
+@include b('add-more') {
+  @include set-component-css-var('add-more', $add-more);
+  width: 100%;
+  .van-button {
+    width: 100%;
+    border: none;
+    background-color: getCssVar(add-more, color-bg);
+    color: getCssVar(add-more, color-text);
+  }
+}

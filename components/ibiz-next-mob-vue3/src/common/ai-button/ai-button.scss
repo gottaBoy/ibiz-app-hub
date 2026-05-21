@@ -1,0 +1,97 @@
+@include b('ai-button') {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0.5rem;
+  font-size: 2.5rem;
+  color: getCssVar('color', 'text', '0');
+  background-color: getCssVar('color', 'bg', '1');
+  border: 1px solid getCssVar(color, border);
+  border-radius: 50%;
+  box-shadow: getCssVar('shadow', 'elevated');
+  transition: 0.2s;
+
+  @include e('content') {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    .#{bem('icon')} {
+      display: flex;
+      align-items: center;
+    }
+
+    svg {
+      width: 1em;
+      max-width: 100%;
+      height: 1em;
+      max-height: 100%;
+
+      path {
+        fill: currentcolor;
+      }
+    }
+  }
+
+  @include when('left-start') {
+    top: 2rem;
+    left: 1rem;
+    @include when('adsorption') {
+      left: -1.5rem;
+      opacity: 0.8;
+    }
+  }
+
+  @include when('left') {
+    top: 50%;
+    left: 1rem;
+    transform: translate(0, -50%);
+    @include when('adsorption') {
+      left: -1.5rem;
+      opacity: 0.8;
+    }
+  }
+
+  @include when('left-end') {
+    top: calc(100% - 8rem);
+    left: 1rem;
+    @include when('adsorption') {
+      left: -1.5rem;
+      opacity: 0.8;
+    }
+  }
+
+  @include when('right-start') {
+    top: 2rem;
+    left: calc(100% - 4rem);
+
+    @include when('adsorption') {
+      left: calc(100% - 1.5rem);
+      opacity: 0.8;
+    }
+  }
+
+  @include when('right') {
+    top: 50%;
+    left: calc(100% - 4rem);
+    transform: translate(0, -50%);
+
+    @include when('adsorption') {
+      left: calc(100% - 1.5rem);
+      opacity: 0.8;
+    }
+  }
+
+  @include when('right-end') {
+    top: calc(100% - 8rem);
+    left: calc(100% - 4rem);
+
+    @include when('adsorption') {
+      left: calc(100% - 1.5rem);
+      opacity: 0.8;
+    }
+  }
+}

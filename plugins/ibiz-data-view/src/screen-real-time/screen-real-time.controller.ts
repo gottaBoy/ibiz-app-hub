@@ -40,41 +40,28 @@ export class ScreenRealTimeController extends EditorController<ISpan> {
    */
   protected async onInit(): Promise<void> {
     super.onInit();
-    if (this.parent.valueFormat) {
-      const arr = this.parent.valueFormat.split(',');
-      const index = arr.findIndex(w => w === 'week'); // 找到week
 
-      if (index > -1) {
-        this.showWeek = true;
-        if (index === 0) {
-          // 左侧没配 0 1
-          this.leftTime = '';
-          this.rightTime = arr[1];
-        }
-        if (index === 1) {
-          // 左侧配了  0 1 ， 0 1 2
-          arr.splice(index, 1);
-          arr.forEach((str, i) => {
-            if (i === 0) {
-              this.leftTime = str;
-            }
-            if (i === 1) {
-              this.rightTime = str;
-            }
-          });
-        }
-      } else {
-        this.showWeek = false;
-        // 按顺序赋值  0 2
-        arr.forEach((str, i) => {
-          if (i === 0) {
-            this.leftTime = str;
-          }
-          if (i === 1) {
-            this.rightTime = str;
-          }
-        });
-      }
+    if (!this.parent.valueFormat) {
+      return;
     }
+
+    const arr = this.parent.valueFormat.split(',');
+
+    // 安全检查：确保至少有一个元素
+    if (arr.length === 0) {
+      return;
+    }
+
+    const index = arr.indexOf('week');
+
+    if (index !== -1) {
+      this.showWeek = true;
+      arr.splice(index, 1);
+    } else {
+      this.showWeek = false;
+    }
+    // 按顺序赋值
+    this.leftTime = arr[0] ?? '';
+    this.rightTime = arr[1] ?? '';
   }
 }

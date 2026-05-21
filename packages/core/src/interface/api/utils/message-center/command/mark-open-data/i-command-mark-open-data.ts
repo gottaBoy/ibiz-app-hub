@@ -10,7 +10,7 @@ import { IMarkOpenData } from './i-mark-open-data';
 export interface ICommandMarkOpenData extends ICommandBase {
   /**
    * @description 发送消息
-   * @param {IMarkOpenData} data
+   * @param {IMarkOpenData} data 协同数据
    * @memberof ICommandMarkOpenData
    */
   send(data: IMarkOpenData): void;

@@ -1,8 +1,9 @@
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { PropType, defineComponent, ref } from 'vue';
-import './preset-view-back.scss';
 import { useRoute } from 'vue-router';
+import { IMobPlatformProvider } from '@ibiz-template/runtime';
 import { useViewStack } from '../../util';
+import './preset-view-back.scss';
 
 export const IBizPresetViewBack = defineComponent({
   name: 'IBizPresetViewBack',
@@ -18,7 +19,22 @@ export const IBizPresetViewBack = defineComponent({
     const route = useRoute();
     const { viewStack } = useViewStack();
     const backButtonVisible = ref(false);
-    const initButtonVisible = () => {
+
+    if (
+      Object.prototype.hasOwnProperty.call(
+        props.view.params,
+        'srfmobshowpresetback',
+      )
+    ) {
+      if (
+        props.view.params.srfmobshowpresetback === 'true' ||
+        props.view.params.srfmobshowpresetback === true
+      ) {
+        backButtonVisible.value = true;
+      }
+    } else if (
+      (ibiz.platform as unknown as IMobPlatformProvider).getShowPresetBack()
+    ) {
       if (
         (props.view.modal.viewUsage === 1 &&
           viewStack.cacheKeys.length > 1 &&
@@ -27,10 +43,6 @@ export const IBizPresetViewBack = defineComponent({
       ) {
         backButtonVisible.value = true;
       }
-    };
-
-    if (ibiz.config.view.mobShowPresetBack) {
-      initButtonVisible();
     }
 
     const goBack = () => {

@@ -1,49 +1,77 @@
+$quill-preview: (
+  // 高度
+  min-height: rem(100px),
+  // 颜色
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  color-btn: getCssVar(color, primary),
+  // 字体大小
+  font-fontSize: getCssVar(font-size, header-4),
+  font-more-lineHeight: getCssVar(font-size, header-4),
+  font-more-fontSize: getCssVar(font-size, header-4),
+  // 间距
+  spacing-editor-padding-top: getCssVar('spacing', 'base-tight'),
+  spacing-editor-padding-right: getCssVar('spacing', 'base'),
+  spacing-padding-right: getCssVar('spacing', 'super-loose'),
+  spacing-readonly-padding-right: getCssVar('spacing', 'base'),
+  spacing-disabled-padding-right: getCssVar('spacing', 'base'),
+  spacing-more-margin-bottom: getCssVar('spacing', 'loose'),
+);
+
 @include b(quill-preview) {
-    position: relative;
-    @include e(edit) {
-        position: absolute;
-        top: rem(12px);
-        right: rem(15px);
-        font-size: getCssVar(font-size, header-4);
-    }
+  @include set-component-css-var(quill-preview, $quill-preview);
 
+  position: relative;
+  min-height: getCssVar(quill-preview, min-height);
+  @include e(edit) {
+    position: absolute;
+    top: getCssVar(quill-preview, spacing-editor-padding-top);
+    right: getCssVar(quill-preview, spacing-editor-padding-right);
+    font-size: getCssVar(quill-preview, font-fontSize);
+  }
+
+  .ql-editor {
+    padding-right: getCssVar(quill-preview, spacing-padding-right);
+  }
+  @include m(readonly) {
     .ql-editor {
-        padding-right: rem(40px);
+      padding-right: getCssVar(quill-preview, spacing-readonly-padding-right);
     }
-    @include m(readonly) {
-        .ql-editor {
-            padding-right: rem(15px);
-        }
+  }
+  @include m(disabled) {
+    .ql-editor {
+      padding-right: getCssVar(quill-preview, spacing-disabled-padding-right);
     }
-    @include m(disabled) {
-        .ql-editor {
-            padding-right: rem(15px);
-        }
-    }
-    @include e(image-popup) {
-        background-color: transparent;
-        overflow: visible;
-    }
+  }
+  @include e(image-popup) {
+    overflow: visible;
+    background-color: transparent;
+  }
 
-    .ql-editor.ql-blank {
-        padding: 0;
-        &::before {
-            font-style: normal;
-            color: getCssVar('form-item', 'placeholder-color');
-            left: 0;
-        }
+  .ql-editor.ql-blank {
+    padding: 0;
+
+    &::before {
+      left: 0;
+      font-style: normal;
+      color: getCssVar(quill-preview, color-placeholder);
     }
-    @include m('show-collapse'){
-        @include when('collapse'){            
-            height: var(--default-height);
-            .ql-editor{
-                overflow: hidden;
-            }
-        }
+  }
+  @include m('show-collapse') {
+    @include when('collapse') {
+      height: getCssVar(quill-preview, height-default);
+      margin-bottom:  getCssVar(quill-preview, spacing-more-margin-bottom);
+      .ql-editor {
+        overflow: hidden;
+      }
+      .ql-container {
+        line-height: 1;
+      }
     }
+  }
 }
-@include b('quill-preview-collapse-btn'){
-    color: getCssVar(color,primary);
-    display: flex;
-    align-items: center;
+@include b('quill-preview-collapse-btn') {
+  display: flex;
+  align-items: center;
+  color: getCssVar(quill-preview, color-btn);
+  font-size: getCssVar(quill-preview, font-more-fontSize);
 }

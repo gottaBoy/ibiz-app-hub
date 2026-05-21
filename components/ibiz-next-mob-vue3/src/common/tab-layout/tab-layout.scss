@@ -1,0 +1,13 @@
+$tab-layout: (
+  // Color
+  color-tab-text: getCssVar('color', 'text', 0),
+  color-tab-text-active: getCssVar('color', 'primary'),
+  // Font
+  font-tab-fontSize: getCssVar('font-size', 'regular')
+);
+@include b('tab-layout') {
+  @include set-component-css-var('tab-layout', $tab-layout);
+
+  width: 100%;
+  height: 100%;
+}

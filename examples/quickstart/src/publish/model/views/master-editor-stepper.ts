@@ -209,6 +209,7 @@ export default {
                   editor: {
                     stepValue: 1,
                     precision: 2,
+                    scale: 2,
                     editorParams: {
                       precision: '2',
                     },

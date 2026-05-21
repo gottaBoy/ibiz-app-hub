@@ -1,5 +1,5 @@
-import { defineComponent, h, PropType, ref, resolveComponent } from 'vue';
-import { useNamespace } from '@ibiz-template/vue3-util';
+import { defineComponent, h, PropType, resolveComponent } from 'vue';
+import { useNamespace, computedAsync } from '@ibiz-template/vue3-util';
 import { IDEFormItem } from '@ibiz/model-core';
 import { FormItemController } from '@ibiz-template/runtime';
 import CompositeFormItem from './composite-form-item/composite-form-item';
@@ -32,36 +32,16 @@ export const FormItem = defineComponent({
       props.controller.setDataValue(val, name, ignore);
     };
 
-    // 额外参数
-    const extraParams = ref({});
-
-    // 是否隐藏无值的单位
-    let emptyHiddenUnit = ibiz.config.form.emptyHiddenUnit;
-    const emptyhiddenunit =
-      props.controller.form?.controlParams?.emptyhiddenunit;
-
-    if (emptyhiddenunit) {
-      emptyHiddenUnit = Object.is(emptyhiddenunit, 'true');
-    }
-
-    // 编辑器参数优先级最高
-    const editorParams = props.controller.editor?.model?.editorParams || {};
-    const { EMPTYHIDDENUNIT } = editorParams;
-
-    if (EMPTYHIDDENUNIT) {
-      emptyHiddenUnit = Object.is(EMPTYHIDDENUNIT, 'true');
-    }
-
-    Object.assign(extraParams.value, {
-      emptyHiddenUnit,
+    const CustomHtml = computedAsync(async () => {
+      const html = await props.controller.getCustomHtml(props.controller.data);
+      return html;
     });
 
-    return { ns, c, extraParams, onValueChange };
+    return { ns, c, CustomHtml, onValueChange };
   },
   render() {
-    if (!this.c.state.visible || this.c.model.editor?.editorType === 'HIDDEN') {
+    if (!this.c.state.visible || this.c.model.editor?.editorType === 'HIDDEN')
       return null;
-    }
     // 编辑器内容
     let editor = null;
     const compositeItem = this.c.model.compositeItem;
@@ -93,7 +73,6 @@ export const FormItem = defineComponent({
         disabled: this.c.state.disabled,
         readonly: this.c.state.readonly,
         onChange: this.onValueChange,
-        extraParams: this.extraParams,
         controlParams: editMode
           ? { ...this.c.form.controlParams, editmode: editMode }
           : this.c.form.controlParams,
@@ -120,6 +99,20 @@ export const FormItem = defineComponent({
         );
       }
     }
+
+    if (this.c.isCustomCode)
+      return (
+        <div
+          class={[
+            this.ns.b(),
+            this.ns.e('script'),
+            this.ns.m(this.modelData.id),
+            this.ns.is('compositeItem', compositeItem),
+            ...this.c.containerClass,
+          ]}
+          v-html={this.CustomHtml}
+        ></div>
+      );
 
     return (
       <iBizFormItemContainer

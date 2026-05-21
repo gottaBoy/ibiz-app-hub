@@ -1,5 +1,9 @@
 @include b(chat-input-material) {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: -4px;
+
+  & > * {
+    margin: 4px;
+  }
 }

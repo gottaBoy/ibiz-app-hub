@@ -58,7 +58,7 @@ export const ScreenPortlet = defineComponent({
       const borderDiv = resolveComponent(this.c.borderStyle);
       let offsetY = 0;
       if (this.c.model.showTitleBar && this.c.borderMode === 'body') {
-        offsetY = 50;
+        offsetY = 58;
       }
       return h(
         borderDiv,

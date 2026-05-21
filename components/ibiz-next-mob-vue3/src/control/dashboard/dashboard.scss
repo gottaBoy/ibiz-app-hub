@@ -1,16 +1,82 @@
 $control-dashboard: (
-    'dashboard-margin': getCssVar('spacing', 'tight'),
-    portlet-header-height: rem(40px),
+    // 边距
+    spacing-sidebar-topleft-top: calc(#{getCssVar(view-page-caption, line-height)} + 2 * #{getCssVar(spacing, tight)}),
+    spacing-sidebar-topleft-left: rem(0px),
+    spacing-sidebar-topright-top: calc(#{getCssVar(view-page-caption, line-height)} + 2 * #{getCssVar(spacing, tight)}),
+    spacing-sidebar-topright-right: rem(0px),
+    spacing-sidebar-bottomleft-bottom: rem(0px),
+    spacing-sidebar-bottomleft-left: rem(0px),
+    spacing-sidebar-bottomright-bottom: rem(0px),
+    spacing-sidebar-bottomright-right: rem(0px),
+    spacing-sidebar-middleleft-top: 50%,
+    spacing-sidebar-middleleft-left: rem(0px),
+    spacing-sidebar-middleright-top: 50%,
+    spacing-sidebar-middleright-right: rem(0px),
 );
 
 @include b(control-dashboard) {
     @include set-component-css-var('control-dashboard', $control-dashboard);
 
     height: 100%;
-    margin: getCssVar('control-dashboard', 'dashboard-margin');
     overflow: getCssVar(control, overflow);
+
+
+    @include e(nav-bar) {
+        @include m(topleft) {
+            .van-index-bar__sidebar {
+                top: getCssVar('control-dashboard', 'spacing-sidebar-topleft-top');
+                right: auto;
+                left: getCssVar('control-dashboard', 'spacing-sidebar-topleft-left');
+                transform: none;
+            }
+        }
+
+        @include m(topright) {
+            .van-index-bar__sidebar {
+                top: getCssVar('control-dashboard', 'spacing-sidebar-topright-top');
+                right: getCssVar('control-dashboard', 'spacing-sidebar-topright-right');
+                transform: none;
+            }
+        }
+
+        @include m(bottomleft) {
+            .van-index-bar__sidebar {
+                inset: auto auto getCssVar('control-dashboard', 'spacing-sidebar-bottomleft-bottom') getCssVar('control-dashboard', 'spacing-sidebar-bottomleft-left');
+                transform: none;
+            }
+        }
+
+        @include m(bottomright) {
+            .van-index-bar__sidebar {
+                top: auto;
+                right: getCssVar('control-dashboard', 'spacing-sidebar-bottomright-right');
+                bottom: getCssVar('control-dashboard', 'spacing-sidebar-bottomright-bottom');
+                transform: none;
+            }
+        }
+
+        @include m(middleleft) {
+            .van-index-bar__sidebar {
+                top: getCssVar('control-dashboard', 'spacing-sidebar-middleleft-top');
+                right: auto;
+                left: getCssVar('control-dashboard', 'spacing-sidebar-middleleft-left');
+            }
+        }
+
+        @include m(middleright) {
+            .van-index-bar__sidebar {
+                top: getCssVar('control-dashboard', 'spacing-sidebar-middleright-top');
+                right: getCssVar('control-dashboard', 'spacing-sidebar-middleright-right');
+            }
+        }
+
+    }
 
     @include b(control-dashboard-row) {
         gap: getCssVar('control-dashboard', 'dashboard-margin');
+    }
+
+    &.#{bem(control)} {
+        width: auto;
     }
 }

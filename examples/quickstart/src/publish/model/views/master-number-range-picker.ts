@@ -306,6 +306,7 @@ export default {
                   deformItemUpdateId: 'fill_value2',
                   editor: {
                     precision: 2,
+                    scale: 2,
                     editorParams: {
                       precision: '2',
                     },

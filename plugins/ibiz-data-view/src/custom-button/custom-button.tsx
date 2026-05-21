@@ -86,11 +86,12 @@ export const CustomButton = defineComponent({
     });
 
     Object.assign(svgStyle.value, {
-      '--svgBorderColor': svgBorderColor.value,
-      '--svgColor': svgColor.value,
-      '--svgBgColor': svgBgColor.value,
-      '--svgBgOpacity': svgBgOpacity.value,
+      [ns.cssVarBlockName('svg-border-color')]: svgBorderColor.value,
+      [ns.cssVarBlockName('svg-color')]: svgColor.value,
+      [ns.cssVarBlockName('svg-bg-color')]: svgBgColor.value,
+      [ns.cssVarBlockName('svg-bg-opacity')]: svgBgOpacity.value,
     });
+    console.log('svgStyle', ns, svgStyle.value);
 
     watch(
       () => c.data,
@@ -147,6 +148,7 @@ export const CustomButton = defineComponent({
         <div class={this.ns.b('custon-btn')} style={this.svgStyle}>
           {buttonName && h(buttonName)}
           <iBizRawItem
+            class={this.ns.e('raw-item')}
             rawItem={this.modelData}
             content={this.content}
           ></iBizRawItem>

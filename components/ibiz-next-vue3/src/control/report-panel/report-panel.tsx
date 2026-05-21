@@ -36,7 +36,7 @@ export const ReportPanelControl = defineComponent({
     noLoadDefault: { type: Boolean, default: false },
   },
   setup() {
-    const c = useControlController(
+    const c: ReportPanelController = useControlController(
       (...args) => new ReportPanelController(...args),
     );
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
@@ -44,20 +44,21 @@ export const ReportPanelControl = defineComponent({
     // 绘制内容
     const renderContent = (): VNode | false => {
       // 未加载不显示无数据
-      const { reportType } = c.state;
-      switch (reportType) {
+      switch (c.model.appDEReport?.reportType) {
         case 'USER':
           return <iBizUserReportPanel controller={c}></iBizUserReportPanel>;
         case 'USER2':
           return <iBizUser2ReportPanel controller={c}></iBizUser2ReportPanel>;
+        case 'SYSBIREPORT':
         case 'DESYSBIREPORTS':
         case 'SYSBICUBE':
         case 'DESYSBICUBES':
         case 'ALLSYSBICUBES':
-        case 'SYSBIREPORT':
         case 'SYSBICUBEREPORTS':
         case 'ALLSYSBIREPORTS':
-          return <iBizBIReportPanel controller={c}></iBizBIReportPanel>;
+          if (c.isBIReportDesign)
+            return <iBizBIReportPanel controller={c}></iBizBIReportPanel>;
+          return <iBizBIReport controller={c}></iBizBIReport>;
         default:
           return <div>{ibiz.i18n.t('control.reportPanel.unrealized')}</div>;
       }
@@ -70,9 +71,7 @@ export const ReportPanelControl = defineComponent({
     };
   },
   render() {
-    if (!this.c.state.isCreated) {
-      return;
-    }
+    if (!this.c.state.isCreated) return;
     return (
       <iBizControlBase controller={this.c}>
         {this.renderContent()}

@@ -7,7 +7,7 @@ import { IApiData } from '@ibiz-template/core';
  */
 export interface IApiViewSession {
   /**
-   * @description 当前视图的数据
+   * @description 当前视图作用域数据
    * @type {(IApiData | null)}
    * @default null
    * @memberof IApiViewSession

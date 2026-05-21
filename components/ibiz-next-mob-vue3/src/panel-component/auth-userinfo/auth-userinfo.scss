@@ -1,39 +1,50 @@
-$user-info: (color: getCssVar(color, text, 0),
-  img-size:rem(50px),
-  img-radius:rem(8px),
-  bg-color: transparent,
-  padding:getCssVar(spacing, tight),
+$user-info: (
+  // 颜色
+  color-text: getCssVar(color, text, 0),
+  color-bg-color: transparent,
+  color-org-color: getCssVar(color, text, 1),
+  // 间距
+  spacing-padding: getCssVar(spacing, tight),
+  spacing-user-info-center-padding: getCssVar(spacing, tight),
+  // 字体
+  font-username-fontSize: rem(14px),
+  font-username-fontWeight: 600,
+  font-org-fontSize: rem(12px),
+  font-van-image-fontSize: rem(25px),
+  // 宽度
+  width-img-size: rem(50px),
+  // 圆角
+  radius-img-radius: rem(8px),
 );
 
 @include b(user-info) {
   @include set-component-css-var(user-info, $user-info);
 
   display: flex;
-  gap: getCssVar(user-info, padding);
   align-items: center;
-  padding: getCssVar(user-info, padding);
-  color: getCssVar(user-info, color);
-  background-color: getCssVar(user-info, bg-color);
+  gap: getCssVar(user-info, spacing-padding);
+  padding: getCssVar(user-info, spacing-padding);
+  color: getCssVar(user-info, color-text);
+  background-color: getCssVar(user-info, color-bg-color);
 
   @include e(username) {
-    font-size: rem(14px);
-    font-weight: 600;
+    font-size: getCssVar(user-info, font-username-fontSize);
+    font-weight: getCssVar(user-info, font-username-fontWeight);
   }
 
   @include e(org) {
-    font-size: rem(12px);
-    color: getCssVar(color, text, 3);
+    font-size: getCssVar(user-info, font-org-fontSize);
+    color: getCssVar(user-info, org-color);
   }
 
-
   .van-image {
-    width: getCssVar(user-info, img-size);
-    height: getCssVar(user-info, img-size);
+    width: getCssVar(user-info, width-img-size);
+    height: getCssVar(user-info, width-img-size);
     overflow: hidden;
-    border-radius: getCssVar(user-info, img-radius);
+    border-radius: getCssVar(user-info, radius-img-radius);
 
     .van-image__loading {
-      font-size: rem(25px);
+      font-size: getCssVar(user-info, font-van-image-fontSize);
     }
   }
 
@@ -41,6 +52,6 @@ $user-info: (color: getCssVar(color, text, 0),
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    gap: getCssVar(user-info, padding);
+    gap: getCssVar(user-info, spacing-user-info-center-padding);
   }
 }

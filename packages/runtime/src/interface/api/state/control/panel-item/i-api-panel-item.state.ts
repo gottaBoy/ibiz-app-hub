@@ -1,4 +1,4 @@
-import { IApiContext } from '@ibiz-template/core';
+import { IApiContext, IApiData } from '@ibiz-template/core';
 import { IApiColState } from '../../common/i-api-col-state';
 /**
  * @primary
@@ -42,6 +42,13 @@ export interface IApiPanelItemState extends IApiColState {
    * @memberof IApiPanelItemState
    */
   context?: IApiContext;
+
+  /**
+   * @description 计数器数据
+   * @type {IApiData}
+   * @memberof IApiPanelItemState
+   */
+  counterData: IApiData;
 }
 /**
  * @description 面板项样式接口

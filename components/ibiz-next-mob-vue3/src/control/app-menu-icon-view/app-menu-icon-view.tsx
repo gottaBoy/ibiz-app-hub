@@ -1,7 +1,10 @@
-import { IAppMenu } from '@ibiz/model-core';
-import { computed, defineComponent, PropType } from 'vue';
+import { IAppMenu, IAppMenuItem } from '@ibiz/model-core';
+import { defineComponent, PropType, VNode } from 'vue';
 import { AppMenuController, IControlProvider } from '@ibiz-template/runtime';
-import { prepareControl, useControlController } from '@ibiz-template/vue3-util';
+import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
+import { isNil } from 'ramda';
+import { isArray } from 'lodash-es';
+import { getDefaultIconVal, useMenuRender } from '../app-menu/menu-render-util';
 import './app-menu-icon-view.scss';
 
 export const AppMenuIconViewControl = defineComponent({
@@ -14,63 +17,138 @@ export const AppMenuIconViewControl = defineComponent({
   },
   setup() {
     const c = useControlController((...args) => new AppMenuController(...args));
-    const { controlClass, ns } = prepareControl(c);
+    const ns = useNamespace(
+      `control-${c.model.controlType!.toLowerCase()}-${c.model.controlStyle?.toLowerCase()}`,
+    );
 
-    // 默认激活菜单项
-    const columnNum = computed(() => {
-      // todo 根据屏幕宽度计算显示多少列
-      return 5;
-    });
-    return {
-      controlClass,
-      c,
-      columnNum,
-      ns,
-    };
-  },
-  render() {
-    const { model } = this.c;
-    const { controlStyle } = model;
-    return (
-      <van-grid
-        clickable
-        column-num={this.columnNum}
-        border={false}
-        class={[
-          this.ns.b(),
-          this.ns.b(controlStyle!.toLowerCase()),
-          this.ns.m(this.modelData.id),
-        ]}
-      >
-        {(model as IAppMenu)?.appMenuItems?.map(item => {
-          return (
-            item.itemType === 'MENUITEM' &&
-            item.hidden !== true && (
-              <van-grid-item
-                class={this.ns.b('item')}
-                text={item.caption}
-                onClick={(event: MouseEvent) =>
-                  this.c.onClickMenuItem(item.id!, event, false)
-                }
-              >
+    const { onCustomizedClick } = useMenuRender(c);
+
+    // 绘制菜单项
+    const renderMenuItem = (
+      menuItem: IAppMenuItem,
+    ): Array<VNode | null> | VNode | null => {
+      if (menuItem.hidden === true) {
+        return null;
+      }
+      const counterNum = menuItem.counterId
+        ? c.state.counterData[menuItem.counterId]
+        : null;
+      let renderItem: Array<VNode | null> | VNode | null = null;
+      switch (menuItem.itemType) {
+        case 'MENUITEM':
+          if (isArray(menuItem.appMenuItems)) {
+            renderItem = (
+              <van-grid-item class={ns.e('group-item')} text={menuItem.caption}>
                 {{
-                  icon: () => {
+                  default: () => {
                     return (
-                      <div class={this.ns.b('icon')}>
-                        {item.sysImage ? (
-                          <iBizIcon icon={item.sysImage}></iBizIcon>
-                        ) : (
-                          <van-icon name='setting-o'></van-icon>
-                        )}
+                      <div class={ns.em('group-item', 'container')}>
+                        <div class={ns.em('group-item', 'header')}>
+                          {[
+                            menuItem.sysImage ? (
+                              <iBizIcon icon={menuItem.sysImage}></iBizIcon>
+                            ) : null,
+                            <span class={ns.em('group-item', 'caption')}>
+                              {menuItem.caption}
+                            </span>,
+                            !isNil(counterNum) && (
+                              <iBizBadge
+                                class={ns.em('group-item', 'counter')}
+                                value={counterNum}
+                              />
+                            ),
+                          ]}
+                        </div>
+                        <van-grid
+                          clickable
+                          column-num={c.columnNum}
+                          border={false}
+                          class={ns.em('group-item', 'content')}
+                        >
+                          {menuItem.appMenuItems?.length ? (
+                            menuItem.appMenuItems?.map(_item =>
+                              renderMenuItem(_item),
+                            )
+                          ) : (
+                            <div class={[ns.b('no-data')]}>
+                              {ibiz.i18n.t('control.appmenu.noData')}
+                            </div>
+                          )}
+                        </van-grid>
                       </div>
                     );
                   },
                 }}
               </van-grid-item>
-            )
-          );
-        })}
-      </van-grid>
+            );
+          } else {
+            renderItem = (
+              <van-grid-item
+                class={ns.e('item')}
+                onClick={(event: MouseEvent) =>
+                  c.onClickMenuItem(menuItem.id!, event, false)
+                }
+              >
+                {{
+                  default: () => {
+                    const content = [
+                      <div class={ns.em('item', 'icon')}>
+                        {
+                          <iBizIcon
+                            icon={menuItem.sysImage || getDefaultIconVal()}
+                          ></iBizIcon>
+                        }
+                        {!isNil(counterNum) && (
+                          <iBizBadge
+                            class={ns.em('item', 'counter')}
+                            value={counterNum}
+                          />
+                        )}
+                      </div>,
+                      <span class={ns.em('item', 'caption')}>
+                        {menuItem.caption}
+                      </span>,
+                    ];
+                    return (
+                      <div class={ns.em('item', 'content')}>{content}</div>
+                    );
+                  },
+                }}
+              </van-grid-item>
+            );
+          }
+          break;
+        default:
+          break;
+      }
+      return renderItem;
+    };
+    return {
+      c,
+      ns,
+      renderMenuItem,
+      onCustomizedClick,
+    };
+  },
+  render() {
+    const { model, state } = this.c;
+    if (!state.isCreated) return;
+
+    return (
+      <div
+        class={[this.ns.b(), this.ns.m(this.modelData.id?.toLocaleLowerCase())]}
+      >
+        <van-grid clickable column-num={this.c.columnNum} border={false}>
+          {state.mobMenuItems.map(item => this.renderMenuItem(item))}
+        </van-grid>
+        {model.enableCustomized && (
+          <iBizFloatButton
+            class={this.ns.e('icon-container')}
+            align={this.c.customizedAlign}
+            onClick={this.onCustomizedClick}
+          />
+        )}
+      </div>
     );
   },
 });

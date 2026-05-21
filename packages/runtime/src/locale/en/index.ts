@@ -2,6 +2,7 @@ export const en = {
   // runtime
   runtime: {
     common: {
+      undefined: 'undefined',
       unrealized: 'unrealized',
       noExplanation: 'No explanation available at the moment',
     },
@@ -50,6 +51,8 @@ export const en = {
           invalidSortType: 'Sorting property is not a numeric type',
           logicOpendata: 'Missing {itemType}_opendata view logic',
           logicNewdata: 'Missing {itemType}_newdata view logic',
+          tabularColumns: 'No tabular columns',
+          exported: 'No exported data',
         },
         editor: {
           editorNoConfigured:
@@ -398,6 +401,7 @@ export const en = {
           'End execution entity logic, logic identifier: {id} - logic name: {name}',
         noFoundEntityLogic:
           '{dataEntityId} entity logic not found {deDELogicId}',
+        logicalNodeOperation: 'Logical node {name} operation parameter value:',
       },
     },
     engine: {
@@ -860,6 +864,10 @@ export const en = {
           'The specified identifier [{ctrlId}] component was not found',
         firstRecord: 'The current data is already the first record of data',
         lastRecord: 'The current data is already the last record of data',
+      },
+      jsonUtil: {
+        parseSuccess: 'The JSON data was successfully extracted',
+        parseError: 'No valid JSON or JSONArray content was found',
       },
     },
     deAction: {

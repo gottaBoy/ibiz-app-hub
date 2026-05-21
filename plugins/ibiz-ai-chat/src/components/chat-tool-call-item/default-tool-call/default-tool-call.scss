@@ -1,0 +1,110 @@
+@include b('default-tool-call') {
+  padding: 4px;
+  margin-bottom: 8px;
+  background-color: getCssVar(chat-tool-call-item, bg);
+  border: getCssVar(chat-tool-call-item, border-color);
+  border-radius: 4px;
+
+  svg {
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  @include e('header') {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px;
+
+    >div {
+      display: flex;
+      column-gap: 4px;
+      align-items: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  @include e('header-left') {
+    gap: 8px;
+    min-width: 0;
+    margin-right: 8px;
+
+    @include m(caption) {
+      flex-shrink: 0;
+    }
+
+    @include m('desc') {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  @include e('header-right') {
+    flex-shrink: 0;
+
+    svg {
+      width: 14px !important;
+      height: 14px !important;
+      fill: none !important;
+    }
+  }
+
+  @include e('content') {
+    padding: 8px 0;
+    color: getCssVar('color', 'text-2');
+  }
+
+  @include e('copy') {
+    display: flex;
+    align-items: center;
+  }
+
+  .code-line {
+    display: flex;
+    min-height: 18px;
+    margin-bottom: 5px;
+    font-family: Consolas, monospace;
+    font-size: 0.95rem;
+  }
+
+  .line-number {
+    min-width: 20px;
+    margin-right: 15px;
+    color: #6a9955;
+    text-align: right;
+    user-select: none;
+  }
+
+  .property {
+    color: getCssVar(chat-tool-call-item, text-property);
+  }
+
+  .string {
+    overflow: hidden;
+    color: getCssVar(chat-tool-call-item, text-string);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .boolean {
+    color: getCssVar(chat-tool-call-item, text-boolean);
+  }
+
+  .number {
+    color: getCssVar(chat-tool-call-item, text-number);
+  }
+
+  .null {
+    color: getCssVar(chat-tool-call-item, text-boolean);
+  }
+
+  .error {
+    color: getCssVar(chat-tool-call-item, text-error);
+  }
+}

@@ -1,7 +1,7 @@
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { IPanelContainer } from '@ibiz/model-core';
 import { computed, defineComponent, PropType, ref, VNode } from 'vue';
-import { PanelItemController } from '@ibiz-template/runtime';
+import { PanelContainerController } from '@ibiz-template/runtime';
 import './panel-view-header.scss';
 
 /**
@@ -23,7 +23,7 @@ export const PanelViewHeader = defineComponent({
      * @description 容器控制器
      */
     controller: {
-      type: PanelItemController,
+      type: PanelContainerController,
       required: true,
     },
   },
@@ -79,6 +79,10 @@ export const PanelViewHeader = defineComponent({
       </iBizRow>
     );
 
-    return <div class={this.classArr}>{content}</div>;
+    return (
+      <div class={this.classArr} v-loading={this.controller.state.loading}>
+        {content}
+      </div>
+    );
   },
 });

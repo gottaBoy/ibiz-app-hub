@@ -1,35 +1,62 @@
+$date-picker: (
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-bg: transparent,
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  
+  // 字体
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+);
+
+
 @include b('date-picker') {
+  @include set-component-css-var(date-picker, $date-picker);
+
+  font-size: getCssVar(date-picker, font-fontSize);
+  line-height: getCssVar(date-picker, font-lineHeight);
+  color: getCssVar(date-picker, color);
+
+  --van-field-input-text-color: #{getCssVar(date-picker, color)};
+  --van-cell-text-color: #{getCssVar(date-picker, color)};
+  --van-cell-value-color: #{getCssVar(date-picker, color)};
+  --van-cell-line-height: #{getCssVar(date-picker, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(date-picker, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(date-picker, font-fontSize)};
+
   input {
     width: 100%;
-    font-size: getCssVar('form-item', 'font-size');
-    color: getCssVar('form-item', 'text-color');
+    padding: 0;
+    font-size: getCssVar(date-picker, font-fontSize);
+    line-height: getCssVar(date-picker, font-lineHeight);
+    color: getCssVar(date-picker, color);
     text-align: inherit;
-    background-color: transparent;
+    background-color: getCssVar(date-picker, color-bg);
     border: none;
-    border-color: getCssVar('form-item', 'border-color');
     box-shadow: none;
   }
 
   input::placeholder {
-    color: getCssVar('form-item', 'placeholder-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'placeholder-color');
+    color: getCssVar(date-picker, color-placeholder);
+    -webkit-text-fill-color: getCssVar(date-picker, color-placeholder);
   }
 
   input[disabled] {
-    color: getCssVar('form-item', 'disabled-color');
-    background-color: getCssVar('form-item', 'disabled-bg-color');
-    border-color: getCssVar('form-item', 'disabled-border-color');
+    color: getCssVar(date-picker, color-disabled);
   }
 
   @include m(readonly) {
-    color: getCssVar('form-item', 'readonly-color');
+    color: getCssVar(date-picker, color-readonly);
   }
 
   input {
-    text-align: getCssVar(form-item-container, editor-align);
+    text-align: getCssVar(date-picker, font-textAlign);
   }
   &.#{bem('date-picker','','readonly')}{
-    text-align: getCssVar(form-item-container, editor-align);
+    text-align: getCssVar(date-picker, font-textAlign);
   }
 }
 

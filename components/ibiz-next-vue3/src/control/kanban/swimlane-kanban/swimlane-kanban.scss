@@ -121,26 +121,19 @@ $swimlane-kanban: (
 
     @include m('popper') {
       &.el-popper {
+        >.el-scrollbar {
+          overflow: visible;
+        }
+        .#{bem(action-toolbar, popover)} {
+          background-color: getCssVar(color, primary);
+        }
+
         &.el-dropdown__popper {
           .el-scrollbar__view {
             &.el-dropdown__list {
               padding: getCssVar('spacing', 'extra', 'tight')
                 getCssVar('spacing', 'none');
-              background-color: getCssVar('color', 'white');
             }
-          }
-
-          .el-button {
-            color: getCssVar('color', 'text', 2);
-
-            --el-button-bg-color: #{getCssVar('color', 'white')};
-            --el-button-hover-bg-color: #{getCssVar('color', 'fill', 0)};
-            --el-button-active-bg-color: #{getCssVar('color', 'fill', 0)};
-            --el-button-text-color: #{getCssVar('color', 'text', 2)};
-            --el-button-hover-text-color: #{getCssVar('color', 'primary')};
-            --el-button-active-text-color: #{getCssVar('color', 'primary')};
-
-            border: none;
           }
         }
       }
@@ -280,6 +273,7 @@ $swimlane-kanban: (
     }
     @include m('actions') {
       display: flex;
+      column-gap: getCssVar('spacing', 'extra', 'tight');
       justify-content: center;
       .#{bem(action-toolbar, item)} {
         margin: 0;

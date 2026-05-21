@@ -104,6 +104,13 @@ export const ContextMenuControl = defineComponent({
 
     const { popoverid, setPopoverZIndex } = usePopoverzIndex();
 
+    // 是否为引用界面行为组
+    const isRefUIActionGroup = (detail: IAppDEUIActionGroupDetail): boolean => {
+      return !!(
+        detail.detailType === 'DEUIACTIONGROUP' && detail.refUIActionGroup
+      );
+    };
+
     // 转换多语言
     const transformLanguage = (items?: IDETBUIActionItem[]) => {
       if (!Array.isArray(items)) {
@@ -204,6 +211,105 @@ export const ContextMenuControl = defineComponent({
       }
     };
 
+    // 获取行为名称
+    const calcDetailCaption = (detail: IAppDEUIActionGroupDetail) => {
+      return (
+        detail.refUIActionGroup?.name ||
+        detail.refUIActionGroup?.id ||
+        detail.caption
+      );
+    };
+
+    /**
+     * @description 绘制项内容
+     * @param {IAppDEUIActionGroupDetail} detail
+     * @returns {*}
+     */
+    const renderItemContent = (detail: IAppDEUIActionGroupDetail) => {
+      return [
+        detail.showIcon && detail.sysImage && (
+          <div class={ns.e('action-content-icon')}>
+            <iBizIcon icon={detail.sysImage}></iBizIcon>
+          </div>
+        ),
+        detail.showCaption ? (
+          <div
+            class={[
+              ns.e('action-content-caption'),
+              ns.e('action-content-group-caption'),
+            ]}
+          >
+            {calcDetailCaption(detail)}
+          </div>
+        ) : null,
+      ];
+    };
+
+    // 绘制引用界面行为组
+    const renderActionGroup = (
+      detail: IAppDEUIActionGroupDetail,
+      isExpand = true,
+    ) => {
+      const actionGroup = detail.refUIActionGroup;
+      if (!actionGroup?.uiactionGroupDetails?.length) return null;
+      // 子项所有项都隐藏，父项也应该隐藏
+      const pvisible = actionGroup.uiactionGroupDetails.some(item => {
+        return c.state.buttonsState[item.id!].visible;
+      });
+      if (!pvisible) return null;
+      const ishorizontal = isExpand;
+      return [
+        detail.addSeparator && renderDivider(isExpand),
+        <el-popover
+          teleported={false}
+          popper-class={ns.e('popover')}
+          placement={ishorizontal ? 'bottom' : 'right-start'}
+          popper-options={{
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, 4],
+                },
+              },
+            ],
+          }}
+        >
+          {{
+            reference: () => {
+              return (
+                <el-button
+                  text
+                  size='small'
+                  class={[...calcActionItemClass(detail), ns.e('group-item')]}
+                >
+                  <div class={ns.em('group-item', 'content')}>
+                    <div class={ns.em('group-item', 'caption')}>
+                      {renderItemContent(detail)}
+                    </div>
+                    <ion-icon
+                      class={ns.em('group-item', 'icon')}
+                      name={
+                        ishorizontal
+                          ? 'chevron-down-outline'
+                          : 'chevron-forward-outline'
+                      }
+                    ></ion-icon>
+                  </div>
+                </el-button>
+              );
+            },
+            default: () => {
+              return renderActions(
+                actionGroup.uiactionGroupDetails || [],
+                false,
+              );
+            },
+          }}
+        </el-popover>,
+      ];
+    };
+
     /**
      * 绘制分隔符
      *
@@ -243,7 +349,7 @@ export const ContextMenuControl = defineComponent({
               )}
               {detail.showCaption ? (
                 <div class={ns.e('action-content-caption')}>
-                  {detail.caption}
+                  {calcDetailCaption(detail)}
                 </div>
               ) : (
                 ''
@@ -267,16 +373,23 @@ export const ContextMenuControl = defineComponent({
       let detail: IAppDEUIActionGroupDetail = item as IAppDEUIActionGroupDetail;
       // 绘制按项展开界面行为组
       if (uiactionGroup && groupExtractMode === 'ITEM') {
-        return uiactionGroup?.uiactionGroupDetails?.map(_item =>
-          renderActionButton(_item, isExpand),
-        );
+        return uiactionGroup?.uiactionGroupDetails?.map(_item => {
+          if (isRefUIActionGroup(_item))
+            return renderActionGroup(_item, isExpand);
+
+          return renderActionButton(_item, isExpand);
+        });
       }
       const details = item.uiactionGroup?.uiactionGroupDetails?.filter(
         _item => c.state.buttonsState[_item.id!].visible,
       );
       if (uiactionGroup && groupExtractMode === 'ITEMX' && details) {
         detail = details[0];
+
+        if (isRefUIActionGroup(detail))
+          return renderActionGroup(detail, isExpand);
       }
+
       if (detail) {
         return (
           <el-popover
@@ -319,7 +432,7 @@ export const ContextMenuControl = defineComponent({
                             ns.e('action-content-group-caption'),
                           ]}
                         >
-                          {detail.caption}
+                          {calcDetailCaption(detail)}
                         </div>
                       ) : (
                         ''
@@ -338,6 +451,10 @@ export const ContextMenuControl = defineComponent({
                     if (groupExtractMode === 'ITEMX' && index === 0) {
                       return null;
                     }
+
+                    if (isRefUIActionGroup(_item))
+                      return renderActionGroup(_item, isExpand);
+
                     return renderActionButton(_item, isExpand);
                   });
                 }
@@ -370,6 +487,9 @@ export const ContextMenuControl = defineComponent({
         if (detail.itemType === 'ITEMS') {
           return renderGroupItem(detail, isExpand);
         }
+        if (isRefUIActionGroup(detail))
+          return renderActionGroup(detail, isExpand);
+
         return null;
       });
     };
@@ -387,6 +507,7 @@ export const ContextMenuControl = defineComponent({
       renderActions,
       renderActionButton,
       calcActionItemClass,
+      calcDetailCaption,
       setPopoverZIndex,
       actionDetails,
     };
@@ -510,7 +631,9 @@ export const ContextMenuControl = defineComponent({
                         {detail.showIcon && detail.sysImage && (
                           <iBizIcon icon={detail.sysImage}></iBizIcon>
                         )}
-                        {detail.showCaption ? detail.caption : ''}
+                        {detail.showCaption
+                          ? this.calcDetailCaption(detail)
+                          : ''}
                       </el-dropdown-item>
                     );
                   }

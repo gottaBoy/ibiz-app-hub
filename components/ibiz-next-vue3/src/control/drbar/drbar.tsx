@@ -4,14 +4,7 @@ import {
   useControlController,
   useNamespace,
 } from '@ibiz-template/vue3-util';
-import {
-  defineComponent,
-  onUnmounted,
-  PropType,
-  reactive,
-  VNode,
-  watch,
-} from 'vue';
+import { defineComponent, onUnmounted, PropType, ref, VNode, watch } from 'vue';
 import { IDEDRBar } from '@ibiz/model-core';
 import { useRoute, useRouter } from 'vue-router';
 import { IControlProvider, IDRBarItemsState } from '@ibiz-template/runtime';
@@ -59,9 +52,9 @@ export const DRBarControl = defineComponent({
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
     const router = useRouter();
 
-    const counterData = reactive<IData>({});
+    const counterData = ref<IData>({});
     const fn = (counter: IData) => {
-      Object.assign(counterData, counter);
+      counterData.value = counter;
     };
     c.evt.on('onCreated', () => {
       if (c.counter) {
@@ -175,10 +168,10 @@ export const DRBarControl = defineComponent({
         >
           <iBizIcon class={ns.e('icon')} icon={item.sysImage}></iBizIcon>
           <span>{item.caption}</span>
-          {item.counterId && counterData[item.counterId] != null && (
+          {item.counterId && counterData.value[item.counterId] != null && (
             <iBizBadge
               class={ns.e('counter')}
-              value={counterData[item.counterId]}
+              value={counterData.value[item.counterId]}
               counterMode={item.counterMode}
             />
           )}

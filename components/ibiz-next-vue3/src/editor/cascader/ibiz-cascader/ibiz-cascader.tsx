@@ -19,6 +19,7 @@ import './ibiz-cascader.scss';
  * @editorparams {"name":"multiple","parameterType":"boolean","defaultvalue":false,"description":"el-cascader组件props属性的multiple参数"}
  * @editorparams {"name":"separator","parameterType":"string","defaultvalue":"'/'","description":"el-cascader组件的separator属性"}
  * @editorparams {"name":"readonly","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否为只读态"}
+ * @editorparams {"name":"leaffield","parameterType":"string","defaultvalue":"undefined","description":"设置数据的叶子节点属性（boolean类型或是否逻辑类型），如果数据为叶子节点则点击数据时不展开子数据，直接选中该数据"}
  * @ignoreprops autoFocus | overflowMode
  * @ignoreemits infoTextChange
  */
@@ -60,26 +61,23 @@ export const IBizCascader = defineComponent({
     let multiple = false;
     // 连接符
     let separator = '/';
+    // 叶子节点属性
+    let leafField: string | undefined;
 
     if (editorModel.editorParams) {
-      if (editorModel.editorParams.editorStyle) {
+      if (editorModel.editorParams.editorStyle)
         editorStyle = editorModel.editorParams.editorStyle;
-      }
-      if (editorModel.editorParams.editorstyle) {
+      if (editorModel.editorParams.editorstyle)
         editorStyle = editorModel.editorParams.editorstyle;
-      }
-      if (editorModel.editorParams.size) {
-        size = editorModel.editorParams.size;
-      }
-      if (editorModel.editorParams.filterable) {
+      if (editorModel.editorParams.size) size = editorModel.editorParams.size;
+      if (editorModel.editorParams.filterable)
         filterable = c.toBoolean(editorModel.editorParams.filterable);
-      }
-      if (editorModel.editorParams.multiple) {
+      if (editorModel.editorParams.multiple)
         multiple = c.toBoolean(editorModel.editorParams.multiple);
-      }
-      if (editorModel.editorParams.separator) {
+      if (editorModel.editorParams.separator)
         separator = editorModel.editorParams.separator;
-      }
+      if (editorModel.editorParams.leaffield)
+        leafField = editorModel.editorParams.leaffield;
     }
 
     // 树数据(用于维护级联选择器默认选中数据)
@@ -349,7 +347,9 @@ export const IBizCascader = defineComponent({
                   : ibiz.i18n.t('editor.cascader.ibizCascader.title', {
                       index,
                     }),
-                leaf: level === valueItems.value.length - 1,
+                leaf:
+                  level === valueItems.value.length - 1 ||
+                  (leafField && item[leafField]),
                 nodekey: `${value ? `${value}_${item.srfkey}` : item.srfkey}`,
               }),
             );
@@ -370,6 +370,9 @@ export const IBizCascader = defineComponent({
             } else {
               resolve(nodes);
             }
+          } else {
+            // 没有子数据则标记为叶子节点
+            node.data.leaf = true;
           }
         }
         resolve([]);
@@ -527,58 +530,58 @@ export const IBizCascader = defineComponent({
     return {
       ns,
       c,
-      valueItems,
-      editorStyle,
-      filterable,
-      separator,
-      onBlur,
-      onFocus,
-      treeData,
       items,
-      selectValue,
-      treeSelectData,
-      valueItemData,
-      defaultCheckedKeys,
-      searchValue,
-      isLoaded,
-      getSize,
-      getIsLeaf,
-      getDisabled,
-      loadData,
       treeRef,
-      handleTreeClear,
-      handleRemoveTag,
+      treeData,
+      isLoaded,
       multiple,
-      handleCascaderValueChange,
       editorRef,
       valueText,
+      separator,
       isEditable,
-      setEditable,
+      valueItems,
+      filterable,
+      editorStyle,
+      selectValue,
+      searchValue,
+      valueItemData,
+      treeSelectData,
+      defaultCheckedKeys,
       showFormDefaultContent,
+      onBlur,
+      onFocus,
+      getSize,
+      loadData,
+      getIsLeaf,
+      getDisabled,
+      setEditable,
       handleKeyUp,
+      handleTreeClear,
+      handleRemoveTag,
+      handleCascaderValueChange,
     };
   },
   render() {
     // 编辑态内容
     const editContent = (
       <el-cascader
-        ref='editorRef'
-        class={[this.ns.b('input')]}
-        popper-class={this.ns.b('popper')}
         clearable
-        teleported={!this.showFormDefaultContent}
-        options={this.treeData}
+        ref='editorRef'
         size={this.getSize()}
+        options={this.treeData}
+        disabled={this.disabled}
         separator={this.separator}
+        v-model={this.selectValue}
+        class={this.ns.b('input')}
         filterable={this.filterable}
+        popper-class={this.ns.b('popper')}
+        teleported={!this.showFormDefaultContent}
         placeholder={this.c.placeHolder ? this.c.placeHolder : ' '}
         props={{
           lazy: true,
           multiple: this.multiple,
           lazyLoad: this.loadData,
         }}
-        disabled={this.disabled}
-        v-model={this.selectValue}
         onBlur={this.onBlur}
         onFocus={this.onFocus}
         onRemoveTag={this.handleRemoveTag}

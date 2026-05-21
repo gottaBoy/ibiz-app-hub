@@ -1,3 +1,11 @@
+<!--
+ * @Author: lijianxiong 1518062161@qq.com
+ * @Date: 2024-04-16 11:29:25
+ * @LastEditors: lijianxiong 1518062161@qq.com
+ * @LastEditTime: 2024-06-18 19:27:39
+ * @FilePath: /ibiz-plugin-vue3/packages/gantt/README.md
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 # 甘特图
 
 甘特图基础组件，主要是在XGantt组件上进行功能扩展

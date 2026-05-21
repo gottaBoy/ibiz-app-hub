@@ -9,42 +9,38 @@ import { IRadioButtonList } from '@ibiz/model-core';
  */
 export class ScreenRadioListEditorController extends CodeListEditorController<IRadioButtonList> {
   /**
-   * 单选一行展示几个
-   * @author fangZhiHao
-   * @date 2024-07-17 10:07:40
-   * @type {(number | undefined)}
+   * @description 循环速度,单位毫秒
+   * @type {number}
+   * @memberof ScreenRadioListEditorController
    */
-  rowNumber: number | undefined = undefined;
+  speed: number = 3000;
 
   /**
-   * 是否开启循环
+   * 按钮间隔
    *
-   * @author fangZhiHao
-   * @date 2024-08-08 14:08:13
-   * @type {boolean}
+   * @type {number}
+   * @memberof ScreenRadioListEditorController
    */
-  enablecirculate: boolean = true;
+  btnSpace: number = 0;
 
   /**
-   * 循环间隔
-   *
-   * @author fangZhiHao
-   * @date 2024-08-08 14:08:13
-   * @type {boolean}
+   * @description 绘制模式(button: 按钮模式, radio: 单选框模式)
+   * @type {('button' | 'radio')}
+   * @memberof ScreenRadioListEditorController
    */
-  intervaltime: number = 3000;
+  renderMode: 'button' | 'radio' = 'button';
 
   protected async onInit(): Promise<void> {
     super.onInit();
-    const { ENABLECIRCULATE, INTERVALTIME, rowNumber } = this.editorParams;
-    if (rowNumber) {
-      this.rowNumber = rowNumber;
+    const { speed, renderMode, btnSpace } = this.editorParams;
+    if (speed) {
+      this.speed = Number(speed);
     }
-    if (INTERVALTIME) {
-      this.intervaltime = Number(INTERVALTIME);
+    if (renderMode) {
+      this.renderMode = renderMode;
     }
-    if (ENABLECIRCULATE) {
-      this.enablecirculate = JSON.parse(ENABLECIRCULATE);
+    if (btnSpace) {
+      this.btnSpace = Number(btnSpace);
     }
   }
 }

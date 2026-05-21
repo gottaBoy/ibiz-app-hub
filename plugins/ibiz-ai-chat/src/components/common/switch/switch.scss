@@ -1,0 +1,52 @@
+@include b('chat-switch') {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  font-size: 14px;
+  line-height: 20px;
+  vertical-align: middle;
+
+  @include e('core') {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    min-width: 40px;
+    height: 20px;
+    cursor: pointer;
+    background: getCssVar('color', 'border');
+    border: 1px solid getCssVar('color', 'border');
+    border-radius: 10px;
+    outline: 0;
+    transition:
+      border-color 0.3s,
+      background-color 0.3s;
+  }
+
+  @include e('action') {
+    position: absolute;
+    left: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    color: getCssVar('color', 'border');
+    background-color: getCssVar('color', 'white');
+    border-radius: 100%;
+    transition: all 0.3s;
+  }
+
+  @include when('checked') {
+    @include e('core') {
+      background-color: getCssVar('color', 'primary');
+      border-color: getCssVar('color', 'primary');
+    }
+
+    @include e('action') {
+      left: calc(100% - 17px);
+      color: getCssVar('color', 'primary');
+    }
+  }
+}

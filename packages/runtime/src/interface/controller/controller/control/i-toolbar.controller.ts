@@ -6,6 +6,7 @@ import { AppCounter } from '../../../../service';
 import { IApiToolbarController } from '../../../api';
 import { IViewController } from '../view';
 import { IToolbarItemProvider } from '../../../provider';
+import { ControlController } from '../../../../controller';
 
 /**
  * @description 工具栏控制器接口
@@ -57,4 +58,11 @@ export interface IToolbarController<
    * @memberof IToolbarController
    */
   counter?: AppCounter;
+
+  /**
+   * @description 界面行为数据部件
+   * @type {ControlController}
+   * @memberof IToolbarController
+   */
+  xdataControl?: ControlController;
 }

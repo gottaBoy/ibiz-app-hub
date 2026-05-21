@@ -12,6 +12,14 @@ export { AppUtil } from './app-util/app-util';
 export { FullscreenUtil } from './fullscreen/fullscreen-util';
 export * from './wang-editor-util/wang-editor-util';
 export { useFocusByEnter } from './keydown-util/keydown-util';
-export { calcAiToolbarItemsByAc } from './ai-util/ai-util';
 export { convertBtnType } from './button-util/button-util';
 export * from './icon/icon';
+export { InLineAIUtil } from './inline-ai-util/inline-ai-util';
+export { AIChatUtil } from './ai-chat-util/ai-chat-util';
+export { ScreenShotUtil } from './screen-shot-util/screen-shot-util';
+export {
+  splitPathToSegments,
+  validateRouteSegments,
+} from './user-route-util/user-route-util';
+export { PrintPreviewUtil } from './print-preview-util/print-preview-util';
+export { useContextMenu } from './context-menu/context-menu';

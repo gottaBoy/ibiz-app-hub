@@ -32,18 +32,28 @@ export interface ChatSearchProps {
    * @memberof ChatSearchProps
    */
   onChange?: (value: string) => void;
+  /**
+   * 回车事件
+   * @param value
+   * @returns
+   */
+  onEnter?: (value: string) => void;
 }
 
 const ns = new Namespace('chat-search');
 
 export const ChatSearch = (props: ChatSearchProps) => {
-  const { className, value, placeholder, onChange } = props;
+  const { className, value, placeholder, onChange, onEnter } = props;
 
   const [isFocused, setIsFocused] = useState(false);
 
   const handleChange = (event: any) => {
     event.stopPropagation();
     onChange?.(event.target?.value);
+  };
+
+  const onKeyDown = (event: any) => {
+    if (event.code === 'Enter') onEnter?.(event.target?.value);
   };
 
   return (
@@ -60,6 +70,7 @@ export const ChatSearch = (props: ChatSearchProps) => {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onChange={event => handleChange(event)}
+        onKeyDown={onKeyDown}
       />
     </div>
   );

@@ -1,0 +1,16 @@
+:root {
+  // 编辑器默认
+  #{getCssVarName(editor, default, font-size)}: getCssVar(font-size, header-6);
+  #{getCssVarName(editor, default, line-height)}: rem(32px);
+  #{getCssVarName(editor, default, text-color)}: getCssVar(color, text, 0);
+  #{getCssVarName(editor, default, placeholder-color)}: getCssVar(color, text, 3);
+  #{getCssVarName(editor, default, active-text-color)}: getCssVar(color, primary);
+  #{getCssVarName(editor, default, text-align)}: right;
+  #{getCssVarName(editor, default, flex-justify-content)}: flex-end;
+  #{getCssVarName(editor, default, required-style)}: initial;
+  // 编辑器禁用
+  #{getCssVarName(editor, disabled, text-color)}: getCssVar(color, text, 3);
+  // 编辑器只读
+  #{getCssVarName(editor, readonly, text-color)}: getCssVar(color, text, 2);
+
+}

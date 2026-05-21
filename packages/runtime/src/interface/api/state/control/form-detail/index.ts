@@ -14,3 +14,4 @@ export type { IApiFormPageState } from './i-api-form-page.state';
 export type { IApiFormRawItemState } from './i-api-form-rawitem.state';
 export type { IApiFormTabPageState } from './i-api-form-tab-page.state';
 export type { IApiFormTabPanelState } from './i-api-form-tab-panel.state';
+export type { IApiFormContainerState } from './i-api-form-container.state';

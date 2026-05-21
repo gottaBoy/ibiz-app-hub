@@ -21,7 +21,6 @@ import { ScreenRadioListEditorController } from './screen-radio-list.controller'
 
 export const ScreenRadioList = defineComponent({
   name: 'ScreenRadioList',
-  // @ts-ignore
   props: getRadioProps<ScreenRadioListEditorController>(),
   emits: getEditorEmits(),
   setup(props, { emit }) {
@@ -32,21 +31,6 @@ export const ScreenRadioList = defineComponent({
     const editorModel = c.model;
 
     let timer: NodeJS.Timeout | null = null;
-
-    // 绘制模式
-    let renderMode = 'radio';
-    // 按钮圆角显示
-    let isBtnRoundCorner = false;
-    if (editorModel.editorParams) {
-      if (editorModel.editorParams.renderMode) {
-        renderMode = editorModel.editorParams.renderMode;
-      }
-      if (editorModel.editorParams.isBtnRoundCorner) {
-        isBtnRoundCorner = c.toBoolean(
-          editorModel.editorParams.isBtnRoundCorner,
-        );
-      }
-    }
 
     const { useInFocusAndBlur, useInValueChange } = useAutoFocusBlur(
       props,
@@ -61,7 +45,7 @@ export const ScreenRadioList = defineComponent({
     // 代码表
     const items = ref<readonly IData[]>([]);
 
-    const loopselect = () => {
+    const loopSelect = () => {
       const index = items.value.findIndex((item: IData) => {
         return item.value === props.value;
       });
@@ -75,11 +59,10 @@ export const ScreenRadioList = defineComponent({
     };
 
     onMounted(() => {
-      if (c.enablecirculate) {
-        timer = setInterval(() => {
-          loopselect();
-        }, c.intervaltime);
-      }
+      timer = setInterval(() => {
+        loopSelect();
+      }, c.speed);
+      loopSelect();
     });
 
     onBeforeMount(() => {
@@ -91,8 +74,7 @@ export const ScreenRadioList = defineComponent({
     watch(
       () => props.data,
       newVal => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        c.loadCodeList(newVal).then((_codeList: any) => {
+        c.loadCodeList(newVal).then(_codeList => {
           items.value = _codeList;
         });
       },
@@ -146,13 +128,12 @@ export const ScreenRadioList = defineComponent({
     return {
       timer,
       ns,
+      c,
       editorModel,
       items,
       valueText,
       onSelectValueChange,
       editorRef,
-      renderMode,
-      isBtnRoundCorner,
       showFormDefaultContent,
     };
   },
@@ -164,13 +145,7 @@ export const ScreenRadioList = defineComponent({
           this.disabled ? this.ns.m('disabled') : '',
           this.readonly ? this.ns.m('readonly') : '',
           this.ns.is('show-default', this.showFormDefaultContent),
-          this.ns.is('grid-layout', !!this.controller.rowNumber),
         ]}
-        style={
-          this.controller.rowNumber
-            ? `--ibiz-radio-group-row-number:${this.controller.rowNumber}`
-            : ''
-        }
         ref='editorRef'
       >
         {this.readonly ? (
@@ -182,28 +157,31 @@ export const ScreenRadioList = defineComponent({
             onChange={this.onSelectValueChange}
             {...this.$attrs}
           >
-            {this.items.map((_item, index: number) =>
-              this.renderMode === 'radio' ? (
+            {this.items.map((item, index: number) =>
+              this.controller.renderMode === 'radio' ? (
                 <el-radio
                   key={index}
-                  label={notNilEmpty(_item.value) ? String(_item.value) : ''}
-                  disabled={this.disabled || _item.disableSelect === true}
+                  label={notNilEmpty(item.value) ? String(item.value) : ''}
+                  disabled={this.disabled || item.disableSelect === true}
                 >
-                  <span class={this.ns.e('text')}>{_item.text}</span>
+                  <span class={this.ns.e('text')}>{item.text}</span>
                 </el-radio>
               ) : (
                 <el-radio-button
                   key={index}
+                  border
                   class={[
                     this.ns.e('button'),
-                    this.isBtnRoundCorner
-                      ? this.ns.em('button', 'round-corner')
-                      : '',
+                    this.ns.is('space', this.c.btnSpace !== 0),
                   ]}
-                  label={notNilEmpty(_item.value) ? String(_item.value) : ''}
-                  disabled={this.disabled || _item.disableSelect === true}
+                  style={{
+                    [this.ns.cssVarBlockName('button-space')]:
+                      `${this.c.btnSpace}px`,
+                  }}
+                  label={notNilEmpty(item.value) ? String(item.value) : ''}
+                  disabled={this.disabled || item.disableSelect === true}
                 >
-                  <span class={this.ns.em('button', 'text')}>{_item.text}</span>
+                  <span class={this.ns.em('button', 'text')}>{item.text}</span>
                 </el-radio-button>
               ),
             )}

@@ -92,6 +92,7 @@ export class TabExpPanelController
     this.state.tabPages = [];
     this.state.activeName = '';
     this.state.expViewParams = {};
+    this.state.counterData = {};
   }
 
   /**
@@ -104,6 +105,7 @@ export class TabExpPanelController
   async onCreated(): Promise<void> {
     await super.onCreated();
     await this.initCounter();
+    this.counter?.onChange(this.onCounterChange.bind(this));
     this.layoutPanel = this.view.layoutPanel! as
       | IViewLayoutPanelController
       | undefined;
@@ -308,6 +310,7 @@ export class TabExpPanelController
    * @memberof TabExpPanelController
    */
   protected async initCounter(): Promise<void> {
+    if (this.state.isCounterDisabled) return;
     const { appCounterRefs } = this.model as IData;
     const appCounterRef = appCounterRefs?.[0];
     if (appCounterRef) {
@@ -320,6 +323,15 @@ export class TabExpPanelController
   }
 
   /**
+   * @description 计数器对象数据改变
+   * @param {IData} data
+   * @memberof TabExpPanelController
+   */
+  onCounterChange(data: IData): void {
+    this.state.counterData = data;
+  }
+
+  /**
    * @description 设置激活项
    * @param {string} name
    * @memberof TabExpPanelController
@@ -327,5 +339,18 @@ export class TabExpPanelController
   setActive(name: string): void {
     this.state.activeName = name;
     this.handleTabChange();
+  }
+
+  /**
+   * @description 生命周期-销毁完成
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof TabExpPanelController
+   */
+  protected async onDestroyed(): Promise<void> {
+    await super.onDestroyed();
+    if (this.counter) {
+      this.counter.destroy();
+    }
   }
 }

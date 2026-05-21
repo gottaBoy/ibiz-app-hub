@@ -20,9 +20,9 @@ import { IDataEntity } from '../../interface';
 export class AppDataEntity implements IDataEntity {
   [key: string | symbol]: any;
 
-  protected declare _data: IData;
+  declare protected _data: IData;
 
-  protected declare _entity: IAppDataEntity;
+  declare protected _entity: IAppDataEntity;
 
   declare srfdeid: string;
 

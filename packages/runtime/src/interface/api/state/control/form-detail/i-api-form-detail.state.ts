@@ -1,3 +1,4 @@
+import { IApiData } from '@ibiz-template/core';
 import { IApiColState } from '../../common';
 
 /**
@@ -69,4 +70,11 @@ export interface IApiFormDetailState extends IApiColState {
    * @memberof IApiFormDetailState
    */
   required: boolean;
+
+  /**
+   * @description 计数器数据
+   * @type {IApiData}
+   * @memberof IApiFormDetailState
+   */
+  counterData: IApiData;
 }

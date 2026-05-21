@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { runApp } from '@ibiz-template/vue3-components';
 import VueTextFormat from 'vue-text-format';
 import gridLayout from 'vue-grid-layout';

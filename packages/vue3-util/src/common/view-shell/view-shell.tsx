@@ -72,33 +72,44 @@ export const IBizViewShell = defineComponent({
       viewModel: IAppView,
     ): Promise<boolean> => {
       let checkResult: boolean = true;
-      const { accUserMode, accessKey } = viewModel;
+      const { accessKey } = viewModel;
+      let { accUserMode } = viewModel;
       const authInfo = ibiz.auth.getAuthInfo();
       // 0：未指定、 1：未登录用户、 2：登录用户、 3：未登录用户及登录用户、 4：登录用户且拥有指定资源能力
-      if (accUserMode !== undefined) {
-        switch (accUserMode) {
-          case 1:
-            if (authInfo) {
-              checkResult = false;
-            }
-            break;
-          case 2:
-            if (!authInfo) {
-              checkResult = false;
-            }
-            break;
-          case 4:
+      if (isNil(accUserMode) || accUserMode === 0) {
+        accUserMode = ibiz.config.view.viewAccUserMode;
+      }
+      switch (accUserMode) {
+        case 1:
+          // 未登录用户(登录用户不能访问)
+          if (authInfo && !authInfo.isAnonymous) {
+            checkResult = false;
+          }
+          break;
+        case 2:
+          // 登录用户(未登录用户或者匿名用户不能访问)
+          if (!authInfo || (authInfo && authInfo.isAnonymous)) {
+            checkResult = false;
+          }
+          break;
+        case 4:
+          // 登录用户且拥有指定资源能力（登录用户且存在指定资源能力才能访问）
+          if (authInfo && !authInfo.isAnonymous) {
             if (accessKey) {
               const app = await ibiz.hub.getApp(context.value.srfappid);
               const permitted = app.authority.calcByResCode(accessKey);
               if (!permitted) {
                 checkResult = false;
               }
+            } else {
+              checkResult = false;
             }
-            break;
-          default:
-            break;
-        }
+          } else {
+            checkResult = false;
+          }
+          break;
+        default:
+          break;
       }
       return checkResult;
     };
@@ -195,9 +206,12 @@ export const IBizViewShell = defineComponent({
 
                 // *动态工作流编辑视图从数据里额外获取参数
                 if (
-                  ['DEWFDYNAEDITVIEW3', 'DEWFDYNAEDITVIEW'].includes(
-                    viewModel.viewType!,
-                  )
+                  [
+                    'DEWFDYNAEDITVIEW3',
+                    'DEWFDYNAEDITVIEW',
+                    'DEMOBWFDYNAEDITVIEW3',
+                    'DEMOBWFDYNAEDITVIEW',
+                  ].includes(viewModel.viewType!)
                 ) {
                   // 如果视图参数中没有获取到对应流程实例标识与步骤标识，则从请求回来的数据中获取对应信息
                   if (isNil(params.value.processDefinitionKey)) {

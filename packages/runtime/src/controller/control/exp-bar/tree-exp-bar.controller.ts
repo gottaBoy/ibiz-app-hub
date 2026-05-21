@@ -1,4 +1,4 @@
-import { RuntimeError, RuntimeModelError } from '@ibiz-template/core';
+import { RuntimeError } from '@ibiz-template/core';
 import { IDETree, IDETreeNode, ITreeExpBar } from '@ibiz/model-core';
 import {
   ITreeEvent,
@@ -35,16 +35,14 @@ export class TreeExpBarController
    */
   defaultExpandedKeys?: string[];
 
-  get xDataController(): ITreeController {
+  get xDataController(): ITreeController | undefined {
     const controller = this.view.getController(this.model.xdataControlName!);
-    if (!controller) {
-      throw new RuntimeModelError(
-        this.model,
+    if (!controller)
+      ibiz.log.error(
         ibiz.i18n.t('runtime.controller.control.expBar.unableMore', {
           xdataControlName: this.model.xdataControlName,
         }),
       );
-    }
     return controller as ITreeController;
   }
 
@@ -71,11 +69,9 @@ export class TreeExpBarController
    */
   protected async onMounted(): Promise<void> {
     super.onMounted();
-    if (this.xDataController) {
-      this.xDataController.evt.on('onAfterRefreshParent', _event => {
-        this.navDataByStack();
-      });
-    }
+    this.xDataController?.evt.on('onAfterRefreshParent', _event => {
+      this.navDataByStack();
+    });
   }
 
   /**
@@ -138,20 +134,29 @@ export class TreeExpBarController
     const result = this.prepareParams(nodeModel, deData, context, params);
     result.context.currentSrfNav = nodeId;
     this.state.srfnav = nodeId;
-    return {
+    const navViewMsg = {
       key: nodeId,
       viewId: nodeModel.navAppViewId,
       isCache: this.isCache,
       ...result,
     };
+    if (ibiz.env.isMob) {
+      Object.assign(navViewMsg, {
+        modalOptions: {
+          replace: true,
+        },
+      });
+    }
+    return navViewMsg;
   }
 
   protected navByFirstItem(): void {
+    if (!this.xDataController) return;
     const data = this.xDataController.state.items.find(node => {
       // 根节点不显示的时候排除根节点
       if (
-        !this.xDataController.model.rootVisible &&
-        this.xDataController.state.rootNodes.includes(node)
+        !this.xDataController!.model.rootVisible &&
+        this.xDataController!.state.rootNodes.includes(node)
       ) {
         return false;
       }
@@ -174,6 +179,7 @@ export class TreeExpBarController
    * @memberof TreeExpBarController
    */
   navDataByStack(): void {
+    if (!this.xDataController) return;
     const { items } = this.xDataController.state;
     const preNav = this.navStack.find(nav =>
       items.find(item => nav[this.navKeyName] === item[this.navKeyName]),
@@ -188,8 +194,8 @@ export class TreeExpBarController
       const data = items.find(node => {
         // 根节点不显示的时候排除根节点
         if (
-          !this.xDataController.model.rootVisible &&
-          this.xDataController.state.rootNodes.includes(node)
+          !this.xDataController!.model.rootVisible &&
+          this.xDataController!.state.rootNodes.includes(node)
         ) {
           return false;
         }
@@ -249,7 +255,7 @@ export class TreeExpBarController
   async onRouterChange(info: { srfnav: string; path: string }): Promise<void> {
     if (this.state.srfnav !== info.srfnav) {
       const expandKeys = this.calcExpandKeys(info.srfnav);
-      await this.xDataController.expandNodeByKey(expandKeys);
+      await this.xDataController?.expandNodeByKey(expandKeys);
     }
     await super.onRouterChange(info);
   }

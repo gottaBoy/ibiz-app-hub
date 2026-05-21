@@ -1,6 +1,6 @@
 {
   "imports": {
-    "axios": "../js/axios/1.6.1/axios.system.min.js",
+    "axios": "../js/axios/1.8.2/axios.system.min.js",
     "dayjs": "../js/dayjs/1.11.10/index.system.min.js",
     "dayjs/plugin/minMax": "../js/dayjs/1.11.10/plugin/minMax.js",
     "dayjs/plugin/isSameOrBefore": "../js/dayjs/1.11.10/plugin/isSameOrBefore.js",
@@ -17,7 +17,7 @@
     "vue": "../js/vue/3.3.8/vue.runtime.global.system.prod.js",
     "vue-router": "../js/vue-router/4.2.5/vue-router.system.min.js",
     "vue-grid-layout": "../js/vue-grid-layout/3.0.0-beta1/index.system.min.js",
-    "vue-i18n": "../js/vue-i18n/9.6.5/vue-i18n.runtime.system.prod.js",
+    "vue-i18n": "../js/vue-i18n/9.14.3/vue-i18n.runtime.system.prod.js",
     "react": "../js/react/18.2.0/react.system.min.js",
     "react-dom": "../js/react-dom/18.2.0/react-dom.system.min.js",
     "scheduler": "../js/scheduler/18.2.0/scheduler.system.min.js",
@@ -43,25 +43,25 @@
     "@wangeditor/editor": "../js/@wangeditor/editor/5.1.23/index.system.js",
     "@wangeditor/editor-for-vue": "../js/@wangeditor/editor-for-vue/5.1.12/index.system.js",
     "@imengyu/vue3-context-menu": "../js/@imengyu/vue3-context-menu/1.3.3/index.system.min.js",
-    "@ibiz-template-plugin/ai-chat": "../js/@ibiz-template-plugin/ai-chat/0.0.28/index.system.min.js",
+    "@ibiz-template-plugin/ai-chat": "../js/@ibiz-template-plugin/ai-chat/0.0.60/index.system.min.js",
     "@antv/x6": "../js/@antv/x6/2.15.5/index.system.min.js",
-    "@ibiz-template-plugin/gantt": "../js/@ibiz-template-plugin/gantt/0.1.8-alpha.299/index.system.min.js",
-    "@ibiz-template-plugin/bi-report": "../js/@ibiz-template-plugin/bi-report/0.0.26/index.system.min.js",
-    "@ibiz-template-plugin/data-view":"../js/@ibiz-template-plugin/data-view/0.0.4/index.system.min.js"
+    "@ibiz-template-plugin/gantt": "../js/@ibiz-template-plugin/gantt/0.1.8-alpha.378/index.system.min.js",
+    "@ibiz-template-plugin/bi-report": "../js/@ibiz-template-plugin/bi-report/0.0.32/index.system.min.js",
+    "@ibiz-template-plugin/data-view":"../js/@ibiz-template-plugin/data-view/0.0.6/index.system.min.js"
   },
   "styles": {
     "@ibiz-template/vue3-components": "../js/@ibiz-template/vue3-components/index.min.css",
     "@ibiz-template/vue3-util": "../js/@ibiz-template/vue3-util/index.min.css",
     "@ibiz-template/web-theme": "../js/@ibiz-template/web-theme/index.min.css",
     "@ibiz-template/devtool": "../js/@ibiz-template/devtool/index.min.css",
-    "@ibiz-template-plugin/ai-chat":"../js/@ibiz-template-plugin/ai-chat/0.0.28/index.min.css",
+    "@ibiz-template-plugin/ai-chat":"../js/@ibiz-template-plugin/ai-chat/0.0.60/index.min.css",
     "@wangeditor/editor": "../js/@wangeditor/editor/5.1.23/css/style.css",
     "cherry-markdown": "../js/cherry-markdown/0.8.58/cherry-markdown.min.css",
     "@imengyu/vue3-context-menu": "../js/@imengyu/vue3-context-menu/1.3.3/index.min.css",
     "@antv/x6": "../js/@antv/x6/2.15.5/index.min.css",
-    "@ibiz-template-plugin/gantt": "../js/@ibiz-template-plugin/gantt/0.1.8-alpha.299/index.min.css",
-    "@ibiz-template-plugin/bi-report": "../js/@ibiz-template-plugin/bi-report/0.0.26/index.min.css",
-    "@ibiz-template-plugin/data-view":"../js/@ibiz-template-plugin/data-view/0.0.4/index.min.css",
+    "@ibiz-template-plugin/gantt": "../js/@ibiz-template-plugin/gantt/0.1.8-alpha.378/index.min.css",
+    "@ibiz-template-plugin/bi-report": "../js/@ibiz-template-plugin/bi-report/0.0.32/index.min.css",
+    "@ibiz-template-plugin/data-view":"../js/@ibiz-template-plugin/data-view/0.0.6/index.min.css",
     "vue-grid-layout": "../js/vue-grid-layout/3.0.0-beta1/index.min.css"
   }
 }

@@ -28,4 +28,13 @@ export interface FormDataChangeEvent extends EventBase {
    * @type {*}
    */
   oldValue: any;
+
+  /**
+   * 原始实体数据
+   *
+   * @author tony001
+   * @date 2025-12-25 17:28:27
+   * @type {IData[]}
+   */
+  realData: IData[];
 }

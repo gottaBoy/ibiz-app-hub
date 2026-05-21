@@ -1,8 +1,8 @@
 import { CTX } from '@ibiz-template/runtime';
 import {
+  useNamespace,
   route2routePath,
   routePath2string,
-  useNamespace,
 } from '@ibiz-template/vue3-util';
 import { IPanelField } from '@ibiz/model-core';
 import { computed, defineComponent, inject, PropType } from 'vue';
@@ -52,7 +52,7 @@ export const PanelAppTitle = defineComponent({
       return 'LEFT';
     });
 
-    const handleClick = async () => {
+    const handleClick = async (event: MouseEvent) => {
       // 适配登录页系统标题不提供点击链接能力
       if (c.panel.view.model.viewType === 'APPLOGINVIEW') return;
       // 跳转首页
@@ -66,7 +66,7 @@ export const PanelAppTitle = defineComponent({
         });
       }
 
-      props.controller.onClick();
+      props.controller.onClick(event);
     };
 
     const showImgOnly = computed(() => {
@@ -102,7 +102,7 @@ export const PanelAppTitle = defineComponent({
     };
   },
   render() {
-    const { icon, isSvg, caption, caption2, subCaption, subCaption2 } =
+    const { icon, icon2, caption, caption2, subCaption, subCaption2 } =
       this.c.state;
     let iconVNode = null;
     let content = null;
@@ -112,19 +112,15 @@ export const PanelAppTitle = defineComponent({
     } else {
       if (this.menuAlign === 'LEFT') {
         if (this.isCollapse) {
-          if (icon) {
-            let tempIcon = null;
-            if (isSvg) {
-              tempIcon = <ion-icon class={this.ns.e('logo')} icon={icon} />;
-            } else {
-              tempIcon = (
-                <span class={this.ns.e('logo')}>
-                  <img src={icon} />
-                </span>
-              );
-            }
+          const collapseIcon = icon2 || icon;
+          if (collapseIcon) {
             iconVNode = (
-              <div class={this.ns.e('collpase-icon')}>{tempIcon}</div>
+              <div class={this.ns.e('collpase-icon')}>
+                <iBizIcon
+                  class={this.ns.e('logo')}
+                  icon={{ rawContent: collapseIcon }}
+                />
+              </div>
             );
           } else {
             iconVNode = (
@@ -135,18 +131,6 @@ export const PanelAppTitle = defineComponent({
             );
           }
         } else if (this.showIcon && icon) {
-          let tempIcon = null;
-          if (isSvg) {
-            tempIcon = (
-              <ion-icon class={this.ns.em('logo', 'expand')} icon={icon} />
-            );
-          } else {
-            tempIcon = (
-              <span class={this.ns.em('logo', 'expand')}>
-                <img src={icon} />
-              </span>
-            );
-          }
           let tempContent = (
             <g
               id='app-caption-panel'
@@ -199,7 +183,10 @@ export const PanelAppTitle = defineComponent({
           }
           iconVNode = (
             <span class={this.ns.e('logo')}>
-              {tempIcon}
+              <iBizIcon
+                class={this.ns.em('logo', 'expand')}
+                icon={{ rawContent: icon }}
+              />
               <svg
                 width='166px'
                 height='80px'
@@ -252,15 +239,9 @@ export const PanelAppTitle = defineComponent({
         }
       } else if (this.menuAlign === 'TOP') {
         if (icon) {
-          if (isSvg) {
-            iconVNode = <ion-icon class={this.ns.e('logo')} icon={icon} />;
-          } else {
-            iconVNode = (
-              <span class={this.ns.e('logo')}>
-                <img src={icon} />
-              </span>
-            );
-          }
+          iconVNode = (
+            <iBizIcon class={this.ns.e('logo')} icon={{ rawContent: icon }} />
+          );
         }
       }
       // 左侧只展示图片

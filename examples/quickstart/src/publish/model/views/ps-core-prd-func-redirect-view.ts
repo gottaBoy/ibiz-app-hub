@@ -3,18 +3,18 @@ export default {
     {
       realTitle: '核心产品功能编辑视图',
       realTitleLanguageRes: {
-        lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.EDITVIEW',
+        lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.INFOVIEW',
       },
-      refAppViewId: 'web.ps_core_prd_func_edit_view',
+      refAppViewId: 'web.ps_core_prd_func_info_view',
       name: 'PSCOREPRDFUNC:EDITVIEW',
       id: 'pscoreprdfunc:editview',
     },
     {
       realTitle: '核心产品功能编辑视图',
       realTitleLanguageRes: {
-        lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.EDITVIEW',
+        lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.INFOVIEW',
       },
-      refAppViewId: 'web.ps_core_prd_func_edit_view',
+      refAppViewId: 'web.ps_core_prd_func_info_view',
       name: 'EDITVIEW',
       id: 'editview',
     },

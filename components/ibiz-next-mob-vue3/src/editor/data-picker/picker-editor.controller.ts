@@ -242,7 +242,7 @@ export class PickerEditorController extends EditorController<IPicker> {
       this.params,
     );
     if (selectedData) {
-      params.selectedData = selectedData;
+      params.selecteddata = selectedData;
     }
     if (!this.pickupView) {
       throw new RuntimeModelError(

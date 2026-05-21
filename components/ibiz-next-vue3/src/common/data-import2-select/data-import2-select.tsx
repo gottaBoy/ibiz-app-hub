@@ -31,6 +31,10 @@ export const DataImport2Select = defineComponent({
       type: String,
       required: true,
     },
+    context: {
+      type: Object as PropType<IContext>,
+      required: false,
+    },
   },
   setup(props, { emit }) {
     const ns = useNamespace('data-import2-select');
@@ -62,6 +66,7 @@ export const DataImport2Select = defineComponent({
         data.name = item.label;
         const result = await updateImportSchema({
           data,
+          context: props.context,
         });
         // 请求更新
         if (result.status === 200 && result.ok) {
@@ -92,7 +97,7 @@ export const DataImport2Select = defineComponent({
       e.stopPropagation();
       const columnData = props.columnMappingListMap.get(str);
       if (columnData) {
-        const res = await deleteImportSchema(columnData.id);
+        const res = await deleteImportSchema(columnData.id, props.context);
 
         // 删除之后把下拉里的也删除
         if (res.status === 200 && res.ok) {

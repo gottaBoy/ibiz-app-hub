@@ -33,7 +33,7 @@ export default {
       symbols: 'Symbols',
       flags: 'Flags',
     },
-    mdCtrlSetting: {
+    mdSortSetting: {
       confirm: 'Confirm',
       sort: 'Sort',
       asc: 'ascend',
@@ -79,15 +79,18 @@ export default {
   // 部件
   control: {
     common: {
-      loadMore: 'Load more',
+      loadMore: 'Load more...',
+      loadFinish: 'I have made it to the end',
+      loadError: 'Loading failed. Click to reload',
+      addbtn: 'Add',
     },
     appmenu: {
       more: 'More',
       bottomNav: 'Bottom Navigation',
       customNav: 'Customize Navigation',
       save: 'Save',
+      noData: 'No data',
     },
-    dataView: { end: 'The end~' },
     form: {
       noSupportDetailType:
         'Form detail type not supported: {detailType} or corresponding provider cannot be found',
@@ -119,6 +122,10 @@ export default {
         search: 'Search',
         reset: 'Reset',
       },
+      repeaterGrid: {
+        index: 'Index',
+        noData: 'No data',
+      },
     },
     list: {
       expand: 'Expand',
@@ -138,6 +145,12 @@ export default {
       property: 'property',
       and: 'AND',
       or: 'OR',
+      expand: 'Expand',
+      collapse: 'Collapse',
+      history: 'History',
+      clear: 'Clear',
+      more: 'More',
+      cancel: 'Cancel',
     },
     toolbar: {
       noSupportType: 'Toolbar item type: {itemType} is not supported',
@@ -154,6 +167,12 @@ export default {
       today: 'Today',
       pickerDate: 'Picker Date',
       customPicker: 'Please select a date',
+    },
+    dashboard: {
+      customLayout: 'Custom Layout',
+      save: 'Save',
+      showList: 'Show List',
+      hiddenList: 'Hidden List',
     },
   },
   // 编辑器
@@ -173,6 +192,7 @@ export default {
       ibizCascader: {
         title: 'Title {index}',
       },
+      noData: 'No data',
     },
     datePicker: {
       title: 'Select a date',
@@ -189,6 +209,9 @@ export default {
     dropdownList: {
       noSupportTreePicker: 'Drop-down tree selection is not supported',
       confirm: 'confirm',
+    },
+    mapPicker: {
+      searchPlaceholder: 'Please enter a keyword to select a location',
     },
     markdown: {
       uploadJsonFormatErr:
@@ -210,6 +233,7 @@ export default {
       exportJsonFormatErr:
         'The configuration of exportparams did not follow the standard JSON format',
       cancelUpload: 'Cancel Upload',
+      compressError: 'Image compression failed',
     },
     emojiPicker: {
       addEmoji: 'Add emoji',
@@ -257,6 +281,7 @@ export default {
       processingSteps: 'Processing steps',
       processingPersonnel: 'Processing personnel',
       submissionPath: 'Submission path',
+      processInformation: 'Process information',
     },
     userMessage: {
       notice: 'Notice',
@@ -287,6 +312,8 @@ export default {
       internalMessageJson: {
         jumpToView: 'Jump to view',
         missingHtml: 'Missing HTML in the content of the data',
+        todo: 'I have assigned you process tasks',
+        done: 'Complete process tasks',
       },
       internalMessageTab: {
         noSupportType:
@@ -295,6 +322,11 @@ export default {
         loadMore: 'Load more({length})',
         onlyShowUnread: 'Only show unread',
       },
+    },
+    themeToggling: {
+      auto: 'Follow system',
+      light: 'Light',
+      dark: 'Dark',
     },
   },
   // 工具
@@ -314,6 +346,32 @@ export default {
       insecureContextError:
         'Camera access is only permitted in secure context. use HTTPS or localhost rather than HTTP.',
     },
+    aiChartUtil: {
+      feedback: 'Feedback',
+      description: 'Description',
+      regardingIssue: 'Regarding the problem',
+      understandProblem: 'Not understanding the problem',
+      forgotContext: 'Forgot the previous text',
+      notFollowingRequire: 'Not Following Requirements',
+      regardingResponse: 'Regarding the effectiveness of the answer',
+      incorrectAswer: 'Incorrect answer',
+      logicalConfusion: 'Logical confusion',
+      poorTimeliness: 'Poor timeliness',
+      poorReadability: 'Poor readability',
+      incompleteAnswer: 'Incomplete answer',
+      unprofessional: 'The answer is vague and unprofessional',
+      report: 'Report',
+      pornographicVulgar: 'Pornographic Vulgar',
+      politicallySensitive: 'Politically sensitive',
+      illegalCriminal: 'Illegal crime',
+      discriminationPrejudice: 'Discrimination or Prejudice Answer',
+      violationPrivacy: 'Violation of Privacy',
+      contentInfringement: 'Content infringement',
+      placeholder: 'Please enter',
+    },
+    printPreviewUtil: {
+      title: 'Print Preview',
+    },
   },
   // 视图
   view: {
@@ -326,6 +384,13 @@ export default {
     password: 'Password',
     login: 'Login',
     thirdAuthFail: 'Third party login authorization failed',
+    downloading: 'Download now...',
+    downloadSuccess: 'Download successful!',
+    downloadFailed: 'Download failed!',
+    noSupportDownload:
+      'This file is not supported for download. Please click the upper right corner to open and download it with your browser!',
+    immediatelyDownload: 'Download now',
+    reDownload: 'Download again',
   },
   // 视图引擎
   viewEngine: {

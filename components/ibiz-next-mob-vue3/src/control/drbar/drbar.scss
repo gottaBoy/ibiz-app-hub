@@ -1,6 +1,25 @@
+$control-drbar: (
+  max-width: rem(100px),
+  width-icon: getCssVar(width-icon, medium),
+  height-popover-item: var(--van-popover-action-height),
+  color: getCssVar(color, text-2),
+  color-bg: getCssVar(view, bg-color),
+  color-active: getCssVar(color, primary),
+  color-disabled-text: getCssVar(color, disabled, text),
+  color-disabled-bg: getCssVar(color, disabled, bg),
+  spacing-padding: getCssVar(spacing, tight),
+  spacing-gap: getCssVar(spacing, tight),
+  spacing-group-gap: getCssVar(spacing, extra-tight),
+  spacing-group-padding: getCssVar(spacing, tight),
+  spacing-popover-padding: 0 getCssVar(spacing, base-loose),
+  font-fontSize: getCssVar(font-size, header-4),
+  font-popover-fontSize: getCssVar(font-size, header-5),
+);
+
 @include b(control-drbar) {
-  padding: getCssVar(spacing, tight);
-  background-color: getCssVar(view, bg-color);
+  @include set-component-css-var(control-drbar, $control-drbar);
+  padding: getCssVar(control-drbar, spacing-padding);
+  background-color: getCssVar(control-drbar, color-bg);
 
   .van-button {
     border: none;
@@ -10,50 +29,51 @@
     .van-button__text {
       display: flex;
       align-items: center;
-      line-height: getCssVar(font-size, header-4);
-      font-size: getCssVar(font-size, header-4);
-      gap: getCssVar(spacing, extra-tight);
+      line-height: getCssVar(control-drbar, font-fontSize);
+      font-size: getCssVar(control-drbar, font-fontSize);
+      gap: getCssVar(control-drbar, spacing-gap);
     }
   }
 
   @include e(default) {
     width: auto;
-    max-width: rem(100px);
+    max-width: getCssVar(control-drbar, max-width);
     .#{bem(icon)} {
       @include flex(row, center, center);
 
-      width: getCssVar(width-icon, medium);
-      height: getCssVar(width-icon, medium);
-      font-size: getCssVar(width-icon, medium);
+      width: getCssVar(control-drbar, width-icon);
+      height: getCssVar(control-drbar, width-icon);
+      font-size: getCssVar(control-drbar, width-icon);
     }
     @include m(group) {
-      color: getCssVar(color, text-2);
-      padding: getCssVar(spacing, tight);
+      color: getCssVar(control-drbar, color);
+      padding: getCssVar(control-drbar, spacing-group-padding);
     }
     @include m(group-title) {
       display: flex;
       align-items: center;
-      gap: getCssVar(spacing, tight);
+      gap: getCssVar(control-drbar, spacing-group-gap);
     }
     @include m(item-title) {
       display: flex;
       align-items: center;
-      gap: getCssVar(spacing, tight);
+      gap: getCssVar(control-drbar, spacing-group-gap);
     }
   }
 
   @include e(popover) {
+    @include set-component-css-var(control-drbar, $control-drbar);
     @include m(group) {
       display: flex;
       cursor: pointer;
       position: relative;
       align-items: center;
       box-sizing: border-box;
-      height: var(--van-popover-action-height);
-      padding: 0 getCssVar(spacing, base-loose);
-      font-size: getCssVar(font-size, header-5);
-      gap: getCssVar(spacing, tight);
-      color: getCssVar(color, text-2);
+      height: getCssVar(control-drbar, height-popover-action);
+      padding: getCssVar(control-drbar, spacing-popover-padding);
+      font-size: getCssVar(control-drbar, font-popover-fontSize);
+      gap: getCssVar(control-drbar, spacing-gap);
+      color: getCssVar(control-drbar, color);
     }
     @include m(item) {
       display: flex;
@@ -61,35 +81,35 @@
       position: relative;
       align-items: center;
       box-sizing: border-box;
-      height: var(--van-popover-action-height);
-      padding: 0 getCssVar(spacing, base-loose);
-      font-size: getCssVar(font-size, header-5);
-      gap: getCssVar(spacing, tight);
+      height: getCssVar(control-drbar, height-popover-item);
+      padding: getCssVar(control-drbar, spacing-popover-padding);
+      font-size: getCssVar(control-drbar, font-popover-fontSize);
+      gap: getCssVar(control-drbar, spacing-gap);
 
       .#{bem(icon)} {
         @include flex(row, center, center);
 
-        width: getCssVar(width-icon, medium);
-        height: getCssVar(width-icon, medium);
-        font-size: getCssVar(width-icon, medium);
+        width: getCssVar(control-drbar, width-icon);
+        height: getCssVar(control-drbar, width-icon);
+        font-size: getCssVar(control-drbar, width-icon);
       }
 
       .caption {
         flex-grow: 1;
         display: flex;
         align-items: center;
-        gap: getCssVar(spacing, tight);
+        gap: getCssVar(control-drbar, spacing-gap);
       }
 
       ion-icon {
-        color: getCssVar(color, primary);
+        color: getCssVar(control-drbar, color-active);
       }
 
       @include when(disabled) {
         cursor: not-allowed;
         pointer-events: none;
-        color: getCssVar(color, disabled-text);
-        background-color: getCssVar(color, disabled-bg);
+        color: getCssVar(color, color-disabled-text);
+        background-color: getCssVar(color, color-disabled-bg);
       }
     }
   }

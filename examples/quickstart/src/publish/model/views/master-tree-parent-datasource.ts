@@ -56,9 +56,10 @@ export default {
           id: 'root',
         },
         {
-          dataSourceType: 'DEACTION',
+          dataSourceType: 'CUSTOM',
           idAppDEFieldId: 'id',
-          appDEActionId: 'get_sample_data',
+          scriptCode:
+            "return [\n\t{ id: '1', name: '父数据1', details: [{ id: '1-1', name: '子数据1-1'}, {id: '1-2', name: '子数据1-2'}] },\n\t{ id: '2', name: '父数据2', details: [{ id: '2-1', name: '子数据2-1'}] },\n\t{ id: '3', name: '父数据3', details: [{ id: '3-1', name: '子数据3-1'}, {id: '3-2', name: '子数据3-2'}] },\n]",
           sortDir: 'ASC',
           sortAppDEFieldId: 'px',
           textAppDEFieldId: 'name',

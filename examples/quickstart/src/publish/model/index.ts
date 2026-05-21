@@ -22,6 +22,18 @@ export async function registerCodeList(
   setCodeList(await import('./code-list/wf-states').then(m => m.default));
   setCodeList(await import('./code-list/yes-no').then(m => m.default));
   setCodeList(
+    await import('./code-list/base-action-level').then(m => m.default),
+  );
+  setCodeList(
+    await import('./code-list/base-button-style').then(m => m.default),
+  );
+  setCodeList(
+    await import('./code-list/base-dyna-code-list-icon').then(m => m.default),
+  );
+  setCodeList(
+    await import('./code-list/base-platform-type').then(m => m.default),
+  );
+  setCodeList(
     await import('./code-list/extension-def-read-only-mode').then(
       m => m.default,
     ),
@@ -47,6 +59,21 @@ export async function registerCodeList(
   );
   setCodeList(
     await import('./code-list/extension-log-state').then(m => m.default),
+  );
+  setCodeList(
+    await import('./code-list/extension-product-func-state').then(
+      m => m.default,
+    ),
+  );
+  setCodeList(
+    await import('./code-list/extension-pscoreprdfunc-category').then(
+      m => m.default,
+    ),
+  );
+  setCodeList(
+    await import('./code-list/extension-pscoreprdfunc-type').then(
+      m => m.default,
+    ),
   );
   setCodeList(await import('./code-list/field-data-type').then(m => m.default));
   setCodeList(
@@ -129,6 +156,11 @@ export async function registerCodeList(
   setCodeList(await import('./code-list/mock-cl-sample').then(m => m.default));
   setCodeList(await import('./code-list/mock-cl-status').then(m => m.default));
   setCodeList(
+    await import('./code-list/mock-mob-editor-span-status').then(
+      m => m.default,
+    ),
+  );
+  setCodeList(
     await import('./code-list/mock-wizard-state').then(m => m.default),
   );
 }
@@ -186,6 +218,11 @@ export async function getAppDataEntityModel(
     case 'web.psdelogic':
     case 'psdelogic':
       return import('./entities/psde-logic').then(
+        m => m.default as unknown as IAppDataEntity,
+      );
+    case 'web.ua_group_detail':
+    case 'ua_group_detail':
+      return import('./entities/ua-group-detail').then(
         m => m.default as unknown as IAppDataEntity,
       );
     case 'web.pssysbicubemeasure':
@@ -275,6 +312,10 @@ export async function getAppDataEntityModel(
 export async function getAppViewModel(name: string): Promise<IAppView> {
   const _name = name.toLowerCase();
   switch (_name) {
+    case 'report_quick_create_view':
+      return import('./views/report-quick-create-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_list_view':
       return import('./views/master-list-view').then(
         m => m.default as unknown as IAppView,
@@ -301,6 +342,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_tree_grid_ex_rowedit':
       return import('./views/master-tree-grid-ex-rowedit').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_codelist_federation':
+      return import('./views/master-codelist-federation').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_kanban_dyna_visible':
@@ -341,6 +386,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_form_event_tab_exp_view':
       return import('./views/master-form-event-tab-exp-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_bi_report_multi_stack_strip':
+      return import('./views/master-bi-report-multi-stack-strip').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_theme_plugin':
@@ -397,6 +446,14 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_card_grid_layout':
       return import('./views/master-card-grid-layout').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_simple_page_grid_view':
+      return import('./views/master-simple-page-grid-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_ctrl_engine_ctrl':
+      return import('./views/master-ctrl-engine-ctrl').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_calendar_contextmenu_day':
@@ -499,8 +556,16 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-calendar-exp-view').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_editform_repeater_table2':
+      return import('./views/master-editform-repeater-table-2').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_kanban_draggable_edit':
       return import('./views/master-kanban-draggable-edit').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_treegridex_column_dy_uiaction_group':
+      return import('./views/master-treegridex-column-dy-uiaction-group').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_editor_markdown':
@@ -619,6 +684,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-editor-dropdown-list').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_bi_report_multi_partition_line':
+      return import('./views/master-bi-report-multi-partition-line').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_chart_grid_tab_exp_view':
       return import('./views/master-chart-grid-tab-exp-view').then(
         m => m.default as unknown as IAppView,
@@ -629,6 +698,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_calendar_layout_month':
       return import('./views/master-calendar-layout-month').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_remaining_height_edit_view':
+      return import('./views/master-remaining-height-edit-view').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_editor_switch':
@@ -669,6 +742,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_list_empty':
       return import('./views/master-list-empty').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_ctrl_engine_search':
+      return import('./views/master-ctrl-engine-search').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_kanban_group_draggable':
@@ -727,6 +804,14 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-drtab-logic-script').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_panel_field_injection':
+      return import('./views/master-panel-field-injection').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_list_ext_view3_group_style2':
+      return import('./views/master-list-ext-view-3-group-style-2').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_wizard_event_tab_exp_view':
       return import('./views/master-wizard-event-tab-exp-view').then(
         m => m.default as unknown as IAppView,
@@ -753,6 +838,14 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_tabexppanel_base':
       return import('./views/master-tabexppanel-base').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_grid_column_render':
+      return import('./views/master-grid-column-render').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_kanban_dy_uiaction_group_exp':
+      return import('./views/master-kanban-dy-uiaction-group-exp').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_pickup_edit_view':
@@ -887,6 +980,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-kanban-cache-refreshmode').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_tree_dy_uiaction_group':
+      return import('./views/master-tree-dy-uiaction-group').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_de_logic_params':
       return import('./views/master-de-logic-params').then(
         m => m.default as unknown as IAppView,
@@ -1011,6 +1108,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/func-demo').then(
         m => m.default as unknown as IAppView,
       );
+    case 'region_treegrid_dy_uiaction_group_exp':
+      return import('./views/region-treegrid-dy-uiaction-group-exp').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'region_list_navparam_list_exp_view':
       return import('./views/region-list-navparam-list-exp-view').then(
         m => m.default as unknown as IAppView,
@@ -1037,6 +1138,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_calendar_nav_param_tab_exp_view':
       return import('./views/master-calendar-nav-param-tab-exp-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_dashboard_chart':
+      return import('./views/master-dashboard-chart').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_card_built_in_toolbar_exp':
@@ -1119,8 +1224,16 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-chart-group-mode-tab-exp-view').then(
         m => m.default as unknown as IAppView,
       );
+    case 'ua_group_detail_edit_view':
+      return import('./views/ua-group-detail-edit-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_calendar_daterange':
       return import('./views/master-calendar-daterange').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_kanban_swimlane_dy_uiaction_group_embed':
+      return import('./views/master-kanban-swimlane-dy-uiaction-group-embed').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_drtab_counter_disabled':
@@ -1137,6 +1250,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_editor_date_picker':
       return import('./views/master-editor-date-picker').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_card_batchtoolbarmode':
+      return import('./views/master-card-batchtoolbarmode').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_card_default_style':
@@ -1199,6 +1316,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-ui-logic-advanced').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_de_action_expand_edit_view':
+      return import('./views/master-de-action-expand-edit-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_grid_view_read':
       return import('./views/master-grid-view-read').then(
         m => m.default as unknown as IAppView,
@@ -1213,6 +1334,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_pickup_grid_view':
       return import('./views/master-pickup-grid-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_full_code_slot_custom_view':
+      return import('./views/master-full-code-slot-custom-view').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_kanban_cssandicon':
@@ -1269,6 +1394,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_editor_html':
       return import('./views/master-editor-html').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_grid_column_dy_uiaction_group':
+      return import('./views/master-grid-column-dy-uiaction-group').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_tree_parent_datasource':
@@ -1331,12 +1460,20 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-grid-localsort').then(
         m => m.default as unknown as IAppView,
       );
+    case 'region_treegrid_dy_uiaction_group':
+      return import('./views/region-treegrid-dy-uiaction-group').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_default_date_calendar_view_custom':
       return import('./views/master-default-date-calendar-view-custom').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_data_dashboard':
       return import('./views/master-data-dashboard').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_formitem_update':
+      return import('./views/master-formitem-update').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_list_auto_group':
@@ -1349,6 +1486,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_cache_tab_exp_view':
       return import('./views/master-cache-tab-exp-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_panelitem_render':
+      return import('./views/master-panelitem-render').then(
         m => m.default as unknown as IAppView,
       );
     case 'region_m_pickup_view2':
@@ -1371,6 +1512,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-drtab').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_ctrl_expansion':
+      return import('./views/master-ctrl-expansion').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_list_group_action':
       return import('./views/master-list-group-action').then(
         m => m.default as unknown as IAppView,
@@ -1389,6 +1534,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_drtab_logic':
       return import('./views/master-drtab-logic').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_bi_report_multi_partition_bar':
+      return import('./views/master-bi-report-multi-partition-bar').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_editor_slider':
@@ -1419,6 +1568,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/ps-core-prd-func-redirect-view').then(
         m => m.default as unknown as IAppView,
       );
+    case 'region_treegrid_attr':
+      return import('./views/region-treegrid-attr').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_list_format':
       return import('./views/master-list-format').then(
         m => m.default as unknown as IAppView,
@@ -1443,6 +1596,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-kanban-swimlane-group-action').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_treegridex_column_expand_icon':
+      return import('./views/master-treegridex-column-expand-icon').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_app_portal_demo_grid_view':
       return import('./views/master-app-portal-demo-grid-view').then(
         m => m.default as unknown as IAppView,
@@ -1459,12 +1616,20 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-card-base-data-view-exp-view').then(
         m => m.default as unknown as IAppView,
       );
+    case 'ua_group_detail_grid_view':
+      return import('./views/ua-group-detail-grid-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_tree_grid_ex_celledit':
       return import('./views/master-tree-grid-ex-celledit').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_grid_group_auto':
       return import('./views/master-grid-group-auto').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_tree_quicksearch_exp_view':
+      return import('./views/master-tree-quicksearch-exp-view').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_map_built_in_nav':
@@ -1481,6 +1646,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'region_tree_grid_logictabexpview':
       return import('./views/region-tree-grid-logictabexpview').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_bi_report_scatter':
+      return import('./views/master-bi-report-scatter').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_layout_view':
@@ -1543,6 +1712,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-editform-group-close-mode').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_grid_column_slot':
+      return import('./views/master-grid-column-slot').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_calendar_mixin':
       return import('./views/master-calendar-mixin').then(
         m => m.default as unknown as IAppView,
@@ -1552,9 +1725,9 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
         m => m.default as unknown as IAppView,
       );
     case 'master_chart_exp_quick_search_chart_exp_view':
-      return import(
-        './views/master-chart-exp-quick-search-chart-exp-view'
-      ).then(m => m.default as unknown as IAppView);
+      return import('./views/master-chart-exp-quick-search-chart-exp-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_grid_css':
       return import('./views/master-grid-css').then(
         m => m.default as unknown as IAppView,
@@ -1571,6 +1744,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-list-base-exp').then(
         m => m.default as unknown as IAppView,
       );
+    case 'ps_core_prd_func_info_view':
+      return import('./views/ps-core-prd-func-info-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_tree_picker':
       return import('./views/master-tree-picker').then(
         m => m.default as unknown as IAppView,
@@ -1583,12 +1760,20 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-tree-nav-right').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_screen_comp_tab_exp_view':
+      return import('./views/master-screen-comp-tab-exp-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'region_meditpanel_row':
       return import('./views/region-meditpanel-row').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_chart':
       return import('./views/master-chart').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_data_dashboard_status':
+      return import('./views/master-data-dashboard-status').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_tab_nav':
@@ -1645,10 +1830,6 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'about_modal_hidden_close':
       return import('./views/about-modal-hidden-close').then(
-        m => m.default as unknown as IAppView,
-      );
-    case 'ps_core_prd_func_edit_view':
-      return import('./views/ps-core-prd-func-edit-view').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_chart_event':
@@ -1839,6 +2020,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-card-bottom-nav').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_gantt_column_expand_icon':
+      return import('./views/master-gantt-column-expand-icon').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_form_validatemode':
       return import('./views/master-form-validatemode').then(
         m => m.default as unknown as IAppView,
@@ -1847,8 +2032,8 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/ps-core-prd-func-installed-grid-view').then(
         m => m.default as unknown as IAppView,
       );
-    case 'master_tree_counter':
-      return import('./views/master-tree-counter').then(
+    case 'master_tree_count':
+      return import('./views/master-tree-count').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_navparam_groupmode_exp':
@@ -1919,6 +2104,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-grid-newrow-group-auto').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_kanban_dy_uiaction_group':
+      return import('./views/master-kanban-dy-uiaction-group').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_group_bar_chart_exp_view':
       return import('./views/master-group-bar-chart-exp-view').then(
         m => m.default as unknown as IAppView,
@@ -1929,6 +2118,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_card_batchtoolbar':
       return import('./views/master-card-batchtoolbar').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_kanban_dy_uiaction_group_embed':
+      return import('./views/master-kanban-dy-uiaction-group-embed').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_tree_grid_ex_nodetabexpview':
@@ -2067,6 +2260,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-editor-span').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_bi_report_dashboard':
+      return import('./views/master-bi-report-dashboard').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'about_drawer_hidden_close':
       return import('./views/about-drawer-hidden-close').then(
         m => m.default as unknown as IAppView,
@@ -2087,6 +2284,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-kanban-row-layout').then(
         m => m.default as unknown as IAppView,
       );
+    case 'region_treegrid_column_expand':
+      return import('./views/region-treegrid-column-expand').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_editform_repeater_table':
       return import('./views/master-editform-repeater-table').then(
         m => m.default as unknown as IAppView,
@@ -2099,6 +2300,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-map-tooltip-style').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_tree_searchphseparator':
+      return import('./views/master-tree-searchphseparator').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_action_plugin':
       return import('./views/master-action-plugin').then(
         m => m.default as unknown as IAppView,
@@ -2107,12 +2312,20 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-grid-mixin').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_list_ext_view3':
+      return import('./views/master-list-ext-view-3').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_tree_grid_ex_css':
       return import('./views/master-tree-grid-ex-css').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_treeview':
       return import('./views/master-treeview').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_app_expand_tab_exp_view':
+      return import('./views/master-app-expand-tab-exp-view').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_tree_datasource_exp':
@@ -2139,6 +2352,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-calendar-bottomnav-multiple-data').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_kanban_simple_page':
+      return import('./views/master-kanban-simple-page').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'region_tree_grid_require':
       return import('./views/region-tree-grid-require').then(
         m => m.default as unknown as IAppView,
@@ -2151,6 +2368,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-editor-autocomplete').then(
         m => m.default as unknown as IAppView,
       );
+    case 'ps_core_prd_func_setting_edit_view':
+      return import('./views/ps-core-prd-func-setting-edit-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_wizard_hiddenstepbar':
       return import('./views/master-wizard-hiddenstepbar').then(
         m => m.default as unknown as IAppView,
@@ -2161,6 +2382,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_teleport_placeholder_list':
       return import('./views/master-teleport-placeholder-list').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_form_dy_uiaction_group':
+      return import('./views/master-form-dy-uiaction-group').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_view_event_trigger':
@@ -2199,6 +2424,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-card-group-action').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_bi_report_number':
+      return import('./views/master-bi-report-number').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_kanban_swimlane_draggable_exp':
       return import('./views/master-kanban-swimlane-draggable-exp').then(
         m => m.default as unknown as IAppView,
@@ -2209,6 +2438,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'psde_logic_all_log_grid_view':
       return import('./views/psde-logic-all-log-grid-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_bi_report_pie':
+      return import('./views/master-bi-report-pie').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_chart_multiple_sequences':
@@ -2225,6 +2458,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_calendar_refreshmode_nocache':
       return import('./views/master-calendar-refreshmode-nocache').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_list_simple_page':
+      return import('./views/master-list-simple-page').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_kanban':
@@ -2295,6 +2532,14 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-gantt-event-and-call').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_editor_expansion':
+      return import('./views/master-editor-expansion').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_logic_expand_tab_exp_view':
+      return import('./views/master-logic-expand-tab-exp-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_list_draggable_edit':
       return import('./views/master-list-draggable-edit').then(
         m => m.default as unknown as IAppView,
@@ -2307,12 +2552,20 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-map-view').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_decoration_dashboard_view':
+      return import('./views/master-decoration-dashboard-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_gantt':
       return import('./views/master-gantt').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_treeview_cssandicon':
       return import('./views/master-treeview-cssandicon').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'region_treegrid_dy_uiaction_group_embed':
+      return import('./views/region-treegrid-dy-uiaction-group-embed').then(
         m => m.default as unknown as IAppView,
       );
     case 'app_wf_step_trace_view':
@@ -2379,6 +2632,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-list-cache-refreshmode').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_list_dy_uiaction_group':
+      return import('./views/master-list-dy-uiaction-group').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_list_nav_bottom':
       return import('./views/master-list-nav-bottom').then(
         m => m.default as unknown as IAppView,
@@ -2415,6 +2672,14 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/panel-appdatauploadview').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_screen_button':
+      return import('./views/master-screen-button').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_search_form_convertparammode':
+      return import('./views/master-search-form-convertparammode').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_list_roll_load':
       return import('./views/master-list-roll-load').then(
         m => m.default as unknown as IAppView,
@@ -2443,6 +2708,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-grid-dfvalue').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_grid_property_injection':
+      return import('./views/master-grid-property-injection').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_calendar_multiple_data':
       return import('./views/master-calendar-multiple-data').then(
         m => m.default as unknown as IAppView,
@@ -2455,12 +2724,24 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-list-only-data').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_bi_report_multi_bar':
+      return import('./views/master-bi-report-multi-bar').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_dashboard_render':
+      return import('./views/master-dashboard-render').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_tree_grid_ex_cacherefresh':
       return import('./views/master-tree-grid-ex-cacherefresh').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_codelist_css':
       return import('./views/master-codelist-css').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_bi_report_area':
+      return import('./views/master-bi-report-area').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_gantt_month':
@@ -2471,8 +2752,16 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-portlet-plugin').then(
         m => m.default as unknown as IAppView,
       );
+    case 'region_tree_grid_simple_page':
+      return import('./views/region-tree-grid-simple-page').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_ui_logic_node_base':
       return import('./views/master-ui-logic-node-base').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_card_dy_uiaction_group_embed':
+      return import('./views/master-card-dy-uiaction-group-embed').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_editor_radio_list':
@@ -2487,8 +2776,16 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-card-logic-call').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_gantt_column_dy_uiaction_group':
+      return import('./views/master-gantt-column-dy-uiaction-group').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_tree_grid_ex_event':
       return import('./views/master-tree-grid-ex-event').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_file_preview_view':
+      return import('./views/master-file-preview-view').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_grid_sort_ban':
@@ -2505,6 +2802,14 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_kanban_enablegrouphidden_exp':
       return import('./views/master-kanban-enablegrouphidden-exp').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'about_mob_about10':
+      return import('./views/about-mob-about-10').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_tree_dy_uiaction_group_exp':
+      return import('./views/master-tree-dy-uiaction-group-exp').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_kanban_swimlane_description':
@@ -2525,6 +2830,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_form_ability_edit_view':
       return import('./views/master-form-ability-edit-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_editor_field_injection':
+      return import('./views/master-editor-field-injection').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_tree_contextmenurightclickinvoke':
@@ -2551,8 +2860,20 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-grid-nav-right').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_editor_dashboard_view':
+      return import('./views/master-editor-dashboard-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_kanban_item_action':
       return import('./views/master-kanban-item-action').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_grid_column_update':
+      return import('./views/master-grid-column-update').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_form_enablejsonschema':
+      return import('./views/master-form-enablejsonschema').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_ui_action_cssandicon':
@@ -2560,9 +2881,9 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
         m => m.default as unknown as IAppView,
       );
     case 'master_pickup_gridpickupview_pickup_grid_view':
-      return import(
-        './views/master-pickup-gridpickupview-pickup-grid-view'
-      ).then(m => m.default as unknown as IAppView);
+      return import('./views/master-pickup-gridpickupview-pickup-grid-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_data':
       return import('./views/master-data').then(
         m => m.default as unknown as IAppView,
@@ -2593,6 +2914,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_list_ext_view2':
       return import('./views/master-list-ext-view-2').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_batch_action_edit_view':
+      return import('./views/master-batch-action-edit-view').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_list_showmode_exp':
@@ -2723,6 +3048,14 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-editform-hover-tab-exp-view').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_grid_column_dy_uiaction_group_embed':
+      return import('./views/master-grid-column-dy-uiaction-group-embed').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_bi_report_multi_strip':
+      return import('./views/master-bi-report-multi-strip').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_tree_selectpickup':
       return import('./views/master-tree-selectpickup').then(
         m => m.default as unknown as IAppView,
@@ -2779,6 +3112,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/region-tree-grid-captionwidth').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_custom_btn_dashboard_view':
+      return import('./views/master-custom-btn-dashboard-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_grid_agg':
       return import('./views/master-grid-agg').then(
         m => m.default as unknown as IAppView,
@@ -2807,8 +3144,16 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-chart-funnel-plot').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_calendar_dy_uiaction_group_embed':
+      return import('./views/master-calendar-dy-uiaction-group-embed').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'extend_log_info_view':
       return import('./views/extend-log-info-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_data_view_simple_page':
+      return import('./views/master-data-view-simple-page').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_tree_allsearch':
@@ -2819,12 +3164,20 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-ui-action-pickupview').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_treegridex_column_dy_uiaction_group_exp':
+      return import('./views/master-treegridex-column-dy-uiaction-group-exp').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_line_bar_chart_exp_view':
       return import('./views/master-line-bar-chart-exp-view').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_scatter_right_nav':
       return import('./views/master-scatter-right-nav').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_grid_column_dy_uiaction_group_exp':
+      return import('./views/master-grid-column-dy-uiaction-group-exp').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_panel_view_message':
@@ -2863,6 +3216,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-async-activity').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_treegridex_column_dy_uiaction_group_embed':
+      return import('./views/master-treegridex-column-dy-uiaction-group-embed').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_tab_ctrl_federation':
       return import('./views/master-tab-ctrl-federation').then(
         m => m.default as unknown as IAppView,
@@ -2891,8 +3248,16 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/region-edit-view-3').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_de_logic_advanced':
+      return import('./views/master-de-logic-advanced').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_edit_view':
       return import('./views/master-edit-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_tree_dy_uiaction_group_embed':
+      return import('./views/master-tree-dy-uiaction-group-embed').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_form_info':
@@ -2963,6 +3328,14 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-searchbar-hight').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_grid_attachment_column_enablenoaccess':
+      return import('./views/master-grid-attachment-column-enablenoaccess').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_grid_attachment_column_osscat':
+      return import('./views/master-grid-attachment-column-osscat').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_grid_logic_ctrl_event':
       return import('./views/master-grid-logic-ctrl-event').then(
         m => m.default as unknown as IAppView,
@@ -3003,6 +3376,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-grid-nav-inside').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_bi_report_table':
+      return import('./views/master-bi-report-table').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_chart_annular':
       return import('./views/master-chart-annular').then(
         m => m.default as unknown as IAppView,
@@ -3013,6 +3390,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_kanban_order_group_draggable':
       return import('./views/master-kanban-order-group-draggable').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_screen_editor':
+      return import('./views/master-screen-editor').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_tabexppanel_bottom':
@@ -3063,8 +3444,16 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/region-tree-grid-localagg').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_calendar_dy_uiaction_group':
+      return import('./views/master-calendar-dy-uiaction-group').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_panel_nav_pos':
       return import('./views/master-panel-nav-pos').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_kanban_swimlane_dy_uiaction_group':
+      return import('./views/master-kanban-swimlane-dy-uiaction-group').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_map_picker':
@@ -3081,6 +3470,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_editor_cascader':
       return import('./views/master-editor-cascader').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_list_batchtoolbarmode':
+      return import('./views/master-list-batchtoolbarmode').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_list_dyna_visible':
@@ -3131,8 +3524,16 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-ui-logic-plugin').then(
         m => m.default as unknown as IAppView,
       );
+    case 'region_tree_grid_batchtoolbarmode':
+      return import('./views/region-tree-grid-batchtoolbarmode').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_chart_exp_cache_tab_exp_view':
       return import('./views/master-chart-exp-cache-tab-exp-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_grid_batchtoolbarmode':
+      return import('./views/master-grid-batchtoolbarmode').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_searchform_layout':
@@ -3167,6 +3568,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-panel-panel-item-render').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_card_dy_uiaction_group_exp':
+      return import('./views/master-card-dy-uiaction-group-exp').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'region_tree_grid_celledit':
       return import('./views/region-tree-grid-celledit').then(
         m => m.default as unknown as IAppView,
@@ -3197,6 +3602,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_kaban_format':
       return import('./views/master-kaban-format').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_bi_report_multi_line':
+      return import('./views/master-bi-report-multi-line').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_kanban_swimlane_nocache_refreshmode':
@@ -3241,6 +3650,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'region_tree_grid_toolbartabexpview':
       return import('./views/region-tree-grid-toolbartabexpview').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_ui_action_expand_data_view':
+      return import('./views/master-ui-action-expand-data-view').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_editform_mdctrl_list':
@@ -3315,6 +3728,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-default-date-calendar-view-week').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_ctrl_slot_grid_view':
+      return import('./views/master-ctrl-slot-grid-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'region_tree_grid_align':
       return import('./views/region-tree-grid-align').then(
         m => m.default as unknown as IAppView,
@@ -3343,12 +3760,20 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-calendar-tab-exp-view').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_list_dy_uiaction_group_exp':
+      return import('./views/master-list-dy-uiaction-group-exp').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'region_list_exp_view':
       return import('./views/region-list-exp-view').then(
         m => m.default as unknown as IAppView,
       );
     case 'report_baseinfo_edit_view':
       return import('./views/report-baseinfo-edit-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_report_exp':
+      return import('./views/master-report-exp').then(
         m => m.default as unknown as IAppView,
       );
     case 'psde_logic_tree_exp_view':
@@ -3423,12 +3848,20 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-card-format').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_calendar_dy_uiaction_group_exp':
+      return import('./views/master-calendar-dy-uiaction-group-exp').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_p_icker_singletabexpview':
       return import('./views/master-p-icker-singletabexpview').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_cache_data_view_exp_view':
       return import('./views/master-cache-data-view-exp-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_bi_report_radar':
+      return import('./views/master-bi-report-radar').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_list_default_showmode':
@@ -3583,6 +4016,14 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-editor-code').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_gantt_column_dy_uiaction_group_embed':
+      return import('./views/master-gantt-column-dy-uiaction-group-embed').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_screen_border_dashboard_view':
+      return import('./views/master-screen-border-dashboard-view').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_pickup_muleditview':
       return import('./views/master-pickup-muleditview').then(
         m => m.default as unknown as IAppView,
@@ -3601,6 +4042,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_codelist_num':
       return import('./views/master-codelist-num').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_gantt_column_uiaction_group':
+      return import('./views/master-gantt-column-uiaction-group').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_card_load_more':
@@ -3623,12 +4068,20 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-bar-right-nav').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_ctrl_engine':
+      return import('./views/master-ctrl-engine').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_codelist_field':
       return import('./views/master-codelist-field').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_list_sort_draggable':
       return import('./views/master-list-sort-draggable').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_treegridex_attr':
+      return import('./views/master-treegridex-attr').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_calendar_contextmenu_week':
@@ -3641,6 +4094,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_list_codelist_group':
       return import('./views/master-list-codelist-group').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_view_expansion':
+      return import('./views/master-view-expansion').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_redirect_view':
@@ -3661,6 +4118,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_editform_mdctrl_table':
       return import('./views/master-editform-mdctrl-table').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_card_dy_uiaction_group':
+      return import('./views/master-card-dy-uiaction-group').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_form_base':
@@ -3741,6 +4202,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_panel_nav_pos_view':
       return import('./views/master-panel-nav-pos-view').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_rewrite_predefined_comp':
+      return import('./views/master-rewrite-predefined-comp').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_codelist_type':
@@ -3843,6 +4308,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-map-item-style').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_bi_report_intersection_table':
+      return import('./views/master-bi-report-intersection-table').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'region_info_view':
       return import('./views/region-info-view').then(
         m => m.default as unknown as IAppView,
@@ -3857,6 +4326,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_grid_grouprowmode_exp':
       return import('./views/master-grid-grouprowmode-exp').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_calendar_timeline_loadmore':
+      return import('./views/master-calendar-timeline-loadmore').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_card_sort_draggable':
@@ -3876,9 +4349,9 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
         m => m.default as unknown as IAppView,
       );
     case 'master_grid_attachment_column_enabledownloadticket':
-      return import(
-        './views/master-grid-attachment-column-enabledownloadticket'
-      ).then(m => m.default as unknown as IAppView);
+      return import('./views/master-grid-attachment-column-enabledownloadticket').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_ui_action_closeview':
       return import('./views/master-ui-action-closeview').then(
         m => m.default as unknown as IAppView,
@@ -3925,6 +4398,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'region_tree_grid_layouttabexpview':
       return import('./views/region-tree-grid-layouttabexpview').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_bi_report_multi_stack_bar':
+      return import('./views/master-bi-report-multi-stack-bar').then(
         m => m.default as unknown as IAppView,
       );
     case 'region_tree_grid_rowedittabexpview':
@@ -4017,6 +4494,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_card_auto_group':
       return import('./views/master-card-auto-group').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_list_dy_uiaction_group_embed':
+      return import('./views/master-list-dy-uiaction-group-embed').then(
         m => m.default as unknown as IAppView,
       );
     case 'region_tree_grid_disablesort':
@@ -4123,6 +4604,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-call-view-ability').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_toolbar_logic_js_demo':
+      return import('./views/master-toolbar-logic-js-demo').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_nav_param_scatter_chart_exp_view':
       return import('./views/master-nav-param-scatter-chart-exp-view').then(
         m => m.default as unknown as IAppView,
@@ -4187,6 +4672,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-list-event-call-exp').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_edit_form_item_slot':
+      return import('./views/master-edit-form-item-slot').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_panel_media':
       return import('./views/master-panel-media').then(
         m => m.default as unknown as IAppView,
@@ -4231,6 +4720,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/master-pickup-editview-2').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_gantt_column_dy_uiaction_group_exp':
+      return import('./views/master-gantt-column-dy-uiaction-group-exp').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_pickup_multabexpview':
       return import('./views/master-pickup-multabexpview').then(
         m => m.default as unknown as IAppView,
@@ -4257,6 +4750,10 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       );
     case 'master_calendar_rightnav_multiple_data':
       return import('./views/master-calendar-rightnav-multiple-data').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_model_expand_grid_view':
+      return import('./views/master-model-expand-grid-view').then(
         m => m.default as unknown as IAppView,
       );
     case 'region_tree_grid_exporttabexpview':
@@ -4295,12 +4792,24 @@ export async function getAppViewModel(name: string): Promise<IAppView> {
       return import('./views/report-edit-view').then(
         m => m.default as unknown as IAppView,
       );
+    case 'master_grid_column_editor_expand':
+      return import('./views/master-grid-column-editor-expand').then(
+        m => m.default as unknown as IAppView,
+      );
     case 'master_calendar_bottomnav_user':
       return import('./views/master-calendar-bottomnav-user').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_searchbar_ph':
       return import('./views/master-searchbar-ph').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_screen_component':
+      return import('./views/master-screen-component').then(
+        m => m.default as unknown as IAppView,
+      );
+    case 'master_editor_slot':
+      return import('./views/master-editor-slot').then(
         m => m.default as unknown as IAppView,
       );
     case 'master_tree_grid_ex_rowedittabexpview':

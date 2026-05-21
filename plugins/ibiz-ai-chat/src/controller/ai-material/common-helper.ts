@@ -37,17 +37,18 @@ export class CommonHelper extends MaterialHelper {
       }
     }
     if (result && result.data && result.data.length > 0) {
-      const tempData = result.data[0];
-      const material = {
-        id: tempData.id,
-        type: tempData.type,
-        data: tempData.data || {},
-        metadata: tempData.metadata || {},
-      };
-      if (item!.id) {
-        Object.assign(material.metadata, { actionId: item!.id });
-      }
-      this.aiChat.addMaterial(material);
+      result.data.forEach((tempData: any) => {
+        const material = {
+          id: tempData.id,
+          type: tempData.type,
+          data: tempData.data || {},
+          metadata: tempData.metadata || {},
+        };
+        if (item!.id) {
+          Object.assign(material.metadata, { actionId: item!.id });
+        }
+        this.aiChat.addMaterial(material);
+      });
     }
   }
 }

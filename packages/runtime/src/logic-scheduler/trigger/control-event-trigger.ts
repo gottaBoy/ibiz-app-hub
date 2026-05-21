@@ -40,7 +40,7 @@ export class ControlEventTrigger extends LogicTrigger {
     return (
       superResult &&
       // 忽略大小写匹配
-      matchParams.ctrlName!.toLowerCase() ===
+      matchParams.ctrlName?.toLowerCase() ===
         this.logic.ctrlName!.toLowerCase() &&
       this.listenEventNames.includes(matchParams.eventName!)
     );

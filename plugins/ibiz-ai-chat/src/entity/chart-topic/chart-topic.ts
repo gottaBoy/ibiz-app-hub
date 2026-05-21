@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ITopic } from '../../interface';
 
 /**
@@ -27,7 +28,7 @@ export class ChatTopic implements ITopic {
   }
 
   get sourceCaption(): ITopic['sourceCaption'] {
-    return this.data.sourceCaption || this.caption;
+    return this.data.sourceCaption;
   }
 
   get url(): ITopic['url'] {
@@ -36,6 +37,34 @@ export class ChatTopic implements ITopic {
 
   get aiChat(): ITopic['aiChat'] {
     return this.data.aiChat;
+  }
+
+  get captionMode(): ITopic['captionMode'] {
+    return this.data.captionMode;
+  }
+
+  get realid(): ITopic['realid'] {
+    return this.data.realid;
+  }
+
+  get sequence(): ITopic['sequence'] {
+    return this.data.sequence;
+  }
+
+  get isTop(): ITopic['isTop'] {
+    return this.data.isTop;
+  }
+
+  get isShow(): boolean {
+    return (this.data as Record<string, any>).isShow ?? true;
+  }
+
+  get disableStorage(): boolean {
+    return (this.data as Record<string, any>).disableStorage || false;
+  }
+
+  get captionComputed(): boolean {
+    return (this.data as Record<string, any>).captionComputed || false;
   }
 
   constructor(public data: ITopic) {}

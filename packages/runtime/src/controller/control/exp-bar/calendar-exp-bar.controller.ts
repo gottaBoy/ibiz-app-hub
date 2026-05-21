@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/prefer-as-const */
-import { RuntimeModelError } from '@ibiz-template/core';
 import {
   ISysCalendar,
   ICalendarExpBar,
@@ -48,11 +47,10 @@ export class CalendarExpBarController
     return sysCalendarItems?.find(item => item.itemType === itemTypeName);
   }
 
-  get xDataController(): ICalendarController {
+  get xDataController(): ICalendarController | undefined {
     const controller = this.view.getController(this.model.xdataControlName!);
     if (!controller)
-      throw new RuntimeModelError(
-        this.model,
+      ibiz.log.error(
         ibiz.i18n.t('runtime.controller.control.expBar.unableMore', {
           xdataControlName: this.model.xdataControlName,
         }),
@@ -61,8 +59,9 @@ export class CalendarExpBarController
   }
 
   public navBySrfnav(): void {
+    if (!this.xDataController) return;
     const selectItem: ICalendarItemData | undefined =
-      this.xDataController?.state.items.find(
+      this.xDataController.state.items.find(
         item => item.navId === this.state.srfnav,
       );
     super.navBySrfnav();
@@ -77,6 +76,7 @@ export class CalendarExpBarController
    * @memberof CalendarExpBarController
    */
   navDataByStack(): void {
+    if (!this.xDataController) return;
     const { controlParams, state, model } = this.xDataController;
     const calendarStyle = model.calendarStyle?.toLowerCase();
     const items = state.items.filter(item => {

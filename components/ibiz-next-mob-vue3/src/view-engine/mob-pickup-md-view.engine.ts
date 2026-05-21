@@ -9,7 +9,7 @@ import {
 import { IAppDEDataView } from '@ibiz/model-core';
 
 export class PickupMDViewEngine extends MDViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEDataView,
     IPickupMDViewState,
     IPickupMDViewEvent
@@ -35,6 +35,7 @@ export class PickupMDViewEngine extends MDViewEngine {
     this.view.slotProps.mdctrl.singleSelect = this.view.state.singleSelect;
     this.view.slotProps.mdctrl.selectedData = this.view.state.selectedData;
     this.view.slotProps.mdctrl.mode = 'SELECT';
+    this.view.slotProps.mdctrl.mdctrlActiveMode = 2;
   }
 
   async onMounted(): Promise<void> {

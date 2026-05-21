@@ -217,9 +217,15 @@ export class AppSwitchController extends PanelItemController<IPanelRawItem> {
 
     // 组装主应用所有首页视图
     const defaultAppModel = ibiz.hub.getAppSourceModel(defaultApp.appId);
+    if (!defaultAppModel || !defaultAppModel.cache) {
+      return result;
+    }
     const allAppIndexViews = defaultAppModel.cache?.getPSAppViews?.filter(
       (appView: IModel) => {
-        return appView.viewType === 'APPINDEXVIEW';
+        // 启用应用切换器才加入应用切换清单
+        return (
+          appView.viewType === 'APPINDEXVIEW' && appView.appSwitchMode === 1
+        );
       },
     );
     if (allAppIndexViews && allAppIndexViews.length > 0) {
@@ -247,7 +253,10 @@ export class AppSwitchController extends PanelItemController<IPanelRawItem> {
         const subAppModel = ibiz.hub.getAppSourceModel(subApp.appId);
         const allSubAppIndexViews = subAppModel.cache?.getPSAppViews?.filter(
           (appView: IModel) => {
-            return appView.viewType === 'APPINDEXVIEW';
+            // 启用应用切换器才加入应用切换清单
+            return (
+              appView.viewType === 'APPINDEXVIEW' && appView.appSwitchMode === 1
+            );
           },
         );
         if (allSubAppIndexViews && allSubAppIndexViews.length > 0) {

@@ -36,6 +36,7 @@ export const GridUAColumn = defineComponent({
         {this.controller.model.deuiactionGroup?.uiactionGroupDetails
           ?.length && (
           <iBizActionToolbar
+            zIndex={this.controller.grid.state.zIndex}
             onDblclick={this.onStopPropagation}
             onClick={this.onStopPropagation}
             action-details={

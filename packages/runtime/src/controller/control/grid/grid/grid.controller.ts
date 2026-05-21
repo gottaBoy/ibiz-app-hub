@@ -20,8 +20,10 @@ import {
   IDEGridGroupColumn,
   IDEGridFieldColumn,
   IAppDEDataExport,
+  IDEGridUAColumn,
+  IDEUIActionGroup,
 } from '@ibiz/model-core';
-import { clone, isNil } from 'ramda';
+import { clone } from 'ramda';
 import dayjs from 'dayjs';
 import { GridFieldColumnController } from '../grid-column/grid-field-column/grid-field-column.controller';
 import { GridColumnController } from './grid-column.controller';
@@ -45,8 +47,9 @@ import {
   IGridColumnProvider,
   IStorageColumnStates,
   IApiGridColumnMapping,
+  IApiExportParams,
 } from '../../../../interface';
-import { calcDeCodeNameById } from '../../../../model';
+import { calcDeCodeNameById, calcUIActionGroup } from '../../../../model';
 import {
   getGridColumnProvider,
   getAutoGridColumnProvider,
@@ -358,6 +361,14 @@ export class GridController<
     return !!this.model.enableRowEditOrder;
   }
 
+  /**
+   * @description 自动保存的定时器引用
+   * @protected
+   * @type {unknown}
+   * @memberof GridController
+   */
+  protected autoSaveTimer?: unknown;
+
   protected initState(): void {
     super.initState();
     this.state.rows = [];
@@ -415,6 +426,61 @@ export class GridController<
     await this.initGroup();
     // 初始化数据导出对象
     await this.initExportData();
+
+    this.initAutoSaveTimer();
+  }
+
+  /**
+   * @description 初始化界面行为组
+   * @protected
+   * @memberof GridController
+   */
+  protected async initUIActions(): Promise<void> {
+    // 收集所有遍历过程中的异步任务
+    const asyncTasks: Promise<IDEUIActionGroup>[] = [];
+
+    // 遍历所有列，计算属性列界面行为组与操作列界面行为组
+    recursiveIterate(
+      this.model,
+      (column: IDEGridFieldColumn | IDEGridUAColumn) => {
+        if (column.deuiactionGroup) {
+          const task = calcUIActionGroup(
+            column.deuiactionGroup,
+            this.context,
+            this.params,
+          );
+          asyncTasks.push(task);
+        }
+      },
+      { childrenFields: ['degridColumns'] },
+    );
+    await Promise.all(asyncTasks);
+  }
+
+  /**
+   * @description 初始化自动保存定时器
+   * @protected
+   * @memberof GridController
+   */
+  protected initAutoSaveTimer(): void {
+    if (this.editSaveMode !== 'auto') return;
+    this.destroyAutoSaveTimer();
+    this.autoSaveTimer = setInterval(() => {
+      // 该方法只会保存修改过的行数据
+      this.saveAll();
+    }, 3000);
+  }
+
+  /**
+   * @description 销毁自动保存定时器
+   * @protected
+   * @memberof GridController
+   */
+  protected destroyAutoSaveTimer(): void {
+    if (this.autoSaveTimer) {
+      clearInterval(this.autoSaveTimer as number);
+      this.autoSaveTimer = undefined;
+    }
   }
 
   /**
@@ -628,45 +694,10 @@ export class GridController<
     this.calcColumnFixed();
   }
 
-  /**
-   * 本地排序items
-   * @author zzq
-   * @date 2024-04-22 19:30:55
-   * @param {IData[]} items
-   */
-  sortItems(items: IData[]): void {
-    const sortField = this.model.orderValueAppDEFieldId!;
-    if (!sortField || !this.enableRowEditOrder) {
-      return;
-    }
-
-    // 格式化排序属性的值
-    items.forEach(item => {
-      const sortValue = item[sortField];
-      if (isNil(sortValue)) {
-        item[sortField] = 0;
-      } else {
-        const toNum = Number(sortValue);
-        if (Number.isNaN(toNum)) {
-          throw new RuntimeError(
-            ibiz.i18n.t('runtime.controller.control.grid.convertedValue', {
-              srfmajortext: item.srfmajortext,
-            }),
-          );
-        }
-      }
-    });
-
-    // 排序,本地排序默认升序
-    items.sort((a, b) => a[sortField] - b[sortField]);
-  }
-
   async afterLoad(
     args: MDCtrlLoadParams,
     items: ControlVO[],
   ): Promise<ControlVO[]> {
-    // 每次加载回来先本地排序，把数据的排序属性规范一下
-    this.sortItems(this.state.items);
     await super.afterLoad(args, items);
     // 每次表格刷新时通知表格属性列,加载代码表,避免动态代码表更新不及时
     await handleAllSettled(
@@ -871,10 +902,7 @@ export class GridController<
    */
   calcAggResult(items: IData[]): void {
     Object.values(this.fieldColumns).forEach(column => {
-      const result = column.calcFieldAgg(items);
-      if (result) {
-        this.state.aggResult[column.model.id!] = result;
-      }
+      this.state.aggResult[column.model.id!] = column.calcFieldAgg(items);
     });
   }
 
@@ -1688,7 +1716,7 @@ export class GridController<
    * @author: zzq
    * @Date: 2024-03-20 17:54:16
    */
-  async getExportData(params: IData): Promise<IData[]> {
+  async getExportData(params: IApiExportParams): Promise<IData[]> {
     const { type } = params;
     let data: IData[] = [];
     // 未指定类型时，默认导出当前页
@@ -1701,8 +1729,8 @@ export class GridController<
         type === 'customPage'
           ? {
               page: 0,
-              offset: (startPage - 1) * size,
-              size: (endPage - startPage + 1) * size,
+              offset: (startPage! - 1) * size,
+              size: (endPage! - startPage! + 1) * size,
             }
           : { size: this.dataExport?.maxRowCount || 1000, page: 0 };
       data = await this.loadData({ viewParam });
@@ -1721,7 +1749,7 @@ export class GridController<
    * @description 执行后台导出
    * @param params 额外参数
    */
-  async excuteBackendExport(params: IData): Promise<void> {
+  async excuteBackendExport(params: IApiExportParams): Promise<void> {
     // 准备参数
     const fetchParams = await this.getFetchParams({ ...this.params });
     let tempParams: IParams = {};
@@ -1750,8 +1778,8 @@ export class GridController<
         type === 'customPage'
           ? {
               page: 0,
-              offset: (startPage - 1) * size,
-              size: (endPage - startPage + 1) * size,
+              offset: (startPage! - 1) * size,
+              size: (endPage! - startPage! + 1) * size,
             }
           : { size: this.dataExport?.maxRowCount || 1000, page: 0 };
     }
@@ -1784,11 +1812,14 @@ export class GridController<
 
   /**
    * @description 导出数据
-   * @param {{  event: MouseEvent; params: IData }} args
+   * @param {{  event: MouseEvent; params: IApiExportParams }} args
    * @returns {*}  {Promise<void>}
    * @memberof GridController
    */
-  async exportData(args: { params: IData; event: MouseEvent }): Promise<void> {
+  async exportData(args: {
+    params: IApiExportParams;
+    event: MouseEvent;
+  }): Promise<void> {
     if (this.dataExport?.enableBackend) {
       await this.excuteBackendExport(args.params);
       return;
@@ -2118,38 +2149,6 @@ export class GridController<
   }
 
   /**
-   * 更新改变项数据
-   * @author: zzq
-   * @date 2024-04-22 17:12:58
-   * @return {*}  {Promise<void>}
-   */
-  async updateChangedItems(changedItems: ControlVO[]): Promise<void> {
-    try {
-      await Promise.all(
-        changedItems.map(async item => {
-          // 往上下文添加主键
-          const deName = calcDeCodeNameById(this.model.appDataEntityId!);
-          const tempContext = this.context.clone();
-          tempContext[deName] = item.srfkey;
-
-          // 调用接口修改数据
-          const res = await this.service.update(tempContext, item);
-
-          // 更新完之后更新state里的数据。
-          if (res.data) {
-            const index = this.state.items.findIndex(
-              x => x.srfkey === item.srfkey,
-            );
-            this.state.items.splice(index, 1, res.data);
-          }
-        }),
-      );
-    } finally {
-      await this.afterLoad({}, this.state.items as ControlVO[]);
-    }
-  }
-
-  /**
    * 计算统计数据
    * @author: zzq
    * @date 2024-06-28 17:12:58
@@ -2231,5 +2230,16 @@ export class GridController<
     id: string,
   ): IApiGridColumnMapping[K] {
     return this.columns[id] as unknown as IApiGridColumnMapping[K];
+  }
+
+  /**
+   * @description 生命周期-销毁完成
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof GridController
+   */
+  protected async onDestroyed(): Promise<void> {
+    await super.onDestroyed();
+    this.destroyAutoSaveTimer();
   }
 }

@@ -1,9 +1,21 @@
+$emoji-list: (
+  // 颜色
+  color-bg-color: getCssVar('color', 'bg', 0),
+  // 间距
+  spacing-padding-top: getCssVar('spacing', 'tight'),
+  spacing-container-padding: 0 getCssVar('spacing', 'super-tight'),
+  // 宽高
+  height-container-max-height: 27vh,
+);
+
 @include b('emoji-list') {
+  @include set-component-css-var(emoji-list, $emoji-list);
+
   display: block;
   width: 100%;
   max-width: 100%;
-  padding-top: getCssVar('spacing', 'tight');
-  background-color: getCssVar('color', 'bg', 0);
+  padding-top: getCssVar('emoji-list', 'spacing-padding-top');
+  background-color: getCssVar('emoji-list', 'color-bg-color');
 
   ::-webkit-scrollbar {
     width: 0;
@@ -14,8 +26,8 @@
 
   @include e('container') {
     height: 100%;
-    max-height: 27vh;
-    padding: 0 getCssVar('spacing', 'super-tight');
+    max-height: getCssVar('emoji-list', 'height-container-max-height');
+    padding: getCssVar('emoji-list', 'spacing-container-padding');
     overflow-y: scroll;
   }
 

@@ -2,6 +2,7 @@
 /* eslint-disable no-unsafe-finally */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable object-shorthand */
+/* eslint-disable no-nested-ternary */
 import {
   ref,
   watch,
@@ -19,17 +20,10 @@ import {
 import { createUUID } from 'qx-util';
 import { ElMessageBox } from 'element-plus';
 import * as monaco from 'monaco-editor';
-import { AxiosProgressEvent } from 'axios';
 import loader from '@monaco-editor/loader';
-import { SysUIActionTag, UIActionUtil } from '@ibiz-template/runtime';
-import {
-  StringUtil,
-  IBizContext,
-  IChatMessage,
-  IPortalAsyncAction,
-} from '@ibiz-template/core';
+import { MenuItem } from '@imengyu/vue3-context-menu';
+import { IChatMessage } from '@ibiz-template/core';
 import { CodeEditorController } from '../code-editor.controller';
-import { calcAiToolbarItemsByAc } from '../../../util';
 import './monaco-editor.scss';
 
 /**
@@ -42,8 +36,29 @@ import './monaco-editor.scss';
  * @editorparams {"name":"enablefullscreen","parameterType":"boolean","defaultvalue":false,"description":"若该值为true，会显示代码编辑器顶部的工具栏，并且点击工具栏中的全屏按钮后，编辑框将全屏显示，方便在较大的视野下进行代码编辑工作"}
  * @editorparams {"name":"srfaiappendcurdata","parameterType":"boolean","defaultvalue":false,"description":"在打开AI功能时，该参数用于判断是否传入对象参数，主要用于在请求历史记录时，附加当前参数"}
  * @editorparams {"name":"srfaiappendcurcontent","parameterType":"string","description":"在打开AI功能时，如果该参数存在值，会将其传入编辑内容作为用户消息，主要用于在请求历史记录后，附加当前编辑内容作为用户消息"}
- * @editorparams {name:ac,parameterType:boolean,defaultvalue:false,description:是否启用ac自填模式}
+ * @editorparams {"name":"ac","parameterType":"boolean","defaultvalue":false,"description":"是否启用ac自填模式"}
  * @editorparams {"name":"readonly","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否为只读态"}
+ * @editorparams {"name":"autoquestion","parameterType":"boolean","defaultvalue":true,"description": "在打开AI功能时历史数据最后一个项是用户消息（USER）时是否自动提问，当打开AI行内聊天时是否自动提问"}
+ * @editorparams {"name":"autofill","parameterType":"boolean","defaultvalue":false,"description": "用于AI聊天，AI回答完成之后是否触发回填"}
+ * @editorparams {"name":"openmode","parameterType":"'default' | 'minimize' | 'autoexpand'","description": "用于AI聊天，AI窗口的打开模式，minimize：默认最小化窗口；autoexpand：默认最小化窗口，当提问完成后自动展开窗口"}
+ * @editorparams {"name":"autoclose","parameterType":"{mode:'minimize' | 'close' | 'closetime',duration?:number}","description": "用于AI聊天，在提问完成后，设置AI窗口的自动关闭模式。其中 mode 设为 minimize 时窗口会最小化，设为 close 时窗口会直接关闭，设为 closetime 时窗口会根据 duration 配置的值延时关闭。duration配置单位为秒（s），默认值为 3 秒"}
+ * @editorparams {"name":"inlineaichatheight","parameterType":"number","defaultvalue":300,"description":"用于指定AI行内聊天框高度"}
+ * @editorparams {"name":"enableaiminimize","parameterType":"boolean","description":"用于控制ai聊天窗口是否启用最小化，优先级大于全局参数enableAIMinimize"}
+ * @editorparams {"name":"inlinecompletionmode","parameterType":"'sync' | 'async'","defaultvalue":"async", "description":"用于AI行内聊天，控制请求方式是同步还是异步"}
+ * @editorparams {"name":"srfaiappendresource","parameterType":"string", "description":"AI聊天默认附加资源数据"}
+ * @editorparams {"name":"srfmode","parameterType":"string", "description":"指定AI聊天自定义模式"}
+ * @editorparams {"name":"srfenableaiagentchange","parameterType":"boolean","defaultvalue":true, "description":"指定AI聊天智能体是否可切换"}
+ * @editorparams {"name":"srfaiagent","parameterType":"string", "description":"指定AI聊天默认智能体"}
+ * @editorparams {"name":"summarymaxtokens","parameterType":"number","defaultvalue":"30", "description":"AI聊天标题摘要最大字符数,仅话题标题模式为summary时生效"}
+ * @editorparams {"name":"srfenableknowledgebaseselect","parameterType":"boolean","defaultvalue":true, "description":"AI聊天是否启用知识库选择，若未启用则不显示知识库图标"}
+ * @editorparams {"name":"srfenablerecallconfigsetting","parameterType":"boolean","defaultvalue":true, "description":"AI聊天是否启用自定义召回配置，若未启用则不显示召回配置图标"}
+ * @editorparams {"name":"rerankdefaultvalue","parameterType":"0 | 1 | 2","defaultvalue":"2", "description":"AI聊天召回重排默认值，0:禁用;1:启用;2:自动，仅在启用自定义召回配置和当前智能体召回重排无值时生效"}
+ * @editorparams {"name":"maxchunksdefaultvalue","parameterType":"number","defaultvalue":"10", "description":"AI聊天最大召回数量默认值，仅在启用自定义召回配置和当前智能体最大召回数量无值时生效"}
+ * @editorparams {"name":"chunkthresholddefaultvalue","parameterType":"number","defaultvalue":"0.4", "description":"AI聊天召回相似度阈值默认值，仅在启用自定义召回配置和当前智能体召回相似度阈值无值时生效"}
+ * @editorparams {"name":"hidelinenumbers","parameterType":"boolean","defaultvalue":"false", "description":"在非全屏状态下隐藏行号"}
+ * @editorparams {"name":"hideminimap","parameterType":"boolean","defaultvalue":"false", "description":"在非全屏状态下隐藏总览区"}
+ * @editorparams {"name":"srfaichunkview","parameterType":"string", "description":"知识切片视图，用于定义AI交谈打开目标知识切片视图"}
+ * @editorparams {"name":"srfaichunkentity","parameterType":"string", "description":"知识切片实体，用于定义AI交谈打开知识切片视图数据主键key"}
  * @ignoreprops autoFocus | overflowMode
  * @ignoreemits blur | focus | enter | infoTextChange
  */
@@ -57,6 +72,8 @@ export const IBizCode = defineComponent({
     const c = props.controller!;
     const UUID = createUUID();
     const currentVal = ref<string>('');
+
+    const { UIStore, zIndex } = useUIStore();
 
     // 允许编辑
     const enableEdit = ref(true);
@@ -75,6 +92,20 @@ export const IBizCode = defineComponent({
 
     // 是否加载中
     const isLoading = ref(false);
+
+    // 文本编辑工具栏
+    const textTBRef = ref();
+
+    // 文本编辑工具栏直接样式
+    const textTBStyle = ref<IData>({
+      [ns.cssVarBlockName('text-editor-toolbar-z-index')]: zIndex.increment(),
+    });
+
+    // 文本编辑工具栏可见状态
+    const textTBVisible = ref(false);
+
+    // 当前编辑器主题
+    const editorTheme = ref('');
 
     const editorModel = c.model;
     if (editorModel.editorParams) {
@@ -113,10 +144,11 @@ export const IBizCode = defineComponent({
     let decorationsCollection: monaco.editor.IEditorDecorationsCollection | null;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let chatInstance: any;
-    const { UIStore, zIndex } = useUIStore();
 
     // 编辑器主题
     const getMonacoTheme = (name: string): string => {
+      editorTheme.value =
+        c?.editorParams?.customTheme || ibiz.config.codeEditorTheme || name;
       // customTheme参数已弃用，后续请使用全局参数codeEditorTheme
       const customTheme = c?.editorParams?.customTheme;
       if (customTheme) {
@@ -187,256 +219,35 @@ export const IBizCode = defineComponent({
      */
     const openAIChat = async () => {
       if (!c.deACMode || !c.model.appDataEntityId) return;
-      const {
-        contentToolbarItems,
-        footerToolbarItems,
-        questionToolbarItems,
-        otherToolbarItems,
-      } = calcAiToolbarItemsByAc(c.deACMode);
-      const module = await import('@ibiz-template-plugin/ai-chat');
-      chatInstance = module.chat || module.default.chat;
-      let id: string = '';
-      let abortController: AbortController;
+      chatInstance = await ibiz.aiChatUtil.getAIChat();
+      const { containerOptions, chatOptions } =
+        await ibiz.aiChatUtil.getEditorExAIChatParams(
+          c.editorParams,
+          c.context,
+          c.params,
+          props.data,
+          c.deACMode,
+          { chatInstance, view: c.view, ctrl: c.ctrl },
+        );
+      const resourceOptions = await ibiz.aiChatUtil.getAIResourceOptions(
+        c.context,
+        c.params,
+      );
       chatInstance.create({
+        resourceOptions,
         containerOptions: {
           zIndex: zIndex.increment(),
+          ...containerOptions,
         },
         chatOptions: {
           caption: c.deACMode.logicName,
           context: { ...c.context },
           params: { ...c.params, srfactag: c.deACMode.codeName },
-          // 编辑器参数srfaiappendcurdata，是否传入对象参数，用于历史查询传参
-          appendCurData:
-            c.editorParams.srfaiappendcurdata === 'true'
-              ? props.data
-              : undefined,
-          // 编辑器参数srfaiappendcurcontent，传入编辑内容作为用户消息,获取历史数据后附加
-          appendCurContent: c.editorParams.srfaiappendcurcontent
-            ? StringUtil.fill(
-                c.editorParams.srfaiappendcurcontent,
-                c.context,
-                c.params,
-                props.data,
-              )
-            : undefined,
           appDataEntityId: c.model.appDataEntityId,
-          contentToolbarItems,
-          footerToolbarItems,
-          questionToolbarItems,
-          otherToolbarItems,
-          question: async (
-            aiChat: any,
-            ctx: IContext,
-            param: IParams,
-            other: IParams,
-            arr: IChatMessage[],
-          ) => {
-            id = createUUID();
-            abortController = new AbortController();
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            try {
-              await deService.aiChatSse(
-                (msg: IPortalAsyncAction) => {
-                  // 20: 持续回答中，消息会持续推送。同一个消息 id 会显示在同一个框内
-                  if (msg.actionstate === 20 && msg.actionresult) {
-                    aiChat.addMessage({
-                      messageid: id,
-                      state: msg.actionstate,
-                      type: 'DEFAULT',
-                      role: 'ASSISTANT',
-                      content: msg.actionresult as string,
-                    });
-                  }
-                  // 30: 回答完成，包含具体所有消息内容。直接覆盖之前的临时拼接消息
-                  else if (msg.actionstate === 30 && msg.actionresult) {
-                    const result = JSON.parse(msg.actionresult as string);
-                    const choices = result.choices;
-                    if (choices && choices.length > 0) {
-                      aiChat.replaceMessage({
-                        messageid: id,
-                        state: msg.actionstate,
-                        type: 'DEFAULT',
-                        role: 'ASSISTANT',
-                        content: choices[0].content || '',
-                      });
-                    }
-                  }
-                  // 40: 回答报错，展示错误信息
-                  else if (msg.actionstate === 40) {
-                    aiChat.replaceMessage({
-                      messageid: id,
-                      state: msg.actionstate,
-                      type: 'ERROR',
-                      role: 'ASSISTANT',
-                      content: msg.actionresult as string,
-                    });
-                  }
-                },
-                abortController,
-                ctx,
-                param,
-                {
-                  messages: arr,
-                },
-              );
-            } catch (error) {
-              aiChat.replaceMessage({
-                messageid: id,
-                state: 40,
-                type: 'ERROR',
-                role: 'ASSISTANT',
-                content: (error as IData).message || ibiz.i18n.t('app.aiError'),
-              });
-              abortController?.abort();
-            } finally {
-              // 标记当前消息已经交互完成
-              aiChat.completeMessage(id, true);
-              return true;
-            }
-          },
-          abortQuestion: async (aiChat: any) => {
-            abortController?.abort();
-            await aiChat.stopMessage({
-              messageid: id,
-              state: 30,
-              type: 'DEFAULT',
-              role: 'ASSISTANT',
-              content: '',
-            });
-            // 标记当前消息已经交互完成
-            await aiChat.completeMessage(id, true);
-          },
+          ...chatOptions,
           action: ((action: string, message: IChatMessage) => {
             if (action === 'backfill') emit('change', message.realcontent);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
           }) as any,
-          history: async (ctx: IContext, param: IParams, other: IParams) => {
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            const historyData = other.appendCurData ? other.appendCurData : {};
-            const result = await deService.aiChatHistory(
-              ctx,
-              param,
-              historyData,
-            );
-            if (result.data && Array.isArray(result.data)) {
-              let preMsg: IData | undefined;
-              result.data.forEach(item => {
-                if (item.role === 'TOOL') {
-                  if (preMsg && item.content) {
-                    chatInstance.aiChat!.updateRecommendPrompt(
-                      preMsg as any,
-                      item.content,
-                    );
-                  }
-                } else {
-                  const msg = {
-                    messageid: createUUID(),
-                    state: 30,
-                    type: 'DEFAULT',
-                    role: item.role,
-                    content: item.content,
-                    completed: true,
-                  } as const;
-                  preMsg = msg;
-                  chatInstance.aiChat!.addMessage(msg);
-                }
-              });
-            }
-            return true;
-          },
-          recommendPrompt: async (
-            ctx: IContext,
-            param: IParams,
-            other: IParams,
-          ) => {
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            const result = await deService.aiChatRecommendPrompt(
-              ctx,
-              param,
-              other.message,
-            );
-            if (result.ok && result.data) {
-              const choices = result.data.choices;
-              if (choices && choices.length > 0) {
-                return choices[0];
-              }
-              return null;
-            }
-            return null;
-          },
-          uploader: {
-            onUpload: async (
-              file: File,
-              reportProgress: (progress: number) => void,
-              options?: IData,
-            ) => {
-              const fileMeata = ibiz.util.file.calcFileUpDownUrl(
-                options?.context || c.context,
-                options?.params || c.params,
-                {},
-              );
-              const uploadHeaders = ibiz.util.file.getUploadHeaders();
-              const formData = new FormData();
-              formData.append('file', file);
-              const res = await ibiz.net.axios({
-                url: fileMeata.uploadUrl,
-                method: 'post',
-                headers: uploadHeaders,
-                data: formData,
-                onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-                  const percent =
-                    (progressEvent.loaded / progressEvent.total!) * 100;
-                  reportProgress(percent);
-                },
-              });
-              return res.data;
-            },
-          },
-          extendToolbarClick: async (
-            event: MouseEvent,
-            source: IData,
-            context: IData,
-            params: IData,
-            data: IData,
-          ) => {
-            const result = await UIActionUtil.exec(
-              source.id,
-              {
-                view: c.view,
-                ctrl: c.ctrl,
-                context: IBizContext.create(context),
-                params,
-                data: [data],
-                event,
-              },
-              source.appId,
-            );
-            if (result.closeView) {
-              // 修复编辑器失焦后，调整数据后直接点击关闭按钮导致无法触发自动保存
-              // params.view.modal.ignoreDismissCheck = true;
-              c.view.closeView({ ok: true });
-            } else if (result.refresh) {
-              switch (result.refreshMode) {
-                case 1:
-                  c.view.callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                case 2:
-                  c.view.parentView?.callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                case 3:
-                  c.view.getTopView()?.callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                default:
-              }
-            }
-            return result;
-          },
         },
       });
     };
@@ -457,12 +268,104 @@ export const IBizCode = defineComponent({
       return true;
     };
 
+    // 工具栏更新相关逻辑
+    const updateTextToolbarPos = (selection: IParams): void => {
+      // 获取选中文本的位置信息
+      const position = selection.getStartPosition();
+      if (position) {
+        // 计算工具栏位置
+        const coordinates = editor?.getScrolledVisiblePosition(position);
+        const editorRect = editor?.getDomNode()?.getBoundingClientRect();
+        if (!editorRect || !coordinates) return;
+
+        textTBStyle.value = {
+          ...textTBStyle.value,
+          // 编辑器左侧距离 + 选区距离编辑器左侧距离
+          [ns.cssVarBlockName('text-editor-toolbar-left')]: `${
+            editorRect.left + coordinates.left
+          }px`,
+          // 编辑器上方距离 + 选区距离编辑器上方距离 + 行高度
+          [ns.cssVarBlockName('text-editor-toolbar-top')]: `${
+            editorRect.top + coordinates.top + coordinates.height
+          }px`,
+        };
+      }
+    };
+
+    // 设置工具栏显隐状态
+    const setTextTBVisible = (): void => {
+      // 只读模式或无自填模式时始终隐藏
+      if (
+        props.readonly ||
+        !enableEdit.value ||
+        !c.deACMode ||
+        !c.chatCompletion
+      )
+        return;
+
+      const selection = editor?.getSelection();
+      textTBVisible.value = !!(selection && !selection.isEmpty());
+    };
+
+    // 处理选中文本事件
+    const onSelectionChange = (e: IParams): void => {
+      const selection = e.selection;
+      if (selection) {
+        updateTextToolbarPos(selection);
+        c.currentSelection = selection;
+      }
+    };
+
+    // 处理行内ai点击
+    const handleLineAiClick = (_e: MouseEvent): void => {
+      const position = editor?.getSelection()?.getStartPosition();
+      if (!position) return;
+      const coordinates = editor?.getScrolledVisiblePosition(position);
+      const editorRect = editor?.getDomNode()?.getBoundingClientRect();
+      const textTBHeight = textTBRef.value.offsetHeight;
+      if (!coordinates || !editorRect || !textTBHeight) return;
+      const items: MenuItem[] = ibiz.inLineAIUtil.calcContextMenus(
+        c.deACMode,
+        (tag: string) => {
+          c.doInLineAIUIAction(tag, c.model.appId);
+        },
+      );
+      if (items.length === 0) return;
+      ibiz.inLineAIUtil.showContextMenus(
+        // 编辑器左侧距离 + 选区距离编辑器左侧距离
+        editorRect.left + coordinates.left,
+        // 编辑器上方距离 + 选区距离编辑器上方距离 + 行高度 + 工具栏高度
+        editorRect.top + coordinates.top + coordinates.height + textTBHeight,
+        items,
+        {
+          zIndex: zIndex.increment(),
+          onClose: () => {
+            zIndex.decrement();
+          },
+        },
+      );
+    };
+
+    // 编辑器内鼠标点击事件
+    const handleEditorClick = (e: MouseEvent): void => {
+      if (!textTBRef.value?.contains(e.target)) {
+        setTimeout(setTextTBVisible, 100); // 延迟检查，确保选择已更新
+      }
+    };
+
+    // 窗口鼠标按下事件
+    const handleMousedown = (e: MouseEvent): void => {
+      if (textTBVisible.value && !textTBRef.value?.contains(e.target)) {
+        textTBVisible.value = false;
+      }
+    };
+
     const editorInit = (): void => {
       nextTick(() => {
         isLoading.value = true;
         loader.config({
           paths: {
-            vs: `${ibiz.env.pluginBaseUrl}/monaco-editor@0.45.0/min/vs`,
+            vs: `${ibiz.env.pluginBaseUrl}/monaco-editor@0.52.2/min/vs`,
           },
         });
         loader
@@ -478,8 +381,13 @@ export const IBizCode = defineComponent({
                 foldingStrategy: 'indentation',
                 renderLineHighlight: 'all', // 行亮
                 selectOnLineNumbers: true, // 显示行号
+                lineNumbers: isFullScreen.value
+                  ? 'on'
+                  : c.hideLineNumbers
+                    ? 'off'
+                    : 'on',
                 minimap: {
-                  enabled: true,
+                  enabled: isFullScreen.value ? true : !c.hideMinimap,
                 },
                 readOnly: hasEnableEdit.value
                   ? readonlyState.value
@@ -494,7 +402,7 @@ export const IBizCode = defineComponent({
               });
               // 为当前编辑器实例添加自定义属性
               (editor as any).__instanceId = UUID;
-              if (c.deACMode && ibiz.env.enableAI) {
+              if (c.chatCompletion && ibiz.env.enableAI) {
                 codeLensProviderDisposable =
                   loaderMonaco.languages.registerCodeLensProvider(
                     props.language || props.controller.language,
@@ -521,6 +429,9 @@ export const IBizCode = defineComponent({
                   );
               }
             }
+
+            c.onCreated(editor, loaderMonaco);
+
             setTimeout(() => {
               editor!.layout();
               editor!.setValue(currentVal.value);
@@ -565,11 +476,18 @@ export const IBizCode = defineComponent({
 
             // 监听值的变化
             editor.onDidChangeModelContent(() => {
+              setTextTBVisible();
               if (!hasEnableEdit.value) {
                 currentVal.value = editor!.getValue();
                 emit('change', currentVal.value);
               }
             });
+
+            // 监听选择区变化事件
+            editor.onDidChangeCursorSelection(onSelectionChange);
+
+            // 点击编辑器其他区域时隐藏工具栏
+            editor.getDomNode()?.addEventListener('click', handleEditorClick);
 
             window.addEventListener('resize', () => {
               editor!.layout();
@@ -726,12 +644,45 @@ export const IBizCode = defineComponent({
       );
     };
 
+    // 绘制行内文本编辑工具栏
+    const renderTextEditorToolbar = () => {
+      if (!textTBVisible.value || !c.chatCompletion) return null;
+      return (
+        <div
+          ref='textTBRef'
+          class={[ns.b('text-editor-toolbar')]}
+          style={{
+            ...textTBStyle.value,
+          }}
+        >
+          <div
+            class={[ns.be('text-editor-toolbar', 'item')]}
+            title='AI'
+            onClick={handleLineAiClick}
+          >
+            <svg
+              version='1.1'
+              xmlns='http://www.w3.org/2000/svg'
+              viewBox='0 0 1024 1024'
+              width='1em'
+              height='1em'
+              fill='currentColor'
+            >
+              <path d='M274.344554 173.673875c16.429399 0 30.950568 8.00526 39.956484 20.338945a34.906655 34.906655 0 0 1 14.660796 15.754537l1.117013 2.815803 210.138065 597.927736c6.795162 19.268474-5.329083 40.817516-27.041022 48.147913-20.641469 6.95806-42.493035-1.419537-50.451753-18.803052l-1.117013-2.815803-54.477653-154.939008H134.997185L80.566074 837.039954c-6.771891 19.268474-29.856826 28.949253-51.568765 21.618855-20.641469-6.981331-32.602816-26.761769-27.925325-45.239025l0.861031-2.908888L212.047809 212.58316c4.025901-11.426112 13.799764-19.477914 25.598214-22.619512 9.029188-10.006575 22.107548-16.289773 36.67526-16.289773z m386.416675 169.460176c21.828295 0 39.723774 10.890876 41.469106 24.713912l0.116356 2.210755v461.652153c0 14.893506-18.616883 26.947938-41.585462 26.947938-21.805024 0-39.700503-10.890876-41.422565-24.737183l-0.162897-2.210755V370.081989c0-14.870235 18.616883-26.924667 41.585462-26.924667z m-389.697901-48.171184L163.620643 600.628812h214.88537l-107.442685-305.665945z m602.163076-206.181978a12.566396 12.566396 0 0 1 8.144887 8.051802l32.509731 99.041817 101.694723 36.07021a12.566396 12.566396 0 0 1-0.791218 23.922695l-99.53051 27.995137-30.857483 97.552467a12.566396 12.566396 0 0 1-23.899423 0.116355l-32.509732-99.018546-98.669479-31.322905a12.566396 12.566396 0 0 1-0.186169-23.876152l97.505924-32.812256 30.834212-97.529195a12.566396 12.566396 0 0 1 15.754537-8.191429zM649.544557 0.513593c2.676177 0.884302 4.770576 3.025243 5.608336 5.724692l18.523798 59.294772 60.970292 20.66474a8.796477 8.796477 0 0 1-0.325796 16.755194l-60.73758 18.058377-19.780438 59.550754a8.796477 8.796477 0 0 1-16.731924-0.162898l-18.523798-59.271501-59.062061-17.825665a8.796477 8.796477 0 0 1-0.395609-16.708653l59.574025-20.943993 19.780438-59.574025a8.796477 8.796477 0 0 1 11.100317-5.561794z'></path>
+            </svg>
+          </div>
+        </div>
+      );
+    };
+
     onMounted(() => {
       editorInit();
+      window.addEventListener('mousedown', handleMousedown.bind(this));
     });
 
     onUnmounted(() => {
       unload();
+      window.removeEventListener('mousedown', handleMousedown.bind(this));
     });
 
     return {
@@ -742,8 +693,11 @@ export const IBizCode = defineComponent({
       hasEnableEdit,
       readonlyState,
       isLoading,
+      textTBRef,
+      editorTheme,
       renderFooter,
       renderHeaderToolbar,
+      renderTextEditorToolbar,
       renderCodeContent,
       changeFullScreenState,
     };
@@ -754,12 +708,14 @@ export const IBizCode = defineComponent({
       <div
         class={[
           this.ns.b(),
+          this.ns.is(this.editorTheme, !!this.editorTheme),
           { [this.ns.b('editor-readonly')]: this.readonlyState },
           { [this.ns.b('editor-enable')]: !this.readonlyState },
           this.ns.is('enable', this.hasEnableEdit),
         ]}
         v-loading={isLoading}
       >
+        {this.renderTextEditorToolbar()}
         {this.renderHeaderToolbar()}
         {this.renderCodeContent()}
         {this.hasEnableEdit && !this.readonlyState ? this.renderFooter() : null}
@@ -773,11 +729,13 @@ export const IBizCode = defineComponent({
         <div
           class={[
             this.ns.b(),
+            this.ns.is(this.editorTheme, !!this.editorTheme),
             { [this.ns.b('editor-readonly')]: this.readonlyState },
             { [this.ns.b('editor-enable')]: !this.readonlyState },
           ]}
           v-loading={isLoading}
         >
+          {this.renderTextEditorToolbar()}
           {this.renderHeaderToolbar()}
           {this.renderCodeContent()}
           {this.hasEnableEdit && !this.readonlyState

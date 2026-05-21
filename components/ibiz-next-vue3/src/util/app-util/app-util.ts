@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 /* eslint-disable no-unsafe-finally */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable no-shadow */
@@ -10,27 +11,16 @@ import {
   IAuthResult,
   getDeACMode,
   IAiChatParam,
-  ConfigService,
   calcDeCodeNameById,
-  UIActionUtil,
-  SysUIActionTag,
   IApiViewController,
-  IControlController,
-  ViewController,
+  RouteConst,
 } from '@ibiz-template/runtime';
-import { createUUID } from 'qx-util';
-import {
-  IBizContext,
-  IChatMessage,
-  IPortalAsyncAction,
-} from '@ibiz-template/core';
-import { AxiosProgressEvent } from 'axios';
+import { IChatMessage } from '@ibiz-template/core';
 import {
   route2routePath,
   routePath2string,
   useUIStore,
 } from '@ibiz-template/vue3-util';
-import { calcAiToolbarItemsByAc } from '../ai-util/ai-util';
 
 export class AppUtil implements IAppUtil {
   /**
@@ -47,6 +37,51 @@ export class AppUtil implements IAppUtil {
    * @param {Router} router
    */
   constructor(public router: Router) {}
+
+  /**
+   * @description 注册导航结束事件
+   * @param {(form: string, to: string) => void} [callBack]
+   * @memberof AppUtil
+   */
+  registerEventOnNavEnd(callBack: (form: string, to: string) => void): void {
+    this.router.afterEach((form, to) => {
+      if (callBack) callBack(form.fullPath, to.fullPath);
+    });
+  }
+
+  /**
+   * @description 注册路由导航完成关闭模态类视图
+   */
+  registerAutoCloseOnNavEnd(): void {
+    if (!ibiz.config.common.autoCloseModalView || !this.router) return;
+    this.router.afterEach(to => {
+      if (this.viewCacheCenter.size === 0) return;
+      // 打开目标视图类型是路由模态视图则不做处理
+      if (
+        to &&
+        to.path &&
+        to.path.indexOf(`/${RouteConst.ROUTE_MODAL_TAG}`) !== -1
+      ) {
+        return;
+      }
+      const cacheViews = [...this.viewCacheCenter.values()];
+      const validModalViews = cacheViews.filter((view: IData) => {
+        return (
+          view &&
+          view.state.isDestroyed === false &&
+          view.modal &&
+          view.modal.viewUsage === 2
+        );
+      });
+      if (validModalViews.length === 0) return;
+      setTimeout(() => {
+        validModalViews.forEach(
+          (view: IApiViewController) =>
+            view && view.closeView && view.closeView(),
+        );
+      }, 0);
+    });
+  }
 
   /**
    * @description 路由是否初始化构建完成
@@ -265,296 +300,61 @@ export class AppUtil implements IAppUtil {
       context.srfappid,
     );
     if (!deACMode) return Promise.resolve([]);
-    const {
-      contentToolbarItems,
-      footerToolbarItems,
-      questionToolbarItems,
-      otherToolbarItems,
-    } = calcAiToolbarItemsByAc(deACMode);
-    const module = await import('@ibiz-template-plugin/ai-chat');
-    const chatInstance = module.chat || module.default.chat;
-    const messages: IChatMessage[] = [];
+    const chatInstance = await ibiz.aiChatUtil.getAIChat();
     const appDataEntityName = calcDeCodeNameById(appDataEntityId!);
-    let topicId = `${context.srfsystemid}_${context.srfappid}_${appDataEntityId}_${appDEACModeId}_`;
+    let topicId = `${appDataEntityId}@${appDEACModeId}@`;
     topicId += context[appDataEntityName]
       ? context[appDataEntityName]
-      : createUUID();
-    const caption = `[${deACMode.logicName}]${data?.srfmajortext || ''}`;
+      : 'default';
+    const sessionid = ibiz.aiChatUtil.getChatSessionId('TOPIC', topicId);
+    const topicCaption = `[${deACMode.logicName}]${data?.srfmajortext || ''}`;
     const tempParams = { ...params, ...{ srfactag: deACMode.codeName } };
     const { zIndex } = useUIStore();
     const containerZIndex = zIndex.increment();
+    const { containerOptions, topicOptions, chatOptions } =
+      await ibiz.aiChatUtil.getUIActionExAIChatParams(
+        context,
+        params,
+        data,
+        deACMode,
+        { chatInstance, view, ctrl },
+      );
+    const resourceOptions = await ibiz.aiChatUtil.getAIResourceOptions(
+      context,
+      params,
+    );
     return new Promise(resolve => {
-      let id: string = '';
-      let abortController: AbortController;
       chatInstance.create({
         mode: 'TOPIC',
+        resourceOptions,
         containerOptions: {
           zIndex: containerZIndex,
           enableBackFill: false,
+          ...containerOptions,
         },
         topicOptions: {
           appid: ibiz.env.appId,
           id: topicId,
-          caption,
+          caption: topicCaption,
           url: window.location.hash.substring(1),
           type: context.srftopicpath || 'default',
-          beforeDelete: async (...args: any[]) => {
-            const isBatchRemove = args[4];
-            const result = await ibiz.confirm.warning({
-              title: ibiz.i18n.t(
-                `util.appUtil.${isBatchRemove ? 'clearTopic' : 'aiTitle'}`,
-              ),
-              desc: ibiz.i18n.t(
-                `util.appUtil.${isBatchRemove ? 'clearTopicDesc' : 'aiDesc'}`,
-              ),
-            });
-            return result;
-          },
-          action: async (
-            action: string,
-            context: IContext,
-            params: IParams,
-            data: IData,
-            event: MouseEvent,
-          ) => {
-            if (action === 'LINK') {
-              await ibiz.openView.push(data.url);
-            }
-            return true;
-          },
-          configService: (
-            appid: string,
-            storageType: string,
-            subType: string,
-          ) => {
-            return new ConfigService(appid, storageType, subType);
-          },
+          ...topicOptions,
         },
         chatOptions: {
           caption: deACMode.logicName,
           context: { ...context },
           params: tempParams,
-          // 界面行为导航上下文参数srfaiappendcurdata，是否传入对象参数，用于历史查询传参
-          appendCurData:
-            context.srfaiappendcurdata === 'true' ? data : undefined,
           appDataEntityId,
-          contentToolbarItems: contentToolbarItems as any,
-          footerToolbarItems: footerToolbarItems as any,
-          questionToolbarItems: questionToolbarItems as any,
-          otherToolbarItems: otherToolbarItems as any,
-          question: async (
-            aiChat: any,
-            ctx: IContext,
-            param: IParams,
-            other: IParams,
-            arr: IChatMessage[],
+          sessionid,
+          // 扩展参数
+          ...chatOptions,
+          // 关闭回调
+          closed: (
+            context: IContext,
+            params: IParams,
+            messages: IChatMessage[],
           ) => {
-            id = createUUID();
-            abortController = new AbortController();
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            try {
-              await deService.aiChatSse(
-                (msg: IPortalAsyncAction) => {
-                  // 20: 持续回答中，消息会持续推送。同一个消息 id 会显示在同一个框内
-                  if (msg.actionstate === 20 && msg.actionresult) {
-                    aiChat.addMessage({
-                      messageid: id,
-                      state: msg.actionstate,
-                      type: 'DEFAULT',
-                      role: 'ASSISTANT',
-                      content: msg.actionresult as string,
-                    });
-                  }
-                  // 30: 回答完成，包含具体所有消息内容。直接覆盖之前的临时拼接消息
-                  else if (msg.actionstate === 30 && msg.actionresult) {
-                    const result = JSON.parse(msg.actionresult as string);
-                    const choices = result.choices;
-                    if (choices && choices.length > 0) {
-                      aiChat.replaceMessage({
-                        messageid: id,
-                        state: msg.actionstate,
-                        type: 'DEFAULT',
-                        role: 'ASSISTANT',
-                        content: choices[0].content || '',
-                      });
-                    }
-                  }
-                  // 40: 回答报错，展示错误信息
-                  else if (msg.actionstate === 40) {
-                    aiChat.replaceMessage({
-                      messageid: id,
-                      state: msg.actionstate,
-                      type: 'ERROR',
-                      role: 'ASSISTANT',
-                      content: msg.actionresult as string,
-                    });
-                  }
-                },
-                abortController,
-                ctx,
-                param,
-                {
-                  messages: arr,
-                },
-              );
-            } catch (error) {
-              aiChat.replaceMessage({
-                messageid: id,
-                state: 40,
-                type: 'ERROR',
-                role: 'ASSISTANT',
-                content: (error as IData).message || ibiz.i18n.t('app.aiError'),
-              });
-              abortController?.abort();
-            } finally {
-              // 标记当前消息已经交互完成
-              aiChat.completeMessage(id, true);
-              return true;
-            }
-          },
-          abortQuestion: async (aiChat: any) => {
-            abortController?.abort();
-            await aiChat.stopMessage({
-              messageid: id,
-              state: 30,
-              type: 'DEFAULT',
-              role: 'ASSISTANT',
-              content: '',
-            });
-            // 标记当前消息已经交互完成
-            await aiChat.completeMessage(id, true);
-          },
-          closed: () => {
             resolve(messages);
-          },
-          history: async (ctx: IContext, param: IParams, other: IParams) => {
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            const historyData = other.appendCurData ? other.appendCurData : {};
-            const result = await deService.aiChatHistory(
-              ctx,
-              param,
-              historyData,
-            );
-            if (result.data && Array.isArray(result.data)) {
-              let preMsg: IData | undefined;
-              result.data.forEach(item => {
-                if (item.role === 'TOOL') {
-                  if (preMsg && item.content) {
-                    chatInstance.aiChat!.updateRecommendPrompt(
-                      preMsg as any,
-                      item.content,
-                    );
-                  }
-                } else {
-                  const msg = {
-                    messageid: createUUID(),
-                    state: 30,
-                    type: 'DEFAULT',
-                    role: item.role,
-                    content: item.content,
-                    completed: true,
-                  } as const;
-                  preMsg = msg;
-                  chatInstance.aiChat!.addMessage(msg);
-                }
-              });
-            }
-            return true;
-          },
-          recommendPrompt: async (
-            ctx: IContext,
-            param: IParams,
-            other: IParams,
-          ) => {
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            const result = await deService.aiChatRecommendPrompt(
-              ctx,
-              param,
-              other.message,
-            );
-            if (result.ok && result.data) {
-              const choices = result.data.choices;
-              if (choices && choices.length > 0) {
-                return choices[0];
-              }
-              return null;
-            }
-            return null;
-          },
-          uploader: {
-            onUpload: async (
-              file: File,
-              reportProgress: (progress: number) => void,
-              options?: IData,
-            ) => {
-              const { uploadUrl } = ibiz.util.file.calcFileUpDownUrl(
-                options?.context || context,
-                options?.params || params,
-                {},
-              );
-              const headers = ibiz.util.file.getUploadHeaders();
-              const formData = new FormData();
-              formData.append('file', file);
-              const res = await ibiz.net.axios({
-                url: uploadUrl,
-                method: 'post',
-                headers,
-                data: formData,
-                onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-                  const percent =
-                    (progressEvent.loaded / progressEvent.total!) * 100;
-                  reportProgress(percent);
-                },
-              });
-              return res.data;
-            },
-          },
-          extendToolbarClick: async (
-            event: MouseEvent,
-            source: IData,
-            context: IData,
-            params: IData,
-            data: IData,
-          ) => {
-            const result = await UIActionUtil.exec(
-              source.id,
-              {
-                view: view as ViewController,
-                ctrl: ctrl as IControlController,
-                context: IBizContext.create(context),
-                params,
-                data: [data],
-                event,
-              },
-              source.appId,
-            );
-            if (result.closeView) {
-              // 修复编辑器失焦后，调整数据后直接点击关闭按钮导致无法触发自动保存
-              // params.view.modal.ignoreDismissCheck = true;
-              view.closeView({ ok: true });
-            } else if (result.refresh) {
-              switch (result.refreshMode) {
-                case 1:
-                  (view as ViewController).callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                case 2:
-                  view.parentView?.callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                case 3:
-                  (view as ViewController)
-                    .getTopView()
-                    ?.callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                default:
-              }
-            }
-            return result;
           },
         },
       });
@@ -575,7 +375,7 @@ export class AppUtil implements IAppUtil {
    *   }}
    * @memberof AppUtil
    */
-  route2routeObject(isRouteModal?: boolean): {
+  route2routeObject(isRouteModal: boolean = false): {
     appContext?: IParams;
     pathNodes: {
       viewName: string;
@@ -584,7 +384,10 @@ export class AppUtil implements IAppUtil {
       srfnav?: string;
     }[];
   } {
-    const routePath = route2routePath(this.router.currentRoute.value as any);
+    const routePath = route2routePath(
+      this.router.currentRoute.value as any,
+      isRouteModal,
+    );
     return routePath;
   }
 

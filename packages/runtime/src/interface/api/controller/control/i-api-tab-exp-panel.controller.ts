@@ -25,7 +25,7 @@ export interface IApiTabExpPanelController<
 
   /**
    * @description 设置激活项
-   * @param {string} name
+   * @param {string} name 分页标识
    * @memberof IApiTabExpPanelController
    */
   setActive(name: string): void;

@@ -3,8 +3,13 @@ import {
   RuntimeError,
   RuntimeModelError,
 } from '@ibiz-template/core';
-import { EditorController, convertNavData } from '@ibiz-template/runtime';
-import { IMarkdown } from '@ibiz/model-core';
+import {
+  EditorController,
+  IAppDEService,
+  convertNavData,
+  getDeACMode,
+} from '@ibiz-template/runtime';
+import { IAppDEACMode, IMarkdown } from '@ibiz/model-core';
 import qs from 'qs';
 
 /**
@@ -25,11 +30,51 @@ export class MarkDownEditorController extends EditorController<IMarkdown> {
    */
   public exportParams?: IParams;
 
+  /**
+   * @description 是否启用无权限
+   * @type {boolean}
+   * @memberof MarkDownEditorController
+   */
+  public enableNoAccess: boolean = false;
+
+  /**
+   * @description 是否使用全局文件下载前缀
+   * @memberof MarkDownEditorController
+   */
+  public globalDownloadPrifix = false;
+
+  /**
+   * 应用实体服务
+   *
+   * @type {IAppDEService}
+   * @memberof HtmlEditorController
+   */
+  deService?: IAppDEService;
+
+  /**
+   * @description 自填模式
+   * @type {IAppDEACMode}
+   * @memberof MarkDownEditorController
+   */
+  deACMode?: IAppDEACMode;
+
+  /**
+   * @description AI 聊天自填模式
+   * @type {boolean}
+   * @memberof MarkDownEditorController
+   */
+  chatCompletion: boolean = false;
+
   protected async onInit(): Promise<void> {
     await super.onInit();
 
     if (this.editorParams) {
-      const { uploadparams, exportparams } = this.editorParams;
+      const {
+        uploadparams,
+        exportparams,
+        enablenoaccess,
+        globaldownloadprifix,
+      } = this.editorParams;
 
       if (uploadparams) {
         try {
@@ -49,6 +94,28 @@ export class MarkDownEditorController extends EditorController<IMarkdown> {
             exportparams,
             ibiz.i18n.t('editor.markdown.exportJsonFormatErr'),
           );
+        }
+      }
+      if (enablenoaccess) {
+        this.enableNoAccess = enablenoaccess === 'true';
+      }
+      this.globalDownloadPrifix =
+        globaldownloadprifix === 'true' ||
+        ibiz.config.common.globalDownloadPrifix;
+    }
+    const model = this.model;
+    if (model.appDEACModeId) {
+      this.deACMode = await getDeACMode(
+        model.appDEACModeId,
+        model.appDataEntityId!,
+        this.context.srfappid,
+      );
+      if (this.deACMode) {
+        if (this.deACMode.actype === 'CHATCOMPLETION') {
+          this.deService = await ibiz.hub
+            .getApp(model.appId)
+            .deService.getService(this.context, model.appDataEntityId!);
+          this.chatCompletion = true;
         }
       }
     }

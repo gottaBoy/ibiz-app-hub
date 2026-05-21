@@ -32,7 +32,7 @@ export class IBizContext implements IIBizContext {
    * @type {IBizContext[]}
    * @memberof IBizContext
    */
-  protected declare _associationContext: IBizContext[];
+  declare protected _associationContext: IBizContext[];
 
   /**
    * @description 修改的父上下文
@@ -40,7 +40,7 @@ export class IBizContext implements IIBizContext {
    * @type {IData}
    * @memberof IBizContext
    */
-  protected declare _context: IData;
+  declare protected _context: IData;
 
   /**
    * @description 父的上下文源对象

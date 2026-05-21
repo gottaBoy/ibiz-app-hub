@@ -20,11 +20,18 @@ import { PickupViewEngine } from './pickup-view.engine';
  * @extends {ViewEngineBase}
  */
 export class MPickupViewEngine extends PickupViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEPickupView,
     IMPickupViewState,
     IMPickupViewEvent
   >;
+
+  /**
+   * @description 是否严格的遵循穿梭空左右互相关联
+   * @type {boolean}
+   * @memberof MPickupViewEngine
+   */
+  checkStrictly: boolean = false;
 
   /**
    * 简单列表控制器
@@ -67,6 +74,12 @@ export class MPickupViewEngine extends PickupViewEngine {
     this.view.slotProps.simplelist.isSimple = true;
     this.view.slotProps.simplelist.singleSelect = false;
     this.view.slotProps.pickupviewpanel.singleSelect = false;
+    if (this.view.params.checkstrictly) {
+      this.checkStrictly =
+        this.view.params.checkstrictly === 'true' ||
+        this.view.params.checkstrictly === true;
+      delete this.view.params.checkstrictly;
+    }
   }
 
   /**
@@ -167,14 +180,22 @@ export class MPickupViewEngine extends PickupViewEngine {
    * @memberof MPickupViewEngine
    */
   protected async handlePushSimpleListItems(data: IData[]): Promise<void> {
-    // 每次添加的都是多数据部件当前页数据，因此需先将原来简单列表的当前页数据过滤掉
-    const items = await this.pickupViewPanel.getAllData();
-    // 过滤出非当前页数据
-    const selectItems = this.simpleList
-      .getAllData()
-      .filter(selected => !items.some(item => item.srfkey === selected.srfkey));
-    // 将多数据部件当前页数据加入简单列表选中
-    selectItems.push(...data);
+    let selectItems: IData[] = [];
+    if (this.checkStrictly) {
+      // 每次添加的都是多数据部件当前页数据，因此需先将原来简单列表的当前页数据过滤掉
+      const items = await this.pickupViewPanel.getAllData();
+      // 过滤出非当前页数据
+      selectItems = this.simpleList
+        .getAllData()
+        .filter(
+          selected => !items.some(item => item.srfkey === selected.srfkey),
+        );
+      // 将多数据部件当前页数据加入简单列表选中
+      selectItems.push(...data);
+    } else {
+      const allData = this.simpleList.getAllData();
+      selectItems = [...allData, ...data];
+    }
     // 去重items
     const uniqueItems = this.handleUniqueItems(selectItems);
     this.setSelectedData(uniqueItems);
@@ -245,7 +266,8 @@ export class MPickupViewEngine extends PickupViewEngine {
    * @memberof MPickupViewEngine
    */
   protected setSelectedData(items: IData[]): void {
-    super.setSelectedData(items);
+    // 严格检查模式时需同步穿梭框左右的选中数据
+    if (this.checkStrictly) super.setSelectedData(items);
     this.simpleList.setData(items);
   }
 

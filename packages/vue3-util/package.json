@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/vue3-util",
-  "version": "0.7.41-alpha.21",
+  "version": "0.7.41-alpha.77",
   "description": "通用组件库(vue3)",
   "main": "lib/index.cjs",
   "types": "es/index.d.ts",
@@ -20,8 +20,8 @@
   "scripts": {
     "watch": "ibiz-temp build -w",
     "build": "ibiz-temp build -c && vue-tsc --declaration --emitDeclarationOnly",
-    "lint": "vue-tsc --noEmit && eslint 'src/**/*.tsx' 'src/**/*.ts'",
-    "lint:fix": "vue-tsc --noEmit && eslint --fix 'src/**/*.tsx' 'src/**/*.ts'",
+    "lint": "eslint 'src/**/*.tsx' 'src/**/*.ts'",
+    "lint:fix": "eslint --fix 'src/**/*.tsx' 'src/**/*.ts'",
     "clean": "rimraf es dist",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -36,7 +36,7 @@
   "author": "iBiz",
   "license": "MIT",
   "devDependencies": {
-    "@ibiz-template/cli": "^0.3.10",
+    "@ibiz-template/cli": "0.3.23",
     "@ibiz-template/core": "workspace:*",
     "@ibiz-template/runtime": "workspace:*",
     "@ibiz-template/theme": "workspace:*",
@@ -57,7 +57,7 @@
   "peerDependencies": {
     "@ibiz-template/core": "^0.7.0",
     "@ibiz-template/runtime": "^0.7.0",
-    "@ibiz/model-core": "^0.1.79",
+    "@ibiz/model-core": "^0.1.84",
     "dayjs": "^1.11.10",
     "path-browserify": "^1.0.1",
     "pinia": "^2.1.7",

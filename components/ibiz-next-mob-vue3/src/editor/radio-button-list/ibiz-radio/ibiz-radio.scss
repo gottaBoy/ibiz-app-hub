@@ -1,13 +1,31 @@
+$radio: (
+  color: getCssVar(editor, default, text-color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  spacing-gap: getCssVar(spacing, tight),
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  // 其它
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
+
 @include b('radio') {
+  @include set-component-css-var(radio, $radio);
+
   height: 100%;
-  padding: getCssVar('spacing', 'tight') 0;
+  font-size: getCssVar(radio, font-fontSize);
+  line-height: getCssVar(radio, font-lineHeight);
+  color: getCssVar(radio, color);
+
+  --van-radio-size: #{getCssVar(radio, font-fontSize)};
 
   .van-radio--horizontal {
     margin-right: 0;
   }
 
   .van-radio-group--horizontal {
-    gap: getCssVar('spacing', 'tight');
+    gap: getCssVar(radio, spacing-gap);
   }
 
   .van-radio-group {
@@ -15,19 +33,26 @@
   }
 
   @include e('text') {
-    font-size: getCssVar('form-item', 'font-size');
-    color: getCssVar('form-item', 'text-color');
+    font-size: getCssVar(radio, font-fontSize);
+    line-height: getCssVar(radio, font-lineHeight);
+    color: getCssVar(radio, color);
+  }
+
+  @include m(disabled) {
+    @include e('text') {
+      color: getCssVar(radio, color-disabled);
+    }
   }
 
   @include m(readonly) {
-    color: getCssVar('form-item', 'readonly-color');
+    color: getCssVar(radio, color-readonly);
   }
 
   .van-radio-group--horizontal {
     display: flex;
-    justify-content: getCssVar(form-item-container, editor-align);
+    justify-content: getCssVar(radio, flex-justify-content);
   }
   &.#{bem('radio','','readonly')}{
-    text-align: getCssVar(form-item-container, editor-align);
+    text-align: getCssVar(radio, font-textAlign);
   }
 }

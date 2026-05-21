@@ -3,7 +3,7 @@
     :context="props.context"
     :params="props.params"
     :modal="props.modal"
-    :model-data="model"
+    :model-data="viewModel"
   >
     <template #drbar="slotProps">
       <i-biz-dr-bar-control v-bind="slotProps" />
@@ -24,4 +24,6 @@ interface Props {
   modal?: IModal;
 }
 const props = withDefaults(defineProps<Props>(), {});
+
+const viewModel = props.model;
 </script>

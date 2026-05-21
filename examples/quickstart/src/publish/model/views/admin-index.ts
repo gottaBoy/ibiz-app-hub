@@ -521,6 +521,25 @@ export default {
                 },
                 id: 'container4',
               },
+              {
+                actionType: 'UIACTION',
+                buttonStyle: 'DEFAULT',
+                buttonType: 'PANELBUTTON',
+                uiactionId: 'global_ai_assistant@master',
+                renderMode: 'BUTTON',
+                tooltip: 'AI助手',
+                uiactionTarget: 'NONE',
+                caption: 'AI助手',
+                itemStyle: 'DEFAULT',
+                itemType: 'BUTTON',
+                layoutPos: {
+                  layoutPos: 'CENTER',
+                  layout: 'BORDER',
+                },
+                sysPFPluginId: 'ai_assistant_button',
+                showCaption: true,
+                id: 'button_calluilogic',
+              },
             ],
             predefinedType: 'CONTAINER_SCROLL_MAIN',
             layout: {
@@ -780,6 +799,657 @@ export default {
                 itemType: 'MENUITEM',
                 appMenuItems: [
                   {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc108',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '应用看板视图',
+                    tooltip: '应用看板视图',
+                    id: 'menuitem163',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc88',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '应用启动视图',
+                    tooltip: '应用启动视图',
+                    id: 'menuitem151',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc89',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '应用欢迎视图',
+                    tooltip: '应用欢迎视图',
+                    id: 'menuitem152',
+                  },
+                ],
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '功能页',
+                tooltip: '功能页',
+                id: 'menuitem185',
+              },
+              {
+                itemType: 'MENUITEM',
+                appMenuItems: [
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513353562',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '编辑视图',
+                    tooltip: '编辑视图',
+                    id: 'menuitem34',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc117',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '编辑视图（左右关系）',
+                    tooltip: '编辑视图（左右关系）',
+                    id: 'menuitem187',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc118',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '编辑视图（分页关系）',
+                    tooltip: '编辑视图（分页关系）',
+                    id: 'menuitem188',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc119',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '编辑视图（上下关系）',
+                    tooltip: '编辑视图（上下关系）',
+                    id: 'menuitem189',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513392449',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '向导视图',
+                    tooltip: '向导视图',
+                    id: 'menuitem38',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc104',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '选择视图',
+                    tooltip: '选择视图',
+                    id: 'menuitem51',
+                  },
+                ],
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '数据操作页',
+                tooltip: '数据操作页',
+                id: 'menuitem186',
+              },
+              {
+                itemType: 'MENUITEM',
+                appMenuItems: [
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513267307',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '表格视图',
+                    tooltip: '表格视图',
+                    id: 'menuitem39',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513883462',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '列表视图',
+                    tooltip: '列表视图',
+                    id: 'menuitem40',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc44',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '卡片视图',
+                    tooltip: '卡片视图',
+                    id: 'menuitem113',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513647532',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '看板视图',
+                    tooltip: '看板视图',
+                    id: 'menuitem41',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513574103',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '图表视图',
+                    tooltip: '图表视图',
+                    id: 'menuitem53',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc42',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '树表格视图',
+                    tooltip: '树表格视图',
+                    id: 'menuitem111',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513329297',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '多表单编辑视图',
+                    tooltip: '多表单编辑视图',
+                    id: 'menuitem42',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513634013',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '日历视图',
+                    tooltip: '日历视图',
+                    id: 'menuitem43',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513647141',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '地图视图',
+                    tooltip: '地图视图',
+                    id: 'menuitem44',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc40',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '甘特视图',
+                    tooltip: '甘特视图',
+                    id: 'menuitem108',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc73',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '报表视图',
+                    tooltip: '报表视图',
+                    id: 'menuitem130',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513019494',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: 'HTML视图',
+                    tooltip: 'HTML视图',
+                    id: 'menuitem54',
+                  },
+                ],
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '数据展示页',
+                tooltip: '数据展示页',
+                id: 'menuitem190',
+              },
+              {
+                itemType: 'MENUITEM',
+                appMenuItems: [
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513529208',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '表格导航视图',
+                    tooltip: '表格导航视图',
+                    id: 'menuitem48',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513000196',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '列表导航视图',
+                    tooltip: '列表导航视图',
+                    id: 'menuitem47',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc39',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '卡片导航视图',
+                    tooltip: '卡片导航视图',
+                    id: 'menuitem107',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513180643',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '日历导航视图',
+                    tooltip: '日历导航视图',
+                    id: 'menuitem49',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513502451',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '树导航视图',
+                    tooltip: '树导航视图',
+                    id: 'menuitem46',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0513306285',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '分页导航视图',
+                    tooltip: '分页导航视图',
+                    id: 'menuitem45',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc45',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '分页搜索视图',
+                    tooltip: '分页搜索视图',
+                    id: 'menuitem110',
+                  },
+                ],
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '导航页',
+                tooltip: '导航页',
+                id: 'menuitem150',
+              },
+              {
+                itemType: 'MENUITEM',
+                appMenuItems: [
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc86',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '重定向视图',
+                    tooltip: '重定向视图',
+                    id: 'menuitem148',
+                  },
+                ],
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '流程页',
+                tooltip: '流程页',
+                id: 'menuitem106',
+              },
+              {
+                itemType: 'MENUITEM',
+                appMenuItems: [
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0516387433',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '打开方式',
+                    tooltip: '打开方式',
+                    id: 'menuitem81',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc90',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '视图逻辑',
+                    tooltip: '视图逻辑',
+                    id: 'menuitem149',
+                  },
+                ],
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '页面相关',
+                tooltip: '页面相关',
+                id: 'menuitem112',
+              },
+            ],
+            layout: {
+              columnCount: 24,
+              layout: 'TABLE_24COL',
+            },
+            layoutPos: {
+              colMD: 24,
+              layout: 'TABLE_24COL',
+            },
+            sysImage: {
+              cssClass: 'fa fa-th-large',
+              glyph: 'xf009@FontAwesome',
+            },
+            valid: true,
+            caption: '页面',
+            tooltip: '页面',
+            id: 'menuitem33',
+          },
+          {
+            itemType: 'MENUITEM',
+            appMenuItems: [
+              {
+                itemType: 'MENUITEM',
+                appMenuItems: [
+                  {
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'top_menu',
                     layout: {
@@ -796,6 +1466,7 @@ export default {
                     id: 'menuitem11',
                   },
                   {
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'usrappfunc0514396236',
                     layout: {
@@ -810,6 +1481,23 @@ export default {
                     caption: '数据看板',
                     tooltip: '数据看板',
                     id: 'menuitem23',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc120',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '实体数据看板',
+                    tooltip: '实体数据看板',
+                    id: 'menuitem191',
                   },
                 ],
                 layout: {
@@ -829,7 +1517,7 @@ export default {
                 itemType: 'MENUITEM',
                 appMenuItems: [
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc58',
                     layout: {
@@ -931,7 +1619,7 @@ export default {
                 itemType: 'MENUITEM',
                 appMenuItems: [
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc61',
                     layout: {
@@ -948,7 +1636,7 @@ export default {
                     id: 'menuitem118',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc60',
                     layout: {
@@ -1118,7 +1806,7 @@ export default {
                     id: 'menuitem21',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc100',
                     layout: {
@@ -1135,7 +1823,7 @@ export default {
                     id: 'menuitem129',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc59',
                     layout: {
@@ -1186,7 +1874,7 @@ export default {
                     id: 'menuitem17',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc102',
                     layout: {
@@ -1271,7 +1959,7 @@ export default {
                 itemType: 'MENUITEM',
                 appMenuItems: [
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc69',
                     layout: {
@@ -1288,7 +1976,7 @@ export default {
                     id: 'menuitem126',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc68',
                     layout: {
@@ -1305,7 +1993,7 @@ export default {
                     id: 'menuitem125',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc70',
                     layout: {
@@ -1322,7 +2010,7 @@ export default {
                     id: 'menuitem127',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc65',
                     layout: {
@@ -1339,7 +2027,7 @@ export default {
                     id: 'menuitem122',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc66',
                     layout: {
@@ -1356,7 +2044,7 @@ export default {
                     id: 'menuitem123',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc67',
                     layout: {
@@ -1373,7 +2061,7 @@ export default {
                     id: 'menuitem124',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc63',
                     layout: {
@@ -1424,7 +2112,7 @@ export default {
                     id: 'menuitem18',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc104',
                     layout: {
@@ -2210,7 +2898,7 @@ export default {
                     id: 'menuitem96',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc78',
                     layout: {
@@ -2295,7 +2983,7 @@ export default {
                     id: 'menuitem82',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc79',
                     layout: {
@@ -2329,7 +3017,7 @@ export default {
                     id: 'menuitem86',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'appfunc80',
                     layout: {
@@ -2361,6 +3049,23 @@ export default {
                     caption: '电子签名',
                     tooltip: '电子签名',
                     id: 'menuitem154',
+                  },
+                  {
+                    accUserMode: 2,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc133',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '文件预览',
+                    tooltip: '文件预览',
+                    id: 'menuitem211',
                   },
                 ],
                 layout: {
@@ -2398,759 +3103,7 @@ export default {
             itemType: 'MENUITEM',
             appMenuItems: [
               {
-                itemType: 'MENUITEM',
-                appMenuItems: [
-                  {
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc108',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '应用看板视图',
-                    tooltip: '应用看板视图',
-                    id: 'menuitem163',
-                  },
-                  {
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc88',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '应用启动视图',
-                    tooltip: '应用启动视图',
-                    id: 'menuitem151',
-                  },
-                  {
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc89',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '应用欢迎视图',
-                    tooltip: '应用欢迎视图',
-                    id: 'menuitem152',
-                  },
-                ],
-                layout: {
-                  columnCount: 24,
-                  layout: 'TABLE_24COL',
-                },
-                layoutPos: {
-                  colMD: 24,
-                  layout: 'TABLE_24COL',
-                },
-                valid: true,
-                caption: '功能页',
-                tooltip: '功能页',
-                id: 'menuitem185',
-              },
-              {
-                itemType: 'MENUITEM',
-                appMenuItems: [
-                  {
-                    accUserMode: 2,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513353562',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '编辑视图',
-                    tooltip: '编辑视图',
-                    id: 'menuitem34',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc117',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '编辑视图（左右关系）',
-                    tooltip: '编辑视图（左右关系）',
-                    id: 'menuitem187',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc118',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '编辑视图（分页关系）',
-                    tooltip: '编辑视图（分页关系）',
-                    id: 'menuitem188',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc119',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '编辑视图（上下关系）',
-                    tooltip: '编辑视图（上下关系）',
-                    id: 'menuitem189',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513392449',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '向导视图',
-                    tooltip: '向导视图',
-                    id: 'menuitem38',
-                  },
-                  {
-                    accUserMode: 2,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc104',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '选择视图',
-                    tooltip: '选择视图',
-                    id: 'menuitem51',
-                  },
-                ],
-                layout: {
-                  columnCount: 24,
-                  layout: 'TABLE_24COL',
-                },
-                layoutPos: {
-                  colMD: 24,
-                  layout: 'TABLE_24COL',
-                },
-                valid: true,
-                caption: '数据操作页',
-                tooltip: '数据操作页',
-                id: 'menuitem186',
-              },
-              {
-                itemType: 'MENUITEM',
-                appMenuItems: [
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513267307',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '表格视图',
-                    tooltip: '表格视图',
-                    id: 'menuitem39',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513883462',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '列表视图',
-                    tooltip: '列表视图',
-                    id: 'menuitem40',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc44',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '卡片视图',
-                    tooltip: '卡片视图',
-                    id: 'menuitem113',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513647532',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '看板视图',
-                    tooltip: '看板视图',
-                    id: 'menuitem41',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513574103',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '图表视图',
-                    tooltip: '图表视图',
-                    id: 'menuitem53',
-                  },
-                  {
-                    accUserMode: 2,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc42',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '树表格视图',
-                    tooltip: '树表格视图',
-                    id: 'menuitem111',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513329297',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '多表单编辑视图',
-                    tooltip: '多表单编辑视图',
-                    id: 'menuitem42',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513634013',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '日历视图',
-                    tooltip: '日历视图',
-                    id: 'menuitem43',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513647141',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '地图视图',
-                    tooltip: '地图视图',
-                    id: 'menuitem44',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc40',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '甘特视图',
-                    tooltip: '甘特视图',
-                    id: 'menuitem108',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc73',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '报表视图',
-                    tooltip: '报表视图',
-                    id: 'menuitem130',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513019494',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: 'HTML视图',
-                    tooltip: 'HTML视图',
-                    id: 'menuitem54',
-                  },
-                ],
-                layout: {
-                  columnCount: 24,
-                  layout: 'TABLE_24COL',
-                },
-                layoutPos: {
-                  colMD: 24,
-                  layout: 'TABLE_24COL',
-                },
-                valid: true,
-                caption: '数据展示页',
-                tooltip: '数据展示页',
-                id: 'menuitem190',
-              },
-              {
-                itemType: 'MENUITEM',
-                appMenuItems: [
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513529208',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '表格导航视图',
-                    tooltip: '表格导航视图',
-                    id: 'menuitem48',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513000196',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '列表导航视图',
-                    tooltip: '列表导航视图',
-                    id: 'menuitem47',
-                  },
-                  {
-                    accUserMode: 2,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc39',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '卡片导航视图',
-                    tooltip: '卡片导航视图',
-                    id: 'menuitem107',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513180643',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '日历导航视图',
-                    tooltip: '日历导航视图',
-                    id: 'menuitem49',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513502451',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '树导航视图',
-                    tooltip: '树导航视图',
-                    id: 'menuitem46',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0513306285',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '分页导航视图',
-                    tooltip: '分页导航视图',
-                    id: 'menuitem45',
-                  },
-                  {
-                    accUserMode: 2,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc45',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '分页搜索视图',
-                    tooltip: '分页搜索视图',
-                    id: 'menuitem110',
-                  },
-                ],
-                layout: {
-                  columnCount: 24,
-                  layout: 'TABLE_24COL',
-                },
-                layoutPos: {
-                  colMD: 24,
-                  layout: 'TABLE_24COL',
-                },
-                valid: true,
-                caption: '导航页',
-                tooltip: '导航页',
-                id: 'menuitem150',
-              },
-              {
-                itemType: 'MENUITEM',
-                appMenuItems: [
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc86',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '重定向视图',
-                    tooltip: '重定向视图',
-                    id: 'menuitem148',
-                  },
-                ],
-                layout: {
-                  columnCount: 24,
-                  layout: 'TABLE_24COL',
-                },
-                layoutPos: {
-                  colMD: 24,
-                  layout: 'TABLE_24COL',
-                },
-                valid: true,
-                caption: '流程页',
-                tooltip: '流程页',
-                id: 'menuitem106',
-              },
-              {
-                itemType: 'MENUITEM',
-                appMenuItems: [
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'usrappfunc0516387433',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '打开方式',
-                    tooltip: '打开方式',
-                    id: 'menuitem81',
-                  },
-                  {
-                    accUserMode: 3,
-                    itemType: 'MENUITEM',
-                    appFuncId: 'appfunc90',
-                    layout: {
-                      columnCount: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    layoutPos: {
-                      colMD: 24,
-                      layout: 'TABLE_24COL',
-                    },
-                    valid: true,
-                    caption: '视图逻辑',
-                    tooltip: '视图逻辑',
-                    id: 'menuitem149',
-                  },
-                ],
-                layout: {
-                  columnCount: 24,
-                  layout: 'TABLE_24COL',
-                },
-                layoutPos: {
-                  colMD: 24,
-                  layout: 'TABLE_24COL',
-                },
-                valid: true,
-                caption: '页面相关',
-                tooltip: '页面相关',
-                id: 'menuitem112',
-              },
-            ],
-            layout: {
-              columnCount: 24,
-              layout: 'TABLE_24COL',
-            },
-            layoutPos: {
-              colMD: 24,
-              layout: 'TABLE_24COL',
-            },
-            sysImage: {
-              cssClass: 'fa fa-th-large',
-              glyph: 'xf009@FontAwesome',
-            },
-            valid: true,
-            caption: '页面',
-            tooltip: '页面',
-            id: 'menuitem33',
-          },
-          {
-            itemType: 'MENUITEM',
-            appMenuItems: [
-              {
                 accUserMode: 3,
-                itemType: 'MENUITEM',
-                appFuncId: 'appfunc16',
-                layout: {
-                  columnCount: 24,
-                  layout: 'TABLE_24COL',
-                },
-                layoutPos: {
-                  colMD: 24,
-                  layout: 'TABLE_24COL',
-                },
-                valid: true,
-                caption: 'UI插件',
-                tooltip: 'UI插件',
-                id: 'menuitem74',
-              },
-              {
-                accUserMode: 3,
-                itemType: 'MENUITEM',
-                appFuncId: 'appfunc17',
-                layout: {
-                  columnCount: 24,
-                  layout: 'TABLE_24COL',
-                },
-                layoutPos: {
-                  colMD: 24,
-                  layout: 'TABLE_24COL',
-                },
-                valid: true,
-                caption: '逻辑插件',
-                tooltip: '逻辑插件',
-                id: 'menuitem75',
-              },
-              {
-                accUserMode: 3,
-                itemType: 'MENUITEM',
-                appFuncId: 'appfunc3',
-                layout: {
-                  columnCount: 24,
-                  layout: 'TABLE_24COL',
-                },
-                layoutPos: {
-                  colMD: 24,
-                  layout: 'TABLE_24COL',
-                },
-                valid: true,
-                caption: '主题插件',
-                tooltip: '主题插件',
-                id: 'menuitem56',
-              },
-              {
-                accUserMode: 3,
-                itemType: 'MENUITEM',
-                appFuncId: 'appfunc4',
-                layout: {
-                  columnCount: 24,
-                  layout: 'TABLE_24COL',
-                },
-                layoutPos: {
-                  colMD: 24,
-                  layout: 'TABLE_24COL',
-                },
-                valid: true,
-                caption: '全局插件',
-                tooltip: '全局插件',
-                id: 'menuitem57',
-              },
-              {
-                accUserMode: 2,
-                itemType: 'MENUITEM',
-                appFuncId: 'appfunc94',
-                layout: {
-                  columnCount: 24,
-                  layout: 'TABLE_24COL',
-                },
-                layoutPos: {
-                  colMD: 24,
-                  layout: 'TABLE_24COL',
-                },
-                valid: true,
-                caption: '替换默认插件',
-                tooltip: '替换默认插件',
-                id: 'menuitem156',
-              },
-            ],
-            layout: {
-              columnCount: 24,
-              layout: 'TABLE_24COL',
-            },
-            layoutPos: {
-              colMD: 24,
-              layout: 'TABLE_24COL',
-            },
-            sysImage: {
-              cssClass: 'fa fa-th-large',
-              glyph: 'xf009@FontAwesome',
-            },
-            valid: true,
-            caption: '插件示例',
-            tooltip: '插件示例',
-            id: 'menuitem55',
-          },
-          {
-            itemType: 'MENUITEM',
-            appMenuItems: [
-              {
                 itemType: 'MENUITEM',
                 appFuncId: 'appfunc99',
                 layout: {
@@ -3184,7 +3137,7 @@ export default {
                 id: 'menuitem69',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'usrappfunc0514600707',
                 layout: {
@@ -3236,7 +3189,7 @@ export default {
                 id: 'menuitem72',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'appfunc106',
                 layout: {
@@ -3253,7 +3206,7 @@ export default {
                 id: 'menuitem160',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'appfunc107',
                 layout: {
@@ -3268,6 +3221,125 @@ export default {
                 caption: '代码表',
                 tooltip: '代码表',
                 id: 'menuitem162',
+              },
+              {
+                accUserMode: 3,
+                itemType: 'MENUITEM',
+                appFuncId: 'appfunc114',
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '挂载界面引擎',
+                tooltip: '挂载界面引擎',
+                id: 'menuitem166',
+              },
+              {
+                itemType: 'MENUITEM',
+                appMenuItems: [
+                  {
+                    accUserMode: 2,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc122',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '工具栏脚本',
+                    tooltip: '工具栏脚本',
+                    id: 'menuitem194',
+                  },
+                  {
+                    accUserMode: 2,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc123',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '表单项更新',
+                    tooltip: '表单项更新',
+                    id: 'menuitem195',
+                  },
+                  {
+                    accUserMode: 2,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc124',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '表格列更新',
+                    tooltip: '表格列更新',
+                    id: 'menuitem196',
+                  },
+                  {
+                    accUserMode: 2,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc125',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '表格列绘制',
+                    tooltip: '表格列绘制',
+                    id: 'menuitem197',
+                  },
+                  {
+                    accUserMode: 2,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc126',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '面板项绘制',
+                    tooltip: '面板项绘制',
+                    id: 'menuitem198',
+                  },
+                ],
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '脚本代码',
+                tooltip: '脚本代码',
+                id: 'menuitem193',
               },
             ],
             layout: {
@@ -3291,7 +3363,7 @@ export default {
             itemType: 'MENUITEM',
             appMenuItems: [
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'appfunc82',
                 layout: {
@@ -3308,7 +3380,7 @@ export default {
                 id: 'menuitem132',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'appfunc81',
                 layout: {
@@ -3340,7 +3412,7 @@ export default {
                 id: 'menuitem138',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'appfunc83',
                 layout: {
@@ -3372,7 +3444,7 @@ export default {
                 id: 'menuitem136',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'appfunc105',
                 layout: {
@@ -3406,7 +3478,7 @@ export default {
                 id: 'menuitem157',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'usrappfunc0718597559',
                 layout: {
@@ -3423,7 +3495,7 @@ export default {
                 id: 'menuitem158',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'appfunc113',
                 layout: {
@@ -3456,6 +3528,40 @@ export default {
                 tooltip: '数据大屏',
                 id: 'menuitem153',
               },
+              {
+                accUserMode: 3,
+                itemType: 'MENUITEM',
+                appFuncId: 'appfunc115',
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '数据大屏组件',
+                tooltip: '数据大屏组件',
+                id: 'menuitem167',
+              },
+              {
+                accUserMode: 2,
+                itemType: 'MENUITEM',
+                appFuncId: 'appfunc132',
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '动态界面行为组',
+                tooltip: '动态界面行为组',
+                id: 'menuitem201',
+              },
             ],
             layout: {
               columnCount: 24,
@@ -3478,7 +3584,7 @@ export default {
             itemType: 'MENUITEM',
             appMenuItems: [
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'appfunc84',
                 layout: {
@@ -3495,7 +3601,7 @@ export default {
                 id: 'menuitem140',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'usrappfunc0701263154',
                 layout: {
@@ -3621,7 +3727,7 @@ export default {
                 id: 'menuitem142',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'tab_ctrl_federation1',
                 layout: {
@@ -3638,7 +3744,7 @@ export default {
                 id: 'menuitem143',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'tree_ctrl_federation',
                 layout: {
@@ -3655,7 +3761,7 @@ export default {
                 id: 'menuitem144',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'actions_federation',
                 layout: {
@@ -3672,7 +3778,7 @@ export default {
                 id: 'menuitem145',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'appfunc93',
                 layout: {
@@ -3688,6 +3794,23 @@ export default {
                 tooltip: '表单部件融合',
                 id: 'menuitem155',
               },
+              {
+                accUserMode: 2,
+                itemType: 'MENUITEM',
+                appFuncId: 'appfunc121',
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '代码表融合',
+                tooltip: '代码表融合',
+                id: 'menuitem192',
+              },
             ],
             layout: {
               columnCount: 24,
@@ -3698,13 +3821,328 @@ export default {
               layout: 'TABLE_24COL',
             },
             sysImage: {
-              cssClass: 'fa fa-puzzle-piece',
-              glyph: 'xf12e@FontAwesome',
+              cssClass: 'fa fa-th-large',
+              glyph: 'xf009@FontAwesome',
             },
             valid: true,
             caption: '多应用融合',
             tooltip: '多应用融合',
             id: 'app_federation',
+          },
+          {
+            itemType: 'MENUITEM',
+            appMenuItems: [
+              {
+                itemType: 'MENUITEM',
+                appMenuItems: [
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc16',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: 'UI插件',
+                    tooltip: 'UI插件',
+                    id: 'menuitem74',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc17',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '逻辑插件',
+                    tooltip: '逻辑插件',
+                    id: 'menuitem75',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc3',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '主题插件',
+                    tooltip: '主题插件',
+                    id: 'menuitem56',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc4',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '全局插件',
+                    tooltip: '全局插件',
+                    id: 'menuitem57',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc94',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '替换默认插件',
+                    tooltip: '替换默认插件',
+                    id: 'menuitem156',
+                  },
+                ],
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '插件示例',
+                tooltip: '插件示例',
+                id: 'menuitem55',
+              },
+              {
+                itemType: 'MENUITEM',
+                appMenuItems: [
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc127',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    hidden: true,
+                    valid: true,
+                    caption: '面板项插槽',
+                    tooltip: '面板项插槽',
+                    id: 'menuitem199',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc129',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    hidden: true,
+                    valid: true,
+                    caption: '表单项',
+                    tooltip: '表单项',
+                    id: 'menuitem203',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc130',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    hidden: true,
+                    valid: true,
+                    caption: '表格列',
+                    tooltip: '表格列',
+                    id: 'menuitem204',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc128',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    hidden: true,
+                    valid: true,
+                    caption: '编辑器插槽',
+                    tooltip: '编辑器插槽',
+                    id: 'menuitem202',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'appfunc131',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    hidden: true,
+                    valid: true,
+                    caption: '部件插槽',
+                    tooltip: '部件插槽',
+                    id: 'menuitem205',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0107883337',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '应用级扩展',
+                    tooltip: '应用级扩展',
+                    id: 'menuitem210',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0107915523',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '视图级扩展',
+                    tooltip: '视图级扩展',
+                    id: 'menuitem206',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0107515699',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '部件级扩展',
+                    tooltip: '部件级扩展',
+                    id: 'menuitem207',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0107434002',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '元素级扩展',
+                    tooltip: '元素级扩展',
+                    id: 'menuitem208',
+                  },
+                  {
+                    accUserMode: 3,
+                    itemType: 'MENUITEM',
+                    appFuncId: 'usrappfunc0107036478',
+                    layout: {
+                      columnCount: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    layoutPos: {
+                      colMD: 24,
+                      layout: 'TABLE_24COL',
+                    },
+                    valid: true,
+                    caption: '逻辑块扩展',
+                    tooltip: '逻辑块扩展',
+                    id: 'menuitem209',
+                  },
+                ],
+                layout: {
+                  columnCount: 24,
+                  layout: 'TABLE_24COL',
+                },
+                layoutPos: {
+                  colMD: 24,
+                  layout: 'TABLE_24COL',
+                },
+                valid: true,
+                caption: '全代码扩展',
+                tooltip: '全代码扩展',
+                id: 'menuitem200',
+              },
+            ],
+            layout: {
+              columnCount: 24,
+              layout: 'TABLE_24COL',
+            },
+            layoutPos: {
+              colMD: 24,
+              layout: 'TABLE_24COL',
+            },
+            sysImage: {
+              cssClass: 'fa fa-th-large',
+              glyph: 'xf009@FontAwesome',
+            },
+            valid: true,
+            caption: '扩展',
+            tooltip: '扩展',
+            id: 'menuitem212',
           },
           {
             accUserMode: 2,
@@ -3760,7 +4198,7 @@ export default {
             id: 'custom',
           },
           {
-            accUserMode: 2,
+            accUserMode: 3,
             itemType: 'MENUITEM',
             appFuncId: 'appfunc112',
             layout: {

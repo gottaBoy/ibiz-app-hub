@@ -26,7 +26,7 @@ export class EditView2Engine extends EditViewEngine {
    *   >}
    * @memberof EditView2Engine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEEditView,
     IEditView2State,
     IEditView2Event

@@ -51,3 +51,4 @@ export * from './i-tab-search-view.state';
 export * from './i-app-data-upload-view.state';
 export * from './i-app-login-view.state';
 export * from './i-md-custom-view.state';
+export * from './i-html-view.state';

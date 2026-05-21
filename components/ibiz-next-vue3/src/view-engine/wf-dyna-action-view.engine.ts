@@ -16,7 +16,7 @@ export class WFDynaActionViewEngine extends WFDynaEditViewEngine {
    * @type {ViewController<IAppDEWFDynaActionView, IWFDynaActionViewState, IWFDynaActionViewEvent>}
    * @memberof WFDynaActionViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEWFDynaActionView,
     IWFDynaActionViewState,
     IWFDynaActionViewEvent

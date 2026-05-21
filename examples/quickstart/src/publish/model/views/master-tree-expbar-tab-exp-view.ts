@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'treeExpbarTabExpView',
   deviewId: 'b8b072073bec7f0da76758708bf7e74f',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IChat } from '../i-chat-options/i-chat-options';
 import { IConfigService } from '../i-config-service/i-config-service';
 
@@ -38,6 +39,20 @@ export interface ITopic {
   type: string;
 
   /**
+   * @description 会话排序
+   * @type {number}
+   * @memberof ITopic
+   */
+  sequence: number;
+
+  /**
+   * @description 是否置顶
+   * @type {(0 | 1)}
+   * @memberof ITopic
+   */
+  isTop: 0 | 1;
+
+  /**
    * 话题标题
    *
    * @author tony001
@@ -45,6 +60,23 @@ export interface ITopic {
    * @type {string}
    */
   caption?: string;
+
+  /**
+   * 话题标题模式
+   * default:默认值，由外部传入标题决定
+   * snippet：片段,新建或重置会话时默认显示新会话，如果获取到的history内容中包含user信息，则取最后一条user信息截取用作标题,若未能取到标题时等待用户输入第一个user消息后截取作为标题
+   * summary：摘要，需调用ai接口生成摘要作为标题
+   *
+   * @type {'default' | 'snippet' | 'summary'}
+   */
+  captionMode?: 'default' | 'snippet' | 'summary';
+
+  /**
+   * @description 标题是否计算完成
+   * @type {boolean}
+   * @memberof ITopic
+   */
+  captionComputed?: boolean;
 
   /**
    * 源话题标题
@@ -65,6 +97,16 @@ export interface ITopic {
   url?: string;
 
   /**
+   * 真实id
+   */
+  realid?: string;
+
+  /**
+   * 是否忽略显示,默认显示
+   */
+  isShow?: boolean;
+
+  /**
    * 上下文
    *
    * @author tony001
@@ -83,6 +125,16 @@ export interface ITopic {
  * @interface ITopicOptions
  */
 export interface ITopicOptions extends ITopic {
+  /**
+   * 隐藏话题侧边栏,默认不隐藏
+   */
+  hideTopicSidebar: boolean;
+
+  /**
+   * 禁用存储
+   */
+  disableStorage: boolean;
+
   /**
    * 删除之前
    *

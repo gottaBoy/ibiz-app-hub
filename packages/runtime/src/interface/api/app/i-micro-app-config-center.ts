@@ -8,7 +8,7 @@ import { IMicroAppConfig } from '../common';
 export interface IMicroAppConfigCenter {
   /**
    * @description 注册微应用
-   * @param {IMicroAppConfig[]} apps
+   * @param {IMicroAppConfig[]} apps 微应用列表
    * @memberof IMicroAppConfigCenter
    */
   registerMicroApps(apps: IMicroAppConfig[]): void;
@@ -22,7 +22,7 @@ export interface IMicroAppConfigCenter {
 
   /**
    * @description 获取指定名称的微应用
-   * @param {string} name
+   * @param {string} name 微应用名称
    * @returns {*}  {(IMicroAppConfig | undefined)}
    * @memberof IMicroAppConfigCenter
    */
@@ -30,7 +30,7 @@ export interface IMicroAppConfigCenter {
 
   /**
    * @description 获取插件基础路径
-   * @param {string} name
+   * @param {string} name 微应用名称
    * @returns {*}  {string}
    * @memberof IMicroAppConfigCenter
    */

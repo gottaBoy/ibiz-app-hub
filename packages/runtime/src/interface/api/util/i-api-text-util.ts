@@ -44,4 +44,12 @@ export interface IApiTextUtil {
    * @memberof IApiTextUtil
    */
   stringToHexColor(text: string): string;
+
+  /**
+   * @description 获取文本缩写
+   * @param {string} text 文本
+   * @returns {*}  {(string | void)}
+   * @memberof IApiTextUtil
+   */
+  abbreviation(text: string): string | void;
 }

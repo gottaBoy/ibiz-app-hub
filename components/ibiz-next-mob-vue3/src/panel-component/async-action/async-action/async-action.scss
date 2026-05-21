@@ -1,5 +1,21 @@
 $async-action: (
-  loading-warp-bg-color: linear-gradient(90deg,getCssVar(color, primary, light, hover),getCssVar(color, primary)),
+  // 颜色
+  color-loading-warp-bg-color: linear-gradient(
+      90deg,
+      getCssVar(color, primary, light, hover),
+      getCssVar(color, primary)
+    ),
+  color-async-action-bg-hover: getCssVar(color, fill, 1),
+  color-error-info-color: getCssVar(color, danger),
+  // 间距
+  spacing-caption-margin-bottom: getCssVar('spacing', 'tight'),
+  spacing-error-info-margin-bottom: getCssVar('spacing', 'tight'),
+  // 宽度
+  width-async-action-left: rem(30px),
+  width-async-action-right: rem(80px),
+  width-async-action-center: rem(342px),
+  // 字体大小
+  font-caption-fontWeight: getCssVar(font-weight, bold),
 );
 
 @include b(async-action) {
@@ -9,94 +25,91 @@ $async-action: (
   position: relative;
   white-space: nowrap;
 
-  @include m(clickable){
+  @include m(clickable) {
     cursor: pointer;
   }
 
-  &:hover{
-    background-color: getCssVar(color, fill, 1);
+  &:hover {
+    background-color: getCssVar(async-action, color-async-action-bg-hover);
   }
 
-  @include e(caption){
-    margin-bottom: getCssVar('spacing', 'tight');
-    font-weight: getCssVar(font-weight, bold);
+  @include e(caption) {
+    margin-bottom: getCssVar('async-action','spacing-caption-margin-bottom');
+    font-weight: getCssVar(async-action, font-caption-fontWeight);
   }
 
-  @include e(error-info){
-    margin-bottom: getCssVar('spacing', 'tight');
-    color: getCssVar(color, danger);
+  @include e(error-info) {
+    margin-bottom: getCssVar('async-action','spacing-error-info-margin-bottom');
+    color: getCssVar(async-action, color-error-info-color);
     @include utils-ellipsis;
-
   }
-
 }
 
 @include b(async-action-left) {
   flex-grow: 0;
   flex-shrink: 0;
-  width: rem(30px);
-  font-size: getCssVar(font-size,header-3);
+  width: getCssVar('async-action','width-async-action-left');
+  font-size: getCssVar(font-size, header-3);
   text-align: center;
 }
 
 @include b(async-action-right) {
   flex-grow: 0;
   flex-shrink: 0;
-  width: rem(80px);
+  width: getCssVar('async-action','width-async-action-right');
   text-align: center;
-
 }
 
 @include b(async-action-center) {
   flex-grow: 1;
 
   // flex-shrink: 1;
-  width: 342px;
+  width: getCssVar('async-action','width-async-action-center');
 }
 
 @keyframes breath {
   0% {
-    opacity: .5
+    opacity: 0.5;
   }
 
   10% {
-    opacity: .6
+    opacity: 0.6;
   }
 
   20% {
-    opacity: .7
+    opacity: 0.7;
   }
 
   30% {
-    opacity: .8
+    opacity: 0.8;
   }
 
   40% {
-    opacity: .9
+    opacity: 0.9;
   }
 
   50% {
-    opacity: 1
+    opacity: 1;
   }
 
   60% {
-    opacity: .9
+    opacity: 0.9;
   }
 
   70% {
-    opacity: .8
+    opacity: 0.8;
   }
 
   80% {
-    opacity: .7
+    opacity: 0.7;
   }
 
   90% {
-    opacity: .6
+    opacity: 0.6;
   }
 
   100% {
-    opacity: .5
+    opacity: 0.5;
   }
 }
 
@@ -105,12 +118,12 @@ $async-action: (
   inset: 0;
   z-index: -1;
 
-  @include e(inner){
+  @include e(inner) {
     width: 0;
     height: 100%;
     text-align: right;
-    background: getCssVar(async-action,loading-warp-bg-color) !important;
-    transition: width .5s;
+    background: getCssVar(async-action, color-loading-warp-bg-color) !important;
+    transition: width 0.5s;
     animation: breath 2s ease-in-out infinite;
   }
 }

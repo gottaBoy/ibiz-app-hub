@@ -8,7 +8,7 @@ import { IApiMDViewCall } from './i-api-md-view.call';
  */
 export interface IApiDataViewCall extends IApiMDViewCall {
   /**
-   * @description 展开
+   * @description 展开卡片分组，srfcollapsetag: 卡片分组标识，srfgroup: 卡片分组标识，优先取srfcollapsetag参数
    * @type {{
    *     args: { params: { srfcollapsetag?: string; srfgroup?: string } };
    *   }}
@@ -18,7 +18,7 @@ export interface IApiDataViewCall extends IApiMDViewCall {
     args: { params: { srfcollapsetag?: string; srfgroup?: string } };
   };
   /**
-   * @description 折叠
+   * @description 收缩卡片分组，srfcollapsetag: 卡片分组标识，srfgroup: 卡片分组标识，优先取srfcollapsetag参数
    * @type {{
    *     args: { params: { srfcollapsetag?: string; srfgroup?: string } };
    *   }}

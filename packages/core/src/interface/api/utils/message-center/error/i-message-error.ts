@@ -10,7 +10,7 @@ import { IMessageBase } from '../base';
 export interface IMessageError extends IMessageBase {
   /**
    * @description 发送消息
-   * @param {(IApiData | string)} data
+   * @param {(IApiData | string)} data 错误数据
    * @memberof IMessageError
    */
   send(data: IApiData | string): void;

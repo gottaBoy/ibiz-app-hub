@@ -137,7 +137,7 @@ export class DRBarController
     this.state.drBarItems = [];
     this.state.srfnav = '';
     this.state.isCalculatedPermission = false;
-    this.state.hideEditItem = !Object.is(this.model.hideEditItem, false);
+    this.state.hideEditItem = !!this.model.hideEditItem;
   }
 
   /**
@@ -306,6 +306,32 @@ export class DRBarController
     this.initDRBarItems();
     if (!this.form) {
       await this.calcDrBarItemsState();
+    }
+    // 表单已经加载完成执行默认选中，否则加载完成事件里执行
+    if (this.form && this.form.state.isLoaded) {
+      this.doDefaultSelect();
+    }
+  }
+
+  /**
+   * @description 处理第一次的默认选中
+   * @memberof DRTabController
+   */
+  doDefaultSelect(): void {
+    const viewForm = this.view.layoutPanel?.panelItems.view_form;
+    if (viewForm) {
+      viewForm.state.visible = false;
+      viewForm.state.keepAlive = false;
+    }
+
+    // 显示编辑项的时候如果没有srfnav需要回显则不处理
+    if (!this.state.hideEditItem && !this.state.srfnav) {
+      this.setVisible('form');
+      return;
+    }
+
+    if (this.isCreate) {
+      this.state.defaultItem = this.model.uniqueTag!;
     }
   }
 
@@ -540,6 +566,9 @@ export class DRBarController
       params,
       viewId: drBarItem.appViewId,
       isRoutePushed,
+      modalOptions: {
+        replace: true,
+      },
     });
   }
 

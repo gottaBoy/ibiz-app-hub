@@ -17,6 +17,8 @@ import { IApiMDControlController } from './i-api-md-control.controller';
  * @ctrlparams {name:showdetail,title:显示详情,defaultvalue:false,parameterType:boolean,description:当日历部件样式为`周` 、`天`时生效，鼠标悬浮到显示日历事件项之上时是否弹出气泡框显示事件项详情,effectPlatform:web}
  * @ctrlparams {name:defaultdatetime,title:默认时间,defaultvalue:'',parameterType:string,description:当日历部件样式为`周` 、`天`、`月`、`用户自定义`时生效，用于设置日历初始化的时间，值格式化为YYYY-MM-DD,effectPlatform:web}
  * @ctrlparams {"name":"mdctrlrefreshmode","title":"刷新模式","defaultvalue":"'cache'","parameterType":"'nocache' | 'cache'","description":"多数据部件刷新模式，当值为 'cache'，部件刷新时保留选中数据；当值为 'nocache'，部件刷新时清空选中数据","effectPlatform":"web"}
+ * @ctrlparams {"name":"timelinecaptionformat","title":"时光轴标题格式","defaultvalue":"'YYYY-MM-DD'","parameterType":"string","description":"时光轴标题格式，默认为 'YYYY-MM-DD'"}
+ * @ctrlparams {"name":"grouptimefield","title":"分组时间属性","defaultvalue":"'beginTime'","parameterType":"'beginTime' | 'endTime'","description":"指定时间轴样式日历的分组字段，只能为开始时间或结束时间，并以该字段倒序查询数据，默认为 'beginTime'"}
  * @extends {IApiMDControlController<T, S>}
  * @template T
  * @template S
@@ -27,7 +29,7 @@ export interface IApiCalendarController<
 > extends IApiMDControlController<T, S> {
   /**
    * @description  设置选中日期
-   * @param {Date} date
+   * @param {Date} date 日期
    * @memberof IApiCalendarController
    */
   setSelectDate(date: Date): void;

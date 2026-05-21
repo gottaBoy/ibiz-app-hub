@@ -1,4 +1,7 @@
 @include b(tagged-wall) {
+  display: flex;
+  align-items: center;
+  height: 100%;
   @include e(content) {
     margin: 0 auto;
     text-align: center;
@@ -10,15 +13,13 @@
     margin: auto;
   }
 
-  @include e(tag-body-tags){
+  @include e(tag-body-tags) {
     text-align: center;
     word-break: break-word;
-
   }
 
-  @include e(tag-body-tags-li){
+  @include e(tag-body-tags-li) {
     min-height: 30px;
     text-align: center;
   }
-    
 }

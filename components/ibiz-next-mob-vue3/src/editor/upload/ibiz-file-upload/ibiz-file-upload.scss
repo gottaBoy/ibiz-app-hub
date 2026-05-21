@@ -1,4 +1,26 @@
+$file-upload: (
+  min-height: getCssVar(editor, default, line-height),
+  width-icon: getCssVar('width-icon', 'large'),
+  width-img: getCssVar('height-control', 'large'),
+  width-remove: getCssVar('width-icon', 'large'),
+  color-btn: getCssVar(color, text, 2),
+  color-preview: getCssVar(color, disabled, bg),
+  spacing-preview-gap: getCssVar(spacing, tight),
+  spacing-preview-padding: 0 getCssVar(spacing, tight),
+  spacing-img-padding: getCssVar(spacing, tight),
+  spacing-preview-text-gap: getCssVar(spacing, tight),
+  font-btn-fontSize: getCssVar(font-size, header-4),
+  font-preview-fontSize: getCssVar(font-size, regular),
+  font-textAlign: getCssVar(editor, default, text-align),
+  radius-preview: getCssVar(border-radius, small),
+  radius-img: getCssVar(border, radius, small),
+  // 其它
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
+
 @include b('file-upload') {
+  @include set-component-css-var(file-upload, $file-upload);
+
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -12,14 +34,24 @@
     width: 100%;
   }
 
+  @include m(readonly) {
+    .van-uploader {
+      display: none;
+    }
+  }
+
   @include b('file-upload-button') {
-    width: rem(20px);
-    height: rem(20px);
-    font-size: getCssVar('font-size', header-4);
-    color: getCssVar('color', 'text', 2);
+    width: getCssVar(file-upload, width-icon);
+    height: getCssVar(file-upload, width-icon);
+    font-size: getCssVar(file-upload, font-btn-fontSize);
+    color: getCssVar(file-upload, color-btn);
     background: transparent;
     border: none;
     border-radius: 50%;
+
+    .van-button__icon {
+      font-size: inherit;
+    }
   }
 
   .van-uploader__preview {
@@ -32,25 +64,9 @@
     }
   }
 
-  @include b(file-upload-item-cover) {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    font-size: rem(12px);
-    line-height: initial;
-    color: #fff;
-    text-align: center;
-    background: getCssVar(color, overlay, bg);
-  }
-
   @include b(file-upload-preview) {
     width: 100%;
-    margin-top: rem(10px);
+    margin-top: getCssVar(file-upload, spacing-preview-gap);
   }
 
   @include b(file-upload-preview-item) {
@@ -58,10 +74,10 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 0 getCssVar('spacing', 'tight');
-    margin-bottom: getCssVar('spacing', 'tight');
-    background: getCssVar(color, disabled, bg);
-    border-radius: getCssVar('border-radius', 'small');
+    padding: getCssVar(file-upload, spacing-preview-padding);
+    margin-bottom: getCssVar(file-upload, spacing-preview-gap);
+    background: getCssVar(file-upload, color-preview);
+    border-radius: getCssVar(file-upload, radius-preview);
 
     &:last-child {
       margin: 0;
@@ -71,15 +87,15 @@
 
   @include b(file-upload-preview-item-img) {
     flex-shrink: 0;
-    width: rem(40px);
-    min-width: rem(40px);
-    height: rem(40px);
-    padding: rem(6px);
+    width: getCssVar(file-upload, width-img);
+    min-width: getCssVar(file-upload, width-img);
+    height: getCssVar(file-upload, width-img);
+    padding: getCssVar(file-upload, spacing-img-padding);
 
     img {
       width: 100%;
       height: 100%;
-      border-radius: rem(4px);
+      border-radius: getCssVar(file-upload, radius-img);
     }
   }
 
@@ -87,16 +103,16 @@
     display: flex;
     flex-grow: 1;
     align-items: center;
-    width: calc(100% - #{rem(20px)});
+    width: calc(100% - #{getCssVar(file-upload, width-remove)});
   }
 
   @include b(file-upload-preview-item-text) {
     display: flex;
     flex: 1;
     align-items: center;
-    width: calc(100% - #{rem(40px)});
-    padding-left: getCssVar('spacing', 'tight');
-    font-size: rem(14px);
+    width: calc(100% - #{getCssVar(file-upload, width-img)} - #{getCssVar(file-upload, width-remove)});
+    padding-left: getCssVar(file-upload, spacing-preview-text-gap);
+    font-size: getCssVar(file-upload, font-preview-fontSize);
   }
 
   @include b(file-upload-preview-item-name) {
@@ -112,21 +128,37 @@
     flex-shrink: 0;
     align-items: center;
     justify-content: flex-end;
-    width: rem(20px);
-    color: getCssVar(color, overlay, bg);
+    width: getCssVar(file-upload, width-remove);
     text-align: right;
+  }
+
+  .van-uploader__wrapper {
+    display: flex;
+    align-items: center;
+    min-height: getCssVar(file-upload, min-height);
   }
 
   .van-uploader__input-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: getCssVar(file-upload, flex-justify-content);
     width: 100%;
-    text-align: right;
+
     input {
-      right: 0;
       left: auto;
-      width: 1.25rem;
+      width: getCssVar(file-upload, width-icon);
     }
   }
 
+  // 单文件上传且存在值时，只显示文件
+  @include when(single) {
+    .van-uploader {
+      display: none;
+    }
+    .#{bem(file-upload-preview)} {
+      margin: 0;
+    }
+  }
 }
 
 @include b(form-item-container) {

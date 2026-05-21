@@ -1,7 +1,69 @@
 export default {
   appDEFields: [
     {
+      codeName: 'enable',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.ENABLE',
+      },
+      logicName: '逻辑有效标识',
+      predefinedType: 'NONE',
+      stdDataType: 9,
+      name: 'ENABLE',
+      id: 'enable',
+    },
+    {
+      codeName: 'create_man',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.CREATE_MAN',
+      },
+      logicName: '创建人',
+      predefinedType: 'NONE',
+      stdDataType: 25,
+      stringLength: 100,
+      name: 'CREATE_MAN',
+      id: 'create_man',
+    },
+    {
+      codeName: 'create_time',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.CREATE_TIME',
+      },
+      logicName: '创建时间',
+      predefinedType: 'NONE',
+      stdDataType: 5,
+      valueFormat: 'YYYY-MM-DD HH:mm:ss',
+      name: 'CREATE_TIME',
+      id: 'create_time',
+    },
+    {
+      codeName: 'update_man',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.UPDATE_MAN',
+      },
+      logicName: '更新人',
+      predefinedType: 'NONE',
+      stdDataType: 25,
+      stringLength: 100,
+      name: 'UPDATE_MAN',
+      id: 'update_man',
+    },
+    {
+      codeName: 'update_time',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.UPDATE_TIME',
+      },
+      logicName: '更新时间',
+      predefinedType: 'NONE',
+      stdDataType: 5,
+      valueFormat: 'YYYY-MM-DD HH:mm:ss',
+      name: 'UPDATE_TIME',
+      id: 'update_time',
+    },
+    {
       codeName: 'FuncType',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.FUNCTYPE',
+      },
       logicName: '功能类型',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -11,6 +73,9 @@ export default {
     },
     {
       codeName: 'settings',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.SETTINGS',
+      },
       logicName: '设置',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -20,6 +85,9 @@ export default {
     },
     {
       codeName: 'vers',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.VERS',
+      },
       logicName: '可用版本',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -29,6 +97,9 @@ export default {
     },
     {
       codeName: 'info',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.INFO',
+      },
       logicName: '详细信息',
       predefinedType: 'NONE',
       stdDataType: 21,
@@ -38,6 +109,9 @@ export default {
     },
     {
       codeName: 'category',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.CATEGORY',
+      },
       logicName: '产品分类',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -47,6 +121,9 @@ export default {
     },
     {
       codeName: 'changelog',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.CHANGELOG',
+      },
       logicName: '变更日志',
       predefinedType: 'NONE',
       stdDataType: 21,
@@ -56,6 +133,9 @@ export default {
     },
     {
       codeName: 'PSCorePrdFuncId',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.PSCOREPRDFUNCID',
+      },
       logicName: '核心产品功能标识',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -65,6 +145,9 @@ export default {
     },
     {
       codeName: 'PSCorePrdFuncName',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.PSCOREPRDFUNCNAME',
+      },
       logicName: '应用名称',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -75,6 +158,9 @@ export default {
     },
     {
       codeName: 'CreateMan',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.CREATEMAN',
+      },
       logicName: '建立人',
       predefinedType: 'CREATEMAN',
       stdDataType: 25,
@@ -84,6 +170,9 @@ export default {
     },
     {
       codeName: 'CreateDate',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.CREATEDATE',
+      },
       logicName: '建立时间',
       predefinedType: 'CREATEDATE',
       stdDataType: 5,
@@ -93,6 +182,9 @@ export default {
     },
     {
       codeName: 'UpdateMan',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.UPDATEMAN',
+      },
       logicName: '更新人',
       predefinedType: 'UPDATEMAN',
       stdDataType: 25,
@@ -102,6 +194,9 @@ export default {
     },
     {
       codeName: 'UpdateDate',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.UPDATEDATE',
+      },
       logicName: '更新时间',
       predefinedType: 'UPDATEDATE',
       stdDataType: 5,
@@ -111,6 +206,9 @@ export default {
     },
     {
       codeName: 'FuncState',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.FUNCSTATE',
+      },
       logicName: '功能状态',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -120,6 +218,9 @@ export default {
     },
     {
       codeName: 'SettingUrl',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.SETTINGURL',
+      },
       logicName: '设置地址',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -129,6 +230,9 @@ export default {
     },
     {
       codeName: 'CurrentVersion',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.CURRENTVERSION',
+      },
       logicName: '当前版本',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -138,6 +242,9 @@ export default {
     },
     {
       codeName: 'PSCorePrdName',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.PSCOREPRDNAME',
+      },
       logicName: '核心产品',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -147,6 +254,9 @@ export default {
     },
     {
       codeName: 'FuncTag2',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.FUNCTAG2',
+      },
       logicName: '功能标记2',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -156,6 +266,9 @@ export default {
     },
     {
       codeName: 'Path',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.PATH',
+      },
       logicName: '路径',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -165,6 +278,9 @@ export default {
     },
     {
       codeName: 'FuncSN',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.FUNCSN',
+      },
       logicName: '功能编号',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -174,6 +290,9 @@ export default {
     },
     {
       codeName: 'HttpUrlToRepo',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.HTTPURLTOREPO',
+      },
       logicName: 'Http仓库地址',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -183,6 +302,9 @@ export default {
     },
     {
       codeName: 'PSCorePrdId',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.PSCOREPRDID',
+      },
       logicName: '核心产品',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -192,6 +314,9 @@ export default {
     },
     {
       codeName: 'FullPath',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.FULLPATH',
+      },
       logicName: '完全路径',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -201,6 +326,9 @@ export default {
     },
     {
       codeName: 'FullName',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.FULLNAME',
+      },
       logicName: '完全名称',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -210,6 +338,9 @@ export default {
     },
     {
       codeName: 'AvatarUrl',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.AVATARURL',
+      },
       logicName: '图标路径',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -219,6 +350,9 @@ export default {
     },
     {
       codeName: 'FuncUrl',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.FUNCURL',
+      },
       logicName: '功能描述链接',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -228,6 +362,9 @@ export default {
     },
     {
       codeName: 'FuncTag',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.FUNCTAG',
+      },
       logicName: '功能标记',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -237,6 +374,9 @@ export default {
     },
     {
       codeName: 'OrderValue',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.ORDERVALUE',
+      },
       logicName: '排序值',
       predefinedType: 'ORDERVALUE',
       stdDataType: 9,
@@ -245,6 +385,9 @@ export default {
     },
     {
       codeName: 'Memo',
+      lnlanguageRes: {
+        lanResTag: 'DEF.LNAME.PSCOREPRDFUNC.MEMO',
+      },
       logicName: '备注',
       predefinedType: 'NONE',
       stdDataType: 25,
@@ -257,6 +400,58 @@ export default {
     {
       codeName: 'PSCorePrdFuncDTO',
       appDEMethodDTOFields: [
+        {
+          codeName: 'enable',
+          logicName: '逻辑有效标识',
+          appDEFieldId: 'enable',
+          sourceType: 'DEFIELD',
+          stdDataType: 9,
+          type: 'SIMPLE',
+          allowEmpty: true,
+          id: 'enable',
+        },
+        {
+          codeName: 'create_man',
+          logicName: '创建人',
+          appDEFieldId: 'create_man',
+          sourceType: 'DEFIELD',
+          stdDataType: 25,
+          type: 'SIMPLE',
+          allowEmpty: true,
+          id: 'create_man',
+        },
+        {
+          codeName: 'create_time',
+          jsonFormat: 'yyyy-MM-dd HH:mm:ss',
+          logicName: '创建时间',
+          appDEFieldId: 'create_time',
+          sourceType: 'DEFIELD',
+          stdDataType: 5,
+          type: 'SIMPLE',
+          allowEmpty: true,
+          id: 'create_time',
+        },
+        {
+          codeName: 'update_man',
+          logicName: '更新人',
+          appDEFieldId: 'update_man',
+          sourceType: 'DEFIELD',
+          stdDataType: 25,
+          type: 'SIMPLE',
+          allowEmpty: true,
+          id: 'update_man',
+        },
+        {
+          codeName: 'update_time',
+          jsonFormat: 'yyyy-MM-dd HH:mm:ss',
+          logicName: '更新时间',
+          appDEFieldId: 'update_time',
+          sourceType: 'DEFIELD',
+          stdDataType: 5,
+          type: 'SIMPLE',
+          allowEmpty: true,
+          id: 'update_time',
+        },
         {
           codeName: 'FuncType',
           logicName: '功能类型',
@@ -802,6 +997,28 @@ export default {
       id: 'install',
     },
     {
+      codeName: 'reload',
+      methodType: 'DEACTION',
+      appDEMethodInput: {
+        appDEMethodDTOId: 'pscoreprdfuncdto',
+        type: 'DTO',
+        id: '输入对象',
+      },
+      appDEMethodReturn: {
+        type: 'VOID',
+        id: '返回对象',
+      },
+      requestMethod: 'POST',
+      requestParamType: 'ENTITY',
+      requestPath: '/reload',
+      needResourceKey: true,
+      actionMode: 'CUSTOM',
+      actionName: 'RELOAD',
+      actionType: 'REMOTE',
+      dataSetType: 'REMOTE',
+      id: 'reload',
+    },
+    {
       codeName: 'uninstall',
       methodType: 'DEACTION',
       appDEMethodInput: {
@@ -952,6 +1169,41 @@ export default {
       actionLevel: 100,
       actionTarget: 'SINGLEKEY',
       buttonStyle: 'DEFAULT',
+      caption: '重新加载',
+      codeName: 'Reload',
+      fullCodeName: 'PSCorePrdFunc_Reload',
+      appDEMethodId: 'reload',
+      navigateContexts: [
+        {
+          key: 'PSCOREPRDFUNC',
+          value: 'pscoreprdfuncid',
+          name: 'PSCOREPRDFUNC',
+          id: 'pscoreprdfunc',
+        },
+      ],
+      navigateParams: [
+        {
+          key: 'n_pscoreprdid_eq',
+          value: 'srfv2systemid',
+          id: 'n_pscoreprdid_eq',
+        },
+      ],
+      successMsg: '开始重新加载，请稍等片刻重新刷新页面！',
+      timeout: 60000,
+      uiactionMode: 'BACKEND',
+      uiactionTag: 'Reload',
+      uiactionType: 'DEUIACTION',
+      enableConfirm: true,
+      showBusyIndicator: true,
+      noPrivDisplayMode: 2,
+      appDataEntityId: 'web.pscoreprdfunc',
+      name: '重新加载',
+      id: 'reload@pscoreprdfunc',
+    },
+    {
+      actionLevel: 100,
+      actionTarget: 'SINGLEKEY',
+      buttonStyle: 'DEFAULT',
       caption: '卸载',
       codeName: 'Uninstall',
       fullCodeName: 'PSCorePrdFunc_Uninstall',
@@ -987,6 +1239,25 @@ export default {
     },
     {
       actionLevel: 100,
+      actionTarget: 'NONE',
+      buttonStyle: 'DEFAULT',
+      caption: 'clone此应用',
+      codeName: 'clone_git',
+      frontProcessType: 'OTHER',
+      fullCodeName: 'PSCorePrdFunc_clone_git',
+      uiactionMode: 'FRONT',
+      uiactionTag: 'clone_git',
+      uiactionType: 'DEUIACTION',
+      uilogicAttachMode: 'REPLACE',
+      showBusyIndicator: true,
+      noPrivDisplayMode: 2,
+      appDEUILogicId: 'clone_git',
+      appDataEntityId: 'web.pscoreprdfunc',
+      name: 'clone此应用',
+      id: 'clone_git@pscoreprdfunc',
+    },
+    {
+      actionLevel: 100,
       actionTarget: 'SINGLEDATA',
       buttonStyle: 'DEFAULT',
       caption: '安装特定版本',
@@ -1005,22 +1276,95 @@ export default {
     },
     {
       actionLevel: 100,
-      actionTarget: 'SINGLEDATA',
+      actionTarget: 'NONE',
       buttonStyle: 'DEFAULT',
-      caption: '打开卡片详情页面',
-      codeName: 'open_info_view',
+      caption: '构建信息',
+      codeName: 'model_build_info',
       frontProcessType: 'OTHER',
-      fullCodeName: 'PSCorePrdFunc_open_info_view',
+      fullCodeName: 'PSCorePrdFunc_model_build_info',
+      scriptCode: 'util.message.info("功能正在开发中");',
       uiactionMode: 'FRONT',
-      uiactionTag: 'open_info_view',
+      uiactionTag: 'model_build_info',
+      uiactionType: 'DEUIACTION',
+      showBusyIndicator: true,
+      noPrivDisplayMode: 2,
+      appDataEntityId: 'web.pscoreprdfunc',
+      name: '模型构建信息',
+      id: 'model_build_info@pscoreprdfunc',
+    },
+    {
+      actionLevel: 100,
+      actionTarget: 'NONE',
+      buttonStyle: 'DEFAULT',
+      caption: '详情',
+      codeName: 'open_app_detail_view_logic',
+      frontProcessType: 'OTHER',
+      fullCodeName: 'PSCorePrdFunc_open_app_detail_view_logic',
+      uiactionMode: 'FRONT',
+      uiactionTag: 'open_app_detail_view_logic',
       uiactionType: 'DEUIACTION',
       uilogicAttachMode: 'REPLACE',
       showBusyIndicator: true,
       noPrivDisplayMode: 2,
       appDEUILogicId: 'open_app_info',
       appDataEntityId: 'web.pscoreprdfunc',
+      name: '打开卡片详情页面_界面逻辑',
+      id: 'open_app_detail_view_logic@pscoreprdfunc',
+    },
+    {
+      actionLevel: 100,
+      actionTarget: 'SINGLEDATA',
+      buttonStyle: 'DEFAULT',
+      caption: '打开卡片详情页面',
+      codeName: 'open_info_view',
+      frontAppViewId: 'web.ps_core_prd_func_info_view',
+      frontProcessType: 'WIZARD',
+      fullCodeName: 'PSCorePrdFunc_open_info_view',
+      uiactionMode: 'FRONT',
+      uiactionTag: 'open_info_view',
+      uiactionType: 'DEUIACTION',
+      showBusyIndicator: true,
+      noPrivDisplayMode: 2,
+      appDataEntityId: 'web.pscoreprdfunc',
       name: '打开卡片详情页面',
       id: 'open_info_view@pscoreprdfunc',
+    },
+    {
+      actionLevel: 100,
+      actionTarget: 'SINGLEDATA',
+      buttonStyle: 'DEFAULT',
+      caption: '扩展设置',
+      codeName: 'open_module_setting_option',
+      frontAppViewId: 'web.ps_core_prd_func_setting_edit_view',
+      frontProcessType: 'WIZARD',
+      fullCodeName: 'PSCorePrdFunc_open_module_setting_option',
+      uiactionMode: 'FRONT',
+      uiactionTag: 'open_module_setting_option',
+      uiactionType: 'DEUIACTION',
+      showBusyIndicator: true,
+      noPrivDisplayMode: 2,
+      appDataEntityId: 'web.pscoreprdfunc',
+      name: '打开扩展设置视图',
+      id: 'open_module_setting_option@pscoreprdfunc',
+    },
+    {
+      actionLevel: 100,
+      actionTarget: 'NONE',
+      buttonStyle: 'DEFAULT',
+      caption: 'Git',
+      codeName: 'skip_gitlab',
+      frontProcessType: 'OTHER',
+      fullCodeName: 'PSCorePrdFunc_skip_gitlab',
+      uiactionMode: 'FRONT',
+      uiactionTag: 'skip_gitlab',
+      uiactionType: 'DEUIACTION',
+      uilogicAttachMode: 'REPLACE',
+      showBusyIndicator: true,
+      noPrivDisplayMode: 2,
+      appDEUILogicId: 'skip_gitlab',
+      appDataEntityId: 'web.pscoreprdfunc',
+      name: '跳转gitlab',
+      id: 'skip_gitlab@pscoreprdfunc',
     },
     {
       actionLevel: 100,
@@ -1044,9 +1388,9 @@ export default {
   ],
   appDEUILogics: [
     {
-      codeName: 'open_app_info',
+      codeName: 'clone_git',
       defaultParamName: 'Default',
-      logicName: ' 跳转应用详情页面',
+      logicName: 'clone此应用',
       deuilogicNodes: [
         {
           codeName: 'Begin',
@@ -1054,7 +1398,7 @@ export default {
           logicNodeType: 'BEGIN',
           deuilogicLinks: [
             {
-              dstDEUILogicNodeId: 'msgbox1',
+              dstDEUILogicNodeId: 'rawjscode1',
               srcDEUILogicNodeId: 'begin',
               id: '连接名称',
             },
@@ -1065,10 +1409,128 @@ export default {
           id: 'begin',
         },
         {
+          code: 'var { httpurltorepo } = uiLogic.default;\n\nvar aux = document.createElement("textarea");\n// aux.setAttribute("value", info); \naux.value=\'git clone \' + httpurltorepo;\ndocument.body.appendChild(aux); \naux.select(); \ndocument.execCommand("copy"); \ndocument.body.removeChild(aux); \n\nutil.message.success(\'复制成功!\');',
+          codeName: 'RAWJSCODE1',
+          leftPos: 322,
+          logicNodeType: 'RAWJSCODE',
+          topPos: 208,
+          name: '注入脚本代码',
+          id: 'rawjscode1',
+        },
+      ],
+      deuilogicParams: [
+        {
+          codeName: 'Default',
+          default: true,
+          entityParam: true,
+          name: '传入变量',
+          id: 'default',
+        },
+      ],
+      startDEUILogicNodeId: 'begin',
+      name: 'clone此应用',
+      id: 'clone_git',
+    },
+    {
+      codeName: 'init_plugin_info',
+      defaultParamName: 'Default',
+      logicName: '初始化插件信息',
+      deuilogicNodes: [
+        {
+          codeName: 'Begin',
+          leftPos: 200,
+          logicNodeType: 'BEGIN',
+          deuilogicLinks: [
+            {
+              dstDEUILogicNodeId: 'rawjscode1',
+              srcDEUILogicNodeId: 'begin',
+              id: '连接名称',
+            },
+          ],
+          topPos: 200,
+          parallelOutput: true,
+          name: '开始',
+          id: 'begin',
+        },
+        {
+          code: 'var data = uiLogic.form.state.data;\nvar setting_json = JSON.parse(data.settings, null, 4);\ndata.rt_object_repo = setting_json.rTObjectRepo || "";\ndata.plugin_code = setting_json.pluginCode || "";',
+          codeName: 'RAWJSCODE1',
+          leftPos: 380,
+          logicNodeType: 'RAWJSCODE',
+          topPos: 208,
+          name: '初始化',
+          id: 'rawjscode1',
+        },
+      ],
+      deuilogicParams: [
+        {
+          codeName: 'Default',
+          default: true,
+          entityParam: true,
+          name: '传入变量',
+          id: 'default',
+        },
+        {
+          codeName: 'form',
+          ctrlParam: true,
+          id: 'form',
+        },
+        {
+          codeName: 'view',
+          activeViewParam: true,
+          id: 'view',
+        },
+      ],
+      startDEUILogicNodeId: 'begin',
+      name: '初始化插件信息',
+      id: 'init_plugin_info',
+    },
+    {
+      codeName: 'open_app_info',
+      defaultParamName: 'Default',
+      logicName: ' 跳转应用详情页面',
+      deuilogicNodes: [
+        {
+          codeName: 'Begin',
+          leftPos: 200,
+          logicNodeType: 'BEGIN',
+          deuilogicLinks: [
+            {
+              dstDEUILogicNodeId: 'deuiaction_01',
+              srcDEUILogicNodeId: 'begin',
+              id: '连接名称',
+            },
+          ],
+          topPos: 200,
+          parallelOutput: true,
+          name: '开始',
+          id: 'begin',
+        },
+        {
+          dstAppDEUIActionId: 'open_info_view@pscoreprdfunc',
+          dstAppDataEntityId: 'web.pscoreprdfunc',
+          codeName: 'DEUIACTION_01',
+          dstDEUILogicParamId: 'default',
+          leftPos: 400,
+          logicNodeType: 'DEUIACTION',
+          deuilogicLinks: [
+            {
+              dstDEUILogicNodeId: 'end1',
+              srcDEUILogicNodeId: 'deuiaction_01',
+              id: '连接名称',
+            },
+          ],
+          topPos: 300,
+          parallelOutput: true,
+          name: '界面行为',
+          id: 'deuiaction_01',
+        },
+        {
           codeName: 'END1',
           leftPos: 838,
           logicNodeType: 'END',
           topPos: 200,
+          parallelOutput: true,
           name: '结束',
           id: 'end1',
         },
@@ -1103,6 +1565,99 @@ export default {
       startDEUILogicNodeId: 'begin',
       name: ' 跳转应用详情页面',
       id: 'open_app_info',
+    },
+    {
+      codeName: 'skip_gitlab',
+      defaultParamName: 'Default',
+      logicName: '跳转gitlab',
+      deuilogicNodes: [
+        {
+          codeName: 'Begin',
+          leftPos: 200,
+          logicNodeType: 'BEGIN',
+          deuilogicLinks: [
+            {
+              dstDEUILogicNodeId: 'rawjscode1',
+              srcDEUILogicNodeId: 'begin',
+              id: '连接名称',
+            },
+          ],
+          topPos: 200,
+          parallelOutput: true,
+          name: '开始',
+          id: 'begin',
+        },
+        {
+          code: "const { httpurltorepo } = uiLogic.default;\nwindow.open(httpurltorepo, '_blank');",
+          codeName: 'RAWJSCODE1',
+          leftPos: 523,
+          logicNodeType: 'RAWJSCODE',
+          topPos: 208,
+          name: '跳转',
+          id: 'rawjscode1',
+        },
+      ],
+      deuilogicParams: [
+        {
+          codeName: 'Default',
+          default: true,
+          entityParam: true,
+          name: '传入变量',
+          id: 'default',
+        },
+      ],
+      startDEUILogicNodeId: 'begin',
+      name: '跳转gitlab',
+      id: 'skip_gitlab',
+    },
+    {
+      codeName: 'update_plugin_setting',
+      defaultParamName: 'Default',
+      logicName: '更新插件设置',
+      deuilogicNodes: [
+        {
+          codeName: 'Begin',
+          leftPos: 200,
+          logicNodeType: 'BEGIN',
+          deuilogicLinks: [
+            {
+              dstDEUILogicNodeId: 'rawjscode1',
+              srcDEUILogicNodeId: 'begin',
+              id: '连接名称',
+            },
+          ],
+          topPos: 200,
+          parallelOutput: true,
+          name: '开始',
+          id: 'begin',
+        },
+        {
+          code: 'var rt_object_repo = uiLogic.default.rt_object_repo;\nvar data = uiLogic.form.state.data;\nvar setting_json = JSON.parse(data.settings);\nsetting_json.rTObjectRepo = rt_object_repo;\ndata.settings = JSON.stringify(setting_json, null, 4);',
+          codeName: 'RAWJSCODE1',
+          leftPos: 362,
+          logicNodeType: 'RAWJSCODE',
+          topPos: 208,
+          name: '更新settings字段',
+          id: 'rawjscode1',
+        },
+      ],
+      deuilogicParams: [
+        {
+          codeName: 'Default',
+          default: true,
+          entityParam: true,
+          name: '传入变量',
+          id: 'default',
+        },
+        {
+          codeName: 'form',
+          ctrlParam: true,
+          id: 'form',
+        },
+      ],
+      startDEUILogicNodeId: 'begin',
+      name: '更新插件设置',
+      id: 'update_plugin_setting',
     },
   ],
   deopprivs: [

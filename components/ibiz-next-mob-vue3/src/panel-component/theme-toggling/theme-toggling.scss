@@ -1,0 +1,21 @@
+$theme-toggling: (
+  spacing-van-cell-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
+  font-van-cell-fontSize: getCssVar(font-size, regular),
+  color-van-cell-text: getCssVar(color, text-0),
+  color-van-cell-bg: getCssVar(color, bg-2),
+  color-icon-text: getCssVar(color, primary, active),
+);
+@include b(theme-toggling) {
+  @include set-component-css-var(theme-toggling, $theme-toggling);
+  @include e(item) {
+    &.van-cell {
+      padding: getCssVar(theme-toggling, spacing-van-cell-padding);
+      font-size: getCssVar(theme-toggling, font-van-cell-fontSize);
+      color: getCssVar(theme-toggling, color-van-cell-text);
+      background-color: getCssVar(theme-toggling, color-van-cell-bg);
+    }
+  }
+  @include e(icon) {
+    color: getCssVar(theme-toggling, color-icon-text);
+  }
+}

@@ -1,4 +1,33 @@
-$async-action-preview: ();
+$async-action-preview: (
+  // 颜色
+  color-detail-item-index-text: getCssVar(color, primary, text),
+  color-detail-item-index-bg: getCssVar(color, primary),
+  color-van-field-bg: var(--van-dialog-background),
+  // 间距
+  spacing-detail-item-index-margin-right: getCssVar('spacing', 'base'),
+  spacing-preview-time-padding: getCssVar(spacing, base) 0,
+  spacing-detail-item-padding: getCssVar('spacing', 'base-tight')
+    getCssVar(spacing, base),
+  spacing-button-margin-left: rem(6px),
+  // 宽高
+  width-button: rem(20px),
+  width-detail-item-index: getCssVar('height-control', 'large'),
+  height-button: rem(20px),
+  height-header: rem(32px),
+  height-count: rem(48px),
+  height-detail-item: rem(72px),
+  height-count-padding: getCssVar(spacing, tight) 0,
+  height-detail-item-index: getCssVar('height-control', 'large'),
+  // 字体大小
+  font-van-field-fontSize: rem(12px),
+  font-detail-item-index-fontSize: getCssVar('font-size', 'header-4'),
+  font-detail-item-index-lineHeight: getCssVar('height-control', 'large'),
+  font-van-field-fontWeight: getCssVar('font-weight', 'bold'),
+  // 其他
+  border-header-border-bottom: rem(1px) solid getCssVar(color, border),
+  border-detail-border-top: rem(1px) solid getCssVar(color, border),
+  border-detail-item-border-bottom: rem(1px) solid getCssVar(color, border),
+);
 
 @include b(async-action-preview) {
   @include set-component-css-var('async-action-preview', $async-action-preview);
@@ -23,22 +52,22 @@ $async-action-preview: ();
 
   .van-field__label,
   .van-field__value {
-    font-size: rem(12px);
-    font-weight: getCssVar('font-weight', 'bold');
+    font-size: getCssVar(async-action-preview, font-van-field-fontSize);
+    font-weight: getCssVar(async-action-preview, font-van-field-fontWeight);
   }
 
   .van-field {
-    background: var(--van-dialog-background);
+    background: getCssVar(async-action-preview, font-van-field-bg);
   }
 
   @include e(button) {
-    width: rem(20px);
-    height: rem(20px);
-    margin-left: rem(6px);
+    width: getCssVar(async-action-preview, width-button);
+    height: getCssVar(async-action-preview, height-button);
+    margin-left: getCssVar(async-action-preview, spacing-button-margin-left);
   }
 }
 
-@include b(async-action-preview-toolbar){
+@include b(async-action-preview-toolbar) {
   @include flex(row, center, center);
 }
 
@@ -46,17 +75,17 @@ $async-action-preview: ();
   @include flex(row, flex-end, center);
 
   position: relative;
-  height: rem(32px);
-  border-bottom: 1px solid getCssVar(color, border);
+  height: getCssVar(async-action-preview, height-header);
+  border-bottom: getCssVar(async-action-preview, border-header-border-bottom);
 }
 
 @include b(async-action-preview-time) {
-  padding: getCssVar(spacing, tight) 0;
+  padding: getCssVar(async-action-preview, spacing-preview-time-padding);
 }
 
 @include b(async-action-preview-count) {
-  height: rem(48px);
-  padding: getCssVar(spacing, tight) 0;
+  height: getCssVar(async-action-preview, height-count);
+  padding: getCssVar(async-action-preview, height-count-padding);
   @include flex(row, space-between, center);
 
   .van-field__label {
@@ -67,25 +96,37 @@ $async-action-preview: ();
 @include b(async-action-preview-detail) {
   flex-grow: 1;
   overflow: auto;
-  border-top: 1px solid getCssVar(color, border);
+  border-top: getCssVar(async-action-preview, border-detail-border-top);
 }
 
 @include b(async-action-preview-detail-item) {
   @include flex(row, space-between, center);
 
-  height: rem(72px);
-  padding: getCssVar('spacing', 'base-tight') getCssVar(spacing, base);
-  border-bottom: 1px solid getCssVar(color, border);
+  height: getCssVar(async-action-preview, height-detail-item);
+  padding: getCssVar(async-action-preview, spacing-detail-item-padding);
+  border-bottom: getCssVar(
+    async-action-preview,
+    border-detail-item-border-bottom
+  );
 
   @include e(index) {
-    width: getCssVar('height-control', 'large');
-    height: getCssVar('height-control', 'large');
-    margin-right: getCssVar('spacing', 'base');
-    font-size: getCssVar('font-size', 'header-4');
-    line-height: getCssVar('height-control', 'large');
-    color: getCssVar(color, primary, text);
+    width: getCssVar(async-action-preview, width-detail-item-index);
+    height: getCssVar(async-action-preview, height-detail-item-index);
+    margin-right: getCssVar(
+      async-action-preview,
+      spacing-detail-item-index-margin-right
+    );
+    font-size: getCssVar(async-action-preview, font-detail-item-index-fontSize);
+    line-height: getCssVar(
+      async-action-preview,
+      font-detail-item-index-lineHeight
+    );
+    color: getCssVar(async-action-preview, color-detail-item-index-text);
     text-align: center;
-    background-color: getCssVar(color, primary);
+    background-color: getCssVar(
+      async-action-preview,
+      color-detail-item-index-bg
+    );
     border-radius: 0;
   }
 

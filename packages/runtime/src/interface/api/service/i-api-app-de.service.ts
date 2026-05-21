@@ -36,11 +36,11 @@ export interface IApiAppDEService {
 
   /**
    * @description 执行实体服务方法
-   * @param {string} id
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
-   * @param {IApiData} [header]
+   * @param {string} id 数据集标识
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
+   * @param {IApiParams} [header] Axios 原生请求头类型
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -49,14 +49,14 @@ export interface IApiAppDEService {
     context: IApiContext,
     params?: IApiData | IApiData[],
     params2?: IApiParams,
-    header?: IApiData,
+    header?: IApiParams,
   ): Promise<IHttpResponse>;
 
   /**
    * @description 获取草稿数据[系统预置]
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -68,9 +68,9 @@ export interface IApiAppDEService {
 
   /**
    * @description 获取草稿数据[系统预置](临时数据)
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -82,9 +82,9 @@ export interface IApiAppDEService {
 
   /**
    * @description 创建数据[系统预置]
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -96,9 +96,9 @@ export interface IApiAppDEService {
 
   /**
    * @description 创建数据[系统预置](临时数据)
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -110,9 +110,9 @@ export interface IApiAppDEService {
 
   /**
    * @description 获取数据[系统预置]
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -124,9 +124,9 @@ export interface IApiAppDEService {
 
   /**
    * @description 获取数据[系统预置](临时数据)
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -138,9 +138,9 @@ export interface IApiAppDEService {
 
   /**
    * @description 更新数据[系统预置]
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -152,9 +152,9 @@ export interface IApiAppDEService {
 
   /**
    * @description 更新数据[系统预置](临时数据)
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -166,9 +166,9 @@ export interface IApiAppDEService {
 
   /**
    * @description 删除数据[系统预置]
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -180,9 +180,9 @@ export interface IApiAppDEService {
 
   /**
    * @description 删除数据[系统预置](临时数据)
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -194,9 +194,9 @@ export interface IApiAppDEService {
 
   /**
    * @description 获取默认数据集[系统预置]
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -208,9 +208,9 @@ export interface IApiAppDEService {
 
   /**
    * @description 获取默认数据集[系统预置](临时数据)
-   * @param {IApiContext} context
-   * @param {(IApiData | IApiData[])} [params]
-   * @param {IApiParams} [params2]
+   * @param {IApiContext} context 应用上下文
+   * @param {(IApiData | IApiData[])} [params] 实体数据
+   * @param {IApiParams} [params2] 请求参数
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */
@@ -222,8 +222,10 @@ export interface IApiAppDEService {
 
   /**
    * @description 创建下载凭证
-   * @param {IApiContext} context
-   * @param {{ srfossfileid: string }} [params] 文件标识
+   * @param {IApiContext} context 应用上下文
+   * @param {{
+   *  srfossfileid: string
+   * }} [params] 请求参数：{ 文件标识 }
    * @returns {*}  {Promise<IHttpResponse>}
    * @memberof IApiAppDEService
    */

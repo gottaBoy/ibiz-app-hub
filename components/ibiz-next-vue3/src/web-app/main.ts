@@ -13,6 +13,7 @@ import {
   useAppStore,
 } from '@ibiz-template/vue3-util';
 import { Plugin } from 'vue';
+import { RouteRecordRaw } from 'vue-router';
 import { createVueApp } from './create-vue-app';
 
 import { attachEnvironmentConfig } from './attach-environment-config';
@@ -31,13 +32,18 @@ import {
   OverlayController,
   RenderUtil,
   FullscreenUtil,
+  InLineAIUtil,
+  AIChatUtil,
+  ScreenShotUtil,
+  PrintPreviewUtil,
 } from '../util';
 import { AuthGuard, DynaAuthGuard } from './guard';
 
 export async function runApp(
   plugins?: Plugin[],
   opts?: {
-    getAuthGuard: () => AuthGuard;
+    getAuthGuard?: () => AuthGuard;
+    userRoutes?: RouteRecordRaw[];
   },
 ): Promise<void> {
   AppHooks.createApp.tap((_, app) => {
@@ -107,7 +113,7 @@ export async function runApp(
   AppRouter.setAuthGuard((context: IParams, notLogin?: boolean) =>
     authGuard.verify(context, notLogin),
   );
-  app.use(AppRouter.getRouter());
+  app.use(AppRouter.getRouter(opts?.userRoutes));
   // 监听打开设计器
   listenOpenDevTool(AppRouter.getRouter());
 
@@ -121,10 +127,13 @@ export async function runApp(
   ibiz.loading = new LoadingUtil();
   ibiz.notice = new NoticeUtil();
   ibiz.overlay = new OverlayController();
+  ibiz.inLineAIUtil = new InLineAIUtil();
+  ibiz.screenShotUtil = new ScreenShotUtil();
+  ibiz.aiChatUtil = new AIChatUtil();
   ibiz.util.text.format = (value, code): string => {
     return app.config.globalProperties.$textFormat(value, code);
   };
-
+  ibiz.printPreview = new PrintPreviewUtil();
   ibiz.fullscreenUtil = new FullscreenUtil();
   await ibiz.i18n.init();
 

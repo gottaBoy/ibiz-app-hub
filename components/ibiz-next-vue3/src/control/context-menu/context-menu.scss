@@ -43,6 +43,13 @@ transfer-zindex: 1000,
     @include flex(row, center, center);
   }
 
+  // 界面行为组样式
+  @include e(group-item) {
+    @include m(content) {
+      display: flex;
+    }
+  }
+
   @include e(popover) {
     @include set-component-css-var(context-menu, $context-menu);
 
@@ -76,6 +83,7 @@ transfer-zindex: 1000,
         margin-right: getCssVar('spacing', 'base-loose');
       }
 
+      .#{bem(context-menu, group-item, icon)},
       .#{bem('context-menu','action-content-group-icon')} {
         position: absolute;
         right: getCssVar('spacing', 'base-loose');

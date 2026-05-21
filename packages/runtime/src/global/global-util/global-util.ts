@@ -24,6 +24,8 @@ import {
   VoiceUtil,
   EncyptionUtil,
   WaterMarkUtil,
+  WeChatUtil,
+  JsonUtil,
 } from '../../utils';
 
 /**
@@ -146,6 +148,18 @@ export class GlobalUtil implements IApiGlobalUtil {
    * @memberof GlobalUtil
    */
   readonly watermark = new WaterMarkUtil();
+
+  /**
+   * @description 微信工具类
+   * @memberof GlobalUtil
+   */
+  readonly weChat = new WeChatUtil();
+
+  /**
+   * @description json工具类
+   * @memberof GlobalUtil
+   */
+  readonly jsonUtil = new JsonUtil();
 
   constructor() {
     this.error.register(new DefaultErrorHandler());

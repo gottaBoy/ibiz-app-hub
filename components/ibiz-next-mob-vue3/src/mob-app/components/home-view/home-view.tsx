@@ -1,7 +1,7 @@
 import { defineComponent, PropType } from 'vue';
 import { IModal, IModalData, Modal, ViewMode } from '@ibiz-template/runtime';
-import './home-view.scss';
 import { useNamespace } from '@ibiz-template/vue3-util';
+import './home-view.scss';
 
 export const HomeView = defineComponent({
   name: 'HomeView',
@@ -25,10 +25,13 @@ export const HomeView = defineComponent({
   },
   render() {
     return (
-      <iBizRouterView
-        class={this.ns.b()}
-        modal={this.viewModal}
-      ></iBizRouterView>
+      <>
+        <iBizRouterView
+          class={this.ns.b()}
+          modal={this.viewModal}
+        ></iBizRouterView>
+        <iBizAIButton />
+      </>
     );
   },
 });

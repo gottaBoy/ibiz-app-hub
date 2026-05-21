@@ -2,15 +2,26 @@ import { h } from 'vue';
 import {
   EditorController,
   IAppDEService,
+  IInLineAIEditor,
+  IInLineAiChatOptions,
   IModal,
   IModalData,
   IOverlayPopoverContainer,
+  UIActionUtil,
   getDeACMode,
 } from '@ibiz-template/runtime';
-import { NOOP, listenJSEvent } from '@ibiz-template/core';
+import { NOOP, RuntimeError, listenJSEvent } from '@ibiz-template/core';
 import { IAppDEACMode, IHtml } from '@ibiz/model-core';
 import { Boot, IDomEditor } from '@wangeditor/editor';
-import { AIMenu, Emoji, EmojiElem, EmojiModule, Plugin } from './wang-editor';
+import { clone } from 'ramda';
+import {
+  AIMenu,
+  Emoji,
+  EmojiElem,
+  EmojiModule,
+  InLineAIMenu,
+  Plugin,
+} from './wang-editor';
 
 /**
  * html框编辑器控制器
@@ -19,7 +30,10 @@ import { AIMenu, Emoji, EmojiElem, EmojiModule, Plugin } from './wang-editor';
  * @class HtmlEditorController
  * @extends {EditorController}
  */
-export class HtmlEditorController extends EditorController<IHtml> {
+export class HtmlEditorController
+  extends EditorController<IHtml>
+  implements IInLineAIEditor
+{
   /**
    * 上传参数
    */
@@ -100,6 +114,14 @@ export class HtmlEditorController extends EditorController<IHtml> {
   private presetPreventPropEvents: number[] = [27];
 
   /**
+   * AI行内聊天框高度
+   *
+   * @type {number}
+   * @memberof HtmlEditorController
+   */
+  inlineAiChatHeight?: number;
+
+  /**
    * 初始化
    *
    * @protected
@@ -110,8 +132,13 @@ export class HtmlEditorController extends EditorController<IHtml> {
     await super.onInit();
     this.customRegister();
     if (this.editorParams) {
-      const { uploadParams, exportParams, uploadparams, exportparams } =
-        this.editorParams;
+      const {
+        uploadParams,
+        exportParams,
+        uploadparams,
+        exportparams,
+        inlineaichatheight,
+      } = this.editorParams;
 
       if (uploadParams) {
         try {
@@ -157,6 +184,9 @@ export class HtmlEditorController extends EditorController<IHtml> {
           );
         }
       }
+      if (inlineaichatheight) {
+        this.inlineAiChatHeight = Number(inlineaichatheight);
+      }
     }
     const model = this.model;
     if (model.appDEACModeId) {
@@ -187,6 +217,7 @@ export class HtmlEditorController extends EditorController<IHtml> {
     // 注册AI
     if (!(window as IData).aichartRegister && ibiz.env.enableAI) {
       Boot.registerMenu(AIMenu);
+      Boot.registerMenu(InLineAIMenu);
       (window as IData).aichartRegister = true;
     }
     // 注册表情相关
@@ -305,5 +336,154 @@ export class HtmlEditorController extends EditorController<IHtml> {
     if (this.overlay) {
       this.overlay.dismiss();
     }
+  }
+
+  /**
+   * 获取选中文本
+   * @returns 选中文本
+   */
+  getSelectionText(): string {
+    if (this.wangEditor) {
+      return this.wangEditor.getSelectionText();
+    }
+    return '';
+  }
+
+  /**
+   * 插入文本
+   * @param text 文本
+   */
+  insertText(text: string): void {
+    if (this.wangEditor) {
+      // 创建一个新的段落节点
+      const newParagraph = {
+        type: 'paragraph',
+        children: [{ text }],
+      };
+      // 将选区折叠到末尾位置
+      const selection = this.wangEditor.selection;
+      if (selection) {
+        const collapsedSelection = {
+          anchor: selection.anchor,
+          focus: selection.anchor,
+        };
+        // 如果有选中文本，将光标移到选区末尾
+        if (
+          selection.anchor.path !== selection.focus.path ||
+          selection.anchor.offset !== selection.focus.offset
+        ) {
+          collapsedSelection.anchor = selection.focus;
+          collapsedSelection.focus = selection.focus;
+        }
+        // 应用折叠后的选区
+        this.wangEditor.select(collapsedSelection);
+      }
+      // 在当前光标位置后插入新段落
+      this.wangEditor.insertNode(newParagraph);
+      // 将光标移动到新段落的末尾
+      this.wangEditor.move(1);
+    }
+  }
+
+  /**
+   * 替换选中文本
+   * @param text 文本
+   */
+  replaceSelectionText(text: string): void {
+    if (this.wangEditor) {
+      // 检查是否有选区
+      if (this.wangEditor.selection) {
+        // 先删除选中内容
+        this.wangEditor.deleteFragment();
+        // 再插入新内容
+        this.wangEditor.insertText(text);
+      } else {
+        // 没有选区时直接插入文本
+        this.wangEditor.insertText(text);
+      }
+    }
+  }
+
+  /**
+   * 恢复选区
+   */
+  restoreSelection(): void {
+    if (this.wangEditor) {
+      this.wangEditor.restoreSelection();
+    }
+  }
+
+  /**
+   * 获取内联AI编辑器元素
+   */
+  getInLineAiEditorElement(): Element {
+    if (!this.wangEditor) {
+      throw new RuntimeError('编辑器未初始化');
+    }
+    return this.wangEditor.getEditableContainer();
+  }
+
+  /**
+   * 获取内联AI编辑器主题
+   */
+  getInLineAiEditorTheme(): 'light' | 'dark' {
+    const appTheme = ibiz.util.theme.getTheme();
+    if (appTheme.indexOf('dark') !== -1) {
+      return 'dark';
+    }
+    return 'light';
+  }
+
+  /**
+   * 获取内联AI参数
+   */
+  getInLineAiChatOptions(): IInLineAiChatOptions {
+    if (!this.wangEditor) {
+      throw new RuntimeError('编辑器未初始化');
+    }
+    const selectionPosition = this.wangEditor.getSelectionPosition();
+    if (!selectionPosition || !selectionPosition.left || !selectionPosition.top)
+      throw new RuntimeError('获取选区位置失败');
+    const editorBoundingClientRect = this.wangEditor
+      .getEditableContainer()
+      .getBoundingClientRect();
+    return {
+      // 编辑器的左侧距离 + 默认padding
+      left: editorBoundingClientRect.x + 10,
+      // 编辑器的上方距离+选区距离编辑器上方距离
+      top:
+        editorBoundingClientRect.y +
+        Number(selectionPosition.top.replace('px', '')),
+      // 编辑器的宽度 - 左右padding
+      width: editorBoundingClientRect.width - 20,
+      editorElement: this.getInLineAiEditorElement(),
+      editorTheme: this.getInLineAiEditorTheme(),
+      height: this.inlineAiChatHeight,
+    };
+  }
+
+  /**
+   * 执行内联AIUI操作
+   * @param uiActionId
+   * @param appId
+   */
+  async doInLineAIUIAction(uiActionId: string, appId: string): Promise<void> {
+    const eventArgs = this.ctrl.getEventArgs();
+    eventArgs.params = clone(eventArgs.params);
+    eventArgs.params.editor = this;
+    // 编辑器参数srfaiappendcurdata，是否传入对象参数，用于历史查询传参
+    if (
+      this.editorParams.srfaiappendcurdata &&
+      this.editorParams.srfaiappendcurdata === 'true'
+    ) {
+      eventArgs.context.srfaiappendcurdata = true;
+    }
+    await UIActionUtil.exec(
+      uiActionId!,
+      {
+        ...eventArgs,
+      },
+      appId,
+    );
   }
 }

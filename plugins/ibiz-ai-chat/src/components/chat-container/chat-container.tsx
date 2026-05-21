@@ -1,3 +1,7 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
 import { Component, createContext, createRef } from 'preact';
 import interact from 'interactjs';
@@ -12,7 +16,11 @@ import {
   CloseFullScreenSvg,
 } from '../../icons';
 import { AIChatConst } from '../../constants';
-import { IChatToolbarItem, IChatContainerOptions } from '../../interface';
+import {
+  IAutoClose,
+  IChatToolbarItem,
+  IChatContainerOptions,
+} from '../../interface';
 import { ChatTopics } from '../chat-topics/chat-topics';
 import { ChatToolbar } from '../chat-toolbar/chat-toolbar';
 import { ChatMinimize } from '../chat-minimize/chat-minimize';
@@ -38,21 +46,27 @@ export interface ChatContainerProps {
   enableBackFill?: boolean;
 
   /**
-   * ai话题控制器
+   * ai话题控制器，非loading模式必传
    *
    * @author tony001
    * @date 2025-02-23 16:02:38
    * @type {AiTopicController}
    */
-  aiTopic: AiTopicController;
+  aiTopic?: AiTopicController;
   /**
-   * 聊天控制器
+   * 聊天控制器，非loading模式必传
    *
    * @author tony001
    * @date 2025-02-23 16:02:24
    * @type {AiChatController}
    */
-  aiChat: AiChatController;
+  aiChat?: AiChatController;
+
+  /**
+   * 隐藏话题侧边栏
+   */
+  hideTopicSidebar: boolean;
+
   /**
    * 关闭聊天窗口
    *
@@ -116,8 +130,31 @@ export interface ChatContainerProps {
    * @type {IChatContainerOptions}
    */
   containerOptions?: IChatContainerOptions;
-}
 
+  /**
+   * 自动关闭
+   *
+   * @type {IAutoClose}
+   * @memberof ChatContainerProps
+   */
+  autoClose?: IAutoClose;
+
+  /**
+   * @description AI窗口的打开模式
+   * - default：默认；minimize：最小化；autoexpand：自动展开
+   * @type {('default' | 'minimize' | 'autoexpand')}
+   * @memberof IChat
+   */
+  openMode?: 'default' | 'minimize' | 'autoexpand';
+
+  /**
+   * 是否加载中
+   */
+  isLoading: boolean;
+}
+/**
+ * 容器状态
+ */
 interface ChatContainerState {
   /**
    * 全屏状态
@@ -134,20 +171,26 @@ interface ChatContainerState {
    * @memberof ChatContainerState
    */
   isMinimize: boolean;
+
+  /**
+   * 是否启用最小化
+   *
+   * @type {boolean}
+   * @memberof ChatContainerState
+   */
+  enableAIMinimize: boolean;
 }
 
 // zIndex上下文接口
 interface ContainerContext {
   zIndex: number;
   enableBackFill: boolean;
-  newTopic: Function;
 }
 
 // zIndex上下文
 export const ContainerContext = createContext<ContainerContext>({
   zIndex: 10,
   enableBackFill: true,
-  newTopic: () => {},
 });
 
 /**
@@ -168,8 +211,38 @@ export class ChatContainer extends Component<
     // 初始化状态
     this.state = {
       isFullScreen: false,
-      isMinimize: false,
+      isMinimize: !!(
+        props?.openMode === 'minimize' || props?.openMode === 'autoexpand'
+      ),
+      enableAIMinimize: props?.containerOptions?.enableAIMinimize === true,
     };
+
+    props?.aiChat?.evt.on('onCompleteMessage', () => {
+      // 窗口自动关闭
+      if (props.autoClose) {
+        const { mode, duration = 3 } = props.autoClose;
+        switch (mode) {
+          case 'minimize':
+            this.minimize();
+            break;
+          case 'close':
+            this.close();
+            break;
+          case 'closetime':
+            setTimeout(() => {
+              this.close();
+            }, duration * 1000);
+            break;
+          default:
+            break;
+        }
+      }
+
+      // 窗口的打开模式，请求结束后自动打开
+      if (props.openMode === 'autoexpand') {
+        this.exitMinimize();
+      }
+    });
   }
 
   ns = new Namespace('chat-container');
@@ -231,9 +304,6 @@ export class ChatContainer extends Component<
       this.props?.enableBackFill !== null
         ? this.props?.enableBackFill
         : true,
-    newTopic: () => {
-      this.props.aiTopic.newTopic();
-    },
   };
 
   /**
@@ -515,17 +585,19 @@ export class ChatContainer extends Component<
                 {this.props.caption || 'AI助手'}
               </div>
               <div className={this.ns.b('header-action-wrapper')}>
-                <div
-                  title='最小化'
-                  className={`${this.ns.be(
-                    'header-action-wrapper',
-                    'action-item',
-                  )} ${this.ns.be('header-action-wrapper', 'minimize')}`}
-                  onMouseDown={this.stopPropagation.bind(this)}
-                  onClick={this.minimize.bind(this)}
-                >
-                  <MinimizeSvg />
-                </div>
+                {this.state.enableAIMinimize && (
+                  <div
+                    title='最小化'
+                    className={`${this.ns.be(
+                      'header-action-wrapper',
+                      'action-item',
+                    )} ${this.ns.be('header-action-wrapper', 'minimize')}`}
+                    onMouseDown={this.stopPropagation.bind(this)}
+                    onClick={this.minimize.bind(this)}
+                  >
+                    <MinimizeSvg />
+                  </div>
+                )}
                 {this.state.isFullScreen ? (
                   <div
                     title='退出全屏'
@@ -567,32 +639,54 @@ export class ChatContainer extends Component<
                 </div>
               </div>
             </div>
-            {this.props.mode === 'TOPIC' ? (
-              <div className={`${this.ns.b('main')}`}>
-                <div className={`${this.ns.be('main', 'left')}`}>
-                  <ChatTopics controller={this.props.aiTopic}></ChatTopics>
+            {this.props.isLoading ? (
+              <div className={`${this.ns.be('main', 'loading')}`}>
+                <div className={`${this.ns.be('main', 'spinner')}`}></div>
+                <div className={`${this.ns.be('main', 'text')}`}>
+                  正在加载...
                 </div>
-                <div className={`${this.ns.be('main', 'right')}`}>
+              </div>
+            ) : this.props.mode === 'TOPIC' ? (
+              <div className={`${this.ns.b('main')}`}>
+                {!this.props.hideTopicSidebar && (
+                  <div
+                    className={`${this.ns.be('main', 'left')}`}
+                    style={{
+                      width: `${this.props.aiTopic!.topicSidebarWidth.value}px`,
+                    }}
+                  >
+                    <ChatTopics controller={this.props.aiTopic!}></ChatTopics>
+                  </div>
+                )}
+                <div
+                  className={`${this.ns.be('main', 'right')}`}
+                  style={{
+                    width: this.props.hideTopicSidebar
+                      ? '100%'
+                      : `calc(100% - ${this.props.aiTopic!.topicSidebarWidth.value}px)`,
+                  }}
+                >
                   <div className={this.ns.b('content')}>
                     <ChatMessages
-                      controller={this.props.aiChat}
+                      controller={this.props.aiChat!}
                       toolbarItems={this.props.contentToolbarItems}
                     />
                   </div>
                   <ChatToolbar
                     type='footer'
                     mode={this.props.mode}
-                    data={this.props.aiTopic.activedTopic.value}
+                    hideTopicSidebar={this.props.hideTopicSidebar}
+                    data={this.props.aiTopic!.activedTopic.value}
                     className={`${this.ns.e('toolbar')} ${this.ns.is(
                       'has-materials',
-                      this.props.aiChat.materials.value.length > 0,
+                      this.props.aiChat!.materials.value.length > 0,
                     )}`}
-                    controller={this.props.aiChat}
+                    controller={this.props.aiChat!}
                     items={this.props.footerToolbarItems}
                   />
                   <div className={this.ns.b('footer')}>
                     <ChatInput
-                      controller={this.props.aiChat}
+                      controller={this.props.aiChat!}
                       questionToolbarItems={this.props.questionToolbarItems}
                     />
                   </div>
@@ -602,36 +696,39 @@ export class ChatContainer extends Component<
               <div className={`${this.ns.be('main', 'default')}`}>
                 <div className={this.ns.b('content')}>
                   <ChatMessages
-                    controller={this.props.aiChat}
+                    controller={this.props.aiChat!}
                     toolbarItems={this.props.contentToolbarItems}
                   />
                 </div>
                 <ChatToolbar
                   type='footer'
                   mode={this.props.mode}
-                  data={this.props.aiTopic.activedTopic.value}
+                  hideTopicSidebar={this.props.hideTopicSidebar}
+                  data={this.props.aiTopic!.activedTopic.value}
                   className={`${this.ns.e('toolbar')} ${this.ns.is(
                     'has-materials',
-                    this.props.aiChat.materials.value.length > 0,
+                    this.props.aiChat!.materials.value.length > 0,
                   )}`}
-                  controller={this.props.aiChat}
+                  controller={this.props.aiChat!}
                   items={this.props.footerToolbarItems}
                 />
                 <div className={this.ns.b('footer')}>
                   <ChatInput
-                    controller={this.props.aiChat}
+                    controller={this.props.aiChat!}
                     questionToolbarItems={this.props.questionToolbarItems}
                   />
                 </div>
               </div>
             )}
           </div>
-          <ChatMinimize
-            title={this.props.caption || 'AI助手'}
-            controller={this.props.aiChat}
-            isMinimize={this.state.isMinimize}
-            onClick={this.exitMinimize.bind(this)}
-          />
+          {!this.props.isLoading && (
+            <ChatMinimize
+              title={this.props.caption || 'AI助手'}
+              controller={this.props.aiChat!}
+              isMinimize={this.state.isMinimize}
+              onClick={this.exitMinimize.bind(this)}
+            />
+          )}
         </div>
       </ContainerContext.Provider>
     );

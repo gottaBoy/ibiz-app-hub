@@ -67,14 +67,14 @@ export interface IDEUIActionGroupDetail extends IUIActionGroupDetail {
 
   /**
    * 成员类型
-   * @description 值模式 [云平台工具栏项类型（界面行为组成员）] {DEUIACTION：实体界面行为、DEUIACTIONGROUP:实体界面行为分组 }
-   * @type {( string | 'DEUIACTION')}
+   * @description 值模式 [界面行为组成员类型] {DEUIACTION：实体界面行为、 DEUIACTIONGROUP：实体界面行为组 }
+   * @type {( string | 'DEUIACTION' | 'DEUIACTIONGROUP')}
    * 来源  getDetailType
    */
   detailType?: string | 'DEUIACTION' | 'DEUIACTIONGROUP';
 
   /**
-   * 引用界面行为对象
+   * 引用界面行为组对象
    *
    * @type {IUIActionGroup}
    * 来源  getRefPSUIActionGroup

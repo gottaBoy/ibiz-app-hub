@@ -1,4 +1,5 @@
 import { IApiData, IApiParams } from '@ibiz-template/core';
+import { IApiModalOptions } from '../common';
 
 /**
  * @description 二维码工具
@@ -8,18 +9,18 @@ import { IApiData, IApiParams } from '@ibiz-template/core';
 export interface IApiQrcodeUtil {
   /**
    * @description 扫描二维码
-   * @param {(IApiParams | undefined)} [options] 创建二维码参数配置
+   * @param {IApiModalOptions} [options] 模态配置
    * @returns {*}  {Promise<IApiData>}
    * @memberof IApiQrcodeUtil
    */
-  scanQrcode(options?: IApiParams | undefined): Promise<IApiData>;
+  scanQrcode(options?: IApiModalOptions): Promise<IApiData>;
 
   /**
    * @description 创建二维码
    * @param {string} value 创建二维码需要的文本值
-   * @param {(IApiParams | undefined)} [options] 创建二维码参数配置
+   * @param {IApiParams} [options] 创建二维码参数配置
    * @returns {*}  {IApiParams}
    * @memberof IApiQrcodeUtil
    */
-  createQrcode(value: string, options?: IApiParams | undefined): IApiParams;
+  createQrcode(value: string, options?: IApiParams): IApiParams;
 }

@@ -25,6 +25,7 @@ $action-toolbar: (
 
     @include m(icon) {
       @include when('has-icon') {
+        position: relative;
         display: flex;
         align-items: baseline;
         justify-content: center;
@@ -33,6 +34,14 @@ $action-toolbar: (
         margin-right: getCssVar('spacing','extra-tight');
         margin-left: getCssVar('spacing','extra-tight');
         font-size: getCssVar('width-icon', 'medium');
+
+        // 适配浏览器缩放为80%时图标未垂直居中对齐
+        .#{bem('icon')} {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+        }
       }
     }
     @include m('label') {
@@ -51,11 +60,18 @@ $action-toolbar: (
     > span {
       width: 100%;
     }
-    @include m(caption) {
+    @include m(content) {
       display: flex;
+      gap: getCssVar(spacing, extra, tight);
       align-items: center;
       justify-content: space-between;
       width: 100%;
+    }
+    @include m(caption) {
+      display: flex;
+      align-items: center;
+      padding: getCssVar(action-toolbar, item-padding);
+      margin: getCssVar(action-toolbar, item-margin);
     }
   }
 
@@ -88,8 +104,10 @@ $action-toolbar: (
         background-color: getCssVar(action-toolbar, popover-button-hover-bg);
       }
 
-      .#{bem(icon)} {
-        margin-right: getCssVar('spacing', 'extra-tight');
+      .#{bem('action-toolbar__item--icon')} {
+        @include when(has-icon) {
+          margin: 0 getCssVar('spacing', 'tight') 0 0;
+        }
       }
     }
 
@@ -105,6 +123,19 @@ $action-toolbar: (
 
     @include e(caption-icon) {
       vertical-align: bottom;
+    }
+  }
+
+  @include m(buttons) {
+    @include when(nowrap) {
+      flex-wrap: nowrap;
+      .#{bem(action-toolbar, item)},
+      .#{bem(action-toolbar, item)} > span {
+        overflow: hidden;
+      }
+      .#{bem(action-toolbar, item, label)} {
+        @include utils-ellipsis;
+      }
     }
   }
 }

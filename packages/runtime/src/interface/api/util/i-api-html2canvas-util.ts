@@ -160,8 +160,8 @@ export interface IApiHtml2canvasOption {
 export interface IApiHtml2canvasUtil {
   /**
    * @description 导出canvas
-   * @param {HTMLElement} dom
-   * @param {IApiHtml2canvasOption} [option]
+   * @param {HTMLElement} dom 元素
+   * @param {IApiHtml2canvasOption} [option] html2canvas配置
    * @returns {*}  {Promise<void>}
    * @memberof IApiHtml2canvasUtil
    */
@@ -169,8 +169,8 @@ export interface IApiHtml2canvasUtil {
 
   /**
    * @description 获取节点转化的canvas
-   * @param {HTMLElement} dom
-   * @param {IApiHtml2canvasOption} [option]
+   * @param {HTMLElement} dom 元素
+   * @param {IApiHtml2canvasOption} [option] html2canvas配置
    * @returns {*}  {Promise<HTMLCanvasElement>}
    * @memberof IApiHtml2canvasUtil
    */

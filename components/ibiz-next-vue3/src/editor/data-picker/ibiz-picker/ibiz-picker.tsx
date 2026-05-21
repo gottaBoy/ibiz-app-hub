@@ -8,6 +8,7 @@ import {
   onMounted,
   defineComponent,
   resolveComponent,
+  onBeforeUnmount,
 } from 'vue';
 import {
   renderString,
@@ -16,6 +17,7 @@ import {
   getDataPickerProps,
 } from '@ibiz-template/vue3-util';
 import { isEmpty, isNil } from 'ramda';
+import { debounce } from 'lodash-es';
 import { showTitle } from '@ibiz-template/core';
 import { IAppDEUIActionGroupDetail } from '@ibiz/model-core';
 import { PickerEditorController } from '../picker-editor.controller';
@@ -193,6 +195,25 @@ export const IBizPicker = defineComponent({
       }
     };
 
+    // 更新下拉列表数据回调方法
+    let listCallback: (_items: IData[]) => void | void;
+    // 搜索值
+    let searchQuery = '';
+
+    // 更新下拉列表数据
+    const handleCallback = (cb: (_items: IData[]) => void) => {
+      const callbackItems: IData[] = items.value.length
+        ? [...items.value]
+        : [{ srftype: 'empty' }];
+      actionPostion === 'top'
+        ? callbackItems.unshift(...c.actionDetails)
+        : callbackItems.push(...c.actionDetails);
+
+      if (c.isShowLoadMore) {
+        callbackItems.push({ srftype: 'loadmore' });
+      }
+      cb(callbackItems);
+    };
     // 搜索
     const onSearch = async (query: string, cb?: (_items: IData[]) => void) => {
       if (c.model.appDataEntityId) {
@@ -205,13 +226,27 @@ export const IBizPicker = defineComponent({
           items.value = res.data as IData[];
           isLoaded.value = true;
           if (cb && cb instanceof Function) {
-            const callbackItems: IData[] = items.value.length
-              ? [...items.value]
-              : [{ srftype: 'empty' }];
-            actionPostion === 'top'
-              ? callbackItems.unshift(...c.actionDetails)
-              : callbackItems.push(...c.actionDetails);
-            cb(callbackItems);
+            searchQuery = trimQuery;
+            listCallback = cb;
+            handleCallback(cb);
+          }
+        }
+      }
+    };
+
+    /**
+     * 加载更多
+     * @return {*}  {Promise<void>}
+     */
+    const loadMore = async (): Promise<void> => {
+      if (c.total > items.value.length && c.model.appDataEntityId) {
+        const res = await c.getServiceData(searchQuery, props.data, {
+          isLoadMore: true,
+        });
+        if (res) {
+          items.value = [...items.value, ...(res.data as IData[])];
+          if (listCallback) {
+            handleCallback(listCallback);
           }
         }
       }
@@ -222,7 +257,11 @@ export const IBizPicker = defineComponent({
       isShowAll.value = true;
       setEditable(false);
       // 回车选中空白
-      if (item.srftype === 'empty' || item.detailType === 'DEUIACTION')
+      if (
+        item.srftype === 'empty' ||
+        item.detailType === 'DEUIACTION' ||
+        item.srftype === 'loadmore'
+      )
         return resetCurValue();
       await handleDataSelect(item);
     };
@@ -290,6 +329,74 @@ export const IBizPicker = defineComponent({
       { immediate: true },
     );
 
+    // 加载更多Ref
+    const loadmoreRef = ref();
+
+    // 是否关闭弹窗
+    const isClosePopper = ref(false);
+    // 处理加载更多的点击事件
+    const onLoadMoreClick = async (_event: MouseEvent) => {
+      _event.preventDefault();
+      _event.stopPropagation();
+      loadMore();
+      editorRef.value?.popperRef?.onOpen();
+      isClosePopper.value = true;
+    };
+
+    // 处理弹窗关闭逻辑
+    const handlePopperClose = (_event: MouseEvent) => {
+      // 点击加载更多
+      const isClickInside = loadmoreRef.value?.contains(_event.target);
+      // 点击输入框
+      const isFocus = editorRef.value?.inputRef?.input.contains(_event.target);
+      if (!isClickInside && !isFocus && isClosePopper.value) {
+        editorRef.value?.popperRef?.onClose();
+        isClosePopper.value = false;
+      }
+    };
+
+    //  获取弹窗中的滚动容器元素
+    const getPopperScroll = (): IParams | void => {
+      return editorRef.value?.popperRef?.popperRef.contentRef.querySelector(
+        '.el-scrollbar__wrap',
+      );
+    };
+
+    // 处理滚动加载
+    const handleScrollLoad = async () => {
+      const infiniteScroll = getPopperScroll();
+
+      // 确保滚动容器存在
+      if (!infiniteScroll) return;
+
+      // 获取滚动容器的相关属性
+      const { scrollTop, scrollHeight, clientHeight } = infiniteScroll;
+
+      // 计算当前滚动位置与底部的距离（预留20px的缓冲）
+      const distanceToBottom = scrollHeight - scrollTop - clientHeight;
+
+      // 当滚动到接近底部（距离小于等于20px）且不在加载中时，触发加载
+      if (distanceToBottom <= 20) {
+        await loadMore();
+      }
+    };
+
+    const debScrollLoad = debounce(handleScrollLoad, 300);
+
+    // 初始化懒加载逻辑
+    const initLazyLoad = () => {
+      switch (c.pagingMode) {
+        case 3:
+          document.addEventListener('mouseup', handlePopperClose);
+          break;
+        case 2:
+          getPopperScroll()?.addEventListener('scroll', debScrollLoad);
+          break;
+        default:
+          break;
+      }
+    };
+
     onMounted(() => {
       watch(
         () => props.data[c.valueItem],
@@ -314,9 +421,24 @@ export const IBizPicker = defineComponent({
               emit('change', null, c.model.id, true);
             }
           }
+
+          initLazyLoad();
         },
         { immediate: true },
       );
+    });
+
+    onBeforeUnmount(() => {
+      switch (c.pagingMode) {
+        case 3:
+          document.removeEventListener('mouseup', handlePopperClose);
+          break;
+        case 2:
+          getPopperScroll()?.removeEventListener('scroll', debScrollLoad);
+          break;
+        default:
+          break;
+      }
     });
 
     const renderActionItem = (detail: IAppDEUIActionGroupDetail) => {
@@ -355,6 +477,18 @@ export const IBizPicker = defineComponent({
       );
     };
 
+    const renderLoadMore = () => {
+      return (
+        <div
+          ref={loadmoreRef}
+          class={ns.e('loadmore')}
+          onClick={_event => onLoadMoreClick(_event)}
+        >
+          {ibiz.i18n.t('editor.common.loadMore')}
+        </div>
+      );
+    };
+
     return {
       ns,
       c,
@@ -374,6 +508,7 @@ export const IBizPicker = defineComponent({
       handleKeyUp,
       setEditable,
       renderEmpty,
+      renderLoadMore,
       openLinkView,
       openPickUpView,
       renderActionItem,
@@ -391,7 +526,7 @@ export const IBizPicker = defineComponent({
       const panel = this.c.deACMode?.itemLayoutPanel;
       const { context, params } = this.c;
       let selected =
-        item[this.c.textName] || item.srfmajortext === this.curValue;
+        (item[this.c.textName] || item.srfmajortext) === this.curValue;
       if (this.c.valueItem) {
         selected =
           (item[this.c.keyName] || item.srfkey) === this.data[this.c.valueItem];
@@ -491,6 +626,7 @@ export const IBizPicker = defineComponent({
           clearable
           popper-class={[
             this.ns.e('transfer'),
+            this.ns.bm('popper', `${this.c.model.id}`),
             this.ns.is('empty', !this.items.length),
           ]}
           fetch-suggestions={this.onSearch}
@@ -507,6 +643,7 @@ export const IBizPicker = defineComponent({
             default: ({ item }: { item: IData }) => {
               if (this.$slots.append) return this.$slots.append({});
               if (item.srftype === 'empty') return this.renderEmpty();
+              if (item.srftype === 'loadmore') return this.renderLoadMore();
               if (item.detailType === 'DEUIACTION')
                 return this.renderActionItem(item as IAppDEUIActionGroupDetail);
               return itemContent(item);

@@ -58,4 +58,21 @@ export class DatePickerEditorController extends EditorController<IDatePicker> {
         return 'YYYY-MM-DD hh:mm:ss';
     }
   }
+
+  /**
+   * 值格式化
+   *
+   * @readonly
+   * @type {(string | undefined)}
+   * @memberof DatePickerEditorController
+   */
+  get valueFormat(): string | undefined {
+    if (super.valueFormat) {
+      return super.valueFormat;
+    }
+    if (this.model.dateTimeFormat) {
+      return this.model.dateTimeFormat;
+    }
+    return this.getFormatByType(this.model.editorType);
+  }
 }

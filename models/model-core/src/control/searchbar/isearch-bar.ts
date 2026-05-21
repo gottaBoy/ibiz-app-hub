@@ -20,7 +20,7 @@ export interface ISearchBar extends IControlContainer, IControl {
 
   /**
    * 分组模式
-   * @description 值模式 [实体搜索栏过滤分组模式] {SINGLE：单项、 AND：多项（与逻辑）、 OR：多项（或逻辑） }
+   * @description 值模式 [搜索栏过滤分组模式] {SINGLE：单项、 AND：多项（与逻辑）、 OR：多项（或逻辑） }
    * @type {( string | 'SINGLE' | 'AND' | 'OR')}
    * @default SINGLE
    * 来源  getGroupMode

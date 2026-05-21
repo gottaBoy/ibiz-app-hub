@@ -1,9 +1,9 @@
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import { computed, defineComponent, PropType, VNode } from 'vue';
 import { ITreeExpBar } from '@ibiz/model-core';
-import './tree-exp-bar.scss';
 import { IControlProvider, TreeExpBarController } from '@ibiz-template/runtime';
 import { useExpBarRender, useWatchRouteChange } from '../render-util';
+import './tree-exp-bar.scss';
 
 export const TreeExpBarControl = defineComponent({
   name: 'IBizTreeExpBarControl',
@@ -73,7 +73,7 @@ export const TreeExpBarControl = defineComponent({
     };
     if (isCreated) {
       if (XDataModel) {
-        const key = this.c.controlPanel ? XDataModel.name! : 'default';
+        const key = this.c.controlPanel ? 'treeexpbar_tree' : 'default';
         // 树自己绘制，要传递额外的参数
         slots[key] = (): VNode => {
           return (

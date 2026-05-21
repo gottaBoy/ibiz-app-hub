@@ -7,6 +7,7 @@ import {
   IBizGridContainer,
   IBizPanelRawItem,
   IBizMultiDataContainer,
+  IBizMultiDataContainerRaw,
   IBizPanelTabPage,
   IBizPanelContainerGroup,
   IBizSingleDataContainer,
@@ -14,6 +15,8 @@ import {
   IBizPanelContainerImage,
   IBizPanelItemRender,
   IBizAuthWxmpQrcode,
+  IBizTeleportPlaceholder,
+  IBizPanelCtrlViewPageCaption,
 } from '@ibiz-template/vue3-util';
 import IBizViewContentPanelContainer from './view-content-panel-container';
 import IBizViewHeaderPanelContainer from './view-header-panel-container';
@@ -31,9 +34,18 @@ import IBizMobAsyncAction from './async-action';
 import IBizPanelButtonList from './panel-button-list';
 import IBizAuthSso from './auth-sso';
 import IBizPanelAppTitle from './panel-app-title';
+import IBizIndexBlankPlaceholder from './index-blank-placeholder';
+import IBizViewMessage from './view-message';
+import IBizViewMsgPos from './view-msg-pos';
+import IBizSettingContainer from './setting-container';
+import IBizSplitContainer from './split-container';
+import IBizThemeToggling from './theme-toggling';
 
 export const IBizPanelComponents = {
   install: (v: App): void => {
+    v.use(IBizThemeToggling);
+    v.use(IBizSplitContainer);
+    v.use(IBizPanelCtrlViewPageCaption);
     v.use(IBizPanelContainer);
     v.use(IBizPanelCtrlPos);
     v.use(IBizNavPosIndex);
@@ -49,6 +61,7 @@ export const IBizPanelComponents = {
     v.use(IBizWFActionButton);
     v.use(IBizSingleDataContainer);
     v.use(IBizMultiDataContainer);
+    v.use(IBizMultiDataContainerRaw);
     v.use(IBizPanelTabPage);
     v.use(IBizPanelTabPanel);
     v.use(IBizPanelContainerGroup);
@@ -63,7 +76,12 @@ export const IBizPanelComponents = {
     v.use(IBizPanelButtonList);
     v.use(IBizAuthSso);
     v.use(IBizAuthWxmpQrcode);
+    v.use(IBizTeleportPlaceholder);
     v.use(IBizPanelAppTitle);
+    v.use(IBizIndexBlankPlaceholder);
+    v.use(IBizViewMessage);
+    v.use(IBizViewMsgPos);
+    v.use(IBizSettingContainer);
   },
 };
 

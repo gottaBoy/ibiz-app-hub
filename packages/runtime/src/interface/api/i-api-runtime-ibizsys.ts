@@ -8,6 +8,7 @@ import {
   IApiMessageUtil,
   IApiModalUtil,
   IApiNotificationUtil,
+  IApiPrintPreviewUtil,
   IApiQrcodeUtil,
 } from './util';
 import { IApiOpenViewUtil } from './util/i-api-open-view-util';
@@ -93,4 +94,9 @@ export interface IApiRuntimeIbizsys {
    * @memberof IApiRuntimeIbizsys
    */
   appUtil: IApiAppUtil;
+
+  /**
+   * @description 打印预览服务
+   */
+  printPreview: IApiPrintPreviewUtil;
 }

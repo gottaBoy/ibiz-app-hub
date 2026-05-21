@@ -44,6 +44,7 @@ export const TreeGridExUAColumn = defineComponent({
       >
         {uiactionGroup?.uiactionGroupDetails?.length && (
           <iBizActionToolbar
+            zIndex={this.controller.treeGrid.state.zIndex}
             action-details={uiactionGroup.uiactionGroupDetails}
             actions-state={
               this.row.columnActionsStates[this.controller.model.codeName!]

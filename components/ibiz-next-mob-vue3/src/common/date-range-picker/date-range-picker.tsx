@@ -10,7 +10,7 @@ import {
   ref,
   watch,
 } from 'vue';
-import { useNamespace } from '@ibiz-template/vue3-util';
+import { useNamespace, useFilterAttribute } from '@ibiz-template/vue3-util';
 import dayjs from 'dayjs';
 import './date-range-picker.scss';
 import { RangePicker } from './components/range-picker/range-picker';
@@ -421,7 +421,7 @@ export const IBizDateRangeCalendar = defineComponent({
               max-date={this.maxDate}
               onSelect={this.onSelect}
               onConfirm={this.onConfirm}
-              {...this.$attrs}
+              {...useFilterAttribute(this.$attrs)}
             >
               {{
                 title: () => {

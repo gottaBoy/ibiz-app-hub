@@ -11,6 +11,7 @@ import { ColorPickerEditorController } from '../color-picker-editor.controller';
  * 移动端颜色选择器
  * @primary
  * @description  使用van-field组件，轻量化的颜色选择器，支持色板选取、RGB 格式输入及实时预览，满足高效精准的色彩配置需求。支持编辑器类型包含：`移动端颜色选择器`
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
  * @ignoreemits  infoTextChange | enter
  */
@@ -82,7 +83,7 @@ export const IBizColorPicker = defineComponent({
       // 编辑态显示
       content = [
         <van-field
-          class={[this.ns.e('item')]}
+          class={[this.ns.e('item'), this.ns.e('color')]}
           v-model={this.currentVal}
           disabled={this.disabled}
           placeholder={this.c.placeHolder}

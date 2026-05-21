@@ -99,6 +99,7 @@ export default {
             },
             deformDetails: [
               {
+                dataRelationTag: 'counter_form_group_DR',
                 deformTabPages: [
                   {
                     layout: {

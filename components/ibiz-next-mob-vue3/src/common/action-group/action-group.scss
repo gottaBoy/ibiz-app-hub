@@ -1,0 +1,74 @@
+$action-group: (
+  // 颜色
+  color-separator-bg: getCssVar(color, border),
+  color-van-button-border: getCssVar(color, white),
+  // 宽高
+  height-separator: rem(1px),
+  width-van-button: var(--van-popover-action-width),
+  height-van-button: var(--van-popover-action-height),
+  height-van-button-line-height: 1,
+  // 间距
+  spacing-button-gap: getCssVar(spacing, extra, tight),
+  spacing-van-button-text-gap: getCssVar(spacing, extra, tight),
+  spacing-popover-button-item: 0 getCssVar(spacing, base),
+  // 字体大小
+  font-van-button-font-size: var(--van-popover-action-font-size),
+  // 圆角
+  radius-van-button: getCssVar(border-radius, medium),
+);
+@include b(action-group) {
+  @include set-component-css-var('action-group', $action-group);
+
+  @include e('separator') {
+    width: 100%;
+    height: getCssVar(action-group, height-separator);
+    display: inline-block;
+    vertical-align: middle;
+    background-color: getCssVar(action-group, color-separator-bg);
+  }
+
+  @include e(button) {
+    @include set-component-css-var('action-group', $action-group);
+    line-height: getCssVar(action-group, height-van-button-line-height);
+
+    @include m('icon') {
+      flex-shrink: 0;
+    }
+    @include m(text) {
+      @include utils-ellipsis;
+    }
+    .van-button__text {
+      display: flex;
+      align-items: center;
+      gap: getCssVar(action-group, spacing-button-gap);
+      @include utils-ellipsis;
+    }
+  }
+  .van-popover__content {
+    display: flex;
+    flex-direction: column;
+    .van-button {
+      padding: getCssVar(action-group, spacing-popover-button-item);
+      font-size: getCssVar(action-group, font-van-button-font-size);
+      line-height: getCssVar(action-group, height-van-button-line-height);
+      width: getCssVar(action-group, width-van-button);
+      height: getCssVar(action-group, height-van-button);
+      border-radius: getCssVar(action-group, radius-van-button);
+      border-color: transparent;;
+      border: none;
+      color: currentColor;
+      background-color: transparent;
+      &:before {
+        border-color: getCssVar(action-group, color-van-button-border);
+      }
+      .van-button__content {
+        justify-content: flex-start;
+      }
+      .van-button__text {
+        display: block;
+        gap: getCssVar(action-group, spacing-van-button-text-gap);
+        @include utils-ellipsis;
+      }
+    }
+  }
+}

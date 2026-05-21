@@ -2,8 +2,8 @@
 import { defineComponent, PropType } from 'vue';
 import { IInternalMessage } from '@ibiz-template/core';
 import { useNamespace } from '@ibiz-template/vue3-util';
-import './internal-message-default.scss';
 import { IInternalMessageProvider } from '@ibiz-template/runtime';
+import './internal-message-default.scss';
 
 const stateTexts = {
   READ: '已阅读',
@@ -39,6 +39,7 @@ export const InternalMessageDefault = defineComponent({
   },
   emits: {
     close: () => true,
+    read: () => true,
   },
   setup() {
     const ns = useNamespace('internal-message');
@@ -55,6 +56,7 @@ export const InternalMessageDefault = defineComponent({
         class={[this.ns.b()]}
         message={this.message}
         provider={this.provider}
+        onRead={() => this.$emit('read')}
         onClose={() => this.$emit('close')}
       >
         <div class={this.ns.b('left')}>

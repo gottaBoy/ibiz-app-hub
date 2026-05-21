@@ -28,6 +28,7 @@ export type {
   IGlobalCommonConfig,
   IGlobalFlowDrtabConfig,
   IGlobalMobConfig,
+  IGlobalImgCompressConfig,
 } from './i-global-config';
 export type { IUILogicParams } from './i-ui-logic-params/i-ui-logic-params';
 export type { IDataAbilityParams } from './i-data-ability-params/i-data-ability-params';

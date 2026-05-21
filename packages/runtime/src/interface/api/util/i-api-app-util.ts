@@ -92,11 +92,11 @@ export interface IApiAppUtil {
    *
    * @author tony001
    * @date 2024-05-14 15:05:07
-   * @param {string} loginName
-   * @param {string} password
-   * @param {boolean} [remember]
-   * @param {IApiData} [headers]
-   * @param {IApiData} [opts]
+   * @param {string} loginName 登录名
+   * @param {string} password 密码
+   * @param {boolean} [remember] 是否记住登录状态
+   * @param {IApiData} [headers] 请求头
+   * @param {IApiData} [opts] 登录配置
    * @return {*}  {Promise<boolean>}
    */
   login(
@@ -112,7 +112,7 @@ export interface IApiAppUtil {
    *
    * @author tony001
    * @date 2024-05-14 15:05:24
-   * @param {IApiData} [opts]
+   * @param {IApiData} [opts] 登出配置
    * @return {*}  {Promise<boolean>}
    */
   logout(opts?: IApiData): Promise<boolean>;
@@ -122,15 +122,19 @@ export interface IApiAppUtil {
    *
    * @author tony001
    * @date 2024-05-14 15:05:33
-   * @param {string} oldPwd
-   * @param {string} newPwd
-   * @param {IApiData} [opts]
+   * @param {string} oldPwd 旧密码
+   * @param {string} newPwd 新密码
+   * @param {{
+   *       surePwd: string; // 确认密码
+   *     }} [opts] 变更密码配置
    * @return {*}  {Promise<IApiAuthResult>}
    */
   changePwd(
     oldPwd: string,
     newPwd: string,
-    opts?: IApiData,
+    opts?: {
+      surePwd: string;
+    },
   ): Promise<IApiAuthResult>;
 
   /**
@@ -138,9 +142,9 @@ export interface IApiAppUtil {
    *
    * @author tony001
    * @date 2024-05-14 15:05:51
-   * @param {string} oldOrgId
-   * @param {string} newOrgId
-   * @param {IApiData} [opts]
+   * @param {string} oldOrgId 旧组织id
+   * @param {string} newOrgId 新组织id
+   * @param {IApiData} [opts] 切换组织配置
    * @return {*}  {Promise<boolean>}
    */
   switchOrg(
@@ -154,9 +158,9 @@ export interface IApiAppUtil {
    *
    * @author tony001
    * @date 2024-05-14 16:05:06
-   * @param {string} oldTheme
-   * @param {string} newTheme
-   * @param {IApiData} [opts]
+   * @param {string} oldTheme 旧主题
+   * @param {string} newTheme 新主题
+   * @param {IApiData} [opts] 切换主题配置
    * @return {*}  {Promise<boolean>}
    */
   switchTheme(
@@ -170,9 +174,9 @@ export interface IApiAppUtil {
    *
    * @author tony001
    * @date 2024-05-14 16:05:20
-   * @param {string} oldLanguage
-   * @param {string} newLanguage
-   * @param {IApiData} [opts]
+   * @param {string} oldLanguage 旧语言
+   * @param {string} newLanguage 新语言
+   * @param {IApiData} [opts] 切换语言配置
    * @return {*}  {Promise<boolean>}
    */
   switchLanguage(
@@ -192,7 +196,7 @@ export interface IApiAppUtil {
   /**
    * 打开AI聊天
    *
-   * @param {IApiAiChatParam} params
+   * @param {IApiAiChatParam} params 聊天配置
    * @return {*}  {Promise<IApiChatMessage[]>}
    * @memberof IApiAppUtil
    */
@@ -207,7 +211,7 @@ export interface IApiAppUtil {
 
   /**
    * @description 当前路由转换成路由路径对象
-   * @param {boolean} [isRouteModal]
+   * @param {boolean} [isRouteModal] 是否是路由模态
    * @returns {*}  {{
    *     appContext: IApiParams;
    *     pathNodes: {
@@ -232,14 +236,14 @@ export interface IApiAppUtil {
   /**
    * @description 路由路径对象转化为路由路径
    * @param {{
-   *     appContext?: IApiParams;
+   *     appContext?: IApiParams; // 应用上下文
    *     pathNodes: {
-   *       viewName: string;
-   *       context?: IApiParams;
-   *       params?: IApiParams;
-   *       srfnav?: string;
+   *       viewName: string;  // 视图名称
+   *       context?: IApiParams; // 上下文参数
+   *       params?: IApiParams; // 视图参数
+   *       srfnav?: string; // 导航参数
    *     }[];
-   *   }} routePath
+   *   }} routePath 路由路径对象
    * @returns {*}  {string}
    * @memberof IApiAppUtil
    */
@@ -252,4 +256,17 @@ export interface IApiAppUtil {
       srfnav?: string;
     }[];
   }): string;
+
+  /**
+   * @description 注册导航结束事件
+   * @param {(form: string, to: string) => void} callBack 导航结束回调
+   * @memberof IApiAppUtil
+   */
+  registerEventOnNavEnd(callBack: (form: string, to: string) => void): void;
+
+  /**
+   * @description 注册路由导航完成关闭模态类视图
+   * @memberof IApiAppUtil
+   */
+  registerAutoCloseOnNavEnd(): void;
 }

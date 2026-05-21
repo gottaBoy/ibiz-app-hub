@@ -5,6 +5,13 @@
 此日志格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/),
 并且此项目遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/).
 
+## [0.1.80] - 2025-09-28
+
+### Added
+
+- 应用及应用引用新增开发系统标识
+- 表单分页部件新增实体数据关系标记
+
 ## [0.1.79] - 2025-08-25
 
 ### Added

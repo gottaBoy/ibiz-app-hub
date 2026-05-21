@@ -94,6 +94,8 @@ export class ScriptFunction {
       'parent',
       'util',
       'ctrl',
+      // 每个事件特定参数，如：表单值变更前的值等
+      'args',
     ];
     keys.push(...presetArgsKeys);
     // 除重

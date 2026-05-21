@@ -575,7 +575,7 @@ export default {
                     id: 'menuitem4',
                   },
                   {
-                    accUserMode: 2,
+                    accUserMode: 3,
                     itemType: 'MENUITEM',
                     appFuncId: 'usrappfunc0513353562',
                     layout: {

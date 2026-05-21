@@ -13,7 +13,7 @@ $control-treegridex: (
 $control-treegridex-header: (
   text-color: getCssVar(color, text, 2),
   cell-padding: getCssVar(control-treegridex, cell-padding),
-  height: auto,
+  height: 54px,
   bg-color: rgba(#{getCssVar(grey, 1)}, 1),
   font-size: getCssVar(font-size, regular),
   font-weight: getCssVar(font-weight, regular),

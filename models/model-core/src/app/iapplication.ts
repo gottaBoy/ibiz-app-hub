@@ -345,6 +345,13 @@ export interface IApplication extends IModelObject {
   applicationLogics?: IApplicationLogic[];
 
   /**
+   * 开发系统标识
+   * @type {string}
+   * 来源  getPSDevSlnSysId
+   */
+  devSlnSysId?: string;
+
+  /**
    * 应用默认图标
    *
    * @type {ISysImage}

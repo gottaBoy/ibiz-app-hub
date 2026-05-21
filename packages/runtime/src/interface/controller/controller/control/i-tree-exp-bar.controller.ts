@@ -4,7 +4,6 @@ import { ITreeExpBarState } from '../../state';
 import { IExpBarControlController } from './i-exp-bar-control.controller';
 import { IApiTreeExpBarController } from '../../../api';
 import { IViewController } from '../view';
-import { IMDControlController } from './i-md-control.controller';
 
 /**
  * @description 树导航栏控制器
@@ -26,11 +25,4 @@ export interface ITreeExpBarController
    * @memberof ITreeExpBarController
    */
   view: IViewController;
-
-  /**
-   * @description 数据部件控制器（多数据）
-   * @type {IMDControlController}
-   * @memberof ITreeExpBarController
-   */
-  xDataController: IMDControlController;
 }

@@ -1,13 +1,14 @@
-import { PlatformProviderBase } from '@ibiz-template/runtime';
 import { nextTick } from 'vue';
+import { useViewStack } from '../util';
+import { MobPlatformProviderBase } from './mob-platform-provider-base';
 
 /**
  * @description ios搭载平台
  * @export
  * @class IosPlatformProvider
- * @extends {PlatformProviderBase}
+ * @extends {MobPlatformProviderBase}
  */
-export class IosPlatformProvider extends PlatformProviderBase {
+export class IosPlatformProvider extends MobPlatformProviderBase {
   /**
    * @description初始化
    * @return {*}  {Promise<void>}
@@ -39,5 +40,15 @@ export class IosPlatformProvider extends PlatformProviderBase {
       },
       true,
     );
+  }
+
+  /**
+   * 返回事件
+   *
+   * @memberof IosPlatformProvider
+   */
+  back(): void {
+    const { goBack } = useViewStack();
+    goBack();
   }
 }

@@ -185,25 +185,31 @@ export async function getLocalOpenWFRedirectView(
     );
   }
   const app = ibiz.hub.getApp(context.srfappid);
-  const deCodeName = app.deName2DeCodeName.get(deName.toUpperCase()); // 实体codeName
+  let deCodeName: string | undefined = app.deName2DeCodeName.get(
+    deName.toUpperCase(),
+  ); // 实体codeName
 
   if (!deCodeName) {
-    throw new RuntimeError(
-      ibiz.i18n.t('runtime.utils.openRedirectView.noFoundSpecifiedEntity', {
-        deName,
-      }),
-    );
+    deCodeName = deName.toLowerCase();
   }
 
   // 把视图参数里的实体name主键换成codeName主键
-  params[deCodeName.toLowerCase()] = params[deName.toLowerCase()];
+  params[deCodeName!] = params[deName.toLowerCase()];
 
   // 实体的默认重定向视图codeName
-  const deRdViewCodeName = `${deCodeName}${
-    ibiz.env.isMob ? 'Mob' : ''
-  }RedirectView`;
-
-  const deRdView = await ibiz.hub.getAppView(deRdViewCodeName);
+  let deRdViewCodeName = '';
+  let deRdView;
+  try {
+    deRdViewCodeName = `${deCodeName}${
+      ibiz.env.isMob ? 'Mob' : ''
+    }RedirectView`;
+    deRdView = await ibiz.hub.getAppView(deRdViewCodeName);
+  } catch (error) {
+    deRdViewCodeName = `${deCodeName}${
+      ibiz.env.isMob ? '_mob' : ''
+    }_redirect_view`;
+    deRdView = await ibiz.hub.getAppView(deRdViewCodeName);
+  }
 
   // 删除跳转用参数
   delete params.srfdename;
@@ -220,6 +226,10 @@ export async function getLocalOpenWFRedirectView(
   if (params.srfprocessinstanceid) {
     context.srfprocessinstanceid = params.srfprocessinstanceid;
     delete params.srfprocessinstanceid;
+  }
+  // 修正视图上下文appid（适配多应用）
+  if (deRdView && deRdView.appId !== context.srfappid) {
+    context.srfappid = deRdView.appId;
   }
 
   return {
@@ -286,6 +296,22 @@ export async function getDERedirectToView(
 
         if (linkUrl.startsWith('http://') || linkUrl.startsWith('https://')) {
           return { type: 'url', url: linkUrl };
+        }
+        if (linkUrl.startsWith('view://')) {
+          const result = parseViewProtocol(linkUrl);
+          Object.assign(context, result.context);
+          Object.assign(params, result.params);
+          return {
+            type: 'view',
+            viewId: result.viewId,
+            context,
+            params,
+            opts: { ...opts, data: [curData] },
+          };
+        }
+        if (linkUrl.startsWith('route://')) {
+          const routeUrl = `/${linkUrl.split('route://')[1]}`;
+          return { type: 'url', url: routeUrl };
         }
         if (linkUrl.startsWith('appredirectview?')) {
           const toView = await getLocalOpenWFRedirectView(

@@ -10,24 +10,10 @@ import {
   useNamespace,
   useUIStore,
 } from '@ibiz-template/vue3-util';
-import {
-  CodeListItem,
-  SysUIActionTag,
-  UIActionUtil,
-} from '@ibiz-template/runtime';
+import { CodeListItem } from '@ibiz-template/runtime';
 import { ITextArea } from '@ibiz/model-core';
-import {
-  IBizContext,
-  IChatMessage,
-  IPortalAsyncAction,
-  StringUtil,
-  base64ToStr,
-  isEmoji,
-} from '@ibiz-template/core';
-import { createUUID } from 'qx-util';
-import { AxiosProgressEvent } from 'axios';
+import { IChatMessage, base64ToStr, isEmoji } from '@ibiz-template/core';
 import { TextBoxEditorController } from '../text-box-editor.controller';
-import { calcAiToolbarItemsByAc } from '../../../util';
 import './input.scss';
 
 /**
@@ -45,6 +31,24 @@ import './input.scss';
  * @editorparams {name:minlength,parameterType:number,description:指定编辑器输入内容的最小字数}
  * @editorparams {name:maxlength,parameterType:number,description:指定编辑器输入内容的最大字数}
  * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
+ * @editorparams {name:emptyhiddenunit,parameterType:boolean,defaultvalue:true,description:编辑器无值时，其对应的值单位（如'天'、'%'等）是否隐藏}
+ * @editorparams {name:autoquestion,parameterType:boolean,defaultvalue:true,description: 用于AI聊天，AI历史数据最后一个项是用户消息（USER）时是否自动提问，默认开启}
+ * @editorparams {name:autofill,parameterType:boolean,defaultvalue:false,description: 用于AI聊天，AI回答完成之后是否触发回填，默认关闭}
+ * @editorparams {name:openmode,parameterType:'default' | 'minimize' | 'autoexpand',description: 用于AI聊天，AI窗口的打开模式，minimize：默认最小化窗口；autoexpand：默认最小化窗口，当提问完成后自动展开窗口}
+ * @editorparams {"name":"autoclose","parameterType":"{mode:'minimize' | 'close' | 'closetime',duration?:number}","description": "用于AI聊天，在提问完成后，设置AI窗口的自动关闭模式。其中 mode 设为 minimize 时窗口会最小化，设为 close 时窗口会直接关闭，设为 closetime 时窗口会根据 duration 配置的值延时关闭。duration配置单位为秒（s），默认值为 3 秒"}
+ * @editorparams {"name":"enableaiminimize","parameterType":"boolean","description":"用于控制ai聊天窗口是否启用最小化，优先级大于全局参数enableAIMinimize"}
+ * @editorparams {"name":"srfaiappendresource","parameterType":"string", "description":"AI聊天默认附加资源数据"}
+ * @editorparams {"name":"srfmode","parameterType":"string", "description":"指定AI聊天自定义模式"}
+ * @editorparams {"name":"srfenableaiagentchange","parameterType":"boolean","defaultvalue":true, "description":"指定AI聊天智能体是否可切换"}
+ * @editorparams {"name":"srfaiagent","parameterType":"string", "description":"指定AI聊天默认智能体"}
+ * @editorparams {"name":"summarymaxtokens","parameterType":"number","defaultvalue":"30", "description":"AI聊天标题摘要最大字符数,仅话题标题模式为summary时生效"}
+ * @editorparams {"name":"srfenableknowledgebaseselect","parameterType":"boolean","defaultvalue":true, "description":"AI聊天是否启用知识库选择，若未启用则不显示知识库图标"}
+ * @editorparams {"name":"srfenablerecallconfigsetting","parameterType":"boolean","defaultvalue":true, "description":"AI聊天是否启用自定义召回配置，若未启用则不显示召回配置图标"}
+ * @editorparams {"name":"rerankdefaultvalue","parameterType":"0 | 1 | 2","defaultvalue":"2", "description":"AI聊天召回重排默认值，0:禁用;1:启用;2:自动，仅在启用自定义召回配置和当前智能体召回重排无值时生效"}
+ * @editorparams {"name":"maxchunksdefaultvalue","parameterType":"number","defaultvalue":"10", "description":"AI聊天最大召回数量默认值，仅在启用自定义召回配置和当前智能体最大召回数量无值时生效"}
+ * @editorparams {"name":"chunkthresholddefaultvalue","parameterType":"number","defaultvalue":"0.4", "description":"AI聊天召回相似度阈值默认值，仅在启用自定义召回配置和当前智能体召回相似度阈值无值时生效"}
+ * @editorparams {"name":"srfaichunkview","parameterType":"string", "description":"知识切片视图，用于定义AI交谈打开目标知识切片视图"}
+ * @editorparams {"name":"srfaichunkentity","parameterType":"string", "description":"知识切片实体，用于定义AI交谈打开知识切片视图数据主键key"}
  * @ignoreprops overflowMode
  * @ignoreemits infoTextChange
  */
@@ -255,259 +259,36 @@ export const IBizInput = defineComponent({
     const onClick = async () => {
       const appDataEntityId = (c.model as ITextArea).appDataEntityId;
       if (!appDataEntityId || !c.deACMode) return;
-      const {
-        contentToolbarItems,
-        footerToolbarItems,
-        questionToolbarItems,
-        otherToolbarItems,
-      } = calcAiToolbarItemsByAc(c.deACMode);
       const { zIndex } = useUIStore();
       const containerZIndex = zIndex.increment();
-      const module = await import('@ibiz-template-plugin/ai-chat');
-      chatInstance = module.chat || module.default.chat;
-      let id: string = '';
-      let abortController: AbortController;
+      chatInstance = await ibiz.aiChatUtil.getAIChat();
+      const { containerOptions, chatOptions } =
+        await ibiz.aiChatUtil.getEditorExAIChatParams(
+          c.editorParams,
+          c.context,
+          c.params,
+          props.data,
+          c.deACMode,
+          { chatInstance, view: c.view, ctrl: c.ctrl },
+        );
+      const resourceOptions = await ibiz.aiChatUtil.getAIResourceOptions(
+        c.context,
+        c.params,
+      );
       chatInstance.create({
+        resourceOptions,
         containerOptions: {
           zIndex: containerZIndex,
+          ...containerOptions,
         },
         chatOptions: {
           caption: c.deACMode.logicName,
           context: { ...c.context },
           params: { ...c.params, srfactag: c.deACMode.codeName },
-          // 编辑器参数srfaiappendcurdata，是否传入对象参数，用于历史查询传参
-          appendCurData:
-            c.editorParams.srfaiappendcurdata === 'true'
-              ? props.data
-              : undefined,
-          // 编辑器参数srfaiappendcurcontent，传入编辑内容作为用户消息,获取历史数据后附加
-          appendCurContent: c.editorParams.srfaiappendcurcontent
-            ? StringUtil.fill(
-                c.editorParams.srfaiappendcurcontent,
-                c.context,
-                c.params,
-                props.data,
-              )
-            : undefined,
           appDataEntityId,
-          contentToolbarItems: contentToolbarItems as any,
-          footerToolbarItems: footerToolbarItems as any,
-          questionToolbarItems: questionToolbarItems as any,
-          otherToolbarItems: otherToolbarItems as any,
-          question: async (
-            aiChat: any,
-            ctx: IContext,
-            param: IParams,
-            other: IParams,
-            arr: IChatMessage[],
-          ) => {
-            id = createUUID();
-            abortController = new AbortController();
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            try {
-              await deService.aiChatSse(
-                (msg: IPortalAsyncAction) => {
-                  // 20: 持续回答中，消息会持续推送。同一个消息 id 会显示在同一个框内
-                  if (msg.actionstate === 20 && msg.actionresult) {
-                    aiChat.addMessage({
-                      messageid: id,
-                      state: msg.actionstate,
-                      type: 'DEFAULT',
-                      role: 'ASSISTANT',
-                      content: msg.actionresult as string,
-                    });
-                  }
-                  // 30: 回答完成，包含具体所有消息内容。直接覆盖之前的临时拼接消息
-                  else if (msg.actionstate === 30 && msg.actionresult) {
-                    const result = JSON.parse(msg.actionresult as string);
-                    const choices = result.choices;
-                    if (choices && choices.length > 0) {
-                      aiChat.replaceMessage({
-                        messageid: id,
-                        state: msg.actionstate,
-                        type: 'DEFAULT',
-                        role: 'ASSISTANT',
-                        content: choices[0].content || '',
-                      });
-                    }
-                  }
-                  // 40: 回答报错，展示错误信息
-                  else if (msg.actionstate === 40) {
-                    aiChat.replaceMessage({
-                      messageid: id,
-                      state: msg.actionstate,
-                      type: 'ERROR',
-                      role: 'ASSISTANT',
-                      content: msg.actionresult as string,
-                    });
-                  }
-                },
-                abortController,
-                ctx,
-                param,
-                {
-                  messages: arr,
-                },
-              );
-            } catch (error) {
-              aiChat.replaceMessage({
-                messageid: id,
-                state: 40,
-                type: 'ERROR',
-                role: 'ASSISTANT',
-                content: (error as IData).message || ibiz.i18n.t('app.aiError'),
-              });
-              abortController?.abort();
-            } finally {
-              // 标记当前消息已经交互完成
-              aiChat.completeMessage(id, true);
-              return true;
-            }
-          },
-          abortQuestion: async (aiChat: any) => {
-            abortController?.abort();
-            await aiChat.stopMessage({
-              messageid: id,
-              state: 30,
-              type: 'DEFAULT',
-              role: 'ASSISTANT',
-              content: '',
-            });
-            // 标记当前消息已经交互完成
-            await aiChat.completeMessage(id, true);
-          },
-          action: ((action: string, message: IChatMessage) => {
-            if (action === 'backfill') {
-              handleChange(message.realcontent || '');
-            }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          }) as any,
-          history: async (ctx: IContext, param: IParams, other: IParams) => {
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            const historyData = other.appendCurData ? other.appendCurData : {};
-            const result = await deService.aiChatHistory(
-              ctx,
-              param,
-              historyData,
-            );
-            if (result.data && Array.isArray(result.data)) {
-              let preMsg: IData | undefined;
-              result.data.forEach(item => {
-                if (item.role === 'TOOL') {
-                  if (preMsg && item.content) {
-                    chatInstance.aiChat!.updateRecommendPrompt(
-                      preMsg as any,
-                      item.content,
-                    );
-                  }
-                } else {
-                  const msg = {
-                    messageid: createUUID(),
-                    state: 30,
-                    type: 'DEFAULT',
-                    role: item.role,
-                    content: item.content,
-                    completed: true,
-                  } as const;
-                  preMsg = msg;
-                  chatInstance.aiChat!.addMessage(msg);
-                }
-              });
-            }
-            return true;
-          },
-          recommendPrompt: async (
-            ctx: IContext,
-            param: IParams,
-            other: IParams,
-          ) => {
-            const deService = await ibiz.hub
-              .getApp(ctx.srfappid)
-              .deService.getService(ctx, other.appDataEntityId);
-            const result = await deService.aiChatRecommendPrompt(
-              ctx,
-              param,
-              other.message,
-            );
-            if (result.ok && result.data) {
-              const choices = result.data.choices;
-              if (choices && choices.length > 0) {
-                return choices[0];
-              }
-              return null;
-            }
-            return null;
-          },
-          uploader: {
-            onUpload: async (
-              file: File,
-              reportProgress: (progress: number) => void,
-              options?: IData,
-            ) => {
-              const fileMeata = ibiz.util.file.calcFileUpDownUrl(
-                options?.context || c.context,
-                options?.params || c.params,
-                {},
-              );
-              const uploadHeaders = ibiz.util.file.getUploadHeaders();
-              const formData = new FormData();
-              formData.append('file', file);
-              const res = await ibiz.net.axios({
-                url: fileMeata.uploadUrl,
-                method: 'post',
-                headers: uploadHeaders,
-                data: formData,
-                onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-                  const percent =
-                    (progressEvent.loaded / progressEvent.total!) * 100;
-                  reportProgress(percent);
-                },
-              });
-              return res.data;
-            },
-          },
-          extendToolbarClick: async (
-            event: MouseEvent,
-            source: IData,
-            context: IData,
-            params: IData,
-            data: IData,
-          ) => {
-            const result = await UIActionUtil.exec(
-              source.id,
-              {
-                view: c.view,
-                ctrl: c.ctrl,
-                context: IBizContext.create(context),
-                params,
-                data: [data],
-                event,
-              },
-              source.appId,
-            );
-            if (result.closeView) {
-              // 修复编辑器失焦后，调整数据后直接点击关闭按钮导致无法触发自动保存
-              // params.view.modal.ignoreDismissCheck = true;
-              c.view.closeView({ ok: true });
-            } else if (result.refresh) {
-              switch (result.refreshMode) {
-                case 1:
-                  c.view.callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                case 2:
-                  c.view.parentView?.callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                case 3:
-                  c.view.getTopView()?.callUIAction(SysUIActionTag.REFRESH);
-                  break;
-                default:
-              }
-            }
-            return result;
+          ...chatOptions,
+          action: (action: string, message: IChatMessage) => {
+            if (action === 'backfill') emit('change', message.realcontent);
           },
         },
       });
@@ -711,7 +492,11 @@ export const IBizInput = defineComponent({
 
         {content}
         {this.c.chatCompletion ? (
-          <div class={this.ns.e('ai-chat')} onClick={this.onClick}>
+          <div
+            class={this.ns.e('ai-chat')}
+            title={ibiz.i18n.t('editor.textBox.openAiChat')}
+            onClick={this.onClick}
+          >
             <ion-icon src='./assets/images/svg/chat.svg' />
           </div>
         ) : null}

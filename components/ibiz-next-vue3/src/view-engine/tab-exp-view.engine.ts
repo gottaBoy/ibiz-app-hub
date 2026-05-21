@@ -28,7 +28,7 @@ export class TabExpViewEngine extends ViewEngineBase {
    *     >}
    * @memberof TabExpViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDETabExplorerView,
     ITabExpViewState,
     ITabExpViewEvent

@@ -426,4 +426,27 @@
     #{getCssVarName(control, treeview, row, select, color)}:rgba(28, 33, 38, 1);
     #{getCssVarName(control, treeview, row, select, bg-color)}:rgba(232, 248, 255, 1);
   }
+
+  @include b(control-appmenu-popup-container) {
+    #{getCssVarName(color, primary)}: rgba(255, 255, 255, 1);
+  }
+
+  .el-popper.el-dropdown__popper .el-dropdown-menu,
+  .el-popper.el-dropdown__popper .el-scrollbar .el-dropdown__list {
+    color: getCssVar(color, text, 0);
+    background-color: getCssVar(color, bg, 2);
+  }
+
+  .el-popper.el-dropdown__popper
+    .el-scrollbar
+    .el-dropdown__list
+    .el-dropdown-menu__item {
+    color: getCssVar(color, text, 0);
+    background-color: getCssVar(color, bg, 2);
+
+    &:hover {
+      color: getCssVar(color, primary, hover, text);
+      background-color: getCssVar(color, primary, hover);
+    }
+  }
 }

@@ -1,6 +1,32 @@
+$range-picker:(
+  // 颜色
+  color-input-background: getCssVar(color, fill, 3),
+  color-input-label-text: getCssVar(color, tertiary),
+  color-input-input-bg: getCssVar(color, fill, 3),
+  color-input-show-input-text: getCssVar(color, primary),
+  color-input-border-active: getCssVar(color, primary),
+  color-input-border-error: getCssVar(color, danger),
+  color-calendar-input-error-text: getCssVar(color, danger),
+  // 间距
+  spacing-calendar-input-gap: getCssVar(spacing, base),
+  spacing-input-padding: getCssVar(spacing, base),
+  spacing-input-margin-top: getCssVar(spacing, base),
+  spacing-input-input-margin-top: getCssVar(spacing, base),
+  spacing-input-show-input-margin-top: getCssVar(spacing, base),
+  spacing-calendar-input-error-top: getCssVar(spacing, tight),
+  // 字体大小
+  font-input-show-input-fontSize: getCssVar(font-size, small),
+  font-input-label-fontSize: getCssVar(font-size, header, 4),
+  font-calendar-input-error-fontSize: getCssVar(font-size, small),
+  // 其他
+  border-focus-border-bottom: rem(1px) solid getCssVar(range-picker, color-input-border-active),
+  border-error-border-bottom: rem(1px) solid getCssVar(range-picker, color-input-border-error),
+);
 @include b('range-picker-calendar-input') {
+  @include set-component-css-var('range-picker',$range-picker);
+
     display: flex;
-    gap: getCssVar(spacing, base);
+    gap: getCssVar(range-picker, spacing-calendar-input-gap);
     justify-content: center;
     width: 100vw;
   
@@ -11,23 +37,23 @@
       align-items: start;
       justify-content: left;
       max-width: 40%;
-      padding: getCssVar(spacing, base);
-      margin-top: getCssVar(spacing, base);
+      padding: getCssVar(range-picker, spacing-input-padding);
+      margin-top: getCssVar(range-picker, spacing-input-margin-top);
       text-align: left;
-      background-color: getCssVar(color, fill, 3);
+      background-color: getCssVar(range-picker,color-input-background);
   
       @include m('label') {
         position: absolute;
         top: 50%;
         z-index: 1;
-        font-size: getCssVar(font-size, header, 4);
-        color: getCssVar(color, tertiary);
+        font-size: getCssVar(range-picker, font-input-label-fontSize);
+        color: getCssVar(range-picker,color-input-label-text);
         transition: all linear 0.1s;
         transform: translateY(-50%);
       }
       @include m('input') {
-        margin-top: getCssVar(spacing, base);
-        background-color: getCssVar(color, fill, 3);
+        margin-top: getCssVar(range-picker, spacing-input-input-margin-top);
+        background-color: getCssVar(range-picker,color-input-input-bg);
         opacity: 0;
       }
       @include when('show-input') {
@@ -35,9 +61,9 @@
           @include m('label') {
             position: absolute;
             top: 0%;
-            margin-top: getCssVar(spacing, base);
-            font-size: getCssVar(font-size, small);
-            color: getCssVar(color, primary);
+            margin-top: getCssVar(range-picker, spacing-input-show-input-margin-top);
+            font-size: getCssVar(range-picker, font-input-show-input-fontSize);
+            color: getCssVar(range-picker, color-input-show-input-text);
             transform: unset;
           }
           @include m('input') {
@@ -46,13 +72,13 @@
         }
       }
       @include when('focus') {
-        border-bottom: 1px solid getCssVar(color, primary);
+        border-bottom: getCssVar(range-picker, border-focus-border-bottom);
       }
       @include when('error') {
-        border-bottom: 1px solid getCssVar(color, danger);
+        border-bottom: getCssVar(range-picker, border-error-border-bottom);
         .#{bem('range-picker-calendar-input','start')} {
           @include m('label') {
-            color: getCssVar(color, danger);
+            color: getCssVar(range-picker, color-input-border-error);
           }
         }
       }
@@ -64,23 +90,23 @@
       align-items: start;
       justify-content: left;
       max-width: 40%;
-      padding: getCssVar(spacing, base);
-      margin-top: getCssVar(spacing, base);
+      padding: getCssVar(range-picker, spacing-input-padding);
+      margin-top: getCssVar(range-picker, spacing-input-margin-top);
       text-align: left;
-      background-color: getCssVar(color, fill, 3);
+      background-color: getCssVar(range-picker,color-input-background);
   
       @include m('label') {
         position: absolute;
         top: 50%;
         z-index: 1;
-        font-size: getCssVar(font-size, header, 4);
-        color: getCssVar(color, tertiary);
+        font-size: getCssVar(range-picker, font-input-label-fontSize);
+        color: getCssVar(range-picker,color-input-label-text);
         transition: all linear 0.1s;
         transform: translateY(-50%);
       }
       @include m('input') {
-        margin-top: getCssVar(spacing, base);
-        background-color: getCssVar(color, fill, 3);
+        margin-top: getCssVar(range-picker, spacing-input-input-margin-top);
+        background-color: getCssVar(range-picker,color-input-input-bg);
         opacity: 0;
       }
       @include when('show-input') {
@@ -88,9 +114,9 @@
           @include m('label') {
             position: absolute;
             top: 0%;
-            margin-top: getCssVar(spacing, base);
-            font-size: getCssVar(font-size, small);
-            color: getCssVar(color, primary);
+            margin-top: getCssVar(range-picker, spacing-input-show-input-margin-top);
+            font-size: getCssVar(range-picker, font-input-show-input-fontSize);
+            color: getCssVar(range-picker, color-input-show-input-text);
             transform: unset;
           }
           @include m('input') {
@@ -99,13 +125,13 @@
         }
       }
       @include when('focus') {
-        border-bottom: 1px solid getCssVar(color, primary);
+        border-bottom: getCssVar(range-picker, border-focus-border-bottom);
       }
       @include when('error') {
-        border-bottom: 1px solid getCssVar(color, danger);
+        border-bottom: getCssVar(range-picker, border-error-border-bottom);
         .#{bem('range-picker-calendar-input','end')} {
           @include m('label') {
-            color: getCssVar(color, danger);
+            color: getCssVar(range-picker, color-input-border-error);
           }
         }
       }
@@ -113,9 +139,9 @@
   
     @include e('error') {
       position: absolute;
-      top: calc(100% + getCssVar(spacing,tight));
-      font-size: getCssVar(font-size, small);
-      color: getCssVar(color, danger);
+      top: calc(100% + getCssVar(range-picker,spacing-calendar-input-error-top));
+      font-size: getCssVar(range-picker, font-calendar-input-error-fontSize);
+      color: getCssVar(range-picker, color-calendar-input-error-text);
       white-space: pre-line;
     }
   }

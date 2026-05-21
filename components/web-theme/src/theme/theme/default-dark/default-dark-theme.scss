@@ -314,11 +314,11 @@
   #{getCssVarName(color, text, 1)}: rgba(var(#{getCssVarName(dark, purple, 8)}),1); // 文本/图标颜色 - 稍次要
   #{getCssVarName(color, text, 2)}: rgba(var(#{getCssVarName(grey, 9)}),.6); // 文本/图标颜色 - 次要
   #{getCssVarName(color, text, 3)}: rgba(var(#{getCssVarName(grey, 9)}),.35); // 文本/图标颜色 - 最次要
-  #{getCssVarName(color, text, 5)}: rgba(255, 255, 255, 0.8); // 文本色(特殊) - 应用搜索框使用
+  #{getCssVarName(color, text, 5)}: rgb(255 255 255 / 80%); // 文本色(特殊) - 应用搜索框使用
   #{getCssVarName(color, text, menu)}: rgba(var(#{getCssVarName(white)}), 1); // 文本 - 特殊-菜单颜色
 
   // 图标颜色
-  #{getCssVarName(color, icon, 0)}: rgba(204,204,204,.6); // 图标颜色 - 最主要
+  #{getCssVarName(color, icon, 0)}: rgb(204 204 204 / 60%); // 图标颜色 - 最主要
   #{getCssVarName(color, icon, 1)}: #37373d; // 图标颜色 - 稍次要
     
   // 链接颜色
@@ -333,7 +333,7 @@
   #{getCssVarName(color, bg, 2)}: rgb(53 54 60 / 100%); // 背景色 - 中间层（模态等容器）
   #{getCssVarName(color, bg, 3)}: rgb(67 68 74 / 100%); // 背景色 - 次上层（通知，Toast等）
   #{getCssVarName(color, bg, 4)}: rgb(79 81 89 / 100%); // 背景色 - 最上层（特殊）
-  #{getCssVarName(color, bg, 5)}: rgba(204, 204, 204, .6); // 背景色(特殊) - 应用搜索框使用
+  #{getCssVarName(color, bg, 5)}: rgb(204 204 204 / 60%); // 背景色(特殊) - 应用搜索框使用
   #{getCssVarName(color, bg, overlay)}: rgba(22 22 26 / 60%);  // 蒙层背景色
 
   // 填充色
@@ -413,12 +413,38 @@
 
 :root.dark {
   @include b(panel-app-header) {
-    #{getCssVarName(color, primary)}: rgb(28, 28, 28);
-    #{getCssVarName(color, text, menu)}: rgba(204, 204, 204, .6);
-    #{getCssVarName(color, primary, text)}: rgba(204, 204, 204, .6);
+    #{getCssVarName(color, primary)}: rgb(28 28 28);
+    #{getCssVarName(color, text, menu)}: rgb(204 204 204 / 60%);
+    #{getCssVarName(color, primary, text)}: rgb(204 204 204 / 60%);
     #{getCssVarName(color, primary, hover)}: #2a2d2e; 
     #{getCssVarName(color, primary, hover, text)}: #fff;
     #{getCssVarName(color, primary, active)}: #37373d;
     #{getCssVarName(color, primary, active, text)}: #fff;
+  }
+
+  @include b(control-appmenu-popup-container) {
+    #{getCssVarName(color, primary)}: getCssVar(color, bg, 2);
+  }
+
+  .el-popper.el-dropdown__popper .el-dropdown-menu,
+  .el-popper.el-dropdown__popper .el-scrollbar .el-dropdown__list {
+    background-color: getCssVar(color, bg, 2);
+  }
+
+  .el-popper.el-dropdown__popper
+    .el-scrollbar
+    .el-dropdown__list
+    .el-dropdown-menu__item {
+    background-color: getCssVar(color, bg, 2);
+
+    &:hover {
+      background-color: getCssVar(color, bg, 3);
+    }
+  }
+
+  // 模态弹框样式
+  .el-dialog__body {
+    border: 1px solid getCssVar(color, border);
+    box-shadow: var(--el-box-shadow-dark);
   }
 }

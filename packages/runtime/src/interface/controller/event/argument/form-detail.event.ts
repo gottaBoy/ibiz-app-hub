@@ -48,4 +48,9 @@ export interface FormDetailEvent extends EventBase {
    * @type {FormDetailEventName}
    */
   formDetailEventName: FormDetailEventName;
+
+  /**
+   * 额外参数
+   */
+  args?: IData;
 }

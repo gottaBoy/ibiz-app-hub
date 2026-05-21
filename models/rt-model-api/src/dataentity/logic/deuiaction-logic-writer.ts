@@ -9,6 +9,7 @@ export class DEUIActionLogicWriter extends DEUILogicNodeWriter {
 
     _.x(d, 'dstAppDEUIActionId', s, 'getDstPSAppDEUIAction');
     _.x(d, 'dstAppDataEntityId', s, 'getDstPSAppDataEntity');
+    _.x(d, 'retDEUILogicParamId', s, 'getRetPSDEUILogicParam');
 
     super.onFillDSL(c, s, d);
   }

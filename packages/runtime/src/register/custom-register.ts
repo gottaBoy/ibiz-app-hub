@@ -2,9 +2,12 @@ import { calcDeCodeNameById } from '../model';
 import { IRegisterParams } from '../interface';
 import {
   CONTROL_PROVIDER_PREFIX,
+  DEMETHOD_PROVIDER_PREFIX,
+  EDITOR_PROVIDER_PREFIX,
   FORMDETAIL_PROVIDER_PREFIX,
   GRIDCOLUMN_PROVIDER_PREFIX,
   PANELITEM_PROVIDER_PREFIX,
+  UIACTION_PROVIDER_PREFIX,
 } from './helper';
 
 /**
@@ -28,6 +31,12 @@ export class CustomRegister {
       case GRIDCOLUMN_PROVIDER_PREFIX:
       case CONTROL_PROVIDER_PREFIX:
         return this.calcKeyByCtrl(opts);
+      case UIACTION_PROVIDER_PREFIX:
+        return this.calcKeyByAction(opts);
+      case DEMETHOD_PROVIDER_PREFIX:
+        return this.calcKeyByMethod(opts);
+      case EDITOR_PROVIDER_PREFIX:
+        return this.calcKeyByEditor(opts);
       default:
         return '';
     }
@@ -85,6 +94,86 @@ export class CustomRegister {
 
     if (controlItemModel?.codeName) {
       key += `@${controlItemModel.codeName.toUpperCase()}`;
+    }
+    key = prefix + key;
+    return key;
+  }
+
+  /**
+   * @description 通过界面行为模型计算key，其中实体部分无实体的话默认为APP
+   * @static
+   * @param {IRegisterParams} opts
+   * @returns {*}  {string}
+   * @memberof CustomRegister
+   */
+  static calcKeyByAction(opts: IRegisterParams): string {
+    const { uiActionModel } = opts;
+    let prefix: string = 'APP';
+    let key = '';
+    if (uiActionModel) {
+      const { appDataEntityId, uiactionTag } = uiActionModel as IData;
+      if (appDataEntityId) {
+        prefix = calcDeCodeNameById(appDataEntityId).toUpperCase();
+      }
+      key += `${prefix}`;
+      if (uiactionTag) {
+        key += `@${uiactionTag.toUpperCase()}`;
+      }
+    }
+    return key;
+  }
+
+  /**
+   * @description 通过实体方法模型计算key
+   * @static
+   * @param {IRegisterParams} opts
+   * @returns {*}  {string}
+   * @memberof CustomRegister
+   */
+  static calcKeyByMethod(opts: IRegisterParams): string {
+    const { deMethodModel, entityModel } = opts;
+    let key: string = '';
+    if (deMethodModel) {
+      const { methodType, codeName } = deMethodModel;
+      if (entityModel?.id) {
+        key += calcDeCodeNameById(entityModel.id).toUpperCase();
+      }
+      if (methodType && codeName) {
+        key += `@${methodType.toUpperCase()}@${codeName.toUpperCase()}`;
+      }
+    }
+    return key;
+  }
+
+  /**
+   * @description 通过编辑器模型计算key
+   * @static
+   * @param {IRegisterParams} opts
+   * @returns {*}  {string}
+   * @memberof CustomRegister
+   */
+  static calcKeyByEditor(opts: IRegisterParams): string {
+    const { editorModel, controlItemModel, controlModel } = opts;
+    let key = '';
+    let prefix: string = 'APP';
+    if (controlModel) {
+      const { appDataEntityId, controlType, codeName } = controlModel;
+      if (appDataEntityId) {
+        prefix = calcDeCodeNameById(appDataEntityId).toUpperCase();
+      }
+      if (controlType) {
+        key += `@${controlType.toUpperCase()}`;
+      }
+      if (codeName) {
+        key += `@${codeName.toUpperCase()}`;
+      }
+    }
+
+    if (controlItemModel?.codeName) {
+      key += `@${controlItemModel.codeName.toUpperCase()}`;
+    }
+    if (editorModel) {
+      key += `_EDITOR`;
     }
     key = prefix + key;
     return key;

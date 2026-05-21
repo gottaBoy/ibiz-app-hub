@@ -7,6 +7,7 @@ import { IPanelItemController } from './panel-item';
 import { IController } from '../i.controller';
 import { IApiPanelController } from '../../../api';
 import { IViewController } from '../view';
+import { AppCounter } from '../../../../service';
 
 /**
  * @description 面板控制器
@@ -55,6 +56,13 @@ export interface IPanelController<
    * @memberof IPanelController
    */
   container?: IController;
+
+  /**
+   * @description 计数器
+   * @type {{ [key: string]: AppCounter }}
+   * @memberof IPanelController
+   */
+  counters: { [key: string]: AppCounter };
 
   /**
    * @description 值校验

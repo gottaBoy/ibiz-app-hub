@@ -392,6 +392,7 @@ export default {
             singleSelect: true,
             appCodeListId: 'web.mock__cl_sample',
             editorType: 'DROPDOWNLIST',
+            placeHolder: '请选择数据',
             valueType: 'SIMPLE',
             editable: true,
             id: 'dropdownlist',
@@ -437,6 +438,7 @@ export default {
           appDEFieldId: 'numberval',
           editor: {
             editorType: 'TEXTBOX',
+            placeHolder: '请输入数值',
             valueType: 'SIMPLE',
             editable: true,
             id: 'numberval',
@@ -452,6 +454,7 @@ export default {
           editor: {
             maxLength: 100,
             editorType: 'TEXTBOX',
+            placeHolder: '请输入',
             valueType: 'SIMPLE',
             editable: true,
             id: 'textbox',

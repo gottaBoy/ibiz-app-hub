@@ -1,0 +1,86 @@
+$menu-design-tree: (
+  // Color
+  'color-item-bg': getCssVar(color, bg, 0),
+  // 树节点项背景色
+  // Width/Height
+  'height-item': getCssVar('height-control', 'large'),
+  // 树节点项高度
+  // Spacing
+  'spacing-item-padding': 0 getCssVar('spacing', 'base'),
+  // 树节点项内间距
+  'spacing-item-margin': getCssVar('spacing', 'tight') 0,
+  // 树节点项外间距
+  'spacing-item-caption-margin': 0 0 0 getCssVar('spacing', 'tight'),
+  // 树节点项主文本外间距
+  'spacing-item-checkbox-margin': 0 0 0 getCssVar('spacing', 'extra-tight'),
+  // 树节点项复选框外间距
+  'spacing-node-item-margin-left': rem(20px),
+  // 树节点项左侧间距，用于缩进区分父节点与子节点
+  // Radius
+  'radius-item-circle': getCssVar(border, radius, medium),
+  // 树节点项圆角
+  // Font
+  'font-item-font-size': getCssVar('font-size', 'header-6'),
+  // 树节点项字体大小
+  // Other
+  'icon-item-size': getCssVar('font-size', 'header-6'),
+  // 树节点项图标大小
+);
+@include b(menu-design-tree) {
+  @include set-component-css-var('menu-design-tree', $menu-design-tree);
+
+  @include e(item) {
+    display: flex;
+    align-items: center;
+    height: getCssVar(menu-design-tree, height-item);
+    padding: getCssVar(menu-design-tree, spacing-item-padding);
+    margin: getCssVar(menu-design-tree, spacing-item-margin);
+    font-size: getCssVar(menu-design-tree, font-item-font-size);
+    line-height: getCssVar(menu-design-tree, height-item);
+    background-color: getCssVar(menu-design-tree, color-item-bg);
+    border-radius: getCssVar(menu-design-tree, radius-item-circle);
+
+    @include m(icon) {
+      display: flex;
+      align-items: center;
+      width: getCssVar(menu-design-tree, icon-item-size);
+      & + .#{bem(menu-design-tree, item, caption)} {
+        margin: getCssVar(menu-design-tree, spacing-item-caption-margin);
+      }
+    }
+
+    @include m(caption) {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @include m(checkbox) {
+      padding: getCssVar(menu-design-tree, spacing-item-checkbox-margin);
+      margin-left: auto;
+    }
+  }
+
+  &:has(.#{bem(no-data)}) {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // 解决复选框点击后未触发点击事件的问题，通过添加蒙层来触发对应项的点击事件
+  .#{bem(menu-design-tree, item)} {
+    position: relative;
+
+    &::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      content: '';
+    }
+  }
+}

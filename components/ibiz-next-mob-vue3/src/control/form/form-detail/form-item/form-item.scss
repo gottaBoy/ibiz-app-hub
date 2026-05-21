@@ -1,33 +1,8 @@
-$form-item: (label-color: getCssVar(color, text, 0),
-  text-color: getCssVar(color, text, 0),
-  bg-color: getCssVar(color, fill, 0),
-  hover-color: getCssVar(color, text, 0),
-  hover-bg-color: getCssVar(color, fill, 1),
-  readonly-color: getCssVar(color, text, 2),
-  border-color: transparent,
-  font-size: getCssVar(font-size, header-6),
-  error-font-size: getCssVar(font-size, regular),
-  error-color: getCssVar(color, danger),
-  placeholder-color: getCssVar(color, text, 3),
-  disabled-color: getCssVar(color, text, 3),
-  disabled-bg-color: transparent,
-  disabled-border-color: getCssVar(color, disabled, border),
-  active-bg: getCssVar(color, fill, 2),
-  active-border: getCssVar(active, bg),
-  focus-bg: getCssVar(color, fill, 0),
-  focus-border: getCssVar(color, focus, border),
-  line-height: rem(20px),
-);
-
-$form-item-caption: ('color': getCssVar('form-item', 'text-color'),
-  'font-size': getCssVar('form-item', 'font-size'),
+$form-item: (
 );
 
 @include b(form-item) {
   @include set-component-css-var('form-item', $form-item);
-  @include set-component-css-var('form-item-caption', $form-item-caption);
-
-  #{getCssVarName(editor, default, line-height)}: rem(20px);
 
   .van-field {
     height: 100%;

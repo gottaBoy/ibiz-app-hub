@@ -9,10 +9,12 @@ import { InternalMessageHTML } from './internal-message-html/internal-message-ht
 import { InternalMessageHTMLtProvider } from './internal-message-html/internal-message-html.provider';
 import { InternalMessageTextProvider } from './internal-message-text/internal-message-text.provider';
 import { InternalMessageText } from './internal-message-text/internal-message-text';
+import { InternalMessagGroup } from './internal-message-group/internal-message-group';
 
 export { InternalMessageTab } from './internal-message-tab/internal-message-tab';
 
 export function installInternalMessage(v: App): void {
+  v.component(InternalMessagGroup.name, InternalMessagGroup);
   v.component(InternalMessageContainer.name, InternalMessageContainer);
   v.component(InternalMessageDefault.name, InternalMessageDefault);
   v.component(InternalMessageJSON.name, InternalMessageJSON);

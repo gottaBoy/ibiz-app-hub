@@ -1,0 +1,150 @@
+$toolbar-group-list: (
+  // Color
+  color-item-disabled-text: getCssVar('control-toolbar', 'color-disabled-text'),
+  // Width/Height
+  height-max-height: calc(100vh - #{getCssVar(height, control, large)}),
+  height-item: rem(48px),
+  height-modal: 100vh,
+  width-modal: 100vw,
+  width-item-arrow: calc(#{getCssVar('spacing', 'base')} + #{getCssVar('toolbar-group-list', 'font-item-arrow-font-size')}),
+  // Spacing
+  spacing-padding: getCssVar('spacing', 'tight') 0,
+  spacing-default-padding: 0,
+  spacing-group-item-wrapper-padding: 0 1.2em 0 0,
+  spacing-item-padding: getCssVar('spacing', 'tight')
+    getCssVar('spacing', 'base'),
+  spacing-item-label-margin: 0 0 0 getCssVar('spacing', 'tight'),
+  spacing-default-item-label-margin: 0 0 0 getCssVar('spacing', 'extra-tight'),
+  // Font
+  font-item-font-size: getCssVar('spacing', 'base'),
+  font-item-arrow-font-size: 1.1em
+);
+
+@mixin list-item-style {
+  @include flex(row, start, center);
+
+  position: relative;
+  height: getCssVar(toolbar-group-list, height-item);
+  padding: getCssVar(toolbar-group-list, spacing-item-padding);
+  font-size: getCssVar(toolbar-group-list, font-item-font-size);
+  width: 100%;
+
+  @include when('disabled') {
+    color: getCssVar(toolbar-group-list, color-item-disabled-text);
+    pointer-events: none;
+  }
+}
+
+@mixin list-item-wrapper-style {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .#{bem(toolbar-group-list-item)} {
+    width: 100%;
+    #{getCssVarName(info-item, spacing-label-margin)}: getCssVar(
+      toolbar-group-list,
+      spacing-item-label-margin
+    );
+
+    // icon图标元素占位
+    &:not(:has(.#{bem(icon)}))::before {
+      display: inline-block;
+      width: getCssVar(info-item, icon-size);
+      height: getCssVar(info-item, icon-size);
+      margin: getCssVar(info-item, spacing-label-margin);
+      content: '';
+      flex-shrink: 0;
+    }
+    .#{bem(info-item, label)} {
+      @include utils-ellipsis;
+    }
+  }
+}
+
+@mixin list-group-item-wrapper-style {
+  @include list-item-wrapper-style;
+  padding: getCssVar(toolbar-group-list, spacing-group-item-wrapper-padding);
+}
+
+@include b('toolbar-group-list') {
+  @include set-component-css-var('toolbar-group-list', $toolbar-group-list);
+
+  display: flex;
+  flex-direction: column;
+  max-height: getCssVar(toolbar-group-list, height-max-height);
+  padding: getCssVar(toolbar-group-list, spacing-padding);
+  @include e('wrapper') {
+    height: 100%;
+    width: 100%;
+    overflow: hidden auto;
+  }
+
+  @include e('item') {
+    @include list-item-style;
+
+    @include m('wrapper') {
+      @include list-item-wrapper-style;
+    }
+  }
+
+  @include e('group-item') {
+    @include list-item-style;
+    @include m('wrapper') {
+      @include list-group-item-wrapper-style;
+    }
+  }
+
+  @include e('group-itemx') {
+    @include list-item-style;
+    @include m('wrapper') {
+      @include list-group-item-wrapper-style;
+
+      .#{bem(toolbar-group-list, item)} {
+        padding: 0;
+      }
+    }
+  }
+
+  @include e('item-arrow') {
+    @include flex(row, start, center);
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: getCssVar(toolbar-group-list, font-item-arrow-font-size);
+    height: 100%;
+    width: getCssVar(toolbar-group-list, width-item-arrow);
+  }
+
+  @include e('modal') {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: getCssVar(toolbar-group-list, width-modal);
+    height: getCssVar(toolbar-group-list, height-modal);
+  }
+
+  // 气泡显示时的样式
+  @include when('default') {
+    #{getCssVarName(toolbar-group-list, spacing-padding)}: getCssVar(
+      toolbar-group-list,
+      spacing-default-padding
+    );
+    #{getCssVarName(toolbar-group-list, spacing-item-label-margin)}: getCssVar(
+      toolbar-group-list,
+      spacing-default-item-label-margin
+    );
+
+    @include e('wrapper') {
+      position: relative;
+      z-index: 2;
+    }
+    .#{bem(toolbar-group-list-item)} {
+      // 气泡显示时无图标元素不显示占位
+      &:not(:has(.#{bem(icon)}))::before {
+        display: none;
+      }
+    }
+  }
+}

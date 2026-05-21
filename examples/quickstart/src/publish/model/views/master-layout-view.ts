@@ -2,7 +2,7 @@ export default {
   deviewCodeName: 'layout_view',
   deviewId: '05d6a748cdc5aa6164beb96fb869fce5',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

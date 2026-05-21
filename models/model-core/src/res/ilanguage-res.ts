@@ -7,6 +7,13 @@ import { IModelObject } from '../imodel-object';
  */
 export interface ILanguageRes extends IModelObject {
   /**
+   * 代码标识
+   * @type {string}
+   * 来源  getCodeName
+   */
+  codeName?: string;
+
+  /**
    * 默认内容
    * @type {string}
    * 来源  getDefaultContent

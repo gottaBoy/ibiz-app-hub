@@ -27,11 +27,11 @@ export interface IApiReportPanelState extends IApiControlState {
 
   /**
    * @description 报表数据
-   * @type {(IApiData | IApiData[])}
+   * @type {(IApiData[])}
    * @default {}
    * @memberof IApiReportPanelState
    */
-  data: IApiData | IApiData[];
+  data: IApiData[];
 
   /**
    * @description 是否正在处理中
@@ -40,12 +40,4 @@ export interface IApiReportPanelState extends IApiControlState {
    * @memberof IApiReportPanelState
    */
   processing: boolean;
-
-  /**
-   * @description 报表类型
-   * @type {string}
-   * @default ''
-   * @memberof IApiReportPanelState
-   */
-  reportType: string;
 }

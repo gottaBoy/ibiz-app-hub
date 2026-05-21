@@ -1,18 +1,26 @@
+$wf-step-trace: (
+  spacing-wf-step-trace-task-item: getCssVar('spacing', 'tight'),
+  font-wf-step-trace-task-item-fontSize: getCssVar('font-size', 'regular'),
+  font-van-field-fontWeight: getCssVar('font-weight', 'bold'),
+  border-wf-step-trace-task: rem(1px) solid getCssVar('color', 'border'),
+);
 @include b(wf-step-trace) {
-
+  @include set-component-css-var('wf-step-trace', $wf-step-trace);
   @include b(wf-step-trace-task) {
-    border: rem(1px) solid getCssVar('color', 'border');
+    border: getCssVar(wf-step-trace, 'border-wf-step-trace-task');
   }
 
   @include b(wf-step-trace-task-item) {
-    padding: getCssVar('spacing', 'tight');
-    font-size: getCssVar('font-size', 'regular');
-    border-bottom: rem(1px) solid getCssVar('color', 'border');
+    padding: getCssVar(wf-step-trace, 'spacing-wf-step-trace-task-item');
+    font-size: getCssVar(
+      wf-step-trace,
+      'font-wf-step-trace-task-item-fontSize'
+    );
+    border-bottom: getCssVar(wf-step-trace, 'border-wf-step-trace-task');
 
     .van-field__label {
       flex: 1;
-      font-weight: getCssVar('font-weight', 'bold');
+      font-weight: getCssVar(wf-step-trace, 'font-van-field-fontWeight');
     }
   }
-
 }

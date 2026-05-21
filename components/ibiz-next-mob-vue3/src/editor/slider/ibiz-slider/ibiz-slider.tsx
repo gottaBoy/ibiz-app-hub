@@ -4,6 +4,7 @@ import {
   getSliderProps,
   useFocusAndBlur,
   useNamespace,
+  useFilterAttribute,
 } from '@ibiz-template/vue3-util';
 import { toNumber } from 'lodash-es';
 import { SliderEditorController } from '../slider-editor.controller';
@@ -13,16 +14,17 @@ import './ibiz-slider.scss';
  * 移动端滑动输入条
  * @primary
  * @description 使用van-slider组件，用于在给定的范围内选择一个值的场景。支持编辑器类型包含：`移动端滑动输入条`
- * @editorparams {name:stepValue,parameterType:number,defaultvalue:1,description:步长，van-slider组件的step属性}
- * @editorparams {name:maxValue,parameterType:number,defaultvalue:100,description:最大值，van-slider组件的max属性}
- * @editorparams {name:minValue,parameterType:number,defaultvalue:0,description:最小值，van-slider组件的min属性}
+ * @editorparams {name:stepvalue,parameterType:number,defaultvalue:1,description:步长，van-slider组件的step属性}
+ * @editorparams {name:maxvalue,parameterType:number,defaultvalue:100,description:最大值，van-slider组件的max属性}
+ * @editorparams {name:minvalue,parameterType:number,defaultvalue:0,description:最小值，van-slider组件的min属性}
  * @editorparams {name:range,parameterType:boolean,defaultvalue:false,description:是否开启双滑块模式，van-slider组件的range属性}
- * @editorparams {name:type,parameterType:string,defaultvalue:line,description:进度条类型，可选值为line（线形）或circle（环形）}
- * @editorparams {name:textItem,parameterType:string,description:环形时显示的文本属性}
- * @editorparams {name:showText,parameterType:boolean,defaultvalue:false,description:环形时是否显示文本}
- * @editorparams {name:format,parameterType:string,defaultvalue:0%,description:环形时显示文本的格式化规则}
+ * @editorparams {name:type,parameterType:'line' | 'circle',defaultvalue:'line',description:进度条类型，可选值为line（线形）或circle（环形）}
+ * @editorparams {name:textitem,parameterType:string,description:环形时显示的文本属性}
+ * @editorparams {name:showtext,parameterType:boolean,defaultvalue:false,description:环形时是否显示文本}
+ * @editorparams {name:format,parameterType:string,defaultvalue:'0%',description:环形时显示文本的格式化规则}
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
- * @ignoreemits  infoTextChange | enter
+ * @ignoreemits  blur | focus | infoTextChange | enter
  */
 export const IBizSlider = defineComponent({
   name: 'IBizSlider',
@@ -57,11 +59,20 @@ export const IBizSlider = defineComponent({
       if (editorModel.editorParams.stepValue) {
         step = toNumber(editorModel.editorParams.stepValue);
       }
+      if (editorModel.editorParams.stepvalue) {
+        step = toNumber(editorModel.editorParams.stepvalue);
+      }
       if (editorModel.editorParams.maxValue) {
         max = toNumber(editorModel.editorParams.maxValue);
       }
+      if (editorModel.editorParams.maxvalue) {
+        max = toNumber(editorModel.editorParams.maxvalue);
+      }
       if (editorModel.editorParams.minValue) {
         min = toNumber(editorModel.editorParams.minValue);
+      }
+      if (editorModel.editorParams.minvalue) {
+        min = toNumber(editorModel.editorParams.minvalue);
       }
       if (editorModel.editorParams.range) {
         range = c.toBoolean(editorModel.editorParams.range);
@@ -72,8 +83,14 @@ export const IBizSlider = defineComponent({
       if (editorModel.editorParams.textItem) {
         textItem = editorModel.editorParams.textItem;
       }
+      if (editorModel.editorParams.textitem) {
+        textItem = editorModel.editorParams.textitem;
+      }
       if (editorModel.editorParams.showText) {
         showText = c.toBoolean(editorModel.editorParams.showText);
+      }
+      if (editorModel.editorParams.showtext) {
+        showText = c.toBoolean(editorModel.editorParams.showtext);
       }
       if (editorModel.editorParams.format) {
         format = editorModel.editorParams.format;
@@ -184,11 +201,29 @@ export const IBizSlider = defineComponent({
           min={this.min}
           range={this.range}
           onChange={this.handleChange}
-          {...this.$attrs}
+          {...useFilterAttribute(this.$attrs)}
         >
           {{
             button: () => {
               return <div class={this.ns.b('button')}>{this.currentVal}</div>;
+            },
+            'left-button': () => {
+              return (
+                <div class={this.ns.b('button')}>
+                  {Array.isArray(this.currentVal)
+                    ? this.currentVal[0]
+                    : this.currentVal}
+                </div>
+              );
+            },
+            'right-button': () => {
+              return (
+                <div class={this.ns.b('button')}>
+                  {Array.isArray(this.currentVal)
+                    ? this.currentVal[1]
+                    : this.currentVal}
+                </div>
+              );
             },
           }}
         </van-slider>
@@ -202,7 +237,7 @@ export const IBizSlider = defineComponent({
           size={this.circleSize} // 显示直径
           layer-color='lightgray'
           stroke-width='100'
-          {...this.$attrs}
+          {...useFilterAttribute(this.$attrs)}
         >
           {{
             default: () => {

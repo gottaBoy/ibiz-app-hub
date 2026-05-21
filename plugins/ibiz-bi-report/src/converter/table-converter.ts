@@ -182,7 +182,7 @@ export class TableConverter extends BaseConverter {
     if (!data || !model || !appDataEntityId) return;
     if (!data.appBIReportMeasures) return model;
     const input = {
-      appId: ibiz.env.appId,
+      appId: data.appId || ibiz.env.appId,
       appDataEntityId,
       caption: data!.name,
       value: data.appBIReportMeasures[0].measureTag,

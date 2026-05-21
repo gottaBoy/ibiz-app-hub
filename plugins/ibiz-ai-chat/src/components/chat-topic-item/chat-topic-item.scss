@@ -1,12 +1,17 @@
 @include b(chat-topic-item) {
-  height: 38px;
+  position: relative;
   display: flex;
+  align-items: center;
+  height: 38px;
   padding: 0 8px;
+  margin-bottom: 6px;
+  font-size: getCssVar(font-size, regular);
   cursor: pointer;
   border-radius: 12px;
-  position: relative;
-  align-items: center;
-  font-size: getCssVar(font-size, regular);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   &:hover:not(.is-edit) {
     color: #{getCssVar('ai-chat', 'hover-color')};
@@ -29,10 +34,17 @@
   }
 
   @include e(caption) {
-    width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
+    width: 100%;
+    height: 100%;
+
+    @include m(readonly) {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+    }
 
     @include m(text) {
       min-width: 0;
@@ -41,32 +53,37 @@
       white-space: nowrap;
     }
 
+    @include m(icon) {
+      flex-shrink: 0;
+      font-size: 12px;
+    }
+
     @include m(editor) {
       width: 100%;
       height: 100%;
-      border: none;
-      outline: none;
       color: #{getCssVar('ai-chat', 'color')};
       background: #{getCssVar('ai-chat', 'background-color')};
+      border: none;
+      outline: none;
     }
   }
 
   @include e(icon) {
-    top: 50%;
-    gap: 8px;
-    opacity: 0;
-    right: 10px;
-    height: 24px;
-    display: flex;
-    outline: none;
-    padding: 0 8px;
-    border-radius: 8px;
     position: absolute;
+    top: 50%;
+    right: 10px;
+    display: flex;
+    gap: 8px;
     align-items: center;
     justify-content: flex-end;
-    transform: translateY(-50%);
+    height: 24px;
+    padding: 0 8px;
     color: #{getCssVar('ai-chat', 'hover-color')};
     background-color: #{getCssVar('ai-chat', 'hover-background-color')};
+    border-radius: 8px;
+    outline: none;
+    opacity: 0;
+    transform: translateY(-50%);
 
     @include m(item) {
       font-size: 12px;

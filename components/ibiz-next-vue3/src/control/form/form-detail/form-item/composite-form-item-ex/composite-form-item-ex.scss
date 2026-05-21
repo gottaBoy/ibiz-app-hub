@@ -1,0 +1,181 @@
+$composite-form-item-ex: (
+  'menu-top': 0,
+  'menu-right': 0,
+  'menu-text-color': getCssVar(color, text, 2),
+  'menu-font-size': getCssVar(font-size, regular),
+  'menu-width': 120px,
+  'menu-height': getCssVar('height-control', 'default'),
+  'menu-icon-gap': getCssVar('spacing', 'extra-tight'),
+  'menu-z-index': 9,
+  'menu-padding': 0 getCssVar('spacing', 'base-tight'),
+  'menu-item-padding': getCssVar('spacing', 'extra-tight'),
+  'menu-item-hover-bg-color': getCssVar(color, fill, 0),
+  'menu-bg-color': getCssVar(color, bg, 3),
+  'menu-text-icon-size': getCssVar('font-size', 'header-6'),
+  'menu-content-padding': getCssVar('spacing', 'base-tight'),
+  'loading-min-height': calc(var(--el-loading-spinner-size) + getCssVar('spacing', 'tight')),
+);
+
+@include b (composite-form-item-ex) {
+  @include set-component-css-var('composite-form-item-ex', $composite-form-item-ex);
+
+  position: relative;
+
+  @include e(editor) {
+    @include when(hidden-switch) {
+      #{getCssVarName('composite-form-item-ex', 'menu-width')}: 0;
+    }
+  }
+
+  @include b(composite-form-item-ex-menu) {
+    position: absolute;
+    top: getCssVar('composite-form-item-ex', 'menu-top');
+    right: getCssVar('composite-form-item-ex', 'menu-right');
+    z-index: getCssVar('composite-form-item-ex', 'menu-z-index');
+    display: flex;
+    align-items: center;
+    width: getCssVar('composite-form-item-ex', 'menu-width');
+    height: getCssVar('composite-form-item-ex', 'menu-height');
+    padding: getCssVar('composite-form-item-ex', 'menu-padding');
+    font-size: getCssVar('composite-form-item-ex', 'menu-font-size');
+    color: getCssVar('composite-form-item-ex', 'menu-text-color');
+    cursor: pointer;
+    background: getCssVar('composite-form-item-ex', 'menu-bg-color');
+
+    @include when(disabled) {
+      cursor: auto;
+
+      @include e(icon) {
+        display: none;
+      }
+    }
+
+    @include e(text-icon) {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      width: 1em;
+      height: 1em;
+      margin-right: getCssVar('composite-form-item-ex', 'menu-icon-gap');
+      font-size: getCssVar('composite-form-item-ex', 'menu-text-icon-size');
+  
+      .#{bem('icon')} {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+  
+        svg {
+          width: 1em;
+          height: 1em;
+          fill: currentcolor;
+        }
+      }
+    }
+
+    @include e(text) {
+      flex: 1 1 0;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @include e(icon) {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      margin-left: getCssVar('composite-form-item-ex', 'menu-icon-gap');
+
+      svg {
+        width: 1em;
+        height: 1em;
+      }
+    }
+  }
+  
+  @include b(form-item-container) {
+    @include e(editor) {
+      > .el-loading-parent--relative {
+        min-height: getCssVar('composite-form-item-ex', 'loading-min-height');
+      }
+    }
+  }
+  
+}
+
+@include b(composite-form-item-ex-menu-popover) {
+  @include set-component-css-var('composite-form-item-ex', $composite-form-item-ex);
+
+  &.el-popover.el-popper {
+    width: getCssVar('composite-form-item-ex', 'menu-width') !important;
+    min-width: getCssVar('composite-form-item-ex', 'menu-width');
+    padding: getCssVar('composite-form-item-ex', 'menu-content-padding');
+  }
+}
+
+@include b(composite-form-item-ex-menu-content) {
+  font-size: getCssVar('composite-form-item-ex', 'menu-font-size');
+  color: getCssVar('composite-form-item-ex', 'menu-text-color');
+}
+
+@include b(composite-form-item-ex-menu-item) {
+  display: flex;
+  align-items: center;
+  padding: getCssVar('composite-form-item-ex', 'menu-item-padding');
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+
+  @include e(icon) {
+    flex: 0 0 auto;
+    width: 1em;
+    height: 1em;
+    margin-right: getCssVar('composite-form-item-ex', 'menu-icon-gap');
+    visibility: hidden;
+    fill: currentcolor;
+  }
+
+  @include e(text-icon) {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+    margin-right: getCssVar('composite-form-item-ex', 'menu-icon-gap');
+    font-size: getCssVar('composite-form-item-ex', 'menu-text-icon-size');
+
+    .#{bem('icon')} {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        width: 1em;
+        height: 1em;
+        fill: currentcolor;
+      }
+    }
+  }
+
+  @include e(text) {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include when(active) {
+    @include e(icon) {
+      visibility: visible;
+    }
+  }
+
+  &:hover {
+    background-color: getCssVar('composite-form-item-ex', 'menu-item-hover-bg-color');
+  }
+}

@@ -45,8 +45,7 @@ export const CustomDV6 = defineComponent({
       | MutationCallback
       | EventListenerOrEventListenerObject;
     let domObserver: MutationObserver | null;
-    const backgroundColor = 'var(--ibiz-screen-dashboard-custom-dv-bg)';
-    /**
+    const backgroundColor = `var(${ns.cssVarName('screen-dashboard-custom-dv-bg')})`;    /**
      *  初始化宽高
      * @param resize
      * @returns

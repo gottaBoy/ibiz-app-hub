@@ -4,7 +4,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'grid_design',
   deviewId: '40a8c198b2bafdbc4f9cecb77d1dfeb6',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.CATEGORY',
   },

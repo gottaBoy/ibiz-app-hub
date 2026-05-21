@@ -15,6 +15,7 @@ export class NumberEditorWriter extends EditorWriter {
       c.s('valuerule.SysValueRule[]', s, 'getPSSysValueRule'),
     );
     _.w(d, 'precision', s);
+    _.w(d, 'scale', s);
 
     super.onFillDSL(c, s, d);
   }

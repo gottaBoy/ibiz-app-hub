@@ -32,6 +32,14 @@ export class WaterMarkManager {
   private container: HTMLElement;
 
   /**
+   * @description 水印容器的宿主元素
+   * @private
+   * @type {HTMLElement}
+   * @memberof WaterMarkManager
+   */
+  private hostContainer?: HTMLElement;
+
+  /**
    * @description 用于显示水印的覆盖层元素
    * @private
    * @type {HTMLDivElement}
@@ -139,11 +147,13 @@ export class WaterMarkManager {
     if (this.disposed) return;
     this.teardownObservers();
     this.overlay?.parentElement?.remove();
+    this.hostContainer?.remove();
     // shadowRoot 会随着宿主节点的删除自动被回收
     // 清理引用
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     this.overlay = undefined;
+    this.hostContainer = undefined;
     this.disposed = true;
   }
 
@@ -198,6 +208,8 @@ export class WaterMarkManager {
 
     // 设置防篡改监听
     this.setupObservers(host);
+
+    this.hostContainer = host;
   }
 
   // 获取宿主元素样式对象

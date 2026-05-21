@@ -232,7 +232,7 @@ $control-grid-footer: (
         }
 
         .el-input__wrapper, .el-textarea__inner, .el-date-editor {
-          --el-input-bg-color: #{getCssVar(color, white)};
+          --el-input-bg-color: #{getCssVar(color, bg, 1)};
         }
       }
     }
@@ -273,26 +273,6 @@ $control-grid-footer: (
     // 表格body样式
     .el-table__body-wrapper {
       color: getCssVar(control-grid, content, text-color);
-      #{getCssVarName(color, text, 0)}: getCssVar(
-        control-grid,
-        content,
-        text-color
-      );
-      #{getCssVarName(color, text, 1)}: getCssVar(
-        control-grid,
-        content,
-        text-color
-      );
-      #{getCssVarName(color, text, 2)}: getCssVar(
-        control-grid,
-        content,
-        text-color
-      );
-      #{getCssVarName(color, text, 3)}: getCssVar(
-        control-grid,
-        content,
-        text-color
-      );
       border-bottom: 0.1px solid getCssVar(color, border);
 
       // 设置最小行高，内容多了换行要把行高撑开。

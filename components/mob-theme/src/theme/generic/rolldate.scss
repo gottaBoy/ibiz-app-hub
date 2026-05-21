@@ -1,0 +1,36 @@
+:root {
+    // 扩展日期选择样式
+    .rolldate-container {
+    color: getCssVar(color, text, 0);
+
+    .rolldate-mask {
+      background-color: getCssVar(color, bg, overlay);
+    }
+
+    .rolldate-panel {
+      background-color: getCssVar(color, bg, 0);
+    }
+
+    header {
+      border-color: getCssVar(color, border);
+    }
+
+    .rolldate-btn {
+      color: getCssVar(color, text, 1);
+    }
+
+    .rolldate-confirm {
+      color: getCssVar(color, primary);
+    }
+
+    .mask-top {
+      background: linear-gradient(0deg, #{rgba(var(#{getCssVarName(grey, 0)}), 0.4)}, #{rgba(var(#{getCssVarName(grey, 0)}), 0.8)});
+      border-color: getCssVar(color, border);
+    }
+
+    .mask-bottom {
+      background: linear-gradient(0deg, #{rgba(var(#{getCssVarName(grey, 0)}), 0.4)}, #{rgba(var(#{getCssVarName(grey, 0)}), 0.8)});
+      border-color: getCssVar(color, border);
+    }
+  }
+}

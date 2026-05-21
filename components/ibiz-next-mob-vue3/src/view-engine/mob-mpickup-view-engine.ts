@@ -21,7 +21,7 @@ import { MobPickupViewEngine } from './mob-pickup-view.engine';
  * @extends {MobViewBaseEngine}
  */
 export class MobMPickupViewEngine extends MobPickupViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEMobPickupView,
     IMPickupViewState,
     IMPickupViewEvent
@@ -67,6 +67,10 @@ export class MobMPickupViewEngine extends MobPickupViewEngine {
     if (this.view.params.selectedData) {
       this.selectedData = JSON.parse(this.view.params.selectedData);
       delete this.view.params.selectedData;
+    }
+    if (this.view.params.selecteddata) {
+      this.selectedData = JSON.parse(this.view.params.selecteddata);
+      delete this.view.params.selecteddata;
     }
     if (!this.view.slotProps.simplelist) {
       this.view.slotProps.simplelist = {};

@@ -1,12 +1,26 @@
+$span-link: (
+  color: getCssVar(color, primary),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+);
+
 @include b(span-link) {
-  color: getCssVar('form-item', 'hover-color');
+  @include set-component-css-var(span-link, $span-link);
+
+  font-size: getCssVar(span-link, font-fontSize);
+  line-height: getCssVar(span-link, font-lineHeight);
+  color: getCssVar(span-link, color);
+  text-align: getCssVar(span-link, font-textAlign);
   cursor: pointer;
-  text-align: getCssVar(form-item-container, editor-align);
 
   @include m(disabled) {
+    color: getCssVar(span-link, color-disabled);
     cursor: not-allowed;
   }
   @include m(readonly) {
-    color: getCssVar('form-item', 'readonly-color');
+    color: getCssVar(span-link, color-readonly);
   }
 }

@@ -10,7 +10,7 @@ import { IAppDEDataView } from '@ibiz/model-core';
 import { DataViewEngine } from './data-view.engine';
 
 export class PickupDataViewEngine extends DataViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEDataView,
     IPickupDataViewState,
     IPickupDataViewEvent

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import { ModelError, recursiveIterate } from '@ibiz-template/core';
-import { IDEEditFormItem, IDEForm } from '@ibiz/model-core';
+import { IDEEditFormItem, IDEForm, IDEFormDetail } from '@ibiz/model-core';
 import { clone, isNil } from 'ramda';
 import {
   FormDetailEventName,
@@ -126,6 +126,17 @@ export class FormMDCtrlRepeaterController
       id,
       codeName: id,
       name: id,
+      controlParam: {
+        ctrlParams: {
+          // 重复器忽略消息中心通知变更
+          ignoremcmsg: 'true',
+          // 启用重复表单
+          enablerepeatedform: 'true',
+          appId: this.model.appId,
+        },
+        id,
+        appId: this.model.appId,
+      },
       deformPages: [
         {
           appId: this.model.appId,
@@ -200,11 +211,13 @@ export class FormMDCtrlRepeaterController
    * @memberof FormMDCtrlRepeaterController
    */
   setValue(value: IData[] | IData | null): void {
+    const oldValue = this.data[this.name];
     this.form.setDataValue(this.name, value);
-    this.executeScriptCode('SCRIPTCODE_CHANGE');
+    this.executeScriptCode('SCRIPTCODE_CHANGE', { oldValue });
     this.form.evt.emit('onFormDetailEvent', {
       formDetailName: this.name || this.model.id!,
       formDetailEventName: FormDetailEventName.CHANGE,
+      args: { oldValue },
     });
   }
 
@@ -308,14 +321,15 @@ export class FormMDCtrlRepeaterController
    */
   async formStateNotify(state: FormNotifyState): Promise<void> {
     super.formStateNotify(state);
-    // 初始化完成之后设置更新默认值
-    if (state === FormNotifyState.LOAD && this.value) {
-      Array.isArray(this.value)
-        ? this.value.forEach((item: IData) =>
-            this.setDefaultValue(item, 'update'),
-          )
-        : this.setDefaultValue(this.value, 'update');
-    }
+    // 初始化完成之后设置默认值
+    const type = !this.value ? 'create' : 'update';
+    const data: IData[] | IData = this.isSingleData
+      ? this.value || {}
+      : this.value || [];
+    Array.isArray(data)
+      ? data.forEach((item: IData) => this.setDefaultValue(item, type))
+      : this.setDefaultValue(data, type);
+    this.setValue(data);
   }
 
   /**
@@ -328,7 +342,10 @@ export class FormMDCtrlRepeaterController
     // 递归所有的表单项，设置默认值
     recursiveIterate(
       this.model,
-      (item: IDEEditFormItem) => {
+      (item: IDEEditFormItem, parent: IDEFormDetail) => {
+        // 嵌套重复器中的子表单属性项不应挂在父重复器表单中
+        if (parent.detailType === 'MDCTRL' && parent.id !== this.model.id)
+          return true;
         if (item.detailType === 'FORMITEM') {
           const { createDVT, createDV, updateDVT, updateDV, valueFormat } =
             item;
@@ -351,6 +368,7 @@ export class FormMDCtrlRepeaterController
       },
       {
         childrenFields: ['deformPages', 'deformTabPages', 'deformDetails'],
+        isBreak: true,
       },
     );
   }

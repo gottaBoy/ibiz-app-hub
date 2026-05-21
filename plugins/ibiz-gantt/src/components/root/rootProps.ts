@@ -168,6 +168,14 @@ export default {
   },
 
   /**
+   * 显示展开按钮列名称，如果该字段为空，则默认第一列展示展开按钮
+   */
+  expandColumnName: {
+    type: String,
+    default: null,
+  },
+
+  /**
    * 虚拟表格预加载数量
    */
   preload: {

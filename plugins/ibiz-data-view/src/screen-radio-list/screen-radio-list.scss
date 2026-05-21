@@ -1,10 +1,11 @@
+/* stylelint-disable selector-class-pattern */
 $screen-radio-list: (
-  group-row-number: 0,
   'radio-input-display': none,
   'radio-padding': 0 5px,
   'radio-border': 1px solid getCssVar(screen-dashboard, border-color),
   'radio-checked-font-weight': 600,
   'radio-label-padding-left': 0,
+  'button-space': 16px,
 );
 /* stylelint-disable no-descending-specificity */
 @include b(screen-radio-list) {
@@ -48,55 +49,14 @@ $screen-radio-list: (
     color: getCssVar(form-item, readonly-color);
   }
 
-  @include e(button) {
-    @include m(round-corner) {
-      margin-right: getCssVar(spacing, base-loose);
+  @include e('button') {
+    @include when('space') {
+      margin-right: getCssVar(screen-radio-list, button-space);
+      border-radius: 4px;
 
-      &.el-radio-button.is-active {
-        .el-radio-button__inner {
-          color: getCssVar(color, primary);
-          background-color: getCssVar(color, secondary, light, default);
-          border-color: getCssVar(color, secondary, light, default);
-        }
-
-        .el-radio-button__original-radio:checked + .el-radio-button__inner {
-          box-shadow: none;
-        }
+      .el-radio-button__inner {
+        border-left: 1px;
       }
-
-      &.el-radio-button .el-radio-button__inner {
-        padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'base');
-        background-color: getCssVar(color, tertiary, light, hover);
-        border-color: getCssVar(color, tertiary, light, hover);
-        border-radius: getCssVar(height-control, default);
-
-        &:nth-last-child(1) {
-          margin: 0;
-        }
-      }
-
-      &.el-radio-button.is-disabled {
-        &.is-active .el-radio-button__inner {
-          border: getCssVar('border-thickness', 'control') solid
-            getCssVar(color, disabled, text);
-        }
-
-        .el-radio-button__inner {
-          color: getCssVar(color, disabled, text);
-          background: getCssVar(color, disabled, bg);
-          border-color: getCssVar(color, disabled, border);
-        }
-      }
-    }
-  }
-
-  @include when(grid-layout) {
-    .el-radio-group {
-      display: grid;
-      grid-template-columns: repeat(
-        getCssVar(screen-radio-list, group-row-number),
-        1fr
-      );
     }
   }
 }

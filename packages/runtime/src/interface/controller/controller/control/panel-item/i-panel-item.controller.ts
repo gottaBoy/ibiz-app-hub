@@ -2,6 +2,7 @@ import { PanelNotifyState } from '../../../../../controller';
 import { IPanelController } from '../i-panel.controller';
 import { IPanelItemContainerController } from './i-panel-item-container.controller';
 import { IApiPanelItemController } from '../../../../api';
+import { AppCounter } from '../../../../../service';
 /**
  * @description 面板成员控制器接口
  * @export
@@ -22,6 +23,13 @@ export interface IPanelItemController extends IApiPanelItemController {
    * @memberof IPanelItemController
    */
   parent?: IPanelItemContainerController;
+
+  /**
+   * @description 计数器对象
+   * @type {AppCounter}
+   * @memberof IPanelItemController
+   */
+  counter?: AppCounter;
 
   /**
    * @description 面板数据变更通知(由面板控制器调用)

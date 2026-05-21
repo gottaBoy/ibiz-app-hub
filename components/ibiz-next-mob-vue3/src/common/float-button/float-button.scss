@@ -1,0 +1,131 @@
+$float-button: (
+  // Color
+  'color-bg': getCssVar('color', 'bg', 1),
+  // 按钮背景色
+  'color-text': getCssVar('color', 'primary'),
+  // 按钮文字颜色
+  'color-box-shadow': getCssVar(shadow, elevated),
+  // 按钮阴影
+  // Width/Height
+  'width': getCssVar('height-control', 'large'),
+  // 按钮宽度
+  'height': getCssVar('height-control', 'large'),
+  // 按钮高度
+  // Spacing
+  'spacing-padding': unset,
+  // 按钮内边距
+  'spacing-left-padding': 0 getCssVar('spacing', 'super-tight') 0 0,
+  'spacing-right-padding': 0 0 0 getCssVar('spacing', 'super-tight'),
+  // Radius
+  'radius-circle': unset,
+  // 按钮圆角
+  'radius-left-circle': 0 calc(#{getCssVar('height-control', 'large')} / 2) calc(#{getCssVar('height-control', 'large')} / 2) 0,
+  // 按钮左侧位置时显示的圆角
+  'radius-right-circle': calc(#{getCssVar('height-control', 'large')} / 2) 0 0 calc(#{getCssVar('height-control', 'large')} / 2),
+  // 按钮右侧位置时显示的圆角
+  // Font
+  'font-text-font-size': getCssVar('font-size', 'header-3'),
+  // 按钮文字大小
+  // Other
+  'position': fixed,
+  // 按钮定位模式
+  'position-left': unset,
+  // 按钮基于左边移动位置
+  'position-right': unset,
+  //  按钮基于右边移动位置
+  'position-top': unset,
+  //  按钮基于上边移动位置
+  'position-bottom': unset,
+  // 按钮下边移动位置
+  'position-base-offset': 0px,
+  // 按钮基础偏移
+  'position-top-offset': rem(20px),
+  // 按钮相对顶部偏移
+  'position-bottom-offset': rem(30px),
+  // 按钮相对底部偏移
+  'position-start-top': calc(#{getCssVar(float-button, position-top-offset)} + #{getCssVar(height, control, large)}),
+  // 按钮基于顶部偏移：顶部偏移量 + 视图头高度
+  'position-end-bottom': calc(#{getCssVar(float-button, position-bottom-offset)} + var(--van-back-top-bottom)),
+  // 按钮基于底部偏移：底部偏移量 + 移动端安全距离
+  'transform': unset,
+  // 按钮变换样式
+  'border': none,
+  // 按钮层级
+  'z-index': 1,
+);
+
+@include b(float-button) {
+  @include set-component-css-var('float-button', $float-button);
+
+  position: getCssVar(float-button, position);
+  left: getCssVar(float-button, position-left);
+  right: getCssVar(float-button, position-right);
+  top: getCssVar(float-button, position-top);
+  bottom: getCssVar(float-button, position-bottom);
+  z-index: getCssVar(float-button, z-index);
+
+  @include e(icon) {
+    display: flex;
+    align-items: center;
+  }
+
+  @include m('button') {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: getCssVar(float-button, width);
+    height: getCssVar(float-button, height);
+    background-color: getCssVar(float-button, color-bg);
+    border-radius: getCssVar(float-button, radius-circle);
+    padding: getCssVar(float-button, spacing-padding);
+    box-shadow: getCssVar(float-button, color-box-shadow);
+    transform: getCssVar(float-button, transform);
+    color: getCssVar(float-button, color-text);
+    font-size: getCssVar(float-button, font-text-font-size);
+  }
+
+  @include when(leftstart) {
+    #{getCssVar(float-button, position-left)}: getCssVar(float-button, position-base-offset);
+    #{getCssVarName(float-button, position-top)}: getCssVar(float-button, position-start-top);
+    #{getCssVarName(float-button, radius-circle)}: getCssVar(float-button, radius-left-circle);
+    #{getCssVarName(float-button, spacing-padding)}: getCssVar(float-button, spacing-left-padding);
+  }
+
+  @include when(left) {
+    #{getCssVarName(float-button, position-left)}: getCssVar(float-button, position-base-offset);
+    #{getCssVarName(float-button, position-top)}: 50%;
+    #{getCssVarName(float-button, transform)}: translateY(-50%);
+    #{getCssVarName(float-button, radius-circle)}: getCssVar(float-button, radius-left-circle);
+    #{getCssVarName(float-button, spacing-padding)}: getCssVar(float-button, spacing-left-padding);
+  }
+
+  @include when(leftend) {
+    #{getCssVarName(float-button, position-left)}: getCssVar(float-button, position-base-offset);
+    #{getCssVarName(float-button, position-bottom)}: getCssVar(float-button, position-end-bottom);
+    #{getCssVarName(float-button, radius-circle)}: getCssVar(float-button, radius-left-circle);
+    #{getCssVarName(float-button, spacing-padding)}: getCssVar(float-button, spacing-left-padding);
+  }
+
+  @include when(rightstart) {
+    #{getCssVarName(float-button, position-right)}: getCssVar(float-button, position-base-offset);
+    #{getCssVarName(float-button, position-top)}: getCssVar(float-button, position-start-top);
+    #{getCssVarName(float-button, radius-circle)}: getCssVar(float-button, radius-right-circle);
+    #{getCssVarName(float-button, spacing-padding)}: getCssVar(float-button, spacing-right-padding);
+  }
+
+  @include when(right) {
+    #{getCssVarName(float-button, position-right)}: getCssVar(float-button, position-base-offset);
+    #{getCssVarName(float-button, position-top)}: 50%;
+    #{getCssVarName(float-button, transform)}: translateY(-50%);
+    #{getCssVarName(float-button, radius-circle)}: getCssVar(float-button, radius-right-circle);
+    #{getCssVarName(float-button, spacing-padding)}: getCssVar(float-button, spacing-right-padding);
+  }
+
+  @include when(rightend) {
+    #{getCssVarName(float-button, position-right)}: getCssVar(float-button, position-base-offset);
+    #{getCssVarName(float-button, position-bottom)}: getCssVar(float-button, position-end-bottom);
+    #{getCssVarName(float-button, radius-circle)}: getCssVar(float-button, radius-right-circle);
+    #{getCssVarName(float-button, spacing-padding)}: getCssVar(float-button, spacing-right-padding);
+  }
+}

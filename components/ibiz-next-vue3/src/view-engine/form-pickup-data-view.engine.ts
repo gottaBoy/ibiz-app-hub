@@ -7,7 +7,7 @@ import { IAppDEDataView } from '@ibiz/model-core';
 import { PickupDataViewEngine } from './pickup-data-view.engine';
 
 export class FormPickupDataViewEngine extends PickupDataViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEDataView,
     IFormPickupDataViewState,
     IFormPickupDataViewEvent

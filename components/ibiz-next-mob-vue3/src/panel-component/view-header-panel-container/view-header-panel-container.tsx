@@ -1,12 +1,13 @@
+import { PropType, defineComponent, computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { IPanelContainer } from '@ibiz/model-core';
+import { IMobPlatformProvider } from '@ibiz-template/runtime';
 import {
   useNamespace,
   PanelContainerController,
 } from '@ibiz-template/vue3-util';
-import { IPanelContainer } from '@ibiz/model-core';
-import { PropType, defineComponent, computed, ref } from 'vue';
-import './view-header-panel-container.scss';
-import { useRoute } from 'vue-router';
 import { useViewStack } from '../../util';
+import './view-header-panel-container.scss';
 
 /**
  * 面板容器（视图头部）
@@ -46,7 +47,9 @@ export const ViewHeaderPanelContainer = defineComponent({
         backButtonVisible.value = true;
       }
     };
-    if (ibiz.config.view.mobShowPresetBack) {
+    if (
+      (ibiz.platform as unknown as IMobPlatformProvider).getShowPresetBack()
+    ) {
       initButtonVisible();
     }
     const view = props.controller.panel.view;
@@ -70,7 +73,9 @@ export const ViewHeaderPanelContainer = defineComponent({
       )?.value;
       const mobShowViewHeader = value
         ? Object.is(value, 'true')
-        : ibiz.config.view.mobShowViewHeader;
+        : (
+            ibiz.platform as unknown as IMobPlatformProvider
+          ).getShowViewHeader();
       return mobShowViewHeader;
     });
     return { ns, classArr, backButtonVisible, view, showHeader };

@@ -1,0 +1,97 @@
+@include b(async-action-result) {
+    height: 100%;
+    @include flex(column);
+
+    padding: getCssVar(spacing, tight);
+
+    @include e(title) {
+        font-size: getCssVar('font-size', 'header-5');
+        font-weight: getCssVar('font-weight', 'bold');
+    }
+}
+
+@include b(async-action-result-header) {
+    @include flex(row, space-between, center);
+
+    height: 48px;
+    padding: getCssVar(spacing, tight);
+    border-bottom: 1px solid getCssVar(color, border);
+}
+
+@include b(async-action-result-content) {
+     padding: getCssVar(spacing, tight);
+    
+
+    .el-form-item__label,
+    .el-form-item__content {
+        font-weight: getCssVar('font-weight', 'bold');
+    }
+
+    @include e(json-container) {
+        width: 100%;
+        max-height: 400px;
+        padding: 12px;
+        overflow-y: auto;
+        font-family: Monaco, Menlo, 'Ubuntu Mono', monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        word-break: break-word;
+        white-space: pre-wrap;
+        background-color: getCssVar(color, bg, 0);
+        border: 1px solid getCssVar(color, border);
+        border-radius: 4px;
+        
+        // 自定义滚动条样式
+        &::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+            
+            &:hover {
+                background: #a8a8a8;
+            }
+        }
+    }
+
+     @include e(json-key) {
+        font-weight: bold;
+        color: #d73a49; // 红色
+    }
+    
+    @include e(json-string) {
+        color: #032f62; // 蓝色
+    }
+    
+    @include e(json-number) {
+        color: #005cc5; // 深蓝色
+    }
+    
+    @include e(json-boolean) {
+        color: #d73a49; // 红色
+    }
+    
+    @include e(json-null) {
+        color: #d73a49; // 红色
+    }
+    
+    @include e(json-array) {
+        display: inline-block;
+    }
+    
+    @include e(json-object) {
+        display: inline-block;
+    }
+    
+    @include e(json-indent) {
+        display: block;
+    }
+}

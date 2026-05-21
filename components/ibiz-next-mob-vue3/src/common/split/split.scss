@@ -1,0 +1,108 @@
+$split-wrapper:(
+  width-trigger-width: rem(6px),
+);
+
+@include b(split-wrapper) {
+  @include set-component-css-var('split-wrapper', $split-wrapper);
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  @include when(no-select) {
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+}
+@include b(split-pane) {
+  position: absolute;
+
+  @include m(left) {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+  }
+
+  @include m(right) {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  @include m(top) {
+    top: 0;
+    right: 0;
+    left: 0;
+    overflow: hidden;
+  }
+
+  @include m(bottom) {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+  }
+
+  @include m(moving) {
+    user-select: none;
+  }
+}
+
+@include b(split-trigger-con) {
+  position: absolute;
+  z-index: 10;
+  width: getCssVar('split-wrapper','width-trigger-width');
+  transform: translate(-50%, -50%);
+  touch-action: none; 
+}
+
+@mixin horizontal-trigger-con-and-pane {
+  @include b(split-trigger-con) {
+    top: 50%; 
+    height: 100%;
+  }
+
+  @include b(split-pane) {
+    position: unset;
+    @include m(right){
+      padding-left: getCssVar('split-wrapper','width-trigger-width');
+    }
+  }
+}
+
+@mixin vertical-trigger-con-and-pane {
+  @include b(split-trigger-con) {
+    left: 50%;
+    width: 100%;
+    height: 0; 
+  }
+
+  @include b(split-pane) {
+    position: absolute;
+    @include m(bottom){
+      padding-top: getCssVar('split-wrapper','width-trigger-width');
+    }
+  }
+}
+
+@include b(split) {
+  @include m(horizontal) {
+    display: flex;
+    height: 100%;
+    @include horizontal-trigger-con-and-pane;
+  }
+
+  @include m(vertical) {   
+    @include vertical-trigger-con-and-pane;
+  }
+}
+
+// 修复分割容器内存在其它分割容器时 分割容器(上下) 与 分割容器(左右) 样式互相影响，在此加权重
+.#{bem('split--vertical')} .#{bem('split--horizontal')} {
+  @include horizontal-trigger-con-and-pane;
+}
+.#{bem('split--horizontal')}  .#{bem('split--vertical')} {    
+  @include vertical-trigger-con-and-pane;
+}

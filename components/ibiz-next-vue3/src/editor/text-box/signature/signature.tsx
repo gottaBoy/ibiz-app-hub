@@ -26,6 +26,10 @@ import './signature.scss';
  * @editorparams {"name":"readonly","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否为只读态"}
  * @editorparams {"name":"appentitytag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所属实体。该参数值会作为验证下载权限的依据。配置格式为（应用代码名称.实体代码名称），示例：web.master"}
  * @editorparams {"name":"datafieldtag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所关联的数据属性。完成配置后，将自动从容器数据（涵盖表单数据、表格行数据、面板数据）、上下文环境以及视图参数中获取该属性的实际值，将其作为验证下载权限的依据"}
+ * @editorparams {"name":"exportparams","parameterType":"string","description":"下载参数，图片或文件下载时，用于计算下载路径"}
+ * @editorparams {"name":"osscat","parameterType":"string","description":"用于计算上传和下载路径的OSS参数"}
+ * @editorparams {"name":"enablenoaccess","parameterType":"boolean","defaultvalue":"false", "description":"是否启用无权限模式，若启用无权限模式，上传文件夹需拼接'$'字符，也不需要计算下载凭证"}
+ * @editorparams {"name":"globaldownloadprifix","parameterType":"boolean","defaultvalue":"false", "description":"是否使用全局文件下载前缀，若启用，则以global作为前缀"}
  * @ignoreprops autoFocus | overflowMode
  * @ignoreemits blur | focus | enter | infoTextChange
  */
@@ -53,6 +57,16 @@ export const IBizSignature = defineComponent({
     const currentDataURL = ref('');
     const currentVal = ref<string>('');
 
+    // 是否启用无权限
+    let enableNoAccess = c?.editorParams?.enablenoaccess === 'true';
+
+    // 是否使用全局文件下载前缀
+    let globalDownloadPrifix: boolean = false;
+    if (c?.editorParams.globaldownloadprifix) {
+      globalDownloadPrifix = c.editorParams.globaldownloadprifix === 'true';
+    } else {
+      globalDownloadPrifix = ibiz.config.common.globalDownloadPrifix;
+    }
     let saveMode: 'img' | 'file' = 'img';
     // 按钮配置数组
     let buttons = [
@@ -81,6 +95,9 @@ export const IBizSignature = defineComponent({
         } catch (error) {
           ibiz.log.error(error);
         }
+      }
+      if (editorModel.editorParams.enablenoaccess) {
+        enableNoAccess = editorModel.editorParams.enablenoaccess === 'true';
       }
     }
 
@@ -125,18 +142,28 @@ export const IBizSignature = defineComponent({
           const fileData = JSON.parse(currentVal.value)[0];
           const _url = downloadUrl.value.replace('%fileId%', fileData.id);
           try {
-            const editorParams = { ...c.editorParams };
+            const editorParams: IData = {
+              ...c.editorParams,
+              enableNoAccess,
+              globalDownloadPrifix,
+            };
             if (editorParams.exportparams) {
               editorParams.exportParams = JSON.parse(editorParams.exportparams);
             }
-            const fileBlob = await ibiz.util.file.requestFile(_url, undefined, {
-              context: c.context,
-              params: c.params,
-              data: props.data,
-              file: { fileId: fileData.id },
-              extraParams: editorParams,
-              downloadTicketParams: c.downloadTicketParams,
-            });
+            const fileBlob = await ibiz.util.file.requestFile(
+              _url,
+              undefined,
+              {
+                context: c.context,
+                params: c.params,
+                data: props.data,
+                file: { fileId: fileData.id },
+                extraParams: editorParams,
+                downloadTicketParams: c.downloadTicketParams,
+              },
+              undefined,
+              enableNoAccess,
+            );
             // 通过文件流创建下载链接
             const dataUrl =
               await signatureRef.value?.signaturePad.blobToDataURL(
@@ -159,11 +186,19 @@ export const IBizSignature = defineComponent({
       () => props.data,
       newVal => {
         if (newVal) {
+          const editorParams: IData = {
+            ...c.editorParams,
+            enableNoAccess,
+            globalDownloadPrifix,
+          };
+          if (editorParams.uploadparams) {
+            editorParams.uploadParams = JSON.parse(editorParams.uploadparams);
+          }
           const urls = ibiz.util.file.calcFileUpDownUrl(
             c.context,
             c.params,
             newVal,
-            c.editorParams,
+            editorParams,
           );
           uploadUrl.value = urls.uploadUrl;
           downloadUrl.value = urls.downloadUrl;

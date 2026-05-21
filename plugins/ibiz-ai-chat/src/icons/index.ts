@@ -16,7 +16,7 @@ export { LinkSvg } from './link-svg';
 export { RemoveSvg } from './remove-svg';
 export { ChevronDownSvg } from './chevron-down-svg';
 export { CheckMarkCircleSvg } from './checkmark-circle-svg';
-export { LoadingSvg } from './loading-svg';
+export { LoadingSvg, LoadingIcon } from './loading-svg';
 export { PaperclipSvg } from './paperclip-svg';
 export { FileSvg } from './upload-svg';
 export { MaterialRemoveSvg } from './material-remove-svg';
@@ -28,3 +28,25 @@ export { ResetDialogueSvg } from './reset-dialogue-svg';
 export { RenameSvg } from './rename-svg';
 export { ChevronForwardSvg } from './chevron-forward-svg';
 export { SearchSvg } from './search-svg';
+export { Agent, SettingSvg } from './agent';
+export { ArrowDown } from './arrow-down';
+export { LikeSvg } from './like-svg';
+export { DislikeSvg } from './dislike-svg';
+export { TopSvg } from './top-svg';
+export { NoTopSvg } from './no-top-svg';
+export { DownLoadSvg } from './download';
+export { WarningSvg } from './warning-svg';
+export {
+  ImageSvg,
+  ErrorSvg,
+  ExpandSvg,
+  EmptySvg,
+  CopyingSvg,
+  CopyPasteSvg,
+  KnowledgeSvg,
+} from './tool-call-svg';
+export { FailSvg } from './fail-svg';
+export { CorrectSvg } from './correct-svg';
+export { SiderbarSvg } from './siderbar';
+export { TempChatSvg } from './temp-chat-svg';
+export { TempChatSelectedSvg } from './temp-chat-selected-svg';

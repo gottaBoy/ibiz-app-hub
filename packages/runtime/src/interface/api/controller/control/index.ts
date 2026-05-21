@@ -3,6 +3,7 @@ export * from './form-detail';
 export * from './portlet';
 export * from './grid-column';
 export * from './tree';
+export * from './report-panel';
 export type { IApiControlController } from './i-api-control.controller';
 export type { IApiPanelController } from './i-api-panel.controller';
 export type { IApiViewLayoutPanelController } from './i-api-view-layout-panel.controller';
@@ -14,7 +15,10 @@ export type {
 } from './i-api-md-control.controller';
 export type { IApiGridController } from './i-api-grid.controller';
 export type { IApiFormController } from './i-api-form.controller';
-export type { IApiEditFormController } from './i-api-edit-form.controller';
+export type {
+  IApiEditFormController,
+  IApiFormSaveParams,
+} from './i-api-edit-form.controller';
 export type { IApiMenuController } from './i-api-app-menu.controller';
 export type { IApiToolbarController } from './i-api-toolbar.controller';
 export type { IApiExpBarControlController } from './i-api-exp-bar-control.controller';

@@ -16,6 +16,7 @@ import {
   calcItemVisible,
 } from '@ibiz-template/runtime';
 import { IDEDRBar, IDEDRBarItem, IDEDRCtrlItem } from '@ibiz/model-core';
+import { isNil } from 'ramda';
 import { Router } from 'vue-router';
 
 /**
@@ -291,7 +292,11 @@ export class DRBarController
         const data = event.data[0];
         this.view.state.srfactiveviewdata = data;
         if (Object.prototype.hasOwnProperty.call(data, 'srfreadonly')) {
-          this.view.context.srfreadonly = data.srfreadonly;
+          if (data.srfreadonly) {
+            this.view.context.srfreadonly = true;
+          } else if (isNil(this.view.context.srfreadonly)) {
+            this.view.context.srfreadonly = false;
+          }
         }
         await this.calcDrBarItemsState();
         this.handleFormChange();
@@ -604,6 +609,7 @@ export class DRBarController
    * @return {*}  {Promise<void>}
    */
   protected async initCounter(): Promise<void> {
+    if (this.state.isCounterDisabled) return;
     const { appCounterRefs } = this.model;
     const appCounterRef = appCounterRefs?.[0];
     if (appCounterRef) {

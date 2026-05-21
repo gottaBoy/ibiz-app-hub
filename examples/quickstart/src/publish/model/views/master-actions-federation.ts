@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'actions_federation',
   deviewId: '3f4335ba376f74e223f303ac5e612a33',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
@@ -87,6 +87,24 @@ export default {
           actionLevel: 100,
           groupExtractMode: 'ITEM',
           uiactionGroup: {
+            uiactionGroupDetails: [
+              {
+                actionLevel: 100,
+                afterItemType: 'NONE',
+                beforeItemType: 'NONE',
+                buttonStyle: 'DEFAULT',
+                caption: '查看详情',
+                detailType: 'DEUIACTION',
+                uiactionId: 'open_info@master',
+                showCaption: true,
+                showIcon: true,
+                sysImage: {
+                  cssClass: 'fa fa-eye',
+                  glyph: 'xf06e@FontAwesome',
+                },
+                id: 'u2104eee',
+              },
+            ],
             appDataEntityId: 'web.master',
             uniqueTag: 'master__toolbar_actions_federation',
             name: '界面行为组融合（工具栏）',

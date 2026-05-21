@@ -164,6 +164,12 @@ const ChartControl = defineComponent({
 
     onMounted(() => {
       const chart = init(chartRef.value);
+      ibiz.log.debug(
+        '初始化图表元素，源dom对象：',
+        chartRef.value,
+        '目标图表对象：',
+        chart,
+      );
       c.initChart(chart);
       window.addEventListener('resize', setHeight);
       window.addEventListener('pointerdown', setDrillState);
@@ -300,70 +306,72 @@ const ChartControl = defineComponent({
   },
   render() {
     return (
-      <iBizControlBase controller={this.c}>
-        <div id={this.uuid} class={this.ns.b('chart-container')}>
-          {this.renderNoData()}
-          <div
-            class={[
-              this.ns.e('chart-grid'),
-              this.ns.is('no-data', this.c.state.items.length === 0),
-              this.ns.is('show-grid', this.c.state.showGrid),
-              {
-                [this.ns.em('chart-grid', this.c.state.gridPosition)]:
-                  this.c.state.showGrid,
-              },
-            ]}
-          >
+      <iBizControlNavigation controller={this.c}>
+        <iBizControlBase controller={this.c}>
+          <div id={this.uuid} class={this.ns.b('chart-container')}>
+            {this.renderNoData()}
             <div
               class={[
-                this.ns.e('chart-grid-container'),
-                this.ns.is(this.c.state.gridPosition, this.c.state.showGrid),
-                this.ns.is('no-grid', !this.c.state.showGrid),
+                this.ns.e('chart-grid'),
+                this.ns.is('no-data', this.c.state.items.length === 0),
+                this.ns.is('show-grid', this.c.state.showGrid),
+                {
+                  [this.ns.em('chart-grid', this.c.state.gridPosition)]:
+                    this.c.state.showGrid,
+                },
               ]}
             >
-              <div ref='chartRef' class={[this.ns.e('chart')]}>
-                {ibiz.i18n.t('control.chart.chartPlaceholder')}
-              </div>
-              {this.showCheck ? (
-                <div
-                  ref='drillDetailRef'
-                  class={this.ns.e('drill-detail')}
-                  style={this.drillDetailPos}
-                  onPointerdown={this.openDrillDetail}
-                >
-                  <div class={this.ns.em('drill-detail', 'item')}>
-                    <svg
-                      viewBox='0 0 16 16'
-                      xmlns='http://www.w3.org/2000/svg'
-                      height='1em'
-                      width='1em'
-                      focusable='false'
-                      fill='currentColor'
-                    >
-                      <g
-                        id='aspnormal/preview'
-                        stroke-width='1'
-                        fill-rule='evenodd'
+              <div
+                class={[
+                  this.ns.e('chart-grid-container'),
+                  this.ns.is(this.c.state.gridPosition, this.c.state.showGrid),
+                  this.ns.is('no-grid', !this.c.state.showGrid),
+                ]}
+              >
+                <div ref='chartRef' class={[this.ns.e('chart')]}>
+                  {ibiz.i18n.t('control.chart.chartPlaceholder')}
+                </div>
+                {this.showCheck ? (
+                  <div
+                    ref='drillDetailRef'
+                    class={this.ns.e('drill-detail')}
+                    style={this.drillDetailPos}
+                    onPointerdown={this.openDrillDetail}
+                  >
+                    <div class={this.ns.em('drill-detail', 'item')}>
+                      <svg
+                        viewBox='0 0 16 16'
+                        xmlns='http://www.w3.org/2000/svg'
+                        height='1em'
+                        width='1em'
+                        focusable='false'
+                        fill='currentColor'
                       >
-                        <path
-                          d='M11.626 0c1.057 0 1.923.818 2 1.855l.005.15v3.411a.6.6 0 0 1-1.192.097l-.008-.097.001-1.348V2.005c0-.41-.31-.749-.705-.799l-.101-.006h-9.62c-.41 0-.75.308-.8.704l-.006.101v11.989c0 .41.308.75.705.8l.101.006h5.906l.017-.004.016-.003h2.074a.598.598 0 1 1 .107 1.187l-.095.01V16H2.006a2.006 2.006 0 0 1-2-1.856L0 13.994V2.005C0 .948.818.082 1.856.005L2.006 0h9.62zm-1.595 6.328a3.669 3.669 0 0 1 3.665 3.665c0 .79-.251 1.523-.678 2.123l2.412 2.412a.6.6 0 1 1-.848.85l-2.41-2.412a3.646 3.646 0 0 1-2.14.692 3.67 3.67 0 0 1-3.667-3.665 3.67 3.67 0 0 1 3.666-3.665zm-5.106 5.29a.6.6 0 0 1 .097 1.191l-.097.008H2.85a.6.6 0 0 1-.097-1.192l.097-.008h2.074zm5.106-4.09a2.468 2.468 0 0 0-2.466 2.465 2.468 2.468 0 0 0 2.466 2.466 2.47 2.47 0 0 0 2.466-2.466 2.469 2.469 0 0 0-2.466-2.465zm-4.815-.126a.6.6 0 0 1 .097 1.193l-.097.007h-2.35A.6.6 0 0 1 2.77 7.41l.098-.008h2.349zm5.58-4a.6.6 0 0 1 .097 1.192l-.097.008H2.867A.6.6 0 0 1 2.77 3.41l.097-.008h7.929z'
-                          id='asp合并形状'
-                        ></path>
-                      </g>
-                    </svg>
-                    <div class={this.ns.em('drill-detail', 'item-text')}>
-                      {ibiz.i18n.t('control.chart.drillDetail')}
+                        <g
+                          id='aspnormal/preview'
+                          stroke-width='1'
+                          fill-rule='evenodd'
+                        >
+                          <path
+                            d='M11.626 0c1.057 0 1.923.818 2 1.855l.005.15v3.411a.6.6 0 0 1-1.192.097l-.008-.097.001-1.348V2.005c0-.41-.31-.749-.705-.799l-.101-.006h-9.62c-.41 0-.75.308-.8.704l-.006.101v11.989c0 .41.308.75.705.8l.101.006h5.906l.017-.004.016-.003h2.074a.598.598 0 1 1 .107 1.187l-.095.01V16H2.006a2.006 2.006 0 0 1-2-1.856L0 13.994V2.005C0 .948.818.082 1.856.005L2.006 0h9.62zm-1.595 6.328a3.669 3.669 0 0 1 3.665 3.665c0 .79-.251 1.523-.678 2.123l2.412 2.412a.6.6 0 1 1-.848.85l-2.41-2.412a3.646 3.646 0 0 1-2.14.692 3.67 3.67 0 0 1-3.667-3.665 3.67 3.67 0 0 1 3.666-3.665zm-5.106 5.29a.6.6 0 0 1 .097 1.191l-.097.008H2.85a.6.6 0 0 1-.097-1.192l.097-.008h2.074zm5.106-4.09a2.468 2.468 0 0 0-2.466 2.465 2.468 2.468 0 0 0 2.466 2.466 2.47 2.47 0 0 0 2.466-2.466 2.469 2.469 0 0 0-2.466-2.465zm-4.815-.126a.6.6 0 0 1 .097 1.193l-.097.007h-2.35A.6.6 0 0 1 2.77 7.41l.098-.008h2.349zm5.58-4a.6.6 0 0 1 .097 1.192l-.097.008H2.867A.6.6 0 0 1 2.77 3.41l.097-.008h7.929z'
+                            id='asp合并形状'
+                          ></path>
+                        </g>
+                      </svg>
+                      <div class={this.ns.em('drill-detail', 'item-text')}>
+                        {ibiz.i18n.t('control.chart.drillDetail')}
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : null}
+              </div>
+              {this.c.state.showGrid ? (
+                <div class={this.ns.e('grid')}>{this.renderGrid()}</div>
               ) : null}
             </div>
-            {this.c.state.showGrid ? (
-              <div class={this.ns.e('grid')}>{this.renderGrid()}</div>
-            ) : null}
           </div>
-        </div>
-      </iBizControlBase>
+        </iBizControlBase>
+      </iBizControlNavigation>
     );
   },
 });

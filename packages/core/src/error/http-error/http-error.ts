@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { InputError } from '../../interface';
+import { IApiHttpError, InputError } from '../../interface';
 
 /**
  * @description 请求异常
@@ -7,7 +7,7 @@ import { InputError } from '../../interface';
  * @class HttpError
  * @extends {Error}
  */
-export class HttpError extends Error {
+export class HttpError extends Error implements IApiHttpError {
   name: string = 'HttpError';
 
   message: string;

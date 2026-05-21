@@ -25,8 +25,10 @@ import './signature.scss';
  * @editorparams {"name":"backgroundcolor","parameterType":"string","defaultvalue":"'rgba(0,0,0,0)'","description":"画布背景色。签名画布的背景颜色，导出图片时会包含此背景，可接受CSS颜色格式"}
  * @editorparams {name:throttle,parameterType:number,defaultvalue:16,description:事件节流时间（单位：毫秒）。限制绘制事件的触发频率，避免高频操作导致性能问题}
  * @editorparams {"name":"readonly","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否为只读态"}
- * @ignoreprops overflowMode
- * @ignoreemits infoTextChange
+ * @editorparams {"name":"enablenoaccess","parameterType":"boolean","defaultvalue":"false", "description":"是否启用无权限模式，若启用无权限模式，上传文件夹需拼接'$'字符，也不需要计算下载凭证"}
+ * @editorparams {"name":"globaldownloadprifix","parameterType":"boolean","defaultvalue":"false", "description":"是否使用全局文件下载前缀，若启用，则以global作为前缀"}
+ * @ignoreprops autoFocus | overflowMode
+ * @ignoreemits blur | focus | infoTextChange | enter
  */
 export const IBizSignature = defineComponent({
   name: 'IBizSignature',
@@ -51,6 +53,17 @@ export const IBizSignature = defineComponent({
     const fullScreen = ref(false);
     const currentDataURL = ref('');
     const currentVal = ref<string>('');
+
+    // 是否启用无权限
+    const enableNoAccess = c.editorParams?.enablenoaccess === 'true';
+
+    // 是否使用全局文件下载前缀
+    let globalDownloadPrifix: boolean = false;
+    if (c.editorParams.globaldownloadprifix) {
+      globalDownloadPrifix = c.editorParams.globaldownloadprifix === 'true';
+    } else {
+      globalDownloadPrifix = ibiz.config.common.globalDownloadPrifix;
+    }
 
     let saveMode: 'img' | 'file' = 'img';
     // 按钮配置数组
@@ -128,9 +141,38 @@ export const IBizSignature = defineComponent({
           currentDataURL.value = currentVal.value;
         } else if (downloadUrl.value) {
           const fileData = JSON.parse(currentVal.value)[0];
-          const _url = downloadUrl.value.replace('%fileId%', fileData.id);
+          let url = downloadUrl.value.replace('%fileId%', fileData.id);
           try {
-            const fileBlob = await ibiz.util.file.requestFile(_url);
+            if (ibiz.config.common.enableDownloadTicket && !enableNoAccess) {
+              const downloadTicket = await ibiz.util.file.getDownloadTicket(
+                c.context,
+                c.params,
+                props.data || {},
+                { fileId: fileData.id },
+                c.downloadTicketParams,
+              );
+              if (downloadTicket && downloadTicket.ticket)
+                url = downloadUrl.value.replace(
+                  '%fileId%',
+                  downloadTicket.ticket,
+                );
+            }
+            const editorParams: IData = {
+              ...c.editorParams,
+              enableNoAccess,
+              globalDownloadPrifix,
+            };
+            if (editorParams.exportparams) {
+              editorParams.exportParams = JSON.parse(editorParams.exportparams);
+            }
+            const fileBlob = await ibiz.util.file.requestFile(url, undefined, {
+              context: c.context,
+              params: c.params,
+              data: props.data,
+              file: { fileId: fileData.id },
+              extraParams: editorParams,
+              downloadTicketParams: c.downloadTicketParams,
+            });
             // 通过文件流创建下载链接
             const dataUrl =
               await signatureRef.value?.signaturePad.blobToDataURL(
@@ -152,11 +194,19 @@ export const IBizSignature = defineComponent({
       () => props.data,
       newVal => {
         if (newVal) {
+          const editorParams: IData = {
+            ...c.editorParams,
+            enableNoAccess,
+            globalDownloadPrifix,
+          };
+          if (editorParams.uploadparams) {
+            editorParams.uploadParams = JSON.parse(editorParams.uploadparams);
+          }
           const urls = ibiz.util.file.calcFileUpDownUrl(
             c.context,
             c.params,
             newVal,
-            c.editorParams,
+            editorParams,
           );
           uploadUrl.value = urls.uploadUrl;
           downloadUrl.value = urls.downloadUrl;
@@ -224,6 +274,7 @@ export const IBizSignature = defineComponent({
      * @return {*}
      */
     const handleModalClick = (): void => {
+      if ((props.disabled || props.readonly) && !currentDataURL.value) return;
       fullScreen.value = true;
       restCavans();
     };
@@ -334,7 +385,7 @@ export const IBizSignature = defineComponent({
           <div class={this.ns.em('modal', 'background')}></div>
 
           <div class={this.ns.em('modal', 'toolbar')}>
-            {this.currentDataURL && (
+            {this.currentDataURL && !this.disabled && !this.readonly && (
               <van-button
                 round
                 disabled={this.disabled}
@@ -364,8 +415,7 @@ export const IBizSignature = defineComponent({
             this.ns.is('readonly', this.readonly),
           ]}
           style={{
-            [this.ns.cssVarBlockName('overlay-padding-bottom')]:
-              this.getSafeDistance(),
+            [this.ns.cssVarBlockName('spacing-safe')]: this.getSafeDistance(),
           }}
           onClick={this.handlePadContainerClick}
         >

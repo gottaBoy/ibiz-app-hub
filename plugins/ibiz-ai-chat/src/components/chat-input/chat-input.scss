@@ -3,62 +3,52 @@
   padding: 4px;
   overflow: hidden auto;
   font-size: 16px;
-  color: var(--ibiz-ai-chat-color);
-  background-color: var(--ibiz-ai-chat-background-color);
+  color: getCssVar('ai-chat', 'color');
+  background-color: getCssVar('ai-chat', 'background-color');
 }
 
 @include b(chat-input-main-wrapper) {
-  display: flex;
-  align-items: center;
-  border: 1px solid #{getCssVar('ai-chat', 'border-color')};
-  border-radius: #{getCssVar('ai-chat', 'border-radius')};
-}
-
-@include b(chat-input__textarea) {
-  flex-grow: 1;
-  max-height: 6em;
-  padding: 4px;
-  overflow: hidden auto !important;
-  font-size: 16px;
-  color: #{getCssVar('ai-chat', 'color')};
-  resize: none;
-  background-color: #{getCssVar('ai-chat', 'background-color')};
-  border: none;
-  outline: none;
-
-  // 设置滚动条样式
-  &::-webkit-scrollbar {
-    width: getCssVar('ai-chat', 'scroll-bar-width');
-    height: getCssVar('ai-chat', 'scroll-bar-height');
-  }
-
-  // 滚动条轨道
-  &::-webkit-scrollbar-thumb {
-    background-color: getCssVar(color, fill, 2);
-    border-radius: #{getCssVar('ai-chat', 'border-radius')};
-  }
+  border: 1px solid getCssVar('ai-chat', 'border-color');
+  border-radius: getCssVar('ai-chat', 'border-radius');
 }
 
 @include b(chat-input-action-wrapper) {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+}
+
+@include b(chat-input-left-action-wrapper) {
+  display: flex;
+  flex: 1;
+  gap: getCssVar('spacing', 'tight');
+  align-items: center;
+  width: calc(100% - 96px);
+  padding: 6px;
+}
+
+@include b(chat-input-right-action-wrapper) {
+  display: flex;
   gap: 6px;
   align-items: center;
   padding: 6px;
-  color: #{getCssVar('ai-chat', 'color')};
+  color: getCssVar('ai-chat', 'color');
 
   @include e(action-item) {
     padding: 3px;
     font-size: 12px;
-    border-radius: #{getCssVar('ai-chat', 'border-radius')};
+    border-radius: getCssVar('ai-chat', 'border-radius');
 
     &:hover {
-      color: #{getCssVar('ai-chat', 'hover-color')};
+      color: getCssVar('ai-chat', 'hover-color');
       cursor: pointer;
-      background-color: #{getCssVar('ai-chat', 'hover-background-color')};
+      background-color: getCssVar('ai-chat', 'hover-background-color');
     }
 
     @include when(disabled) {
-      color: #{getCssVar('ai-chat', 'disabled-color')};
+      color: getCssVar('ai-chat', 'disabled-color');
       pointer-events: none;
     }
   }
@@ -78,10 +68,10 @@
   line-height: 22px;
   cursor: pointer;
   border-radius: 4px;
-  transition: background-color .2s;
+  transition: background-color 0.2s;
 
   &:hover {
-    background-color: var(--ibiz-color-fill-0);
+    background-color: getCssVar('color', 'fill-0');
   }
 }
 
@@ -90,14 +80,13 @@
   height: 18px;
   margin-right: 8px;
   font-size: 18px;
-  color: #{getCssVar('ai-chat', 'color')};
+  color: getCssVar('ai-chat', 'color');
   pointer-events: none;
-
 }
 
 @include b(chat-input-pop-action-item-title) {
   font-size: 14px;
   line-height: 22px;
-  color: #{getCssVar('ai-chat', 'color')};
+  color: getCssVar('ai-chat', 'color');
   pointer-events: none;
 }

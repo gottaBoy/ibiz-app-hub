@@ -32,8 +32,10 @@ export class CaptionBarController
 
     this.view.evt.on('onViewInfoChange', ({ caption: _caption, dataInfo }) => {
       const { showDataInfoBar } = this.view.model as IData;
-      if (ibiz.config.view.onlyShowDataInfo && dataInfo) {
+      if (ibiz.config.view.onlyShowDataInfo && showDataInfoBar && dataInfo) {
         this.state.caption = dataInfo;
+      } else if (!ibiz.config.view.enableDataInfoBar) {
+        this.state.caption = `${this.view.model.caption}`;
       } else {
         this.state.caption = `${this.view.model.caption}${
           showDataInfoBar && dataInfo ? `-${dataInfo}` : ''

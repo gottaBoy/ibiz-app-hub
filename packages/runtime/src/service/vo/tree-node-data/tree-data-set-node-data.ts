@@ -51,17 +51,21 @@ export class TreeDataSetNodeData extends TreeNodeData implements ITreeNodeData {
       data: IData;
       leaf: boolean; // 是否有子节点关系
       defaultExpand: boolean;
+      context?: IContext;
+      params?: IParams;
       navContext?: IParams;
       navParams?: IParams;
     },
   ) {
     super(model, parentNodeData, opts);
+
     const { data } = opts;
     this._deData = data;
     this._oldDeData = data.clone();
-
+    const { idAppDEFieldId } = model;
     // id小写
-    const selfId = `${model.id}@${data.srfkey}`.toLowerCase();
+    const selfId =
+      `${model.id}@${data.srfkey || data[idAppDEFieldId!]}`.toLowerCase();
     Object.defineProperty(this, '_id', {
       get() {
         return this._parent ? `${this._parent._id}:${selfId}` : selfId;
@@ -113,9 +117,6 @@ export class TreeDataSetNodeData extends TreeNodeData implements ITreeNodeData {
         [deName]: data.srfkey,
       });
     }
-
-    this.initIcon(model);
-    this.initTextHtml(model);
 
     // 识别叶子节点标识属性，根据后台数据赋值leaf
     if (model.leafFlagAppDEFieldId) {
@@ -265,6 +266,15 @@ export class TreeDataSetNodeData extends TreeNodeData implements ITreeNodeData {
   }
 
   /**
+   * 初始化异步数据
+   * @param model 节点模型
+   */
+  public async initAsyncData(model: IDETreeDataSetNode): Promise<void> {
+    await this.initIcon(model);
+    await this.initTextHtml(model);
+  }
+
+  /**
    * 初始化节点图标
    * @author ljx
    * @date 2024-01-16 18:41:31
@@ -326,8 +336,16 @@ export class TreeDataSetNodeData extends TreeNodeData implements ITreeNodeData {
     dataItem: IDETreeNodeDataItem,
   ): Promise<string | undefined> {
     if (dataItem.customCode && dataItem.scriptCode) {
+      const tempContext = Object.assign(
+        this._fullContext || {},
+        this._context || {},
+      );
+      const tempParams = Object.assign(
+        this._fullParams || {},
+        this._params || {},
+      );
       return ScriptFactory.execScriptFn(
-        { data: this._deData, context: this._context, viewParam: this._params },
+        { data: this._deData, context: tempContext, viewParam: tempParams },
         dataItem.scriptCode,
         {
           isAsync: true,

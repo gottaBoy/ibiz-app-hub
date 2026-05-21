@@ -11,6 +11,7 @@ export class SpanWriter extends CodeListEditorWriter {
     _.x(d, 'linkAppViewId', s, 'getLinkPSAppView');
     _.w(d, 'precision', s);
     _.w(d, 'renderMode', s);
+    _.w(d, 'scale', s);
     _.w(d, 'valign', s, 'vAlign', 'MIDDLE');
     _.w(d, 'wrapMode', s, '', 'NOWRAP');
     _.w(d, 'enableLinkView', s);

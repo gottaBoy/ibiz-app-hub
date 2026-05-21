@@ -25,9 +25,11 @@ function isValidDateFormat(dateStr: string, format: string): boolean {
  * 标签
  * @primary
  * @description 直接呈现文本内容，可配置单位。支持编辑器类型包含：`标签`
- * @editorparams {name:TEXTSEPARATOR,parameterType:string,defaultvalue:'',description:文本分隔符。如果是数组数据，在呈现时用逗号分隔并且转换为字符串显示}
- * @editorparams {name:REVERSECOLOR,parameterType:boolean,description:是否反转颜色，即代码表项的color是否用于代码表项的背景色}
- * @editorparams {name:SHOWMODE,parameterType:'DEFAULT' | 'ICON' | 'TEXT',defaultvalue:'DEFAULT',description:显示模式，即代码表项的显示情况，值为DEFAULT：显示图标和文本，值为ICON：只显示图标，值为TEXT：只显示文本}
+ * @editorparams {"name":"textseparator","parameterType":"string","defaultvalue":"','","description":"文本分隔符。如果是数组数据，在呈现时会使用文本分隔符拼接为字符串显示"}
+ * @editorparams {name:reversecolor,parameterType:boolean,description:是否反转颜色，即代码表项的color是否用于代码表项的背景色}
+ * @editorparams {name:showmode,parameterType:'DEFAULT' | 'ICON' | 'TEXT',defaultvalue:'DEFAULT',description:显示模式，即代码表项的显示情况，值为DEFAULT：显示图标和文本，值为ICON：只显示图标，值为TEXT：只显示文本}
+ * @editorparams {"name":"valuetype","parameterType":"string","description":"编辑器的值类型"}
+ * @editorparams {"name":"objectnamefield","parameterType":"string","defaultvalue":"'srfmajortext'","description":"值类型为OBJECT、OBJECTS时显示的对象属性"}
  * @ignoreprops  autoFocus | overflowMode
  * @ignoreemits  infoTextChange | enter | change | blur | focus
  */
@@ -45,7 +47,10 @@ export const IBizSpan = defineComponent({
 
     // 文本分隔符
     const textSeparator =
-      c.model.textSeparator || c.editorParams?.TEXTSEPARATOR || ',';
+      c.model.textSeparator ||
+      c.editorParams?.TEXTSEPARATOR ||
+      c.editorParams?.textseparator ||
+      ',';
 
     watch(
       () => props.value,
@@ -163,12 +168,24 @@ export const IBizSpan = defineComponent({
         <iBizCodeList
           class={[
             this.ns.e('code-list'),
-            this.ns.is('reverse-color', !!this.c.editorParams?.REVERSECOLOR),
+            this.ns.is(
+              'reverse-color',
+              !!this.c.editorParams?.REVERSECOLOR ||
+                !!this.c.editorParams?.reversecolor,
+            ),
+            this.ns.em(
+              'code-list',
+              this.c.editorParams?.SHOWMODE?.toLowerCase() ||
+                this.c.editorParams?.showmode?.toLowerCase(),
+            ),
           ]}
           codeListItems={this.items}
           codeList={this.c.codeList}
-          showMode={this.c.editorParams?.SHOWMODE}
+          showMode={
+            this.c.editorParams?.SHOWMODE || this.c.editorParams?.showmode
+          }
           value={this.text}
+          convertToCodeItemText={this.c.convertToCodeItemText}
         ></iBizCodeList>
       );
     } else if (this.text) {

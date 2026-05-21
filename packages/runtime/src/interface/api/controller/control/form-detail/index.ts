@@ -13,3 +13,4 @@ export type { IApiFormPageController } from './i-api-form-page.controller';
 export type { IApiFormRawItemController } from './i-api-form-rawitem.controller';
 export type { IApiFormTabPageController } from './i-api-form-tab-page.controller';
 export type { IApiFormTabPanelController } from './i-api-form-tab-panel.controller';
+export type { IApiFormContainerController } from './i-api-form-container.controller';

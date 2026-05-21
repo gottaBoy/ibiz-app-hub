@@ -60,7 +60,7 @@ export const CustomTheme = defineComponent({
       nextTick(() => {
         loader.config({
           paths: {
-            vs: `${ibiz.env.pluginBaseUrl}/monaco-editor@0.45.0/min/vs`,
+            vs: `${ibiz.env.pluginBaseUrl}/monaco-editor@0.52.2/min/vs`,
           },
         });
         loader.init().then(loaderMonaco => {
@@ -255,6 +255,13 @@ export const CustomTheme = defineComponent({
       vue.$forceUpdate();
     };
 
+    const getVarLabel = (item: IData) => {
+      if (item.labelLang) {
+        return ibiz.i18n.t(`control.common.customTheme.${item.labelLang}`);
+      }
+      return item.label;
+    };
+
     // 预置颜色
     const predefineColors = ref([
       'rgb(241, 4, 4)',
@@ -332,9 +339,7 @@ export const CustomTheme = defineComponent({
       }
       return (
         <div class={ns.b('item')}>
-          <div class={ns.be('item', 'caption')}>
-            {ibiz.i18n.t(`control.common.customTheme.${item.labelLang}`)}
-          </div>
+          <div class={ns.be('item', 'caption')}>{getVarLabel(item)}</div>
           <div class={ns.be('item', 'content')}>
             {item.vars.map((data: IData) => {
               let content = renderColorPicker(data);
@@ -351,9 +356,7 @@ export const CustomTheme = defineComponent({
                       ),
                     )}
                   >
-                    {ibiz.i18n.t(
-                      `control.common.customTheme.${data.labelLang}`,
-                    )}
+                    {getVarLabel(data)}
                   </span>
                   {content}
                 </div>
@@ -431,11 +434,7 @@ export const CustomTheme = defineComponent({
                 return (
                   <el-button
                     color={item.color}
-                    title={showTitle(
-                      ibiz.i18n.t(
-                        `control.common.customTheme.${item.labelLang}`,
-                      ),
-                    )}
+                    title={showTitle(getVarLabel(item))}
                     onClick={() => {
                       handleThemeChange(item.codeName);
                     }}
@@ -476,12 +475,7 @@ export const CustomTheme = defineComponent({
             <el-tabs v-model={activeTab.value}>
               {c.model.map((item: IData, index: number) => {
                 return (
-                  <el-tab-pane
-                    name={index}
-                    label={ibiz.i18n.t(
-                      `control.common.customTheme.${item.labelLang}`,
-                    )}
-                  >
+                  <el-tab-pane name={index} label={getVarLabel(item)}>
                     {renderItem(item)}
                   </el-tab-pane>
                 );

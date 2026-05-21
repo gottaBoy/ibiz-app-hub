@@ -35,6 +35,13 @@ export class ThemeUtil implements IApiThemeUtil {
   readonly evt = new QXEventEx<defaultType>();
 
   /**
+   * @description 插件主题
+   * @type {IAppUITheme[]}
+   * @memberof ThemeUtil
+   */
+  public pluginTheme: IAppUITheme[] = [];
+
+  /**
    * @description 加载主题插件
    * @param {IAppUITheme} theme
    * @param {('COLOR' | 'ICON')} [type='COLOR'] 颜色主题|图标主题，默认值为颜色主题
@@ -57,6 +64,8 @@ export class ThemeUtil implements IApiThemeUtil {
     if (type === 'COLOR') {
       this.setThemeParams(theme, data);
       this.setTheme(theme.themeTag!);
+      // 只计算颜色主题插件
+      this.pluginTheme.push(theme);
     } else {
       this.html.classList.add(theme.themeTag!);
     }

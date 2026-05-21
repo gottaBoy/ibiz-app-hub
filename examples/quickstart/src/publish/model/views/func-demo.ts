@@ -1,4 +1,5 @@
 export default {
+  accUserMode: 3,
   caption: '应用功能示例',
   codeName: 'func_demo',
   controls: [

@@ -3,6 +3,9 @@
 /* stylelint-disable selector-class-pattern */
 $panel-field: (
   'icon-margin': 6px,
+  'error-font-size': getCssVar('font-size','small'),
+  'error-padding-top': getCssVar('spacing','super-tight'),
+  'error-color': getCssVar(color, danger),
 );
 
 // 三块定义该变量的地方，要改的话一起改！
@@ -29,6 +32,8 @@ $form-item: (
 
 @include b(panel-field) {
   @include set-component-css-var('form-item', $form-item);
+  @include set-component-css-var('panel-field', $panel-field);
+
   width: 100%;
   height: 100%;
   position: relative;
@@ -37,19 +42,29 @@ $form-item: (
     left: 0;
     top: 100%;
     line-height: 1;
-    font-size: getCssVar('font-size','small');
-    padding-top: getCssVar('spacing','super-tight');
+    font-size: getCssVar('panel-field','error-font-size');
+    padding-top: getCssVar('panel-field','error-padding-top');
     position: absolute;
-    color: var(--ibiz-color-danger);
+    color: getCssVar('panel-field','error-color');
   }
 
   @include when(error) {
     .el-input__wrapper {
-      box-shadow: 0 0 0 1px var(--ibiz-color-danger) inset;
+      box-shadow: 0 0 0 1px getCssVar('panel-field','error-color') inset;
     }
   }
 
   @include b(panel-field-content) {
     line-height: inherit;
+  }
+
+  @include when(mob) {
+    #{getCssVarName('panel-field', 'icon-margin')}: rem(6px);
+    #{getCssVarName(editor, default, text-align)}: left;
+    #{getCssVarName(editor, default, flex-justify-content)}: flex-start;
+
+    @include b(panel-field-content) {
+      line-height: getCssVar(editor, default, line-height);
+    }
   }
 }

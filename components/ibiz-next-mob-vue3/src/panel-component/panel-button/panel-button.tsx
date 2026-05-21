@@ -8,7 +8,7 @@ import './panel-button.scss';
 /**
  * 按钮组件
  * @primary
- * @description 面板中最常见的按钮组件，支持配置界面行为、界面逻辑等，同时支持权限配置是否显示、是否禁用。
+ * @description 面板中最常见的按钮组件，支持配置界面行为、界面逻辑等，同时支持权限配置是否显示、是否禁用；当绑定的界面行为标识为 global_ai_assistant 时，则识别为全局AI助手按钮
  */
 export const PanelButton = defineComponent({
   name: 'IBizPanelButton',
@@ -35,7 +35,6 @@ export const PanelButton = defineComponent({
       caption,
       captionItemName,
       renderMode,
-      buttonStyle,
       showCaption,
       sysImage,
       codeName,
@@ -51,8 +50,8 @@ export const PanelButton = defineComponent({
     });
 
     const buttonType = computed(() => {
-      if (Object.is(renderMode, 'LINK')) return 'text';
-      return convertBtnType(buttonStyle);
+      if (Object.is(renderMode, 'LINK')) return 'link';
+      return convertBtnType(props.modelData);
     });
 
     const handleButtonClick = (event: MouseEvent) => {
@@ -87,27 +86,30 @@ export const PanelButton = defineComponent({
     };
   },
   render() {
-    if (this.state.visible) {
-      return (
-        <van-button
-          type={this.buttonType}
-          disabled={this.state.disabled}
-          onClick={this.handleButtonClick}
-          class={this.classArr}
-        >
-          <div class={this.ns.b('content')}>
+    if (!this.state.visible) return;
+    if (this.state.isGlobalAIAssistant) return <iBizAIButton />;
+    return (
+      <van-button
+        type={this.buttonType}
+        class={this.classArr}
+        disabled={this.state.disabled}
+        onClick={this.handleButtonClick}
+      >
+        <div class={this.ns.b('content')}>
+          {this.sysImage ? (
             <iBizIcon
               class={this.ns.bm('content', 'icon')}
               icon={this.sysImage}
             />
+          ) : null}
+          {this.showCaption ? (
             <span class={this.ns.bm('content', 'caption')}>
-              {this.showCaption ? this.captionText : null}
+              {this.captionText}
             </span>
-          </div>
-        </van-button>
-      );
-    }
-    return null;
+          ) : null}
+        </div>
+      </van-button>
+    );
   },
 });
 export default PanelButton;

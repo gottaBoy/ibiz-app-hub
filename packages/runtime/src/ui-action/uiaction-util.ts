@@ -3,6 +3,7 @@ import { PresetIdentifier, SysUIActionTag, ViewCallTag } from '../constant';
 import { IUILogicParams, IUIActionResult } from '../interface';
 import { getUIActionById } from '../model';
 import { getUIActionProvider } from '../register';
+import { execUILogic } from '../ui-logic';
 
 /**
  * @description 界面行为工具类
@@ -43,6 +44,24 @@ export class UIActionUtil {
   }
 
   /**
+   * 执行界面逻辑
+   * @param appDEUILogicId
+   * @param appDataEntityId
+   * @param args
+   * @returns
+   */
+  static async execUILogic(
+    appDEUILogicId: string,
+    appDataEntityId: string,
+    args: IUILogicParams,
+  ): Promise<unknown> {
+    const result = await execUILogic(appDEUILogicId, appDataEntityId, {
+      ...args,
+    });
+    return result;
+  }
+
+  /**
    * @description 执行界面行为并处理返回值
    * @static
    * @param {string} actionId
@@ -57,23 +76,25 @@ export class UIActionUtil {
     appId: string,
   ): Promise<void> {
     const result = await this.exec(actionId, params, appId);
+    // 先处理刷新引用视图，再处理关闭，避免关闭时刷新无效
+    if (result.refresh) {
+      switch (result.refreshMode) {
+        case 1:
+          await params.view.callUIAction(SysUIActionTag.REFRESH);
+          break;
+        case 2:
+          await params.view.parentView?.callUIAction(SysUIActionTag.REFRESH);
+          break;
+        case 3:
+          await params.view.getTopView()?.callUIAction(SysUIActionTag.REFRESH);
+          break;
+        default:
+      }
+    }
     if (result.closeView) {
       // 编辑器失焦后，调整数据后直接点击关闭按钮导致无法触发自动保存通过modal中preDismiss钩子执行，shouldDismiss钩子仅负责计算是否可关闭视图参数，不能混为一谈
       params.view.modal.ignoreDismissCheck = true;
       params.view.closeView({ ok: true });
-    } else if (result.refresh) {
-      switch (result.refreshMode) {
-        case 1:
-          params.view.callUIAction(SysUIActionTag.REFRESH);
-          break;
-        case 2:
-          params.view.parentView?.callUIAction(SysUIActionTag.REFRESH);
-          break;
-        case 3:
-          params.view.getTopView()?.callUIAction(SysUIActionTag.REFRESH);
-          break;
-        default:
-      }
     }
     const action = await getUIActionById(actionId, appId);
     // 异步行为模型配置方式:

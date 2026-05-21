@@ -10,13 +10,14 @@ import { FormNotifyState } from '../../../../constant';
 import { FormButtonListState } from './form-button-list.state';
 import { FormController } from '../../form';
 import {
+  IModalData,
   IApiFormButtonListController,
   IFormDetailContainerController,
-  IModalData,
 } from '../../../../../interface';
 import { OpenAppViewCommand } from '../../../../../command';
 import { convertNavData } from '../../../../../utils';
 import { EditFormController } from '../../edit-form';
+import { calcUIActionGroup, getAllUIActionItems } from '../../../../../model';
 
 /**
  * 表单按钮组控制器
@@ -52,8 +53,25 @@ export class FormButtonListController
   }
 
   protected async onInit(): Promise<void> {
-    super.onInit();
+    await super.onInit();
     await this.initButtonsState();
+  }
+
+  /**
+   * @description 初始化界面行为组
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof FormButtonListController
+   */
+  protected async initUIActions(): Promise<void> {
+    const { buttonListType, uiactionGroup } = this.model;
+    if (buttonListType === 'UIACTIONGROUP' && uiactionGroup) {
+      await calcUIActionGroup(
+        uiactionGroup,
+        this.form.context,
+        this.form.params,
+      );
+    }
   }
 
   /**
@@ -65,17 +83,20 @@ export class FormButtonListController
   async initButtonsState(): Promise<void> {
     const { buttonListType, uiactionGroup, deformButtons } = this.model;
     if (buttonListType === 'UIACTIONGROUP') {
-      uiactionGroup?.uiactionGroupDetails?.forEach(detail => {
-        if (detail.uiactionId) {
-          const buttonState = new UIActionButtonState(
-            detail.id!,
-            detail.appId,
-            detail.uiactionId,
-            detail,
-          );
-          this.state.buttonsState.addState(detail.id!, buttonState);
-        }
-      });
+      if (uiactionGroup?.uiactionGroupDetails) {
+        const actions = getAllUIActionItems(uiactionGroup.uiactionGroupDetails);
+        actions.forEach(detail => {
+          if (detail.uiactionId) {
+            const buttonState = new UIActionButtonState(
+              detail.id!,
+              detail.appId,
+              detail.uiactionId,
+              detail,
+            );
+            this.state.buttonsState.addState(detail.id!, buttonState);
+          }
+        });
+      }
     } else {
       deformButtons?.forEach(button => {
         if (button.uiactionId) {
@@ -151,10 +172,10 @@ export class FormButtonListController
     id: string,
   ): IDEFormButton | IUIActionGroupDetail | undefined {
     const { buttonListType, uiactionGroup, deformButtons } = this.model;
-    if (buttonListType === 'UIACTIONGROUP')
-      return uiactionGroup?.uiactionGroupDetails?.find(
-        detail => detail.id === id,
-      );
+    if (buttonListType === 'UIACTIONGROUP') {
+      const actions = getAllUIActionItems(uiactionGroup?.uiactionGroupDetails);
+      return actions.find(detail => detail.id === id);
+    }
     return deformButtons?.find(button => button.id === id);
   }
 

@@ -1,6 +1,6 @@
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { IDETBUIActionItem } from '@ibiz/model-core';
-import { defineComponent, PropType, ref, VNode } from 'vue';
+import { defineComponent, onMounted, PropType, ref, VNode } from 'vue';
 import { IToolbarController } from '@ibiz-template/runtime';
 import { showTitle } from '@ibiz-template/core';
 import { convertBtnType } from '../../../util';
@@ -27,6 +27,7 @@ export const IBizExportExcel = defineComponent({
     },
     controller: {
       type: Object as PropType<IToolbarController>,
+      required: true,
     },
   },
   emits: ['exportExcel'],
@@ -34,6 +35,18 @@ export const IBizExportExcel = defineComponent({
     const ns = useNamespace('export-excel');
     const startPage = ref(1);
     const endPage = ref(9999);
+    const maxRowCount = ref(1000);
+
+    const xdataControl = props.controller.xdataControl;
+
+    onMounted(() => {
+      if (xdataControl)
+        xdataControl.evt.on('onMounted', () => {
+          maxRowCount.value =
+            (xdataControl as IData).dataExport?.maxRowCount || 1000;
+        });
+    });
+
     const onCommand = (command: string, e: MouseEvent): void => {
       if (!command) {
         return;
@@ -44,7 +57,7 @@ export const IBizExportExcel = defineComponent({
         endPage: endPage.value,
       });
     };
-    return { ns, endPage, startPage, onCommand };
+    return { ns, maxRowCount, endPage, startPage, onCommand };
   },
   render() {
     return this.$props.mode === 'menu' ? (
@@ -74,7 +87,9 @@ export const IBizExportExcel = defineComponent({
                   this.onCommand('maxRowCount', e)
                 }
               >
-                {ibiz.i18n.t('control.toolbar.exportExcel.exportAll')}
+                {ibiz.i18n.t('control.toolbar.exportExcel.exportAll', {
+                  maxRowCount: this.maxRowCount,
+                })}
               </el-menu-item>,
               <el-menu-item
                 class={this.ns.b('menu-item')}
@@ -169,7 +184,9 @@ export const IBizExportExcel = defineComponent({
             return (
               <el-dropdown-menu>
                 <el-dropdown-item command='maxRowCount'>
-                  {ibiz.i18n.t('control.toolbar.exportExcel.exportAll')}
+                  {ibiz.i18n.t('control.toolbar.exportExcel.exportAll', {
+                    maxRowCount: this.maxRowCount,
+                  })}
                 </el-dropdown-item>
 
                 <el-dropdown-item command='activatedPage'>

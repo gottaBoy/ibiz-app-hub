@@ -1,0 +1,1 @@
+export { ScreenShot } from './components';

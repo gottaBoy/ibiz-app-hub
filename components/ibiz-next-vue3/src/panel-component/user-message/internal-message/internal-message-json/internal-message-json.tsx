@@ -2,14 +2,14 @@
 import { computed, defineComponent, PropType } from 'vue';
 import { IInternalMessage } from '@ibiz-template/core';
 import { useNamespace } from '@ibiz-template/vue3-util';
-import './internal-message-json.scss';
 import { InternalMessageJSONtProvider } from './internal-message-json.provider';
+import './internal-message-json.scss';
 
 export const InternalMessageJSON = defineComponent({
   name: 'IBizInternalMessageJSON',
   props: {
     message: {
-      type: Object as PropType<IInternalMessage>,
+      type: Object as PropType<IInternalMessage & { enableLink?: boolean }>,
       required: true,
     },
     provider: {
@@ -19,6 +19,7 @@ export const InternalMessageJSON = defineComponent({
   },
   emits: {
     close: () => true,
+    read: () => true,
   },
   setup(props, { emit }) {
     const ns = useNamespace('internal-message-json');
@@ -32,8 +33,18 @@ export const InternalMessageJSON = defineComponent({
 
     // 没有短内容和长内容不一致时, 显示点击
     const redirectUrl = computed(() => {
-      const url = ibiz.env.isMob ? props.message.mobile_url : props.message.url;
-      return url || jsonContent.value?.redirecturl;
+      if (props.message.enableLink) {
+        const url = ibiz.env.isMob
+          ? props.message.mobile_url
+          : props.message.url;
+        return url || jsonContent.value?.redirecturl;
+      }
+      return undefined;
+    });
+
+    // 是否是工作流消息
+    const isWFMessage = computed(() => {
+      return jsonContent.value?.todoid;
     });
 
     const toolbarItems = computed(() => {
@@ -58,7 +69,14 @@ export const InternalMessageJSON = defineComponent({
       }
     };
 
-    return { ns, jsonContent, toolbarItems, redirectUrl, onToolbarClick };
+    return {
+      ns,
+      redirectUrl,
+      isWFMessage,
+      jsonContent,
+      toolbarItems,
+      onToolbarClick,
+    };
   },
   render() {
     // 内容区
@@ -70,23 +88,47 @@ export const InternalMessageJSON = defineComponent({
     } else if (this.jsonContent?.todoid) {
       content = (
         <div class={this.ns.e('content')}>
-          <div class={this.ns.b('todo')}>
-            <div class={this.ns.e('header')}>
-              <div
-                class={this.ns.e('title')}
-              >{`${this.jsonContent.title}${this.jsonContent.param05}`}</div>
-              <div class={this.ns.e('state')}>
-                <el-tag>{this.jsonContent.todostatetext}</el-tag>
-              </div>
+          <div class={this.ns.e('card')}>
+            <div class={this.ns.em('card', 'avatar')}>
+              {this.jsonContent.createmanname.substring(0, 2)}
             </div>
-            <div class={this.ns.e('content')}>
-              {ibiz.i18n.t(
-                'panelComponent.userMessage.internalMessageJson.todoContent',
-                {
-                  createmanname: this.jsonContent.createmanname,
-                  processdate: this.jsonContent.processdate,
-                },
-              )}
+            <div class={this.ns.em('card', 'content')}>
+              <div class={[this.ns.e('todo'), this.ns.em('todo', 'header')]}>
+                <span class={this.ns.em('todo', 'person')}>
+                  {this.jsonContent.createmanname}
+                </span>
+                <span class={this.ns.em('todo', 'action')}>
+                  {this.jsonContent.todostate === 'ACTIVE'
+                    ? ibiz.i18n.t(
+                        'panelComponent.userMessage.internalMessageJson.todo',
+                      )
+                    : ibiz.i18n.t(
+                        'panelComponent.userMessage.internalMessageJson.done',
+                      )}
+                </span>
+              </div>
+              <div class={[this.ns.e('todo'), this.ns.em('todo', 'content')]}>
+                <span class={this.ns.em('todo', 'title')}>
+                  {this.jsonContent.title}
+                </span>
+                <span class={this.ns.em('todo', 'step')}>
+                  {this.jsonContent.param05}
+                </span>
+                <el-tag class={this.ns.em('todo', 'state')}>
+                  {this.jsonContent.todostatetext}
+                </el-tag>
+              </div>
+              <div class={[this.ns.e('todo'), this.ns.em('todo', 'footer')]}>
+                <span class={this.ns.em('todo', 'date')}>
+                  {this.jsonContent.todostate === 'ACTIVE'
+                    ? this.jsonContent.createdate
+                    : this.jsonContent.processdate}
+                </span>
+                <span class={this.ns.em('todo', 'separate')}>·</span>
+                <span class={this.ns.em('todo', 'name')}>
+                  {this.jsonContent.param04}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -106,9 +148,14 @@ export const InternalMessageJSON = defineComponent({
         class={[this.ns.b()]}
         message={this.message}
         provider={this.provider}
-        clickable={!!this.redirectUrl}
+        clickable={
+          !!this.redirectUrl ||
+          (!!this.isWFMessage && !!this.message.enableLink)
+        }
+        isUnread={!!this.message.enableLink}
         toolbarItems={this.toolbarItems}
         onToolbarClick={this.onToolbarClick}
+        onRead={() => this.$emit('read')}
         onClose={() => this.$emit('close')}
       >
         {content}

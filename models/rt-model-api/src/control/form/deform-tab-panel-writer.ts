@@ -7,6 +7,7 @@ export class DEFormTabPanelWriter extends DEFormDetailWriter {
 
     //let iPSDEFormTabPanel = src
 
+    _.w(d, 'dataRelationTag', s);
     _.v(
       d,
       'deformTabPages',

@@ -18,6 +18,8 @@ import {
 import { createUUID } from 'qx-util';
 import Cherry from 'cherry-markdown';
 import { MarkDownEditorController } from '../markdown-editor.controller';
+import { initCustomMenu } from './custom-menu';
+import { useImgPreviewRender } from './render-util';
 import './ibiz-markdown-editor.scss';
 
 /**
@@ -32,6 +34,31 @@ import './ibiz-markdown-editor.scss';
  * @editorparams {"name":"osscat","parameterType":"string","description":"用于计算上传和下载路径的OSS参数"}
  * @editorparams {"name":"appentitytag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所属实体。该参数值会作为验证下载权限的依据。配置格式为（应用代码名称.实体代码名称），示例：web.master"}
  * @editorparams {"name":"datafieldtag","parameterType":"string","description":"在应用启用下载授权时，用于指定当前文件所关联的数据属性。完成配置后，将自动从容器数据（涵盖表单数据、表格行数据、面板数据）、上下文环境以及视图参数中获取该属性的实际值，将其作为验证下载权限的依据"}
+ * @editorparams {"name":"showmode","parameterType":"'default' | 'manual'","defaultvalue":"'default'","description":"设置Markdown显示模式，当设置为manual时，默认呈现信息态和编辑按钮，点击编辑按钮进入编辑态"}
+ * @editorparams {"name":"inlineaichatheight","parameterType":"number","defaultvalue":300,"description":"用于指定AI行内聊天框高度"}
+ * @editorparams {"name":"srfaiappendcurdata","parameterType":"boolean","defaultvalue":false,"description":"在打开AI功能时，该参数用于判断是否传入对象参数，主要用于在请求历史记录时，附加当前参数"}
+ * @editorparams {"name":"srfaiappendcurcontent","parameterType":"string","description":"在打开AI功能时，如果该参数存在值，会将其传入编辑内容作为用户消息，主要用于在请求历史记录后，附加当前编辑内容作为用户消息"}
+ * @editorparams {"name":"autoquestion","parameterType":"boolean","defaultvalue":true,"description": "在打开AI功能时历史数据最后一个项是用户消息（USER）时是否自动提问，当打开AI行内聊天时是否自动提问"}
+ * @editorparams {"name":"autofill","parameterType":"boolean","defaultvalue":false,"description": "用于AI聊天，AI回答完成之后是否触发回填"}
+ * @editorparams {"name":"openmode","parameterType":"'default' | 'minimize' | 'autoexpand'","description": "用于AI聊天，AI窗口的打开模式，minimize：默认最小化窗口；autoexpand：默认最小化窗口，当提问完成后自动展开窗口"}
+ * @editorparams {"name":"autoclose","parameterType":"{mode:'minimize' | 'close' | 'closetime',duration?:number}","description": "用于AI聊天，在提问完成后，设置AI窗口的自动关闭模式。其中 mode 设为 minimize 时窗口会最小化，设为 close 时窗口会直接关闭，设为 closetime 时窗口会根据 duration 配置的值延时关闭。duration配置单位为秒（s），默认值为 3 秒"}
+ * @editorparams {"name":"enableaiminimize","parameterType":"boolean","description":"用于控制ai聊天窗口是否启用最小化，优先级大于全局参数enableAIMinimize"}
+ * @editorparams {"name":"inlinecompletionmode","parameterType":"'sync' | 'async'","defaultvalue":"async", "description":"用于AI行内聊天，控制请求方式是同步还是异步"}
+ * @editorparams {"name":"enablenoaccess","parameterType":"boolean","defaultvalue":"false", "description":"是否启用无权限模式，若启用无权限模式，上传文件夹需拼接'$'字符，也不需要计算下载凭证"}
+ * @editorparams {"name":"disabledirectory","parameterType":"boolean","defaultvalue":"false", "description":"是否禁用markdown的目录功能"}
+ * @editorparams {"name":"globaldownloadprifix","parameterType":"boolean","defaultvalue":"false", "description":"是否使用全局文件下载前缀，若启用，则以global作为前缀"}
+ * @editorparams {"name":"srfaiappendresource","parameterType":"string", "description":"AI聊天默认附加资源数据"}
+ * @editorparams {"name":"srfmode","parameterType":"string", "description":"指定AI聊天自定义模式"}
+ * @editorparams {"name":"srfenableaiagentchange","parameterType":"boolean","defaultvalue":true, "description":"指定AI聊天智能体是否可切换"}
+ * @editorparams {"name":"srfaiagent","parameterType":"string", "description":"指定AI聊天默认智能体"}
+ * @editorparams {"name":"summarymaxtokens","parameterType":"number","defaultvalue":"30", "description":"AI聊天标题摘要最大字符数,仅话题标题模式为summary时生效"}
+ * @editorparams {"name":"srfenableknowledgebaseselect","parameterType":"boolean","defaultvalue":true, "description":"AI聊天是否启用知识库选择，若未启用则不显示知识库图标"}
+ * @editorparams {"name":"srfenablerecallconfigsetting","parameterType":"boolean","defaultvalue":true, "description":"AI聊天是否启用自定义召回配置，若未启用则不显示召回配置图标"}
+ * @editorparams {"name":"rerankdefaultvalue","parameterType":"0 | 1 | 2","defaultvalue":"2", "description":"AI聊天召回重排默认值，0:禁用;1:启用;2:自动，仅在启用自定义召回配置和当前智能体召回重排无值时生效"}
+ * @editorparams {"name":"maxchunksdefaultvalue","parameterType":"number","defaultvalue":"10", "description":"AI聊天最大召回数量默认值，仅在启用自定义召回配置和当前智能体最大召回数量无值时生效"}
+ * @editorparams {"name":"chunkthresholddefaultvalue","parameterType":"number","defaultvalue":"0.4", "description":"AI聊天召回相似度阈值默认值，仅在启用自定义召回配置和当前智能体召回相似度阈值无值时生效"}
+ * @editorparams {"name":"srfaichunkview","parameterType":"string", "description":"知识切片视图，用于定义AI交谈打开目标知识切片视图"}
+ * @editorparams {"name":"srfaichunkentity","parameterType":"string", "description":"知识切片实体，用于定义AI交谈打开知识切片视图数据主键key"}
  * @ignoreprops autoFocus | overflowMode
  * @ignoreemits blur | focus | enter | infoTextChange
  */
@@ -40,7 +67,7 @@ const IBizMarkDown: any = defineComponent({
   name: 'IBizMarkDown',
   props: getMarkDownProps<MarkDownEditorController>(),
   emits: getEditorEmits(),
-  setup(props, { emit }) {
+  setup(props, { emit, slots }) {
     const ns = useNamespace('markdown');
 
     const c = props.controller;
@@ -50,6 +77,9 @@ const IBizMarkDown: any = defineComponent({
     let editor: IData | null = null;
 
     const id = createUUID();
+
+    const { isImgPreview, onMDEditorCreated, renderImgPreview } =
+      useImgPreviewRender(ns);
 
     // 请求头
     const uploadHeaders = ibiz.util.file.getUploadHeaders();
@@ -62,9 +92,23 @@ const IBizMarkDown: any = defineComponent({
     const customTheme =
       c?.editorParams?.customTheme || c?.editorParams?.customtheme;
 
+    // 是否启用无权限
+    const enableNoAccess = c?.editorParams?.enablenoaccess === 'true';
+
     // 编辑器主题
     const { UIStore } = useUIStore();
     const theme = ref(customTheme || UIStore.theme);
+
+    // 是否正在编辑中
+    const isEditing = ref(false);
+
+    // 显示模式
+    let showmode: 'default' | 'manual' = 'default';
+    if (c && c.editorParams?.showmode) {
+      showmode = c.editorParams.showmode;
+    }
+    // 是否进入全屏
+    const isFullScreen = ref(false);
 
     // 编辑器模式
     const defaultModel = ref('editOnly');
@@ -72,21 +116,54 @@ const IBizMarkDown: any = defineComponent({
     // 浏览器ResizeObserver对象
     let resizeObserver: ResizeObserver | null = null;
 
+    // 工具栏ResizeObserver对象
+    let toolbarResizeObserver: ResizeObserver | null = null;
+
     // 上次监听到的markdown外层宽度，一旦发生变化就重新计算
     let lastMarkDownWidth = 0;
 
     // 样式变量
     const cssVars = ref({});
 
+    // 工具栏样式变量
+    const toolbarCssVars = ref({});
+
+    // 正常大小时目录状态
+    const lastDirectoryState: Ref<'full' | 'pure'> = ref('pure');
+
     // 是否忽略改变
     let isIgnoreChange: boolean = false;
 
+    // AI 聊天实例
+    let chatInstance: any;
+
+    // 禁用目录
+    let disabledirectory = false;
+    if (c?.editorParams?.disabledirectory) {
+      disabledirectory = c.editorParams.disabledirectory === 'true';
+    }
+
+    // 目录位置
+    let tocPos: 'absolute' | 'fixed' = 'absolute';
+    if (c?.editorParams?.tocpos) {
+      tocPos = c.editorParams.tocpos === 'fixed' ? 'fixed' : 'absolute';
+    }
+    const [AIMenu, AIChart] = initCustomMenu(c as MarkDownEditorController, {
+      props,
+      chatInstance,
+      isEditing,
+      currentVal,
+      emit,
+    });
     // data响应式变更基础路径
     watch(
       () => props.data,
       newVal => {
         if (newVal && c) {
-          const editorParams = { ...c.editorParams };
+          const editorParams = {
+            ...c.editorParams,
+            enableNoAccess,
+          };
           if (editorParams.uploadparams) {
             editorParams.uploadParams = JSON.parse(editorParams.uploadparams);
           }
@@ -115,9 +192,19 @@ const IBizMarkDown: any = defineComponent({
       if (!c) {
         return '';
       }
-      const editorParams = { ...c.editorParams };
+      const editorParams = {
+        ...c.editorParams,
+        enableNoAccess,
+      };
       if (editorParams.exportparams) {
         editorParams.exportParams = JSON.parse(editorParams.exportparams);
+      }
+      if (editorParams.globaldownloadprifix) {
+        editorParams.globalDownloadPrifix =
+          editorParams.globaldownloadprifix === 'true';
+      } else {
+        editorParams.globalDownloadPrifix =
+          ibiz.config.common.globalDownloadPrifix;
       }
       if (file && file.folder) {
         editorParams.osscat = file.folder;
@@ -140,7 +227,12 @@ const IBizMarkDown: any = defineComponent({
       );
       const downloadUrl = getDownloadUrl(props.data || {}, data.fileid);
       let url = downloadUrl.replace('%fileId%', data.fileid);
-      if (ibiz.config.common.enableDownloadTicket && c) {
+      if (
+        ibiz.config.common.enableDownloadTicket &&
+        c &&
+        c.editorParams &&
+        !enableNoAccess
+      ) {
         const downloadTicket = await ibiz.util.file.getDownloadTicket(
           c.context,
           c.params,
@@ -172,7 +264,8 @@ const IBizMarkDown: any = defineComponent({
     // 设置markdown内容
     const setCherryContent = (val: string) => {
       isIgnoreChange = true;
-      editor?.setMarkdown(val, false);
+      // 第二个参数传true时，能保持当前的光标位置，默认false
+      editor?.setMarkdown(val, true);
     };
 
     watch(
@@ -198,6 +291,9 @@ const IBizMarkDown: any = defineComponent({
 
     // 变更事件回调
     const afterChange = (_e: string) => {
+      if (showmode === 'manual') {
+        return;
+      }
       emit('change', getCherryContent(), c?.model.id, isIgnoreChange);
       isIgnoreChange = false;
     };
@@ -286,8 +382,13 @@ const IBizMarkDown: any = defineComponent({
       if (editor && markDownBox.value) {
         if (isFullscreen()) {
           closeFullscreen();
+          editor.toggleToc(lastDirectoryState.value);
+          isFullScreen.value = false;
         } else {
           openFullscreen();
+          lastDirectoryState.value = editor.toc.model;
+          editor.toggleToc('full');
+          isFullScreen.value = true;
         }
       }
     };
@@ -296,18 +397,89 @@ const IBizMarkDown: any = defineComponent({
     const handleKeyDown = (_e: KeyboardEvent) => {
       _e.stopPropagation();
       if (_e.key === 'Escape') {
+        _e.preventDefault();
         // 关闭全屏
         if (isFullscreen()) {
           closeFullscreen();
+          editor!.toggleToc(lastDirectoryState.value);
+          isFullScreen.value = false;
         }
       }
     };
 
+    // 主题变更
+    const changeMainTheme = (_theme: string) => {
+      c?.setCurrentEditorTheme(_theme);
+    };
+
+    // 选择变更，包括选区变更，光标位置变更
+    const selectionChange = (event: IData) => {
+      const { info } = event;
+      let isForwardSelection = true;
+
+      // 取第一个选区（默认单选区场景，多选区可扩展）
+      const firstRange = info.ranges && info.ranges[0];
+      if (!firstRange) {
+        // 无有效选区，重置方向
+        isForwardSelection = true;
+      } else {
+        const { anchor, head } = firstRange;
+        // 判断选择方向
+        isForwardSelection = c!.isPositionBefore(anchor, head);
+      }
+      const startPos = c!.mdeditor?.editor.editor.getCursor('start');
+      const endPos = c!.mdeditor?.editor.editor.getCursor('end');
+      c!.setCursorPos(startPos, endPos); // 格式化后的光标位置
+      c!.setSelectionDirection(isForwardSelection);
+    };
+
     const editorInit = () => {
-      if (props.disabled || props.readonly) {
+      if (props.disabled || props.readonly || showmode === 'manual') {
         defaultModel.value = 'previewOnly';
       }
       nextTick(() => {
+        const bubble = [
+          'bold',
+          'italic',
+          'underline',
+          'strikethrough',
+          'sub',
+          'sup',
+          '|',
+          'size',
+          'color',
+        ];
+        const toolbar = [
+          'bold',
+          'italic',
+          'underline',
+          'strikethrough',
+          '|',
+          'color',
+          'header',
+          '|',
+          'list',
+          'image',
+          {
+            insert: [
+              'link',
+              'hr',
+              'br',
+              'code',
+              'formula',
+              'toc',
+              'table',
+              'line-table',
+              'bar-table',
+            ],
+          },
+          'settings',
+          'togglePreview',
+        ];
+        if (c && c.chatCompletion) {
+          toolbar.unshift('AIChart');
+          bubble.unshift('AI');
+        }
         editor = new Cherry({
           id,
           value: currentVal.value,
@@ -341,44 +513,8 @@ const IBizMarkDown: any = defineComponent({
             },
           },
           toolbars: {
-            toolbar: [
-              'bold',
-              'italic',
-              'underline',
-              'strikethrough',
-              '|',
-              'color',
-              'header',
-              '|',
-              'list',
-              'image',
-              {
-                insert: [
-                  'link',
-                  'hr',
-                  'br',
-                  'code',
-                  'formula',
-                  'toc',
-                  'table',
-                  'line-table',
-                  'bar-table',
-                ],
-              },
-              'settings',
-              'togglePreview',
-            ],
-            bubble: [
-              'bold',
-              'italic',
-              'underline',
-              'strikethrough',
-              'sub',
-              'sup',
-              '|',
-              'size',
-              'color',
-            ],
+            toolbar,
+            bubble,
             float: [
               'h1',
               'h2',
@@ -389,12 +525,30 @@ const IBizMarkDown: any = defineComponent({
               'quickTable',
               'code',
             ],
-            customMenu: [],
-            sidebar: [],
+            customMenu: {
+              AI: AIMenu,
+              AIChart,
+            },
+            // 定义侧边栏，默认为空
+            sidebar: ['theme', 'copy'],
+            // 定义顶部右侧工具栏，默认为空
+            toolbarRight: [],
+            // 目录
+            toc: !disabledirectory && {
+              updateLocationHash: false, // 要不要更新URL的hash
+              defaultModel: 'pure', // pure: 精简模式/缩略模式，只有一排小点； full: 完整模式，会展示所有标题
+              showAutoNumber: true, // 是否显示自增序号
+              position: tocPos, // 悬浮目录的悬浮方式。当滚动条在cherry内部时，用absolute；当滚动条在cherry外部时，用fixed
+              cssText: '', // 自定义样式
+            },
           },
           callback: {
             afterChange,
             beforeImageMounted,
+          },
+          event: {
+            changeMainTheme,
+            selectionChange,
           },
           engine: {
             syntax: {
@@ -405,6 +559,12 @@ const IBizMarkDown: any = defineComponent({
             },
           },
         } as any);
+        // 默认设置一次关闭目录，markdown会记录每次操作过后的状态，存在localStorage里面，不重新设置的话每次打开都会拿缓存里的状态
+        editor.toggleToc('pure');
+        // 初始化重置一次预览区的内容，不然目录拿不到数据
+        const html = editor.engine.makeHtml(currentVal.value);
+        editor.previewer.update(html);
+        editor.toc?.updateTocList?.();
         // 必须使用setTheme，否则previewer区域有样式问题
         editor.setTheme(theme.value);
         if (customTheme) {
@@ -427,6 +587,26 @@ const IBizMarkDown: any = defineComponent({
               '.cherry-toolbar>.toolbar-right',
             );
         parentElement?.appendChild(span);
+        c?.setMDEditor(editor);
+        onMDEditorCreated(editor);
+        if (
+          slots.editorSwitchMenu &&
+          window.ResizeObserver &&
+          markDownBox.value
+        ) {
+          const cherryToolbar = markDownBox.value.querySelector(
+            '.cherry-toolbar',
+          ) as HTMLElement | undefined;
+          if (cherryToolbar) {
+            toolbarResizeObserver = new ResizeObserver(entries => {
+              const height = entries[0]?.contentRect.height;
+              toolbarCssVars.value = ns.cssVarBlock({
+                'toolbar-height': `${height}px`,
+              });
+            });
+            toolbarResizeObserver.observe(cherryToolbar);
+          }
+        }
       });
     };
 
@@ -472,6 +652,113 @@ const IBizMarkDown: any = defineComponent({
       }
     };
 
+    // 切换编辑
+    const onEnableEdit = () => {
+      isEditing.value = true;
+      defaultModel.value = 'editOnly';
+      editor?.switchModel(defaultModel.value);
+    };
+
+    // 重置编辑状态
+    const onResetEditState = () => {
+      isEditing.value = false;
+      defaultModel.value = 'previewOnly';
+      editor?.switchModel(defaultModel.value);
+    };
+
+    // 取消编辑
+    const onEditCancel = () => {
+      // 直接重置值
+      setCherryContent(currentVal.value);
+      onResetEditState();
+    };
+
+    // 确认编辑
+    const onEditConfirm = () => {
+      emit('change', getCherryContent(), c?.model.id, isIgnoreChange);
+      isIgnoreChange = false;
+      onResetEditState();
+    };
+
+    // 将浏览器焦点目标设置到编辑器上
+    const onFocusEditor = () => {
+      const target = document.getElementById(id);
+      target?.focus();
+    };
+
+    // 绘制头部额外工具栏
+    const renderHeader = () => {
+      if (showmode === 'manual' && !isEditing.value) {
+        return (
+          <div
+            onClick={onFocusEditor}
+            class={[ns.e('header'), ns.is('fullscreen', isFullScreen.value)]}
+          >
+            {!props.disabled && !props.readonly && (
+              <div
+                class={ns.em('header', 'edit')}
+                onClick={onEnableEdit}
+                title={ibiz.i18n.t('editor.markdown.edit')}
+              >
+                <i class='fa fa-edit' aria-hidden='true'></i>
+              </div>
+            )}
+            <div class={ns.em('header', 'full')} onClick={onSwitchFullscreen}>
+              {isFullScreen.value ? (
+                <i
+                  class='fa fa-compress'
+                  aria-hidden='true'
+                  title={ibiz.i18n.t('editor.html.reduce')}
+                ></i>
+              ) : (
+                <i
+                  class='fa fa-expand'
+                  aria-hidden='true'
+                  title={ibiz.i18n.t('editor.common.fullscreen')}
+                ></i>
+              )}
+            </div>
+          </div>
+        );
+      }
+    };
+
+    // 绘制编辑态的确认取消按钮
+    const renderFooter = () => {
+      if (
+        showmode === 'manual' &&
+        isEditing.value &&
+        !props.disabled &&
+        !props.readonly
+      ) {
+        return (
+          <div
+            onClick={onFocusEditor}
+            class={[ns.e('footer'), ns.is('fullscreen', isFullScreen.value)]}
+          >
+            <div class={ns.em('footer', 'cancel')} onClick={onEditCancel}>
+              {ibiz.i18n.t('editor.common.cancel')}
+            </div>
+            <div class={ns.em('footer', 'save')} onClick={onEditConfirm}>
+              {ibiz.i18n.t('editor.common.confirm')}
+            </div>
+          </div>
+        );
+      }
+    };
+
+    // 绘制编辑器切换菜单
+    const renderEditorSwitchMenu = () => {
+      return (
+        <div
+          class={[ns.b('menu'), ns.is('fullscreen', isFullScreen.value)]}
+          style={toolbarCssVars.value}
+        >
+          {slots.editorSwitchMenu?.()}
+        </div>
+      );
+    };
+
     onMounted(() => {
       editorInit();
       calcMarkDownStyle();
@@ -490,6 +777,12 @@ const IBizMarkDown: any = defineComponent({
       if (resizeObserver) {
         resizeObserver.disconnect();
       }
+      if (toolbarResizeObserver) {
+        toolbarResizeObserver.disconnect();
+      }
+      if (chatInstance && chatInstance.close) {
+        chatInstance.close();
+      }
     });
 
     return {
@@ -500,23 +793,51 @@ const IBizMarkDown: any = defineComponent({
       markDownBox,
       headers,
       theme,
+      UIStore,
       defaultModel,
       cssVars,
+      isEditing,
+      showmode,
+      isFullScreen,
+      isImgPreview,
       getCherryHtml,
       getCherryContent,
       setCherryContent,
+      renderHeader,
+      renderFooter,
+      renderImgPreview,
+      renderEditorSwitchMenu,
     };
   },
   render() {
+    const isShowEditorSwitchMenu = !!this.$slots.editorSwitchMenu;
     return (
       <div
         ref='markDownBox'
-        class={[this.ns.b(), this.ns.is('disabled', this.disabled)]}
+        class={[
+          this.ns.b(),
+          this.ns.is('disabled', this.disabled),
+          this.ns.is('manual', this.showmode === 'manual'),
+          this.ns.is('editing', this.isEditing),
+          this.ns.is('show-editor-switch-menu', isShowEditorSwitchMenu),
+          this.ns.is(
+            'editor-content-fixed',
+            this.isFullScreen || this.isImgPreview,
+          ),
+        ]}
       >
+        {isShowEditorSwitchMenu ? this.renderEditorSwitchMenu() : null}
+        {this.renderHeader()}
+        {this.renderFooter()}
+        {this.renderImgPreview()}
         <div
+          tabindex='-1' // 0 允许聚焦，-1 允许但不参与浏览器tab切换
           id={this.id}
           style={this.cssVars}
-          class={this.ns.b('cherry')}
+          class={[
+            this.ns.b('cherry'),
+            this.ns.m(this.UIStore.theme === 'dark' ? 'dark' : 'light'),
+          ]}
         ></div>
       </div>
     );

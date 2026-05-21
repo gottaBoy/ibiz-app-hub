@@ -1,6 +1,6 @@
 import { IPanelContainer } from '@ibiz/model-core';
 import {
-  PanelItemController,
+  PanelContainerController,
   ViewLayoutPanelController,
 } from '@ibiz-template/runtime';
 
@@ -8,9 +8,9 @@ import {
  * @description 面板滚动容器控制器
  * @export
  * @class ScrollContainerController
- * @extends {PanelItemController<IPanelContainer>}
+ * @extends {PanelContainerController<IPanelContainer>}
  */
-export class ScrollContainerController extends PanelItemController<IPanelContainer> {
+export class ScrollContainerController extends PanelContainerController<IPanelContainer> {
   /**
    * @description 视图布局面板部件控制器
    * @exposedoc

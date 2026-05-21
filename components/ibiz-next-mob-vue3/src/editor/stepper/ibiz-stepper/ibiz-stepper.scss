@@ -1,24 +1,58 @@
+$stepper: (
+  color: getCssVar(editor, default, text-color),
+  color-bg: transparent,
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  width-input: 4rem,
+  // 其它
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
+
 @include b(stepper) {
+  @include set-component-css-var(stepper, $stepper);
+
   display: flex;
   flex-direction: row;
-  justify-content: getCssVar(form-item-container, editor-align);
+  justify-content: getCssVar(stepper, flex-justify-content);
+  font-size: getCssVar(stepper, font-fontSize);
+  line-height: getCssVar(stepper, font-lineHeight);
+  color: getCssVar(stepper, color);
+
+  --van-stepper-input-width: #{getCssVar(stepper, width-input)};
+  --van-stepper-input-font-size: #{getCssVar(stepper, font-fontSize)};
+  --van-stepper-input-line-height: #{getCssVar(stepper, font-lineHeight)};
+  --van-stepper-input-text-color: #{getCssVar(stepper, color)};
+  --van-stepper-input-height: #{getCssVar(stepper, font-lineHeight)};
+  --van-stepper-input-disabled-text-color: #{getCssVar(stepper, color-disabled)};
+
   .van-stepper {
+    display: flex;
+
     .van-stepper__minus,
     .van-stepper__plus {
-      background-color: getCssVar(color, bg, 1);
+      background-color: getCssVar(stepper, color-bg);
     }
 
     .van-stepper__input {
-      background-color: getCssVar(color, bg, 1);
+      background-color: getCssVar(stepper, color-bg);
     }
   }
 
+  input::placeholder {
+    color: getCssVar(stepper, color-placeholder);
+    -webkit-text-fill-color: getCssVar(stepper, color-placeholder);
+  }
+
   @include m(disabled) {
-    color: getCssVar('form-item', 'disabled-color');
+    color: getCssVar(stepper, color-disabled);
   }
 
   @include m(readonly) {
-    color: getCssVar('form-item', 'readonly-color');
+    color: getCssVar(stepper, color-readonly);
   }
 
 }

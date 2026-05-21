@@ -14,8 +14,9 @@ import { usePopstateListener } from '../../../util';
  * 移动端下拉列表（多选）
  * @primary
  * @description  使用van-field组件和van-popup组件，用于在弹出的选择列表中选择多条数据的场景。支持编辑器类型包含：`移动端下拉列表（多选）`
+ * @editorparams {name:readonly,parameterType:boolean,defaultvalue:false,description:设置编辑器是否为只读态}
  * @ignoreprops  autoFocus | overflowMode
- * @ignoreemits  infoTextChange | enter
+ * @ignoreemits  blur | focus | infoTextChange | enter
  */
 export const IBizDropdownList = defineComponent({
   name: 'IBizDropdownList',
@@ -106,6 +107,12 @@ export const IBizDropdownList = defineComponent({
       showPicker.value = false;
     };
 
+    const refreshCodeList = () => {
+      c.loadCodeList(props.data!).then((codeList: readonly IData[]) => {
+        items.value = codeList;
+      });
+    };
+
     // 监听popstate事件
     usePopstateListener(closeDrawer);
 
@@ -121,6 +128,7 @@ export const IBizDropdownList = defineComponent({
       onFocus,
       onRemove,
       onConfirm,
+      refreshCodeList,
     };
   },
 
@@ -138,30 +146,50 @@ export const IBizDropdownList = defineComponent({
         onClick={() => {
           if (!this.disabled) {
             this.showPicker = true;
+            this.refreshCodeList();
           }
         }}
       >
         {{
           'right-icon': <IBizCommonRightIcon></IBizCommonRightIcon>,
           input: () => {
-            return this.selectItems.map((item: IData) => {
+            if (!this.selectItems.length) {
               return (
-                <div class={this.ns.b('select-item')}>
-                  <div class={this.ns.be('select-item', 'text')}>
-                    {item.text}
-                  </div>
-                  <div class={this.ns.be('select-item', 'close')}>
-                    <van-icon
-                      name='cross'
-                      onClick={(e: Event) => {
-                        e.stopPropagation();
-                        this.onRemove(item);
-                      }}
-                    />
-                  </div>
-                </div>
+                <div class={this.ns.e('placeholder')}>{this.c.placeHolder}</div>
               );
-            });
+            }
+            const showNum = 1;
+            const showMore = this.selectItems.length - showNum > 0;
+            return [
+              this.selectItems.slice(0, showNum).map((item: IData) => {
+                return (
+                  <div class={this.ns.b('select-item')}>
+                    <div class={this.ns.be('select-item', 'text')}>
+                      {item.text}
+                    </div>
+                    <div class={this.ns.be('select-item', 'close')}>
+                      <van-icon
+                        name='cross'
+                        onClick={(e: Event) => {
+                          e.stopPropagation();
+                          this.onRemove(item);
+                        }}
+                      />
+                    </div>
+                  </div>
+                );
+              }),
+              showMore && (
+                <div
+                  class={[
+                    this.ns.b('select-item'),
+                    this.ns.bm('select-item', 'more'),
+                  ]}
+                >
+                  + {this.selectItems.length - showNum}
+                </div>
+              ),
+            ];
           },
         }}
       </van-field>,

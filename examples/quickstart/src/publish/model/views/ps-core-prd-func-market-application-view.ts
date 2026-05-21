@@ -6,9 +6,9 @@ export default {
   deviewId: '18f511021422bf60ef2a3a38b456f28e',
   accUserMode: 2,
   capLanguageRes: {
-    lanResTag: 'DE.LNAME.PSCOREPRDFUNC',
+    lanResTag: 'PAGE.CAPTION.PSCOREPRDFUNC.MARKETAPPLICATIONVIEW',
   },
-  caption: '核心产品功能',
+  caption: '应用市场',
   codeName: 'ps_core_prd_func_market_application_view',
   appDataEntityId: 'web.pscoreprdfunc',
   appViewEngines: [
@@ -25,11 +25,11 @@ export default {
       builtinAppUILogic: {
         actionAfterWizard: 'DEFAULT',
         newDataAppView: {
-          refAppViewId: 'web.ps_core_prd_func_edit_view',
+          refAppViewId: 'web.ps_core_prd_func_info_view',
         },
         appUILogicRefViews: [
           {
-            refAppViewId: 'web.ps_core_prd_func_edit_view',
+            refAppViewId: 'web.ps_core_prd_func_info_view',
           },
         ],
         builtinLogic: true,
@@ -45,12 +45,12 @@ export default {
       logicType: 'APPUILOGIC',
       builtinAppUILogic: {
         openDataAppView: {
-          refAppViewId: 'web.ps_core_prd_func_edit_view',
+          refAppViewId: 'web.ps_core_prd_func_info_view',
         },
         editMode: true,
         appUILogicRefViews: [
           {
-            refAppViewId: 'web.ps_core_prd_func_edit_view',
+            refAppViewId: 'web.ps_core_prd_func_info_view',
           },
         ],
         builtinLogic: true,
@@ -73,18 +73,18 @@ export default {
     {
       realTitle: '核心产品功能编辑视图',
       realTitleLanguageRes: {
-        lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.EDITVIEW',
+        lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.INFOVIEW',
       },
-      refAppViewId: 'web.ps_core_prd_func_edit_view',
+      refAppViewId: 'web.ps_core_prd_func_info_view',
       name: 'NEWDATA',
       id: 'newdata',
     },
     {
       realTitle: '核心产品功能编辑视图',
       realTitleLanguageRes: {
-        lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.EDITVIEW',
+        lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.INFOVIEW',
       },
-      refAppViewId: 'web.ps_core_prd_func_edit_view',
+      refAppViewId: 'web.ps_core_prd_func_info_view',
       name: 'EDITDATA',
       id: 'editdata',
     },
@@ -111,6 +111,10 @@ export default {
           layout: {
             columnCount: 24,
             layout: 'TABLE_24COL',
+          },
+          capLanguageRes: {
+            lanResTag:
+              'CONTROL.DEFORM.PSCOREPRDFUNC.USR01029796_SEARCHFORM.FORMPAGE.FORMPAGE1',
           },
           caption: '常规条件',
           codeName: 'formpage1',
@@ -361,7 +365,7 @@ export default {
                                     logicTag: 'itemlayoutpanel',
                                     logicType: 'SCRIPT',
                                     scriptCode:
-                                      'data.funcstate == 0 || data.funcstate == 2',
+                                      'data.funcstate == 0 || data.funcstate == 2 || data.funcstate == 4',
                                     triggerType: 'ITEMVISIBLE',
                                     id: 'logic2',
                                   },
@@ -432,7 +436,8 @@ export default {
                                     itemName: 'disabled',
                                     logicTag: 'itemlayoutpanel',
                                     logicType: 'SCRIPT',
-                                    scriptCode: 'data.funcstate == 1',
+                                    scriptCode:
+                                      'data.funcstate == 1 || data.funcstate == 3',
                                     triggerType: 'ITEMVISIBLE',
                                     id: 'logic3',
                                   },
@@ -486,6 +491,35 @@ export default {
                                 ],
                                 showCaption: true,
                                 id: 'update_func',
+                              },
+                              {
+                                actionType: 'UIACTION',
+                                buttonStyle: 'DEFAULT',
+                                buttonType: 'PANELBUTTON',
+                                uiactionId: 'reload@pscoreprdfunc',
+                                renderMode: 'BUTTON',
+                                tooltip: '重新加载',
+                                uiactionTarget: 'SINGLEKEY',
+                                caption: '重新加载',
+                                itemStyle: 'DEFAULT',
+                                itemType: 'BUTTON',
+                                controlLogics: [
+                                  {
+                                    itemName: 'reload',
+                                    logicTag: 'itemlayoutpanel',
+                                    logicType: 'SCRIPT',
+                                    scriptCode:
+                                      'data.funcstate == 3 || data.funcstate == 4',
+                                    triggerType: 'ITEMVISIBLE',
+                                    id: 'logic1',
+                                  },
+                                ],
+                                layoutPos: {
+                                  shrink: 1,
+                                  layout: 'FLEX',
+                                },
+                                showCaption: true,
+                                id: 'reload',
                               },
                             ],
                             layout: {
@@ -637,7 +671,6 @@ export default {
                                 logicType: 'GROUP',
                               },
                             ],
-                            showCaption: true,
                             id: 'button_calluilogic4',
                           },
                           {
@@ -673,7 +706,10 @@ export default {
                                 logicType: 'GROUP',
                               },
                             ],
-                            showCaption: true,
+                            sysImage: {
+                              rawContent:
+                                '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1733278036305" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="55968" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"><path d="M780.672 964.8H193.856A129.92 129.92 0 0 1 64 835.008V248.064a130.048 130.048 0 0 1 129.856-129.856h224.768a43.968 43.968 0 1 1 0 88H193.856a41.856 41.856 0 0 0-41.856 41.856v586.944c0 23.104 18.752 41.856 41.856 41.856h586.816a41.856 41.856 0 0 0 41.856-41.856V596.608a43.968 43.968 0 1 1 87.936 0v238.464a129.92 129.92 0 0 1-129.792 129.728z" p-id="55969" fill="#cdcdcd"></path><path d="M497.024 554.752a43.968 43.968 0 0 1-31.104-75.136l384.896-384.896a44.032 44.032 0 0 1 62.208 62.208L528.128 541.888a43.712 43.712 0 0 1-31.104 12.864z" p-id="55970" fill="#cdcdcd"></path><path d="M916.032 412.672a43.968 43.968 0 0 1-43.968-43.968V147.136H627.456a43.968 43.968 0 1 1 0-87.936h267.456c35.904 0 65.024 29.12 65.088 65.088V368.64c0 24.32-19.712 44.032-43.968 44.032z" p-id="55971" fill="#cdcdcd"></path></svg>',
+                            },
                             id: 'button_calluilogic3',
                           },
                         ],
@@ -950,9 +986,9 @@ export default {
     },
     {
       capLanguageRes: {
-        lanResTag: 'DE.LNAME.PSCOREPRDFUNC',
+        lanResTag: 'PAGE.CAPTION.PSCOREPRDFUNC.MARKETAPPLICATIONVIEW',
       },
-      caption: '核心产品功能',
+      caption: '应用市场',
       codeName: 'market_application_view_captionbar',
       controlType: 'CAPTIONBAR',
       appDataEntityId: 'web.pscoreprdfunc',
@@ -976,6 +1012,9 @@ export default {
     id: 'layoutpanel',
   },
   title: '应用市场',
+  titleLanguageRes: {
+    lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.MARKETAPPLICATIONVIEW',
+  },
   viewStyle: 'DEFAULT',
   viewType: 'DEDATAVIEW',
   enableDP: true,

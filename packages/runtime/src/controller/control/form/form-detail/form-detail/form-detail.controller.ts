@@ -10,6 +10,7 @@ import { ScriptFactory, verifyFormGroupLogic } from '../../../../../utils';
 import { FormNotifyState } from '../../../../constant';
 import { FormDetailState } from './form-detail.state';
 import { FormController } from '../../form';
+import { AppCounter } from '../../../../../service';
 
 export class FormDetailController<T extends IDEFormDetail = IDEFormDetail>
   implements IFormDetailController
@@ -22,6 +23,13 @@ export class FormDetailController<T extends IDEFormDetail = IDEFormDetail>
    * @type {T}
    */
   readonly model: T;
+
+  /**
+   * @description 是否为自定义代码
+   * @type {boolean}
+   * @memberof FormDetailController
+   */
+  isCustomCode: boolean = false;
 
   /**
    * 表单项状态
@@ -123,6 +131,13 @@ export class FormDetailController<T extends IDEFormDetail = IDEFormDetail>
   };
 
   /**
+   * @description 计数器对象
+   * @type {AppCounter}
+   * @memberof FormDetailController
+   */
+  counter?: AppCounter;
+
+  /**
    * Creates an instance of FormDetailController.
    * @author lxm
    * @date 2022-08-24 20:08:22
@@ -148,6 +163,8 @@ export class FormDetailController<T extends IDEFormDetail = IDEFormDetail>
     if (tag !== undefined && tag > -1) {
       this.state.visible = false;
     }
+    const renderCode = this.getRenderCode();
+    if (renderCode) this.isCustomCode = true;
   }
 
   /**
@@ -162,6 +179,8 @@ export class FormDetailController<T extends IDEFormDetail = IDEFormDetail>
   }
 
   protected async onInit(): Promise<void> {
+    await this.initUIActions();
+
     this.state.showMoreMode = this.model.showMoreMode!;
 
     // 初始化布局参数
@@ -189,6 +208,53 @@ export class FormDetailController<T extends IDEFormDetail = IDEFormDetail>
         this.model.caption,
       );
     }
+    this.handleCounterChange = this.handleCounterChange.bind(this);
+    this.initCounter();
+  }
+
+  /**
+   * @description 初始化界面行为组
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof FormDetailController
+   */
+  protected async initUIActions(): Promise<void> {}
+
+  /**
+   * @description 初始化计数器
+   * @protected
+   * @returns {*}  {void}
+   * @memberof FormDetailController
+   */
+  protected initCounter(): void {
+    const { counters } = this.form;
+    const { appCounterRefId } = this.model;
+    if (appCounterRefId) {
+      this.counter = counters[appCounterRefId];
+      this.counter?.onChange(this.handleCounterChange);
+    }
+  }
+
+  /**
+   * @description 处理计数器改变，并根据计数器模式计算显示状态
+   * @protected
+   * @param {IData} data
+   * @returns {*}  {void}
+   * @memberof FormDetailController
+   */
+  protected handleCounterChange(data: IData): void {
+    this.state.counterData = data;
+    let state: boolean = true;
+    const { counterId, counterMode } = this.model;
+    if (counterId) {
+      const count = this.counter?.getCounter(counterId);
+      if (counterMode === 1 && count === 0) state = false;
+      this.state.visible = state;
+    }
+  }
+
+  destroy(): void {
+    this.counter?.offChange(this.handleCounterChange);
   }
 
   /**
@@ -414,6 +480,7 @@ export class FormDetailController<T extends IDEFormDetail = IDEFormDetail>
       | 'SCRIPTCODE_CLICK'
       | 'SCRIPTCODE_FOCUS'
       | 'SCRIPTCODE_BLUR',
+    args: IData = {},
   ): void {
     this.model.defdgroupLogics?.forEach(logic => {
       const child: IData | undefined = logic.defdlogics?.[0];
@@ -425,6 +492,7 @@ export class FormDetailController<T extends IDEFormDetail = IDEFormDetail>
             data: this.form.data,
             params: this.params,
             context: this.context,
+            args,
           },
           child.value,
         );
@@ -448,5 +516,48 @@ export class FormDetailController<T extends IDEFormDetail = IDEFormDetail>
       formDetailEventName: FormDetailEventName.CLICK,
       event,
     });
+  }
+
+  /**
+   * @description 获取脚本代码html
+   * @param {IData} data
+   * @returns {*}  {(Promise<string | undefined>)}
+   * @memberof FormDetailController
+   */
+  async getCustomHtml(data: IData): Promise<string | undefined> {
+    let renderCode = this.getRenderCode();
+    if (renderCode) {
+      // 兼容单行脚本
+      if (!renderCode.includes('return')) {
+        renderCode = `return (${renderCode})`;
+      }
+      return (await ScriptFactory.asyncExecScriptFn(
+        {
+          data,
+          context: this.context,
+          params: this.params,
+          controller: this,
+          ctrl: this.form,
+          view: this.form.view,
+          metadata: { model: this.model },
+        },
+        renderCode,
+      )) as string;
+    }
+  }
+
+  /**
+   * @description 获取绘制器模型代码
+   * @returns {*}  {string}
+   * @memberof FormDetailController
+   */
+  getRenderCode(): string {
+    let result = '';
+    const { controlRenders = [] } = this.model;
+    const item = controlRenders.find(
+      renderItem => renderItem.renderType === 'LAYOUTPANEL_MODEL',
+    );
+    if (item) result = item.layoutPanelModel || '';
+    return result;
   }
 }

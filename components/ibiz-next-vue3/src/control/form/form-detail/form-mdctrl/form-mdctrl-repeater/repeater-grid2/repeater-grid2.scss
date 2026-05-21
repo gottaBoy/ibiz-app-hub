@@ -1,0 +1,60 @@
+$repeater-grid2: (
+  row-height: 57px,
+  index-cell-padding: getCssVar(spacing, extra-tight),
+  btn-size: getCssVar(width-icon, large),
+  btn-color: getCssVar(color, text, 2),
+  btn-border: 1px solid getCssVar(color, border),
+  btn-margin-left: getCssVar(spacing, tight),
+  btn-hover-color: getCssVar(color, primary, hover),
+  btn-hover-border: 1px solid getCssVar(color, primary, hover),
+);
+
+@include b(repeater-grid2){
+  @include set-component-css-var('repeater-grid2', $repeater-grid2);
+
+  position: relative;
+  width: 100%;
+  #{getCssVarName('grid-column', 'justify-content')}: center;
+
+  @include e(drag-icon) {
+    cursor: move;
+  }
+
+  @include e(sortable-ghost) {
+    opacity: 0.5;
+  }
+
+  .el-table__row {
+    height: getCssVar('repeater-grid2', 'row-height');
+  }
+}
+
+
+@include b(repeater-grid2-index){
+  .cell{
+    padding: getCssVar('repeater-grid2', 'index-cell-padding');
+  }
+}
+
+
+@include b(repeater-grid2-action-group) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-icon {
+    font-size: getCssVar('repeater-grid2', 'btn-size');
+    color: getCssVar('repeater-grid2', 'btn-color');
+    cursor: pointer;
+    border: getCssVar('repeater-grid2', 'btn-border');
+
+    + ion-icon {
+      margin-left: getCssVar('repeater-grid2', 'btn-margin-left');
+    }
+
+    &:hover {
+      color: getCssVar('repeater-grid2', 'btn-hover-color');
+      border: getCssVar('repeater-grid2', 'btn-hover-border');
+    }
+  }
+}

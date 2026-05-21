@@ -10,7 +10,7 @@ import { IApiMDCtrlLoadParams, IApiMDCtrlRemoveParams } from '../controller';
  */
 export interface IApiMDViewCall extends IApiViewCall {
   /**
-   * @description 打开编辑数据视图
+   * @description 打开编辑数据视图，data: 实体数据，event: 鼠标事件，context: 上下文参数，params: 视图参数
    * @type {{
    *     args: {
    *       data: IApiData[];
@@ -30,7 +30,7 @@ export interface IApiMDViewCall extends IApiViewCall {
     };
   };
   /**
-   * @description 查看
+   * @description 查看，data: 实体数据，event: 鼠标事件，context: 上下文参数，params: 视图参数
    * @type {{
    *     args: {
    *       data: IApiData[];
@@ -50,7 +50,7 @@ export interface IApiMDViewCall extends IApiViewCall {
     };
   };
   /**
-   * @description 打开新建数据视图
+   * @description 打开新建数据视图，data: 实体数据，event: 鼠标事件，copyMode: 是否是拷贝模式
    * @type {{
    *     args: {
    *       data: IApiData[];
@@ -98,7 +98,7 @@ export interface IApiMDViewCall extends IApiViewCall {
     args: undefined;
   };
   /**
-   * @description 数据导出
+   * @description 数据导出，event: 鼠标事件
    * @type {{
    *     args: { event: MouseEvent };
    *   }}
@@ -108,7 +108,7 @@ export interface IApiMDViewCall extends IApiViewCall {
     args: { event: MouseEvent };
   };
   /**
-   * @description 拷贝
+   * @description 拷贝，data: 实体数据，event: 鼠标事件
    * @type {{
    *     args: { data: IApiData[]; event?: MouseEvent };
    *   }}
@@ -138,7 +138,7 @@ export interface IApiMDViewCall extends IApiViewCall {
     args: undefined;
   };
   /**
-   * @description 设置选中数据
+   * @description 设置选中数据，data：实体数据集合
    * @type {{
    *     args: {
    *       data: IApiData[];

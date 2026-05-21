@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'drtab',
   deviewId: '641538ec751804076261fdd46d41e06a',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
@@ -48,7 +48,7 @@ export default {
           id: 'count',
         },
         {
-          caption: '计数器禁用',
+          caption: '计数器动态禁用',
           appViewId: 'web.master_drtab_counter_disabled',
           id: 'disable_counter',
         },

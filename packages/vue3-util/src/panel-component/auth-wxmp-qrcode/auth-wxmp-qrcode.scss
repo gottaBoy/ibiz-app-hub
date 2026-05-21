@@ -1,4 +1,13 @@
+$auth-wxmp-qrcode: (
+  caption-font-size: getCssVar(font-size, small),
+  mask-color: getCssVar(color, primary),
+  mask-icon-font-size: getCssVar(font-size, header-1),
+  mask-icon-hover-color: getCssVar(color, primary, hover),
+);
+
 @include b(auth-wxmp-qrcode) {
+  @include set-component-css-var('auth-wxmp-qrcode',$auth-wxmp-qrcode);
+
   width: 100%;
   height: 100%;
   @include e(content) {
@@ -12,7 +21,7 @@
     object-fit: contain;
   }
   @include e(caption) {
-    font-size: getCssVar(font-size, small);
+    font-size: getCssVar(auth-wxmp-qrcode, caption-font-size);
     text-align: center;
   }
   @include e(mask) {
@@ -24,14 +33,14 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    color: getCssVar(color, primary);
+    color: getCssVar(auth-wxmp-qrcode, mask-color);
     background-color: rgb(255 255 255 / 90%);
     @include m(icon) {
-      font-size: getCssVar(font-size, header-1);
+      font-size: getCssVar(auth-wxmp-qrcode, mask-icon-font-size);
       cursor: pointer;
 
       &:hover {
-        color: getCssVar(color, primary, hover);
+        color: getCssVar(auth-wxmp-qrcode, mask-icon-hover-color);
       }
     }
   }

@@ -57,22 +57,28 @@ export const AppDrawerComponent = defineComponent({
 
     let direction = '';
 
-    switch (props.opts.placement) {
-      case 'left':
-        direction = 'left';
-        break;
-      case 'top':
-        direction = 'top';
-        break;
-      case 'bottom':
-        direction = 'bottom';
-        break;
-      default:
-        direction = 'right';
+    if (props.opts.placement) {
+      switch (props.opts.placement) {
+        case 'left':
+          direction = 'left';
+          break;
+        case 'top':
+          direction = 'top';
+          break;
+        case 'bottom':
+          direction = 'bottom';
+          break;
+        default:
+          direction = 'right';
+      }
     }
 
     // 处理自定义样式
     const customStyle = reactive<IData>({ height: '80%' });
+    // 左右抽屉高度默认100%
+    if (['left', 'right'].includes(direction)) {
+      customStyle.height = '100%';
+    }
     const { width, height } = props.opts;
     if (width) {
       if (isNumber(width)) {
@@ -105,9 +111,8 @@ export const AppDrawerComponent = defineComponent({
     return (
       <van-popup
         v-model:show={this.isShow}
-        lock-scroll
+        lock-scroll={false}
         round
-        closeable
         close-on-popstate={true}
         close-icon-position='top-left'
         class={this.ns.b()}
@@ -115,6 +120,7 @@ export const AppDrawerComponent = defineComponent({
         position={this.direction}
         z-index={this.drawerZIndex}
         before-close={this.onBeforeClose}
+        {...this.opts.attrs}
       >
         {this.$slots.default?.(this.modal)}
       </van-popup>

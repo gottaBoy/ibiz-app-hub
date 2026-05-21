@@ -9,6 +9,7 @@ import {
   watch,
   provide,
   inject,
+  renderSlot,
 } from 'vue';
 import {
   IPanel,
@@ -130,6 +131,15 @@ function renderPanelItem(
       tempStyle += attrs.dynamicstyle;
     }
     delete attrs.dynamicstyle;
+  }
+  if (ins?.$slots[panelItem.id!]) {
+    return renderSlot(ins.$slots, panelItem.id!, {
+      modelData: panelItem,
+      controller: panelItemC,
+      key: panelItem.id,
+      style: tempStyle,
+      attrs,
+    });
   }
   return h(
     component,

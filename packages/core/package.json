@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/core",
-  "version": "0.7.41-alpha.18",
+  "version": "0.7.41-alpha.63",
   "description": "运行时核心库",
   "type": "module",
   "main": "out/index.js",
@@ -32,7 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",
-    "axios": "^1.6.5",
+    "axios": "^1.8.2",
     "lodash-es": "^4.17.21",
     "loglevel": "^1.8.1",
     "loglevel-plugin-prefix": "^0.8.4",
@@ -44,7 +44,7 @@
     "@types/qs": "^6.9.11"
   },
   "peerDependencies": {
-    "axios": "^1.4.0",
+    "axios": "^1.8.2",
     "lodash-es": "^4.17.21",
     "qs": "^6.11.0",
     "qx-util": "^0.4.8",

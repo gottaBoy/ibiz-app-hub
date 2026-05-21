@@ -1,51 +1,147 @@
-$control-appmenu: ('icon-width': 100%,
-  'icon-view-icon-size': rem(35px),
-  'icon-view-icon-margin': rem(5px),
-  'icon-color': getCssVar('color', 'text', 0),
+$control-appmenu-iconview: (
+  'color-bg': getCssVar('color', 'bg', 1), // 菜单背景色
+  'color-text': getCssVar('color', 'text', 0), // 菜单项文字颜色
+  'color-group-bg': getCssVar('color', 'bg', 0), // 菜单分组项背景色
+  'color-group-text': getCssVar('color', 'text', 1), // 菜单分组项文字颜色
+  'spacing-icon-gap': getCssVar('spacing', 'extra-tight'), // 菜单项图标间距
+  'spacing-item-padding': getCssVar('spacing', 'base-tight')
+    getCssVar('spacing', 'base'), // 菜单项文字间距
+  'spacing-group-padding': getCssVar('spacing', 'base'), // 菜单分组项文字间距
+  'spacing-group-icon-gap': getCssVar('spacing', 'extra-tight'), // 菜单分组项图标间距
+  'spacing-group-counter-margin': 0 0 0 getCssVar('spacing', 'tight'), // 菜单分组项计数器间距
+  'font-text-fontSize': getCssVar('font-size', 'small'), // 菜单项文字字体大小
+  'font-icon-fontSize': getCssVar('height-control', 'default'), // 菜单项图标字体大小
+  'font-group-fontSize': getCssVar('font-size', 'header-6'), // 菜单分组项文字字体大小
+  'font-group-lineHeight': getCssVar('font-size', 'header-5'), // 菜单分组项文字字体大小
+  'icon-group-iconSize': getCssVar('width-icon', 'medium'), // 分组项图标大小
+  'line-clamp-item-caption': 2, // 项文字行数限制
 );
 
-
 @include b(control-appmenu-iconview) {
-  @include set-component-css-var('control-appmenu', $control-appmenu);
+  @include set-component-css-var(
+    'control-appmenu-iconview',
+    $control-appmenu-iconview
+  );
 
-  .van-grid-item__text {
-    display: -webkit-box;
-    flex: 1;
-    height: fit-content;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  background-color: getCssVar('control-appmenu-iconview', 'color-bg');
 
-    // 图标菜单最大俩行显示
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-
-  .van-badge__wrapper {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .van-grid-item__content--clickable:active {
-    background-color: inherit;
-  }
-
-
-  @include b(control-appmenu-icon) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: getCssVar('control-appmenu', 'icon-view-icon-size');
-    height: getCssVar('control-appmenu', 'icon-view-icon-size');
-    margin-bottom: getCssVar('control-appmenu', 'icon-view-icon-margin');
-    font-size: getCssVar('control-appmenu', 'icon-view-icon-size');
-    color: getCssVar('control-appmenu', 'icon-color');
-
-    @include b(icon) {
+  // 项样式
+  @include e(item) {
+    @include m(content) {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       width: 100%;
       height: 100%;
-      color: getCssVar('control-appmenu', 'icon-color');
+      padding: getCssVar('control-appmenu-iconview', 'spacing-item-padding');
+      color: getCssVar('control-appmenu-iconview', 'color-text');
     }
 
+    @include m(icon) {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: getCssVar('control-appmenu-iconview', 'font-icon-fontSize');
+      margin-bottom: getCssVar('control-appmenu-iconview', 'spacing-icon-gap');
+      font-size: getCssVar('control-appmenu-iconview', 'font-icon-fontSize');
+
+      .#{bem(icon)} {
+        width: 100%;
+        height: 100%;
+      }
+
+      ion-icon.#{bem(icon)} {
+        width: 1em;
+        max-width: 100%;
+        height: 1em;
+        max-height: 100%;
+      }
+      
+      .fa.#{bem(icon)} {
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        max-height: 100%;
+      }
+    }
+
+    @include m(counter) {
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translate(80%, -50%);
+    }
+
+    @include m(caption) {
+      display: -webkit-box;
+      flex: 1;
+      height: fit-content;
+      overflow: hidden;
+      font-size: getCssVar('control-appmenu-iconview', 'font-text-fontSize');
+      text-overflow: ellipsis;
+
+      // 图标菜单最大俩行显示
+      -webkit-line-clamp: getCssVar(
+        'control-appmenu-iconview',
+        'line-clamp-item-caption'
+      );
+      line-clamp: getCssVar(
+        'control-appmenu-iconview',
+        'line-clamp-item-caption'
+      );
+      -webkit-box-orient: vertical;
+    }
   }
+
+  // 分组样式
+  @include e(group-item) {
+    flex-basis: 100% !important;
+
+    > .van-grid-item__content--clickable:active {
+      background-color: var(--van-grid-item-content-background);
+    }
+
+    @include m(container) {
+      width: 100%;
+    }
+    @include m(header) {
+      display: flex;
+      align-items: center;
+      padding: getCssVar('control-appmenu-iconview', 'spacing-group-padding');
+      font-size: getCssVar('control-appmenu-iconview', 'font-group-fontSize');
+      color: getCssVar('control-appmenu-iconview', 'color-group-text');
+      background-color: getCssVar('control-appmenu-iconview', 'color-group-bg');
+
+      .#{bem(icon)} {
+        margin-right: getCssVar(
+          'control-appmenu-iconview',
+          'spacing-group-icon-gap'
+        );
+      }
+    }
+    @include m(content) {
+      display: flex;
+      width: 100%;
+    }
+    @include m(caption) {
+      line-height: getCssVar('control-appmenu-iconview', 'font-group-lineHeight');
+    }
+    @include m(counter) {
+      margin: getCssVar('control-appmenu-iconview', 'spacing-group-counter-margin');
+    }
+  }
+
+  .van-grid-item__content {
+    padding: 0;
+  }
+}
+
+@include b(control-appmenu-iconview-no-data) {
+  width: 100%;
+  padding: getCssVar(control-appmenu-iconview, spacing-item-padding);
+  font-size: getCssVar(control-appmenu-iconview, font-item-fontSize);
+  color: getCssVar(control-appmenu-iconview, color-text);
+  text-align: center;
 }

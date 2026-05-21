@@ -13,7 +13,7 @@ export default {
   install(_app: App): void {
     _app.component(BIReportDesign.name!, BIReportDesign);
     _app.component(BIReportContent.name!, BIReportContent);
-    _app.component(BIReportDrillShell.name!, BIReportDrillShell);
+    _app.component(BIReportDrillShell.name, BIReportDrillShell);
     registerAllChartProvider();
     _app.use(plugins);
   },

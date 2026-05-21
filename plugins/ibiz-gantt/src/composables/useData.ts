@@ -101,6 +101,14 @@ export default () => {
         store.$param.preload = val;
       },
     );
+
+    watch(
+      () => props.expandColumnName,
+      val => {
+        store.$param.expandColumnName = val;
+      },
+      { immediate: true },
+    );
   }
 
   function toRowData(data?: RowItem): RowData {

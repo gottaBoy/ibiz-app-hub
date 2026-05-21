@@ -1,5 +1,6 @@
 import { IChatContainerOptions } from '../i-chat-container/i-chat-container';
 import { IChatOptions } from '../i-chat-options/i-chat-options';
+import { IResourceOptions } from '../i-resource-options/i-resource-options';
 import { ITopicOptions } from '../i-topic-options/i-topic-options';
 
 /**
@@ -37,6 +38,11 @@ export interface IContainerOptions {
    * @type {IChatOptions}
    */
   chatOptions: IChatOptions;
+
+  /**
+   * 资源相关配置参数
+   */
+  resourceOptions: IResourceOptions;
 
   /**
    * ai容器呈现

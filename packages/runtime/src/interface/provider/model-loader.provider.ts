@@ -2,6 +2,7 @@ import {
   IAppBICube,
   IAppBIReport,
   IAppBIScheme,
+  IAppCodeList,
   IAppDataEntity,
   IAppView,
   IApplication,
@@ -153,4 +154,12 @@ export interface ModelLoaderProvider {
     data: IData,
     type: 'APP' | 'VIEW' | 'CTRL' | 'APPENTITY' | 'APPBIREPORT',
   ): Promise<IModel | undefined>;
+
+  /**
+   * 合并子应用代码表
+   *
+   * @author tony001
+   * @param {IAppCodeList} codeList
+   */
+  mergeSubAppCodeList(codeList: IAppCodeList): void;
 }

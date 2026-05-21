@@ -56,33 +56,33 @@
   #{getCssVarName('spacing', 'extra-loose')}: rem(32px);
   #{getCssVarName('spacing', 'super-loose')}: rem(40px);
 
-  // 编辑器默认
-  #{getCssVarName(editor, default, placeholder-color)}: getCssVar(color, text, 2);
-  #{getCssVarName(editor, default, line-height)}: rem(32px);
-  #{getCssVarName(editor, default, text-size)}: getCssVar(font-size, regular);
-  #{getCssVarName(editor, default, text-color)}: getCssVar(color, text, 0);
-  #{getCssVarName(editor, default, bg-color)}: getCssVar(color, fill, 0);
-  #{getCssVarName(editor, default, border-color)}: transparent;
+  // // 编辑器默认
+  // #{getCssVarName(editor, default, placeholder-color)}: getCssVar(color, text, 2);
+  // #{getCssVarName(editor, default, line-height)}: rem(32px);
+  // #{getCssVarName(editor, default, text-size)}: getCssVar(font-size, regular);
+  // #{getCssVarName(editor, default, text-color)}: getCssVar(color, text, 0);
+  // #{getCssVarName(editor, default, bg-color)}: getCssVar(color, fill, 0);
+  // #{getCssVarName(editor, default, border-color)}: transparent;
 
-  // 编辑器悬浮
-  #{getCssVarName(editor, hover, bg-color)}: getCssVar(color, fill, 1);
-  #{getCssVarName(editor, hover, border-color)}: transparent;
+  // // 编辑器悬浮
+  // #{getCssVarName(editor, hover, bg-color)}: getCssVar(color, fill, 1);
+  // #{getCssVarName(editor, hover, border-color)}: transparent;
 
-  // 编辑器按下
-  #{getCssVarName(editor, active, bg-color)}: getCssVar(color, fill, 2);
-  #{getCssVarName(editor, active, border-color)}: getCssVar(editor, active, bg-color);
+  // // 编辑器按下
+  // #{getCssVarName(editor, active, bg-color)}: getCssVar(color, fill, 2);
+  // #{getCssVarName(editor, active, border-color)}: getCssVar(editor, active, bg-color);
 
-  // 编辑器选中
-  #{getCssVarName(editor, focus, bg-color)}: getCssVar(color, fill, 0);
-  #{getCssVarName(editor, focus, border-color)}: getCssVar(color, focus, border);
+  // // 编辑器选中
+  // #{getCssVarName(editor, focus, bg-color)}: getCssVar(color, fill, 0);
+  // #{getCssVarName(editor, focus, border-color)}: getCssVar(color, focus, border);
 
-  // 编辑器禁用
-  #{getCssVarName(editor, disabled, text-color)}: getCssVar(color, disabled, text);
-  #{getCssVarName(editor, disabled, bg-color)}: getCssVar(color, disabled, fill);
-  #{getCssVarName(editor, disabled, border-color)}: getCssVar(color, disabled, border);
+  // // 编辑器禁用
+  // #{getCssVarName(editor, disabled, text-color)}: getCssVar(color, disabled, text);
+  // #{getCssVarName(editor, disabled, bg-color)}: getCssVar(color, disabled, fill);
+  // #{getCssVarName(editor, disabled, border-color)}: getCssVar(color, disabled, border);
 
-  // 编辑器只读
-  #{getCssVarName(editor, readonly, text-color)}: getCssVar(editor, default, text-color);
-  #{getCssVarName(editor, readonly, bg-color)}: getCssVar(editor, default, bg-color);
-  #{getCssVarName(editor, readonly, border-color)}: getCssVar(editor, default, border-color);
+  // // 编辑器只读
+  // #{getCssVarName(editor, readonly, text-color)}: getCssVar(editor, default, text-color);
+  // #{getCssVarName(editor, readonly, bg-color)}: getCssVar(editor, default, bg-color);
+  // #{getCssVarName(editor, readonly, border-color)}: getCssVar(editor, default, border-color);
 }

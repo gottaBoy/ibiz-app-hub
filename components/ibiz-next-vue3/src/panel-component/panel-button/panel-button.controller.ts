@@ -128,9 +128,7 @@ export class PanelButtonController extends PanelItemController<IPanelButton> {
    */
   async onActionClick(event: MouseEvent): Promise<void> {
     const { uiactionId, actionType } = this.model;
-    if (actionType === 'NONE') {
-      return;
-    }
+    if (actionType === 'NONE') return;
     event.stopPropagation();
     event.preventDefault();
     await UIActionUtil.execAndResolved(

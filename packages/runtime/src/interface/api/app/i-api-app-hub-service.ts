@@ -41,7 +41,7 @@ export interface IApiAppHubService {
 
   /**
    * @description 根据应用视图 codeName 或 id 获取应用视图模型
-   * @param {string} tag
+   * @param {string} tag 视图id或者视图codeName
    * @returns {*}  {Promise<IAppView>}
    * @memberof IApiAppHubService
    */
@@ -49,8 +49,8 @@ export interface IApiAppHubService {
 
   /**
    * @description 获取应用实体模型
-   * @param {string} id
-   * @param {string} [appId]
+   * @param {string} id 实体id或者实体codeName
+   * @param {string} [appId] 应用标识
    * @returns {*}  {Promise<IAppDataEntity>}
    * @memberof IApiAppHubService
    */
@@ -58,7 +58,7 @@ export interface IApiAppHubService {
 
   /**
    * @description 异步获取应用对象，用于不确定应用是否已经加载的情况
-   * @param {string} [appId=ibiz.env.appId]
+   * @param {string} [appId=ibiz.env.appId] 应用标识
    * @returns {*}  {Promise<IApiAppService>}
    * @memberof IApiAppHubService
    */
@@ -66,7 +66,7 @@ export interface IApiAppHubService {
 
   /**
    * @description 获取应用实例
-   * @param {(string | IApplication)} [app]
+   * @param {(string | IApplication)} [app] 应用标识或者应用模型
    * @returns {*}  {IApiAppService}
    * @memberof IApiAppHubService
    */
@@ -81,7 +81,7 @@ export interface IApiAppHubService {
 
   /**
    * @description 通过标识获取应用对象
-   * @param {string} id
+   * @param {string} id 应用标识
    * @returns {*}  {(IApiAppService | undefined)}
    * @memberof IApiAppHubService
    */
@@ -89,9 +89,9 @@ export interface IApiAppHubService {
 
   /**
    * @description 获取应用实体服务
-   * @param {string} appId
-   * @param {string} entityId
-   * @param {IApiContext} context
+   * @param {string} appId 应用标识
+   * @param {string} entityId 实体id
+   * @param {IApiContext} context 上下文参数
    * @returns {*}  {Promise<IApiAppDEService>}
    * @memberof IApiAppHubService
    */

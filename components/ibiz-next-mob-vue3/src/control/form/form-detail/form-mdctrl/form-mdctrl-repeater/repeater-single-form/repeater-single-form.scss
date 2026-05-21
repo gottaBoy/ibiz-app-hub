@@ -1,5 +1,4 @@
 $repeater-single-form: (
-  'header-height': 32px,
 );
 
 
@@ -10,9 +9,4 @@ $repeater-single-form: (
   @include e(content){
     width: 100%;
   }
-
-}
-
-@include b(repeater-single-form-header){
-  height: getCssVar(repeater-single-form, header-height);
 }

@@ -1,19 +1,22 @@
 $fullscreen-header: (
-    height: rem(44px),
-    font-size: getCssVar(font-size, header, 5),
-    font-weight: getCssVar(font-weight, bold),
+    spacing-full-screen-spacing: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) var(--safe-area-inset-left),
+    width-full-screen: 100vw,
+    height-full-screen: 100vh,
+    height-fullscreen-header: rem(44px),
+    font-fullscreen-header-fontSize: getCssVar(font-size, header, 5),
+    font-fullscreen-header-fontWeight: getCssVar(font-weight, bold),
 );
 
 @include b('fullscreen-header'){
     @include set-component-css-var('fullscreen-header', $fullscreen-header);
-    height: getCssVar(fullscreen-header, height);
+    height: getCssVar(fullscreen-header, height-fullscreen-header);
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     position: relative;
-    font-size: getCssVar(fullscreen-header, font-size);
-    font-weight: getCssVar(fullscreen-header, font-weight);
+    font-size: getCssVar(fullscreen-header, font-fullscreen-header-fontSize);
+    font-weight: getCssVar(fullscreen-header, font-fullscreen-header-fontWeight);
     @include e('close'){
         position: absolute;
         right: getCssVar(spacing,extra,tight);
@@ -26,11 +29,13 @@ $fullscreen-header: (
 
 
 @include b(full-screen) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    // 移动端安全距离
-    padding: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) var(--safe-area-inset-left);
+  @include set-component-css-var('fullscreen-header', $fullscreen-header);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  height: getCssVar(fullscreen-header, height-full-screen) !important;
+  width: getCssVar(fullscreen-header, width-full-screen) !important;
+  // 移动端安全距离
+  padding: getCssVar(fullscreen-header, spacing-full-screen-spacing);
 }

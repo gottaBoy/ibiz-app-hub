@@ -1,34 +1,58 @@
+$span: (
+  color: getCssVar(editor, default, text-color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  color-code-list: getCssVar(color, white),
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  spacing-code-list-padding: 0 getCssVar(spacing, base-tight),
+  radius-code-list: getCssVar(border-radius, medium),
+  // 其它
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
+
 @include b('span') {
+  @include set-component-css-var(span, $span);
+
   display: block;
   width: 100%;
-  font-size: getCssVar(form-item, font-size);
-  line-height: getCssVar(editor, default, line-height);
-  color: inherit;
+  font-size: getCssVar(span, font-fontSize);
+  line-height: getCssVar(span, font-lineHeight);
+  color: getCssVar(span, color);
+  text-align: getCssVar(span, font-textAlign);
   white-space: pre-line;
   @include utils-ellipsis;
 
   @include m(disabled) {
-    color: getCssVar('form-item', 'disabled-color');
+    color: getCssVar(span, color-disabled);
   }
 
   @include m(readonly) {
-    color: getCssVar('form-item', 'readonly-color');
+    color: getCssVar(span, color-readonly);
   }
   @include e('code-list') {
+    @include m(icon) {
+      min-height: getCssVar(span, font-lineHeight);
+
+      &.#{bem('code-list')} .#{bem('icon')} {
+        padding-right: 0;
+      }
+    }
+
     @include when('reverse-color') {
       .#{bem('code-list','item')} {
-        padding: getCssVar(spacing-extra, tight) getCssVar(spacing-base, tight);
-        color: getCssVar(color, default);
+        padding: getCssVar(span, spacing-code-list-padding);
+        color: getCssVar(span, color-code-list);
         background-color: getCssVar('code-list', 'item-color');
-        border-radius: getCssVar(border-radius, large);
+        border-radius: getCssVar(span, radius-code-list);
       }
     }
   }
-
-  text-align: getCssVar(form-item-container, editor-align);
   .#{bem('span','code-list')}{
+    height: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: getCssVar(form-item-container, editor-align);
+    justify-content: getCssVar(span, flex-justify-content);
   }
 }

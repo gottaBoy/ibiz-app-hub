@@ -7,3 +7,4 @@ export * from './view-engine';
 export * from './util';
 export { i18n } from './locale';
 export * from './mob-app';
+export { default as IBizVue3 } from './ibiz-vue3';

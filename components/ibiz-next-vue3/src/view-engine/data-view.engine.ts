@@ -19,7 +19,7 @@ export class DataViewEngine extends MDViewEngine {
    * @type {ViewController<IAppDEDataView, IDataViewState, IDataViewEvent>}
    * @memberof DataViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEDataView,
     IDataViewState,
     IDataViewEvent

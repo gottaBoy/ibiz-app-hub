@@ -14,6 +14,10 @@ export class DELogicWriter extends ModelObjectWriter {
     _.w(d, 'events', s);
     _.w(d, 'logicName', s);
     _.w(d, 'logicSubType', s, '', 'NONE');
+    _.w(d, 'logicTag', s);
+    _.w(d, 'logicTag2', s);
+    _.w(d, 'logicTag3', s);
+    _.w(d, 'logicTag4', s);
     _.v(
       d,
       'delogicNodes',

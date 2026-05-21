@@ -17,7 +17,7 @@ export class MobOptViewEngine extends MobEditViewEngine {
    * @type {ViewController<IAppDEEditView, IOptViewState, IOptViewEvent>}
    * @memberof MobOptViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEEditView,
     IOptViewState,
     IOptViewEvent

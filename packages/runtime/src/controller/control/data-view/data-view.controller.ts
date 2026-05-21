@@ -5,8 +5,12 @@ import {
   isElementSame,
   RuntimeModelError,
 } from '@ibiz-template/core';
-import { IDEDataView, IUIActionGroupDetail } from '@ibiz/model-core';
-import { isNil } from 'ramda';
+import {
+  IDEDataView,
+  IDEUIActionGroup,
+  IUIActionGroupDetail,
+} from '@ibiz/model-core';
+import { isNil, isNotNil } from 'ramda';
 import { createUUID, isBoolean } from 'qx-util';
 import {
   ISortItem,
@@ -30,6 +34,7 @@ import {
 import { DataViewControlService } from './data-view.service';
 import {
   calcDeCodeNameById,
+  calcUIActionGroup,
   getAllUIActionItems,
   getParentTextAppDEFieldId,
 } from '../../../model';
@@ -98,6 +103,26 @@ export class DataViewControlController<
   }
 
   /**
+   * @description 启用分组
+   * @readonly
+   * @type {boolean}
+   * @memberof DataViewControlController
+   */
+  get enableGroup(): boolean {
+    return this.model.groupMode !== 'NONE';
+  }
+
+  /**
+   * @description 分组时是否显示分组锚点导航
+   * @readonly
+   * @type {boolean}
+   * @memberof DataViewControlController
+   */
+  get showGroupAnchor(): boolean {
+    return this.enableGroup && this.controlParams.showgroupanchor === 'true';
+  }
+
+  /**
    * 初始化State
    *
    * @protected
@@ -118,6 +143,31 @@ export class DataViewControlController<
     );
     this.state.draggable = this.enableEditOrder || this.enableEditGroup;
     this.state.uaState = {};
+    this.initSortDelistItems();
+  }
+
+  /**
+   * @description 初始化排序配置项集合
+   * @protected
+   * @memberof DataViewControlController
+   */
+  protected initSortDelistItems(): void {
+    const sortDelistItems: Array<{
+      value: string;
+      label: string;
+    }> = [];
+    this.model.dedataViewItems?.forEach((item: IParams) => {
+      if (item.enableSort) {
+        sortDelistItems.push({
+          value: item.id,
+          label: ibiz.i18n.t(
+            item?.capLanguageRes?.lanResTag || '',
+            item.caption || item?.capLanguageRes?.defaultContent,
+          ),
+        });
+      }
+    });
+    this.state.sortDelistItems = sortDelistItems;
   }
 
   /**
@@ -143,6 +193,38 @@ export class DataViewControlController<
   protected async initControlService(): Promise<void> {
     this.service = new DataViewControlService(this.model);
     await this.service.init(this.context);
+  }
+
+  /**
+   * @description 初始化界面行为组
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof DataViewControlController
+   */
+  protected async initUIActions(): Promise<void> {
+    const asyncTasks: Promise<IDEUIActionGroup>[] = [];
+    // 分组界面行为组
+    if (this.model.groupUIActionGroup) {
+      const task = calcUIActionGroup(
+        this.model.groupUIActionGroup!,
+        this.context,
+        this.params,
+      );
+      asyncTasks.push(task);
+    }
+
+    // 操作项界面行为组
+    this.model.dedataViewItems?.forEach(item => {
+      if (item.itemType === 'ACTIONITEM' && item.deuiactionGroup) {
+        const task = calcUIActionGroup(
+          item.deuiactionGroup,
+          this.context,
+          this.params,
+        );
+        asyncTasks.push(task);
+      }
+    });
+    await Promise.all(asyncTasks);
   }
 
   /**
@@ -606,7 +688,9 @@ export class DataViewControlController<
    */
   onClickNew(event: MouseEvent, group?: string | number): void {
     const params = { ...this.params };
-    if (group) Object.assign(params, { srfgroup: group });
+    if (isNotNil(group)) {
+      Object.assign(params, { srfgroup: group });
+    }
     UIActionUtil.execAndResolved(
       'new',
       {

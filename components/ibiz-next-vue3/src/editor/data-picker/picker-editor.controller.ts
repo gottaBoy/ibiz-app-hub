@@ -19,6 +19,7 @@ import {
   IUIActionGroupDetail,
   IAppDEUIActionGroupDetail,
 } from '@ibiz/model-core';
+import { isNumber } from 'lodash-es';
 import { mergeDeepLeft } from 'ramda';
 
 /**
@@ -118,6 +119,75 @@ export class PickerEditorController extends EditorController<IPicker> {
    */
   public actionDetails: IAppDEUIActionGroupDetail[] = [];
 
+  /**
+   * 当前页
+   *
+   * @type {number}
+   * @default 1
+   * @memberof PickerEditorController
+   */
+  curPage: number = 1;
+
+  /**
+   * 总条数
+   *
+   * @type {number}
+   * @default 0
+   * @memberof PickerEditorController
+   */
+  public total: number = 0;
+
+  /**
+   * 总页数
+   *
+   * @type {number}
+   * @memberof PickerEditorController
+   */
+  public totalPages?: number;
+
+  /**
+   * 自填模式分页大小
+   *
+   * @type {number}
+   * @memberof PickerEditorController
+   */
+  public pagingSize?: number;
+
+  /**
+   * 自填模式分页模式配置：0：不分页，1：分页栏，2：滚动加载，3：加载更多
+   *
+   * @type {number}
+   * @memberof PickerEditorController
+   */
+  public pagingMode?: number;
+
+  /**
+   * 是否懒加载
+   *
+   * @readonly
+   * @type {boolean}
+   * @memberof PickerEditorController
+   */
+  get isLazyLoad(): boolean {
+    return isNumber(this.pagingMode) && this.pagingMode !== 0;
+  }
+
+  /**
+   * 是否显示加载更多
+   *
+   * @readonly
+   * @type {boolean}
+   * @memberof PickerEditorController
+   */
+  get isShowLoadMore(): boolean {
+    return !!(
+      this.isLazyLoad &&
+      this.pagingMode === 3 &&
+      this.totalPages &&
+      this.curPage < this.totalPages
+    );
+  }
+
   protected async onInit(): Promise<void> {
     super.onInit();
     this.initParams();
@@ -134,7 +204,14 @@ export class PickerEditorController extends EditorController<IPicker> {
         );
         if (this.deACMode) {
           // 自填模式相关
-          const { minorSortAppDEFieldId, minorSortDir } = this.deACMode;
+          const {
+            minorSortAppDEFieldId,
+            minorSortDir,
+            pagingMode,
+            pagingSize,
+          } = this.deACMode;
+          this.pagingMode = pagingMode;
+          this.pagingSize = pagingSize;
           if (minorSortAppDEFieldId && minorSortDir) {
             this.sort = `${minorSortAppDEFieldId.toLowerCase()},${minorSortDir.toLowerCase()}`;
           }
@@ -262,6 +339,9 @@ export class PickerEditorController extends EditorController<IPicker> {
   public async getServiceData(
     query: string,
     data: IData,
+    options?: {
+      isLoadMore?: boolean;
+    },
   ): Promise<IHttpResponse<IData[]>> {
     const { context, params } = this.handlePublicParams(
       data,
@@ -280,6 +360,23 @@ export class PickerEditorController extends EditorController<IPicker> {
       Object.assign(fixedParams, { query });
     }
     Object.assign(fixedParams, { size: 1000 });
+    if (this.isLazyLoad) {
+      // 初始加载需要重置分页
+      const isLoadMore = options?.isLoadMore === true;
+      if (isLoadMore) {
+        this.curPage += 1;
+      } else {
+        this.curPage = 1;
+      }
+    }
+
+    // 是懒加载并且有size才给page和size。size默认值给0就不传分页和大小
+    if (this.isLazyLoad && this.pagingSize) {
+      Object.assign(fixedParams, {
+        size: this.pagingSize,
+        page: this.curPage - 1,
+      });
+    }
     // 合并计算出来的参数和固定参数，以计算参数为准
     const tempParams = mergeDeepLeft(params, fixedParams);
     if (this.interfaceName) {
@@ -290,6 +387,15 @@ export class PickerEditorController extends EditorController<IPicker> {
         context,
         tempParams,
       );
+
+      if (res.headers) {
+        if (res.headers['x-total']) {
+          this.total = Number(res.headers['x-total']);
+        }
+        if (res.headers['x-total-pages']) {
+          this.totalPages = Number(res.headers['x-total-pages']);
+        }
+      }
       return res as IHttpResponse<IData[]>;
     }
     throw new RuntimeModelError(
@@ -330,7 +436,7 @@ export class PickerEditorController extends EditorController<IPicker> {
       OpenAppViewCommand.TAG,
       this.pickupView.id,
       context,
-      params,
+      { checkstrictly: true, ...params },
       { openMode: 'POPUPMODAL' },
     );
     if (res && res.ok && res.data) {

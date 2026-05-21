@@ -4,7 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'listexpTabExpView',
   deviewId: '16e3e4f5a2692c4379baf52f3de2b510',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.REGION',
   },

@@ -34,10 +34,14 @@ import {
   CounterService,
   Srfuf,
 } from '../../../../service';
-import { handleAllSettled } from '../../../../utils';
+import { convertNavData, handleAllSettled } from '../../../../utils';
 import { ControlController } from '../../../common';
 import { FormNotifyState } from '../../../constant';
-import { ControllerEvent, isValueChange } from '../../../utils';
+import {
+  ControllerEvent,
+  getEntitySchema,
+  isValueChange,
+} from '../../../utils';
 import type {
   FormDRUIPartController,
   FormDetailController,
@@ -134,6 +138,77 @@ export abstract class FormController<
    */
   get data(): IData {
     return this.state.data;
+  }
+
+  /**
+   * @description 校验模式
+   * @readonly
+   * @type {('default' | 'notification')}
+   * @memberof FormController
+   */
+  get validateMode(): 'default' | 'notification' {
+    if (this.controlParams.validatemode) {
+      return this.controlParams.validatemode;
+    }
+    return ibiz.config.form.validateMode;
+  }
+
+  /**
+   * @description 是否启用缓存
+   * @readonly
+   * @type {boolean}
+   * @memberof FormController
+   */
+  get srfCachePos(): boolean {
+    if (this.controlParams.srfcachepos)
+      return this.controlParams.srfcachepos === 'true';
+    return ibiz.config.form.srfCachePos;
+  }
+
+  /**
+   * @description 是否显示提示图标
+   * @readonly
+   * @type {boolean}
+   * @memberof FormController
+   */
+  get showTipsIcon(): boolean {
+    if (this.controlParams.showtipsicon)
+      return this.controlParams.showtipsicon === 'true';
+    return ibiz.config.form.showTipsIcon;
+  }
+
+  /**
+   * @description 缓存标识
+   * @readonly
+   * @type {string}
+   * @memberof FormController
+   */
+  get srfcachekeytempl(): string {
+    if (this.controlParams.srfcachekeytempl)
+      return this.controlParams.srfcachekeytempl;
+    if (ibiz.config.form.srfCacheKeyTempl)
+      return ibiz.config.form.srfCacheKeyTempl;
+    return `${this.context.srfuserid}_${this.view.model.codeName}_${this.model.codeName}`;
+  }
+
+  /**
+   * @description jsonSchema属性集合对象
+   * @type {IData}
+   * @memberof FormController
+   */
+  public jsonSchemaProperties?: IData;
+
+  /**
+   * @description 是否启用jsonschema
+   * @readonly
+   * @type {boolean}
+   * @memberof FormController
+   */
+  get enableJsonSchema(): boolean {
+    if (this.controlParams.enablejsonschema) {
+      return this.controlParams.enablejsonschema === 'true';
+    }
+    return ibiz.config.form.enableDynaFormJsonSchema;
   }
 
   protected initState(): void {
@@ -247,10 +322,11 @@ export abstract class FormController<
    * @returns {*}  {Promise<void>}
    */
   protected async onCreated(): Promise<void> {
+    await this.initByEntitySchema();
     await super.onCreated();
-    await this.initDetailControllers();
     // 初始化计数器
     await this.initCounter();
+    await this.initDetailControllers();
 
     // 数据变更通知防抖，且合并参数
     this.dataChangeNotify = debounceAndAsyncMerge(
@@ -420,7 +496,13 @@ export abstract class FormController<
       this.state.modified = true;
     }
 
-    await this._evt.emit('onFormDataChange', { name, value, oldValue });
+    const realData = this.getReal();
+    await this._evt.emit('onFormDataChange', {
+      name,
+      value,
+      oldValue,
+      realData,
+    });
     if (this.state.formIsDestroyed) return;
     try {
       await this.dataChangeNotify([name]);
@@ -485,9 +567,34 @@ export abstract class FormController<
         formItem => formItem.validate(),
       ),
     );
-
-    // 找不到value为false即全部是true
     return values.findIndex(value => !value) === -1;
+  }
+
+  /**
+   * @description 处理校验失败
+   * @memberof FormController
+   */
+  handleValidateFail(): void {
+    // 校验模式为通知模式时校验时提示错误信息
+    if (this.validateMode === 'notification') {
+      // 此处只处理表单项错误信息，多数据部件与关系界面暂不考虑
+      const errorItems = [...this.formItems].filter(
+        formItem => formItem.state.error,
+      );
+      const errors = errorItems.map(formItem => formItem.state.error!);
+      ibiz.notification.error({
+        title: ibiz.i18n.t('runtime.controller.control.form.formCompletion'),
+        desc: errors.join('<br/>'),
+        isHtmlDesc: true,
+      });
+      // 抛出Error错误，只打印错误信息，不抛出错误提示
+      throw new Error(
+        ibiz.i18n.t('runtime.controller.control.form.formCompletion'),
+      );
+    }
+    throw new RuntimeError(
+      ibiz.i18n.t('runtime.controller.control.form.formCompletion'),
+    );
   }
 
   /**
@@ -558,6 +665,9 @@ export abstract class FormController<
     await super.onDestroyed();
     // 销毁视图计数器
     Object.values(this.counters).forEach(counter => counter.destroy());
+    Object.values(this.formItems).forEach(item => {
+      item.destroy();
+    });
   }
 
   /**
@@ -568,6 +678,7 @@ export abstract class FormController<
    * @return {*}  {Promise<void>}
    */
   protected async initCounter(): Promise<void> {
+    if (this.state.isCounterDisabled) return;
     this.counters = {};
     const { appCounterRefs } = this.model;
     if (appCounterRefs && appCounterRefs.length > 0) {
@@ -680,5 +791,35 @@ export abstract class FormController<
     id: string,
   ): IApiFormDetailMapping[K] {
     return this.details[id] as unknown as IApiFormDetailMapping[K];
+  }
+
+  /**
+   * @description 初始化jsonschema
+   * @returns {*}  {Promise<void>}
+   * @memberof FormController
+   */
+  async initByEntitySchema(): Promise<void> {
+    if (!this.enableJsonSchema) {
+      return;
+    }
+    const jsonSchemaParams = JSON.parse(
+      this.controlParams.jsonschemaparams || '{}',
+    );
+    const jsonSchemaQuery = convertNavData(
+      jsonSchemaParams,
+      this.params,
+      this.context,
+    );
+    const tempParams: IData = clone(jsonSchemaQuery);
+    Object.assign(tempParams, this.params);
+    const json = await getEntitySchema(
+      this.model.appDataEntityId!,
+      this.context,
+      tempParams,
+    );
+    if (!json) {
+      return;
+    }
+    this.jsonSchemaProperties = json.properties;
   }
 }

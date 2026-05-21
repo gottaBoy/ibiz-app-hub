@@ -33,6 +33,16 @@ export default {
           appViewId: 'web.master_list_ext_view2',
           id: 'styel2',
         },
+        {
+          caption: '扩展视图3',
+          appViewId: 'web.master_list_ext_view3',
+          id: 'style3',
+        },
+        {
+          caption: '扩展视图3_分组样式2',
+          appViewId: 'web.master_list_ext_view3_group_style2',
+          id: 'style3_group2',
+        },
       ],
       dataRelationTag: 'DataRelation60',
       editItemCapLanguageRes: {

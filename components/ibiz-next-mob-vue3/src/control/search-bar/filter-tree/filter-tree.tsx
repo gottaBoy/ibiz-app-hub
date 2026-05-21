@@ -14,15 +14,15 @@ import {
   computed,
   defineComponent,
   h,
-  onMounted,
   PropType,
   Ref,
   ref,
   resolveComponent,
   watch,
 } from 'vue';
-import './filter-tree.scss';
 import { clearAll } from 'qx-util';
+import { isNil } from 'ramda';
+import './filter-tree.scss';
 
 type FieldInfo = {
   name: string;
@@ -357,7 +357,7 @@ export const FilterTreeControl = defineComponent({
     };
 
     const onEditItem = () => {
-      if (copyNode.value && copyNode.value.value) {
+      if (copyNode.value && !isNil(copyNode.value.value)) {
         Object.assign(editNode.value!, copyNode.value);
       }
       closePopup();
@@ -385,7 +385,7 @@ export const FilterTreeControl = defineComponent({
       if (
         !UiFilterNodes.value.length ||
         !addNode.value ||
-        !addNode.value.value
+        isNil(addNode.value.value)
       ) {
         return;
       }
@@ -403,13 +403,6 @@ export const FilterTreeControl = defineComponent({
       });
       closePopup();
     };
-
-    onMounted(() => {
-      const bol = hasFilter();
-      if (!bol) {
-        addItem();
-      }
-    });
 
     /**
      * @description 过滤项点击

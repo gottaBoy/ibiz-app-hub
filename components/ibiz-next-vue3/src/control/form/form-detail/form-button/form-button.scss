@@ -39,4 +39,8 @@ $form-button: (
       }
     }
   }  
+
+  @include when(readonly) {
+    display: none;
+  }
 }

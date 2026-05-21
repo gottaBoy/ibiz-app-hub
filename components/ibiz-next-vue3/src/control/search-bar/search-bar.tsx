@@ -120,7 +120,8 @@ export const SearchBarControl = defineComponent({
       c.model.searchBarGroups &&
       c.model.searchBarGroups?.length > 0
     ) {
-      c.state.selectedGroupItem = c.model.searchBarGroups[0];
+      const defaultGroup = c.model.searchBarGroups.find(x => x.defaultGroup);
+      c.state.selectedGroupItem = defaultGroup || c.model.searchBarGroups[0];
     }
 
     const filterButtonRef = ref();

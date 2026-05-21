@@ -1,12 +1,12 @@
 import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import { defineComponent, PropType, VNode } from 'vue';
 import { ICalendarExpBar } from '@ibiz/model-core';
-import './calendar-exp-bar.scss';
 import {
-  CalendarExpBarController,
   IControlProvider,
+  CalendarExpBarController,
 } from '@ibiz-template/runtime';
 import { useExpBarRender, useWatchRouteChange } from '../render-util';
+import './calendar-exp-bar.scss';
 
 export const CalendarExpBarControl = defineComponent({
   name: 'IBizCalendarExpBarControl',
@@ -63,7 +63,7 @@ export const CalendarExpBarControl = defineComponent({
     };
     if (isCreated) {
       if (XDataModel) {
-        const key = this.c.controlPanel ? XDataModel.name! : 'default';
+        const key = this.c.controlPanel ? 'calendarexpbar_calendar' : 'default';
         slots[key] = (): VNode => {
           return (
             <iBizControlShell

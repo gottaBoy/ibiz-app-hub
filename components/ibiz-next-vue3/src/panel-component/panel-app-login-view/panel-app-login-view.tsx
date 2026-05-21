@@ -86,9 +86,7 @@ export const PanelAppLoginView = defineComponent({
       <div
         class={this.classArr}
         style={this.cssVars}
-        onClick={() => {
-          this.controller.onClick();
-        }}
+        onClick={event => this.controller.onClick(event)}
       >
         {this.controller.model.cssStyle ? (
           <style type='text/css'>{this.controller.model.cssStyle}</style>

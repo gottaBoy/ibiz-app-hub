@@ -1,8 +1,8 @@
 import { IDEFormTabPage } from '@ibiz/model-core';
-import { FormDetailController } from '../form-detail';
 import { FormTabPageState } from './form-tab-page.state';
 import { FormTabPanelController } from '../form-tab-panel';
 import { IApiFormTabPageController } from '../../../../../interface';
+import { FormContainerController } from '../form-container';
 
 /**
  * 表单分页部件分页控制器
@@ -11,10 +11,10 @@ import { IApiFormTabPageController } from '../../../../../interface';
  * @date 2022-09-04 15:09:52
  * @export
  * @class FormTabPageController
- * @extends {FormDetailController}
+ * @extends {FormContainerController}
  */
 export class FormTabPageController
-  extends FormDetailController<IDEFormTabPage>
+  extends FormContainerController<IDEFormTabPage>
   implements IApiFormTabPageController
 {
   declare state: FormTabPageState;

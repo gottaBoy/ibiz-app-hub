@@ -53,7 +53,18 @@ export abstract class UIActionProviderBase implements IUIActionProvider {
           ibiz.i18n.t('runtime.logicScheduler.executor.noConfiguredLogic'),
         );
       }
-      await execUILogic(appDEUILogicId, appDataEntityId!, args);
+      const { resultContext, resultParams } = await this.handleParams(
+        action,
+        context,
+        data,
+        params,
+      );
+      const res = await execUILogic(appDEUILogicId, appDataEntityId!, {
+        ...args,
+        context: resultContext,
+        params: { ...params, ...resultParams },
+      });
+      if (res) result.data = Array.isArray(res) ? res : [res];
       return result;
     }
 
@@ -372,6 +383,14 @@ export abstract class UIActionProviderBase implements IUIActionProvider {
     if (resultParams.hasOwnProperty('srfasyncaction')) {
       presetParams.srfasyncaction = resultParams.srfasyncaction;
       delete resultParams.srfasyncaction;
+    }
+
+    // viewoption（指定导入视图的打开方式与宽高，参数值格式为viewoption={"modalOption":{"width":"80%","height":"80%"},"openMode":"POPUPMODAL"}，openMode打开方式的可选值有：INDEXVIEWTAB（顶级容器分页）、INDEXVIEWTAB_POPUP（顶级容器分页（非模态弹出））、INDEXVIEWTAB_POPUPMODAL（顶级容器分页（模态弹出））、POPUP（非模式弹出）、POPUPMODAL（模式弹出）、POPOVER（气泡卡片）、DRAWER_LEFT（模态左侧抽屉弹出）、DRAWER_RIGHT（模态右侧抽屉弹出）、DRAWER_TOP（模态上方抽屉弹出）、DRAWER_BOTTOM（模态下方抽屉弹出））
+    if (resultParams.hasOwnProperty('viewoption')) {
+      if (resultParams.viewoption) {
+        presetParams.viewoption = JSON.parse(resultParams.viewoption);
+      }
+      delete resultParams.viewoption;
     }
     return { resultContext, resultData, resultParams, presetParams };
   }

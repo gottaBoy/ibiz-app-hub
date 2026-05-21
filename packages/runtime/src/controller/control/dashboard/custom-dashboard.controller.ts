@@ -4,6 +4,7 @@ import { clone } from 'ramda';
 import { ConfigService, UtilService } from '../../../service';
 import { DashboardController } from './dashboard.controller';
 import { ICustomDesign } from '../../../interface';
+import { deepDeleteSubAppId, deepFillSubAppId } from './dashboard.util';
 
 /**
  * 自定义数据看板部件控制器
@@ -243,12 +244,19 @@ export class CustomDashboardController implements ICustomDesign {
     if (res.model) {
       for (let i = 0; i < res.model.length; i++) {
         const item = res.model[i];
+        const mainApp = ibiz.hub.getApp(ibiz.env.appId);
         if (item.orignModel) {
           item.portletModel = (await ibiz.hub.translationModelToDsl(
             item.portletModel,
             'CTRL',
           )) as any;
           delete item.orignModel;
+        }
+        const targetApp = mainApp.model.subAppRefs?.find(app => {
+          return app.id?.endsWith(item.appCodeName);
+        });
+        if (targetApp && targetApp.id) {
+          deepFillSubAppId(item.portletModel, targetApp.id);
         }
       }
       this.customModelData = res.model;
@@ -314,8 +322,15 @@ export class CustomDashboardController implements ICustomDesign {
         }
       });
     }
+    const cloneModel = clone(model);
+    // 删除无用的数据(appId，仅界面使用)
+    cloneModel.forEach((item: IData) => {
+      if (item.portletModel) {
+        deepDeleteSubAppId(item.portletModel);
+      }
+    });
     const data: IData = {
-      model,
+      model: cloneModel,
       colNum: this.layoutColNum,
       rowH: this.layoutRowH,
       config: this.portletConfig,

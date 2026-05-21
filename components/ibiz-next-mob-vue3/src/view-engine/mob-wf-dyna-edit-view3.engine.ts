@@ -8,7 +8,7 @@ import { IAppDEWFDynaEditView } from '@ibiz/model-core';
 import { MobWFDynaEditViewEngine } from './mob-wf-dyna-edit-view.engine';
 
 export class MobWFDynaEditView3Engine extends MobWFDynaEditViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEWFDynaEditView,
     IWFDynaEditView3State,
     IWFDynaEditView3Event

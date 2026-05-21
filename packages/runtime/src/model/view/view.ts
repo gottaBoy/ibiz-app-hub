@@ -56,14 +56,24 @@ export function getViewEngines(view: IAppView): IAppViewEngine[] {
   return appViewEngines.filter(engine => {
     switch (engine.engineCat) {
       case 'CTRL':
-        ibiz.log.warn(
-          ibiz.i18n.t('runtime.model.view.engineClassifications', {
-            engineType: engine.engineType,
-          }),
-        );
         return false;
       default:
         return true;
     }
   });
+}
+
+/**
+ * @description 获取部件引擎
+ * @export
+ * @param {IAppView} view
+ * @returns {*}  {IAppViewEngine[]}
+ */
+export function getCtrlEngines(view: IAppView): IAppViewEngine[] {
+  const { viewLayoutPanel } = view;
+  const appViewEngines = view.appViewEngines || [];
+  if (viewLayoutPanel) {
+    appViewEngines.push(...(viewLayoutPanel.appViewEngines || []));
+  }
+  return appViewEngines.filter(engine => engine.engineCat === 'CTRL');
 }

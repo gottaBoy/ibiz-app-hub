@@ -94,7 +94,7 @@ export class BIReportPanelController extends PanelItemController {
     const tempContext: IContext = clone(this.panel.context);
     Object.assign(tempContext, { pssysbireport: tempContext[this.reportKey] });
     this.context = tempContext;
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(tempContext.srfappid!);
     try {
       this.panel.view.startLoading();
       const res = await app.deService.exec(
@@ -104,6 +104,27 @@ export class BIReportPanelController extends PanelItemController {
         this.panel.params,
       );
       if (res.data) {
+        // 修正appid，适配多应用场景
+        const appId = res.data.pssysappid;
+        if (appId) {
+          const mainApp = ibiz.hub.getApp(ibiz.env.appId);
+          // 主应用上下文的srfappid应该等于主应用appId
+          if (appId === mainApp.id && this.context.srfappid !== mainApp.appId) {
+            this.context.srfappid = mainApp.appId;
+          } else {
+            // 子应用上下文的srfappid应该等于子应用id
+            const targetApp = mainApp.model.subAppRefs?.find(subAppRef => {
+              return subAppRef.id?.endsWith(appId);
+            });
+            if (
+              targetApp &&
+              targetApp.id &&
+              targetApp.id !== this.context.srfappid
+            ) {
+              this.context.srfappid = targetApp.id;
+            }
+          }
+        }
         const tempConfig = await ibiz.util.biReport.translateDEReportToConfig(
           res.data,
         );

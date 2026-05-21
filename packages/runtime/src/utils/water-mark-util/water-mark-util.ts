@@ -1,7 +1,7 @@
-import { StringUtil } from '@ibiz-template/core';
 import { isArray } from 'lodash-es';
 import { IApiGlobalWaterMarkConfig, IApiWaterMarkUtil } from '../../interface';
 import { WaterMarkManager } from './water-mark-manager/water-mark-manager';
+import { ScriptFactory } from '../script';
 
 /**
  * @description 水印工具类
@@ -24,10 +24,19 @@ export class WaterMarkUtil implements IApiWaterMarkUtil {
     if (_opts.text) {
       // 动态文本解析
       _opts.text = isArray(_opts.text)
-        ? _opts.text.map(_textItem =>
-            StringUtil.fill(_textItem, context, params, data),
+        ? _opts.text.map(
+            _textItem =>
+              ScriptFactory.execSingleLine(`\`${_textItem}\``, {
+                context,
+                params,
+                data,
+              }) as string,
           )
-        : StringUtil.fill(_opts.text, context, params, data);
+        : (ScriptFactory.execSingleLine(`\`${_opts.text}\``, {
+            context,
+            params,
+            data,
+          }) as string);
     }
     const waterMarkManager = new WaterMarkManager(
       _opts as IApiGlobalWaterMarkConfig,

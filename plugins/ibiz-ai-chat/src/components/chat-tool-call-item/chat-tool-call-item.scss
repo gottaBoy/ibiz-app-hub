@@ -1,0 +1,27 @@
+$chat-tool-call-item: (
+  font-size: 14px,
+  header-height: 32px,
+  color-2: var(--ibiz-ai-chat-color-2),
+  bg: var(--ibiz-ai-chat-hover-background-color),
+  bg-2: var(--ibiz-ai-chat-hover-background-color-2),
+  border-radius: var(--ibiz-ai-chat-border-radius),
+  hover-bg-color: var(--ibiz-ai-chat-hover-background-color),
+  border: var(--ibiz-ai-chat-border-color),
+  bg-primary: #1e1e1e,
+  bg-secondary: #2d2d2d,
+  bg-tertiary: #3c3c3c,
+  text-primary: #d4d4d4,
+  text-secondary: #9cdcfe,
+  text-error: #f44747,
+  text-string: #ce9178,
+  text-boolean: #569cd6,
+  text-property: #9cdcfe,
+  text-number: #b5cea8,
+  border-color: #444,
+  accent-primary: #0e639c,
+  accent-error: rgb(244 71 71 / 20%),
+);
+
+@include b(chat-tool-call-item) {
+  @include set-component-css-var('chat-tool-call-item', $chat-tool-call-item);
+}

@@ -5,12 +5,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { clone } from 'ramda';
-import { calcResPath, ISearchCondGroup } from '@ibiz-template/runtime';
+import { h } from 'vue';
+import { calcResPath, ISearchCondGroup, IModal } from '@ibiz-template/runtime';
 import {
   IAppBIReport,
   IAppBIReportDimension,
   IAppBIReportMeasure,
 } from '@ibiz/model-core';
+import { IBizContext } from '@ibiz-template/core';
 import { ConverterFactory } from '../converter';
 import {
   ChartType,
@@ -32,6 +34,7 @@ import {
   parseReportUIModel,
   plural,
 } from '../util';
+import { BIReportDrillShell } from '../components';
 
 /**
  * bi图表
@@ -126,6 +129,10 @@ export abstract class BIReportChartController
    */
   dynaDataDic: IData = {};
 
+  get appId(): string {
+    return this.context.srfappid || ibiz.env.appId;
+  }
+
   /**
    * Creates an instance of BIReportChartController.
    * @author tony001
@@ -157,7 +164,7 @@ export abstract class BIReportChartController
     }
     const { appBISchemeId, appBICubeId, id, name } = this.config as IData;
     this.uuid = `${
-      this.context.srfappid
+      this.appId
     }@${appBISchemeId}@${appBICubeId}@${id}@${selectChartType}@${encodeURIComponent(
       name,
     )}`;
@@ -476,7 +483,7 @@ export abstract class BIReportChartController
     if (!cubeId) return;
     const tempContext = clone(this.context);
     tempContext.pssysbicube = cubeId;
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.appId);
     const res = await app.deService.exec(
       'pssysbicube',
       'get',
@@ -653,7 +660,7 @@ export abstract class BIReportChartController
     if (this.config.reportTag && this.config.reportTag.indexOf('.') === -1) {
       const appDataEntity = await (ibiz as IData).hub.getAppDataEntity(
         this.appDataEntityId!,
-        ibiz.env.appId,
+        this.appId,
       );
       url = `/${appDataEntity.deapicodeName2}/report?srfreporttag=${
         this.config.reportTag || 'bi_report'
@@ -707,7 +714,8 @@ export abstract class BIReportChartController
         }
       }
     }
-    const response = await ibiz.net.post(url, options);
+    const app = await ibiz.hub.getAppAsync(this.appId);
+    const response = await app.net.post(url, options);
     const result: IData[] = this.handResponseData(response.data as IData[]);
     return result;
   }
@@ -794,22 +802,27 @@ export abstract class BIReportChartController
     appViewId: string,
     data: IAppBIDrillDetailData,
   ): Promise<void> {
-    const modal = ibiz.overlay.createModal(
-      'BIReportDrillShell',
-      {
-        appViewId,
-        context: this.context,
-        data,
-        reportModel: this.state.reportModel,
-        config: this.config,
-        dynamicDataDic: this.dynaDataDic,
+    const tempContext = IBizContext.create(this.context);
+    tempContext.srfdefaulttoroutedepth = 2;
+    const overlayModal = ibiz.overlay.createModal(
+      (modal: IModal) => {
+        return h(BIReportDrillShell, {
+          appViewId,
+          context: tempContext,
+          data,
+          reportModel: this.state.reportModel,
+          config: this.config,
+          dynamicDataDic: this.dynaDataDic,
+          modal,
+        });
       },
+      {},
       {
         width: '80%',
         height: '80%',
       },
     );
-    await modal.present();
+    await overlayModal.present();
   }
 
   /**

@@ -1,8 +1,8 @@
-import { PanelItemController } from '@ibiz-template/runtime';
+import { PanelContainerController } from '@ibiz-template/runtime';
 import { IPanelTabPanel } from '@ibiz/model-core';
 import { PanelTabPanelState } from './panel-tab-panel.state';
 
-export class PanelTabPanelController extends PanelItemController<IPanelTabPanel> {
+export class PanelTabPanelController extends PanelContainerController<IPanelTabPanel> {
   declare state: PanelTabPanelState;
 
   /**

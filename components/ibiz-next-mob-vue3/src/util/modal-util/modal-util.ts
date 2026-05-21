@@ -1,5 +1,6 @@
 import { IModalUtil, ModalParams } from '@ibiz-template/runtime';
 import { showConfirmDialog, showDialog } from 'vant';
+import { useNamespace } from '@ibiz-template/vue3-util';
 
 /**
  * 简洁确认操作框
@@ -11,6 +12,22 @@ import { showConfirmDialog, showDialog } from 'vant';
  * @implements {IModalUtil}
  */
 export class ModalUtil implements IModalUtil {
+  /**
+   * 获取根节点样式变量
+   *
+   * @protected
+   * @param {string} name
+   * @return {*}  {(string | undefined)}
+   * @memberof ModalUtil
+   */
+  protected getRootCssVar(name: string): string | undefined {
+    const root = document.documentElement;
+    const styles = window.getComputedStyle(root);
+    if (styles) {
+      return styles.getPropertyValue(name);
+    }
+  }
+
   async info(params: ModalParams): Promise<void> {
     const { confirmButtonText, cancelButtonText } = params;
     await showDialog({
@@ -23,10 +40,12 @@ export class ModalUtil implements IModalUtil {
 
   async success(params: ModalParams): Promise<void> {
     const { confirmButtonText, cancelButtonText } = params;
+    const ns = useNamespace();
+    const color = this.getRootCssVar(ns.cssVarName('color-success'));
     await showDialog({
       title: params.title,
       message: params.desc,
-      confirmButtonColor: '#07c160',
+      confirmButtonColor: color,
       confirmButtonText,
       cancelButtonText,
     });
@@ -34,10 +53,12 @@ export class ModalUtil implements IModalUtil {
 
   async warning(params: ModalParams): Promise<void> {
     const { confirmButtonText, cancelButtonText } = params;
+    const ns = useNamespace();
+    const color = this.getRootCssVar(ns.cssVarName('color-warning'));
     await showDialog({
       title: params.title,
       message: params.desc,
-      confirmButtonColor: '#faab0c',
+      confirmButtonColor: color,
       confirmButtonText,
       cancelButtonText,
     });
@@ -45,9 +66,12 @@ export class ModalUtil implements IModalUtil {
 
   async error(params: ModalParams): Promise<void> {
     const { confirmButtonText, cancelButtonText } = params;
+    const ns = useNamespace();
+    const color = this.getRootCssVar(ns.cssVarName('color-danger'));
     await showDialog({
       title: params.title,
       message: params.desc,
+      confirmButtonColor: color,
       theme: 'round-button',
       confirmButtonText,
       cancelButtonText,
@@ -68,6 +92,28 @@ export class ModalUtil implements IModalUtil {
         })
         .catch(() => {
           resolve(false);
+        });
+    });
+  }
+
+  async extendConfirm(params: ModalParams): Promise<'yes' | 'no' | 'cancel'> {
+    return new Promise(resolve => {
+      showConfirmDialog({
+        message: params.desc,
+        beforeClose: action => {
+          if (!action) {
+            resolve('cancel');
+          }
+          return true;
+        },
+        ...params,
+        ...params.options,
+      })
+        .then(() => {
+          resolve('yes');
+        })
+        .catch(() => {
+          resolve('no');
         });
     });
   }

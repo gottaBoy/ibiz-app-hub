@@ -39,7 +39,6 @@ export const TaggedWall = defineComponent({
   },
   setup() {
     const c = useControlController(
-      // @ts-ignore
       (...args) => new TaggedWallController(...args),
     );
     const ns = useNamespace(`tagged-wall`);

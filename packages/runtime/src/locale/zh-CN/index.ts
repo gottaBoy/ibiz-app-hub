@@ -2,6 +2,7 @@ export const zhCn = {
   // runtime
   runtime: {
     common: {
+      undefined: '未定义',
       unrealized: '未实现',
       noExplanation: '暂无说明',
     },
@@ -44,6 +45,8 @@ export const zhCn = {
           invalidSortType: '排序属性不是数值类型',
           logicOpendata: '缺少{itemType}_opendata的视图逻辑',
           logicNewdata: '缺少{itemType}_newdata的视图逻辑',
+          tabularColumns: '无表格列',
+          exported: '无导出数据',
         },
         editor: {
           editorNoConfigured: '编辑器类型[{editorType}]，未配置代码表',
@@ -330,6 +333,7 @@ export const zhCn = {
         startExecuting: '开始执行实体逻辑，逻辑标识：{id}-逻辑名称：{name}',
         endExecution: '结束执行实体逻辑，逻辑标识：{id}-逻辑名称：{name}',
         noFoundEntityLogic: '{dataEntityId}找不到实体逻辑{deDELogicId}',
+        logicalNodeOperation: '逻辑节点{name}操作参数值:',
       },
     },
     engine: {
@@ -701,6 +705,10 @@ export const zhCn = {
         noFoundCtrl: '未找到指定标识[{ctrlId}]部件',
         firstRecord: '当前数据已经是第一条数据了',
         lastRecord: '当前数据已经是最后一条数据了',
+      },
+      jsonUtil: {
+        parseSuccess: '成功提取JSON数据',
+        parseError: '未找到有效的JSON或JSONArray内容',
       },
     },
     deAction: {

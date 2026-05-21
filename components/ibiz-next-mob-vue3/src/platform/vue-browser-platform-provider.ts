@@ -1,4 +1,7 @@
-import { BrowserPlatformProvider } from '@ibiz-template/runtime';
+import {
+  BrowserPlatformProvider,
+  IMobPlatformProvider,
+} from '@ibiz-template/runtime';
 import { useViewStack } from '../util';
 
 /**
@@ -10,7 +13,10 @@ import { useViewStack } from '../util';
  * @class BrowserPlatformProvider
  * @extends {PlatformProviderBase}
  */
-export class VueBrowserPlatformProvider extends BrowserPlatformProvider {
+export class VueBrowserPlatformProvider
+  extends BrowserPlatformProvider
+  implements IMobPlatformProvider
+{
   /**
    * 返回事件
    *
@@ -21,5 +27,13 @@ export class VueBrowserPlatformProvider extends BrowserPlatformProvider {
   back(): void {
     const { goBack } = useViewStack();
     goBack();
+  }
+
+  getShowViewHeader(): boolean {
+    return ibiz.config.view.mobShowViewHeader;
+  }
+
+  getShowPresetBack(): boolean {
+    return ibiz.config.view.mobShowPresetBack;
   }
 }

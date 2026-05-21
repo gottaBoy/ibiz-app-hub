@@ -23,7 +23,7 @@ export class DevToolConfig implements IDevToolConfig {
    * @date 2024-01-19 05:35:38
    * @type {string}
    */
-  configStorageKey: string = 'devtool-config';
+  configStorageKey: string = '';
 
   /**
    * studio地址
@@ -74,4 +74,11 @@ export class DevToolConfig implements IDevToolConfig {
    * @memberof DevToolConfig
    */
   defaultMode: 'open' | 'close' = 'close';
+
+  /**
+   * 构造函数
+   */
+  constructor() {
+    this.configStorageKey = `${ibiz.env.appId}-devtool-config`;
+  }
 }

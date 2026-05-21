@@ -22,3 +22,4 @@ export type { IInternalMessageProvider } from './i-internal-message.provider';
 export type { IErrorViewProvider } from './i-error-view.provider';
 export type { IToolbarItemProvider } from './i-toolbar-item.provider';
 export type { IAcItemProvider } from './i-ac-item.provider';
+export type { IMobPlatformProvider } from './i-mob-platform-provider';

@@ -104,9 +104,11 @@ export class MaterialResourceParser {
     const [fullMatch] = match;
     const matchStart = match.index;
     const matchEnd = matchStart + fullMatch.length;
-    const remainingText = (
-      input.slice(0, matchStart) + input.slice(matchEnd)
-    ).replace(/\n/g, '');
+    const remainingText = (input.slice(0, matchStart) + input.slice(matchEnd))
+      .replace(/\n/g, '')
+      .replace(/(!\[[^\]]*\]\([^)]+\))/g, '\n$1\n')
+      .replace(/\n+/g, '\n')
+      .replace(/^\n|\n$/g, '');
 
     try {
       // 复用原有解析逻辑

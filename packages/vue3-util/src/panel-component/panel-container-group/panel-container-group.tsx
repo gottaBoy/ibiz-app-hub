@@ -1,9 +1,9 @@
 import { IPanelContainer } from '@ibiz/model-core';
-import { computed, defineComponent, PropType, ref, VNode } from 'vue';
+import { ref, VNode, computed, PropType, defineComponent } from 'vue';
 import { PanelContainerGroupController } from './panel-container-group.controller';
-import './panel-container-group.scss';
 import { useNamespace } from '../../use';
 import { IBizIcon } from '../../common';
+import './panel-container-group.scss';
 
 /**
  * 分组容器
@@ -51,7 +51,7 @@ export const PanelContainerGroup = defineComponent({
       return text;
     });
 
-    return { ns, captionText, changeCollapse, isCollapse };
+    return { ns, captionText, isCollapse, changeCollapse };
   },
   render() {
     const classArr: string[] = [
@@ -59,6 +59,7 @@ export const PanelContainerGroup = defineComponent({
       this.ns.m(this.modelData.id),
       ...this.controller.containerClass,
       this.ns.is('hidden', !this.controller.state.visible),
+      this.ns.is('mob', ibiz.env.isMob),
     ];
     if (this.modelData.showCaption === true) {
       classArr.push(this.ns.m('show-header'));
@@ -95,7 +96,10 @@ export const PanelContainerGroup = defineComponent({
     let header: unknown = null;
     if (this.modelData.showCaption) {
       header = (
-        <div class={[this.ns.b('header')]} onClick={this.changeCollapse}>
+        <div
+          class={[this.ns.b('header'), this.ns.is('is-mob', ibiz.env.isMob)]}
+          onClick={this.changeCollapse}
+        >
           <div class={[this.ns.be('header', 'left')]}>
             <div class={[this.ns.e('caption'), ...this.controller.labelClass]}>
               {this.modelData.sysImage && (
@@ -105,6 +109,12 @@ export const PanelContainerGroup = defineComponent({
                 ></IBizIcon>
               )}
               {this.captionText}
+              {this.modelData.counterId && (
+                <span class={this.ns.e('counter')}>
+                  ({this.controller.state.counterData[this.modelData.counterId]}
+                  )
+                </span>
+              )}
             </div>
           </div>
           <div class={[this.ns.be('header', 'right')]}>
@@ -121,7 +131,7 @@ export const PanelContainerGroup = defineComponent({
     }
 
     return (
-      <div class={classArr}>
+      <div class={classArr} v-loading={this.controller.state.loading}>
         {header}
         <div class={[this.ns.b('content')]}>{content}</div>
       </div>

@@ -19,9 +19,9 @@ export interface IApiFormGroupPanelController
   state: IApiFormGroupPanelState;
   /**
    * @description 触发界面行为
-   * @param {IUIActionGroupDetail} detail
-   * @param {MouseEvent} event
-   * @param {IApiParams} [args]
+   * @param {IUIActionGroupDetail} detail 界面行为组成员模型
+   * @param {MouseEvent} event 鼠标事件
+   * @param {IApiParams} [args] 行为参数
    * @returns {*}  {Promise<void>}
    * @memberof IApiFormGroupPanelController
    */

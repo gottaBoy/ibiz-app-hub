@@ -8,7 +8,7 @@ import { IAppDEMobTreeView } from '@ibiz/model-core';
 import { MobTreeViewEngine } from './mob-tree-view.engine';
 
 export class MobPickupTreeViewEngine extends MobTreeViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEMobTreeView,
     IPickupTreeViewState,
     IPickupTreeViewEvent
@@ -40,10 +40,14 @@ export class MobPickupTreeViewEngine extends MobTreeViewEngine {
   async onMounted(): Promise<void> {
     const { model } = this.view;
     this.xdataControl.evt.on('onSelectionChange', async event => {
-      this.view.evt.emit('onSelectionChange', { ...event });
+      // 使用树节点实体数据，防止后台界面行为传参时JSON.stringify失败
+      const tempData = event.data.map(x => x._deData || x);
+      this.view.evt.emit('onSelectionChange', { ...event, data: tempData });
     });
     this.xdataControl.evt.on('onActive', async event => {
-      this.view.evt.emit('onDataActive', { ...event });
+      // 使用树节点实体数据，防止后台界面行为传参时JSON.stringify失败
+      const tempData = event.data.map(x => x._deData || x);
+      this.view.evt.emit('onDataActive', { ...event, data: tempData });
     });
     // 默认加载
     if (model.loadDefault) {

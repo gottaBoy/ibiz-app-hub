@@ -1,4 +1,4 @@
-import { PanelItemController } from '@ibiz-template/runtime';
+import { PanelContainerController } from '@ibiz-template/runtime';
 import { IPanelContainer } from '@ibiz/model-core';
 import { GridContainerState } from './grid-container.state';
 
@@ -7,9 +7,9 @@ import { GridContainerState } from './grid-container.state';
  *
  * @export
  * @class GridContainerController
- * @extends {PanelItemController}
+ * @extends {PanelContainerController}
  */
-export class GridContainerController extends PanelItemController<IPanelContainer> {
+export class GridContainerController extends PanelContainerController<IPanelContainer> {
   /**
    * @description  面板栅格容器状态
    * @exposedoc

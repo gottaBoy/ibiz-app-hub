@@ -22,8 +22,13 @@ export const AttachmentColumn = defineComponent({
   },
   setup(props) {
     const ns = useNamespace('attachment-column');
-    const { getDownloadUrl, files, onDownload, getDownloadTicketParams } =
-      useFilesParse(props, props.controller);
+    const {
+      getDownloadUrl,
+      files,
+      enableNoAccess,
+      onDownload,
+      getDownloadTicketParams,
+    } = useFilesParse(props, props.controller);
     const loading = ref(true);
 
     const onLoad = (): void => {
@@ -59,7 +64,7 @@ export const AttachmentColumn = defineComponent({
     const handlePDFPreview = async (file: IData): Promise<void> => {
       const downloadUrl = getDownloadUrl(props.data, file);
       let url = file.url || downloadUrl.replace('%fileId%', file.id);
-      if (ibiz.config.common.enableDownloadTicket) {
+      if (ibiz.config.common.enableDownloadTicket && !enableNoAccess) {
         const downloadTicket = await ibiz.util.file.getDownloadTicket(
           props.controller.context,
           props.controller.params,

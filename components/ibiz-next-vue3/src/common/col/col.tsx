@@ -1,10 +1,12 @@
 import {
-  computed,
-  ConcreteComponent,
-  defineComponent,
   h,
+  ref,
+  computed,
   PropType,
+  CSSProperties,
+  defineComponent,
   resolveComponent,
+  ConcreteComponent,
 } from 'vue';
 import { IFlexLayoutPos, IGridLayoutPos, ILayoutPos } from '@ibiz/model-core';
 import { useNamespace } from '@ibiz-template/vue3-util';
@@ -43,6 +45,8 @@ export const IBizCol = defineComponent({
   },
   setup(props) {
     const ns = useNamespace('col');
+
+    const elColRef = ref();
 
     /**
      * 计算间距类名
@@ -94,6 +98,24 @@ export const IBizCol = defineComponent({
 
     const alignStyle = calcContentAlignStyle(props.layoutPos);
 
+    /**
+     * @description 计算剩余空间
+     * @returns {*}  {void}
+     */
+    const calcRemainingSpace = (): CSSProperties | undefined => {
+      const element: HTMLElement = elColRef.value?.$el;
+      // 判断是否存在 style4 的表单分组
+      if (!element || !element.querySelector('.ibiz-form-group--style4'))
+        return;
+      let space: number = 0;
+      (element.parentElement?.children as unknown as HTMLElement[]).forEach(
+        child => {
+          if (child !== element) space += child.offsetHeight;
+        },
+      );
+      return { height: `calc(100% - ${space}px)` };
+    };
+
     const cssVars = computed(() => {
       const layout = props.state.layout;
       const styles = {
@@ -102,6 +124,7 @@ export const IBizCol = defineComponent({
         ...(alignStyle || {}),
       };
       Object.assign(styles, layout.extraStyle);
+      Object.assign(styles, calcRemainingSpace());
       return styles;
     });
 
@@ -117,13 +140,11 @@ export const IBizCol = defineComponent({
       return result;
     });
 
-    return { ns, colClass, gridAttrs, cssVars };
+    return { ns, elColRef, colClass, gridAttrs, cssVars };
   },
   render() {
     // 不显示且不用保活时直接不绘制
-    if (!this.state.visible && !this.state.keepAlive) {
-      return null;
-    }
+    if (!this.state.visible && !this.state.keepAlive) return null;
 
     const defaultSlot = this.$slots.default?.();
     if (this.layoutPos?.layout === 'FLEX') {
@@ -146,6 +167,7 @@ export const IBizCol = defineComponent({
     return h(
       resolveComponent('el-col') as ConcreteComponent,
       {
+        ref: 'elColRef',
         class: this.colClass,
         style: this.cssVars,
         ...this.gridAttrs,

@@ -77,6 +77,26 @@ $portlet-layout: (
     position: relative;
   }
 
+  @include when(custom) {
+    position: relative;
+
+    @include e(left){
+      z-index: 1;
+    }
+  
+    @include e(right){
+      z-index: 1;
+    }
+  
+    @include e(bg) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   height: getCssVar('portlet-layout','header-height');
   padding: getCssVar('portlet-layout','header-padding');
   margin: getCssVar('portlet-layout','header-margin');

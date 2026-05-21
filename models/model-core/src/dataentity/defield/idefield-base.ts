@@ -30,12 +30,20 @@ export interface IDEFieldBase extends IModelObject {
   minValueString?: string;
 
   /**
-   * 数据精度
+   * 精度（废弃，使用getScale）
    * @type {number}
    * @default 0
    * 来源  getPrecision
    */
   precision?: number;
+
+  /**
+   * 小数点位数
+   * @type {number}
+   * @default -1
+   * 来源  getScale
+   */
+  scale?: number;
 
   /**
    * 字符串长度

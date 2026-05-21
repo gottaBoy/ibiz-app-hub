@@ -108,6 +108,8 @@ export class LayoutPanelUtil {
         return this.calcTabExpViewLayoutTag(viewModel);
       case 'DEMEDITVIEW9':
         return this.calcDEMedViewLayoutTag(viewModel);
+      case 'DEMOBTABEXPVIEW':
+        return this.calcTabExpViewLayoutTag(viewModel);
       default:
         return `${viewType}_${viewStyle}`;
     }

@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { IDETreeGrid } from '@ibiz/model-core';
-import { IApiData } from '@ibiz-template/core';
 import { IApiTreeGridState } from '../../state';
 import { IApiGridController } from './i-api-grid.controller';
+import { IApiExportParams } from '../../common';
 
 /**
  * 树表格
@@ -19,6 +20,8 @@ import { IApiGridController } from './i-api-grid.controller';
  * @ctrlparams {"name":"jsonschemaparams","title":"jsonschema参数数据","parameterType":"string","defaultvalue":"'{}'","description":"当`enablejsonschema`值为true时生效。支持配置 JSON 字符串并将其转化为导航参数，该参数将被附加到获取实体的 jsonschema 数据的请求参数中，获取的数据解析后用于自定义添加表格列功能，示例格式：\\{\"test\":\"%test%\"\\}"}
  * @ctrlparams {"name":"triggermode","title":"编辑器值变更模式","parameterType":"'blur' | 'input'","defaultvalue":"'blur'","description":"该配置项用于指定编辑器触发 `emit` 事件的模式。若值为 'input'，则在输入框值变更时触发 change 事件；若值为 'blur'，则在输入框失去焦点时触发 change 事件"}
  * @ctrlparams {"name":"mdctrlrefreshmode","title":"刷新模式","defaultvalue":"'cache'","parameterType":"'nocache' | 'cache'","description":"多数据部件刷新模式，当值为 'cache'，部件刷新时保留选中数据；当值为 'nocache'，部件刷新时清空选中数据","effectPlatform":"web"}
+ * @ctrlparams {"name":"batchtoolbarmode","title":"批操作工具栏显示模式","parameterType":"'default' | 'multiple'","defaultvalue":"'default'","description":"批操作工具栏显示模式，值为 'default' 时表示存在选择数据就显示批操作工具栏，值为 'multiple' 时表示选择至少2条数据才显示批操作工具栏","effectPlatform":"web"}
+ * @ctrlparams {"name":"paginationmode","title":"分页显示模式","defaultvalue":"'default'","parameterType":"'default'|'simple'","description":"表格分页显示模式，当值为 default 时，显示完整的分页组件，值为 simple 时，显示简略版的分页组件，仅包含总条数，当前页，上一页和下一页","effectPlatform":"web"}
  * @template T
  * @template S
  */
@@ -34,9 +37,9 @@ export interface IApiTreeGridController<
 
   /**
    * @description 数据导出
-   * @param {{ event: MouseEvent; params: IApiData }} _args
+   * @param {{ event: MouseEvent; params: IApiExportParams }} _args 导出参数
    * @returns {*}  {Promise<void>}
    * @memberof IApiTreeGridController
    */
-  exportData(_args: { event: MouseEvent; params: IApiData }): Promise<void>;
+  exportData(_args: {event: MouseEvent;params: IApiExportParams}): Promise<void>;
 }

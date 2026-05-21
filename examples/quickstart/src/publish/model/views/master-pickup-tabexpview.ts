@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'Pickup_tabexpview',
   deviewId: '31ab2d3c66978fec65413ac2fce66d1c',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
@@ -31,6 +31,11 @@ export default {
           caption: '多选',
           appViewId: 'web.master_pickup_multabexpview',
           id: 'multiple',
+        },
+        {
+          caption: '批操作',
+          appViewId: 'web.master_batch_action_edit_view',
+          id: 'batch',
         },
       ],
       dataRelationTag: 'DataRelation101',

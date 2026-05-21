@@ -43,6 +43,13 @@ export interface ITreeState extends IMDControlState, IApiTreeState {
    * @memberof ITreeState
    */
   mobExpandedKey: string;
+
+  /**
+   * @description 计数器数据
+   * @type {IData}
+   * @memberof ITreeState
+   */
+  counterData: IData;
 }
 
 /**

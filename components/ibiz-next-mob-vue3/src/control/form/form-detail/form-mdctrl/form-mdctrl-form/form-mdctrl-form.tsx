@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, resolveComponent } from 'vue';
+import { defineComponent, h, resolveComponent } from 'vue';
 import {
   EventBase,
   FormMDCtrlFormController,
@@ -18,30 +18,11 @@ export const FormMDCtrlForm = defineComponent({
   setup(props) {
     const ns = useNamespace('form-mdctrl-form');
 
-    /** 是否显示操作按钮 */
-    const showActions = computed(() => {
-      return props.controller.enableCreate || props.controller.enableDelete;
-    });
-
-    const renderAddBtn = () => {
-      return (
-        <van-button
-          class={[
-            ns.be('item-actions', 'create'),
-            ns.be('item-actions', 'btn'),
-          ]}
-          onClick={(): void => props.controller.create()}
-        >
-          {ibiz.i18n.t('app.add')}
-        </van-button>
-      );
-    };
-
     const onCreated = (id: string, event: EventBase): void => {
       props.controller.setFormController(id, event.ctrl as IEditFormController);
     };
 
-    return { ns, showActions, onCreated, renderAddBtn };
+    return { ns, onCreated };
   },
   render() {
     const { state, formProvider, model } = this.controller;

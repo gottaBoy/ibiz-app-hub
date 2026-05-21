@@ -16,11 +16,11 @@ export interface IApiAppHubController {
 
   /**
    * @description 登录（包含调用登录逻辑，及跳转应用界面）
-   * @param {string} loginName
-   * @param {string} password
-   * @param {boolean} [remember]
-   * @param {IApiData} [headers]
-   * @param {IApiData} [opts]
+   * @param {string} loginName 登录名
+   * @param {string} password 密码
+   * @param {boolean} [remember] 是否记住登录状态
+   * @param {IApiData} [headers] 请求头
+   * @param {IApiData} [opts] 登录配置
    * @returns {*}  {Promise<boolean>}
    * @memberof IApiAppHubController
    */
@@ -34,7 +34,7 @@ export interface IApiAppHubController {
 
   /**
    * @description 登出
-   * @param {IApiData} [opts]
+   * @param {IApiData} [opts] 登出配置
    * @returns {*}  {Promise<boolean>}
    * @memberof IApiAppHubController
    */
@@ -42,23 +42,27 @@ export interface IApiAppHubController {
 
   /**
    * @description 变更密码
-   * @param {string} oldPwd
-   * @param {string} newPwd
-   * @param {IApiData} [opts]
+   * @param {string} oldPwd 旧密码
+   * @param {string} newPwd 新密码
+   * @param {{
+   *       surePwd: string; // 确认密码
+   *     }} [opts] 变更密码配置
    * @returns {*}  {Promise<IApiAuthResult>}
    * @memberof IApiAppHubController
    */
   changePwd(
     oldPwd: string,
     newPwd: string,
-    opts?: IApiData,
+    opts?: {
+      surePwd: string;
+    },
   ): Promise<IApiAuthResult>;
 
   /**
    * @description 切换组织
-   * @param {string} oldOrgId
-   * @param {string} newOrgId
-   * @param {IApiData} [opts]
+   * @param {string} oldOrgId 旧组织id
+   * @param {string} newOrgId 新组织id
+   * @param {IApiData} [opts] 切换组织配置
    * @returns {*}  {Promise<boolean>}
    * @memberof IApiAppHubController
    */
@@ -70,9 +74,9 @@ export interface IApiAppHubController {
 
   /**
    * @description 切换主题
-   * @param {string} oldTheme
-   * @param {string} newTheme
-   * @param {IApiData} [opts]
+   * @param {string} oldTheme 旧主题
+   * @param {string} newTheme 新主题
+   * @param {IApiData} [opts] 切换主题配置
    * @returns {*}  {Promise<boolean>}
    * @memberof IApiAppHubController
    */
@@ -84,9 +88,9 @@ export interface IApiAppHubController {
 
   /**
    * @description 切换语言
-   * @param {string} oldLanguage
-   * @param {string} newLanguage
-   * @param {IApiData} [opts]
+   * @param {string} oldLanguage 旧语言
+   * @param {string} newLanguage 新语言
+   * @param {IApiData} [opts] 切换语言配置
    * @returns {*}  {Promise<boolean>}
    * @memberof IApiAppHubController
    */

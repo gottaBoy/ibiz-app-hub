@@ -33,7 +33,7 @@ export interface IApiMEditViewPanelController<
 
   /**
    * @description 删除项
-   * @param {IApiPanelUiItem} item
+   * @param {IApiPanelUiItem} item 项数据
    * @returns {*}  {Promise<void>}
    * @memberof IApiMEditViewPanelController
    */

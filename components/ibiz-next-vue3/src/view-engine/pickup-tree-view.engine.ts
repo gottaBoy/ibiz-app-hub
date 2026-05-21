@@ -9,7 +9,7 @@ import { IAppDETreeView } from '@ibiz/model-core';
 import { TreeViewEngine } from './tree-view.engine';
 
 export class PickupTreeViewEngine extends TreeViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDETreeView,
     IPickupTreeViewState,
     IPickupTreeViewEvent

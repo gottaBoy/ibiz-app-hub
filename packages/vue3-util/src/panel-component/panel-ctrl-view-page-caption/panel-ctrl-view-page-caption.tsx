@@ -2,6 +2,7 @@ import { IPanelCtrlPos } from '@ibiz/model-core';
 import { computed, defineComponent, PropType } from 'vue';
 import { useNamespace } from '../../use';
 import { PanelCtrlViewPageCaptionController } from './panel-ctrl-view-page-caption.controller';
+import './panel-ctrl-view-page-caption.scss';
 
 /**
  * 视图标题
@@ -32,7 +33,11 @@ export const PanelCtrlViewPageCaption = defineComponent({
     // 类名控制
     const classArr = computed(() => {
       const { id } = props.modelData;
-      const result: Array<string | false> = [ns.b(), ns.m(id)];
+      const result: Array<string | false> = [
+        ns.b(),
+        ns.m(id),
+        ns.is('mob', ibiz.env.isMob),
+      ];
       result.push(...props.controller.containerClass);
       return result;
     });
@@ -56,9 +61,7 @@ export const PanelCtrlViewPageCaption = defineComponent({
     return (
       <div
         class={this.classArr}
-        onClick={() => {
-          this.controller.onClick();
-        }}
+        onClick={event => this.controller.onClick(event)}
       >
         {editor}
       </div>

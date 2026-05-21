@@ -8,13 +8,17 @@ import { TypeToOPs } from './fliter-util';
  * @param {string} entityId 实体标识
  * @return {*}  {Promise<IData>}
  */
-export async function getSchemaByEntity(entityId: string): Promise<IData> {
-  const entity = await ibiz.hub.getAppDataEntity(entityId, ibiz.env.appId);
+export async function getSchemaByEntity(
+  entityId: string,
+  appId: string,
+): Promise<IData> {
+  const entity = await ibiz.hub.getAppDataEntity(entityId, appId);
   let url = `/jsonschema/${entity.name}`;
   if (entity.dynaSysMode === 0 && ibiz.appData) {
     url += `?dynamodeltag=${ibiz.appData.dynamodeltag}`;
   }
-  const res = await ibiz.net.get(url);
+  const app = await ibiz.hub.getAppAsync(appId);
+  const res = await app.net.get(url);
   return res.data;
 }
 

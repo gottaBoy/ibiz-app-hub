@@ -6,7 +6,7 @@ export default {
   deviewCodeName: 'activity_display',
   deviewId: '99e0f976eeef4a59b7921141e4bf0482',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

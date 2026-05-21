@@ -38,7 +38,7 @@ export class StackBarConverter extends BaseConverter {
     if (!data || !model || !appDataEntityId) return;
     if (!data.appBIReportDimensions || !data.appBIReportMeasures) return model;
     const input = {
-      appId: ibiz.env.appId,
+      appId: data.appId || ibiz.env.appId,
       appDataEntityId,
       caption: data!.name,
     };
@@ -83,6 +83,7 @@ export class StackBarConverter extends BaseConverter {
       serieGroup = handleGroupToSeries(
         uiModel.group,
         data.appBIReportDimensions,
+        data.appId || ibiz.env.appId,
       );
     }
     const models = handleSeriesCodeList(
@@ -92,6 +93,7 @@ export class StackBarConverter extends BaseConverter {
         appDataEntityId,
         caption: data!.name,
         dimension: data.appBIReportDimensions[0],
+        appId: data.appId || ibiz.env.appId,
       },
       (_serieModel: IData): void => {
         if (serieGroup && serieGroup.length) {

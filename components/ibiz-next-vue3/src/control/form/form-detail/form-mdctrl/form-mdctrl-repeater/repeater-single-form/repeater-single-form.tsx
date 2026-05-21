@@ -31,10 +31,17 @@ export const RepeaterSingleForm = defineComponent({
     const ns = useNamespace('repeater-single-form');
 
     const onFormDataChange = (event: EventBase) => {
-      // 隔离抛出不一样的对象
       const item = event.data[0];
-      const formData = item instanceof ControlVO ? item.clone() : { ...item };
-      emit('change', formData);
+      const formData =
+        item instanceof ControlVO ? item.getOrigin() : { ...item };
+      // 隔离抛出不一样的对象
+      const cloneData: IData = {};
+      if (formData && Object.keys(formData).length > 0) {
+        Object.keys(formData).forEach(key => {
+          cloneData[key] = formData[key];
+        });
+      }
+      emit('change', cloneData);
     };
 
     const onCreated = (event: EventBase): void => {

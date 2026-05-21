@@ -1,76 +1,95 @@
-@include b('percent-pond'){
+$cover-slider: (
+  height: 8px,
+  color: #000,
+  bgColor: #fff,
+  use-cover-color: getCssVar(color, primary),
+);
+@include b('percent-pond') {
+  @include set-component-css-var('cover-slider', $cover-slider);
+
+  display: flex;
+  gap: 10px;
+  align-items: end;
+  width: 100%;
+  @include e('slider') {
+    flex: 1;
+    @include m('line') {
+      position: relative;
+      width: 100%;
+      height: 1px;
+      overflow: visible;
+      background-color: getCssVar(color, border);
+      opacity: 0.6;
+
+      &::before {
+        position: absolute;
+        top: -2px;
+        left: 0;
+        width: 4px;
+        height: 4px;
+        content: '';
+        background-color: getCssVar(color, primary);
+      }
+
+      &::after {
+        position: absolute;
+        top: -2px;
+        right: 0;
+        width: 4px;
+        height: 4px;
+        content: '';
+        background-color: getCssVar(color, primary);
+      }
+    }
+    @include m('cover-slider') {
+      position: relative;
+      width: 100%;
+      height: getCssVar(cover-slider, height);
+      margin-top: 16px;
+      color: getCssVar(cover-slider, color);
+      background-color: getCssVar(cover-slider, bgcolor);
+      background-image: linear-gradient(
+        315deg,
+        currentcolor 25%,
+        transparent 25%,
+        transparent 50%,
+        currentcolor 50%,
+        currentcolor 75%,
+        transparent 75%,
+        transparent
+      );
+      background-size: 20px 20px;
+    }
+    @include m('use-cover') {
+      position: absolute;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background-color: getCssVar(cover-slider, use-cover-color);
+      opacity: 0.5;
+    }
+    @include m('slider-arrow') {
+      position: absolute;
+      top: -28px;
+      left: 0;
+      color: getCssVar(cover-slider, use-cover-color);
+      opacity: 0.5;
+    }
+  }
+  @include e('value') {
     display: flex;
-    gap: 10px;
+    flex: 0;
     align-items: end;
-    width: 100%;
-    @include e('slider'){
-        flex: 1;
-        @include m('line'){
-            position: relative;
-            width: 100%;
-            height: 1px;
-            overflow: visible;
-            background-color: gray;
-            opacity: 0.6;
-
-            &::before {
-                position: absolute;
-                top: -2px;
-                left: 0;
-                width: 4px;
-                height: 4px;
-                content: "";
-                background-color: getCssVar(screen-dashboard, primary-color);
-            }
-
-            &::after {
-                position: absolute;
-                top: -2px;
-                right: 0;
-                width: 4px;
-                height: 4px;
-                content: "";
-                background-color: getCssVar(screen-dashboard, primary-color);
-            }
-        }
-        @include m('cover-slider'){
-            position: relative;
-            width: 100%;
-            height: 5px;
-            margin-top: 16px;
-            background-color: getCssVar(color,fill,0);
-            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAT4AAAAGCAYAAABaZvJEAAAA20lEQVRYhe3YvyrGcRQG8A+9G4MdxawMb8kV2Bis/sRiklyDa2BSeheTxSiTiYhJJhvlzw2w6dGvvjfxvp3p1OnznPnpjCXZwTqucIsPzGAL0zjBN96xXbZs2bLDbsexj0k84wVz2MMKPnHfwhtly5YtOwq2h1+c4RV97GIZdzhvR9ZwiJ+yZcuWHXbbNb7TVgtnG1rCYwt31XEVB/grW7Zs2ZGwSSaSdPMoyUOS4yT9tltIcpPkKclm2bJly46C7bWH3zymcI1LvLV6uIgvDHDRXNmyZcsOr2XwD/WvZ19mO61bAAAAAElFTkSuQmCC");
-        }
-        @include m('use-cover'){
-            position: absolute;
-            left: 0;
-            width: 0;
-            height: 100%;
-            background-color: getCssVar(screen-dashboard, primary-color);
-            opacity: 0.5;
-        }
-        @include m('slider-arrow'){
-            position: absolute;
-            top: -28px;
-            left: 0;
-            color: getCssVar(screen-dashboard, primary-color);
-            opacity: 0.5;
-        }
+    color: getCssVar(color, primary, light, active);
+    @include m('current') {
+      display: inline-block;
+      font-size: 32px;
+      line-height: 1;
     }
-    @include e('value'){
-        display: flex;
-        flex: 0;
-        align-items: end;
-        color: getCssVar(color,primary,light,active);
-        @include m('current'){
-            display: inline-block;
-            font-size: 32px;
-            line-height: 1;
-        }
-        @include m('total'){
-            display: inline-block;
-            font-size: 16px;
-            font-weight: 600;
-        }
+    @include m('total') {
+      display: inline-block;
+      font-size: 16px;
+      font-weight: 600;
     }
+  }
 }

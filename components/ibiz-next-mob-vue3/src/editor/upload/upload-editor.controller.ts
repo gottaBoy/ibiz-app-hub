@@ -35,6 +35,68 @@ export class UploadEditorController extends EditorController<IFileUploader> {
   public exportParams?: IParams;
 
   /**
+   * @description 是否启用无权限
+   * @type {boolean}
+   * @memberof UploadEditorController
+   */
+  public enableNoAccess: boolean = false;
+
+  /**
+   * @description 是否使用全局文件下载前缀
+   * @memberof UploadEditorController
+   */
+  public globalDownloadPrifix = false;
+
+  /**
+   * @description 是否显示加载动画
+   * @readonly
+   * @type {boolean}
+   * @memberof UploadEditorController
+   */
+  get showLoading(): boolean {
+    if (this.editorParams.showloading) {
+      return Boolean(this.editorParams.showloading);
+    }
+    return ibiz.config.mob.showUploadLoading;
+  }
+
+  /**
+   * @description 图片压缩范围（超过该范围进行压缩，单位kb）
+   * @readonly
+   * @memberof UploadEditorController
+   */
+  get imgCompressLimit(): number {
+    if (this.editorParams.imgcompresslimit) {
+      return Number(this.editorParams.imgcompresslimit);
+    }
+    return ibiz.config.imgCompressConfig.limit;
+  }
+
+  /**
+   * @description 图片压缩质量（0-1，为0时不压缩，默认为0）
+   * @readonly
+   * @memberof UploadEditorController
+   */
+  get imgCompressQuality(): number {
+    if (this.editorParams.imgcompressquality) {
+      return Number(this.editorParams.imgcompressquality);
+    }
+    return ibiz.config.imgCompressConfig.quality;
+  }
+
+  /**
+   * @description 压缩图片最大宽度，默认为1280px
+   * @readonly
+   * @memberof UploadEditorController
+   */
+  get imgCompressMaxWidth(): number {
+    if (this.editorParams.imgcompressmaxwidth) {
+      return Number(this.editorParams.imgcompressmaxwidth);
+    }
+    return ibiz.config.imgCompressConfig.maxWidth;
+  }
+
+  /**
    * 文件类型
    *
    * @author zk
@@ -106,8 +168,17 @@ export class UploadEditorController extends EditorController<IFileUploader> {
       this.multiple = false;
     }
     if (this.editorParams) {
-      const { isDrag, multiple, accept, uploadParams, exportParams } =
-        this.editorParams;
+      const {
+        isDrag,
+        multiple,
+        accept,
+        uploadParams,
+        exportParams,
+        uploadparams,
+        exportparams,
+        enablenoaccess,
+        globaldownloadprifix,
+      } = this.editorParams;
       if (isDrag) {
         this.isDrag = Boolean(isDrag);
       }
@@ -127,6 +198,16 @@ export class UploadEditorController extends EditorController<IFileUploader> {
           );
         }
       }
+      if (uploadparams) {
+        try {
+          this.uploadParams = JSON.parse(uploadparams);
+        } catch (error) {
+          throw new RuntimeModelError(
+            uploadparams,
+            ibiz.i18n.t('editor.upload.uploadJsonFormatErr'),
+          );
+        }
+      }
       if (exportParams) {
         try {
           this.exportParams = JSON.parse(exportParams);
@@ -137,6 +218,22 @@ export class UploadEditorController extends EditorController<IFileUploader> {
           );
         }
       }
+      if (exportparams) {
+        try {
+          this.exportParams = JSON.parse(exportparams);
+        } catch (error) {
+          throw new RuntimeModelError(
+            exportparams,
+            ibiz.i18n.t('editor.upload.exportJsonFormatErr'),
+          );
+        }
+      }
+      if (enablenoaccess) {
+        this.enableNoAccess = enablenoaccess === 'true';
+      }
+      this.globalDownloadPrifix =
+        globaldownloadprifix === 'true' ||
+        ibiz.config.common.globalDownloadPrifix;
     }
   }
 

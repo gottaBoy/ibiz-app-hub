@@ -1,4 +1,5 @@
 export default {
+  openMode: 'POPUPMODAL',
   deviewCodeName: 'BIReportPanelView',
   deviewId: 'd342a17cd3c7f02b7880ebb1cccc4e45',
   accUserMode: 2,

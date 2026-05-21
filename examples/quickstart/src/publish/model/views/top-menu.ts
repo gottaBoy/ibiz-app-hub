@@ -1,5 +1,6 @@
 export default {
   mainMenuAlign: 'TOP',
+  accUserMode: 3,
   caption: '顶部菜单',
   codeName: 'top_menu',
   viewLayoutPanel: {
@@ -351,7 +352,7 @@ export default {
         layoutMode: 'FLEX',
         appMenuItems: [
           {
-            accUserMode: 2,
+            accUserMode: 3,
             itemType: 'MENUITEM',
             appFuncId: 'tab_ctrl_federation1',
             layout: {
@@ -371,7 +372,7 @@ export default {
             id: 'rightmenu1',
           },
           {
-            accUserMode: 2,
+            accUserMode: 3,
             itemType: 'MENUITEM',
             appFuncId: 'tree_ctrl_federation',
             layout: {
@@ -391,7 +392,7 @@ export default {
             id: 'rightmenu2',
           },
           {
-            accUserMode: 2,
+            accUserMode: 3,
             itemType: 'MENUITEM',
             appFuncId: 'actions_federation',
             layout: {
@@ -455,7 +456,7 @@ export default {
                 id: 'leftmenu11',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'usrappfunc0513353562',
                 layout: {
@@ -623,7 +624,7 @@ export default {
             id: 'rightmenu1',
           },
           {
-            accUserMode: 2,
+            accUserMode: 3,
             itemType: 'MENUITEM',
             appFuncId: 'appfunc82',
             layout: {
@@ -720,7 +721,7 @@ export default {
                 id: 'topmenu11',
               },
               {
-                accUserMode: 2,
+                accUserMode: 3,
                 itemType: 'MENUITEM',
                 appFuncId: 'usrappfunc0513353562',
                 layout: {

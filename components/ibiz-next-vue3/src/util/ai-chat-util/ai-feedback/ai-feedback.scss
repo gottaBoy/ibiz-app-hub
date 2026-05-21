@@ -1,0 +1,30 @@
+@include b(ai-feedback) {
+  padding: getCssVar(spacing, base);
+  @include e(header) {
+    padding: getCssVar(spacing, base, tight) 0;
+    font-size: getCssVar(font-size, header-5);
+  }
+  @include e(group) {
+    @include m(title) {
+      padding: getCssVar(spacing, tight) 0;
+      font-size: getCssVar(font-size, header-6);
+      color: getCssVar(color, text-2);
+    }
+    @include m(content) {
+      .el-radio {
+        min-width: 130px;
+      }
+    }
+  }
+  @include e(description) {
+    @include m(title) {
+      padding: getCssVar(spacing, tight) 0;
+      font-size: getCssVar(font-size, header-6);
+    }
+  }
+  @include e(footer) {
+    display: flex;
+    justify-content: end;
+    margin-top: getCssVar(spacing, tight);
+  }
+}

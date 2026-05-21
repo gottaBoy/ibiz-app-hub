@@ -1,6 +1,5 @@
 export default {
   enableDirtyChecking: true,
-  showDataInfoBar: true,
   xdataControlName: 'form',
   loadDefault: true,
   deviewCodeName: 'editor_html',
@@ -21,6 +20,15 @@ export default {
     },
   ],
   appViewMsgGroupId: 'editor_html',
+  appViewNavContexts: [
+    {
+      rawValue: true,
+      key: 'MASTER',
+      value: 'sample',
+      name: 'MASTER',
+      id: 'master',
+    },
+  ],
   controls: [
     {
       xdataControlName: 'form',
@@ -180,6 +188,60 @@ export default {
                   },
                   showCaption: true,
                   id: 'rawitem1',
+                },
+                {
+                  createDV:
+                    "# 选中文本后弹出组件的完整实现  ## 基本实现方案  ### 1. 监听选中并显示弹出组件 ```javascript // 选中文本监听器 class TextSelectionPopup {     constructor() {         this.popup = null;         this.init();     }      init() {         this.createPopup();         this.bindEvents();     }      // 创建弹出组件     createPopup() {         this.popup = document.createElement('div');         this.popup.className = 'selection-popup';         this.popup.innerHTML = `             <div class=\"popup-content\">                 <button class=\"popup-btn ",
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      enableedit: 'true',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem10',
+                  },
+                  updateDV:
+                    "# 选中文本后弹出组件的完整实现  ## 基本实现方案  ### 1. 监听选中并显示弹出组件 ```javascript // 选中文本监听器 class TextSelectionPopup {     constructor() {         this.popup = null;         this.init();     }      init() {         this.createPopup();         this.bindEvents();     }      // 创建弹出组件     createPopup() {         this.popup = document.createElement('div');         this.popup.className = 'selection-popup';         this.popup.innerHTML = `             <div class=\"popup-content\">                 <button class=\"popup-btn ",
+                  allowEmpty: true,
+                  codeName: 'formitem10',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem10',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用enableedit参数控制HTML编辑框是否可以编辑。当前HTML编辑框可以编辑',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem9',
+                  },
+                  codeName: 'rawitem9',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem9',
                 },
               ],
               caption: '编辑状态',
@@ -472,6 +534,212 @@ export default {
               },
               deformDetails: [
                 {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      appentitytag: 'web.master',
+                      datafieldtag: 'id',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem8',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem8',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem8',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用appentitytag参数和datafieldtag参数约束编辑器在应用启用下载授权时手动指定当前文件所属实体及关联数据属性',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem8',
+                  },
+                  codeName: 'rawitem8',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem8',
+                },
+              ],
+              caption: '下载启用鉴权',
+              codeName: 'grouppanel9',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel9',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      enablenoaccess: 'true',
+                      osscat: 'cat',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem20',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem20',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem20',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      "说明：使用enablenoaccess参数可启用无权限模式，启用后将不再计算下载授权凭证，且若上传路径中包含文件夹名称，该名称末尾会自动拼接 '$' 字符",
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem18',
+                  },
+                  codeName: 'rawitem18',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem18',
+                },
+              ],
+              caption: '启用无权限模式',
+              codeName: 'grouppanel11',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel11',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    editorParams: {
+                      globalfileprifix: 'true',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem21',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem21',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem21',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用globalfileprifix参数可启用文件全局路径功能，上传和预览路径使用全局文件路径 global/ibizutil/download',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem21',
+                  },
+                  codeName: 'rawitem21',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem21',
+                },
+              ],
+              caption: '全局文件路径',
+              codeName: 'grouppanel12',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel12',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
                   createDV: 'html内容',
                   dataType: 25,
                   enableCond: 3,
@@ -548,14 +816,526 @@ export default {
                   labelPos: 'NONE',
                   noPrivDisplayMode: 1,
                   editor: {
-                    appDEACModeId: 'aichat',
+                    appDEACModeId: 'aichatautohistory',
                     appDEDataSetId: 'fetch_default',
                     appDataEntityId: 'web.master',
                     enableAC: true,
                     editorParams: {
-                      srfaiappendcurcontent: 'AI聊天附加内容',
                       ac: 'true',
+                      autoquestion: 'true',
+                      autofill: 'true',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem11',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem11',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem11',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：需配置编辑器参数ac=TRUE，使用聊天补全类型的自填模式控制是否开启输入框的AI聊天自填模式。同时在AI模式下支持编辑器参数autofill（自动填充：AI回答完成之后将数据自动填充到输入框中，未配置时默认为false）；autoquestion（自动提问：在打开AI功能时历史数据最后一个项是用户消息（USER）时是否自动提问，当打开AI行内聊天时是否自动提问，未配置时默认为true）',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem10',
+                  },
+                  codeName: 'rawitem10',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem10',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    appDEACModeId: 'aichatautohistory',
+                    appDEDataSetId: 'fetch_default',
+                    appDataEntityId: 'web.master',
+                    enableAC: true,
+                    editorParams: {
+                      ac: 'true',
+                      openmode: 'minimize',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem12',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem12',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem12',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用openmode参数指定AI窗口的打开模式，当前HTML编辑框openmode参数为minimize，默认会最小化AI窗口',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem11',
+                  },
+                  codeName: 'rawitem11',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem11',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    appDEACModeId: 'aichatautohistory',
+                    appDEDataSetId: 'fetch_default',
+                    appDataEntityId: 'web.master',
+                    enableAC: true,
+                    editorParams: {
+                      ac: 'true',
+                      openmode: 'autoexpand',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem13',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem13',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem13',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用openmode参数指定AI窗口的打开模式，当前HTML编辑框openmode参数为autoexpand，默认会最小化AI窗口，当提问完成后自动展开AI窗口',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem12',
+                  },
+                  codeName: 'rawitem12',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem12',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    appDEACModeId: 'aichatautohistory',
+                    appDEDataSetId: 'fetch_default',
+                    appDataEntityId: 'web.master',
+                    enableAC: true,
+                    editorParams: {
+                      ac: 'true',
+                      autoclose: '{"mode":"minimize"}',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem14',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem14',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem14',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用autoclose参数指定在初始聊天完成后，AI窗口的自动关闭模式。当前HTML编辑框autoclose参数为{"mode":"minimize"}，聊天完成后会最小化AI窗口',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem13',
+                  },
+                  codeName: 'rawitem13',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem13',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    appDEACModeId: 'aichatautohistory',
+                    appDEDataSetId: 'fetch_default',
+                    appDataEntityId: 'web.master',
+                    enableAC: true,
+                    editorParams: {
+                      ac: 'true',
+                      autoclose: '{"mode":"close"}',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem15',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem15',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem15',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用autoclose参数指定在初始聊天完成后，AI窗口的自动关闭模式。当前HTML编辑框autoclose参数为{"mode":"close"}，聊天完成后会直接关闭AI窗口',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem14',
+                  },
+                  codeName: 'rawitem14',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem14',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    appDEACModeId: 'aichatautohistory',
+                    appDEDataSetId: 'fetch_default',
+                    appDataEntityId: 'web.master',
+                    enableAC: true,
+                    editorParams: {
+                      ac: 'true',
+                      autoclose: '{"mode":"closetime","duration":6}',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem16',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem16',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem16',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用autoclose参数指定在初始聊天完成后，AI窗口的自动关闭模式。当前HTML编辑框autoclose参数为{"mode":"closetime","duration":6}，聊天完成后会根据 duration 配置的值延时关闭窗口，duration配置单位为秒（s），默认值为 3 秒',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem15',
+                  },
+                  codeName: 'rawitem15',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem15',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    appDEACModeId: 'aichatautohistory',
+                    appDEDataSetId: 'fetch_default',
+                    appDataEntityId: 'web.master',
+                    enableAC: true,
+                    editorParams: {
                       srfaiappendcurdata: 'true',
+                      ac: 'true',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem18',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem18',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem18',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用srfaiappendcurdata参数用于判断是否传入对象参数，主要用于在请求历史记录时，附加当前参数，打开AI行内聊天时默认为true',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem19',
+                  },
+                  codeName: 'rawitem19',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem19',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    appDEACModeId: 'aichatautohistory',
+                    appDEDataSetId: 'fetch_default',
+                    appDataEntityId: 'web.master',
+                    enableAC: true,
+                    editorParams: {
+                      srfaiappendcurcontent: '登录人是${context.srfusername}',
+                      ac: 'true',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem19',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem19',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem19',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用srfaiappendcurcontent参数时，会将其传入编辑内容作为用户消息，主要用于在请求历史记录后，附加当前编辑内容作为用户消息，当前设置的值为"登录人为${context.srfusername}"',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem20',
+                  },
+                  codeName: 'rawitem20',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem20',
+                },
+              ],
+              caption: 'AI聊天',
+              codeName: 'grouppanel7',
+              detailStyle: 'DEFAULT',
+              detailType: 'GROUPPANEL',
+              layoutPos: {
+                colMD: 24,
+                layout: 'TABLE_24COL',
+              },
+              showCaption: true,
+              id: 'grouppanel7',
+            },
+            {
+              layout: {
+                columnCount: 24,
+                layout: 'TABLE_24COL',
+              },
+              deformDetails: [
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    appDEACModeId: 'aichatautohistory',
+                    appDEDataSetId: 'fetch_default',
+                    appDataEntityId: 'web.master',
+                    enableAC: true,
+                    editorParams: {
+                      ac: 'true',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem9',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem9',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem9',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：配置编辑参数 ac=true 并开启编辑器 AI 聊天自填模式后，选取文本时将显示行内工具栏；若自填模式配置额外操作行为组，点击 AI 工具栏项即可打开AI聊天上下文菜单。',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem17',
+                  },
+                  codeName: 'rawitem17',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem17',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    appDEACModeId: 'aichatautohistory',
+                    appDEDataSetId: 'fetch_default',
+                    appDataEntityId: 'web.master',
+                    enableAC: true,
+                    editorParams: {
+                      inlineaichatheight: '400',
+                      ac: 'true',
                     },
                     editorType: 'HTMLEDITOR',
                     valueType: 'SIMPLE',
@@ -575,7 +1355,62 @@ export default {
                 {
                   rawItem: {
                     caption:
-                      '说明：使用聊天补全类型的自填模式控制是否开启HTML编辑框的AI聊天自填模式。当前HTML编辑框已开启AI聊天自填模式',
+                      '说明：使用inlineaichatheight参数指定AI行内聊天框的高度。当前HTML编辑框inlineaichatheight参数为400',
+                    halign: 'LEFT',
+                    valign: 'MIDDLE',
+                    wrapMode: 'NOWRAP',
+                    contentType: 'RAW',
+                    sysCss: {
+                      cssName: 'description-text',
+                    },
+                    id: 'rawitem16',
+                  },
+                  codeName: 'rawitem16',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'RAWITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  sysCss: {
+                    cssName: 'description-text',
+                  },
+                  showCaption: true,
+                  id: 'rawitem16',
+                },
+                {
+                  dataType: 25,
+                  enableCond: 3,
+                  labelPos: 'NONE',
+                  noPrivDisplayMode: 1,
+                  editor: {
+                    appDEACModeId: 'aichatautohistory',
+                    appDEDataSetId: 'fetch_default',
+                    appDataEntityId: 'web.master',
+                    enableAC: true,
+                    editorParams: {
+                      inlinecompletionmode: 'sync',
+                      ac: 'true',
+                    },
+                    editorType: 'HTMLEDITOR',
+                    valueType: 'SIMPLE',
+                    editable: true,
+                    id: 'formitem17',
+                  },
+                  allowEmpty: true,
+                  codeName: 'formitem17',
+                  detailStyle: 'DEFAULT',
+                  detailType: 'FORMITEM',
+                  layoutPos: {
+                    colMD: 24,
+                    layout: 'TABLE_24COL',
+                  },
+                  id: 'formitem17',
+                },
+                {
+                  rawItem: {
+                    caption:
+                      '说明：使用inlinecompletionmode参数指定AI行内聊天框的请求模式。当前HTML编辑框inlinecompletionmode参数为sync，未指定时默认为async',
                     halign: 'LEFT',
                     valign: 'MIDDLE',
                     wrapMode: 'NOWRAP',
@@ -599,94 +1434,8 @@ export default {
                   id: 'rawitem6',
                 },
               ],
-              caption: 'AI聊天',
-              codeName: 'grouppanel7',
-              detailStyle: 'DEFAULT',
-              detailType: 'GROUPPANEL',
-              defdgroupLogics: [
-                {
-                  logicCat: 'PANELVISIBLE',
-                  relatedDetailNames: ['formitem6'],
-                  groupOP: 'AND',
-                  defdlogics: [
-                    {
-                      condOP: 'ISNOTNULL',
-                      defdname: 'formitem6',
-                      logicType: 'SINGLE',
-                      name: 'formitem6值不为空(NotNil)',
-                      id: 'formitem6值不为空(notnil)',
-                    },
-                  ],
-                  logicType: 'GROUP',
-                },
-              ],
-              layoutPos: {
-                colMD: 24,
-                layout: 'TABLE_24COL',
-              },
-              showCaption: true,
-              id: 'grouppanel7',
-            },
-            {
-              layout: {
-                columnCount: 24,
-                layout: 'TABLE_24COL',
-              },
-              deformDetails: [
-                {
-                  dataType: 25,
-                  enableCond: 3,
-                  labelPos: 'NONE',
-                  noPrivDisplayMode: 1,
-                  editor: {
-                    editorParams: {
-                      appentitytag: 'web.master',
-                      datafieldtag: 'id',
-                    },
-                    editorType: 'HTMLEDITOR',
-                    valueType: 'SIMPLE',
-                    editable: true,
-                    id: 'formitem8',
-                  },
-                  allowEmpty: true,
-                  codeName: 'formitem8',
-                  detailStyle: 'DEFAULT',
-                  detailType: 'FORMITEM',
-                  layoutPos: {
-                    colMD: 24,
-                    layout: 'TABLE_24COL',
-                  },
-                  id: 'formitem8',
-                },
-                {
-                  rawItem: {
-                    caption:
-                      '说明：使用appentitytag参数和datafieldtag参数约束编辑器在应用启用下载授权时手动指定当前文件所属实体及关联数据属性',
-                    halign: 'LEFT',
-                    valign: 'MIDDLE',
-                    wrapMode: 'NOWRAP',
-                    contentType: 'RAW',
-                    sysCss: {
-                      cssName: 'description-text',
-                    },
-                    id: 'rawitem8',
-                  },
-                  codeName: 'rawitem8',
-                  detailStyle: 'DEFAULT',
-                  detailType: 'RAWITEM',
-                  layoutPos: {
-                    colMD: 24,
-                    layout: 'TABLE_24COL',
-                  },
-                  sysCss: {
-                    cssName: 'description-text',
-                  },
-                  showCaption: true,
-                  id: 'rawitem8',
-                },
-              ],
-              caption: '下载启用鉴权',
-              codeName: 'grouppanel9',
+              caption: 'AI行内聊天',
+              codeName: 'grouppanel10',
               detailStyle: 'DEFAULT',
               detailType: 'GROUPPANEL',
               layoutPos: {
@@ -694,7 +1443,7 @@ export default {
                 layout: 'TABLE_24COL',
               },
               showCaption: true,
-              id: 'grouppanel9',
+              id: 'grouppanel10',
             },
             {
               dataType: 25,
@@ -751,16 +1500,6 @@ export default {
       modelType: 'PSDEFORM_EDITFORM',
       name: 'form',
       id: 'web.master.main56',
-    },
-    {
-      codeName: 'editor_html_datainfobar',
-      controlType: 'DATAINFOBAR',
-      appDataEntityId: 'web.master',
-      controlParam: {
-        id: 'datainfobar',
-      },
-      name: 'datainfobar',
-      id: 'editor_html_datainfobar',
     },
     {
       capLanguageRes: {

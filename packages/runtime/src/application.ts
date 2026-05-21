@@ -199,7 +199,7 @@ export class Application implements IAppService {
    * @return {*}  {Promise<void>}
    */
   protected async loadGlobalAppUtil(): Promise<void> {
-    const appUtilTag: string = 'GLOBAL_APP_UTIL';
+    const appUtilTag: string = `${ibiz.env.isMob ? 'MOB_' : ''}GLOBAL_APP_UTIL`;
     const globalAppUtilPlugin = ibiz.hub.getPlugin(
       appUtilTag.toLowerCase(),
       this.appId,

@@ -1,9 +1,34 @@
+$cascader: (
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-placeholder: getCssVar(editor, default, placeholder-color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  color-no-data: getCssVar(color, text, 1),
+  // 字体
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+);
+
 @include b(cascader) {
+  @include set-component-css-var(cascader, $cascader);
+
+
   height: 100%;
+  font-size: getCssVar(cascader, font-fontSize);
+  line-height: getCssVar(cascader, font-lineHeight);
+  color: getCssVar(cascader, color);
+
+  --van-field-input-text-color: #{getCssVar(cascader, color)};
+  --van-cell-text-color: #{getCssVar(cascader, color)};
+  --van-cell-value-color: #{getCssVar(cascader, color)};
+  --van-cell-line-height: #{getCssVar(cascader, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(cascader, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(cascader, font-fontSize)};
+  --van-field-input-disabled-text-color: #{getCssVar(cascader, color-disabled)};
 
   .van-field {
-    font-size: getCssVar('form-item', 'font-size');
-
     &::after {
       display: none;
     }
@@ -13,22 +38,38 @@
     background-color: transparent;
   }
 
-  @include m(disabled) {
-    color: getCssVar('form-item', 'disabled-color');
+  input::placeholder {
+    color: getCssVar(cascader, color-placeholder);
+    -webkit-text-fill-color: getCssVar(cascader, color-placeholder);
+  }
 
-    --van-field-input-text-color: #{getCssVar('form-item', 'disabled-color')};
+  @include e(content) {
+    @include set-component-css-var(cascader, $cascader);
+  }
+
+  @include e(empty) {
+    @include flex(row, center, center);
+    width: 100%;
+    height: 100%;
+    color: getCssVar(cascader, color-no-data);
+  }
+
+  @include m(disabled) {
+    color: getCssVar(cascader, color-disabled);
+
+    --van-field-input-disabled-text-color: #{getCssVar(cascader, color-disabled)};
   }
 
   @include m(readonly) {
-    --van-field-input-text-color: #{getCssVar('form-item', 'readonly-color')};
+    --van-field-input-text-color: #{getCssVar(cascader, color-readonly)};
 
-    color: getCssVar('form-item', 'readonly-color');
+    color: getCssVar(cascader, color-readonly);
   }
 
   input {
-    text-align: getCssVar(form-item-container, editor-align);
+    text-align: getCssVar(cascader, font-textAlign);
   }
   &.#{bem('cascader','','readonly')} {
-    text-align: getCssVar(form-item-container, editor-align);
+    text-align: getCssVar(cascader, font-textAlign);
   }
 }

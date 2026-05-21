@@ -49,6 +49,11 @@ export default {
           id: 'counter',
         },
         {
+          caption: '属性注入',
+          appViewId: 'web.master_panel_field_injection',
+          id: 'field_injection',
+        },
+        {
           caption: '常规容器',
           appViewId: 'web.master_panel_container',
           id: 'container',

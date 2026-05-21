@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { useNamespace } from '@ibiz-template/vue3-util';
-import { computed, defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref, watch } from 'vue';
 import { createUUID } from 'qx-util';
 import './cropping.scss';
 
@@ -26,10 +26,17 @@ export const IBizCropping = defineComponent({
       type: Number,
       default: 200,
     },
+    show: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['change'],
   setup(props, { emit }) {
     const ns = useNamespace('cropping');
+    // 是否已点击确定
+    const isConfirm = ref(false);
+    const isLoading = ref(false);
     // 缩放比例
     const scaleNumber = ref(1);
     // 是否允许移动
@@ -61,25 +68,18 @@ export const IBizCropping = defineComponent({
       return '';
     });
 
-    // 计算图片边缘与截取区域相交的边距宽度，用来限制图片拖动时在X轴上允许拖动的范围
-    const spaceWidth = computed(() => {
-      let tempwidth = 0;
-      if (imgRef.value) {
-        const { width } = imgRef.value.getBoundingClientRect();
-        tempwidth = (width - props.cropareaWidth) / 2;
-      }
-      return tempwidth;
-    });
-
-    // 计算图片边缘与截取区域相交的边距高度，用来限制图片拖动时在Y轴上允许拖动的范围
-    const spaceHeight = computed(() => {
-      let tempheight = 0;
-      if (imgRef.value) {
-        const { height } = imgRef.value.getBoundingClientRect();
-        tempheight = (height - props.cropareaHeight) / 2;
-      }
-      return tempheight;
-    });
+    // 重置剪切状态
+    const resetState = () => {
+      imgMovePosition.value = {
+        x: 0,
+        y: 0,
+        tx: 0,
+        ty: 0,
+      };
+      scaleNumber.value = 1;
+      isConfirm.value = false;
+      lastDistance = 0;
+    };
 
     // 缩小
     const onReduce = () => {
@@ -113,11 +113,15 @@ export const IBizCropping = defineComponent({
 
     // 取消
     const onCancel = () => {
+      resetState();
       emit('change', '');
     };
 
     // 确认
     const onConfirm = async () => {
+      if (isConfirm.value) return;
+      isConfirm.value = true;
+      isLoading.value = true;
       let cropDataUrl = '';
       const croparea = document.getElementById(uuid);
       if (croparea && imgRef.value) {
@@ -140,23 +144,20 @@ export const IBizCropping = defineComponent({
       }
       // 确认，截取裁剪框的内容
       emit('change', cropDataUrl);
+      isLoading.value = false;
     };
 
-    // 截取容器宽度
-    const cropContainer = computed(() => {
-      let tempWidth = 200;
-      let tempHeight = 200;
-      if (cropContainerRef.value) {
-        const { width, height } =
-          cropContainerRef.value.getBoundingClientRect();
-        tempWidth = width / 2;
-        tempHeight = height / 2;
-      }
-      return {
-        width: tempWidth,
-        height: tempHeight,
-      };
-    });
+    watch(
+      () => props.show,
+      () => {
+        if (props.show) {
+          resetState();
+        }
+      },
+      {
+        immediate: true,
+      },
+    );
 
     // 触摸屏幕
     const onTouchStart = (event: TouchEvent) => {
@@ -201,22 +202,12 @@ export const IBizCropping = defineComponent({
       const x = touch.pageX;
       const y = touch.pageY;
 
+      // 当前X轴偏移位置
       const spaceX = x - imgMovePosition.value.x + imgMovePosition.value.tx;
+      // 当前Y轴偏移位置
       const spaceY = y - imgMovePosition.value.y + imgMovePosition.value.ty;
-      const { width, height } = cropContainer.value;
-
-      if (
-        spaceX <= spaceWidth.value + width * (scaleNumber.value - 1) &&
-        spaceX >= -spaceWidth.value - width * (scaleNumber.value - 1)
-      ) {
-        imgMovePosition.value.tx = spaceX;
-      }
-      if (
-        spaceY >= -spaceHeight.value - height * (scaleNumber.value - 1) &&
-        spaceY <= spaceHeight.value + height * (scaleNumber.value - 1)
-      ) {
-        imgMovePosition.value.ty = spaceY;
-      }
+      imgMovePosition.value.tx = spaceX;
+      imgMovePosition.value.ty = spaceY;
 
       imgMovePosition.value.x = x;
       imgMovePosition.value.y = y;
@@ -224,66 +215,30 @@ export const IBizCropping = defineComponent({
     // 移动结束
     const onTouchEnd = (_event: TouchEvent) => {
       allowMove.value = false;
-      // 结束之后要归位
-      const spaceX = imgMovePosition.value.tx;
-      const spaceY = imgMovePosition.value.ty;
-
-      if (
-        spaceX >=
-        spaceWidth.value + (props.cropareaWidth / 2) * (scaleNumber.value - 1)
-      ) {
-        imgMovePosition.value.tx =
-          spaceWidth.value +
-          (props.cropareaWidth / 2) * (scaleNumber.value - 1);
-      }
-      if (
-        spaceX <=
-        -spaceWidth.value - (props.cropareaWidth / 2) * (scaleNumber.value - 1)
-      ) {
-        imgMovePosition.value.tx =
-          -spaceWidth.value -
-          (props.cropareaWidth / 2) * (scaleNumber.value - 1);
-      }
-      if (
-        spaceY <=
-        -spaceHeight.value -
-          (props.cropareaHeight / 2) * (scaleNumber.value - 1)
-      ) {
-        imgMovePosition.value.ty =
-          -spaceHeight.value -
-          (props.cropareaHeight / 2) * (scaleNumber.value - 1);
-      }
-      if (
-        spaceY >=
-        spaceHeight.value + (props.cropareaHeight / 2) * (scaleNumber.value - 1)
-      ) {
-        imgMovePosition.value.ty =
-          spaceHeight.value +
-          (props.cropareaHeight / 2) * (scaleNumber.value - 1);
-      }
     };
 
     return {
       ns,
-      cropImgUrl,
-      scaleNumber,
       style,
       uuid,
       imgRef,
+      isLoading,
+      cropImgUrl,
+      scaleNumber,
+      imgMovePosition,
       cropContainerRef,
-      onReduce,
       onAdd,
+      onReduce,
       onCancel,
       onConfirm,
-      onTouchStart,
-      onTouchMove,
       onTouchEnd,
-      imgMovePosition,
+      onTouchMove,
+      onTouchStart,
     };
   },
   render() {
     return (
-      <div class={this.ns.b()}>
+      <div class={this.ns.b()} v-loading={this.isLoading}>
         <div class={this.ns.e('content')}>
           <div class={this.ns.em('content', 'crop')} ref='cropContainerRef'>
             <div

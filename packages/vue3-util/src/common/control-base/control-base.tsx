@@ -290,6 +290,7 @@ export const IBizControlBase: any = defineComponent({
           this.ns.m(this.codeName),
           this.sysCssName,
           this.ns.is('disabled', state.disabled),
+          this.ns.is('mob', ibiz.env.isMob),
         ]}
         style={this.inlineStyle}
       >

@@ -46,6 +46,7 @@ export const FormGroupPanel = defineComponent({
   },
   render() {
     const { state } = this.controller;
+    const { enableAnchor } = this.modelData;
     const defaultSlots: VNode[] = this.$slots.default?.() || [];
     const content = (
       <iBizRow slot='content' layout={this.modelData.layout}>
@@ -92,6 +93,12 @@ export const FormGroupPanel = defineComponent({
         <div class={[this.ns.b('header')]} onClick={this.changeCollapse}>
           <div class={[this.ns.be('header', 'left')]}>
             <div class={[this.ns.e('caption'), ...this.controller.labelClass]}>
+              {this.modelData.sysImage && (
+                <iBizIcon
+                  class={this.ns.em('caption', 'icon')}
+                  icon={this.modelData.sysImage}
+                ></iBizIcon>
+              )}
               {this.captionText}
             </div>
           </div>
@@ -138,12 +145,23 @@ export const FormGroupPanel = defineComponent({
 
     return (
       <div
-        class={classArr}
+        class={[classArr, this.ns.is('loading', this.controller.state.loading)]}
         onClick={(event: MouseEvent) => this.controller.onClick(event)}
       >
-        {header}
+        {enableAnchor ? (
+          <van-index-anchor index={this.captionText}>{header}</van-index-anchor>
+        ) : (
+          header
+        )}
         <div class={[this.ns.e('content')]}>{content}</div>
         {footer}
+        {this.controller.state.loading ? (
+          <van-loading
+            class={this.ns.e('loading')}
+            type='spinner'
+            vertical={true}
+          >{`${ibiz.i18n.t('util.loading')}...`}</van-loading>
+        ) : null}
       </div>
     );
   },

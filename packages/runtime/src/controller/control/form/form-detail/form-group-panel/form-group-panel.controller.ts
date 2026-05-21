@@ -4,9 +4,9 @@ import { IApiFormGroupPanelController } from '../../../../../interface';
 import { UIActionUtil } from '../../../../../ui-action';
 import { FormNotifyState } from '../../../../constant';
 import { ButtonContainerState, UIActionButtonState } from '../../../../utils';
-import { FormDetailController } from '../form-detail/form-detail.controller';
 import { FormGroupPanelState } from './form-group-panel.state';
-import { getAllUIActionItems } from '../../../../../model';
+import { calcUIActionGroup, getAllUIActionItems } from '../../../../../model';
+import { FormContainerController } from '../form-container';
 
 /**
  * 表单分组面板控制器
@@ -20,7 +20,7 @@ import { getAllUIActionItems } from '../../../../../model';
 export class FormGroupPanelController<
     T extends IDEFormGroupPanel = IDEFormGroupPanel,
   >
-  extends FormDetailController<T>
+  extends FormContainerController<T>
   implements IApiFormGroupPanelController
 {
   declare state: FormGroupPanelState;
@@ -55,7 +55,7 @@ export class FormGroupPanelController<
   }
 
   protected async onInit(): Promise<void> {
-    super.onInit();
+    await super.onInit();
     this.state.collapse = !this.defaultExpansion;
     await this.initActionStates();
   }
@@ -66,6 +66,22 @@ export class FormGroupPanelController<
     if (this.state.actionGroupState) {
       const deData = this.data.getOrigin ? this.data.getOrigin() : this.data;
       this.state.actionGroupState.update(this.form.context, deData);
+    }
+  }
+
+  /**
+   * @description 初始化界面行为组
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof FormGroupPanelController
+   */
+  protected async initUIActions(): Promise<void> {
+    if (this.model.uiactionGroup) {
+      await calcUIActionGroup(
+        this.model.uiactionGroup,
+        this.form.context,
+        this.form.params,
+      );
     }
   }
 

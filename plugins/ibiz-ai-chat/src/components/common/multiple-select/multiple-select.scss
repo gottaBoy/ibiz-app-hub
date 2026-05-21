@@ -1,0 +1,97 @@
+@include b('chat-multiple-select') {
+  position: relative;
+  font-size: getCssVar('font-size', 'regular');
+
+  @include e('button') {
+    display: flex;
+    gap: getCssVar('spacing', 'extra', 'tight');
+    align-items: center;
+    min-height: getCssVar('height-control', 'default');
+    line-height: 1.1;
+    cursor: pointer;
+
+    @include m('icon') {
+      display: inline-flex;
+      align-items: center;
+
+      .icon {
+        font-size: 1.2em;
+      }
+    }
+
+    @include m('suffix') {
+      .icon {
+        fill: none;
+      }
+    }
+  }
+
+  @include e('dropdown') {
+    position: absolute;
+    bottom: calc(100% + getCssVar('spacing', 'extra-tight'));
+    left: 0;
+    z-index: 2;
+    width: 200px;
+    height: auto;
+    padding: getCssVar('spacing', 'extra-tight') 0;
+    background-color: getCssVar('color', 'bg', '2');
+    border-radius: getCssVar('border-radius', 'small');
+    box-shadow: getCssVar('shadow', 'elevated');
+
+    @include m('search') {
+      flex-shrink: 0;
+      padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'base-tight');
+    }
+
+    @include m('list') {
+      position: relative;
+      min-height: 70px;
+      max-height: 240px;
+      padding: 0;
+      margin: 0;
+      overflow-y: auto;
+    }
+
+    @include m('item') {
+      display: flex;
+      gap: getCssVar('spacing', 'extra', 'tight');
+      align-items: center;
+      padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'base-tight');
+      line-height: 16px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: getCssVar('color', 'fill', '0');
+      }
+    }
+
+    @include m('item-checkbox') {
+      flex-shrink: 0;
+      accent-color: getCssVar('color', 'primary-hover');
+      cursor: pointer;
+    }
+
+    @include m('item-label') {
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  @include e('empty') {
+    display: flex;
+    flex-direction: column;
+    gap: getCssVar('spacing', 'tight');
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'base-tight');
+
+    svg {
+      width: 2em !important;
+      height: 2em !important;
+    }
+  }
+}

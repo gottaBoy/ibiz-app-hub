@@ -32,6 +32,7 @@ const createInstance = (el: ElementLoading) => {
     message: `${ibiz.i18n.t('util.loading')}...`,
     forbidClick: true,
     teleport: el,
+    duration: 0,
     className: ns.b(),
     loadingType: 'spinner',
     overlayClass: ns.e('overlay'),

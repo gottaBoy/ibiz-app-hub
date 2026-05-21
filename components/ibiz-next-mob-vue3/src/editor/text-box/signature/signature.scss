@@ -1,10 +1,18 @@
 /* stylelint-disable length-zero-no-unit */
 $signature: (
-  'min-height': 120px,
-);
-$signature-overlay: (
-  // 适配浏览器安全距离
-  'padding-bottom': 0px
+  min-height: rem(120px),
+  width-remove: getCssVar('spacing', 'loose'),
+  height-remove: getCssVar('spacing', 'loose'),
+  color: getCssVar('color', 'text', 2),
+  color-bg: getCssVar('color', 'bg', overlay),
+  color-remove-bg: var(--van-uploader-delete-background),
+  color-overlay-bg: getCssVar(color, bg, 1),
+  spacing-safe: 0px,
+  spacing-overlay-header-padding: getCssVar('spacing', 'extra-tight'),
+  spacing-btn-padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'loose'),
+  spacing-btn-spacing: getCssVar('spacing', 'loose'),
+  font-fontSize: getCssVar('font-size', 'header-6'),
+  radius: getCssVar('border-radius', 'large'),
 );
 
 @include b('signature') {
@@ -16,7 +24,7 @@ $signature-overlay: (
   min-height: getCssVar('signature', 'min-height');
   overflow: hidden;
   border: none;
-  border-radius: getCssVar('border-radius', 'large');
+  border-radius: getCssVar('signature', 'radius');
 
   @include e('modal') {
     position: absolute;
@@ -30,12 +38,12 @@ $signature-overlay: (
     @include m('background') {
       width: 100%;
       height: 100%;
-      background-color: getCssVar('color', 'black');
+      background-color: getCssVar('signature', 'color-bg');
       opacity: 0.1;
     }
     @include m('caption') {
       position: absolute;
-      color: getCssVar('color', 'text', 2);
+      color: getCssVar('signature', 'color');
     }
     @include m('toolbar') {
       position: absolute;
@@ -43,16 +51,12 @@ $signature-overlay: (
       right: getCssVar('spacing', 'tight');
 
       .van-button {
-        width: getCssVar('spacing', 'loose');
+        width: getCssVar('signature', 'width-remove');
         height: auto;
-        height: getCssVar('spacing', 'loose');
-        background-color: var(--van-uploader-delete-background);
-        border: var(--van-uploader-delete-background);
+        height: getCssVar('signature', 'height-remove');
+        background-color: getCssVar('signature', 'color-remove-bg');
+        border: none;
         opacity: 0.6;
-
-        & + .van-button {
-          margin-left: getCssVar('spacing', 'loose');
-        }
       }
     }
   }
@@ -60,6 +64,7 @@ $signature-overlay: (
   @include e('content') {
     width: 100%;
     height: 100%;
+    min-height: getCssVar('signature', 'min-height');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: contain;
@@ -74,13 +79,11 @@ $signature-overlay: (
 }
 
 @include b('signature-overlay') {
-  @include set-component-css-var('signature-overlay', $signature-overlay);
-
   position: absolute;
   z-index: 1;
   width: 0;
   height: 0;
-  background-color: getCssVar(color, bg, 1);
+  background-color: getCssVar('signature', 'color-overlay-bg');
   opacity: 0;
 
   @include when('full-screen') {
@@ -95,7 +98,7 @@ $signature-overlay: (
       position: absolute;
       top: 0;
       left: 0;
-      width: calc(100vh - #{getCssVar('signature-overlay', 'padding-bottom')});
+      width: calc(100vh - #{getCssVar('signature', 'spacing-safe')});
       height: 100vw;
       transform: rotate(90deg) translateY(-100%);
       transform-origin: top left;
@@ -103,7 +106,7 @@ $signature-overlay: (
     @include e('header') {
       position: absolute;
       z-index: 6;
-      padding: getCssVar('spacing', 'extra-tight');
+      padding: getCssVar('signature', 'spacing-overlay-header-padding');
       text-align: left;
     }
 
@@ -115,11 +118,11 @@ $signature-overlay: (
 
       .van-button {
         height: auto;
-        padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'loose');
-        font-size: getCssVar('font-size', 'header-6');
+        padding: getCssVar('signature', 'spacing-btn-padding');
+        font-size: getCssVar('signature', font-fontSize);
 
         & + .van-button {
-          margin-left: getCssVar('spacing', 'loose');
+          margin-left: getCssVar('signature', 'spacing-btn-spacing');
         }
       }
     }
@@ -132,7 +135,7 @@ $signature-overlay: (
       top: 0;
       left: 0;
       width: 100vw;
-      height: calc(100vh - #{getCssVar('signature-overlay', 'padding-bottom')});
+      height: calc(100vh - #{getCssVar('signature', 'spacing-safe')});
       transform: rotate(-90deg) translateX(-100%);
       transform-origin: top left;
     }

@@ -5,7 +5,7 @@ import {
   IDEToolbarItem,
   IDETBGroupItem,
   IDETBUIActionItem,
-  IUIActionGroupDetail,
+  IDEUIActionGroup,
 } from '@ibiz/model-core';
 import { ViewCallTag, ViewMode } from '../../../constant';
 import {
@@ -17,7 +17,11 @@ import {
   IToolbarController,
   IToolbarItemProvider,
 } from '../../../interface';
-import { getUIActionById } from '../../../model';
+import {
+  calcUIActionGroup,
+  getAllUIActionItems,
+  getUIActionById,
+} from '../../../model';
 import { AppCounter, ControlVO } from '../../../service';
 import { UIActionUtil } from '../../../ui-action';
 import { ControlController } from '../../common';
@@ -76,13 +80,68 @@ export class ToolbarController<
   counter?: AppCounter;
 
   /**
+   * @description 控制移动端工具栏在屏幕中的位置，仅工具栏样式设为自定义时生效
+   * @readonly
+   * @type {('LEFTSTART'
+   *     | 'LEFT'
+   *     | 'LEFTEND'
+   *     | 'RIGHT'
+   *     | 'RIGHTSTART'
+   *     | 'RIGHTEND')}
+   * @memberof ToolbarController
+   */
+  get placement():
+    | 'LEFTSTART'
+    | 'LEFT'
+    | 'LEFTEND'
+    | 'RIGHT'
+    | 'RIGHTSTART'
+    | 'RIGHTEND' {
+    return this.controlParams.placement || 'RIGHTEND';
+  }
+
+  /**
+   * @description 控制移动端工具栏项的排列方向，仅工具栏样式设为自定义时生效
+   * @readonly
+   * @type {('VERTICAL' | 'HORIZONTAL')}
+   * @memberof ToolbarController
+   */
+  get direction(): 'VERTICAL' | 'HORIZONTAL' {
+    return this.controlParams.direction || 'HORIZONTAL';
+  }
+
+  /**
+   * @description 控制移动端工具栏项的显示模式
+   * @readonly
+   * @type {('VERTICAL' | 'HORIZONTAL')}
+   * @memberof ToolbarController
+   */
+  get showMode(): 'IMMEDIATE' | 'COLLAPSIBLE' {
+    if (this.controlParams.showmode) {
+      return this.controlParams.showmode;
+    }
+    return ibiz.config.mob.toolbarShowMode;
+  }
+
+  /**
+   * @description 移动端工具栏分组与行为组的展示模式
+   * @readonly
+   * @type {('DEFAULT' | 'ACTIONSHEET')}
+   */
+  get groupShowMode(): 'DEFAULT' | 'ACTIONSHEET' {
+    if (this.controlParams.groupshowmode) {
+      return this.controlParams.groupshowmode;
+    }
+    return ibiz.config.mob.toolbarGroupShowMode;
+  }
+
+  /**
    * @description 数据部件控制器
    * @readonly
-   * @protected
    * @type {(ControlController | undefined)}
    * @memberof ToolbarController
    */
-  protected get xdataControl(): ControlController | undefined {
+  get xdataControl(): ControlController | undefined {
     const { xdataControlName } = this.model;
     if (xdataControlName)
       return this.view.getController(
@@ -139,6 +198,10 @@ export class ToolbarController<
 
       try {
         const args = await this.getToolbarEventArgs();
+        // fix:修复工具栏项点击appid异常
+        args.context = Object.assign(args.context, {
+          srfappid: item.appId,
+        });
         args.params = Object.assign(param, args.params);
         await UIActionUtil.execAndResolved(
           actionId!,
@@ -213,6 +276,7 @@ export class ToolbarController<
    * @return {*}
    */
   initCounter(): void {
+    if (this.state.isCounterDisabled) return;
     const { counters } = this.ctx.view;
     const { appCounterRefs } = this.ctx.view.model.viewLayoutPanel!;
     if (appCounterRefs && appCounterRefs.length > 0) {
@@ -227,6 +291,9 @@ export class ToolbarController<
     await super.onCreated();
 
     this.state.viewMode = this.ctx.view.modal.mode;
+
+    // 收集所有遍历过程中的异步任务
+    const asyncTasks: Promise<IDEUIActionGroup>[] = [];
 
     // 初始化工具栏状态控制对象
     recursiveIterate(
@@ -260,29 +327,35 @@ export class ToolbarController<
         }
         const groupItem = item as IDETBGroupItem;
         // 适配行为组展开模式及分组项配置了界面行为组
-        if (
-          groupItem.groupExtractMode &&
-          groupItem.uiactionGroup &&
-          groupItem.uiactionGroup.uiactionGroupDetails
-        ) {
-          groupItem.uiactionGroup.uiactionGroupDetails.forEach(
-            (detail: IUIActionGroupDetail) => {
-              const actionid = detail.uiactionId;
-              if (actionid) {
-                const buttonState = new UIActionButtonState(
-                  detail.id!,
-                  detail.appId,
-                  actionid,
-                  detail,
-                );
-                this.state.buttonsState.addState(detail.id!, buttonState);
-              }
-            },
+        if (groupItem.groupExtractMode && groupItem.uiactionGroup) {
+          const calcTask = calcUIActionGroup(
+            groupItem.uiactionGroup,
+            this.context,
+            this.params,
           );
+          asyncTasks.push(calcTask);
         }
       },
       { childrenFields: ['detoolbarItems'] },
     );
+
+    // 确保工具栏状态初始化都完成后，再往下走
+    const allUIActionGroup = await Promise.all(asyncTasks);
+    allUIActionGroup.forEach(uiactionGroup => {
+      if (uiactionGroup?.uiactionGroupDetails) {
+        getAllUIActionItems(uiactionGroup?.uiactionGroupDetails).forEach(
+          detail => {
+            const buttonState = new UIActionButtonState(
+              detail.id!,
+              detail.appId,
+              detail.uiactionId,
+              detail,
+            );
+            this.state.buttonsState.addState(detail.id!, buttonState);
+          },
+        );
+      }
+    });
 
     await this.initToolbarItemProviders();
 

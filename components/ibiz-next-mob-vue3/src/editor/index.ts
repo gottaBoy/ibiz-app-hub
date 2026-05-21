@@ -1,7 +1,7 @@
 import { registerEditorProvider } from '@ibiz-template/runtime';
 import { App, defineAsyncComponent } from 'vue';
 import { NotSupportedEditor } from './not-supported-editor/not-supported-editor';
-import { IBizSpan, SpanEditorProvider } from './span';
+import { IBizSpan, IBizSpanLink, SpanEditorProvider } from './span';
 import {
   IBizInput,
   IBizInputNumber,
@@ -11,6 +11,7 @@ import {
 import {
   IBizDropdown,
   IBizEmojiPicker,
+  IBizCascaderDropdown,
   DropDownListEditorProvider,
 } from './dropdown-list';
 import { CheckBoxListEditorProvider, IBizCheckboxList } from './check-box-list';
@@ -46,20 +47,26 @@ import { MarkDownEditorProvider } from './markdown';
 import { HtmlEditorProvider } from './html';
 import { IBizDropdownList } from './dropdown-list/ibiz-dropdown-list/ibiz-dropdown-list';
 import { IBizQrcode, QrcodeEditorProvider } from './qrcode';
+import { IBizCheckbox, CheckBoxEditorProvider } from './check-box';
+import { IBizMapPicker, MapPickerEditorProvider } from './map-picker';
+import { IBizArray, ArrayEditorProvider } from './array';
 
 export const IBizEditor = {
   install: (v: App): void => {
     // 组件注册
+    v.component(IBizArray.name, IBizArray);
     v.component(NotSupportedEditor.name, NotSupportedEditor);
     v.component(IBizInput.name, IBizInput);
     v.component(IBizInputNumber.name, IBizInputNumber);
     v.component(IBizSignature.name, IBizSignature);
     v.component(IBizSpan.name, IBizSpan);
+    v.component(IBizSpanLink.name, IBizSpanLink);
     v.component(IBizSwitch.name, IBizSwitch);
     v.component(IBizRadio.name, IBizRadio);
     v.component(IBizDropdown.name, IBizDropdown);
     v.component(IBizDropdownList.name, IBizDropdownList);
     v.component(IBizEmojiPicker.name, IBizEmojiPicker);
+    v.component(IBizCascaderDropdown.name, IBizCascaderDropdown);
     v.component(IBizCheckboxList.name, IBizCheckboxList);
     v.component(IBizSlider.name, IBizSlider);
     v.component(IBizRaw.name, IBizRaw);
@@ -79,6 +86,8 @@ export const IBizEditor = {
     v.component(IBizEditorCarousel.name, IBizEditorCarousel);
     v.component(IBizQrcode.name, IBizQrcode);
     v.component(IBizImageCropping.name, IBizImageCropping);
+    v.component(IBizCheckbox.name, IBizCheckbox);
+    v.component(IBizMapPicker.name, IBizMapPicker);
 
     v.component(
       'IBizMarkDown',
@@ -98,11 +107,21 @@ export const IBizEditor = {
       ),
     );
 
+    // 数组编辑器
+    registerEditorProvider('ARRAY', () => new ArrayEditorProvider());
+    registerEditorProvider('MOBARRAY', () => new ArrayEditorProvider());
+
     // 标签
     registerEditorProvider('SPAN', () => new SpanEditorProvider());
     registerEditorProvider(
       'FIELD_TEXT_DYNAMIC_SPAN',
       () => new SpanEditorProvider(),
+    );
+
+    // 标签（数据链接）
+    registerEditorProvider(
+      'SPAN_LINK',
+      () => new SpanEditorProvider('SPAN_LINK'),
     );
 
     // 文本框
@@ -125,6 +144,10 @@ export const IBizEditor = {
       'MOBTEXT_SIGNATURE',
       () => new TextBoxEditorProvider('SIGNATURE'),
     );
+    registerEditorProvider(
+      'TEXTBOX_SIGNATURE',
+      () => new TextBoxEditorProvider('SIGNATURE'),
+    );
 
     // 下拉列表框
     registerEditorProvider(
@@ -140,6 +163,21 @@ export const IBizEditor = {
     registerEditorProvider(
       'MOBDROPDOWNLIST_EMOJI_PICKER',
       () => new DropDownListEditorProvider('EMOJI_PICKER'),
+    );
+    registerEditorProvider(
+      'DROPDOWNLIST_EMOJI_PICKER',
+      () => new DropDownListEditorProvider('EMOJI_PICKER'),
+    );
+
+    // 级联下拉
+    registerEditorProvider(
+      'DROPDOWNLIST_CASCADER',
+      () => new DropDownListEditorProvider('MOBDROPDOWNLIST_CASCADER'),
+    );
+
+    registerEditorProvider(
+      'MOBDROPDOWNLIST_CASCADER',
+      () => new DropDownListEditorProvider('MOBDROPDOWNLIST_CASCADER'),
     );
 
     // 下拉列表框多选(复选框)
@@ -291,6 +329,10 @@ export const IBizEditor = {
       'PICTURE_ONE_RAW',
       () => new FileUploaderEditorProvider('PICTURE_ONE_RAW'),
     );
+    registerEditorProvider(
+      'PICTURE_CROPPING',
+      () => new FileUploaderEditorProvider('PICTURE_CROPPING'),
+    );
     // 数值范围
     registerEditorProvider(
       'MOBNUMBERRANGE',
@@ -311,6 +353,18 @@ export const IBizEditor = {
       'DATERANGE_NOTIME',
       () => new DateRangeEditorProvider(),
     );
+
+    // 选项框
+    registerEditorProvider('CHECKBOX', () => new CheckBoxEditorProvider());
+
+    // 选项框列表
+    registerEditorProvider(
+      'CHECKBOXLIST',
+      () => new CheckBoxListEditorProvider(),
+    );
+
+    // 地图选择器
+    registerEditorProvider('MAPPICKER', () => new MapPickerEditorProvider());
 
     // 面板预制类型
     // 动态图片

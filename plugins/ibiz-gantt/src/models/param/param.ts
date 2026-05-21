@@ -157,4 +157,14 @@ export default class Param {
   public set preload(v: number) {
     this._preload = v;
   }
+
+  private _expandColumnName: string | null = null;
+
+  public get expandColumnName(): string | null  {
+    return this._expandColumnName;
+  }
+
+  public set expandColumnName(v: string | null) {
+    this._expandColumnName = v;
+  }
 }

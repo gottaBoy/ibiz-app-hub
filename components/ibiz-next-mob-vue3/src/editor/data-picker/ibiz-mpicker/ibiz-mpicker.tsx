@@ -7,15 +7,20 @@ import {
 import { clone } from 'lodash-es';
 import './ibiz-mpicker.scss';
 import { PickerEditorController } from '../picker-editor.controller';
-import { IBizDataMPicker } from '../../common/data-mpicker/ibiz-data-mpicker';
-import { IBizCommonRightIcon } from '../../common/right-icon/right-icon';
+// import { IBizDataMPicker } from '../../common/data-mpicker/ibiz-data-mpicker';
+// import { IBizCommonRightIcon } from '../../common/right-icon/right-icon';
 
 /**
  * 移动端多数据选择
  * @primary
  * @description  使用van-field组件和van-popup组件，用于在弹出列表中选择多项数据的场景。支持编辑器类型包含：`移动端多数据选择`
+ * @editorparams {"name":"valuetype","parameterType":"string","description":"编辑器的值类型"}
+ * @editorparams {"name":"objectidfield","parameterType":"string","description":"值类型为OBJECTS时的对象标识属性"}
+ * @editorparams {"name":"objectnamefield","parameterType":"string","description":"值类型为OBJECTS时的对象名称属性"}
+ * @editorparams {"name":"objectvaluefield","parameterType":"string","description":"值类型为OBJECTS时的对象值属性"}
+ * @editorparams {"name":"readonly","parameterType":"boolean","defaultvalue":false,"description":"设置编辑器是否为只读态"}
  * @ignoreprops  autoFocus | overflowMode
- * @ignoreemits  infoTextChange | enter
+ * @ignoreemits  blur | focus | infoTextChange | enter
  */
 export const IBizMPicker = defineComponent({
   name: 'IBizMPicker',
@@ -39,7 +44,8 @@ export const IBizMPicker = defineComponent({
     const showPicker = ref(false);
 
     // 格式化
-    const formatter = (item: IData) => {
+    const formatter = (item: IData, includeAllProps = true) => {
+      const allProps = includeAllProps ? { ...item } : {};
       return {
         srfkey: item[c.keyName] || item.srfkey,
         value: item[c.keyName] || item.srfkey,
@@ -47,7 +53,7 @@ export const IBizMPicker = defineComponent({
         text: item[c.textName] || item.srfmajortext,
         [c.keyName]: item[c.keyName] || item.srfkey,
         [c.textName]: item[c.textName] || item.srfmajortext,
-        ...item,
+        ...allProps,
       };
     };
 
@@ -122,12 +128,7 @@ export const IBizMPicker = defineComponent({
       const selects: IData[] = [];
       if (result && Array.isArray(result)) {
         const calcPromises = result.map(async select => {
-          const item = formatter(select);
-          // 选择树视图特殊处理
-          if (select.srfnodeid) {
-            Object.assign(item, select._deData);
-          }
-          const dataItems = await c.calcFillDataItems(item);
+          const dataItems = await c.calcFillDataItems(select);
           const res = {};
           dataItems.forEach(dataItem => {
             Object.assign(res, { [dataItem.id]: dataItem.value });
@@ -137,7 +138,7 @@ export const IBizMPicker = defineComponent({
         const dataItemsList = await Promise.all(calcPromises);
         result.forEach((select: IData, _index: number) => {
           Object.assign(select, {
-            ...formatter(select),
+            ...formatter(select, false),
             [c.keyName]: select[c.keyName] ? select[c.keyName] : select.srfkey,
             [c.textName]: select[c.textName]
               ? select[c.textName]
@@ -320,11 +321,11 @@ export const IBizMPicker = defineComponent({
     };
 
     const openPicker = async () => {
-      if (props.disabled || props.readonly) {
-        return;
-      }
-      showPicker.value = true;
-      onSearch();
+      // if (props.disabled || props.readonly) {
+      //   return;
+      // }
+      // showPicker.value = true;
+      // onSearch();
     };
 
     return {
@@ -368,24 +369,50 @@ export const IBizMPicker = defineComponent({
           >
             {{
               input: () => {
-                return this.selectItems.map((item: IData) => {
+                if (!this.selectItems.length) {
                   return (
-                    <div class={this.ns.b('select-item')}>
-                      <div class={this.ns.be('select-item', 'text')}>
-                        {item.srfmajortext}
-                      </div>
-                      <div class={this.ns.be('select-item', 'close')}>
-                        <van-icon
-                          name='cross'
-                          onClick={(e: Event) => {
-                            e.stopPropagation();
-                            this.onRemove(item[this.c.keyName]);
-                          }}
-                        />
-                      </div>
+                    <div class={this.ns.e('placeholder')}>
+                      {this.c.placeHolder}
                     </div>
                   );
-                });
+                }
+                const showNum = 1;
+                const showMore = this.selectItems.length - showNum > 0;
+                return [
+                  this.selectItems.slice(0, showNum).map((item: IData) => {
+                    return (
+                      <div class={this.ns.b('select-item')}>
+                        <div class={this.ns.be('select-item', 'text')}>
+                          {item.srfmajortext}
+                        </div>
+                        <div class={this.ns.be('select-item', 'close')}>
+                          <van-icon
+                            name='cross'
+                            onClick={(e: Event) => {
+                              e.stopPropagation();
+                              this.onRemove(item[this.c.keyName]);
+                            }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  }),
+                  showMore && (
+                    <div
+                      class={[
+                        this.ns.b('select-item'),
+                        this.ns.bm('select-item', 'more'),
+                      ]}
+                      onClick={(event: MouseEvent) => {
+                        if (this.c.model.pickupAppViewId) {
+                          this.openPickUpView(event);
+                        }
+                      }}
+                    >
+                      + {this.selectItems.length - showNum}
+                    </div>
+                  ),
+                ];
               },
               'right-icon': () => {
                 if (this.$slots.append) {
@@ -408,20 +435,20 @@ export const IBizMPicker = defineComponent({
                       ></ion-icon>
                     </van-button>
                   ),
-                  this.c.model.appDEDataSetId && (
-                    <IBizCommonRightIcon></IBizCommonRightIcon>
-                  ),
+                  // this.c.model.appDEDataSetId && (
+                  //   <IBizCommonRightIcon></IBizCommonRightIcon>
+                  // ),
                 ];
               },
             }}
           </van-field>
         )}
-        <IBizDataMPicker
+        {/* <IBizDataMPicker
           items={this.items}
           onChange={this.onSelect}
           v-model:showPicker={this.showPicker}
           value={this.curValue}
-        ></IBizDataMPicker>
+        ></IBizDataMPicker> */}
       </div>
     );
   },

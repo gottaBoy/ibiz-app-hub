@@ -1,180 +1,198 @@
 $control-mobmdctrl: (
-  text-color: getCssVar(color, text, 0),
-  hover-bg-color: getCssVar(color, primary),
-  active-bg-color: #d1d1d5,
-  active-color: getCssVar(color, bg, 1),
-  img-width: getCssVar(width-icon, extra-large),
-  img-radius: getCssVar(border-radius, extra-small),
-  padding: getCssVar(spacing, base) 0 getCssVar(spacing, base)
-  getCssVar(spacing, base),
-  group-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
-  group-font: getCssVar(font-size, regular),
-  icon-color: #a0a5aa,
-  group-caption-color: #9a9b9f,
-  load-more-font-size: getCssVar(font-size, small),
-  font-size: getCssVar(font-size, header-5),
-  right-icon-margin-right: rem(21px),
-  simplelist-height: 250px,
-  select-item-padding-bottom: getCssVar(spacing, tight),
-  select-item-margin: getCssVar(spacing, tight) 0 0 getCssVar(spacing, tight),
-  select-item-check-padding: getCssVar(spacing, extra-tight),
-  select-item-gap: getCssVar(spacing, tight),
-  pagination-height: var(--van-pagination-height),
-);
-
-$panel:(
-  scroll: hidden,
+  // 颜色
+  color-text: getCssVar(color, text, 0),
+  color-active-bg: getCssVar(color, primary, light, default),
+  color-group-bg: getCssVar(color, bg, 0),
+  color-group-text: getCssVar(color, text, 1),
+  // 宽高
+  width-img: getCssVar(width-icon, extra-large),
+  height-img: getCssVar(width-icon, extra-large),
+  // 间距
+  spacing-item-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
+  spacing-group-padding: getCssVar(spacing, tight) getCssVar(spacing, base),
+  spacing-img-padding: getCssVar(spacing, tight),
+  spacing-checkbox-gap: getCssVar('spacing', 'tight'),
+  spacing-border-padding: getCssVar(spacing, base),
+  // 圆角
+  radius-img: getCssVar(border-radius, extra-small),
+  // 字体
+  font-fontSize: getCssVar(font-size, regular),
+  font-group-fontSize: getCssVar(font-size, header-6),
+  font-group-lineHeight: getCssVar(height-control, default),
 );
 
 @include b(control-mobmdctrl) {
   @include set-component-css-var(control-mobmdctrl, $control-mobmdctrl);
-  .#{bem(panel-container)}{
-    @include set-component-css-var(panel, $panel);
-  }
-
-  --van-cell-font-size: #{getCssVar(control-mobmdctrl, font-size)};
 
   height: 100%;
-  overflow: getCssVar(control, overflow);
+  position: relative;
 
+  // 列表容器样式
   @include e(content) {
     width: 100%;
-    height: 99%;
+    height: 100%;
+    overflow: getCssVar(control, overflow);
 
-    .van-cell {
-      padding: getCssVar(control-mobmdctrl, padding);
+    @include when(show-under-line) {
+      .van-hairline--bottom:after {
+        left: calc(-50% + getCssVar(control-mobmdctrl, spacing-border-padding)*2);
+        right: calc(-50% + getCssVar(control-mobmdctrl, spacing-border-padding)*2);
+      }
     }
-    @include when(show-underLine) {
-      .#{bem(control-mobmdctrl-item)}
-      + .#{bem(control-mobmdctrl-item)}::before {
-        position: relative;
-        top: -0.875rem;
-        left: 1rem;
-        display: block;
-        width: calc(100% - 2rem);
-        height: rem(1px);
-        content: '';
-        background-color: getCssVar(color, border);
-      }
-
-      .van-swipe-cell + .van-swipe-cell {
-        .van-swipe-cell__wrapper::before {
-          position: relative;
-          top: rem(1px);
-          left: 1rem;
-          display: block;
-          width: calc(100% - 2rem);
-          height: rem(1px);
-          content: '';
-          background-color: getCssVar(color, border);
-        }
-      }
+    .#{bem(add-more)} {
+      padding: getCssVar(control-mobmdctrl, spacing-item-padding);
     }
   }
 
-  @include e(setting) {
-    position: absolute;
-    right: getCssVar('spacing', 'tight');
-    z-index: 1;
-  }
-
+  // 启用分页，列表内容区需减去分页高度。分页时内容区出滚动条，避免滚动时页码偏移
   @include when(enable-page) {
+    display: flex;
+    flex-direction: column;
     .#{bem(control-mobmdctrl, content)} {
-      height: calc(100% - getCssVar(control-mobmdctrl, pagination-height));
+      flex: auto;
+      height: 0;
+    }
+    .#{bem(control-mobmdctrl, pagination)} {
+      flex: none;
     }
   }
 
-  .van-cell__right-icon {
-    margin-right: getCssVar(control-mobmdctrl, right-icon-margin-right);
-    color: getCssVar(control-mobmdctrl, icon-color);
+  // 分页模式固定出滚动条，且没有回到顶部按钮
+  @include when(scroll) {
+    #{getCssVarName(control, overflow)}: unset auto;
+    .#{bem(control-mobmdctrl, content)} {
+      overflow: auto;
+    }
   }
 
-  .van-cell--clickable:active {
-    color: inherit;
+  @include when(hidden-finished) {
+    // 启用分页时隐藏列表加载完成提示
+    .van-list__finished-text {
+      display: none;
+    }
   }
 
-  .van-cell::after {
-    width: 100%;
+  // 分组锚点容器样式
+  @include e('anchor') {
+    .van-index-anchor {
+      padding: 0;
+    }
   }
 }
 
+// 列表项样式
 @include b(control-mobmdctrl-item) {
-  @include set-component-css-var(control-mobmdctrl, $control-mobmdctrl);
-  background-color: getCssVar(control-mobmdctrl, item-bg-color);
-  color: getCssVar(control-mobmdctrl, item-font-color);
-  &:hover {
-    background-color: getCssVar(control-mobmdctrl,
-      item-hover-color
-    );
+  // 部件为选择模式时，右侧复选框间距
+  @include e(right) {
+    margin-right: getCssVar(control-mobmdctrl, spacing-checkbox-gap);
   }
+
+  // 增加权重，避免ui组件本身样式影响
+  &.#{bem(control-mobmdctrl-item)} {
+    color: getCssVar(control-mobmdctrl, color-text);
+    height: auto;
+    font-size: getCssVar(control-mobmdctrl, font-fontSize);
+    padding: getCssVar(control-mobmdctrl, spacing-item-padding);
+  }
+
+  // 列表项选中样式
   @include when(active) {
-    background-color: getCssVar(control-mobmdctrl,
-      item-active-color
-    );
+    background-color: getCssVar(control-mobmdctrl, color-active-bg);
   }
+}
 
-  @include m(right) {
-    margin-right: getCssVar(control-mobmdctrl, right-icon-margin-right);
-  }
+// 列表项左侧图片样式，默认绘制并且项数据image存在路径值时生效
+@include b(control-mobmdctrl-image) {
+  width: getCssVar(control-mobmdctrl, width-img);
+  height: getCssVar(control-mobmdctrl, height-img);
+  margin-right: getCssVar(control-mobmdctrl, spacing-img-padding);
+  border-radius: getCssVar(control-mobmdctrl, radius-img);
+}
 
-  padding: 0.875rem 0;
-
-  &.#{bem(control-panel)} {
+// 分组样式
+@include b('control-mobmdctrl-group') {
+  @include e('container') {
+    width: 100%;
     height: auto;
   }
-}
 
-@include b(control-mobmdctrl-image) {
-  @include set-component-css-var(control-mobmdctrl, $control-mobmdctrl);
-
-  width: getCssVar(control-mobmdctrl, img-width);
-  margin-right: getCssVar(control-mobmdctrl, padding);
-  border-radius: getCssVar(control-mobmdctrl, img-radius);
-}
-
-@include b(control-mobmdctrl-group-caption) {
-  @include set-component-css-var(control-mobmdctrl, $control-mobmdctrl);
-
-  padding: getCssVar(control-mobmdctrl, group-padding);
-  font-size: getCssVar(control-mobmdctrl, group-font);
-  color: getCssVar(control-mobmdctrl, group-caption-color);
-}
-
-@include b(control-mobmdctrl-load-more) {
-  display: flex;
-  justify-content: center;
-  padding: getCssVar(spacing, tight);
-  font-size: getCssVar(control-mobmdctrl, load-more-font-size);
-  color: getCssVar(color, text, 2);
-
-  span {
-    padding: getCssVar(spacing, extra, tight) getCssVar(spacing, base);
-    cursor: pointer;
-    border: 1px solid getCssVar(color, border);
-    border-radius: getCssVar(border, radius, full);
+  // 分组标题样式
+  @include e('caption') {
+    padding: getCssVar(control-mobmdctrl, spacing-group-padding);
+    font-size: getCssVar(control-mobmdctrl, font-group-fontSize);
+    line-height: getCssVar(control-mobmdctrl, font-group-lineHeight);
+    color: getCssVar(control-mobmdctrl, color-group-text);
+    background-color: getCssVar(control-mobmdctrl, color-group-bg);
   }
 }
 
+// 部件为选择模式并且项为布局面板时的列表项样式
 @include b(control-mobmdctrl-select-item) {
   display: flex;
-  gap: getCssVar(control-mobmdctrl, select-item-gap);
-  padding-bottom: getCssVar(control-mobmdctrl, select-item-padding-bottom);
-  margin: getCssVar(control-mobmdctrl, select-item-margin);
-  border-bottom: 1px solid getCssVar(color, border);
+  align-items: center;
+  justify-content: space-between;
+  padding: getCssVar(control-mobmdctrl, spacing-item-padding);
 
-  > .van-checkbox {
-    padding: getCssVar(control-mobmdctrl, select-item-check-padding);
+  @include e(left) {
+    margin-right: getCssVar(control-mobmdctrl, spacing-checkbox-gap);
+    flex-shrink: 0;
   }
-}
-@include b('control-mobmdctrl-slider-item'){
-  .van-swipe-cell__right{
-    >.van-button{
-      height: 100%;
+  @include when(active) {
+    background-color: getCssVar(control-mobmdctrl, color-active-bg);
+    // 激活项背景无需重复添加，防止背景色重叠
+    .#{bem(control-mobmdctrl-item)} {
+      background-color: transparent;
     }
   }
-  .van-swipe-cell__left{
-    >.van-button{
+
+  .#{bem(control-mobmdctrl-item)} {
+    flex-grow: 1;
+    padding: 0;
+    overflow-x: hidden;
+  }
+}
+
+// 列表项左滑行为组与右滑行为组样式
+@include b('control-mobmdctrl-slider-item') {
+  .van-swipe-cell__right {
+    > .van-button {
       height: 100%;
+      border-color: getCssVar(view, bg, color);
+    }
+  }
+  .van-swipe-cell__left {
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 1px;
+    }
+    > .van-button {
+      height: 100%;
+      border-color: getCssVar(view, bg, color);
+    }
+  }
+}
+
+// 快速工具栏样式
+@include b(control-mobmdctrl-quicktoolbar) {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// 兼容下拉视图刷新样式
+.#{bem(view-content-refresh)} {
+  .#{bem(control-mobmdctrl)}.is-enable-page {
+    position: relative;
+    .#{bem(control-mobmdctrl, content)} {
+      height: auto;
+    }
+    .#{bem(control-mobmdctrl, pagination)} {
+      position: sticky;
+      bottom: 0;
+      width: 100%;
+      background-color: getCssVar(color, bg, 1);
     }
   }
 }

@@ -7,12 +7,7 @@ import {
   IDEDataView,
   INavigatable,
 } from '@ibiz/model-core';
-import {
-  IBizParams,
-  IBizContext,
-  RuntimeError,
-  RuntimeModelError,
-} from '@ibiz-template/core';
+import { IBizParams, IBizContext, RuntimeError } from '@ibiz-template/core';
 import {
   LoadEvent,
   EventBase,
@@ -147,7 +142,8 @@ export class ExpBarControlController<
    * @return {*}  {Promise<IData[]>}
    * @memberof ExpBarControlController
    */
-  load(): Promise<IData[]> {
+  async load(): Promise<IData[]> {
+    if (!this.xDataController) return [];
     return this.xDataController.load({ isInitialLoad: true });
   }
 
@@ -160,16 +156,14 @@ export class ExpBarControlController<
    * @type {IGridController}
    * @memberof ExpBarControlController
    */
-  get xDataController(): IMDControlController {
+  get xDataController(): IMDControlController | undefined {
     const controller = this.view.getController(this.model.xdataControlName!);
-    if (!controller) {
-      throw new RuntimeModelError(
-        this.model,
+    if (!controller)
+      ibiz.log.error(
         ibiz.i18n.t('runtime.controller.control.expBar.unableMore', {
           xdataControlName: this.model.xdataControlName,
         }),
       );
-    }
     return controller as IMDControlController;
   }
 
@@ -287,7 +281,7 @@ export class ExpBarControlController<
     }
 
     if (this.toolbarController) {
-      this.xDataController.evt.on('onSelectionChange', async event => {
+      this.xDataController?.evt.on('onSelectionChange', async event => {
         // 更新工具栏状态
         this.toolbarController!.calcButtonState(
           event.data[0],
@@ -332,10 +326,14 @@ export class ExpBarControlController<
    * @protected
    */
   protected navBySrfnav(): void {
+    if (!this.xDataController) return;
     // 找到选中项，如果没有就模拟选中数据
-    const selectItem = this.xDataController?.state.items.find(
+    const selectItem = this.xDataController.state.items.find(
       item => item[this.navKeyName] === this.state.srfnav,
     );
+
+    const tempContext = this.context.clone();
+    tempContext.srfnavctrlid = this.xDataController.ctrlId;
 
     // 是否是路由模式且有子路由
     const routeAndHasSub = this.routeDepth && hasSubRoute(this.routeDepth);
@@ -351,7 +349,7 @@ export class ExpBarControlController<
           isRoutePushed: true,
           isCache: this.isCache,
         },
-        context: this.context,
+        context: tempContext,
       });
       return;
     }
@@ -368,7 +366,7 @@ export class ExpBarControlController<
           is404: true,
           isCache: this.isCache,
         },
-        context: this.context,
+        context: tempContext,
       });
     }
   }
@@ -382,6 +380,7 @@ export class ExpBarControlController<
    * @protected
    */
   protected navByFirstItem(): void {
+    if (!this.xDataController) return;
     const data = this.xDataController.state.items[0];
     if (!data) return this.clearNavigation();
     // 默认选中并激活第一项
@@ -396,7 +395,7 @@ export class ExpBarControlController<
    */
   protected clearNavigation(): void {
     this.navStack = [];
-    this.xDataController.setSelection([]);
+    this.xDataController?.setSelection([]);
     this.state.srfnav = '';
     this._evt.emit('onNavViewChange', {
       navViewMsg: {
@@ -412,6 +411,7 @@ export class ExpBarControlController<
    * @memberof ExpBarControlController
    */
   navDataByStack(): void {
+    if (!this.xDataController) return;
     const { items } = this.xDataController.state;
     const navData =
       this.navStack
@@ -419,7 +419,7 @@ export class ExpBarControlController<
           items.find(item => nav[this.navKeyName] === item[this.navKeyName]),
         )
         .find(item => item !== undefined) || items[0];
-    if (navData) {
+    if (navData && this.xDataController) {
       this.xDataController.setActive(navData);
       this.xDataController.setSelection([navData]);
     } else {
@@ -481,6 +481,7 @@ export class ExpBarControlController<
     // 合并SrfNav
     const tempContext = Object.assign(context.clone(), resultContext, {
       currentSrfNav: data[this.navKeyName],
+      srfnavctrlid: this.xDataController?.ctrlId,
     });
     this.state.srfnav = data[this.navKeyName];
     const tempParams = { ...resultParams };

@@ -6,7 +6,7 @@ export default {
   deviewCodeName: 'tree_picker',
   deviewId: 'a3a951d417e5f0f9a76132bbaf24083c',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

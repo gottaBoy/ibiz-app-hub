@@ -1,21 +1,183 @@
 $markdown: (
   'width': 100%,
+  color-manual-toolbar-bg-save: getCssVar(color,primary),
+  color-manual-toolbar-text-save: getCssVar(color, primary-active-text),
+  color-manual-toolbar-text-cancel: getCssVar(color,text,1),
+  color-manual-toolbar-text-cancel-hover: getCssVar(color,primary),
+  color-dark-scrollbar-thumb-dark: rgb(var(#{getCssVarName(grey,4)})),
+  color-light-scrollbar-thumb-dark:rgb(var(#{getCssVarName(grey,4)})),
+  color-scrollbar-thumb-dark-hover: rgba(var(#{getCssVarName(grey,4)}),.5),
+  color-dark-toc-text: getCssVar(color, fill, 0),
+  color-toc-header-text: getCssVar(color, text, 0),
+  color-dark-mardown-border: rgb(var(#{getCssVarName(grey,2)})),
+  color-fixed-toc-text: getCssVar(color, black),
+  color-fixed-toc-arrow-text: getCssVar(color, primary), 
+  spacing-manual-toolbar-height: 32px,
+  spacing-manual-toolbar-gap: getCssVar('spacing',base),
+  spacing-manual-toolbar-item-padding: 0 getCssVar('spacing',base),
+  spacing-manual-toolbar-margin: getCssVar('spacing',base-tight) getCssVar('spacing',tight) 0 0,
+  spacing-manual-toolbar-fullscreen-height: getCssVar(height,control-default), 
+  spacing-manual-toolbar-fullscreen-padding: 0 getCssVar('spacing',extra-loose),
+  spacing-manual-toolbar-fullscreen-height-header: getCssVar(spacing, super-loose),
+  height-manual-toolbar-height: getCssVar(height,control-default),
+  border-radius-manual-toolbar-item: getCssVar('border-radius', small),
+  border-manual-toolbar-fullscreen-footer: 1px solid getCssVar(color, border),
+  
+  // Other
+  'img-preview-top': -32px,
+  'img-preview-right': -36px,
+  'img-preview-width': 32px,
+  'img-preview-height': 32px,
 );
 
 
 @include b(markdown) {
-  @include b(markdown-cherry){
-    @include set-component-css-var('markdown', $markdown);
+  @include set-component-css-var('markdown', $markdown);
 
-    width: getCssVar('markdown', 'width');
-
-    .cherry{
+  @include e('header'){
+    display: flex;
+    flex-shrink: 0;
+    gap: getCssVar('markdown', 'spacing-manual-toolbar-gap');
+    align-items: center;
+    justify-content: end;
+    height: getCssVar('markdown', 'spacing-manual-toolbar-height');
+    @include m('edit'){
+      cursor: pointer;
+    }
+    @include m('full'){ 
+      cursor: pointer;
+    }
+    @include when('fullscreen'){
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 1000;
       width: 100%;
+      height: calc(getCssVar('markdown', 'spacing-manual-toolbar-fullscreen-height-header'));
+      padding: getCssVar('markdown', 'spacing-manual-toolbar-fullscreen-padding');
+      margin-top: 0; 
+      background-color: var(--ibiz-view-bg-color);
+
+      & + .ibiz-markdown-cherry .cherry.fullscreen{
+        top: calc(getCssVar('markdown', 'spacing-manual-toolbar-fullscreen-height-header'));
+        height: calc(100% - #{getCssVar('markdown', 'spacing-manual-toolbar-fullscreen-height-header')});
+      }
+    }
+
+  }
+
+  @include e('footer'){
+    display: flex;
+    gap: getCssVar('markdown', 'spacing-manual-toolbar-gap');
+    align-items: center;
+    justify-content: end;
+    height: getCssVar('markdown', 'spacing-manual-toolbar-height');
+    margin: getCssVar('markdown', 'spacing-manual-toolbar-margin');
+    @include m('save'){
+      height: getCssVar('markdown', 'height-manual-toolbar-height');
+      padding: getCssVar('markdown', 'spacing-manual-toolbar-item-padding');
+      line-height: getCssVar('markdown', 'height-manual-toolbar-height');
+      color: getCssVar('markdown', 'color-manual-toolbar-text-save');
+      text-align: center;
+      cursor: pointer;
+      background-color:getCssVar('markdown', 'color-manual-toolbar-bg-save');
+      border-radius: getCssVar('markdown', 'border-radius-manual-toolbar-item');
+    }
+    @include m('cancel'){
+      color: getCssVar('markdown', 'color-manual-toolbar-text-cancel');
+      cursor: pointer;
+
+      &:hover{
+        color: getCssVar('markdown', 'color-manual-toolbar-text-cancel-hover');
+      }
+    }
+    @include when('fullscreen'){
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1000;
+      width: 100%;
+      height: calc(getCssVar('markdown', 'spacing-manual-toolbar-fullscreen-height') * 2);
+      padding: getCssVar('markdown', 'spacing-manual-toolbar-fullscreen-padding');
+      margin-top: 0; 
+      background-color: var(--ibiz-view-bg-color);
+      border-top: getCssVar('markdown', 'border-manual-toolbar-fullscreen-footer');
+
+      & + .ibiz-markdown-cherry .cherry.fullscreen{
+        height: calc(100% - #{getCssVar('markdown', 'spacing-manual-toolbar-fullscreen-height')} * 2);
+      }
     }
   }
 
-  @include when(disabled){
-    .cherry{
+  @include e('img-preview') {
+    // 图片预览样式，默认需不占位
+    &.el-image {
+      position: absolute;
+      height: 0;
+    }
+
+    // 图片预览态样式
+    .el-image-viewer__wrapper {
+      width: 90%;
+      height: 90%;
+      margin: auto;
+    }
+
+    .el-image-viewer__mask {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      cursor: zoom-out;
+      opacity: 0.7;
+    }
+
+    // 图片预览态关闭按钮样式
+    .el-image-viewer__close {
+      top: getCssVar('markdown', 'img-preview-top');
+      right: getCssVar('markdown', 'img-preview-right');
+      width: getCssVar('markdown', 'img-preview-width');
+      height: getCssVar('markdown', 'img-preview-height');
+    }
+  }
+
+  @include b(markdown-cherry) {
+    width: getCssVar('markdown', 'width');
+    outline: none;
+
+    .cherry {
+      width: 100%;
+      border: 1px solid getCssVar(color, border);
+      box-shadow: none;
+
+      .cherry-toolbar {
+        box-shadow: none;
+      }
+
+      .cherry-editor {
+        border-top: 1px solid getCssVar(color, border);
+      }
+
+      .cherry-previewer{
+        border-top: 1px solid getCssVar(color, border);
+        
+        // 调整预览区图片鼠标移入样式
+        img {
+          cursor: zoom-in;
+        }
+      }
+
+      .cherry-sidebar{
+        top: 49px;
+        border-left: 1px solid getCssVar(color, border);
+        box-shadow: none;
+      }
+    }
+  }
+
+  @include when(disabled) {
+    .cherry {
       min-height: auto;
     }
 
@@ -36,10 +198,87 @@ $markdown: (
       }
     }
   }
+
+  @include when(manual){
+    display: flex;
+    flex-direction: column; 
+    .#{bem(markdown-cherry)}{
+      flex-grow: 1;
+      height: calc(100% - #{getCssVar('markdown', 'spacing-manual-toolbar-height')})!important;
+    }
+
+    .cherry.fullscreen .cherry-previewer{
+      padding-top: getCssVar('markdown', 'spacing-manual-toolbar-fullscreen-height-header');
+    }
+    @include when(editing){
+      flex-direction: column-reverse;
+
+      .cherry.fullscreen{
+        height: calc(100% - getCssVar('markdown', 'spacing-manual-toolbar-fullscreen-height') * 2);
+      }
+    }
+
+    .#{bem(markdown-menu)} {
+      display: none;
+    }
+
+    @include when(editing) {
+      .#{bem(markdown-menu)} {
+        display: block;
+      }
+    }
+  }
+
+  @include when('show-editor-switch-menu') {
+    .#{bem(composite-form-item-ex-menu)} {
+      #{getCssVarName('composite-form-item-ex', 'menu-height')}: 47px;
+      #{getCssVarName('composite-form-item-ex', 'menu-padding')}: getCssVar('spacing', 'tight') getCssVar('spacing', 'base-tight') 0;
+      max-height: 100%;
+    }
+
+    .cherry-toolbar {
+      padding-right: calc(getCssVar('composite-form-item-ex', 'menu-width') + getCssVar('spacing', 'extra-tight'));
+    }
+
+    .#{bem(markdown-menu)} {
+      position: absolute;
+      top: 1px;
+      right: 1px;
+      z-index: getCssVar('composite-form-item-ex', 'menu-z-index');
+      display: flex;
+      align-items: center;
+      height: calc(getCssVar('markdown', 'toolbar-height') - 1px);
+      background: getCssVar('composite-form-item-ex', 'menu-bg-color');
+      border-right: 1px solid getCssVar(color, border);
+      border-left: 1px solid getCssVar(color, border);
+
+
+      @include when('fullscreen'){
+        position: fixed;
+        z-index: 1000;
+      }
+
+      .#{bem(composite-form-item-ex-menu)} {
+        position: relative;
+      }
+    }
+  }
   
   .cherry-preview--full {
     border-left: none;
   }
+
+  .cherry-flex-toc__fixed{
+    color: getCssVar(markdown, color-fixed-toc-text);
+
+    &.cherry-flex-toc__pure .cherry-toc-head{
+      color: getCssVar(markdown,color-fixed-toc-arrow-text);
+    }
+
+    &:hover{
+      z-index: 100;
+    }
+  } 
 
   .theme__light,
   .theme__dark {
@@ -55,5 +294,64 @@ $markdown: (
     a::before {
       display: none;
     }
+  }
+
+  .cherry.fullscreen{
+    z-index: 999;
+  }
+
+  @include m('light'){ 
+    .theme__light,
+    .theme__green,
+    .theme__violet{
+      .cherry-toolbar{
+        background-color: getCssVar(color, bg, 0);
+      } 
+    }
+
+    .theme__dark.cherry{
+      .cherry-flex-toc{
+        color: getCssVar(markdown,color-toc-header-text);
+      }
+
+      & *::-webkit-scrollbar-thumb{
+        background: getCssVar(markdown,color-light-scrollbar-thumb-dark);
+        
+        &:hover{
+          background: getCssVar(markdown,color-scrollbar-thumb-dark-hover);
+        } 
+      }   
+    }
+  }
+
+  @include m('dark'){ 
+    &.#{bem(markdown-cherry)} {
+      .cherry {
+        border: 1px solid getCssVar(markdown, color-dark-mardown-border);
+      }
+    }
+    
+
+    .theme__green,
+    .theme__violet,
+    .theme__light{
+      .cherry-toolbar{
+        background-color: getCssVar(color, shadow);
+      } 
+    }
+
+    .theme__dark.cherry{
+      .cherry-toc-head{
+        color: getCssVar(markdown,color-dark-toc-text);
+      }
+
+      & *::-webkit-scrollbar-thumb{
+        background: getCssVar(markdown,color-dark-scrollbar-thumb-dark);
+        
+        &:hover{
+          background: getCssVar(markdown,color-scrollbar-thumb-dark-hover);
+        } 
+      } 
+    }  
   }
 }

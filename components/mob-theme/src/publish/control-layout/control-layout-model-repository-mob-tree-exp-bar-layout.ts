@@ -8,10 +8,90 @@ export default {
       "actionGroupExtractMode": "ITEM",
       "panelItems": [
         {
+          "actionGroupExtractMode": "ITEM",
+          "panelItems": [
+            {
+              "caption": "页面标题",
+              "itemStyle": "DEFAULT",
+              "itemType": "CTRLPOS",
+              "layoutPos": {
+                "shrink": 1,
+                "layout": "FLEX"
+              },
+              "showCaption": true,
+              "id": "captionbar"
+            }
+          ],
+          "layout": {
+            "align": "center",
+            "dir": "row",
+            "layout": "FLEX",
+            "valign": "center"
+          },
+          "dataRegionType": "INHERIT",
+          "caption": "容器",
+          "itemStyle": "DEFAULT",
+          "itemType": "CONTAINER",
+          "layoutPos": {
+            "shrink": 1,
+            "layout": "FLEX"
+          },
+          "id": "control_header_left"
+        },
+        {
+          "actionGroupExtractMode": "ITEM",
+          "panelItems": [
+            {
+              "caption": "工具栏",
+              "itemStyle": "DEFAULT",
+              "itemType": "CTRLPOS",
+              "layoutPos": {
+                "shrink": 1,
+                "layout": "FLEX"
+              },
+              "showCaption": true,
+              "id": "treeexpbar_toolbar"
+            }
+          ],
+          "layout": {
+            "dir": "row-reverse",
+            "layout": "FLEX"
+          },
+          "dataRegionType": "INHERIT",
+          "caption": "容器",
+          "itemStyle": "DEFAULT",
+          "itemType": "CONTAINER",
+          "layoutPos": {
+            "grow": 1,
+            "shrink": 1,
+            "layout": "FLEX"
+          },
+          "id": "control_header_right"
+        }
+      ],
+      "layout": {
+        "dir": "row",
+        "layout": "FLEX"
+      },
+      "dataRegionType": "INHERIT",
+      "caption": "容器",
+      "itemStyle": "DEFAULT",
+      "itemType": "CONTAINER",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "id": "control_header"
+    },
+    {
+      "actionGroupExtractMode": "ITEM",
+      "panelItems": [
+        {
           "caption": "导航树",
           "itemStyle": "DEFAULT",
           "itemType": "CTRLPOS",
           "layoutPos": {
+            "grow": 1,
             "shrink": 1,
             "layout": "FLEX"
           },
@@ -27,6 +107,7 @@ export default {
       "itemStyle": "DEFAULT",
       "itemType": "CONTAINER",
       "layoutPos": {
+        "grow": 1,
         "shrink": 1,
         "layout": "FLEX"
       },

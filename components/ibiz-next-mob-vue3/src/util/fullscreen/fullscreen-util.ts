@@ -32,7 +32,10 @@ export class FullscreenUtil {
    * @memberof FullscreenUtil
    */
   get isFullScreen() {
-    return !!this.fullscreenElement;
+    return (
+      !!this.fullscreenElement &&
+      document.fullscreenElement === this.fullscreenElement
+    );
   }
 
   /**

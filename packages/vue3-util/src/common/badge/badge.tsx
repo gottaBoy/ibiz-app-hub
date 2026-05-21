@@ -35,7 +35,13 @@ export const IBizBadge = defineComponent({
       return;
     }
     return (
-      <div class={[this.ns.b(), this.ns.m(this.type)]}>
+      <div
+        class={[
+          this.ns.b(),
+          this.ns.m(this.type),
+          this.ns.is('mob', ibiz.env.isMob),
+        ]}
+      >
         {this.value > this.max ? `${this.max}+` : this.value}
       </div>
     );

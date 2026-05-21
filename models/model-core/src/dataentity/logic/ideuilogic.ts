@@ -10,6 +10,34 @@ import { IDEUILogicParam } from './ideuilogic-param';
  */
 export interface IDEUILogic extends IDELogicBase {
   /**
+   * 逻辑标记
+   * @type {string}
+   * 来源  getLogicTag
+   */
+  logicTag?: string;
+
+  /**
+   * 逻辑标记2
+   * @type {string}
+   * 来源  getLogicTag2
+   */
+  logicTag2?: string;
+
+  /**
+   * 逻辑标记3
+   * @type {string}
+   * 来源  getLogicTag3
+   */
+  logicTag3?: string;
+
+  /**
+   * 逻辑标记4
+   * @type {string}
+   * 来源  getLogicTag4
+   */
+  logicTag4?: string;
+
+  /**
    * 逻辑处理节点集合
    *
    * @type {IDEUILogicNode[]}

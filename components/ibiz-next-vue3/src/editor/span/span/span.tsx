@@ -36,6 +36,7 @@ function isValidDateFormat(dateStr: string, format: string): boolean {
  * @editorparams {name:overflowmode,parameterType:'auto' | 'ellipsis',description:文本换行模式。当参数为 'auto' 时，若内容超出宽度则会换行显示；当参数为 'ellipsis' 时，若内容超出宽度则会显示省略号}
  * @editorparams {"name":"valuetype","parameterType":"string","description":"编辑器的值类型"}
  * @editorparams {"name":"objectnamefield","parameterType":"string","defaultvalue":"'srfmajortext'","description":"值类型为OBJECT、OBJECTS时显示的对象属性"}
+ * @editorparams {name:emptyhiddenunit,parameterType:boolean,defaultvalue:true,description:编辑器无值时，其对应的值单位（如'天'、'%'等）是否隐藏}
  * @ignoreprops autoFocus | overflowMode
  * @ignoreemits change | blur | focus | enter | infoTextChange
  */

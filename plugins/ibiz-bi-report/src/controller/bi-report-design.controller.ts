@@ -81,6 +81,10 @@ export class BIReportDesignController implements IBIReportDesignController {
    */
   verifyController: BIVerifyController | undefined = undefined;
 
+  get appId(): string {
+    return this.context.srfappid || ibiz.env.appId;
+  }
+
   /**
    * 获取默认值
    *
@@ -379,7 +383,10 @@ export class BIReportDesignController implements IBIReportDesignController {
     const { selectCube } = this.state;
     let schemaFilters: ISchemaField[] = [];
     if (selectCube) {
-      const jsonSchema = await getSchemaByEntity(selectCube.psdename);
+      const jsonSchema = await getSchemaByEntity(
+        selectCube.psdename,
+        this.appId,
+      );
       if (jsonSchema) {
         schemaFilters = await calcSchemaFieldBySchema(jsonSchema);
       }
@@ -395,7 +402,7 @@ export class BIReportDesignController implements IBIReportDesignController {
    * @return {*}  {Promise<IAppBICube[]>}
    */
   async fetchCube(): Promise<IAppBICubeData[]> {
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.appId);
     const res = await app.deService.exec(
       'pssysbicube',
       'fetchdefault',
@@ -417,7 +424,7 @@ export class BIReportDesignController implements IBIReportDesignController {
       ...this.viewParams,
       ...{ n_pssysbicubeid_eq: cubeid, size: 1000 },
     };
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.appId);
     const res = await app.deService.exec(
       'pssysbicubemeasure',
       'fetchdefault',
@@ -439,7 +446,7 @@ export class BIReportDesignController implements IBIReportDesignController {
       ...this.viewParams,
       ...{ n_pssysbicubeid_eq: cubeid, size: 1000 },
     };
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.appId);
     const res = await app.deService.exec(
       'pssysbicubedimension',
       'fetchdefault',
@@ -482,6 +489,7 @@ export class BIReportDesignController implements IBIReportDesignController {
     const tempContext = clone(this.context);
     Object.assign(tempContext, { pssysbireport: '__UNKNOWN__' });
     const params: IData = await ibiz.util.biReport.translateDataToAppBIReport({
+      context: tempContext,
       reportTag: this.config.reportTag,
       selectChartType: this.state.selectChartType,
       selectCubeId: this.state.selectCube!.pssysbicubeid,
@@ -490,7 +498,7 @@ export class BIReportDesignController implements IBIReportDesignController {
       style: propertyData.style,
       extend: propertyData.extend,
     });
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.appId);
     const res = await app.deService.exec(
       'pssysbireport',
       'compileappbireport',
@@ -503,6 +511,7 @@ export class BIReportDesignController implements IBIReportDesignController {
         'APPBIREPORT',
       );
       (result as IData).appBISchemeId = this.config.selectedSchemeId;
+      result.appId = this.appId;
       return result as IAppBIReport;
     }
   }
@@ -557,7 +566,7 @@ export class BIReportDesignController implements IBIReportDesignController {
       }
       _mergeParams.reportUIModel = JSON.stringify(tempReportUIModel);
     }
-    if (_name.startsWith('data')) {
+    if (_name.startsWith('data') || _name.startsWith('extend.aggmode')) {
       _mergeParams =
         (await this.compileAppBIReport(this.state.propertyData)) || {};
     }
@@ -784,7 +793,9 @@ export class BIReportDesignController implements IBIReportDesignController {
         return;
       }
     }
+    const tempContext = clone(this.context);
     const tempData = {
+      context: tempContext,
       reportTag: this.config.reportTag,
       selectChartType: this.state.selectChartType,
       selectCubeId: this.state.selectCube!.pssysbicubeid,
@@ -794,8 +805,7 @@ export class BIReportDesignController implements IBIReportDesignController {
       extend: this.state.propertyData.extend,
     };
     const data = await ibiz.util.biReport.translateDataToAppBIReport(tempData);
-    const tempContext = clone(this.context);
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(this.appId);
     try {
       const res = await app.deService.exec(
         'pssysbireport',
@@ -868,7 +878,7 @@ export class BIReportDesignController implements IBIReportDesignController {
       if (actionid) {
         const buttonState = new UIActionButtonState(
           detail.id!,
-          this.context.srfappid!,
+          this.appId,
           actionid,
         );
         containerState.addState(detail.id!, buttonState);

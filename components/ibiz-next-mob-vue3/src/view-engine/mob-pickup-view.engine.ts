@@ -17,7 +17,7 @@ export class MobPickupViewEngine extends ViewEngineBase {
    * @type {ViewController<IAppDEMobPickupView, IPickupViewState, IPickupViewEvent>}
    * @memberof MobPickupViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEMobPickupView,
     IPickupViewState,
     IPickupViewEvent

@@ -13,3 +13,4 @@ export type { IApiGlobalKanbanConfig } from './i-api-global-kanban-config';
 export type { IApiGlobalFlowDrtabConfig } from './i-api-global-flow-drtab-config';
 export type { IApiGlobalWaterMarkConfig } from './i-api-global-water-mark-config';
 export type { IApiGlobalMobConfig } from './i-api-global-mob-config';
+export type { IApiGlobalImgCompressConfig } from './i-api-global-img-compress-config';

@@ -26,7 +26,7 @@ export class DataViewExpViewEngine extends ExpViewEngine {
    *   >}
    * @memberof DataViewExpViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEDataViewExplorerView,
     IDataViewExpViewState,
     IDataViewExpViewEvent

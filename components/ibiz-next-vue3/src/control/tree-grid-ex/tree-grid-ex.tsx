@@ -17,16 +17,38 @@ import {
   resolveComponent,
   VNodeArrayChildren,
 } from 'vue';
-import { IDETreeColumn, IDETreeGridEx } from '@ibiz/model-core';
+import { IDETreeColumn, IDETreeNode, IDETreeGridEx } from '@ibiz/model-core';
 import {
-  IControlProvider,
   ITreeNodeData,
+  IControlProvider,
   TreeGridExController,
+  ScriptFactory,
 } from '@ibiz-template/runtime';
 import { RuntimeError } from '@ibiz-template/core';
 import { createUUID } from 'qx-util';
 import { useRowEditPopover } from './use-row-edit-popover';
 import './tree-grid-ex.scss';
+
+/**
+ * @description 绘制成员的attrs
+ * @param {IDETreeGridEx} model
+ * @param {IParams} params
+ * @returns {*}  {IParams}
+ */
+function renderAttrs(
+  model: IDETreeNode | IDETreeGridEx,
+  params: IParams,
+): IParams {
+  const attrs: IParams = {};
+  model.controlAttributes?.forEach(item => {
+    if (item.attrName && item.attrValue) {
+      attrs[item.attrName!] = ScriptFactory.execSingleLine(item.attrValue!, {
+        ...params,
+      });
+    }
+  });
+  return attrs;
+}
 
 export const TreeGridExControl = defineComponent({
   name: 'IBizTreeGridExControl',
@@ -50,7 +72,7 @@ export const TreeGridExControl = defineComponent({
     provider: { type: Object as PropType<IControlProvider> },
   },
   setup() {
-    const c = useControlController<TreeGridExController>(
+    const c: TreeGridExController = useControlController<TreeGridExController>(
       (...args) => new TreeGridExController(...args),
     );
 
@@ -110,6 +132,7 @@ export const TreeGridExControl = defineComponent({
           id: node._id,
           _uuid: node._uuid,
           hasChildren: !node._leaf,
+          _deData: node._deData,
         };
         if (!noChild && !node._leaf && node._children !== undefined) {
           temp.children = toElNodes(node._children);
@@ -250,11 +273,11 @@ export const TreeGridExControl = defineComponent({
       elTableData,
       renderColumns,
       tableRefreshKey,
-      renderNoData,
       loadData,
       onRowClick,
-      onExpandChange,
+      renderNoData,
       renderPopover,
+      onExpandChange,
       handleRowClassName,
     };
   },
@@ -281,15 +304,26 @@ export const TreeGridExControl = defineComponent({
         (!this.c.hasAdaptiveColumn && index === this.renderColumns.length - 1);
 
       const widthName = widthFlexGrow ? 'min-width' : 'width';
+
+      // 如果配置有展开图标列且显示，则仅有图标展开列的type为default
+      let type = 'default';
+      const expandiconcolumn =
+        this.c.controlParams.expandiconcolumn?.toLowerCase();
+      const expandColumnSatate = this.c.state.columnStates.find(
+        item => expandiconcolumn && item.key.toLowerCase() === expandiconcolumn,
+      );
+      if (expandColumnSatate && !expandColumnSatate.hidden)
+        type = columnName?.toLowerCase() === expandiconcolumn ? 'default' : '';
       return (
         <el-table-column
-          label={model.caption}
+          type={type}
           prop={columnName}
+          label={model.caption}
           {...{ [widthName]: width }}
           fixed={columnState.fixed}
           sortable={model.enableSort ? 'custom' : false}
-          label-class-name={columnC.model.headerSysCss?.cssName}
           align={model.align?.toLowerCase() || 'center'}
+          label-class-name={columnC.model.headerSysCss?.cssName}
         >
           {{
             header: ({ column }: IData) => {
@@ -306,10 +340,16 @@ export const TreeGridExControl = defineComponent({
                 const comp = resolveComponent(
                   this.c.providers[columnName!].component,
                 );
+                const nodeData = rowState.data;
+                const nodeModel = this.c.getNodeModel(nodeData._nodeId)!;
                 return h(comp, {
                   controller: columnC,
                   row: rowState,
                   key: rowState.data._uuid + columnName,
+                  attrs: renderAttrs(nodeModel, {
+                    ...this.c.getEventArgs(),
+                    data: rowState.data,
+                  }),
                 });
               }
               return null;
@@ -335,6 +375,9 @@ export const TreeGridExControl = defineComponent({
               onExpandChange={this.onExpandChange}
               row-class-name={this.handleRowClassName}
               load={this.loadData}
+              {...renderAttrs(this.c.model, {
+                ...this.c.getEventArgs(),
+              })}
             >
               {{
                 empty: this.renderNoData,

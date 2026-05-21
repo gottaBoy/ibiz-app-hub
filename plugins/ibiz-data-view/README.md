@@ -24,7 +24,7 @@ iBiz数据大屏插件，提供以下核心功能模块：
 │  ├─ custom-border                             自定义边框样式（1-13）
 │  ├─ custom-button                             自定义按钮样式（1-6）
 │  ├─ custom-decoration                         自定义装饰器样式（1-6，11）
-│  ├─ custom-image-search-box                   图片搜索框
+│  ├─ custom-search-box                         搜索框
 │  ├─ digital-flop                              数字翻牌器
 │  ├─ index.ts
 │  ├─ percent-pond                              百分比进度条

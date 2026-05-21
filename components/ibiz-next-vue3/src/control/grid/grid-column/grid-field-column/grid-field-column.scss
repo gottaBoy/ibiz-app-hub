@@ -2,7 +2,7 @@ $grid-field-column: (
   cell-padding: getCssVar(control-grid, cell-padding),
   clickable-text-color: getCssVar(color, link),
   clickable-hover-text-color: getCssVar(color, link-hover),
-  color: getCssVar(color, text, 2),
+  color: getCssVar(color, text, 0),
 );
 
 @include b(grid-field-column) {

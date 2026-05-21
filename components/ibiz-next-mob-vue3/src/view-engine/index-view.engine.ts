@@ -8,7 +8,7 @@ import {
 import { IAppIndexView } from '@ibiz/model-core';
 
 export class IndexViewEngine extends ViewEngineBase {
-  protected declare view: IViewController<
+  declare protected view: IViewController<
     IAppIndexView,
     IIndexViewState,
     IViewEvent

@@ -12,7 +12,7 @@ import { IAppIndexView } from '@ibiz/model-core';
 import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router';
 
 export class IndexViewEngine extends ViewEngineBase {
-  protected declare view: IViewController<
+  declare protected view: IViewController<
     IAppIndexView,
     IIndexViewState,
     IViewEvent

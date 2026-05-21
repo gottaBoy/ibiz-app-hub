@@ -212,7 +212,9 @@ export class UtilService {
     // 设置数据
     tempData[modelIdAppDEFieldId as string] = params?.modelId;
     tempData[modelAppDEFieldId as string] = JSON.stringify(data);
-    tempData[appIdAppDEFieldId as string] = tempContext.srfappid;
+    // 应用中appid为应用codeName，适配多应用情况
+    const app = ibiz.hub.getApp(tempContext.srfappid);
+    tempData[appIdAppDEFieldId as string] = app.model.codeName;
     tempData[userIdAppDEFieldId as string] = tempContext.srfpersonid;
     tempData.type = params?.type;
     tempData.owner_type = params?.ownerType;

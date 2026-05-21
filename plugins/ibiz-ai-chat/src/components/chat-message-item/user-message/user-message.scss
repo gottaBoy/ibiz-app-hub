@@ -5,13 +5,51 @@
     position: relative;
     box-sizing: border-box;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     max-width: 100%;
     font-size: 14px;
     text-align: left;
     word-break: break-word;
     user-select: text;
     transition: all 0.3s ease;
+
+  @include m('warning-container'){
+      display: flex;
+      align-items: center;
+      padding: 4px;
+    }
+
+    @include m('warning'){
+      position: relative;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+     
+      .warning-icon{
+        position: absolute;
+        top: 0;
+        left: 0;
+        visibility: visible; 
+      }
+
+      .refresh-icon{
+        position: absolute;
+        top: 0;
+        left: 0;
+        visibility: hidden;
+      }
+
+      &:hover{
+        .warning-icon{
+          visibility: hidden; 
+        }
+
+        .refresh-icon{
+          visibility: visible;
+        }
+      }
+    }
+
     @include m('body') {
       width: fit-content;
       padding: 10px 16px;
@@ -78,7 +116,7 @@
       background-color: getCssVar(ai-chat, background, color);
     }
 
-    .cherry-previewer {
+    .cherry div.cherry-previewer {
       padding: 0;
       color: getCssVar(ai-chat, color);
       background-color: getCssVar('ai-chat', 'background-color-light');
@@ -102,7 +140,7 @@
   @include e('user-header') {
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
     width: 100%;
     height: 32px;
     margin-bottom: 8px;
@@ -112,5 +150,53 @@
     padding: 6px;
     font-size: 14px;
     font-weight: 800;
+  }
+
+  @include e('text-content'){
+    @include when('collapse'){
+      overflow: hidden;
+
+      .cherry-previewer {
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+      }
+    }
+
+    img {
+      min-height: 27px;
+    }
+  }
+
+  @include e('collapse-btn') {
+    position: absolute;
+    top: 4px;
+    right: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    background-color: #{getCssVar('ai-chat', 'background-color-2')};
+    border-radius: 50%;
+
+    svg {
+      width: 1em !important;
+      height: 1em !important;
+      font-size: 12px !important;
+      fill: currentcolor;
+    }
+
+    @include when('visible') {
+      display: flex;
+    }
+  }
+
+  .pre-wrap-container {
+    position: relative;
+    padding-right: 24px;
   }
 }

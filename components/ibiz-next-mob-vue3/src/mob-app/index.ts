@@ -1,2 +1,2 @@
 export { runApp } from './main';
-export { AuthGuardHooks } from './guard';
+export { AuthGuardHooks, AuthGuard } from './guard';

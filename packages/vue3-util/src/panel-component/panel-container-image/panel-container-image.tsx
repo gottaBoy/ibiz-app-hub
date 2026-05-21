@@ -93,9 +93,8 @@ export const PanelContainerImage = defineComponent({
     return (
       <div
         class={this.classArr}
-        onClick={() => {
-          this.controller.onClick();
-        }}
+        v-loading={this.controller.state.loading}
+        onClick={event => this.controller.onClick(event)}
         style={this.backgroundStyle}
       >
         {this.controller.model.cssStyle ? (

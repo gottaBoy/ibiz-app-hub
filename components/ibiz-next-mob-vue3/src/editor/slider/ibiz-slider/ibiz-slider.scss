@@ -1,20 +1,36 @@
+$slider: (
+  width-slider-button: 1.86rem,
+  height-slider-button-line-height: 1.29rem,
+  min-height: getCssVar(editor, default, line-height),
+  color-text: getCssVar(color, white),
+  color-bg: getCssVar(color, primary),
+  spacing-padding: 0 getCssVar(spacing, base-tight),
+  font-fontSize: getCssVar(font-size, regular),
+  font-button-fontSize: getCssVar(font-size, small),
+  radius-button: rem(100px),
+);
+
 @include b(slider) {
+  @include set-component-css-var(slider, $slider);
+
   height: 100%;
-  min-height: rem(20px);
+  min-height: getCssVar(slider, min-height);
   @include flex(row, flex-start, center);
-  padding: 0 rem(13px);
+
+  padding: getCssVar(slider, spacing-padding);
 
   @include e('circle') {
     width: 100%;
     height: 100%;
     @include m('text') {
-      width: 100%;
-      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: getCssVar('font-size', 'regular');
+      width: 100%;
+      height: 100%;
+      font-size: getCssVar(slider, font-fontSize);
     }
+
     .van-circle{
       width: 100%;
       height: 100%;
@@ -22,12 +38,12 @@
   }
   
   @include b(slider-button) {
-    width: rem(26px);
-    font-size: rem(10px);
-    line-height: rem(18px);
-    color: #fff;
+    width: getCssVar(slider, width-slider-button);
+    line-height: getCssVar(slider, height-slider-button-line-height);
+    font-size: getCssVar(slider, font-button-fontSize);
+    color: getCssVar(slider, color-text);
     text-align: center;
-    background-color: getCssVar(color, primary);
-    border-radius: rem(100px);
+    background-color: getCssVar(slider, color-bg);
+    border-radius: getCssVar(slider, radius-button);
   }
 }

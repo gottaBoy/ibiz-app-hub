@@ -6,7 +6,7 @@ export default {
   deviewCodeName: 'comment_display',
   deviewId: 'c290337dc6cc78c952f4b4b571c08dd1',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

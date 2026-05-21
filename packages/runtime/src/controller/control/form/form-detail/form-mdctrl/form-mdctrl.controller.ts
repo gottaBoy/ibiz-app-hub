@@ -7,7 +7,7 @@ import { FormNotifyState } from '../../../../constant';
 import { UIActionUtil } from '../../../../../ui-action';
 import { EditFormController } from '../../edit-form';
 import { IFormMDCtrlController } from '../../../../../interface';
-import { getAllUIActionItems } from '../../../../../model';
+import { calcUIActionGroup, getAllUIActionItems } from '../../../../../model';
 
 /**
  * @description 表单多数据部件控制器
@@ -127,11 +127,27 @@ export class FormMDCtrlController
    * @memberof FormMDCtrlController
    */
   protected async onInit(): Promise<void> {
-    super.onInit();
+    await super.onInit();
     await this.initActionStates();
     (this.form as EditFormController).evt.on('onBeforeSave', async () => {
       await this.save();
     });
+  }
+
+  /**
+   * @description 初始化界面行为组
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof FormMDCtrlController
+   */
+  protected async initUIActions(): Promise<void> {
+    if (this.model.uiactionGroup) {
+      await calcUIActionGroup(
+        this.model.uiactionGroup,
+        this.form.context,
+        this.form.params,
+      );
+    }
   }
 
   /**

@@ -70,4 +70,17 @@ export interface ITreeEvent extends IMDControlEvent {
       parentNodeData?: ITreeNodeData;
     };
   };
+
+  /**
+   * @description 更新UI事件
+   * @type {{
+   *     event: EventBase;
+   *     emitArgs: undefined;
+   *   }}
+   * @memberof ITreeEvent
+   */
+  onUpdateUI: {
+    event: EventBase;
+    emitArgs: undefined;
+  };
 }

@@ -1,11 +1,35 @@
+$single-picker:(
+  // 颜色
+  color-picker-container-bg: getCssVar(color, fill, 3),
+  color-picker-show-input-active: getCssVar(color, primary),
+  color-picker-error: getCssVar(color, danger),
+  color-picker-label-text: getCssVar(color, tertiary),
+  color-picker-input-background-color: getCssVar(color, fill, 3),
+  // 间距
+  spacing-picker-padding: getCssVar(spacing, base),
+  spacing-picker-input-padding: getCssVar(spacing, base),
+  spacing-picker-show-input-label-left: getCssVar(spacing, base),
+  spacing-picker-margin-top: getCssVar(spacing, base),
+  spacing-picker-show-input-label-margin-top: getCssVar(spacing, base),
+  spacing-picker-error-top: getCssVar(spacing, tight),
+  // 字体
+  font-picker-show-input-label-fontSize: getCssVar(font-size, small),
+  font-picker-label-fontSize: getCssVar(font-size, header, 4),
+  font-picker-error-fontSize: getCssVar(font-size, small),
+  // 其他
+  border-show-input-border-bottom: rem(1px) solid getCssVar(color, primary),
+  border-error-border-bottom: rem(1px) solid getCssVar(color, danger),
+);
 @include b('single-picker') {
+  @include set-component-css-var('single-picker',$single-picker);
+
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: center;
-  padding: getCssVar(spacing, base);
-  margin-top: getCssVar(spacing, base);
+  padding: getCssVar(single-picker, spacing-picker-padding);
+  margin-top: getCssVar(single-picker, spacing-picker-margin-top);
   @include e('container') {
     position: relative;
     display: flex;
@@ -13,29 +37,29 @@
     align-items: start;
     justify-content: left;
     width: 100%;
-    padding: getCssVar(spacing, base);
-    margin-top: getCssVar(spacing, base);
+    padding: getCssVar(single-picker, spacing-picker-padding);
+    margin-top: getCssVar(single-picker, spacing-picker-margin-top);
     text-align: left;
-    background-color: getCssVar(color, fill, 3);
+    background-color: getCssVar(single-picker, color-picker-container-bg);
     @include when('show-input') {
-      border-bottom: 1px solid getCssVar(color, primary);
+      border-bottom: getCssVar(single-picker, border-show-input-border-bottom);
       @include e('input') {
         opacity: 1;
       }
       @include e('label') {
         opacity: 1;
-        left: getCssVar(spacing, base);
+        left: getCssVar(single-picker, spacing-picker-show-input-label-left);
         top: 0%;
-        margin-top: getCssVar(spacing, base);
-        font-size: getCssVar(font-size, small);
-        color: getCssVar(color, primary);
+        margin-top: getCssVar(single-picker, spacing-picker-show-input-label-margin-top);
+        font-size: getCssVar(single-picker, font-picker-show-input-label-fontSize);
+        color: getCssVar(single-picker, color-picker-show-input-active);
         transform: unset;
       }
     }
     @include when('error'){
-        border-bottom: 1px solid getCssVar(color, danger);
+        border-bottom: getCssVar(single-picker, border-error-border-bottom);
         @include e('label') {
-            color: getCssVar(color, danger);
+            color: getCssVar(single-picker, color-picker-error);
         }
     }
   }
@@ -45,22 +69,22 @@
     top: 50%;
     z-index: 1;
     left: 50%;
-    font-size: getCssVar(font-size, header, 4);
-    color: getCssVar(color, tertiary);
+    font-size: getCssVar(single-picker, font-picker-label-fontSize);
+    color: getCssVar(single-picker, color-picker-label-text);
     transition: all linear 0.1s;
     text-align: center;
     transform: translate(-50%, -50%);
   }
   @include e('input') {
-    margin-top: getCssVar(spacing, base);
-    background-color: getCssVar(color, fill, 3);
+    margin-top: getCssVar(single-picker, spacing-picker-input-padding);
+    background-color: getCssVar(single-picker, color-picker-input-background-color);
     opacity: 0;
   }
   @include e('error') {
     position: absolute;
-    top: calc(100% + getCssVar(spacing, tight));
-    font-size: getCssVar(font-size, small);
-    color: getCssVar(color, danger);
+    top: calc(100% + getCssVar(single-picker, spacing-picker-error-top));
+    font-size: getCssVar(single-picker, font-picker-error-fontSize);
+    color: getCssVar(single-picker, color-picker-error);
     white-space: pre-line;
   }
 }

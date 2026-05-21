@@ -22,6 +22,7 @@ export class SubAppRefWriter extends ModelObjectWriter {
       'appMenuModel',
       c.s('app.appmenu.AppMenuModel[]', s, 'getPSAppMenuModel'),
     );
+    _.w(d, 'devSlnSysId', s, 'getPSDevSlnSysId');
     _.w(d, 'refParam', s);
     _.w(d, 'refParam2', s);
     _.w(d, 'serviceId', s);

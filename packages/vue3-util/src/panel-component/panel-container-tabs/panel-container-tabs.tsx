@@ -1,8 +1,8 @@
+import { PanelContainerController } from '@ibiz-template/runtime';
 import { IPanelContainer } from '@ibiz/model-core';
 import { defineComponent, h, PropType, resolveComponent } from 'vue';
 import { useNamespace } from '../../use';
 import './panel-container-tabs.scss';
-import { PanelContainerController } from '../panel-container/panel-container.controller';
 
 /**
  * 分页容器

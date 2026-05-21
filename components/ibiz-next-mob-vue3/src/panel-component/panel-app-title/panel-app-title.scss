@@ -1,10 +1,24 @@
 $panel-app-title: (
-  'color': getCssVar(color, text, 0),
-  'font-size': getCssVar(font-size, header-3),
-  'font-weight': getCssVar(font-weight, bold),
-  'padding': 0 getCssVar(spacing, base, tight),
-  'collapse-padding': 0 getCssVar(spacing, tight),
-  'not-index-height': 60px,
+  // 颜色
+  color-text: getCssVar(color, text, 0),
+  // 间距
+  spacing-padding: 0 getCssVar(spacing, base, tight),
+  spacing-collapse-padding: 0 getCssVar(spacing, tight),
+  spacing-logo-padding: 0 getCssVar(spacing, tight),
+  // 字体
+  font-title-fontSize: getCssVar(font-size, header-3),
+  font-weight: getCssVar(font-weight, bold),
+  font-logo-fontSize: calc(getCssVar('font-size', 'header-1') + getCssVar(spacing, tight)),
+  font-title-fontWeight: getCssVar(font-weight, bold),
+  font-caption2-fontSize: getCssVar(font-size, header-4),
+  font-captoin2-fontWeight: getCssVar(font-weight, bold),
+  font-subCaption2-fontSize: getCssVar(font-size, header-5),
+  // 宽高
+  width-expand: rem(66px),
+  width-expand-svg: rem(66px),
+  height-not-index-height: rem(60px),
+  height-expand: rem(66px),
+  
 );
 
 @include b(panel-app-title) {
@@ -14,23 +28,23 @@ $panel-app-title: (
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: getCssVar('panel-app-title', 'padding');
+  padding: getCssVar('panel-app-title', 'spacing-padding');
   cursor: pointer;
 
   @include e(title) {
     @include utils-ellipsis;    
 
-    font-size: getCssVar('panel-app-title', 'font-size');
-    font-weight: bold;
-    color: getCssVar('panel-app-title', 'color');
+    font-size: getCssVar('panel-app-title', 'font-title-fontSize');
+    font-weight: getCssVar('panel-app-title', 'font-title-fontWeight');
+    color: getCssVar('panel-app-title', 'color-text');
   }
 
   @include e(logo) {
     @include flex(row, center, center);
 
     height: 100%;
-    padding: 0 getCssVar('spacing', 'tight');
-    font-size: calc(getCssVar('font-size', 'header-1') + 8px);
+    padding: getCssVar('panel-app-title', 'spacing-logo-padding');
+    font-size: getCssVar('panel-app-title', 'font-logo-fontSize');
     
     img {
       display: inline-block;
@@ -39,18 +53,17 @@ $panel-app-title: (
     }  
     
     svg {
-      fill: getCssVar('panel-app-title', 'color');
+      fill: getCssVar('panel-app-title', 'color-text');
     }
     @include m('expand') {
-      width: 66px;
-      height: 66px;
+      width: getCssVar('panel-app-title', 'width-expand');
+      height: getCssVar('panel-app-title', 'height-expand');
 
       &+svg {
-        width: calc(100% - 66px);
+        width: calc(100% - getCssVar(panel-app-title, 'width-expand-svg'));
       }
     }
   }
-
 
   @include when(only-img){
     @include e(logo) {
@@ -58,10 +71,9 @@ $panel-app-title: (
     }    
   }
 
-
   @include when(collapse){
     max-width: 100%;
-    padding:  getCssVar(panel-app-title, collapse-padding);
+    padding:  getCssVar(panel-app-title, spacing-collapse-padding);
     @include e(collapse-title){
       width: 100%;
     }
@@ -75,20 +87,20 @@ $panel-app-title: (
 
     @include e(caption2){
       overflow: hidden;
-      font-size: getCssVar(font-size, header-4);
-      font-weight: getCssVar(panel-app-title, font-weight);
+      font-size: getCssVar(panel-app-title, font-caption2-fontSize);
+      font-weight: getCssVar(panel-app-title, font-captoin2-fontWeight);
       text-align: center;
       white-space: nowrap;      
     }
     @include e(subCaption2){
       overflow: hidden;
-      font-size: getCssVar(font-size, header-5);
+      font-size: getCssVar(panel-app-title, font-subCaption2-fontSize);
       text-align: center;
       white-space: nowrap;        
     }
   }
 
   @include when('only-title'){
-    height: getCssVar('panel-app-title','not-index-height');
+    height: getCssVar('panel-app-title','height-not-index-height');
   }
 }

@@ -5,7 +5,7 @@ export default {
   deviewCodeName: 'chartExpTabExpView',
   deviewId: '17dd1ce2f1b12d0eeee7987f5cae3a06',
   appWFId: 'workflow',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },

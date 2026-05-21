@@ -1,17 +1,17 @@
 @include b(internal-message-container) {
   position: relative;
 
-  @include m(clickable){
+  @include m(clickable) {
     cursor: pointer;
   }
 
-  &:hover{
-    .#{bem(internal-message-container-toolbar)}{
+  &:hover {
+    .#{bem(internal-message-container-toolbar)} {
       display: block;
     }
   }
 
-  @include e(unread-tag){
+  @include e(unread-tag) {
     position: absolute;
     top: getCssVar('spacing', 'tight');
     right: getCssVar('spacing', 'tight');
@@ -23,27 +23,29 @@
     border-radius: getCssVar(border, radius, circle);
   }
 
-  @include e(click-tag){
+  @include e(click-tag) {
     position: absolute;
     top: 50%;
-    right: getCssVar('spacing', 'extra-tight');
-    font-size: getCssVar('font-size', 'header-5');
+    right: getCssVar('spacing', 'tight');
+    font-size: getCssVar('font-size', 'header-6');
     transform: translateY(-50%);
-  }  
 
-  @include m(unread){
-    @include e(unread-tag){
+    &:hover {
+      color: getCssVar(color, primary);
+    }
+  }
+
+  @include m(unread) {
+    @include e(unread-tag) {
       display: block;
     }
 
-    &:hover{
-      @include e(unread-tag){
+    &:hover {
+      @include e(unread-tag) {
         display: none;
       }
     }
-
   }
-
 }
 
 @include b(internal-message-container-toolbar) {
@@ -53,12 +55,12 @@
   display: none;
   padding: getCssVar('spacing', 'tight');
 
-  @include e(button){
+  @include e(button) {
     margin-left: getCssVar('spacing', 'tight');
     cursor: pointer;
 
-    &:hover{
-      color: getCssVar(color,primary);
+    &:hover {
+      color: getCssVar(color, primary);
     }
   }
 }

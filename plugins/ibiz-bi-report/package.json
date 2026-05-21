@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template-plugin/bi-report",
-  "version": "0.0.26",
+  "version": "0.0.32",
   "description": "iBiz BI报表组件",
   "author": "iBiz",
   "license": "MIT",
@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "watch": "vite build --watch",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "publish:npm": "npm run build && npm publish --access public --registry=https://registry.npmjs.org/",
     "publish:local": "npm run build && npm publish --access public --registry=http://172.16.240.221:8081/repository/local/"

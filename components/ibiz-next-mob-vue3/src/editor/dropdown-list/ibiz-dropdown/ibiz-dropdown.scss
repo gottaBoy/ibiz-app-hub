@@ -1,18 +1,75 @@
+$dropdown: (
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  // 间距
+  spacing-item-padding: 0,
+  spacing-bg-item-padding: 0 getCssVar(spacing, base),
+  // 圆角
+  radius-item: getCssVar(spacing, base),
+  // 字体
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-icon-fontSize: getCssVar(font-size, header, 5),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  // 其它
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
+
+$dropdown-pop: (
+  // 颜色
+  color-search-bg: getCssVar(color, fill, 2),
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  color-active: getCssVar(color, primary),
+  // 间距
+  spacing-padding: getCssVar(spacing, base),
+  spacing-caption-margin-left: getCssVar(spacing, base),
+  spacing-search-margin-top: getCssVar(spacing, base),
+  spacing-search-padding: getCssVar(spacing, extra-tight),
+  spacing-search-icon-padding: 0 getCssVar(spacing, extra-tight),
+  spacing-item-padding: getCssVar(spacing, base) 0,
+  spacing-bg-item-padding: getCssVar(spacing, extra-tight) getCssVar(spacing, base),
+  spacing-icon-gap: getCssVar(spacing, tight),
+  // 圆角
+  radius-item: getCssVar(spacing, base),
+
+  // 边框
+  border: getCssVar('border-thickness', 'control') solid getCssVar(color, border),
+
+  // 清除按钮样式
+  clear-display: getCssVar(editor, default, required-style),
+);
+
 @include b(dropdown) {
+  @include set-component-css-var(dropdown, $dropdown);
+
   height: 100%;
+  font-size: getCssVar(dropdown, font-fontSize);
+  line-height: getCssVar(dropdown, font-lineHeight);
+  color: getCssVar(dropdown, color);
+  text-align: getCssVar(dropdown, font-textAlign);
+
+  --van-field-input-text-color: #{getCssVar(dropdown, color)};
+  --van-cell-text-color: #{getCssVar(dropdown, color)};
+  --van-cell-value-color: #{getCssVar(dropdown, color)};
+  --van-cell-line-height: #{getCssVar(dropdown, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(dropdown, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(dropdown, font-fontSize)};
 
   @include e(select) {
     height: 100%;
-    font-size: getCssVar('form-item', 'font-size');
+    font-size: getCssVar(dropdown, font-fontSize);
 
     .#{bem('dropdown','select-item')} {
-      padding: 0;
-      color: getCssVar(dropdown, select-option-item-color);
-      background-color: getCssVar(dropdown, select-option-item-bkcolor);
-      border-radius: getCssVar(spacing, base);
+      padding: getCssVar(dropdown, spacing-item-padding);
+      color: getCssVar(dropdown, color-item);
+      background-color: getCssVar(dropdown, color-item-bg);
+      border-radius: getCssVar(dropdown, radius-item);
     }
     .#{bem('dropdown','select-item', 'has-bg')} {
-      padding: 0 getCssVar(spacing, base);
+      padding: getCssVar(dropdown, spacing-bg-item-padding);
     }
 
     &::after {
@@ -26,104 +83,83 @@
     }
   }
 
-  @include e(option) {
-    padding: rem(5px) rem(16px);
-    line-height: 21px;
-    color: getCssVar(dropdown, select-option-item-color);
-    background-color: getCssVar(dropdown, select-option-item-bkcolor);
-    border-radius: getCssVar(spacing, base);
+  @include m(disabled) {
+    --van-field-input-text-color: #{getCssVar(dropdown, color-disabled)};
   }
 
-  .van-picker {
-    .van-picker__mask {
-      background-image: getCssVar(color, overlay, bg);
-    }
-  }
-
-  input:disabled {
-    color: getCssVar('form-item', 'disabled-color');
-    background-color: getCssVar('form-item', 'disabled-bg-color');
-    border-color: getCssVar('form-item', 'disabled-border-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'disabled-color');
-  }
 
   @include m(readonly) {
-    color: getCssVar('form-item', 'readonly-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'readonly-color');
+    color: getCssVar(dropdown, color-readonly);
   }
 
   .van-field__control {
-    justify-content: getCssVar(form-item-container, editor-align);
+    justify-content: getCssVar(dropdown, flex-justify-content);
   }
 
   @include e(placeholder) {
-    color: getCssVar('form-item', 'placeholder-color');
+    color: getCssVar(dropdown, color-placeholder);
   }
 }
 
 @include b(dropdown-readonly-text-item) {
   display: inline-block;
-  padding: 0;
-  font-size: rem(14px);
-  line-height: rem(24px);
-  color: getCssVar(dropdown, select-option-item-color);
-  background-color: getCssVar(dropdown, select-option-item-bkcolor);
-  border-radius: getCssVar(spacing, base);
+  padding: getCssVar(dropdown, spacing-item-padding);
+  font-size: getCssVar(dropdown, font-fontSize);
+  line-height: getCssVar(dropdown, font-lineHeight);
+  color: getCssVar(dropdown, color-item);
+  background-color: getCssVar(dropdown, color-item-bg);
+  border-radius: getCssVar(dropdown, radius-item);
   @include m(has-bg) {
-    padding: 0 getCssVar(spacing, base);
+    padding: getCssVar(dropdown, spacing-bg-item-padding);
   }
 }
 
 @include b(dropdown-pop){
+  @include set-component-css-var(dropdown-pop, $dropdown-pop);
+
   display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: getCssVar(spacing,base);
-  flex-direction: column;
+  padding: getCssVar(dropdown-pop, spacing-padding);
   @include e('header'){
-    flex-shrink: 0;
     display: flex;
+    flex-shrink: 0;
     justify-content: space-between;
     opacity: 0.7;
     @include m('caption'){
-      margin-left: getCssVar(spacing,base);
+      margin-left: getCssVar(dropdown-pop, spacing-caption-margin-left);
     }
     @include m('right'){
-      display: getCssVar(form-item-container,required-style);
+      display: getCssVar(dropdown-pop, clear-display);
     }
   }
   @include e('content'){
+    display: flex;
     flex: 1;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
     overflow: hidden;
   }
   @include e('search'){
-    margin-top: getCssVar(spacing,base);
     flex-shrink: 0;
-    padding: getCssVar(spacing,extra-tight) 0;
+    margin-top: getCssVar(dropdown-pop, spacing-search-margin-top);
     overflow: hidden;
-    border-radius: getCssVar(border-radius,medium);
 
     .van-field{
-      --van-field-icon-size: #{getCssVar(font-soze,heaader-5)};
-      padding: getCssVar(spacing,extra-tight);
-      --van-cell-background:#{getCssVar(color,fill,2)};
+      padding: getCssVar(dropdown-pop, spacing-search-padding);
+
+      --van-cell-background: #{getCssVar(dropdown-pop, color-search-bg)};
 
       .van-field__left-icon{
         display: flex;
         align-items: center;
-        padding: 0 getCssVar(spacing,extra-tight);
+        padding: getCssVar(dropdown-pop, spacing-search-icon-padding);
       }
 
       .van-field__value{
         text-align: left;
-        &::placeholder{
-          font-size: getCssVar(font-size,small);
-          color: getCssVar(color,text,3);
-        }
       }
     }
     
@@ -133,22 +169,27 @@
     overflow: auto;
     @include m('item'){
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: getCssVar(spacing,base) 0;
-      border-bottom: 1px solid getCssVar(color,border);
+      justify-content: space-between;
+      padding: getCssVar(dropdown-pop, spacing-item-padding);
+      border-bottom: getCssVar(dropdown-pop, border);
     }
     @include m('item-text'){
-      color: getCssVar(dropdown, select-option-item-color);
-      background-color: getCssVar(dropdown, select-option-item-bkcolor);
-      
-      border-radius: getCssVar(spacing,base);
-      @include when('bkcolor'){
-        padding: getCssVar(spacing,extra-tight)  getCssVar(spacing,base);
+      color: getCssVar(dropdown-pop, color-item);
+      background-color: getCssVar(dropdown-pop, color-item-bg);
+      border-radius: getCssVar(dropdown-pop, radius-item);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include when('bkcolor') {
+        padding: getCssVar(dropdown-pop, spacing-bg-item-padding);
+      }
+      .#{bem(icon)} {
+        margin-right: getCssVar(dropdown-pop, spacing-icon-gap); 
       }
     }
     @include m('selected'){
-      color: getCssVar(color,primary);
+      color: getCssVar(dropdown-pop, color-active);
     }
   }
 }

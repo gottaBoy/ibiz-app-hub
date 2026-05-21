@@ -7,6 +7,7 @@ import {
   onUnmounted,
   reactive,
   ref,
+  VNode,
   watch,
 } from 'vue';
 import {
@@ -147,15 +148,21 @@ export const MobUserMessage = defineComponent({
       c.load();
     });
 
+    const renderNoData = (): VNode => {
+      // 未加载不显示无数据
+      return (
+        <iBizNoData
+          class={ns.e('nodata')}
+          text={ibiz.i18n.t(
+            'panelComponent.userMessage.internalMessageTab.notificationYet',
+          )}
+        ></iBizNoData>
+      );
+    };
+
     const renderItems = () => {
       if (allItems.value.length === 0) {
-        return (
-          <div class={ns.e('nodata')}>
-            {ibiz.i18n.t(
-              'panelComponent.userMessage.internalMessageTab.notificationYet',
-            )}
-          </div>
-        );
+        return renderNoData();
       }
       return allItems.value.map(msg => {
         let provider: IInternalMessageProvider | undefined;

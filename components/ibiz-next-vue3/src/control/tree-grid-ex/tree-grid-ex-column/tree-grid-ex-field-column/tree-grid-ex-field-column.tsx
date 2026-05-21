@@ -20,6 +20,9 @@ export const TreeGridExFieldColumn = defineComponent({
       type: TreeGridExRowState,
       required: true,
     },
+    nowrap: {
+      type: Boolean,
+    },
   },
   setup(props) {
     const ns = useNamespace('tree-grid-ex-field-column');
@@ -83,9 +86,10 @@ export const TreeGridExFieldColumn = defineComponent({
     const tooltip = computed(() => {
       // ellipsis模式且属性有值的时候显示tooltip
       if (
-        props.controller.treeGrid.overflowMode === 'ellipsis' &&
-        isNotNil(fieldValue.value) &&
-        fieldValue.value !== ''
+        props.nowrap === true ||
+        (props.controller.treeGrid.overflowMode === 'ellipsis' &&
+          isNotNil(fieldValue.value) &&
+          fieldValue.value !== '')
       ) {
         return showText.value;
       }
@@ -185,6 +189,7 @@ export const TreeGridExFieldColumn = defineComponent({
           }
           actions-state={this.row.columnActionsStates[this.controller.name]}
           groupLevelKeys={[50, 100]}
+          nowrap={this.nowrap}
           onActionClick={this.onActionClick}
         ></iBizActionToolbar>
       );

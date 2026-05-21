@@ -13,7 +13,7 @@ export class SubAppRefViewEngine extends ViewEngineBase {
    * @protected
    * @memberof WizardViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDESubAppRefView,
     ISubAppRefViewState,
     ISubAppRefViewEvent

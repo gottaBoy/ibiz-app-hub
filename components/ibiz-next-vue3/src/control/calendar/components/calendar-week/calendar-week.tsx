@@ -390,10 +390,8 @@ export const CalendarWeek = defineComponent({
           [`${this.ns.cssVarBlockName(
             'header-event-scroll-bar-thumb-height',
           )}`]: `${this.thumbHeight}px`,
-          [`${this.ns.cssVarBlockName('header-event-scroll-bar-thumb-top')}`]:
-            `${this.scrollTop}px`,
-          [`${this.ns.cssVarBlockName('header-event-scroll-real-height')}`]:
-            `${this.realHeight}px`,
+          [`${this.ns.cssVarBlockName('header-event-scroll-bar-thumb-top')}`]: `${this.scrollTop}px`,
+          [`${this.ns.cssVarBlockName('header-event-scroll-real-height')}`]: `${this.realHeight}px`,
         }}
       >
         {this.renderHeader()}

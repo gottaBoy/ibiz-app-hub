@@ -15,7 +15,7 @@ export class PortalViewEngine extends ViewEngineBase {
    * @type {ViewController<IAppDEAppPortalView, IAppPortalViewState, IAppPortalViewEvent>}
    * @memberof PortalViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppPortalView,
     IAppPortalViewState,
     IAppPortalViewEvent

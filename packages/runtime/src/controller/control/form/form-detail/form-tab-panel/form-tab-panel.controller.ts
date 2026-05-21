@@ -1,22 +1,33 @@
 import { IDEFormTabPanel } from '@ibiz/model-core';
-import { FormDetailController } from '../form-detail';
 import { FormTabPanelState } from './form-tab-panel.state';
 import { AppCounter } from '../../../../../service';
 import { FormTabPageController } from '../form-tab-page';
 import { IApiFormTabPanelController } from '../../../../../interface';
+import { FormContainerController } from '../form-container';
+import { FormNotifyState } from '../../../../constant';
 
 /**
  * @description 表单分页部件控制器
  * @export
  * @class FormTabPanelController
- * @extends {FormDetailController<IDEFormTabPanel>}
+ * @extends {FormContainerController<IDEFormTabPanel>}
  * @implements {IApiFormTabPanelController}
  */
 export class FormTabPanelController
-  extends FormDetailController<IDEFormTabPanel>
+  extends FormContainerController<IDEFormTabPanel>
   implements IApiFormTabPanelController
 {
   declare state: FormTabPanelState;
+
+  /**
+   * @description 缓存标识
+   * @readonly
+   * @type {string}
+   * @memberof FormTabPanelController
+   */
+  get srfcachekeytempl(): string {
+    return `${this.form.srfcachekeytempl}_${this.model.codeName}_${this.form.data.tempsrfkey}`;
+  }
 
   protected createState(): FormTabPanelState {
     return new FormTabPanelState(this.parent?.state);
@@ -29,6 +40,44 @@ export class FormTabPanelController
   }
 
   /**
+   * @description 表单状态变更通知
+   * @param {FormNotifyState} state
+   * @returns {*}  {Promise<void>}
+   * @memberof FormTabPanelController
+   */
+  async formStateNotify(state: FormNotifyState): Promise<void> {
+    super.formStateNotify(state);
+    if ([FormNotifyState.LOAD, FormNotifyState.DRAFT].includes(state)) {
+      const cacheTabId = localStorage.getItem(this.srfcachekeytempl);
+      if (this.form.srfCachePos && cacheTabId) {
+        const isExist = this.model.deformTabPages?.some(
+          page => page.id === cacheTabId,
+        );
+        if (isExist) this.state.activeTab = cacheTabId;
+      }
+    }
+  }
+
+  /**
+   * @description 初始化计数器
+   * @protected
+   * @returns {*}  {void}
+   * @memberof FormTabPanelController
+   */
+  protected initCounter(): void {
+    const tabPage = this.model.deformTabPages?.find(
+      _item => !!_item.appCounterRefId,
+    );
+    if (!tabPage) return;
+    const { counters } = this.form;
+    const { appCounterRefId } = tabPage;
+    if (appCounterRefId) {
+      this.counter = counters[appCounterRefId];
+      this.counter?.onChange(this.handleCounterChange);
+    }
+  }
+
+  /**
    * 分页点击切换处理
    * @author lxm
    * @date 2024-01-17 02:59:38
@@ -37,6 +86,8 @@ export class FormTabPanelController
    */
   onTabChange(tabId: string): void {
     this.state.activeTab = tabId;
+    if (this.form.srfCachePos)
+      localStorage.setItem(`${this.srfcachekeytempl}`, tabId);
   }
 
   /**

@@ -312,7 +312,7 @@ export class NavPosIndexController extends PanelItemController<IPanelRawItem> {
    * @memberof NavPosIndexController
    */
   clearCache(): void {
-    this.state.cacheKeys = [this.currentKey];
+    this.state.cacheKeys = [];
     this.viewModals = {};
   }
 

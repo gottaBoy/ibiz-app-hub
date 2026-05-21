@@ -34,6 +34,14 @@ export class CodeListService implements IApiCodeListService {
   protected cache: Map<string, readonly CodeListItem[] | DynamicCodeListCache> =
     new Map();
 
+  /**
+   * 已合并子应用代码表标识缓存
+   *
+   * @protected
+   * @type {Map<string, DynamicCodeListCache>}
+   */
+  protected mergedSubCodeListCache: Array<string> = [];
+
   constructor(protected appModel: IApplication) {}
 
   /**
@@ -83,7 +91,18 @@ export class CodeListService implements IApiCodeListService {
    * @returns {*}
    */
   getCodeList(tag: string): IAppCodeList | undefined {
-    return this.allCodeLists.get(tag);
+    const codelist = this.allCodeLists.get(tag);
+    // 仅主应用合并所有子应用同代码表标识代码表
+    // mergedSubCodeListCache防止界面请求重复合并问题
+    if (
+      this.appModel.appId === ibiz.env.appId &&
+      codelist &&
+      !this.mergedSubCodeListCache.includes(codelist.codeListTag!)
+    ) {
+      ibiz.hub.mergeSubAppCodeList(codelist);
+      this.mergedSubCodeListCache.push(codelist.codeListTag!);
+    }
+    return codelist;
   }
 
   /**

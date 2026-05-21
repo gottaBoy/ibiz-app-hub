@@ -3,7 +3,7 @@ import { IAppRedirectView } from '@ibiz/model-core';
 import { clone } from 'ramda';
 import { IModalData, IOpenViewOptions, IViewConfig } from '../../../interface';
 import { calcDeCodeNameById } from '../../../model';
-import { openRedirectView } from '../../../utils';
+import { openRedirectView, stringifyObj } from '../../../utils';
 import { Srfuf } from '../../../service';
 
 /**
@@ -176,6 +176,9 @@ export class OpenAppViewCommand {
     opts: IOpenViewOptions = {},
   ): Promise<IModalData> {
     const { modalOption } = opts;
+    if (opts.parentData) {
+      params.parentData = stringifyObj(opts.parentData);
+    }
     return ibiz.openView.modal(appView.id, context, params, {
       ...modalOption,
       ctx: opts.ctx,
@@ -204,6 +207,9 @@ export class OpenAppViewCommand {
     if (!event) {
       throw new RuntimeError(ibiz.i18n.t('runtime.command.app.missingEvent'));
     }
+    if (opts.parentData) {
+      params.parentData = stringifyObj(opts.parentData);
+    }
     return ibiz.openView.popover(appView.id, event, context, params, {
       ...modalOption,
       ctx: opts.ctx,
@@ -229,6 +235,9 @@ export class OpenAppViewCommand {
     opts: IOpenViewOptions = {},
   ): Promise<IModalData> {
     const { modalOption } = opts;
+    if (opts.parentData) {
+      params.parentData = stringifyObj(opts.parentData);
+    }
     return ibiz.openView.drawer(appView.id, context, params, {
       ...modalOption,
       ctx: opts.ctx,

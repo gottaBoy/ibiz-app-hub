@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
-import { IDEFormItem, IValueItemEditor } from '@ibiz/model-core';
+import { IDEFormItem, IEditor, IValueItemEditor } from '@ibiz/model-core';
 import Schema from 'async-validator';
 import { isNilOrEmpty } from 'qx-util';
+import { isObject } from 'lodash-es';
 import { EditFormController } from '../../edit-form';
 import { FormController } from '../../form/form.controller';
 import { FormDetailController } from '../form-detail/form-detail.controller';
@@ -54,10 +55,10 @@ export class FormItemController
    *
    * @author lxm
    * @date 2022-09-04 18:09:56
-   * @private
+   * @protected
    * @type {Schema}
    */
-  private validator!: Schema;
+  protected validator?: Schema;
 
   /**
    * 值规则
@@ -174,6 +175,19 @@ export class FormItemController
   }
 
   /**
+   * @description 隐藏无值的单位
+   * @readonly
+   * @type {boolean}
+   * @memberof FormItemController
+   */
+  get emptyHiddenUnit(): boolean {
+    if (this.form?.controlParams?.emptyhiddenunit) {
+      return Object.is(this.form?.controlParams?.emptyhiddenunit, 'true');
+    }
+    return ibiz.config.form.emptyHiddenUnit;
+  }
+
+  /**
    * tips缓存标识
    *
    * @private
@@ -208,15 +222,54 @@ export class FormItemController
     }
     // 初始化编辑器控制器,除了隐藏都会需要适配器
     if (this.model.editor && this.model.editor.editorType !== 'HIDDEN') {
-      this.editorProvider = await getEditorProvider(this.model.editor);
+      this.editorProvider = await getEditorProvider(
+        this.model.editor,
+        this.model,
+        this.form.model,
+      );
       if (this.editorProvider) {
         this.editor = await this.editorProvider.createController(
-          this.model.editor,
+          this.createEditorModel(),
           this,
         );
         await this.initRules();
       }
     }
+  }
+
+  /**
+   * @description 获取 enumOptions
+   * @returns {*}  {(IParams | undefined)}
+   * @memberof FormItemController
+   */
+  getEnumOptions(): IParams | undefined {
+    const { jsonSchemaProperties } = this.form as IParams;
+    const deField = this.model.fieldName || this.model.appDEFieldId!;
+    if (!deField) return;
+    return jsonSchemaProperties?.[deField]?.enumOptions;
+  }
+
+  /**
+   * @description 创建编辑器模型
+   * @returns {*}  {IEditor}
+   * @memberof FormItemController
+   */
+  createEditorModel(): IEditor {
+    const editorModel = { ...this.model.editor } as IParams;
+    const enumOptions = this.getEnumOptions();
+    if (isObject(enumOptions)) {
+      const editorParams = { ...editorModel.editorParams };
+      Object.assign(editorParams, {
+        enumOptions: Object.keys(enumOptions).map(key => ({
+          id: key,
+          value: key,
+          text: enumOptions[key],
+        })),
+      });
+      editorModel.editorParams = editorParams;
+    }
+
+    return editorModel as IEditor;
   }
 
   /**
@@ -307,7 +360,18 @@ export class FormItemController
 
     // 刚加载初始化时的值不校验,只校验值项和自身值变更
     if (name.includes(this.name) || name.includes(this.valueItemName!)) {
-      this.validate();
+      const bol = await this.validate();
+      // 值变更且未校验通过时提示错误信息
+      if (
+        this.form.validateMode === 'notification' &&
+        !bol &&
+        this.state.error
+      ) {
+        ibiz.notification.error({
+          title: ibiz.i18n.t('runtime.controller.control.form.formCompletion'),
+          desc: this.state.error,
+        });
+      }
     }
 
     // 有表单项更新，且是自身变更时，触发表单项更新
@@ -407,11 +471,13 @@ export class FormItemController
     ignore: boolean = false,
   ): Promise<void> {
     name = name || this.name;
+    const oldValue = this.data[name];
     await this.form.setDataValue(name, value, ignore);
-    this.executeScriptCode('SCRIPTCODE_CHANGE');
+    this.executeScriptCode('SCRIPTCODE_CHANGE', { oldValue });
     this.form.evt.emit('onFormDetailEvent', {
       formDetailName: name || this.model.id!,
       formDetailEventName: FormDetailEventName.CHANGE,
+      args: { oldValue },
     });
   }
 

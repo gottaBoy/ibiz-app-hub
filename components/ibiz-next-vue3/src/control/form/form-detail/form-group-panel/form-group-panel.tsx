@@ -96,7 +96,11 @@ export const FormGroupPanel = defineComponent({
     let header: unknown = null;
     if (this.modelData.showCaption) {
       header = (
-        <div class={[this.ns.b('header')]} onClick={this.changeCollapse}>
+        <div
+          class={[this.ns.b('header')]}
+          onClick={this.changeCollapse}
+          style={this.controller.model.labelCssStyle}
+        >
           <div class={[this.ns.be('header', 'left')]}>
             <div class={[this.ns.e('caption'), ...this.controller.labelClass]}>
               {this.modelData.sysImage && (
@@ -183,12 +187,18 @@ export const FormGroupPanel = defineComponent({
 
     return (
       <div
-        id={`${this.controller.form.view.model.codeName}_${this.controller.form.model.codeName}_${this.modelData.codeName}`}
         class={classArr}
+        v-loading={this.controller.state.loading}
+        id={`${this.controller.form.view.model.codeName}_${this.controller.form.model.codeName}_${this.modelData.codeName}`}
         onClick={(event: MouseEvent) => this.controller.onClick(event)}
       >
         {header}
-        <div class={[this.ns.b('content')]}>{content}</div>
+        <div
+          class={this.ns.b('content')}
+          style={this.controller.model.cssStyle}
+        >
+          {content}
+        </div>
         {footer}
       </div>
     );

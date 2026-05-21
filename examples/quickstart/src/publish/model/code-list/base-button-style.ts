@@ -1,0 +1,71 @@
+export default {
+  codeListTag: 'base__ButtonStyle',
+  codeListType: 'STATIC',
+  codeName: 'base__ButtonStyle',
+  emptyText: '未定义',
+  codeItems: [
+    {
+      codeName: 'default',
+      text: '默认',
+      value: 'DEFAULT',
+      id: 'default',
+    },
+    {
+      codeName: 'inverse',
+      text: '反向',
+      value: 'INVERSE',
+      id: 'inverse',
+    },
+    {
+      codeName: 'primary',
+      text: '主要',
+      value: 'PRIMARY',
+      id: 'primary',
+    },
+    {
+      codeName: 'info',
+      text: '信息',
+      value: 'INFO',
+      id: 'info',
+    },
+    {
+      codeName: 'success',
+      text: '成功',
+      value: 'SUCCESS',
+      id: 'success',
+    },
+    {
+      codeName: 'warning',
+      text: '警告',
+      value: 'WARNING',
+      id: 'warning',
+    },
+    {
+      codeName: 'danger',
+      text: '危险',
+      value: 'DANGER',
+      id: 'danger',
+    },
+    {
+      codeName: 'style2',
+      text: '样式2',
+      value: 'STYLE2',
+      id: 'style2',
+    },
+    {
+      codeName: 'style3',
+      text: '样式3',
+      value: 'STYLE3',
+      id: 'style3',
+    },
+    {
+      codeName: 'style4',
+      text: '样式4',
+      value: 'STYLE4',
+      id: 'style4',
+    },
+  ],
+  enableCache: true,
+  name: '按钮样式',
+  id: 'web.base__buttonstyle',
+};

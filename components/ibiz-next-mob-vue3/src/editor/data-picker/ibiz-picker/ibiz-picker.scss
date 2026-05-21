@@ -1,17 +1,72 @@
+$picker: (
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-icon: var(--van-field-right-icon-color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  
+  // 字体
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-icon-fontSize: getCssVar(font-size, header, 5),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+);
+
+$picker-pop: (
+  // 颜色
+  color-search-bg: getCssVar(color, fill, 2),
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  color-active: getCssVar(color, primary),
+  // 间距
+  spacing-padding: getCssVar(spacing, base),
+  spacing-caption-margin-left: getCssVar(spacing, base),
+  spacing-search-margin-top: getCssVar(spacing, base),
+  spacing-search-padding: getCssVar(spacing, extra-tight),
+  spacing-search-icon-padding: 0 getCssVar(spacing, extra-tight),
+  spacing-item-padding: getCssVar(spacing, base) 0,
+  spacing-bg-item-padding: getCssVar(spacing, extra-tight) getCssVar(spacing, base),
+  // 圆角
+  radius-item: getCssVar(spacing, base),
+
+  // 边框
+  border: getCssVar('border-thickness', 'control') solid getCssVar(color, border),
+
+  // 清除按钮样式
+  clear-display: getCssVar(editor, default, required-style),
+);
+
 @include b('picker') {
+  @include set-component-css-var(picker, $picker);
+
   height: 100%;
+  font-size: getCssVar(picker, font-fontSize);
+  line-height: getCssVar(picker, font-lineHeight);
+  color: getCssVar(picker, color);
+
+  --van-field-input-text-color: #{getCssVar(picker, color)};
+  --van-cell-text-color: #{getCssVar(picker, color)};
+  --van-cell-value-color: #{getCssVar(picker, color)};
+  --van-cell-line-height: #{getCssVar(picker, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(picker, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(picker, font-fontSize)};
+  --van-field-input-disabled-text-color: #{getCssVar(picker, color-disabled)};
 
   .van-field {
-    font-size: getCssVar('form-item', 'font-size');
-
     &::after {
       display: none;
     }
   }
 
   .van-field__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     button {
-      color: var(--van-field-right-icon-color);
+      height: getCssVar(picker, font-lineHeight);
+      padding: 0;
+      color: getCssVar(picker, color-icon);
       border: none;
     }
   }
@@ -43,104 +98,85 @@
     }
   }
 
-  @include e('transfer-item') {
-    padding: rem(5px);
-    cursor: pointer;
-
-    &:hover {
-      background-color: getCssVar('form-item', 'hover-bg-color');
-    }
-  }
-
-  @include e('link') {
-    width: rem(32px);
-    height: rem(32px);
-    padding: 0 rem(6px);
-  }
-
   @include m(disabled) {
     pointer-events: none;
   }
 
   @include m(readonly) {
-    color: getCssVar('form-item', 'readonly-color');
+    @include set-component-css-var(picker, $picker);
+
+    color: getCssVar(picker, color-readonly);
   }
 
-  input:disabled {
-    color: getCssVar('form-item', 'disabled-color');
-    background-color: getCssVar('form-item', 'disabled-bg-color');
-    border-color: getCssVar('form-item', 'disabled-border-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'disabled-color');
+  input::placeholder {
+    color: getCssVar(picker, color-placeholder);
+    -webkit-text-fill-color: getCssVar(picker, color-placeholder);
   }
 
   @include m(readonly) {
-    color: getCssVar('form-item', 'readonly-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'readonly-color');
-    text-align: getCssVar(form-item-container, editor-align);
+    color: getCssVar(picker, color-readonly);
+    -webkit-text-fill-color: getCssVar(picker, color-readonly);
+    text-align: getCssVar(picker, font-textAlign);
   }
 
   input {
-    text-align: getCssVar(form-item-container, editor-align);
+    text-align: getCssVar(picker, font-textAlign);
   }
 
   @include e('pickup-search-icon'){
-    font-size: getCssVar(font-size,header,5);
     display: flex;
+    font-size: getCssVar(picker, font-icon-fontSize);
   }
   @include e('linkview-icon'){
-    font-size: getCssVar(font-size,header,5);
     display: flex;
+    font-size: getCssVar(picker, font-icon-fontSize);
   }
 }
 @include b(picker-pop){
+  @include set-component-css-var(picker-pop, $picker-pop);
+
   display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: getCssVar(spacing,base);
-  flex-direction: column;
+  padding: getCssVar(picker-pop, spacing-padding);
   @include e('header'){
-    flex-shrink: 0;
     display: flex;
+    flex-shrink: 0;
     justify-content: space-between;
     opacity: 0.7;
     @include m('caption'){
-      margin-left: getCssVar(spacing,base);
+      margin-left: getCssVar(picker-pop, spacing-caption-margin-left);
     }
     @include m('right'){
-      display: getCssVar(form-item-container,required-style);
+      display: getCssVar(picker-pop, clear-display);
     }
   }
   @include e('content'){
+    display: flex;
     flex: 1;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
     overflow: hidden;
   }
   @include e('search'){
-    margin-top: getCssVar(spacing,base);
     flex-shrink: 0;
-    padding: getCssVar(spacing,extra-tight) 0;
+    margin-top: getCssVar(picker-pop, spacing-search-margin-top);
     overflow: hidden;
-    border-radius: getCssVar(border-radius,medium);
 
     .van-field{
-      --van-field-icon-size: #{getCssVar(font-soze,heaader-5)};
-      padding: getCssVar(spacing,extra-tight);
-      --van-cell-background:#{getCssVar(color,fill,2)};
+      padding: getCssVar(picker-pop, spacing-search-padding);
+
+      --van-cell-background:#{getCssVar(picker-pop, color-search-bg)};
 
       .van-field__left-icon{
         display: flex;
         align-items: center;
-        padding: 0 getCssVar(spacing,extra-tight);
+        padding: getCssVar(picker-pop, spacing-search-icon-padding);
       }
 
       .van-field__value{        
-        &::placeholder{
-          font-size: getCssVar(font-size,small);
-          color: getCssVar(color,text,3);
-        }
         input{
           text-align: left;
         }
@@ -153,22 +189,21 @@
     overflow: auto;
     @include m('item'){
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: getCssVar(spacing,base) 0;
-      border-bottom: 1px solid getCssVar(color,border);
+      justify-content: space-between;
+      padding: getCssVar(picker-pop, spacing-item-padding);
+      border-bottom: getCssVar(picker-pop, border);
     }
     @include m('item-text'){
-      color: getCssVar(dropdown, select-option-item-color);
-      background-color: getCssVar(dropdown, select-option-item-bkcolor);
-      
-      border-radius: getCssVar(spacing,base);
+      color: getCssVar(picker-pop, color-item);
+      background-color: getCssVar(picker-pop, color-item-bg);
+      border-radius: getCssVar(picker-pop, radius-item);
       @include when('bkcolor'){
-        padding: getCssVar(spacing,extra-tight)  getCssVar(spacing,base);
+        padding: getCssVar(picker-pop, spacing-bg-item-padding);
       }
     }
     @include m('selected'){
-      color: getCssVar(color,primary);
+      color: getCssVar(picker-pop, color-active);
     }
   }
 }

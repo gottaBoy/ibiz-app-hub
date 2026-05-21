@@ -1,6 +1,6 @@
 import { INavigateParam } from '@ibiz/model-core';
 import { isEmpty, isNil } from 'lodash-es';
-import { isNilOrEmpty, notNilEmpty } from 'qx-util';
+import { isNilOrEmpty, notNilEmpty, createUUID } from 'qx-util';
 
 /**
  * 把对象格式的导航参数转换成数组格式的导航参数
@@ -80,6 +80,13 @@ function getVal(
     return {
       find: true,
       value: new Date().getTime(),
+    };
+  }
+  // 特殊识别srfuniqueid
+  if (key === 'srfuniqueid') {
+    return {
+      find: true,
+      value: createUUID(),
     };
   }
   const keys = key.split('.');

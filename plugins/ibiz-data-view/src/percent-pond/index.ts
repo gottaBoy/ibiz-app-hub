@@ -7,7 +7,7 @@ import { PercentPondProvider } from './percent-pond.provider';
 export const IBizPercentPond = withInstall(PercentPond, function (v: App) {
   v.component(PercentPond.name, PercentPond);
   registerEditorProvider(
-    'EDITOR_CUSTOMSTYLE_SCREEN_PROGRESS',
+    'SLIDER_SCREEN_PROGRESS',
     () => new PercentPondProvider(),
   );
 });

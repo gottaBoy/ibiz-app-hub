@@ -2,3 +2,23 @@
   width: 100%;
   height: 100%;
 }
+
+// 剩余高度样式
+.#{bem('form-page')},
+.#{bem('form-page-tab-item')},
+.#{bem('form-tab-panel-tab-item')},
+.#{bem('form-page-item')},
+.#{bem('col','','flex')} {
+  &:has(.#{bem('form-group', '', 'style4')}) {
+    height: 100%;
+  }
+}
+
+.#{bem('form-page')},
+.#{bem('form-tab-panel')} {
+  > .el-tabs__content {
+    &:has(.#{bem('form-group', '', 'style4')}) {
+      height: calc(100% - 48px);
+    }
+  }
+}

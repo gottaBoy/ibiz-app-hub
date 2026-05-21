@@ -69,6 +69,11 @@ export default {
           id: 'built_in_nav',
         },
         {
+          caption: '简略分页栏',
+          appViewId: 'web.master_list_simple_page',
+          id: 'simplelpage',
+        },
+        {
           caption: '界面样式及图标',
           appViewId: 'web.master_list_cssandicon',
           id: 'css_and_icon',
@@ -92,6 +97,16 @@ export default {
           caption: '刷新模式',
           appViewId: 'web.master_list_refreshmode_exp',
           id: 'refreshmode',
+        },
+        {
+          caption: '批操作工具栏显示模式',
+          appViewId: 'web.master_list_batchtoolbarmode',
+          id: 'batchtoolbarmode',
+        },
+        {
+          caption: '动态界面行为组',
+          appViewId: 'web.master_list_dy_uiaction_group_exp',
+          id: 'dy_uiaction_group',
         },
         {
           caption: '默认展开所有',

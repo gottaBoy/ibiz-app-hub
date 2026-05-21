@@ -162,6 +162,8 @@ export const LoginView = defineComponent({
           }
         } catch (err) {
           ibiz.log.warn(err);
+          // 报错之后刷新页面，重新加载整个应用系统
+          window.location.reload();
         }
         isAnonymous.value = false;
       }

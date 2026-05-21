@@ -13,7 +13,10 @@ export type { IApiThemeUtil } from './i-api-theme-util';
 export type { IApiTextUtil } from './i-api-text-util';
 export type { IApiHandlebarsUtil } from './i-api-handlebars-util';
 export type { IApiRawValueUtil } from './i-api-raw-value-util';
-export type { IApiFileUtil } from './i-api-file-util';
+export type {
+  IApiFileUtil,
+  IApiFileUpDownExtraParams,
+} from './i-api-file-util';
 export type {
   IApiHtml2canvasOption,
   IApiHtml2canvasUtil,
@@ -29,3 +32,20 @@ export type {
   IApiChangeTracker,
 } from './i-api-change-tracker';
 export type { IApiWaterMarkUtil } from './i-api-water-mark-util';
+export type { IApiWeChatUtil } from './i-api-wechat-util';
+export type {
+  IApiInLineAiChatOptions,
+  IApiInLineAIUtil,
+} from './i-api-inline-ai-util';
+export type { IApiAIToolbarItem, IApiAIChatUtil } from './i-api-ai-chat-util';
+export type {
+  IApiJsonUtil,
+  IApiJsonRepairOption,
+  IApiJsonRepairResult,
+} from './i-api-json-util';
+export type { IApiScreenShotUtil } from './i-api-screen-shot-util';
+export type { IApiUIActionUtil } from './i-api-ui-action-util';
+export type { IApiErrorHandlerCenter } from './i-api-error-handle-center';
+export type { IApiEncryptionUtil } from './i-api-encryption-util';
+export type { IApiExcelUtil } from './i-api-excel-util';
+export type { IApiPrintPreviewUtil } from './i-api-print-preview-util';

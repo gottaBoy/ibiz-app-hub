@@ -4,7 +4,7 @@ export default {
   showDataInfoBar: true,
   deviewCodeName: 'meditpanel',
   deviewId: '79b2cbe578be88361e06a0918360b839',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.REGION',
   },

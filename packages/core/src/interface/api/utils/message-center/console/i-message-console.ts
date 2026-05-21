@@ -10,7 +10,7 @@ import { IMessageBase } from '../base';
 export interface IMessageConsole extends IMessageBase {
   /**
    * @description 发送消息
-   * @param {(IApiData | string)} data
+   * @param {(IApiData | string)} data 日志数据
    * @memberof IMessageConsole
    */
   send(data: IApiData | string): void;

@@ -31,6 +31,7 @@ export function useVanUpload(
     }[]
   >;
   limit: ComputedRef<1 | 9999>;
+  loading: Ref<boolean>;
   onDownload: (file: IData) => void;
   onError: (...args: IData[]) => never;
   onRemove: (file: IData) => void;
@@ -60,6 +61,9 @@ export function useVanUpload(
   // 下载文件路径
   const downloadUrl: Ref<string> = ref('');
 
+  // 是否显示加载动画
+  const loading = ref(false);
+
   // 值响应式变更
   watch(
     () => props.value,
@@ -74,11 +78,22 @@ export function useVanUpload(
     () => props.data,
     newVal => {
       if (newVal) {
+        const editorParams: IData = {
+          ...c.editorParams,
+          enableNoAccess: c.enableNoAccess,
+          globalDownloadPrifix: c.globalDownloadPrifix,
+        };
+        if (editorParams.uploadparams) {
+          editorParams.uploadParams = JSON.parse(editorParams.uploadparams);
+        }
+        if (editorParams.exportparams) {
+          editorParams.exportParams = JSON.parse(editorParams.exportparams);
+        }
         const urls = ibiz.util.file.calcFileUpDownUrl(
           c.context,
           c.params,
           newVal,
-          c.editorParams,
+          editorParams,
         );
         uploadUrl.value = urls.uploadUrl;
         downloadUrl.value = urls.downloadUrl;
@@ -94,6 +109,24 @@ export function useVanUpload(
       if (newVal?.length && downloadUrl.value) {
         newVal.forEach((file: IData) => {
           file.url = file.url || downloadUrl.value.replace('%fileId%', file.id);
+          if (ibiz.config.common.enableDownloadTicket)
+            ibiz.util.file
+              .getDownloadTicket(
+                c.context,
+                c.params,
+                props.data,
+                {
+                  fileId: file.id,
+                },
+                c.downloadTicketParams,
+              )
+              .then(downloadTicket => {
+                if (downloadTicket && downloadTicket.ticket)
+                  file.url = downloadUrl.value.replace(
+                    '%fileId%',
+                    downloadTicket.ticket,
+                  );
+              });
         });
       }
     },
@@ -139,8 +172,10 @@ export function useVanUpload(
 
   // 上传成功回调
   const onSuccess = (response: IData) => {
-    if (!response) {
-      return;
+    if (!response) return;
+    // 启用传入下载凭证
+    if (ibiz.config.common.enableDownloadTicket && response.ticket) {
+      ibiz.util.file.setDownloadTicket(response.id, response.ticket);
     }
     files.value.push({
       name: response.filename,
@@ -171,12 +206,29 @@ export function useVanUpload(
     emitValue();
   };
 
-  const uploadFile = (file: IData) => {
-    console.log(file);
+  const uploadFile = async (file: IData) => {
+    const size = file.file.size;
+    const sizeKB = size / 1024;
+    let curFile = file.file;
+    if (
+      c.imgCompressQuality &&
+      c.imgCompressLimit &&
+      sizeKB > c.imgCompressLimit
+    ) {
+      try {
+        curFile = await ibiz.util.file.compressImg(
+          curFile,
+          c.imgCompressMaxWidth,
+          c.imgCompressQuality,
+        );
+      } catch {
+        ibiz.log.error(ibiz.i18n.t('editor.upload.compressError'));
+      }
+    }
     // 创建一个空对象实例
     const formData = new FormData();
     // 调用append()方法添加数据
-    formData.append('file', file.file);
+    formData.append('file', curFile);
     return new Promise((resolve, reject) => {
       ibiz.net
         .axios({
@@ -187,7 +239,6 @@ export function useVanUpload(
         })
         .then(res => {
           if (res.status === 200) {
-            console.log(88, res);
             onSuccess(res.data);
             resolve(true);
           } else {
@@ -203,6 +254,9 @@ export function useVanUpload(
 
   // 读取成功回调
   const afterRead = async (file: IData | IData[]) => {
+    if (c.showLoading) {
+      loading.value = true;
+    }
     if (file.length && file.length > 0) {
       for (let i = 0; i < file.length; i++) {
         const fi = (file as IData[])[i];
@@ -211,6 +265,9 @@ export function useVanUpload(
       }
     } else {
       await uploadFile(file);
+    }
+    if (c.showLoading) {
+      loading.value = false;
     }
   };
 
@@ -231,6 +288,7 @@ export function useVanUpload(
     headers,
     files,
     limit,
+    loading,
     onDownload,
     onError,
     onRemove,

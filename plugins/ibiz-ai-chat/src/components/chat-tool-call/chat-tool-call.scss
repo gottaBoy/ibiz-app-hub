@@ -1,0 +1,101 @@
+$chat-tool-call: (
+    font-size: 14px,
+    header-height: 32px,
+    color: var(--ibiz-ai-chat-color),
+    color-2: var(--ibiz-ai-chat-color-2),
+    bg: var(--ibiz-ai-chat-hover-background-color),
+    bg-2: var(--ibiz-ai-chat-hover-background-color-2),
+    bg-light: var(--ibiz-ai-chat-background-color-light),
+    border-radius: var(--ibiz-ai-chat-border-radius),
+    hover-bg-color: var(--ibiz-ai-chat-hover-background-color),
+    border: var(--ibiz-ai-chat-border-color),
+    loadding-font-size: 16px,
+);
+
+@include b(chat-tool-call) {
+    @include set-component-css-var('chat-tool-call', $chat-tool-call);
+
+    font-size: getCssVar(chat-tool-call, font-size);
+    border-radius: getCssVar(chat-tool-call, border-radius);
+
+    @include e(toggle) {
+        position: relative;
+        display: block;
+        padding: 8px 0;
+        margin-top: 8px;
+        color: getCssVar(chat-tool-call, color-2);
+        text-align: center;
+        cursor: pointer;
+
+        &::before {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            left: 0;
+            z-index: 1;
+            height: 1px;
+            content: "";
+            background: linear-gradient(to right, transparent, getCssVar(chat-tool-call, color), transparent);
+        }
+    }
+
+    @include e(toggle-label) {
+        position: relative;
+        z-index: 2;
+        padding: 0 16px;
+        font-weight: 500;
+        color: getCssVar(chat-tool-call, color);
+        cursor: pointer;
+        user-select: none;
+        background-color: getCssVar(chat-tool-call, bg-light);
+        border-radius: getCssVar(chat-tool-call, border-radius);
+        transition: color 0.2s ease;
+    }
+
+    @include e(loading-container) {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding: 8px;
+        margin-bottom: 8px;
+        font-size: getCssVar(chat-tool-call, loadding-font-size);
+        color: getCssVar(chat-tool-call, color-2);
+        background-color: getCssVar(chat-tool-call, bg);
+        border-radius: getCssVar(chat-tool-call, border-radius);
+    }
+
+    @include e(loading-dot) {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background-color: getCssVar(chat-tool-call, color-2);
+        border-radius: 50%;
+        animation: fade-and-scale 1s infinite ease-in-out both;
+
+        &:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        &:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        &:nth-child(3) {
+            animation-delay: 1s;
+        }
+    }
+
+    @keyframes fade-and-scale {
+        0%,
+        80%,
+        100% {
+            opacity: 0.6;
+            transform: scale(0.8);
+        }
+
+        40% {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+    }
+}

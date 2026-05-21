@@ -640,7 +640,7 @@ export const IBizPickerSelectView = defineComponent({
               h(viewShell, {
                 modal: this.modal,
                 context: this.context,
-                params: this.cloneParams,
+                params: { checkstrictly: true, ...this.cloneParams },
                 viewId: this.c.pickupView.id,
                 style: {
                   height: `${

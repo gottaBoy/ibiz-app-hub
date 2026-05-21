@@ -18,7 +18,7 @@ export class ChartExpViewEngine extends ExpViewEngine {
    *   >}
    * @memberof ChartExpViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEChartExplorerView,
     IChartExpViewState,
     IChartExpViewEvent

@@ -58,4 +58,11 @@ export interface IOpenViewOptions {
    * @type {CTX}
    */
   ctx?: CTX;
+
+  /**
+   * @description 父视图数据
+   * @type {IData[]}
+   * @memberof IOpenViewOptions
+   */
+  parentData?: IData[];
 }

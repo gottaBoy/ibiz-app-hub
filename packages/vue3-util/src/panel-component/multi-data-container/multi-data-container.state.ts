@@ -1,4 +1,4 @@
-import { PanelItemState } from '@ibiz-template/runtime';
+import { PanelContainerState } from '@ibiz-template/runtime';
 
 /**
  * 多项数据容器状态
@@ -7,9 +7,9 @@ import { PanelItemState } from '@ibiz-template/runtime';
  * @date 2023-02-07 06:04:27
  * @export
  * @class MultiDataContainerState
- * @extends {PanelItemState}
+ * @extends {PanelContainerState}
  */
-export class MultiDataContainerState extends PanelItemState {
+export class MultiDataContainerState extends PanelContainerState {
   /**
    * @description 多项数据容器数据
    * @exposedoc

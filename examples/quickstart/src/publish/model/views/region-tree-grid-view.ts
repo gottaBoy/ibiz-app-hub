@@ -3,7 +3,7 @@ export default {
   loadDefault: true,
   deviewCodeName: 'TreeGridView',
   deviewId: '4cae16ea5694d8c5e49e6164c19b4516',
-  accUserMode: 2,
+  accUserMode: 3,
   capLanguageRes: {
     lanResTag: 'DE.LNAME.REGION',
   },

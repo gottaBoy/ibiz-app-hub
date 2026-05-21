@@ -10,9 +10,9 @@ import { IApiGridRowState } from '../../../state';
 export interface IApiGridUAColumnController extends IApiGridColumnController {
   /**
    * @description 触发界面行为
-   * @param {IUIActionGroupDetail} detail 界面行为组成员项
-   * @param {IApiGridRowState} row 行数据
-   * @param {MouseEvent} event 事件对象
+   * @param {IUIActionGroupDetail} detail 界面行为组成员模型
+   * @param {IApiGridRowState} row 行数据状态
+   * @param {MouseEvent} event 鼠标事件
    * @returns {*}  {Promise<void>}
    * @memberof IApiGridUAColumnController
    */

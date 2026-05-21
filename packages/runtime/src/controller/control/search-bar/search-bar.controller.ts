@@ -1069,6 +1069,7 @@ export class SearchBarController
    * @memberof SearchBarController
    */
   protected async initCounter(): Promise<void> {
+    if (this.state.isCounterDisabled) return;
     const { appCounterRefs } = this.model as IData;
     const appCounterRef = appCounterRefs?.[0];
     if (appCounterRef) {

@@ -545,10 +545,12 @@ export default {
             clconvertMode: 'NONE',
             dataItemName: 'name',
             excelCaption: '名称',
+            linkAppViewId: 'web.region_edit_view',
+            linkValueItem: 'srfkey',
             appDEFieldId: 'name',
             treeColumnMode: 1,
             valueType: 'SIMPLE',
-            enableRowEdit: true,
+            enableLinkView: true,
             aggMode: 'NONE',
             align: 'LEFT',
             capLanguageRes: {
@@ -901,21 +903,6 @@ export default {
           },
         ],
         degridEditItems: [
-          {
-            caption: '名称',
-            codeName: 'name',
-            enableCond: 3,
-            appDEFieldId: 'name',
-            editor: {
-              maxLength: 200,
-              editorType: 'TEXTBOX',
-              valueType: 'SIMPLE',
-              editable: true,
-              id: 'name',
-            },
-            allowEmpty: true,
-            id: 'name',
-          },
           {
             caption: '上级区划',
             codeName: 'parent_name',

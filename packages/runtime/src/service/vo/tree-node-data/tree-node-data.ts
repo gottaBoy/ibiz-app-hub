@@ -1,4 +1,4 @@
-import { IDETreeNode } from '@ibiz/model-core';
+import { IDETreeNode, ISysImage } from '@ibiz/model-core';
 import { createUUID } from 'qx-util';
 import { isBase64Image } from '@ibiz-template/core';
 import { IIcon, ITreeNodeData } from '../../../interface';
@@ -57,12 +57,18 @@ export abstract class TreeNodeData implements ITreeNodeData {
 
   srfcollapsestate: -1 | 0 | 1 = -1;
 
+  _fullContext?: IContext;
+
+  _fullParams?: IParams;
+
   constructor(
     model: IDETreeNode,
     parentNodeData: ITreeNodeData | undefined,
     opts: {
       leaf: boolean;
       defaultExpand: boolean;
+      context?: IContext;
+      params?: IParams;
       navContext?: IParams;
       navParams?: IParams;
     },
@@ -83,6 +89,14 @@ export abstract class TreeNodeData implements ITreeNodeData {
     // 所有节点都要继承父的上下文，如果父存在则复制父的资源上下文，否则返回空对象。
     if (this._parent) {
       this._context = { ...this._parent._context };
+    }
+
+    // 存储完整上下文和视图参数
+    if (opts.context) {
+      this._fullContext = opts.context;
+    }
+    if (opts.params) {
+      this._fullParams = opts.params;
     }
 
     // 附加导航上下文和视图参数
@@ -121,14 +135,22 @@ export abstract class TreeNodeData implements ITreeNodeData {
 
   /**
    * 计算节点图标
-   * @author lxm
-   * @date 2023-08-15 02:24:55
-   * @protected
-   * @param {IDETreeNode} model
-   * @return {*}  {(IIcon | undefined)}
+   * @param model
+   * @param dataImage
+   * @returns
    */
-  protected calcIcon(model: IDETreeNode): IIcon | undefined {
-    const { sysImage } = model;
+  protected calcIcon(
+    model: IDETreeNode,
+    dataImage?: ISysImage,
+  ): IIcon | undefined {
+    let { sysImage } = model;
+    // 数据中附加图标优先级更高
+    if (
+      dataImage &&
+      (dataImage.cssClass || dataImage.imagePath || dataImage.rawContent)
+    ) {
+      sysImage = dataImage;
+    }
     const icon: IIcon = {};
     if (sysImage) {
       if (sysImage.cssClass) {

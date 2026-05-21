@@ -121,10 +121,12 @@ export const ModalRouterShell = defineComponent({
       }
       // 设置默认的modal参数
       const opts = {
-        width: appView?.width || '80%',
-        height: appView?.height || '80%',
+        width: appView?.width || '100%',
+        height: appView?.height || '100%',
         footerHide: true,
         isRouteModal: true,
+        // 不显示关闭按钮
+        showClose: false,
       };
       overlay = ibiz.overlay.createModal(component, undefined, opts);
       overlay.present();

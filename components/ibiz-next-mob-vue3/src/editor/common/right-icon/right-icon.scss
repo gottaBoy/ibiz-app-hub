@@ -1,3 +1,10 @@
+$editor-right-icon: (  
+  // 字体大小
+  font-fontSize: getCssVar(font-size, header-4),
+);
+
 @include b(editor-right-icon) {
-    font-size: getCssVar(font-size, header-4);
+  @include set-component-css-var(editor-right-icon, $editor-right-icon);
+
+  font-size: getCssVar(editor-right-icon, font-fontSize);
 }

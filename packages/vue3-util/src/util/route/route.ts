@@ -321,7 +321,7 @@ export async function generateRoutePath(
 ): Promise<{ path: string }> {
   const routePath = route2routePath(route);
   // 如果上下文存在toRouteDepth时，使用上下文的层级，否则使用默认层级
-  let depth = context.srfdefaulttoroutedepth || 2; // 默认层级看上下文的srfdefaulttoroutedepth，如果没有就是2
+  let depth = Number(context.srfdefaulttoroutedepth || 2); // 默认层级看上下文的srfdefaulttoroutedepth，如果没有就是2
   if (context.toRouteDepth) {
     depth = context.toRouteDepth;
     // 使用完后转为undefined，避免添加到上下文里
@@ -571,7 +571,8 @@ export function getNestedRoutePath(
     // 删除至nav
     delete pathNode.srfnav;
   }
-  if (pathNode.context) {
+  // 移动端不删除srfnavctrlid，修复工作流回退异常
+  if (!ibiz.env.isMob && pathNode.context) {
     delete pathNode.context.srfnavctrlid;
   }
   return routePath2string(routePath);

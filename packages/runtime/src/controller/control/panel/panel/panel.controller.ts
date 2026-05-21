@@ -1,27 +1,27 @@
 /* eslint-disable no-param-reassign */
 import {
+  RuntimeError,
   recursiveExecute,
   recursiveIterate,
-  RuntimeError,
 } from '@ibiz-template/core';
 import {
-  IControlLogic,
   IPanel,
-  IPanelContainer,
   IPanelItem,
+  IControlLogic,
   IPanelTabPanel,
+  IPanelContainer,
 } from '@ibiz/model-core';
 import { AsyncSeriesHook } from 'qx-util';
 import {
   IPanelState,
   IPanelEvent,
-  IPanelController,
-  IPanelItemController,
-  IPanelItemProvider,
-  IControlProvider,
-  IPanelItemContainerController,
   IController,
   IUILogicParams,
+  IControlProvider,
+  IPanelController,
+  IPanelItemProvider,
+  IPanelItemController,
+  IPanelItemContainerController,
 } from '../../../../interface';
 import { getAllPanelField } from '../../../../model';
 import { getPanelItemProvider } from '../../../../register';
@@ -30,6 +30,7 @@ import { ControlController } from '../../../common';
 import { PanelNotifyState } from '../../../constant';
 import { ControllerEvent } from '../../../utils';
 import { CTX } from '../../../ctx';
+import { AppCounter, CounterService } from '../../../../service';
 
 /**
  * 面板部件控制器
@@ -95,6 +96,13 @@ export class PanelController<
   container?: IController;
 
   /**
+   * @description 计数器对象
+   * @type {AppCounter}
+   * @memberof PanelController
+   */
+  counters: { [key: string]: AppCounter } = {};
+
+  /**
    * 面板数据
    *
    * @author lxm
@@ -132,8 +140,8 @@ export class PanelController<
 
   protected async onCreated(): Promise<void> {
     await super.onCreated();
+    await this.initCounter();
     await this.initPanelItemControllers();
-
     if (this.scheduler?.hasControlEventTrigger) {
       // 监听部件事件触发部件事件触发器
       this._evt.on('onPanelItemEvent', event => {
@@ -152,6 +160,34 @@ export class PanelController<
   }
 
   /**
+   * @description 初始化计数器
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof PanelController
+   */
+  protected async initCounter(): Promise<void> {
+    if (this.state.isCounterDisabled) return;
+    this.counters = {};
+    const { appCounterRefs } = this.model;
+    if (appCounterRefs && appCounterRefs.length > 0) {
+      try {
+        await Promise.all(
+          appCounterRefs.map(async counterRef => {
+            const counter = await CounterService.getCounterByRef(
+              counterRef,
+              this.context,
+              { ...this.params },
+            );
+            this.counters[counterRef.id!] = counter;
+          }),
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  /**
    * 生命周期-销毁完成
    *
    * @protected
@@ -161,6 +197,8 @@ export class PanelController<
   protected async onDestroyed(): Promise<void> {
     await super.onDestroyed();
     this.data.destroy?.();
+    // 销毁视图计数器
+    Object.values(this.counters).forEach(counter => counter.destroy());
     this.hooks.validate.clear();
     Object.values(this.panelItems).forEach(item => {
       item.destroy();

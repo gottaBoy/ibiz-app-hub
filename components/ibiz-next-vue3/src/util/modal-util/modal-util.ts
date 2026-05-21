@@ -46,4 +46,17 @@ export class ModalUtil implements IModalUtil {
         .catch(() => resolve(false));
     });
   }
+
+  async extendConfirm(params: ModalParams): Promise<'yes' | 'no' | 'cancel'> {
+    return new Promise(resolve => {
+      ElMessageBox.confirm(params.desc, params.title, {
+        ...params,
+        ...params.options,
+      })
+        .then(() => resolve('yes'))
+        .catch((action: string) =>
+          resolve(action === 'cancel' ? 'no' : 'cancel'),
+        );
+    });
+  }
 }

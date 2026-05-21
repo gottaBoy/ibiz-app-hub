@@ -43,9 +43,19 @@ export default {
           id: 'group',
         },
         {
+          caption: '简略分页栏',
+          appViewId: 'web.master_kanban_simple_page',
+          id: 'simplepage',
+        },
+        {
           caption: '内置工具栏',
           appViewId: 'web.master_kanban_built_in_toolbar_exp',
           id: 'built_in_toolbar',
+        },
+        {
+          caption: '动态界面行为组',
+          appViewId: 'web.master_kanban_dy_uiaction_group_exp',
+          id: 'dy_uiaction_group',
         },
         {
           caption: '动态逻辑',

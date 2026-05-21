@@ -27,7 +27,7 @@ export interface IApiViewCall {
     args: undefined;
   };
   /**
-   * @description 快捷方式(最小化)
+   * @description 快捷方式(最小化)，data：实体数据
    * @type {{
    *     args: { data: IApiData[] };
    *   }}

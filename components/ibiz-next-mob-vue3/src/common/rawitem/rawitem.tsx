@@ -5,8 +5,8 @@ import {
   IHtmlItem,
   IPanelRawItem,
   IRawItemContainer,
+  IRawItemParam,
   ITextItem,
-  IUnkownItem,
 } from '@ibiz/model-core';
 import './rawitem.scss';
 import { parseHtml } from '../../panel-component/user-message/user-message.util';
@@ -28,7 +28,7 @@ export const IBizRawItem = defineComponent({
   },
   setup(props) {
     const ns = useNamespace('rawitem');
-    let rawItem = null;
+    let rawItem: IData | null = null;
     let contentType = '';
     if (props.rawItem) {
       rawItem = props.rawItem.rawItem!;
@@ -52,7 +52,7 @@ export const IBizRawItem = defineComponent({
       ['VIDEO', 'DIVIDER', 'INFO', 'WARNING', 'ERROR'].includes(contentType!)
     ) {
       rawItemContent.value =
-        props.content! || (rawItem as IUnkownItem).rawContent!;
+        props.content || rawItem?.rawContent || rawItem?.rawItemParams;
     } else if (contentType === 'IMAGE' && sysImage) {
       rawItemContent.value = sysImage;
     }
@@ -80,18 +80,40 @@ export const IBizRawItem = defineComponent({
       html: '',
     });
 
+    const messageTypeIcon: IData = {
+      WARNING: 'warning-o',
+      ERROR: 'close',
+      INFO: 'info-o',
+    };
+
     // 类型参数
     const alertParams = ref({
-      type: 'info',
       title: '',
-      closeabled: true,
-      showIcon: false,
+      closeabled: false,
+      showIcon: true,
       class: '',
+      wrapable: true, // 是否多行展示
       'left-icon': '',
     });
 
     // 文本类型显示值
     const rawItemText: Ref<string | number | IData> = ref('');
+
+    // 获取直接内容参数
+    const getParamsValue = (key: string): string | undefined => {
+      let value: string | undefined;
+      const params: IRawItemParam[] | undefined = rawItem?.rawItemParams;
+      if (!params) {
+        ibiz.log.error(`未配置视频播放参数:${key}}`);
+        return undefined;
+      }
+      params.forEach((item: IRawItemParam) => {
+        if (item.key === key) {
+          value = item.value;
+        }
+      });
+      return value;
+    };
 
     // 转换各类值操作
     const convertValue = () => {
@@ -118,6 +140,7 @@ export const IBizRawItem = defineComponent({
           'HEADING6',
           'PARAGRAPH',
           'HTML',
+          'RAW',
         ].includes(rawItemType.value)
       ) {
         rawItemText.value = rawItemContent.value;
@@ -143,12 +166,35 @@ export const IBizRawItem = defineComponent({
           let rawConfig = {};
           try {
             if (typeof rawItemContent.value === 'string') {
+              // 消息提示支持直接内容展示
+              if (['INFO', 'WARNING', 'ERROR'].includes(rawItemType.value)) {
+                alertParams.value.class = rawItemType.value.toLocaleLowerCase();
+                alertParams.value.title = rawItemContent.value;
+                alertParams.value['left-icon'] =
+                  messageTypeIcon[rawItemType.value];
+              }
               // eslint-disable-next-line no-new-func
               const func = new Function(`return (${rawItemContent.value});`);
               rawConfig = func();
               switch (rawItemType.value) {
                 case 'VIDEO':
                   Object.assign(playerParams.value, rawConfig);
+                  if (rawItem?.rawItemParams) {
+                    const tempConfig: IData = {
+                      path: getParamsValue('path'),
+                      autoplay: getParamsValue('autoplay'),
+                      mute: getParamsValue('mute'),
+                      replay: getParamsValue('replay'),
+                      showcontrols: getParamsValue('showcontrols'),
+                    };
+                    Object.keys(tempConfig).forEach(key => {
+                      if (tempConfig[key] !== undefined) {
+                        Object.assign(playerParams.value, {
+                          [key]: tempConfig[key],
+                        });
+                      }
+                    });
+                  }
                   break;
                 case 'DIVIDER':
                   Object.assign(dividerParams.value, rawConfig);
@@ -156,19 +202,19 @@ export const IBizRawItem = defineComponent({
                 case 'INFO':
                 case 'WARNING':
                 case 'ERROR':
-                  alertParams.value.class =
-                    rawItemType.value.toLocaleLowerCase();
-                  if (rawItemType.value === 'ERROR') {
-                    alertParams.value['left-icon'] = 'close';
-                  } else {
-                    alertParams.value['left-icon'] =
-                      rawItemType.value.toLocaleLowerCase();
-                  }
                   Object.assign(alertParams.value, rawConfig);
                   break;
                 default:
                   break;
               }
+            } else if (rawItemType.value === 'VIDEO') {
+              Object.assign(playerParams.value, {
+                path: getParamsValue('path'),
+                autoplay: getParamsValue('autoplay'),
+                mute: getParamsValue('mute'),
+                replay: getParamsValue('replay'),
+                showcontrols: getParamsValue('showcontrols'),
+              });
             }
           } catch {
             ibiz.log.error(
@@ -216,7 +262,7 @@ export const IBizRawItem = defineComponent({
           ></i-biz-icon>
         );
       }
-      if (this.rawItemType === 'TEXT') {
+      if (this.rawItemType === 'TEXT' || this.rawItemType === 'RAW') {
         return <span class={this.ns.e('text')}>{this.rawItemText}</span>;
       }
       if (this.rawItemType === 'HEADING1') {
@@ -242,7 +288,10 @@ export const IBizRawItem = defineComponent({
       }
       if (this.rawItemType === 'HTML') {
         return (
-          <div class={this.ns.e('paragraph')} v-html={this.rawItemText}></div>
+          <div
+            class={[this.ns.e('paragraph'), this.ns.e('html')]}
+            v-html={this.rawItemText}
+          ></div>
         );
       }
       if (this.rawItemType === 'VIDEO') {
@@ -288,6 +337,8 @@ export const IBizRawItem = defineComponent({
             text={this.alertParams.title}
             show-icon={this.alertParams.showIcon}
             class={this.alertParams.class}
+            type={this.rawItemType.toLowerCase()}
+            wrapable={this.alertParams.wrapable}
             left-icon={
               this.alertParams.showIcon ? this.alertParams['left-icon'] : ''
             }
@@ -308,6 +359,12 @@ export const IBizRawItem = defineComponent({
       return null;
     };
 
-    return <div class={this.ns.b()}>{renderContent()}</div>;
+    return (
+      <div
+        class={[this.ns.b(), this.ns.m(this.rawItemType?.toLocaleLowerCase())]}
+      >
+        {renderContent()}
+      </div>
+    );
   },
 });

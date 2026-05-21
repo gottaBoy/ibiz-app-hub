@@ -117,7 +117,6 @@ const IBizQuillPreview: any = defineComponent({
     const onClick = () => {
       // isCollapse.value = !isCollapse.value;
       emit('collapse', !props.isCollapse);
-      resetCollapseHeight();
     };
 
     // 绘制伸缩按钮
@@ -136,7 +135,7 @@ const IBizQuillPreview: any = defineComponent({
     };
 
     watch(
-      () => props.value,
+      () => [props.value, props.isCollapse],
       () => {
         resetCollapseHeight();
       },
@@ -169,7 +168,9 @@ const IBizQuillPreview: any = defineComponent({
           this.showCollapse ? this.ns.m('show-collapse') : '',
           this.ns.is('collapse', this.isCollapse),
         ]}
-        style={`--default-height: ${this.collapseHeight}`}
+        style={this.ns.cssVarBlock({
+          'height-default': `${this.collapseHeight || ''}`,
+        })}
       >
         <div ref='editorRef' onClick={this.handleContentClick}>
           {this.controller.valueMode === 'html' ? (

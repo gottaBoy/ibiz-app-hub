@@ -10,7 +10,7 @@ import {
 import { IAppDEMEditView } from '@ibiz/model-core';
 
 export class MEditView9Engine extends MDViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEMEditView,
     IMEditView9State,
     IMEditView9Event

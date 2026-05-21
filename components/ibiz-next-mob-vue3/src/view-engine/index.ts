@@ -117,6 +117,10 @@ export const IBizViewEngine = {
       (c: IMobViewController) => new PortalViewEngine(c),
     );
     ibiz.engine.register(
+      `VIEW_MobPortalView`,
+      (c: IMobViewController) => new PortalViewEngine(c),
+    );
+    ibiz.engine.register(
       `VIEW_DEMOBCUSTOMVIEW`,
       (c: IMobViewController) => new MobCustomViewEngine(c),
     );

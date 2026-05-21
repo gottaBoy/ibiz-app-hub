@@ -1,0 +1,15 @@
+@include b('chat-image-preview') {
+  z-index: 99999;
+
+  .el-image-viewer__btn{
+    color: #{getCssVar('ai-chat', 'color')};
+    background: #{getCssVar('ai-chat', 'background-color')};
+    border: 1px solid #{getCssVar('ai-chat', 'color')};
+  }
+
+  .el-image-viewer__btn:hover{
+    color: #{getCssVar('ai-chat', 'hover-color')};
+    background-color: #{getCssVar('ai-chat', 'hover-background-color')};
+    border: 1px solid #{getCssVar('ai-chat', 'hover-background-color')};
+  }
+}

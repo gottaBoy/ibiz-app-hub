@@ -1,0 +1,62 @@
+$split-trigger: (
+  color-trigger-bar-background: getCssVar(color, border),
+  width-trigger-width: rem(12px),
+  width-trigger-bar-width: rem(12px),
+  height-split-trigger-bar: rem(1px),
+  width-split-trigger-bar: rem(1px),
+  spacing-trigger-bar-interval: rem(3px),
+  spacing-trigger-bar-weight: rem(1px),
+  border-split-trigger: rem(1px) solid getCssVar(color, border),
+);
+
+@include b(split-trigger) {
+  @include set-component-css-var('split-trigger', $split-trigger);
+
+  border: getCssVar(split-trigger, border-split-trigger);
+
+  @include m(vertical) {
+    width: getCssVar(split-trigger, width-trigger-width);
+    height: 100%;
+    cursor: col-resize;
+    border-top: none;
+    border-bottom: none;
+
+    @include b(split-trigger-bar) {
+      float: left;
+      width: getCssVar(split-trigger, width-trigger-bar-width);
+      height: getCssVar(split-trigger, height-split-trigger-bar);
+      margin-top: getCssVar(split-trigger, spacing-trigger-bar-interval);
+      background: getCssVar(split-trigger, color-trigger-bar-background);
+    }
+  }
+
+  @include m(horizontal) {
+    width: 100%;
+    height: getCssVar(split-trigger, width-trigger-width);
+    cursor: row-resize;
+    border-right: none;
+    border-left: none;
+    display: flex;
+
+    @include b(split-trigger-bar) {
+      float: left;
+      width: getCssVar(split-trigger, width-split-trigger-bar);
+      height: getCssVar(split-trigger, width-trigger-bar-width);
+      margin-right: getCssVar(split-trigger, spacing-trigger-bar-interval);
+      background: getCssVar(split-trigger, color-trigger-bar-background);
+    }
+  }
+}
+
+@include b(split-trigger-bar-con) {
+  overflow: hidden;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+
+  @include m(vertical) {
+    flex-direction: column;
+  }
+}

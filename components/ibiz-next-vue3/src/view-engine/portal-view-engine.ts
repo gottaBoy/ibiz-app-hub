@@ -8,6 +8,7 @@ import {
   IDashboardController,
   DEMainViewEngine,
   IApiPortalViewCall,
+  calcDeCodeNameById,
 } from '@ibiz-template/runtime';
 import { IAppView } from '@ibiz/model-core';
 
@@ -19,7 +20,7 @@ export class PortalViewEngine extends DEMainViewEngine {
    * @type {ViewController<IAppView, IAppPortalViewState, IAppPortalViewEvent>}
    * @memberof PortalViewEngine
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppView,
     IPortalViewState,
     IPortalViewEvent
@@ -89,6 +90,10 @@ export class PortalViewEngine extends DEMainViewEngine {
     await super.onMounted();
     // 实体看板视图加载主数据
     if (this.view.model.appDataEntityId) {
+      const deName = calcDeCodeNameById(this.view.model.appDataEntityId!);
+      if (!this.view.context[deName]) {
+        return;
+      }
       await this.loadEntityData();
     }
   }

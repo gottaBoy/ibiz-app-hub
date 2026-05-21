@@ -1,0 +1,49 @@
+$tab-dropdown: (
+  // Color
+  color-text: getCssVar('tab-layout', 'color-tab-text'),
+  color-text-active: getCssVar('tab-layout', 'color-tab-text-active'),
+  // Width/Height
+  width-min-width: rem(40px),
+  width-max-width: rem(80px),
+  // Spacing
+  spacing-padding: getCssVar('spacing', 'tight'),
+  // Font
+  font-tab-fontSize: getCssVar('tab-layout', 'font-tab-fontSize')
+);
+
+@include b('tab-dropdown') {
+  @include set-component-css-var('tab-dropdown', $tab-dropdown);
+
+  // 下拉列表气泡弹框样式
+  @include e('list-modal') {
+    @include set-component-css-var('tab-dropdown', $tab-dropdown);
+
+    background-color: unset;
+    border: unset;
+    box-shadow: unset;
+  }
+
+  &.#{bem(float-button)} {
+    #{getCssVarName('float-button', 'width')}: auto;
+    #{getCssVarName('float-button', 'font-text-font-size')}: getCssVar(
+      tab-dropdown,
+      font-tab-fontSize
+    );
+    #{getCssVarName('float-button', 'spacing-right-padding')}: getCssVar(
+      tab-dropdown,
+      spacing-padding
+    );
+    min-width: getCssVar(tab-dropdown, width-min-width);
+    max-width: getCssVar(tab-dropdown, width-max-width);
+
+    .#{bem(info-item)} {
+      width: 100%;
+    }
+
+    .#{bem(info-item, label)} {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

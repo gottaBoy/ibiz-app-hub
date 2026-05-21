@@ -42,8 +42,8 @@ export interface IDELogic extends IDELogicBase {
 
   /**
    * 逻辑子类
-   * @description 值模式 [实体处逻辑子类] {NONE：无、 DEFIELD：属性逻辑、 DEOPPRIV：实体操作标识计算逻辑、 ATTACHTODEACTION：附加到行为（运行时支持）、 ATTACHTODEDATASET：附加到数据集（运行时支持）、 WEBHOOK：WebHook（运行时支持）、 TIMERTASK：定时作业（运行时支持）、 EVENTHOOK：事件处理（运行时支持）、 FIELDCHANGEHOOK：属性变化处理（运行时支持）、 USER：用户自定义、 USER2：用户自定义2、 USER3：用户自定义3、 USER4：用户自定义4 }
-   * @type {( string | 'NONE' | 'DEFIELD' | 'DEOPPRIV' | 'ATTACHTODEACTION' | 'ATTACHTODEDATASET' | 'WEBHOOK' | 'TIMERTASK' | 'EVENTHOOK' | 'FIELDCHANGEHOOK' | 'USER' | 'USER2' | 'USER3' | 'USER4')}
+   * @description 值模式 [实体处逻辑子类] {NONE：无、 DEFIELD：属性逻辑、 DEOPPRIV：实体操作标识计算逻辑、 AICHAT：AI交谈逻辑、 ATTACHTODEACTION：附加到行为（运行时支持）、 ATTACHTODEDATASET：附加到数据集（运行时支持）、 WEBHOOK：WebHook（运行时支持）、 TIMERTASK：定时作业（运行时支持）、 EVENTHOOK：事件处理（运行时支持）、 FIELDCHANGEHOOK：属性变化处理（运行时支持）、 USER：用户自定义、 USER2：用户自定义2、 USER3：用户自定义3、 USER4：用户自定义4 }
+   * @type {( string | 'NONE' | 'DEFIELD' | 'DEOPPRIV' | 'AICHAT' | 'ATTACHTODEACTION' | 'ATTACHTODEDATASET' | 'WEBHOOK' | 'TIMERTASK' | 'EVENTHOOK' | 'FIELDCHANGEHOOK' | 'USER' | 'USER2' | 'USER3' | 'USER4')}
    * @default NONE
    * 来源  getLogicSubType
    */
@@ -52,6 +52,7 @@ export interface IDELogic extends IDELogicBase {
     | 'NONE'
     | 'DEFIELD'
     | 'DEOPPRIV'
+    | 'AICHAT'
     | 'ATTACHTODEACTION'
     | 'ATTACHTODEDATASET'
     | 'WEBHOOK'
@@ -62,6 +63,34 @@ export interface IDELogic extends IDELogicBase {
     | 'USER2'
     | 'USER3'
     | 'USER4';
+
+  /**
+   * 逻辑标记
+   * @type {string}
+   * 来源  getLogicTag
+   */
+  logicTag?: string;
+
+  /**
+   * 逻辑标记2
+   * @type {string}
+   * 来源  getLogicTag2
+   */
+  logicTag2?: string;
+
+  /**
+   * 逻辑标记3
+   * @type {string}
+   * 来源  getLogicTag3
+   */
+  logicTag3?: string;
+
+  /**
+   * 逻辑标记4
+   * @type {string}
+   * 来源  getLogicTag4
+   */
+  logicTag4?: string;
 
   /**
    * 逻辑处理集合

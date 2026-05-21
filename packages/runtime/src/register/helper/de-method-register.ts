@@ -1,7 +1,8 @@
 import { RuntimeError } from '@ibiz-template/core';
-import { IAppDEMethod } from '@ibiz/model-core';
+import { IAppDataEntity, IAppDEMethod } from '@ibiz/model-core';
 import { getPluginRegisterKey } from './common-register';
 import { IDEMethodProvider } from '../../interface';
+import { CustomRegister } from '../custom-register';
 
 /** 实体行为适配器前缀 */
 export const DEMETHOD_PROVIDER_PREFIX = 'DEMETHOD';
@@ -37,9 +38,24 @@ function getProvider(key: string): IDEMethodProvider | undefined {
  */
 export async function getDEMethodProvider(
   model: IAppDEMethod,
+  entityModel?: IAppDataEntity,
 ): Promise<IDEMethodProvider> {
   let provider: IDEMethodProvider | undefined;
   const { methodType, sysPFPluginId, appId } = model as Required<IAppDEMethod>;
+  const registerKey = CustomRegister.getRegisterKey(DEMETHOD_PROVIDER_PREFIX, {
+    deMethodModel: model,
+    entityModel,
+  });
+  provider = getProvider(registerKey);
+  if (!provider) {
+    ibiz.log.debug(
+      ibiz.i18n.t('runtime.register.helper.customRegistration', {
+        registerKey,
+      }),
+    );
+  } else {
+    return provider;
+  }
 
   // 找插件适配器
   if (sysPFPluginId) {

@@ -12,7 +12,7 @@ import {
 import { IAppDEListView } from '@ibiz/model-core';
 
 export class ListViewEngine extends MDViewEngine {
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDEListView,
     IListViewState,
     IListViewEvent

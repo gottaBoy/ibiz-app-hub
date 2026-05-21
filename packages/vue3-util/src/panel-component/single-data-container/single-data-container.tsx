@@ -103,6 +103,10 @@ export const SingleDataContainer = defineComponent({
         </iBizRow>
       );
     }
-    return <div class={this.classArr}>{content}</div>;
+    return (
+      <div class={this.classArr} v-loading={this.controller.state.loading}>
+        {content}
+      </div>
+    );
   },
 });

@@ -5,7 +5,6 @@ import {
   IBizContext,
   IPortalMessage,
   Namespace,
-  RuntimeError,
 } from '@ibiz-template/core';
 import { IAppView, IPanel } from '@ibiz/model-core';
 import { isEmpty, isNil, isNotNil } from 'ramda';
@@ -25,6 +24,7 @@ import {
   IRedrawData,
   IApiViewMapping,
   IApiControlMapping,
+  ICtrlEngine,
 } from '../../../interface';
 import { SysUIActionTag } from '../../../constant';
 import { convertNavData, Modal } from '../../../utils';
@@ -36,6 +36,7 @@ import { getControlProvider } from '../../../register';
 import { AppCounter, CounterService } from '../../../service';
 import {
   getControlsByView,
+  getCtrlEngines,
   getViewEngines,
   getViewLogics,
 } from '../../../model';
@@ -69,6 +70,9 @@ export class ViewController<
   providers: { [key: string]: IControlProvider } = {};
 
   engines: IViewEngine[] = [];
+
+  // 部件引擎
+  ctrlEngines: ICtrlEngine[] = [];
 
   error: IData = {};
 
@@ -192,6 +196,13 @@ export class ViewController<
   viewMsgController?: ViewMsgController;
 
   /**
+   * @description 父视图数据
+   * @type {IData[]}
+   * @memberof ViewController
+   */
+  parentData?: IData[];
+
+  /**
    * Creates an instance of ViewController.
    * @author lxm
    * @date 2023-04-20 02:05:33
@@ -201,9 +212,21 @@ export class ViewController<
    * @param {CTX} [ctx]
    */
   constructor(model: T, context: IContext, params?: IParams, ctx?: CTX) {
+    let parentData: IData[] | undefined;
+    if (params && params.parentData) {
+      try {
+        parentData = JSON.parse(params.parentData);
+      } catch (err) {
+        ibiz.log.error(err);
+      }
+      delete params.parentData;
+    }
     // 预置模型合并。
     const _model = ibiz.util.layoutPanel.fill(model) as T;
     super(_model, IBizContext.create({}, context), params || {}, new CTX(ctx));
+    if (parentData) {
+      this.parentData = parentData;
+    }
 
     // 如果视图有上层ctx，作为上层的子在上层注册自身
     if (ctx) {
@@ -344,6 +367,16 @@ export class ViewController<
         this.engines.push(ins);
       }
     }
+    // 初始化部件引擎
+    const ctrlEngines = getCtrlEngines(this.model);
+    if (ctrlEngines.length) {
+      ctrlEngines.forEach(engine => {
+        const ins = ibiz.engine.getCtrlEngine(engine, this);
+        if (ins) {
+          this.ctrlEngines.push(ins);
+        }
+      });
+    }
   }
 
   /**
@@ -354,7 +387,11 @@ export class ViewController<
    */
   protected async initCounters(): Promise<void> {
     const viewLayoutPanel = this.model.viewLayoutPanel!;
-    const { appCounterRefs } = viewLayoutPanel;
+    let { appCounterRefs } = viewLayoutPanel;
+    // 无预置界面布局未做参数转化
+    if (!appCounterRefs) {
+      appCounterRefs = this.model.appCounterRefs;
+    }
     if (appCounterRefs && appCounterRefs.length > 0) {
       try {
         await Promise.all(
@@ -454,6 +491,10 @@ export class ViewController<
     // 初始化视图消息
     this.initViewMsg();
 
+    // 执行部件引擎的onCreated
+    if (this.ctrlEngines.length) {
+      await Promise.all(this.ctrlEngines.map(engine => engine.onCreated()));
+    }
     // 执行视图引擎的doCreated
     if (this.engines.length) {
       await Promise.all(this.engines.map(engine => engine.onCreated()));
@@ -465,6 +506,10 @@ export class ViewController<
 
   protected async onMounted(): Promise<void> {
     await super.onMounted();
+    // 执行部件引擎的onMounted
+    if (this.ctrlEngines.length) {
+      await Promise.all(this.ctrlEngines.map(engine => engine.onMounted()));
+    }
     // 执行视图引擎的doMounted
     if (this.engines.length) {
       await Promise.all(this.engines.map(engine => engine.onMounted()));
@@ -495,6 +540,10 @@ export class ViewController<
   protected async onDestroyed(): Promise<void> {
     const srfSessionId = this.context.srfsessionid;
     await super.onDestroyed();
+    // 执行部件引擎的onDestroyed
+    if (this.ctrlEngines.length) {
+      await Promise.all(this.ctrlEngines.map(engine => engine.onDestroyed()));
+    }
     // 执行视图引擎的doDestroyed
     if (this.engines.length) {
       await Promise.all(this.engines.map(engine => engine.onDestroyed()));
@@ -608,9 +657,9 @@ export class ViewController<
     key: string,
     args?: Partial<IUILogicParams>,
   ): Promise<IUIActionResult | null> {
-    const result = this.call(key, args);
+    const result = await this.call(key, args);
     if (result === undefined) {
-      throw new RuntimeError(
+      ibiz.log.warn(
         ibiz.i18n.t('runtime.controller.common.view.noSupportBehavior', {
           key,
         }),

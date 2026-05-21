@@ -1,4 +1,5 @@
 export default {
+  openMode: 'POPUPMODAL',
   deviewCodeName: 'Pickup_gridmpickupview',
   deviewId: 'a31df33b08bffeba57c496fde530be49',
   appWFId: 'workflow',

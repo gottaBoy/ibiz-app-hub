@@ -167,9 +167,7 @@ export const CarouselGrid = defineComponent({
     loadDefault: { type: Boolean, default: true },
   },
   setup(props, { slots }) {
-    // @ts-ignore
     const c = useControlController<CarouselGridController>(
-      // @ts-ignore
       (...args) => new CarouselGridController(...args),
     );
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);

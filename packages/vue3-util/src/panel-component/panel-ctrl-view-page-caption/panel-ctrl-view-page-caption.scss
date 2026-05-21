@@ -1,0 +1,13 @@
+@include b('panel-ctrl-view-page-caption') {
+  @include when(mob) {
+    @include b(panel-ctrl-view-page-caption-content) { 
+      @include utils-ellipsis; 
+
+      font-size: getCssVar(view-page-caption, font-size);
+      font-weight: getCssVar(view-page-caption, font-weight);
+      line-height: getCssVar(view-page-caption, line-height);
+      color: getCssVar(view-page-caption, color);
+      text-align: getCssVar(view-page-caption, text-align); 
+    }
+  }
+}

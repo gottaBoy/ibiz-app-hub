@@ -80,9 +80,19 @@ export function useIViewUpload(
    * @returns {*}  {string}
    */
   const getDownloadUrl = (data: IData, file: IData): string => {
-    const editorParams = { ...c.editorParams };
+    const editorParams: IData = {
+      ...c.editorParams,
+      enableNoAccess: c.enableNoAccess,
+    };
     if (editorParams.exportparams) {
       editorParams.exportParams = JSON.parse(editorParams.exportparams);
+    }
+    if (editorParams.globaldownloadprifix) {
+      editorParams.globalDownloadPrifix =
+        editorParams.globaldownloadprifix === 'true';
+    } else {
+      editorParams.globalDownloadPrifix =
+        ibiz.config.common.globalDownloadPrifix;
     }
     if (file && file.folder) {
       editorParams.osscat = file.folder;
@@ -101,7 +111,10 @@ export function useIViewUpload(
     () => props.data,
     newVal => {
       if (newVal) {
-        const editorParams = { ...c.editorParams };
+        const editorParams: IData = {
+          ...c.editorParams,
+          enableNoAccess: c.enableNoAccess,
+        };
         if (editorParams.uploadparams) {
           editorParams.uploadParams = JSON.parse(editorParams.uploadparams);
         }
@@ -174,7 +187,7 @@ export function useIViewUpload(
         newVal.forEach((file: IData) => {
           const downloadUrl = getDownloadUrl(props.data, file);
           file.url = file.url || downloadUrl.replace('%fileId%', file.id);
-          if (ibiz.config.common.enableDownloadTicket) {
+          if (ibiz.config.common.enableDownloadTicket && !c.enableNoAccess) {
             ibiz.util.file
               .getDownloadTicket(
                 c.context,
@@ -253,7 +266,11 @@ export function useIViewUpload(
     }
 
     // 启用传入下载凭证
-    if (ibiz.config.common.enableDownloadTicket && response.ticket) {
+    if (
+      ibiz.config.common.enableDownloadTicket &&
+      !c.enableNoAccess &&
+      response.ticket
+    ) {
       ibiz.util.file.setDownloadTicket(response.id, response.ticket);
     }
 
@@ -303,18 +320,34 @@ export function useIViewUpload(
   const onDownload = (file: IData) => {
     const downloadUrl = getDownloadUrl(props.data, file);
     const url = file.url || downloadUrl.replace('%fileId%', file.id);
-    const editorParams = { ...c.editorParams };
+    const editorParams: IData = {
+      ...c.editorParams,
+      enableNoAccess: c.enableNoAccess,
+    };
     if (editorParams.exportparams) {
       editorParams.exportParams = JSON.parse(editorParams.exportparams);
     }
-    ibiz.util.file.fileDownload(url, file.name, {
-      context: c.context,
-      params: c.params,
-      data: props.data,
-      file: { fileId: file.id, ...file },
-      extraParams: editorParams,
-      downloadTicketParams: c.downloadTicketParams,
-    });
+    if (editorParams.globaldownloadprifix) {
+      editorParams.globalDownloadPrifix =
+        editorParams.globaldownloadprifix === 'true';
+    } else {
+      editorParams.globalDownloadPrifix =
+        ibiz.config.common.globalDownloadPrifix;
+    }
+    ibiz.util.file.fileDownload(
+      url,
+      file.name,
+      {
+        context: c.context,
+        params: c.params,
+        data: props.data,
+        file: { fileId: file.id, ...file },
+        extraParams: editorParams,
+        downloadTicketParams: c.downloadTicketParams,
+      },
+      undefined,
+      c.enableNoAccess,
+    );
   };
 
   // 允许上传文件的最大数量

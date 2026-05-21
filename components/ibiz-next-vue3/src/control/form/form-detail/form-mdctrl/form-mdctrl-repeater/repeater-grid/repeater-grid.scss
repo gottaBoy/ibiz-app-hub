@@ -28,6 +28,11 @@ $repeater-grid: (
     height: 57px;
   }
 
+  // 适配单元格内的元素存在fixed定位时，该定位元素的z-index设置无效。存在fixed定位元素时，当前单元格的层级需要高于其它单元格
+  .el-table__cell:has(.is-editor-content-fixed) {
+    z-index: calc(var(--el-table-index) + 1);
+  }
+
   .el-table__row:hover {
     .#{bem(repeater-grid-index, text)}{
       &:last-child{

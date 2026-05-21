@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/web-theme",
-  "version": "3.8.0",
+  "version": "3.11.0",
   "description": "web端主题样式库",
   "type": "module",
   "main": "lib/index.cjs",

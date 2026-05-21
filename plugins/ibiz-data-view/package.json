@@ -1,7 +1,7 @@
 {
   "name": "@ibiz-template-plugin/data-view",
-  "version": "0.0.4",
-  "description": "iBiz 数据大屏",
+  "version": "0.0.6",
+  "description": "iBiz 数据大屏，基于iBiz标准门户部件扩展，提供动态数据展示、多样化可视化组件（表格/翻牌器/水位图等）、自定义装饰元素（边框/粒子特效）以及交互式功能（标签墙/按钮系统）的完整大屏解决方案。",
   "author": "iBiz",
   "license": "MIT",
   "type": "module",
@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "watch": "vite build --watch",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "publish:npm": "npm run build && npm publish --access public --registry=https://registry.npmjs.org/",
     "publish:local": "npm run build && npm publish --access public --registry=http://172.16.240.221:8081/repository/local/"

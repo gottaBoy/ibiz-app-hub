@@ -1,0 +1,110 @@
+$ai-tool-call-item: (
+  bg-primary: #1e1e1e,
+  bg-secondary: #2d2d2d,
+  bg-tertiary: #3c3c3c,
+  text-primary: #d4d4d4,
+  text-secondary: #9cdcfe,
+  text-error: #f44747,
+  text-string: #ce9178,
+  text-boolean: #569cd6,
+  text-property: #9cdcfe,
+  text-number: #b5cea8,
+  accent-primary: #0e639c,
+  accent-error: rgb(244 71 71 / 20%),
+  color-bg: getCssVar(inline-ai-textarea-container, color-bg-1),
+  color-border: getCssVar(inline-ai-textarea-container, color-border),
+);
+
+@include b(ai-tool-call-item) {
+  @include set-component-css-var('ai-tool-call-item', $ai-tool-call-item);
+
+  margin-bottom: getCssVar(spacing, tight);
+  background-color: getCssVar(ai-tool-call-item, color-bg);
+  border: 1px solid getCssVar(ai-tool-call-item, color-border);
+  border-radius: getCssVar(border-radius, small);
+
+  @include e(header) {
+    display: flex;
+    gap: getCssVar(spacing, tight);
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: getCssVar(spacing, tight);
+  }
+
+  @include e(header-left) {
+    display: flex;
+    gap: getCssVar(spacing, tight);
+    align-items: center;
+    @include m(caption) {
+      flex-shrink: 0;
+    }
+    @include m(desc) {
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  @include e(header-right) {
+    display: flex;
+    flex-shrink: 0;
+    gap: getCssVar(spacing, tight);
+    align-items: center;
+    @include m(icon) {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    @include m(error-text) {
+      color: getCssVar(color, danger);
+    }
+  }
+
+  @include e(content) {
+    padding: getCssVar(spacing, tight) 0;
+  }
+
+  @include e(code-line) {
+    display: flex;
+    min-height: 18px;
+    margin-bottom: getCssVar(spacing, base, tight);
+    font-family: Consolas, monospace;
+    font-size: 0.95rem;
+    @include m(line-number) {
+      min-width: 20px;
+      margin-right: 15px;
+      color: getCssVar(color, success);
+      text-align: right;
+      user-select: none;
+    }
+  }
+
+  @include e(property) {
+    color: getCssVar(ai-tool-call-item, text-property);
+  }
+
+  @include e(string) {
+    overflow: hidden;
+    color: getCssVar(ai-tool-call-item, text-string);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include e(boolean) {
+    color: getCssVar(ai-tool-call-item, text-boolean);
+  }
+
+  @include e(number) {
+    color: getCssVar(ai-tool-call-item, text-number);
+  }
+
+  @include e('null') {
+    color: getCssVar(ai-tool-call-item, text-boolean);
+  }
+
+  @include e(error) {
+    color: getCssVar(ai-tool-call-item, text-error);
+  }
+}

@@ -9,7 +9,7 @@ import {
   RuntimeModelError,
 } from '@ibiz-template/core';
 import { IAppDEAction, IAppDEMethod } from '@ibiz/model-core';
-import { isArray, isNil } from 'lodash-es';
+import { isArray, isNil, isUndefined } from 'lodash-es';
 import { ascSort } from 'qx-util';
 import { clone } from 'ramda';
 import { Method } from './method';
@@ -177,7 +177,7 @@ export class DEActionMethod extends Method {
             path = `${path}/${srfkey}`;
           }
           const res = await this.request(path, context, data, params, header);
-          if (!res.data) {
+          if (isNil(res.data) || isUndefined(res.data)) {
             ibiz.log.error(
               ibiz.i18n.t('runtime.deAction.responseDataError'),
               res,

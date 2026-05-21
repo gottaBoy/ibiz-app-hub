@@ -1,9 +1,10 @@
 import { useRoute } from 'vue-router';
-import { ref, watch, PropType, onMounted, defineComponent } from 'vue';
-import { prepareControl, useControlController } from '@ibiz-template/vue3-util';
+import { ref, watch, PropType, defineComponent } from 'vue';
+import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import { IAppMenu, IAppMenuItem } from '@ibiz/model-core';
 import { AppMenuController, IControlProvider } from '@ibiz-template/runtime';
-import { MenuDesign } from './custom-menu-design/custom-menu-design';
+import { isNil } from 'ramda';
+import { useMenuRender } from './menu-render-util';
 import './app-menu.scss';
 
 export const AppMenuControl = defineComponent({
@@ -29,9 +30,9 @@ export const AppMenuControl = defineComponent({
   },
   setup() {
     const c = useControlController((...args) => new AppMenuController(...args));
-    const { controlClass, ns } = prepareControl(c);
+    const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
     const activeName = ref();
-    const showPopup = ref(false);
+    const { onCustomizedClick } = useMenuRender(c);
     // 路由对象
     const route = useRoute();
     // 计算当前路由匹配菜单
@@ -47,25 +48,21 @@ export const AppMenuControl = defineComponent({
       });
     };
 
-    const setPopupState = (state: boolean): void => {
-      showPopup.value = state;
-    };
-
     const onTabChange = async (
       active: string,
       event?: MouseEvent,
       opts: IData = {},
     ) => {
-      if (active === 'customized') return setPopupState(true);
+      if (active === 'customized') return onCustomizedClick();
       activeName.value = active;
       await c.onClickMenuItem(active, event, true, opts);
     };
 
-    onMounted(async () => {
+    c.evt.on('onCreated', async () => {
       const allItems = c.getAllItems();
       // 默认激活的菜单项
       const defaultActiveMenuItem = allItems.find(item => {
-        return item.openDefault && !item.hidden;
+        return item.openDefault && c.isMobMenuItemValid(item);
       });
       if (
         defaultActiveMenuItem &&
@@ -93,16 +90,14 @@ export const AppMenuControl = defineComponent({
     return {
       c,
       ns,
-      showPopup,
       activeName,
-      controlClass,
       onTabChange,
-      setPopupState,
     };
   },
   render() {
     const { model, state } = this.c;
     if (!state.isCreated) return;
+
     return (
       <div
         class={[
@@ -111,25 +106,53 @@ export const AppMenuControl = defineComponent({
           this.ns.m(model.controlStyle || 'default'),
         ]}
       >
-        <van-tabbar modelValue={this.activeName} onChange={this.onTabChange}>
-          {state.mobMenuItems.map(item => (
-            <van-tabbar-item name={item.id}>
-              {{
-                icon: () => (
-                  <iBizIcon
-                    slot='icon'
-                    icon={item.sysImage}
-                    class={this.ns.e('icon')}
-                  ></iBizIcon>
-                ),
-                default: () => <span>{item.caption}</span>,
-              }}
-            </van-tabbar-item>
-          ))}
+        <van-tabbar
+          modelValue={this.activeName}
+          fixed={false}
+          onChange={this.onTabChange}
+        >
+          {state.mobMenuItems.map(item => {
+            const counterNum = item.counterId
+              ? this.c.state.counterData[item.counterId]
+              : null;
+            return (
+              <van-tabbar-item name={item.id}>
+                {{
+                  icon: () => (
+                    <div class={this.ns.e('item-icon')}>
+                      <iBizIcon
+                        slot='icon'
+                        icon={
+                          item.sysImage || {
+                            cssClass: 'fa fa-th-large',
+                          }
+                        }
+                      ></iBizIcon>
+                      {!isNil(counterNum) && (
+                        <iBizBadge
+                          class={this.ns.e('counter')}
+                          value={counterNum}
+                        />
+                      )}
+                    </div>
+                  ),
+                  default: () => (
+                    <span class={this.ns.e('item-caption')}>
+                      {item.caption}
+                    </span>
+                  ),
+                }}
+              </van-tabbar-item>
+            );
+          })}
           {model.enableCustomized && (
             <van-tabbar-item name='customized'>
               {{
-                icon: () => <ion-icon name='ellipsis-horizontal'></ion-icon>,
+                icon: () => (
+                  <div class={this.ns.e('item-icon-container')}>
+                    <ion-icon name='ellipsis-horizontal'></ion-icon>
+                  </div>
+                ),
                 default: () => (
                   <span>{ibiz.i18n.t('control.appmenu.more')}</span>
                 ),
@@ -137,18 +160,6 @@ export const AppMenuControl = defineComponent({
             </van-tabbar-item>
           )}
         </van-tabbar>
-        <van-popup
-          round={true}
-          position='bottom'
-          v-model:show={this.showPopup}
-          style={{ height: '80%' }}
-        >
-          <MenuDesign
-            controller={this.c}
-            show={this.showPopup}
-            onClose={() => this.setPopupState(false)}
-          />
-        </van-popup>
       </div>
     );
   },

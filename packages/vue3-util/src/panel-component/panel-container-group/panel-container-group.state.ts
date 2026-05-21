@@ -1,4 +1,4 @@
-import { PanelItemState } from '@ibiz-template/runtime';
+import { PanelContainerState } from '@ibiz-template/runtime';
 
 /**
  * 面板分组容器状态
@@ -7,6 +7,6 @@ import { PanelItemState } from '@ibiz-template/runtime';
  * @date 2023-02-07 06:04:27
  * @export
  * @class PanelContainerGroupState
- * @extends {PanelItemState}
+ * @extends {PanelContainerState}
  */
-export class PanelContainerGroupState extends PanelItemState {}
+export class PanelContainerGroupState extends PanelContainerState {}

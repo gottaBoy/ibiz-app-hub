@@ -1,9 +1,11 @@
+/* eslint-disable prettier/prettier */
 import { IApiData } from '@ibiz-template/core';
 import { IDEGrid } from '@ibiz/model-core';
 import { IApiGridRowState, IApiGridState } from '../../state';
 import { IApiMDControlController } from './i-api-md-control.controller';
 import { IApiGridColumnController } from './grid-column';
 import { IApiGridColumnMapping } from '../common';
+import { IApiExportParams } from '../../common';
 
 /**
  * 表格
@@ -26,8 +28,10 @@ import { IApiGridColumnMapping } from '../common';
  * @ctrlparams {name:defaultexpandall,title:默认全部展开,parameterType:boolean,defaultvalue:false,description:树形表格时是否默认全部展开}
  * @ctrlparams {"name":"triggermode","title":"编辑器值变更模式","parameterType":"'blur' | 'input'","defaultvalue":"'blur'","description":"该配置项用于指定编辑器触发 `emit` 事件的模式。若值为 'input'，则在输入框值变更时触发 change 事件；若值为 'blur'，则在输入框失去焦点时触发 change 事件"}
  * @ctrlparams {"name":"mdctrlrefreshmode","title":"刷新模式","defaultvalue":"'cache'","parameterType":"'nocache' | 'cache'","description":"多数据部件刷新模式，当值为 'cache'，部件刷新时保留选中数据；当值为 'nocache'，部件刷新时清空选中数据","effectPlatform":"web"}
- * @ctrlparams {"name":"grouprowmode","title":"分组行模式","defaultvalue":"'DEFAULT'","parameterType":"'DEFAULT'|'NEWROW'","description":"表格分组行模式，当值为 DEFAULT 时,表示分组行由业务数据第一行出，NEWROW 表示分组行独出一行","effectPlatform":"web"}
+ * @ctrlparams {"name":"grouprowmode","title":"分组行模式","defaultvalue":"'DEFAULT'","parameterType":"'DEFAULT'|'NEWROW'","description":"表格分组行模式，当值为 DEFAULT 时，表示分组行由业务数据第一行出，NEWROW 表示分组行独出一行","effectPlatform":"web"}
+ * @ctrlparams {"name":"paginationmode","title":"分页显示模式","defaultvalue":"'default'","parameterType":"'default'|'simple'","description":"表格分页显示模式，当值为 default 时，显示完整的分页组件，值为 simple 时，显示简略版的分页组件，仅包含总条数，当前页，上一页和下一页","effectPlatform":"web"}
  * @ctrlparams {"name":"unionkeys","title":"表格联合主键","parameterType":"string","description":"表格联合主键，参数以|分割，用于解决同一条数据关联多个版本呈现问题","effectPlatform":"web"}
+ * @ctrlparams {"name":"batchtoolbarmode","title":"批操作工具栏显示模式","parameterType":"'default' | 'multiple'","defaultvalue":"'default'","description":"批操作工具栏显示模式，值为 'default' 时表示存在选择数据就显示批操作工具栏，值为 'multiple' 时表示选择至少2条数据才显示批操作工具栏","effectPlatform":"web"}
  * @childrenparams {"name":"DEFGRIDCOLUMN","title":"表格属性列","interface":"IApiGridFieldColumnController"}
  * @childrenparams {"name":"DEFGRIDCOLUMN_EDIT","title":"表格编辑列","interface":"IApiGridFieldEditColumnController"}
  * @childrenparams {"name":"GROUPGRIDCOLUMN","title":"表格分组列","interface":"IApiGridGroupColumnController"}
@@ -49,7 +53,7 @@ export interface IApiGridController<
 
   /**
    * @description 保存单条数据
-   * @param {IApiData} data
+   * @param {IApiData} data 数据
    * @returns {*}  {Promise<void>}
    * @memberof IApiGridController
    */
@@ -124,15 +128,15 @@ export interface IApiGridController<
 
   /**
    * @description 导出数据，导出成Excel文件
-   * @param {{  event?: MouseEvent; params: IApiData }} args
+   * @param {{  event?: MouseEvent; params: IApiExportParams }} args 导出参数
    * @returns {*}  {Promise<void>}
    * @memberof IApiGridController
    */
-  exportData(args: { event?: MouseEvent; params: IApiData }): Promise<void>;
+  exportData(args: {event?: MouseEvent; params: IApiExportParams;}): Promise<void>;
 
   /**
    * @description 基于数据获取行数据控制器
-   * @param {IApiData} data
+   * @param {IApiData} data 数据
    * @returns {*}  {(IApiGridRowState | undefined)}
    * @memberof IApiGridController
    */
@@ -140,7 +144,7 @@ export interface IApiGridController<
 
   /**
    * @description 切换折叠(分组表格使用),其中tag表示操作指定表格分组行标识，若不传则操作当前表格的所有分组展开状态，expand表示是否展开，若不传则以当前分组状态为基准切换
-   * @param {{ tag: string; expand: boolean }} [params]
+   * @param {{ tag: string; expand: boolean }} [params] 切换折叠参数
    * @memberof IApiGridController
    */
   changeCollapse(params?: { tag?: string; expand?: boolean }): void;

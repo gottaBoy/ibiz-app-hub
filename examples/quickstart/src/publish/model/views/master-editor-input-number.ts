@@ -137,6 +137,7 @@ export default {
                   noPrivDisplayMode: 1,
                   editor: {
                     precision: 2,
+                    scale: 2,
                     editorParams: {
                       precision: '2',
                     },

@@ -37,6 +37,8 @@ export class AppMenuController
     super.initState();
     this.state.menuItemsState = {};
     this.state.mobMenuItems = [];
+    this.state.mobAuthedMenuItems = [];
+    this.state.counterData = {};
   }
 
   /**
@@ -64,6 +66,13 @@ export class AppMenuController
   customController: CustomAppMenuController | null = null;
 
   /**
+   * @description 计数器对象
+   * @type {AppCounter}
+   * @memberof AppMenuController
+   */
+  counter?: AppCounter;
+
+  /**
    * 自定义配置
    *
    * @type {IData[]}
@@ -80,6 +89,43 @@ export class AppMenuController
    */
   get routeDepth(): number | undefined {
     return this.view.modal.routeDepth;
+  }
+
+  /**
+   * @description 控制移动端每行显示的菜单项个数，当前菜单为图标菜单时生效
+   * @readonly
+   * @type {number}
+   * @memberof AppMenuController
+   */
+  get columnNum(): number {
+    return Number(
+      this.model.userParam?.columnnum || this.controlParams.columnnum || 4,
+    );
+  }
+
+  /**
+   * @description 控制移动端定制按钮在屏幕中的位置，当前菜单为图标菜单、列表菜单时生效
+   * @readonly
+   * @type {('LEFTSTART'
+   *     | 'LEFT'
+   *     | 'LEFTEND'
+   *     | 'RIGHT'
+   *     | 'RIGHTSTART'
+   *     | 'RIGHTEND')}
+   * @memberof AppMenuController
+   */
+  get customizedAlign():
+    | 'LEFTSTART'
+    | 'LEFT'
+    | 'LEFTEND'
+    | 'RIGHT'
+    | 'RIGHTSTART'
+    | 'RIGHTEND' {
+    return (
+      this.model.userParam?.customizedalign ||
+      this.controlParams.customizedalign ||
+      'RIGHTEND'
+    );
   }
 
   constructor(model: IAppMenu, context: IContext, params: IParams, ctx: CTX) {
@@ -110,6 +156,19 @@ export class AppMenuController
   }
 
   /**
+   * @description 生命周期-加载完成
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof AppMenuController
+   */
+  protected async onMounted(): Promise<void> {
+    await super.onMounted();
+
+    this.initCounter();
+    this.counter?.onChange(this.onCounterChange.bind(this));
+  }
+
+  /**
    * 加载自定义菜单模型
    *
    * @private
@@ -126,33 +185,213 @@ export class AppMenuController
   }
 
   /**
+   * @description 保存自定义菜单模型
+   * @param {Array<{ id: string; order: number; hidden: boolean }>} items 有权限的菜单项集合
+   * @returns {*}  {Promise<void>}
+   * @memberof AppMenuController
+   */
+  async saveMobCustomMenusModel(
+    items: Array<{ id: string; order: number; hidden: boolean }>,
+  ): Promise<void> {
+    await this.customController!.saveCustomModelData(items);
+
+    this.saveConfigs = items;
+    if (ibiz.env.isMob) {
+      this.state.mobAuthedMenuItems = this.calcMobCustomSorteItems(
+        this.state.mobAuthedMenuItems,
+      );
+      this.state.mobMenuItems = this.calcMobCustomVisibleItems(
+        this.state.mobAuthedMenuItems,
+      );
+    }
+  }
+
+  /**
+   * @description 计数器对象数据改变
+   * @param {IData} data
+   * @memberof AppMenuController
+   */
+  onCounterChange(data: IData): void {
+    this.state.counterData = data;
+  }
+
+  /**
+   * @description 初始化计数器对象
+   * @returns {*}  {void}
+   * @memberof AppMenuController
+   */
+  initCounter(): void {
+    if (this.state.isCounterDisabled) return;
+    const { appCounterRefId } = this.model;
+    if (appCounterRefId) {
+      this.counter = this.getCounter(appCounterRefId) as AppCounter;
+    }
+  }
+
+  /**
    * 初始化移动端菜单项
    *
    * @memberof AppMenuController
    */
   initMobMenuItems(): void {
+    // 是否为标准菜单
+    const isDefaultMenu = !this.model.appMenuStyle;
+
     // 所有可见菜单项
-    const menuItems =
-      this.model.appMenuItems?.filter(
-        item =>
-          item.hidden !== true &&
-          item.itemType === 'MENUITEM' &&
-          this.state.menuItemsState[item.id!].visible,
-      ) || [];
+    let mobAuthedMenuItems = this.calcMobAuthedMenuItems(
+      this.model.appMenuItems || [],
+      isDefaultMenu,
+    );
+
     let mobMenuItems: IAppMenuItem[] = [];
+
     if (this.model.enableCustomized) {
       if (this.saveConfigs.length > 0) {
-        this.saveConfigs.forEach(item => {
-          const menu = menuItems.find(_item => item.id === _item.id);
-          if (menu) mobMenuItems.push(menu);
-        });
+        mobAuthedMenuItems = this.calcMobCustomSorteItems(mobAuthedMenuItems);
+        mobMenuItems = this.calcMobCustomVisibleItems(mobAuthedMenuItems);
+      } else if (isDefaultMenu) {
+        // 标准菜单最大显示4个
+        mobMenuItems = mobAuthedMenuItems.slice(0, 4);
       } else {
-        mobMenuItems = menuItems.slice(0, 4);
+        mobMenuItems = mobAuthedMenuItems;
       }
+      // 权限计算后的可见项
+      this.state.mobAuthedMenuItems = mobAuthedMenuItems;
     } else {
-      mobMenuItems = menuItems;
+      mobMenuItems = mobAuthedMenuItems;
     }
+
+    // 最终显示项
     this.state.mobMenuItems = mobMenuItems;
+  }
+
+  /**
+   * @description 检查移动端菜单项是否有效（可显示）
+   * @private
+   * @param {IAppMenuItem} menuItem 待检查的移动端菜单项
+   * @returns {*}  {boolean}
+   * @memberof AppMenuController
+   */
+  isMobMenuItemValid(menuItem: IAppMenuItem): boolean {
+    return (
+      menuItem.hidden !== true &&
+      menuItem.itemType === 'MENUITEM' &&
+      this.state.menuItemsState[menuItem.id!].visible
+    );
+  }
+
+  /**
+   * @description 计算移动端菜单经过权限计算后可显示的菜单项集合
+   * @private
+   * @param {IAppMenuItem[]} items 原始菜单项数组
+   * @param {boolean} [needRecursive] 是否需要递归处理子项
+   * @returns {*}  {IAppMenuItem[]}
+   * @memberof AppMenuController
+   */
+  private calcMobAuthedMenuItems(
+    items: IAppMenuItem[],
+    needRecursive?: boolean,
+  ): IAppMenuItem[] {
+    const visibleItems: IAppMenuItem[] = [];
+
+    items.forEach(item => {
+      if (!this.isMobMenuItemValid(item)) return;
+
+      const itemData: IAppMenuItem = { ...item };
+      if (item.appMenuItems?.length && needRecursive) {
+        const childItems = this.calcMobAuthedMenuItems(
+          item.appMenuItems,
+          needRecursive,
+        );
+        itemData.appMenuItems = childItems;
+      }
+      visibleItems.push(itemData);
+    });
+
+    return visibleItems;
+  }
+
+  /**
+   * @description 计算移动端自定义模式下可见的菜单项
+   * @private
+   * @param {IAppMenuItem[]} items 原始菜单项数组
+   * @param {IData} [idMap] 菜单项ID映射表
+   * @returns {*}  {IAppMenuItem[]}
+   * @memberof AppMenuController
+   */
+  private calcMobCustomVisibleItems(
+    items: IAppMenuItem[],
+    idMap?: IData,
+  ): IAppMenuItem[] {
+    const customItems: IAppMenuItem[] = [];
+    let itemIdMap: IData | void = idMap;
+
+    if (!itemIdMap) {
+      itemIdMap = {};
+      this.saveConfigs.forEach(config => {
+        itemIdMap![config.id!] = config;
+      });
+    }
+
+    items.forEach(item => {
+      if (!itemIdMap[item.id!] || itemIdMap[item.id!].hidden) return;
+
+      const itemData: IAppMenuItem = { ...item };
+      if (item.appMenuItems?.length) {
+        const childItems = this.calcMobCustomVisibleItems(
+          item.appMenuItems,
+          itemIdMap,
+        );
+        itemData.appMenuItems = childItems;
+      }
+      customItems.push(itemData);
+    });
+
+    return customItems;
+  }
+
+  /**
+   * @description 计算移动端自定义模式下菜单项的排序
+   * @private
+   * @param {IAppMenuItem[]} items
+   * @param {IData} [idMap]
+   * @returns {*}  {IAppMenuItem[]}
+   * @memberof AppMenuController
+   */
+  private calcMobCustomSorteItems(
+    items: IAppMenuItem[],
+    idMap?: IData,
+  ): IAppMenuItem[] {
+    const customItems: IAppMenuItem[] = [];
+
+    let itemIdMap: IData | void = idMap;
+
+    if (!itemIdMap) {
+      itemIdMap = {};
+      this.saveConfigs.forEach(config => {
+        itemIdMap![config.id!] = config;
+      });
+    }
+
+    items.forEach(item => {
+      const itemData: IAppMenuItem = { ...item };
+      if (item.appMenuItems?.length) {
+        const childItems = this.calcMobCustomSorteItems(
+          item.appMenuItems,
+          itemIdMap,
+        );
+        itemData.appMenuItems = childItems;
+      }
+      customItems.push(itemData);
+    });
+
+    customItems.sort((a, b) => {
+      const orderA = itemIdMap![a.id!]?.order || 0;
+      const orderB = itemIdMap![b.id!]?.order || 0;
+      return orderA - orderB;
+    });
+
+    return customItems;
   }
 
   /**
@@ -309,6 +548,7 @@ export class AppMenuController
    * @Date: 2023-07-10 15:14:21
    */
   getCounter(id: string): AppCounter | null {
+    if (this.state.isCounterDisabled) return null;
     const { counters } = this.ctx.view;
     if (counters[id]) {
       return counters[id];
@@ -342,17 +582,41 @@ export class AppMenuController
   }
 
   /**
-   * 获取默认打开视图
-   *
-   * @return {*}  {(string | undefined)}
+   * @description 获取默认打开菜单项
+   * @returns {*}  {(IAppMenuItem | undefined)}
+   * @memberof AppMenuController
+   */
+  getDefaultOpenMenuItem(): IAppMenuItem | undefined {
+    return this.getAllItems().find(
+      item =>
+        item.openDefault &&
+        !item.hidden &&
+        this.state.menuItemsState[item.id!].visible,
+    );
+  }
+
+  /**
+   * @description 获取默认打开视图
+   * @returns {*}  {(string | undefined)}
    * @memberof AppMenuController
    */
   getDefaultOpenView(): string | undefined {
-    const menu = this.getAllItems().find(
-      item => item.openDefault && !item.hidden,
-    );
+    const menu = this.getDefaultOpenMenuItem();
     if (!menu || !menu.appFuncId) return;
     const appFunc = ibiz.hub.getApp(menu.appId).getAppFunc(menu.appFuncId);
     return appFunc?.appFuncType === 'APPVIEW' ? appFunc.appViewId : undefined;
+  }
+
+  /**
+   * @description 生命周期-销毁完成
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof AppMenuController
+   */
+  protected async onDestroyed(): Promise<void> {
+    await super.onDestroyed();
+    if (this.counter) {
+      this.counter.destroy();
+    }
   }
 }

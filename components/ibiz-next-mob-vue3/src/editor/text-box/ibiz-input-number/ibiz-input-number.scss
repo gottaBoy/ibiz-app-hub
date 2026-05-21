@@ -1,42 +1,52 @@
-@include b('input-number') {
-  height: 100%;
-  text-align: getCssVar(form-item-container, editor-align);
+$input-number: (
+  color: getCssVar(editor, default, text-color),
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  spacing-unit-gap: getCssVar(spacing, tight),
+  clear-display: getCssVar(editor, default, required-style),
+);
 
-  input {
-    font-size: getCssVar('form-item', 'font-size');
-    line-height: getCssVar('form-item', 'line-height');
-    color: getCssVar('form-item', 'text-color');
-    border-color: getCssVar('form-item', 'border-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'text-color');
-  }
+@include b('input-number') {
+  @include set-component-css-var(input-number, $input-number);
+
+  height: 100%;
+  font-size: getCssVar(input-number, font-fontSize);
+  line-height: getCssVar(input-number, font-lineHeight);
+  color: getCssVar(input-number, color);
+  text-align: getCssVar(input-number, font-textAlign);
+
+  --van-field-input-text-color: #{getCssVar(input-number, color)};
+  --van-cell-text-color: #{getCssVar(input-number, color)};
+  --van-cell-value-color: #{getCssVar(input-number, color)};
+  --van-cell-line-height: #{getCssVar(input-number, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(input-number, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(input-number, font-fontSize)};
+  --van-field-input-disabled-text-color: #{getCssVar(input-number, color-disabled)};
+
 
   input::placeholder {
-    color: getCssVar('form-item', 'placeholder-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'placeholder-color');
-  }
-
-  input:disabled {
-    color: getCssVar('form-item', 'disabled-color');
-    background-color: getCssVar('form-item', 'disabled-bg-color');
-    border-color: getCssVar('form-item', 'disabled-border-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'disabled-color');
+    color: getCssVar(input-number, color-placeholder);
+    -webkit-text-fill-color: getCssVar(input-number, color-placeholder);
   }
 
   // 只读模式显示
   @include m(readonly) {
-    color: getCssVar('form-item', 'readonly-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'readonly-color');
+    color: getCssVar(input-number, color-readonly);
+    -webkit-text-fill-color: getCssVar(input-number, color-readonly);
     @include overflow-wrap;
   }
 
   // 单位后缀样式
   .#{bem('input-number','unit')} {
-    margin-left: rem(10px);
-    font-size: getCssVar('form-item', 'font-size');
-    font-style: normal;
+    flex: none;
+    margin-left: getCssVar(input-number, spacing-unit-gap);
   }
 
   .van-field__clear{
-    display: getCssVar(form-item-container,required-style);
+    display: getCssVar(input-number, clear-display);
   }
 }

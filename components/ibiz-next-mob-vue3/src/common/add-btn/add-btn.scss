@@ -1,0 +1,13 @@
+$att-btn: (
+  color-button-color: getCssVar(color, primary),
+  color-add-border: getCssVar(color, border), 
+  spacing-button-padding: getCssVar(spacing, tight) 0, 
+  border-add-btn: rem(2px) dashed getCssVar(add-btn, color-add-border),
+);
+@include b('add-btn') {
+  @include set-component-css-var('add-btn', $att-btn);
+  width: 100%;
+  border: getCssVar(add-btn, border-add-btn);
+  margin: getCssVar(add-btn, spacing-button-padding); 
+  color: getCssVar(add-btn, color-button-color);
+}

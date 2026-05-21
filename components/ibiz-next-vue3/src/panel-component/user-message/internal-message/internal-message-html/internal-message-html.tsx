@@ -2,9 +2,9 @@
 import { computed, defineComponent, PropType } from 'vue';
 import { IInternalMessage } from '@ibiz-template/core';
 import { useNamespace } from '@ibiz-template/vue3-util';
-import './internal-message-html.scss';
 import { InternalMessageHTMLtProvider } from './internal-message-html.provider';
 import { parseHtml } from '../../../../util';
+import './internal-message-html.scss';
 
 export const InternalMessageHTML = defineComponent({
   name: 'IBizInternalMessageHTML',
@@ -20,6 +20,7 @@ export const InternalMessageHTML = defineComponent({
   },
   emits: {
     close: () => true,
+    read: () => true,
   },
   setup(props) {
     const ns = useNamespace('internal-message-html');
@@ -34,6 +35,7 @@ export const InternalMessageHTML = defineComponent({
         class={[this.ns.b()]}
         message={this.message}
         provider={this.provider}
+        onRead={() => this.$emit('read')}
         onClose={() => this.$emit('close')}
       >
         <div class={this.ns.e('content')} v-html={this.msgContent}></div>

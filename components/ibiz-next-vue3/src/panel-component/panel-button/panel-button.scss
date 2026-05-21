@@ -13,7 +13,11 @@ $panel-button: (
 
   .el-button{
     width: 100%;
-    
+
+    > span {
+      // 禁用点击事件，保证event.target是button元素
+      pointer-events: none;
+    }
     @include b(panel-button-content){
       @include flex(row, flex-start, center);
 

@@ -1,0 +1,6 @@
+@include b('portlet-rawitem') {
+  >.#{bem('portlet-layout-content')} {
+    padding: getCssVar(portlet-layout, spacing-content-padding) !important;
+    margin: getCssVar(portlet-layout, spacing-content-margin) !important;
+  }
+}

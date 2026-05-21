@@ -39,7 +39,7 @@ export interface IApiFormMDCtrlRepeaterController
   isSingleData: boolean;
 
   /**
-   * @description 重复表单
+   * @description 重复器表单
    * @type {IDEForm}
    * @memberof IApiFormMDCtrlRepeaterController
    */
@@ -54,7 +54,7 @@ export interface IApiFormMDCtrlRepeaterController
 
   /**
    * @description 设置重复器数据（修改主表单里重复器对应属性）
-   * @param {(IApiData[] | IApiData | null)} value
+   * @param {(IApiData[] | IApiData | null)} value 重复器数据
    * @memberof IApiFormMDCtrlRepeaterController
    */
   setValue(value: IApiData[] | IApiData | null): void;

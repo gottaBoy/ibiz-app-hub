@@ -26,7 +26,7 @@ export function useEventListener(
 
   watch(
     elRef,
-    (newVal, oldVal) => {
+    (newVal: IData, oldVal) => {
       if (newVal !== oldVal) {
         if (isNil(newVal)) {
           cleanup();

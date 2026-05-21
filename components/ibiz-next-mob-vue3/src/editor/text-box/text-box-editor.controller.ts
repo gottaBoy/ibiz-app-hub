@@ -1,5 +1,9 @@
-import { EditorController } from '@ibiz-template/runtime';
-import { ITextBox } from '@ibiz/model-core';
+import {
+  EditorController,
+  getDeACMode,
+  IAppDEService,
+} from '@ibiz-template/runtime';
+import { IAppDEACMode, ITextArea, ITextBox } from '@ibiz/model-core';
 import { toNumber } from 'lodash-es';
 
 /**
@@ -20,10 +24,52 @@ export class TextBoxEditorController extends EditorController<ITextBox> {
    */
   precision?: number;
 
+  /**
+   * @description 应用实体服务
+   * @type {IAppDEService}
+   * @memberof TextBoxEditorController
+   */
+  deService?: IAppDEService;
+
+  /**
+   * @description 自填模式
+   * @type {IAppDEACMode}
+   * @memberof TextBoxEditorController
+   */
+  deACMode?: IAppDEACMode;
+
+  /**
+   * @description AI 聊天自填模式
+   * @type {boolean}
+   * @memberof TextBoxEditorController
+   */
+  chatCompletion: boolean = false;
+
   protected async onInit(): Promise<void> {
     await super.onInit();
     this.precision = this.editorParams.precision
       ? toNumber(this.editorParams.precision)
       : this.model.precision;
+    if (
+      this.model.editorType &&
+      ['TEXTAREA', 'TEXTAREA_10', 'MOBTEXTAREA'].includes(this.model.editorType)
+    ) {
+      const model = this.model as ITextArea;
+      if (model.appDEACModeId) {
+        this.deACMode = await getDeACMode(
+          model.appDEACModeId,
+          model.appDataEntityId!,
+          this.context.srfappid,
+        );
+        if (this.deACMode) {
+          if (this.deACMode.actype === 'CHATCOMPLETION' && ibiz.env.enableAI) {
+            this.deService = await ibiz.hub
+              .getApp(model.appId)
+              .deService.getService(this.context, model.appDataEntityId!);
+            this.chatCompletion = true;
+          }
+        }
+      }
+    }
   }
 }

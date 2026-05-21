@@ -19,6 +19,7 @@ export class ArrayWriter extends EditorWriter {
       c.s('valuerule.SysValueRule[]', s, 'getPSSysValueRule'),
     );
     _.w(d, 'precision', s);
+    _.w(d, 'scale', s);
     _.w(d, 'showMaxLength', s);
 
     super.onFillDSL(c, s, d);

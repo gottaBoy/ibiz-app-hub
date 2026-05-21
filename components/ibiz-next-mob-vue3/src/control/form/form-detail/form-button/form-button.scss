@@ -1,6 +1,8 @@
 $form-button: (
-  icon-max-width: getCssVar(width-icon, medium),
-  icon-max-height: getCssVar(width-icon, medium),
+  width-icon: getCssVar(width-icon, medium),
+  height-icon: getCssVar(width-icon, medium),
+  spacing-padding: getCssVar(spacing, base) 0 getCssVar(spacing, base) getCssVar(spacing, base),
+  spacing-gap: getCssVar(spacing, extra, tight),
 );
 
 @include b(form-button) {
@@ -8,7 +10,7 @@ $form-button: (
 
   width: 100%;
   height: 100%;
-  padding: getCssVar(spacing, tight);
+  padding: getCssVar(form-button, spacing-padding);
   overflow: hidden;
 
   .van-button {
@@ -16,13 +18,13 @@ $form-button: (
 
     @include b(form-button-content) {
       @include flex(row, flex-start, center);
-      gap: getCssVar(spacing, extra, tight);
+      gap: getCssVar(form-button, spacing-gap);
       
       img,
       i {
         display: inline-block;
-        max-width: getCssVar(form-button, icon-max-width);
-        max-height: getCssVar(form-button, icon-max-height);
+        max-width: getCssVar(form-button, width-icon);
+        max-height: getCssVar(form-button, height-icon);
       }
     }
   }
@@ -33,5 +35,9 @@ $form-button: (
         display: none;
       }
     }
+  }
+
+  @include when(readonly) {
+    display: none;
   }
 }

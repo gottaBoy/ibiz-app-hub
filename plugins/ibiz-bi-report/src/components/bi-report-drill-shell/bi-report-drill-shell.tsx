@@ -1,5 +1,6 @@
 import { PropType, defineComponent, h, ref, resolveComponent } from 'vue';
 import { IAppBIReport, IAppBIReportDimension } from '@ibiz/model-core';
+import { IModal } from '@ibiz-template/runtime';
 import { useNamespace } from '../../use';
 import { IAppBIDrillDetailData } from '../../interface';
 import {
@@ -37,6 +38,10 @@ export default defineComponent({
       type: Object as PropType<IData>,
       required: true,
     },
+    /**
+     * @description 视图模态操作对象，在模态等形式打开视图时，需给视图注入此对象
+     */
+    modal: { type: Object as PropType<IModal> },
   },
   setup(props) {
     const ns = useNamespace('bi-report-drill-shell');
@@ -153,6 +158,10 @@ export default defineComponent({
       Object.assign(result, {
         searchconds: searchConds,
       });
+      // 处理明细视图标题
+      Object.assign(result, {
+        reportcaption: caption.value,
+      });
       customParams.value = result;
       activeText.value = items.value
         .filter(item => activeItems.value.some(name => name === item.name))
@@ -256,7 +265,7 @@ export default defineComponent({
     }
     return (
       <div class={this.ns.b()}>
-        <div class={this.ns.b('header')}>{this.caption}</div>
+        {/* <div class={this.ns.b('header')}>{this.caption}</div> */}
         <div class={this.ns.b('content')}>
           {this.items.length > 0 && (
             <div class={this.ns.b('content-left')}>
@@ -301,6 +310,7 @@ export default defineComponent({
               context: this.context,
               params: this.customParams,
               viewId: this.appViewId,
+              modal: this.modal,
             })}
           </div>
         </div>

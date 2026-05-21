@@ -1,54 +1,130 @@
+$button-list:(
+  // 颜色
+  color-van-action-disabled-text: getCssVar(color, disabled-text),
+  color-van-action-disabled-bg: getCssVar(color, disabled-bg),
+  color-van-button-border-color: getCssVar(color, white),
+  // 间距
+  spacing-content-gap: getCssVar(spacing, extra, tight),
+  spacing-button-caption-gap: getCssVar(spacing, extra, tight),
+  spacing-van-button-text-gap: getCssVar(spacing, extra, tight),
+  spacing-van-content-gap: getCssVar(spacing, super, tight),
+  spacing-popover-button-item: 0 getCssVar(spacing, base),
+  // 字体大小
+  font-icon-font-size: getCssVar(width-icon, medium),
+  font-van-button-font-size: var(--van-popover-action-font-size),
+  // 宽高
+  width-van-button: var(--van-popover-action-width),
+  height-van-button: var(--van-popover-action-height),
+  height-van-button-line-height: 1,
+  // 圆角
+  radius-van-button: getCssVar(border-radius, medium),
+);
 @mixin button-list-icon-style {
+  @include set-component-css-var('button-list',$button-list);
   .#{bem(icon)} {
     @include flex(row, center, center);
 
-    width: getCssVar(width-icon, medium);
-    height: getCssVar(width-icon, medium);
-    font-size: getCssVar(width-icon, medium);
+    width: getCssVar(button-list,font-icon-font-size);
+    height: getCssVar(button-list,font-icon-font-size);
+    font-size: getCssVar(button-list,font-icon-font-size);
   }
 }
 
 @include b(button-list) {
+  @include set-component-css-var('button-list',$button-list);
+
   width: 100%;
   height: 100%;
-
-  .van-button {
-    border: none;
-    .van-button__text {
-      display: flex;
-      align-items: center;
-      gap: getCssVar(spacing, extra, tight);
-      @include button-list-icon-style;
-    }
-  }
 
   @include e(content) {
     display: flex;
     flex-wrap: wrap;
-    gap: getCssVar(spacing, extra, tight);
+    gap: getCssVar(button-list,spacing-content-gap);
   }
 
+  @include e(button) {
+    @include m(caption) {
+      display: flex;
+      align-items: center;
+      gap: getCssVar(button-list,spacing-button-caption-gap);
+    }
+  }
+
+  // 行为组展开模式
+  // 首项+分组展开项容器样式
+  @include e('group-itemx') {
+    display: flex;
+    align-items: center;
+
+    &>.van-button {
+      border-right-color: transparent;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &>.van-popover__wrapper {
+      display: flex;
+      align-items: center;
+      &>.van-button {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+  }
+  
   @include e(popover) {
-    --ibiz-color-bg-0: #{var(--van-popover-light-text-color)};
+    @include set-component-css-var('button-list',$button-list);
+
+    #{getCssVarName(button-list,radius-van-button )}: 0;
+    #{getCssVarName(color,bg,0)}:#{var(--van-popover-light-text-color)};
 
     .van-popover__action--disabled:active,
     .van-popover__action--disabled {
-      color: getCssVar(color, disabled-text) !important;
-      background-color: getCssVar(color, disabled-bg);
+      color: getCssVar(button-list,color-van-action-disabled-text) !important;
+      background-color: getCssVar(button-list,color-van-action-disabled-bg);
     }
 
-    @include m(item) {
+    .van-popover__content {
+      display: flex;
+      flex-direction: column;
+      gap: getCssVar(button-list,spacing-van-content-gap);
+      .van-button {
+        padding: getCssVar(button-list, spacing-popover-button-item);
+        font-size: getCssVar(button-list,font-van-button-font-size);
+        line-height: getCssVar(button-list,height-van-button-line-height);
+        width: getCssVar(button-list,width-van-button);
+        height: getCssVar(button-list,height-van-button);
+        border-radius: getCssVar(button-list,radius-van-button);
+        border: none;
+        color: currentColor;
+        background-color: transparent;
+        &:before {
+          border-color: getCssVar(button-list,color-van-button-border-color);
+        }
+        .van-button__content {
+          justify-content: flex-start;
+        }
+        .van-button__text {
+          display: flex;
+          align-items: center;
+          gap: getCssVar(button-list, spacing-van-button-text-gap);
+          @include utils-ellipsis;
+        }
+        .#{bem(button-list, item, caption)} {
+          @include utils-ellipsis;
+        }
+      }
+    }
+  }
+
+  
+  .van-button {
+    line-height: getCssVar(button-list,height-van-button-line-height);
+    .van-button__text {
       display: flex;
       align-items: center;
-      gap: getCssVar(spacing, extra, tight);
+      gap: getCssVar(button-list,spacing-content-gap);
       @include button-list-icon-style;
-    }
-
-    @include m(caption) {
-      display: flex;
-      line-height: 100%;
-      align-items: center;
-      gap: getCssVar(spacing, extra, tight);
     }
   }
 }

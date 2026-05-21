@@ -19,7 +19,7 @@ export interface IApiTreeGridExViewCall extends IApiTreeViewCall {
     args: undefined;
   };
   /**
-   * @description 保存行
+   * @description 保存行，data：树节点数据
    * @type {{
    *     args: { data: IApiTreeNodeData[] };
    *   }}

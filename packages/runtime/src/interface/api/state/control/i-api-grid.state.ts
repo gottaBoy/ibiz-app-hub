@@ -1,6 +1,7 @@
 import { IApiData } from '@ibiz-template/core';
 import { IApiMDControlState } from './i-api-md-control.state';
 import { IApiButtonContainerState } from '../common';
+import { IApiControlVO } from '../../service';
 
 /**
  * @description 行数据状态
@@ -87,17 +88,17 @@ export interface IApiGridRowState {
 
   /**
    * @description 缓存的数据对象
-   * @type {IApiData}
+   * @type {IApiControlVO}
    * @memberof IApiGridRowState
    */
-  cacheData?: IApiData;
+  cacheData?: IApiControlVO;
 
   /**
    * @description 获取改变数据
    * @returns {*}  {IApiData}
    * @memberof IApiGridRowState
    */
-  getDiffData(): IApiData;
+  getDiffData(): IApiControlVO;
 }
 
 /**

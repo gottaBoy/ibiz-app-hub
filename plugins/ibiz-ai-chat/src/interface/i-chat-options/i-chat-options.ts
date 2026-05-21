@@ -1,8 +1,10 @@
-import { AiChatController } from '../../controller';
+import { AiChatController, AiTopicController } from '../../controller';
+import { IAIAgent, IAIAgentConfig } from '../i-ai-agent/i-ai-agent';
 import { IChatMessage } from '../i-chat-message/i-chat-message';
 import { IChatToolbarItem } from '../i-chat-toolbar-item/i-chat-toolbar-item';
 import { FileUploaderOptions } from '../i-file-uploader-options/i-file-uploader-options';
 import { ITopic } from '../i-topic-options/i-topic-options';
+import { IKnowledgeBase } from '../i-knowledge-base/i-knowledge-base';
 
 /**
  * 聊天数据
@@ -47,6 +49,27 @@ export interface IChat {
    * @type {string}
    */
   appDataEntityId: string;
+
+  /**
+   *  会话标识
+   */
+  sessionid: string;
+
+  /**
+   * @description 自动提问
+   * - 历史数据最后一个项是user时是否自动提问，默认开启
+   * @type {boolean}
+   * @memberof IChat
+   */
+  autoQuestion?: boolean;
+
+  /**
+   * @description 是否自动回填
+   * - AI回答完成之后是否触发回填，默认关闭
+   * @type {boolean}
+   * @memberof IChat
+   */
+  autoFill?: boolean;
 
   /**
    * 传入对象参数（如果外部传入，在请求历史记录，需要附加当前参数）
@@ -99,6 +122,43 @@ export interface IChat {
    * @type {IChatToolbarItem[]}
    */
   otherToolbarItems?: IChatToolbarItem[];
+
+  /**
+   * 是否允许切换ai代理
+   */
+  enableAIAgentChange?: boolean;
+
+  /**
+   * 激活ai代理标识
+   */
+  activeAIAgentID?: string | undefined;
+
+  /**
+   * AI代理列表
+   *
+   * @type {IAIAgent[]}
+   */
+  aiAgentlist?: IAIAgent[];
+
+  /**
+   * AI知识库列表
+   */
+  aiknowledgeBasesList?: IKnowledgeBase[];
+
+  /**
+   * 选中知识库ID
+   */
+  selectAIKnowledgeBaseId?: string;
+
+  /**
+   * 模式参数，用于业务区分
+   */
+  srfMode?: string;
+
+  /**
+   * 传入当前资源作为用户消息（如果外部传入，在请求历史记录后，需要附加当前资源作为用户消息）
+   */
+  appendCurResource: string;
 }
 
 /**
@@ -138,6 +198,69 @@ export interface IChatOptions extends IChat {
   topic?: ITopic;
 
   /**
+   * 聊天区ai话题控制器
+   *
+   * @type {AiTopicController}
+   */
+  aiTopic?: AiTopicController;
+
+  /**
+   * 摘要最大长度
+   *
+   * @type {number}
+   */
+  summaryMaxTokens?: number;
+
+  /**
+   * 是否允许选择知识库
+   *
+   * @type {boolean}
+   */
+  enableKnowledgeBaseSelect: boolean;
+
+  /**
+   * 是否允许设置召回参数
+   *
+   * @type {boolean}
+   */
+  enableRecallConfigSetting: boolean;
+
+  /**
+   * 召回重排默认值(禁用|启用|自动)
+   *
+   * @type {0 | 1 | 2}
+   */
+  reRankDefaultValue: 0 | 1 | 2;
+
+  /**
+   * 最大召回数量默认值
+   *
+   * @type {number}
+   */
+  maxChunksDefaultValue: number;
+
+  /**
+   * 召回相似度阈值默认值
+   *
+   * @type {number}
+   */
+  chunkThresholdDefaultValue: number;
+
+  /**
+   * 知识分片打开视图
+   *
+   * @type {string}
+   */
+  chunkView?: string;
+
+  /**
+   * 知识分片实体代码名称
+   *
+   * @type {string}
+   */
+  chunkEntity?: string;
+
+  /**
    * 聊天窗触发提问回调
    *
    * @author tony001
@@ -155,16 +278,25 @@ export interface IChatOptions extends IChat {
     otherParams: object,
     question: IChatMessage[],
     sessionid: string,
+    srfaiagent: string | undefined,
+    srfmode: string | undefined,
+    srfaiknowledgebases: string | undefined,
+    srfaiagentconfig: IAIAgentConfig | undefined,
   ): Promise<boolean>;
 
   /**
    * 中断消息
-   *
-   * @author tony001
-   * @date 2025-03-10 14:03:37
-   * @param {AiChatController} aiChat
+   * @param aiChat
+   * @param context
+   * @param params
+   * @param otherParams
    */
-  abortQuestion(aiChat: AiChatController): Promise<void>;
+  abortQuestion(
+    aiChat: AiChatController,
+    context: object,
+    params: object,
+    otherParams: object,
+  ): Promise<void>;
 
   /**
    * 聊天窗历史记录获取
@@ -181,12 +313,11 @@ export interface IChatOptions extends IChat {
 
   /**
    * 窗口关闭
-   *
-   * @param {object} context
-   * @param {object} params
-   * @memberof IChatOptions
+   * @param context
+   * @param params
+   * @param message
    */
-  closed?(context: object, params: object): void;
+  closed?(context: object, params: object, message: IChatMessage[]): void;
 
   /**
    * 聊天窗任意位置点击操作
@@ -221,6 +352,22 @@ export interface IChatOptions extends IChat {
    * @memberof IChatOptions
    */
   minimize?(target: boolean, context: object, params: object): void;
+
+  /**
+   * 获取ai代理列表
+   *
+   * @author tony001
+   * @date 2025-02-28 14:02:41
+   * @type {FileUploaderOptions<object>}
+   */
+  fetchAgentList?: (query?: string) => Promise<IAIAgent[]>;
+
+  /**
+   * 获取AI知识库列表
+   *
+   * @returns
+   */
+  fetchKnowledgeBaseList?: () => Promise<IKnowledgeBase[]>;
 
   /**
    * 文件上传配置
@@ -260,4 +407,29 @@ export interface IChatOptions extends IChat {
     params: object,
     otherParams: object,
   ): Promise<object>;
+
+  /**
+   * 聊天内容摘要回调
+   * @param context
+   * @param params
+   * @param otherParams
+   * @return {*}  {Promise<object>}
+   */
+  chatDigest(
+    context: object,
+    params: object,
+    otherParams: object,
+  ): Promise<object>;
+
+  /**
+   * 打开链接视图
+   * @param url
+   * @param message
+   * @param event
+   */
+  openLinkView(
+    url: string,
+    message: IChatMessage,
+    event: MouseEvent,
+  ): Promise<void>;
 }

@@ -39,7 +39,7 @@ export default {
           id: 'count',
         },
         {
-          caption: '计数器禁用',
+          caption: '计数器动态禁用',
           appViewId: 'web.master_searchbar_counter_disabled',
           id: 'disable_counter',
         },

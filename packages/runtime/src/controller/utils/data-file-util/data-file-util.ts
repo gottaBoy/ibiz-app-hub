@@ -3,6 +3,7 @@ import {
   IPortalAsyncAction,
   IPortalMessage,
   RuntimeError,
+  SelectFileOpts,
   selectFile,
 } from '@ibiz-template/core';
 import { IAppDEDataImport, IAppDataEntity } from '@ibiz/model-core';
@@ -108,7 +109,8 @@ export async function asyncImportData(
     const resPath = calcResPath(context, appDataEntity);
     url = resPath + url;
   }
-  const res = await ibiz.net.request(url, {
+  const app = ibiz.hub.getApp(context?.srfappid);
+  const res = await app.net.request(url, {
     method: 'post',
     data,
     params: queryParam,
@@ -163,7 +165,8 @@ export async function importData(
     isAsync: false,
   };
   try {
-    const res = await ibiz.net.request(url, {
+    const app = ibiz.hub.getApp(context?.srfappid);
+    const res = await app.net.request(url, {
       method: 'post',
       data,
       params: queryParam,
@@ -318,6 +321,7 @@ export async function getDataImportModels(opts: {
  *   dataImportViewId?: string;
  *   context: IContext;
  *   params: IParams;
+ *   viewOption?: IData;
  * }} opts
  * @return {*}  {Promise<void>}
  */
@@ -327,6 +331,8 @@ export async function openDataImport(opts: {
   dataImportViewId?: string;
   context: IContext;
   params: IParams;
+  event?: MouseEvent;
+  viewOption?: IData;
 }): Promise<void> {
   const { deDataImportId, appDataEntityId, context, params } = opts;
   const viewId = opts.dataImportViewId || 'AppDataUploadView';
@@ -350,7 +356,7 @@ export async function openDataImport(opts: {
       view.id,
       context,
       params,
-      { openMode: 'POPUPMODAL' },
+      { openMode: 'POPUPMODAL', event: opts.event, ...opts.viewOption },
     );
   }
   // 走自定义组件的导入
@@ -408,7 +414,8 @@ export async function downloadImportTemplate(
     const resPath = calcResPath(context, appDataEntity);
     templateUrl = resPath + templateUrl;
   }
-  const res = await ibiz.net.request(templateUrl, {
+  const app = ibiz.hub.getApp(context?.srfappid);
+  const res = await app.net.request(templateUrl, {
     responseType: 'blob',
     params: queryParam,
   });
@@ -441,6 +448,7 @@ export async function selectAndImport(opts: {
   dataImport?: IAppDEDataImport;
   context?: IContext;
   params?: IParams;
+  fileOpts?: SelectFileOpts;
 }): Promise<ImportDataResult> {
   return new Promise(resolve => {
     selectFile({
@@ -459,6 +467,7 @@ export async function selectAndImport(opts: {
       onCancel: () => {
         resolve({ cancel: true });
       },
+      ...opts.fileOpts,
     });
   });
 }
@@ -501,7 +510,8 @@ export async function asyncImportData2(opts: {
   if (srfimporttag) {
     Object.assign(queryData, { srfimporttag });
   }
-  await ibiz.net.request(url, {
+  const app = ibiz.hub.getApp(opts.context?.srfappid);
+  await app.net.request(url, {
     method: 'get',
     params: queryData,
   });
@@ -563,6 +573,7 @@ export function calcImportSchemaData(opts: {
  *   appDataEntity?: IAppDataEntity;
  *   dataImport?: IAppDEDataImport;
  *   data: Partial<ImportSchemaData>;
+ *   context?: IContext;
  * }} opts
  * @return {*}
  */
@@ -570,10 +581,12 @@ export async function createImportSchema(opts: {
   appDataEntity?: IAppDataEntity;
   dataImport?: IAppDEDataImport;
   data: Partial<ImportSchemaData>;
+  context?: IContext;
 }): Promise<IHttpResponse<IData>> {
   const data = calcImportSchemaData(opts);
   const url = `extension/import_schemas`;
-  const res = await ibiz.net.request(url, {
+  const app = ibiz.hub.getApp(opts.context?.srfappid);
+  const res = await app.net.request(url, {
     method: 'post',
     data,
   });
@@ -589,6 +602,7 @@ export async function createImportSchema(opts: {
  *   appDataEntity?: IAppDataEntity;
  *   dataImport?: IAppDEDataImport;
  *   data: Partial<ImportSchemaData>;
+ *   context?: IContext;
  * }} opts
  * @return {*}
  */
@@ -596,10 +610,12 @@ export async function updateImportSchema(opts: {
   appDataEntity?: IAppDataEntity;
   dataImport?: IAppDEDataImport;
   data: Partial<ImportSchemaData>;
+  context?: IContext;
 }): Promise<IHttpResponse<IData>> {
   const data = calcImportSchemaData(opts);
   const url = `extension/import_schemas/${data.id}`;
-  const res = await ibiz.net.request(url, {
+  const app = ibiz.hub.getApp(opts.context?.srfappid);
+  const res = await app.net.request(url, {
     method: 'put',
     data,
   });
@@ -612,13 +628,16 @@ export async function updateImportSchema(opts: {
  * @date 2024-04-18 04:47:03
  * @export
  * @param {string} id
+ * @param {IContext} [context]
  * @return {*}  {Promise<IHttpResponse<IData>>}
  */
 export async function getImportSchema(
   id: string,
+  context?: IContext,
 ): Promise<IHttpResponse<IData>> {
   const url = `extension/import_schemas/${id}`;
-  const res = await ibiz.net.request(url, {
+  const app = ibiz.hub.getApp(context?.srfappid);
+  const res = await app.net.request(url, {
     method: 'get',
   });
   return res;
@@ -630,13 +649,16 @@ export async function getImportSchema(
  * @date 2024-04-18 04:47:03
  * @export
  * @param {string} id
+ * @param {IContext} [context]
  * @return {*}  {Promise<IHttpResponse<IData>>}
  */
 export async function deleteImportSchema(
   id: string,
+  context?: IContext,
 ): Promise<IHttpResponse<IData>> {
   const url = `extension/import_schemas/${id}`;
-  const res = await ibiz.net.request(url, {
+  const app = ibiz.hub.getApp(context?.srfappid);
+  const res = await app.net.request(url, {
     method: 'delete',
   });
   return res;
@@ -650,12 +672,14 @@ export async function deleteImportSchema(
  * @param {{
  *   appDataEntity: IAppDataEntity;
  *   dataImport?: IAppDEDataImport;
+ *   context?: IContext;
  * }} opts
  * @return {*}  {Promise<IHttpResponse<IData[]>>}
  */
 export async function fetchImportSchemas(opts: {
   appDataEntity: IAppDataEntity;
   dataImport?: IAppDEDataImport;
+  context?: IContext;
 }): Promise<IHttpResponse<IData[]>> {
   const params = {
     n_import_tag_eq: opts.appDataEntity.defaultAppDEDataImportId,
@@ -663,7 +687,8 @@ export async function fetchImportSchemas(opts: {
     n_data_entity_tag_eq: opts.appDataEntity.codeName,
   };
   const url = `extension/import_schemas/fetch_cur_user`;
-  const res = await ibiz.net.request(url, {
+  const app = ibiz.hub.getApp(opts.context?.srfappid);
+  const res = await app.net.request(url, {
     method: 'post',
     data: params,
   });

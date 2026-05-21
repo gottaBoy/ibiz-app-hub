@@ -113,7 +113,6 @@ export class EditFormController
    */
   protected async onCreated(): Promise<void> {
     await super.onCreated();
-
     this.initAnchorData();
     // 实例部件服务
     this.service = new EditFormService(this.model);
@@ -253,6 +252,8 @@ export class EditFormController
     // 清空主键，重置临时主键
     res.data.srfkey = undefined;
     res.data.tempsrfkey = createUUID();
+    // 主键清空后重置为新建数据
+    res.data.srfuf = Srfuf.CREATE;
 
     this.state.modified = false;
     this.state.data = res.data;
@@ -350,9 +351,7 @@ export class EditFormController
       if (args?.silentVerify === true) {
         return this.data;
       }
-      throw new RuntimeError(
-        ibiz.i18n.t('runtime.controller.control.form.formCompletion'),
-      );
+      this.handleValidateFail();
     }
 
     if (!silent) {
@@ -593,9 +592,7 @@ export class EditFormController
   async wfStart(args?: IDataAbilityParams): Promise<void> {
     const isValid = await this.validate();
     if (!isValid) {
-      throw new RuntimeError(
-        ibiz.i18n.t('runtime.controller.control.form.formCompletion'),
-      );
+      this.handleValidateFail();
     }
     const silent = args?.silent === true;
     if (!silent) {
@@ -607,7 +604,7 @@ export class EditFormController
       if (!this.context.srfignorechange) {
         this.emitDEDataChange('update', this.data);
         // 刷新预定义todo实体数据
-        this.emitDEDataChange('update', { srfdecodename: 'SysTodo' });
+        this.emitDEDataChange('create', { srfdecodename: 'SysTodo' });
       }
     } catch (error) {
       this.actionNotification('WFSTARTERROR', {
@@ -635,9 +632,7 @@ export class EditFormController
   async wfSubmit(args?: IDataAbilityParams): Promise<void> {
     const isValid = await this.validate();
     if (!isValid) {
-      throw new RuntimeError(
-        ibiz.i18n.t('runtime.controller.control.form.formCompletion'),
-      );
+      this.handleValidateFail();
     }
     const silent = args?.silent === true;
     if (!silent) {
@@ -649,7 +644,7 @@ export class EditFormController
       if (!this.context.srfignorechange) {
         this.emitDEDataChange('update', this.data);
         // 刷新预定义todo实体数据
-        this.emitDEDataChange('update', { srfdecodename: 'SysTodo' });
+        this.emitDEDataChange('create', { srfdecodename: 'SysTodo' });
       }
     } catch (error) {
       this.actionNotification('WFSUBMITERROR', {

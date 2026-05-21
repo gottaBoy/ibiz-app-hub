@@ -10,7 +10,7 @@ import { ICommandBase } from '../i-command-base';
 export interface ICommandAsyncAction extends ICommandBase {
   /**
    * @description 发送消息
-   * @param {IPortalAsyncAction} data
+   * @param {IPortalAsyncAction} data 异步作业数据
    * @memberof ICommandAsyncAction
    */
   send(data: IPortalAsyncAction): void;

@@ -5,9 +5,9 @@ export default {
   deviewId: '397c5d86c471e49b544364f496120aeb',
   accUserMode: 2,
   capLanguageRes: {
-    lanResTag: 'DE.LNAME.PSCOREPRDFUNC',
+    lanResTag: 'PAGE.CAPTION.PSCOREPRDFUNC.TREEEXPVIEW',
   },
-  caption: '核心产品功能',
+  caption: '应用市场',
   codeName: 'ps_core_prd_func_tree_exp_view',
   appDataEntityId: 'web.pscoreprdfunc',
   appViewEngines: [
@@ -62,12 +62,18 @@ export default {
       appViewRefs: [
         {
           realTitle: '已安装应用',
+          realTitleLanguageRes: {
+            lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.INSTALLEDGRIDVIEW',
+          },
           refAppViewId: 'web.ps_core_prd_func_installed_grid_view',
           name: 'EXPITEM:node_4',
           id: 'expitem:node_4',
         },
         {
           realTitle: '应用市场',
+          realTitleLanguageRes: {
+            lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.MARKETAPPLICATIONVIEW',
+          },
           refAppViewId: 'web.ps_core_prd_func_market_application_view',
           name: 'EXPITEM:node_5',
           id: 'expitem:node_5',
@@ -227,9 +233,9 @@ export default {
     },
     {
       capLanguageRes: {
-        lanResTag: 'DE.LNAME.PSCOREPRDFUNC',
+        lanResTag: 'PAGE.CAPTION.PSCOREPRDFUNC.TREEEXPVIEW',
       },
-      caption: '核心产品功能',
+      caption: '应用市场',
       codeName: 'tree_exp_view_captionbar',
       controlType: 'CAPTIONBAR',
       appDataEntityId: 'web.pscoreprdfunc',
@@ -250,6 +256,9 @@ export default {
     id: 'layoutpanel',
   },
   title: '应用管理',
+  titleLanguageRes: {
+    lanResTag: 'PAGE.TITLE.PSCOREPRDFUNC.TREEEXPVIEW',
+  },
   viewStyle: 'DEFAULT',
   viewType: 'DETREEEXPVIEW',
   enableDP: true,

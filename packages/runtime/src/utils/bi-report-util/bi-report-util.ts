@@ -359,6 +359,7 @@ export class BIReportUtil {
    * @memberof BIReportUtil
    */
   async translateDataToAppBIReport(arg: {
+    context: IContext;
     reportTag: string;
     selectChartType: string;
     selectCubeId: string;
@@ -368,6 +369,7 @@ export class BIReportUtil {
     extend: IData;
   }): Promise<IData> {
     const {
+      context,
       reportTag,
       selectChartType,
       selectCubeId,
@@ -376,7 +378,7 @@ export class BIReportUtil {
       style,
       extend,
     } = arg;
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(context.srfappid);
     const tempUIReportModel: IData = {
       selectChartType,
       style,

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Component, defineAsyncComponent } from 'vue';
 
 function calcAppViewId(tag: string): string {
@@ -26,16 +27,12 @@ export async function getAppViewComponent(
     case 'master_child_appb_view3':
       return defineAsyncComponent(
         () =>
-          import(
-            './master/master-child-appb-view-3/master-child-appb-view-3.vue'
-          ),
+          import('./master/master-child-appb-view-3/master-child-appb-view-3.vue'),
       );
     case 'master_child_appb_view5':
       return defineAsyncComponent(
         () =>
-          import(
-            './master/master-child-appb-view-5/master-child-appb-view-5.vue'
-          ),
+          import('./master/master-child-appb-view-5/master-child-appb-view-5.vue'),
       );
     case 'master_child_appb_view':
       return defineAsyncComponent(
@@ -49,16 +46,12 @@ export async function getAppViewComponent(
     case 'master_child_appb_view2':
       return defineAsyncComponent(
         () =>
-          import(
-            './master/master-child-appb-view-2/master-child-appb-view-2.vue'
-          ),
+          import('./master/master-child-appb-view-2/master-child-appb-view-2.vue'),
       );
     case 'master_child_appb_view4':
       return defineAsyncComponent(
         () =>
-          import(
-            './master/master-child-appb-view-4/master-child-appb-view-4.vue'
-          ),
+          import('./master/master-child-appb-view-4/master-child-appb-view-4.vue'),
       );
     case 'admin_appb':
       return defineAsyncComponent(() => import('./admin-appb/admin-appb.vue'));

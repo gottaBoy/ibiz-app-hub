@@ -27,7 +27,7 @@ export interface IApiDRBarController<
 
   /**
    * @description 设置激活项
-   * @param {string} name
+   * @param {string} name 项标识
    * @memberof IApiDRBarController
    */
   setActive(name: string): void;

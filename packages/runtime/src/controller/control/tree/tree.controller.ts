@@ -13,6 +13,8 @@ import {
   IDEToolbarItem,
   IDETBUIActionItem,
   IDETreeDataSetNode,
+  IDEUIActionGroup,
+  IDETBGroupItem,
 } from '@ibiz/model-core';
 import { isNil } from 'ramda';
 import { isBoolean } from 'qx-util';
@@ -35,6 +37,7 @@ import {
   getChildNodeRSs,
   getUIActionById,
   calcDeCodeNameById,
+  calcUIActionGroup,
 } from '../../../model';
 import { ControllerEvent } from '../../utils';
 import { AppCounter, CounterService, Srfuf } from '../../../service';
@@ -83,6 +86,30 @@ export class TreeController<
       return this.controlParams.searchphseparator;
     }
     return ibiz.config.common.searchPhSeparator;
+  }
+
+  /**
+   * @description 是否启用点击导航
+   * @readonly
+   * @type {boolean}
+   * @memberof TreeController
+   */
+  get enableClickNav(): boolean {
+    if (!ibiz.env.isMob) return true;
+    if (this.controlParams.enableclicknav) {
+      return this.controlParams.enableclicknav === 'true';
+    }
+    return ibiz.config.tree.enableClickNav;
+  }
+
+  /**
+   * @description 面包屑显示模式
+   * @readonly
+   * @type {('DEFAULT' | 'HEADERSTYLE')}
+   * @memberof TreeController
+   */
+  get crumbShowMode(): 'DEFAULT' | 'HEADERSTYLE' {
+    return this.controlParams.crumbshowmode || 'DEFAULT';
   }
 
   /**
@@ -147,6 +174,7 @@ export class TreeController<
     this.state.size = 0;
     this.state.query = '';
     this.state.mobExpandedKey = '';
+    this.state.counterData = {};
   }
 
   protected async onCreated(): Promise<void> {
@@ -176,6 +204,40 @@ export class TreeController<
     await Promise.all(
       Object.values(this.contextMenus).map(menu => menu.created()),
     );
+  }
+
+  /**
+   * @description 初始化界面行为组
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof TreeController
+   */
+  protected async initUIActions(): Promise<void> {
+    // 收集所有遍历过程中的异步任务
+    const asyncTasks: Promise<IDEUIActionGroup>[] = [];
+    this.model.detreeNodes!.forEach(node => {
+      if (node.decontextMenu?.detoolbarItems?.length) {
+        // 初始化工具栏模型
+        recursiveIterate(
+          node.decontextMenu,
+          (item: IDEToolbarItem) => {
+            const groupItem = item as IDETBGroupItem;
+            // 适配行为组展开模式及分组项配置了界面行为组
+            if (groupItem.groupExtractMode && groupItem.uiactionGroup) {
+              const calcTask = calcUIActionGroup(
+                groupItem.uiactionGroup,
+                this.context,
+                this.params,
+              );
+              asyncTasks.push(calcTask);
+            }
+          },
+          { childrenFields: ['detoolbarItems'] },
+        );
+      }
+    });
+    // 所有上下文菜单
+    await Promise.all(asyncTasks);
   }
 
   /**
@@ -253,11 +315,16 @@ export class TreeController<
     }
   }
 
+  /**
+   * @description 生命周期-销毁完成
+   * @protected
+   * @returns {*}  {Promise<void>}
+   * @memberof TreeController
+   */
   protected async onDestroyed(): Promise<void> {
     await super.onDestroyed();
-    if (this.counter) {
-      this.counter.destroy();
-    }
+    this.counter?.offChange(this.handleCounterChange);
+    this.counter?.destroy();
   }
 
   /**
@@ -280,6 +347,8 @@ export class TreeController<
    * @return {*}  {Promise<void>}
    */
   protected async initCounter(): Promise<void> {
+    this.handleCounterChange = this.handleCounterChange.bind(this);
+    if (this.state.isCounterDisabled) return;
     const { appCounterRefs } = this.model;
     const appCounterRef = appCounterRefs?.[0];
     if (appCounterRef) {
@@ -289,6 +358,17 @@ export class TreeController<
         { ...this.params },
       );
     }
+    this.counter?.onChange(this.handleCounterChange);
+  }
+
+  /**
+   * @description 处理计数器值变更
+   * @protected
+   * @param {IData} data
+   * @memberof TreeController
+   */
+  protected handleCounterChange(data: IData): void {
+    this.state.counterData = data;
   }
 
   /**
@@ -515,9 +595,7 @@ export class TreeController<
     event: MouseEvent,
   ): Promise<void> {
     const nodeData = this.getNodeData(_nodeData._id);
-    if (!nodeData) {
-      return;
-    }
+    if (!nodeData) return;
     // 设置导航数据
     this.setNavData(nodeData);
     // 节点有配置常用操作的上下文菜单时，触发界面行为，后续逻辑都不走
@@ -542,6 +620,7 @@ export class TreeController<
     }
     // 不是导航树上的树，且不是内置导航模式，但是有配置导航视图的时候，直接打开导航视图
     if (
+      this.enableClickNav &&
       !this.state.enableNavView &&
       !this.state.navigational &&
       nodeModel?.navAppViewId
@@ -553,7 +632,7 @@ export class TreeController<
       const { tempContext, tempParams } = this.handleNavParams(
         navContexts,
         navParams,
-        _nodeData,
+        nodeData,
       );
       Object.assign(resultContext, tempContext);
       Object.assign(resultParams, tempParams);
@@ -569,21 +648,8 @@ export class TreeController<
     }
 
     // 单选时，单击才会触发选中逻辑,禁止选择的时候不触发
-    if (this.state.singleSelect && !nodeData._disableSelect) {
-      // 选中相关处理
-      const { selectedData } = this.state;
-      // 选中里没有则添加，有则删除
-      const filterArr = selectedData.filter(item => item._id !== nodeData._id);
-      if (filterArr.length === selectedData.length) {
-        this.setSelection(
-          this.state.singleSelect
-            ? [nodeData]
-            : selectedData.concat([nodeData]),
-        );
-      } else {
-        this.setSelection(filterArr);
-      }
-    }
+    if (this.state.singleSelect && !nodeData._disableSelect)
+      this.setSelection([nodeData]);
 
     // 激活事件
     if (this.state.mdctrlActiveMode === 1) {
@@ -646,7 +712,11 @@ export class TreeController<
    */
   async onDbTreeNodeClick(_nodeData: ITreeNodeData): Promise<void> {
     const nodeData = this.getNodeData(_nodeData._id);
-    if (this.state.mdctrlActiveMode === 2 && nodeData) {
+    if (!nodeData) return;
+    // 多选时，双击节点才选中数据
+    if (!this.state.singleSelect && !nodeData._disableSelect)
+      this.setSelection([nodeData]);
+    if (this.state.mdctrlActiveMode === 2) {
       await this.setActive(nodeData);
     }
   }
@@ -687,9 +757,7 @@ export class TreeController<
    */
   getNodeData(key: string): ITreeNodeData | undefined {
     const find = this.state.items.find(item => item._id === key);
-    if (find) {
-      return find;
-    }
+    if (find) return find;
     return this.state.items.find(item => item._uuid === key);
   }
 
@@ -1407,8 +1475,9 @@ export class TreeController<
       );
     }
     const { context, params, data } = this.parseTreeNodeData(item);
-    const { appDataEntityId } = nodeModel as IDETreeDataSetNode;
-    const deName = calcDeCodeNameById(appDataEntityId!);
+    const { appDataEntityId } = nodeModel;
+    if (!appDataEntityId) return { cancel: true };
+    const deName = calcDeCodeNameById(appDataEntityId);
     context[deName!.toLowerCase()] = item.srfkey;
     context.srfnavctrlid = this.ctrlId;
     const result = await this.viewScheduler?.triggerCustom(
@@ -1478,5 +1547,49 @@ export class TreeController<
     return {
       cancel: result ? !result.ok : true,
     };
+  }
+
+  /**
+   * @description 跳转第一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof TreeController
+   */
+  async goToFirstPage(): Promise<IData[]> {
+    return [];
+  }
+
+  /**
+   * @description 跳转上一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof TreeController
+   */
+  async goToPreviousPage(): Promise<IData[]> {
+    return [];
+  }
+
+  /**
+   * @description 跳转下一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof TreeController
+   */
+  async goToNextPage(): Promise<IData[]> {
+    return [];
+  }
+
+  /**
+   * @description 跳转最后一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof TreeController
+   */
+  async goToLastPage(): Promise<IData[]> {
+    return [];
+  }
+
+  /**
+   * @description 更新UI
+   * @memberof TreeController
+   */
+  updateUI(): void {
+    this._evt.emit('onUpdateUI', undefined);
   }
 }

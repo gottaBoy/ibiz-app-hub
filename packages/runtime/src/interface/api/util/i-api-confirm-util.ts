@@ -35,28 +35,28 @@ export interface IApiConfirmParams {
 export interface IApiConfirmUtil {
   /**
    * @description 弹出普通信息
-   * @param {IApiConfirmParams} params
+   * @param {IApiConfirmParams} params 确认框参数
    * @returns {*}  {Promise<boolean>}
    * @memberof IApiConfirmUtil
    */
   info(params: IApiConfirmParams): Promise<boolean>;
   /**
    * @description 弹出成功信息
-   * @param {IApiConfirmParams} params
+   * @param {IApiConfirmParams} params 确认框参数
    * @returns {*}  {Promise<boolean>}
    * @memberof IApiConfirmUtil
    */
   success(params: IApiConfirmParams): Promise<boolean>;
   /**
    * @description 弹出警告信息
-   * @param {IApiConfirmParams} params
+   * @param {IApiConfirmParams} params 确认框参数
    * @returns {*}  {Promise<boolean>}
    * @memberof IApiConfirmUtil
    */
   warning(params: IApiConfirmParams): Promise<boolean>;
   /**
    * @description 弹出错误信息
-   * @param {IApiConfirmParams} params
+   * @param {IApiConfirmParams} params 确认框参数
    * @returns {*}  {Promise<boolean>}
    * @memberof IApiConfirmUtil
    */

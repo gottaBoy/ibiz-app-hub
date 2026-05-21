@@ -3,7 +3,11 @@ import { ControlVO } from '../../../../service';
 import { IGridEvent } from '../../event';
 import { IGridRowState, IGridState } from '../../state';
 import { IMDControlController } from './i-md-control.controller';
-import { CodeListItem, IApiGridController } from '../../../api';
+import {
+  CodeListItem,
+  IApiGridController,
+  IApiExportParams,
+} from '../../../api';
 import { IViewController } from '../view';
 
 /**
@@ -54,11 +58,14 @@ export interface IGridController<
 
   /**
    * @description 导出数据
-   * @param {{ event?: MouseEvent; params: IData }} args
+   * @param {{ event: MouseEvent; params: IApiExportParams }} args
    * @returns {*}  {Promise<void>}
    * @memberof IGridController
    */
-  exportData(args: { event: MouseEvent; params: IData }): Promise<void>;
+  exportData(args: {
+    event: MouseEvent;
+    params: IApiExportParams;
+  }): Promise<void>;
 }
 
 interface AdditionalProperties {

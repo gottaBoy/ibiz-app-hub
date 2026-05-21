@@ -7,14 +7,18 @@ import {
   onMounted,
   onUnmounted,
 } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { IPanelRawItem } from '@ibiz/model-core';
 import {
   IShortCutData,
   OpenAppViewCommand,
   PanelItemController,
 } from '@ibiz-template/runtime';
-import { useNamespace } from '@ibiz-template/vue3-util';
+import {
+  IRoutePathNode,
+  route2routePath,
+  useNamespace,
+} from '@ibiz-template/vue3-util';
 import draggable from 'vuedraggable';
 import { IBizContext, showTitle } from '@ibiz-template/core';
 import './short-cut.scss';
@@ -49,6 +53,8 @@ export const ShortCut = defineComponent({
     const ns = useNamespace('short-cut');
     const vue = getCurrentInstance()!.proxy!;
     const router = useRouter();
+
+    const route = useRoute();
 
     const shortCutUtil = ibiz.util.shortCut;
 
@@ -120,6 +126,35 @@ export const ShortCut = defineComponent({
     };
 
     /**
+     * 处理路由上下文，当前路由中存在但快捷方式中不存在的上下文键设置为null,用于排除当前路由参数对快捷打开界面影响
+     *
+     * @param {IShortCutData} item - 快捷方式数据项
+     * @returns {IBizContext} 处理后的上下文对象
+     */
+    const processRouteContext = (item: IShortCutData): IBizContext => {
+      const tempContext = IBizContext.create(item.context);
+      const { pathNodes } = route2routePath(route);
+      if (pathNodes && pathNodes.length > 0) {
+        let srfKeepNull: boolean = false;
+        pathNodes.forEach((pathNode: IRoutePathNode) => {
+          if (pathNode.context && Object.keys(pathNode.context).length > 0) {
+            Object.keys(pathNode.context).forEach(key => {
+              // 当前路由上下文中有，但快捷方式存储的上下文中没有的，需设置为null，排除前面路由参数对当前快捷打开界面的影响
+              if (!tempContext[key]) {
+                tempContext[key] = null;
+                srfKeepNull = true;
+              }
+            });
+          }
+        });
+        if (srfKeepNull) {
+          tempContext.srfkeepnull = true;
+        }
+      }
+      return tempContext;
+    };
+
+    /**
      * 快捷方式点击
      * @param item
      */
@@ -132,10 +167,11 @@ export const ShortCut = defineComponent({
           router.push({ path: item.fullPath.substring(1) });
         }
       } else {
+        const tempContext = processRouteContext(item);
         ibiz.commands.execute(
           OpenAppViewCommand.TAG,
           item.appViewId,
-          IBizContext.create(item.context),
+          tempContext,
           item.params,
           { openMode: openModeMap.get(item.openMode) },
         );

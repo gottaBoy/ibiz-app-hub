@@ -1,4 +1,5 @@
 export default {
+  accUserMode: 3,
   caption: '应用欢迎视图',
   codeName: 'app_welcome_view',
   controls: [

@@ -10,6 +10,36 @@
     padding: 0 8px;
   }
 
+  @include e(collapse-container){
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+
+  @include e(icon-container){
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding-bottom: 8px;
+  }
+
+  @include e(icon-item){
+    padding: 2px 4px;
+    cursor: pointer;
+    border-radius: 2px;
+
+    >svg{
+      width: 24px !important;
+      height: 24px !important;
+    }
+
+    &:hover {
+      color: #{getCssVar('ai-chat', 'hover-color')};
+      background-color: #{getCssVar('ai-chat', 'hover-background-color')};
+    }
+  }
+
   @include e(main) {
     flex-grow: 1;
     padding: 0 8px;

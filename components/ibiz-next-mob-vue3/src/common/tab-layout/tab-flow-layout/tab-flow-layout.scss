@@ -1,0 +1,41 @@
+$tab-flow-layout: (
+  // Color
+  color-group-header-text: getCssVar('tab-layout', 'color-tab-text'),
+  color-group-header-bg: getCssVar(color, bg, 0),
+  color-group-noheader-bg: getCssVar(color, bg, 0),
+  // Width/Height
+  height-group-header-content-min-height: getCssVar('height-control', 'default'),
+  // Spacing
+  spacing-group-header-padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'base'),
+  spacing-group-header-ph-padding: getCssVar('spacing', 'tight'),
+  // Font
+  font-group-header-fontSize: getCssVar('tab-layout', 'font-tab-fontSize')
+);
+@include b(tab-flow-layout) {
+  @include set-component-css-var('tab-flow-layout', $tab-flow-layout);
+
+  @include e('group-header') {
+    padding: getCssVar(tab-flow-layout, spacing-group-header-padding);
+    font-size: getCssVar(tab-flow-layout, font-group-header-fontSize);
+    color: getCssVar(tab-flow-layout, color-group-header-text);
+    background-color: getCssVar(tab-flow-layout, color-group-header-bg);
+
+    @include m('content') {
+      min-height: getCssVar(
+        tab-flow-layout,
+        height-group-header-content-min-height
+      );
+    }
+  }
+
+  .van-index-anchor {
+    padding: 0;
+  }
+
+  @include when('flow_noheader') {
+    @include e('group-header-ph') {
+      padding: getCssVar(tab-flow-layout, spacing-group-header-ph-padding);
+      background-color: getCssVar(tab-flow-layout, color-group-noheader-bg);
+    }
+  }
+}

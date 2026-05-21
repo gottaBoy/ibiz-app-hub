@@ -67,6 +67,7 @@ export default {
       id: 'opendata',
     },
   ],
+  appViewMsgGroupId: 'vmgroup359',
   appViewRefs: [
     {
       realOpenMode: 'POPUPMODAL',

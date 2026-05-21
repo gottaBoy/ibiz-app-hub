@@ -5,6 +5,27 @@ export default {
   },
   "rootPanelItems": [
     {
+      "rawItem": {
+        "rawItemParams": [
+          {
+            "key": "POSITION",
+            "value": "TOP"
+          }
+        ],
+        "predefinedType": "VIEWMSG_POS",
+        "id": "viewmsg_pos_top"
+      },
+      "caption": "视图消息占位",
+      "itemStyle": "DEFAULT",
+      "itemType": "RAWITEM",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "showCaption": true,
+      "id": "viewmsg_pos_top"
+    },
+    {
       "actionGroupExtractMode": "ITEM",
       "panelItems": [
         {
@@ -172,6 +193,45 @@ export default {
           "id": "panelpart"
         },
         {
+          "rawItem": {
+            "rawItemParams": [
+              {
+                "key": "POSITION",
+                "value": "BODY"
+              }
+            ],
+            "predefinedType": "VIEWMSG_POS",
+            "id": "viewmsg_pos_body"
+          },
+          "caption": "视图消息占位",
+          "itemStyle": "DEFAULT",
+          "itemType": "RAWITEM",
+          "layoutPos": {
+            "shrink": 0,
+            "layout": "FLEX"
+          },
+          "showCaption": true,
+          "id": "viewmsg_pos_body"
+        }
+      ],
+      "layout": {
+        "dir": "column",
+        "layout": "FLEX"
+      },
+      "dataRegionType": "INHERIT",
+      "caption": "容器",
+      "itemStyle": "DEFAULT",
+      "itemType": "CONTAINER",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "id": "view_top"
+    },
+    {
+      "actionGroupExtractMode": "ITEM",
+      "panelItems": [
+        {
           "actionGroupExtractMode": "ITEM",
           "panelItems": [
             {
@@ -194,29 +254,11 @@ export default {
           "itemStyle": "DEFAULT",
           "itemType": "CONTAINER",
           "layoutPos": {
-            "shrink": 1,
+            "shrink": 0,
             "layout": "FLEX"
           },
           "id": "view_drtab"
-        }
-      ],
-      "layout": {
-        "dir": "column",
-        "layout": "FLEX"
-      },
-      "dataRegionType": "INHERIT",
-      "caption": "容器",
-      "itemStyle": "DEFAULT",
-      "itemType": "CONTAINER",
-      "layoutPos": {
-        "shrink": 0,
-        "layout": "FLEX"
-      },
-      "id": "view_top"
-    },
-    {
-      "actionGroupExtractMode": "ITEM",
-      "panelItems": [
+        },
         {
           "actionGroupExtractMode": "ITEM",
           "panelItems": [
@@ -270,10 +312,32 @@ export default {
       "itemStyle": "DEFAULT",
       "itemType": "CONTAINER",
       "layoutPos": {
+        "grow": 1,
         "shrink": 1,
         "layout": "FLEX"
       },
       "id": "view_content"
+    },
+    {
+      "rawItem": {
+        "rawItemParams": [
+          {
+            "key": "POSITION",
+            "value": "BOTTOM"
+          }
+        ],
+        "predefinedType": "VIEWMSG_POS",
+        "id": "viewmsg_pos_bottom"
+      },
+      "caption": "视图消息占位",
+      "itemStyle": "DEFAULT",
+      "itemType": "RAWITEM",
+      "layoutPos": {
+        "shrink": 0,
+        "layout": "FLEX"
+      },
+      "showCaption": true,
+      "id": "viewmsg_pos_bottom"
     },
     {
       "actionGroupExtractMode": "ITEM",
@@ -287,7 +351,7 @@ export default {
             "layout": "FLEX"
           },
           "showCaption": true,
-          "id": "toolbar"
+          "id": "footertoolbar"
         }
       ],
       "predefinedType": "Footer",

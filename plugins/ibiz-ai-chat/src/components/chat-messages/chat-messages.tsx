@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useState, useMemo } from 'preact/hooks';
 import { Namespace } from '../../utils';
 import { AiChatController } from '../../controller';
 import { IChatToolbarItem } from '../../interface';
@@ -30,11 +30,29 @@ const ns = new Namespace('chat-messages');
 
 export const ChatMessages = (props: ChatMessageProps) => {
   const ref = useRef<HTMLDivElement>(null);
+
+  // 加载更多条数
+  const batchSize: number = 5;
+  // 当前显示的消息数量
+  const [displayCount, setDisplayCount] = useState(batchSize);
+  // 是否正在加载更多
+  const [isLoading, setIsLoading] = useState(false);
   // 是否自动滚动
   const [isAutoScroll, setIsAutoScroll] = useState(true);
   // 标志位
   const isScrollingAutomatically = useRef(false);
+
   const messages = props.controller.messages;
+
+  const visibleMessages = useMemo(() => {
+    // 始终显示最新的消息，所以从末尾开始取
+    const startIndex = Math.max(0, messages.value.length - displayCount);
+    return messages.value.slice(startIndex);
+  }, [messages.value, displayCount]);
+
+  const hasMoreMessages = useMemo(() => {
+    return displayCount < messages.value.length;
+  }, [messages.value, displayCount]);
 
   // 滚动到底部
   const scrollToBottom = () => {
@@ -60,13 +78,38 @@ export const ChatMessages = (props: ChatMessageProps) => {
   const handleScroll = () => {
     // 如果是自动滚动触发的，忽略此次事件
     if (isScrollingAutomatically.current) return;
-    if (ref.current) {
-      const { scrollTop, scrollHeight, clientHeight } = ref.current;
-      // 接近底部的阈值
-      const isNearBottom = scrollHeight - (scrollTop + clientHeight) < 50;
-      // 如果接近底部，则设置为自动滚动模式；否则设置为手动滚动模式
-      setIsAutoScroll(isNearBottom);
+
+    const container = ref.current;
+    if (!container) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = container;
+
+    // 检查是否滚动到顶部附近（触发加载更多）
+    if (scrollTop < 100 && !isLoading && hasMoreMessages) {
+      setIsLoading(true);
+
+      // 加载更多消息
+      setTimeout(() => {
+        const newCount = Math.min(
+          displayCount + batchSize,
+          messages.value.length,
+        );
+        setDisplayCount(newCount);
+
+        // 保持当前滚动位置（加载更多后不跳转）
+        const oldScrollHeight = container.scrollHeight;
+        setTimeout(() => {
+          const newScrollHeight = container.scrollHeight;
+          container.scrollTop =
+            newScrollHeight - oldScrollHeight + container.scrollTop;
+          setIsLoading(false);
+        }, 0);
+      }, 300); // 添加一点延迟让用户体验更好
     }
+
+    // 检查是否接近底部（用于自动滚动判断）
+    const isNearBottom = scrollHeight - (scrollTop + clientHeight) < 50;
+    setIsAutoScroll(isNearBottom);
   };
 
   /**
@@ -80,18 +123,20 @@ export const ChatMessages = (props: ChatMessageProps) => {
 
   return (
     <div ref={ref} className={ns.b()} onScroll={handleScroll}>
-      {messages.value.map(message => {
+      {visibleMessages.map(message => {
         const size = message.content?.length || 0;
         return message.role !== 'SYSTEM' ? (
           <ChatMessageItem
             size={size}
             message={message}
-            key={message.messageid}
+            key={`${message.messageid}_${message.completed ? 'completed' : 'incomplete'}`}
             controller={props.controller}
           >
             <ChatToolbar
-              data={message}
               type='content'
+              mode='DEFAULT'
+              hideTopicSidebar={false}
+              data={message}
               items={props.toolbarItems}
               controller={props.controller}
             />

@@ -3,6 +3,7 @@ import { IApiData } from '@ibiz-template/core';
 import { IApiReportPanelState } from '../../state';
 import { IApiControlController } from './i-api-control.controller';
 import { IApiMDCtrlLoadParams } from './i-api-md-control.controller';
+import { IApiReportPanelGenerator } from './report-panel';
 
 /**
  * 报表部件
@@ -23,18 +24,18 @@ export interface IApiReportPanelController<
    * @type {IApiData}
    * @memberof IApiReportPanelController
    */
-  generator: IApiData;
+  generator: IApiReportPanelGenerator;
 
   /**
    * @description 加载数据
-   * @param {IApiMDCtrlLoadParams} [args]
+   * @param {IApiMDCtrlLoadParams} [args] 加载参数
    * @returns {*}  {Promise<IApiData>}
    * @memberof IApiReportPanelController
    */
   load(args?: IApiMDCtrlLoadParams): Promise<IApiData>;
 
   /**
-   * @description 获取表单数据
+   * @description 获取报表数据
    * @returns {*}  {IApiData[]}
    * @memberof IApiReportPanelController
    */

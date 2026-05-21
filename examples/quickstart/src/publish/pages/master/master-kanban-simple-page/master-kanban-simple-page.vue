@@ -1,0 +1,29 @@
+<template>
+  <i-biz-view
+    :context="props.context"
+    :params="props.params"
+    :modal="props.modal"
+    :model-data="viewModel"
+  >
+    <template #kanban="slotProps">
+      <i-biz-kanban-control v-bind="slotProps" />
+    </template>
+    <template #searchform="slotProps">
+      <i-biz-search-form-control v-bind="slotProps" />
+    </template>
+  </i-biz-view>
+</template>
+<script setup lang="ts">
+import { IModal } from '@ibiz-template/runtime';
+import { defineProps, withDefaults } from 'vue';
+
+interface Props {
+  model: IModel;
+  context?: IContext;
+  params?: IParams;
+  modal?: IModal;
+}
+const props = withDefaults(defineProps<Props>(), {});
+
+const viewModel = props.model;
+</script>

@@ -70,15 +70,21 @@ export class MethodReturn {
         {
           srfappid: app.appId,
           srfsessionid: context.srfsessionid,
+          srfskipcleartmpres: context.srfskipcleartmpres,
         },
         this.entity.id!,
       );
       const items = await this.dto.sets(context, [data]);
       return items[0];
     }
-    if (isNilOrEmpty(data)) {
+    // 返回类型为简单类型时，返回数据key为srfresult，值为响应数据
+    const output = this.method.appDEMethodReturn;
+    if (output && output.type === 'SIMPLE') {
+      data = { srfresult: data };
+    } else if (isNilOrEmpty(data)) {
       data = {};
     }
+
     return new AppDataEntity(this.entity, data);
   }
 

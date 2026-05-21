@@ -3,7 +3,7 @@ import {
   CodeListEditorController,
   OpenAppViewCommand,
 } from '@ibiz-template/runtime';
-import { RuntimeModelError } from '@ibiz-template/core';
+import { IBizContext, RuntimeModelError } from '@ibiz-template/core';
 
 /**
  * 标签编辑器控制器
@@ -53,13 +53,13 @@ export class SpanEditorController extends CodeListEditorController<ISpan> {
    * 打开数据链接视图
    */
   public async openLinkView(data: IData): Promise<IData[] | undefined> {
-    const tempContext = this.context.clone();
+    const tempContext = this.context.deepClone();
     if (data[this.valueItem]) {
       tempContext.srfkey = data[this.valueItem];
     }
     const { context, params } = this.handlePublicParams(
       data,
-      tempContext,
+      IBizContext.create(tempContext),
       this.params,
     );
     const { linkAppViewId } = this.model;

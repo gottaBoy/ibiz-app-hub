@@ -1,0 +1,127 @@
+@include b('screen-shot-toolbar') {
+  @include e('item') {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    @include m('icon') {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        width: 1em;
+        height: 1em;
+        fill: getCssVar(color, text, 1);
+      }
+    }
+
+    @include m('divider') {
+      width: 1px;
+      height: 14px;
+      padding: 0;
+      pointer-events: none;
+      background: getCssVar(color, text, 2);
+    }
+
+    @include when('active') {
+      svg {
+        fill: getCssVar(screen-shot, toolbar-color-active);
+      }
+    }
+
+    @include when('disabled') {
+      pointer-events: none;
+
+      svg {
+        fill: getCssVar(screen-shot, color-disabled);
+      }
+    }
+  }
+
+  @include e('content') {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    height: 40px;
+    padding: 8px 12px;
+    overflow: hidden;
+    font-size: 20px;
+    background-color: getCssVar(screen-shot, toolbar-color-bg);
+    border: 1px solid getCssVar(screen-shot, color-border);
+    border-radius: 2px;
+  }
+
+  // 工具栏项配置相关
+  @include e('item-options') {
+    position: relative;
+    height: 40px;
+    margin-top: 4px;
+
+    @include m('content') {
+      position: absolute;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      width: auto;
+      height: 40px;
+      padding: 4px;
+      background-color: getCssVar(screen-shot, toolbar-color-bg);
+      border: 1px solid getCssVar(screen-shot, color-border);
+      border-radius: 2px;
+    }
+  }
+
+  // 大小配置
+  @include e('size') {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    @include m('item') {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 8px;
+      cursor: pointer;
+
+      &::before {
+        display: block;
+        content: '';
+        background-color: getCssVar(screen-shot, toolbar-color-0);
+        border-radius: 50%;
+      }
+
+      @include when('active') {
+        &::before {
+          background-color: getCssVar(screen-shot, toolbar-color-1);
+        }
+      }
+    }
+    @include m('small') {
+      &::before {
+        width: 4px;
+        height: 4px;
+      }
+    }
+    @include m('medium') {
+      &::before {
+        width: 12px;
+        height: 12px;
+      }
+    }
+    @include m('big') {
+      &::before {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  // 颜色配置
+  @include e('color-picker') {
+    .el-button.is-text {
+      display: none;
+    }
+  }
+}

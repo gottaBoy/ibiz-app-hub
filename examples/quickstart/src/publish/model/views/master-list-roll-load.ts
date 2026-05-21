@@ -87,6 +87,8 @@ export default {
     {
       groupMode: 'NONE',
       groupStyle: 'DEFAULT',
+      minorSortDir: 'ASC',
+      minorSortAppDEFieldId: 'px',
       orderValueAppDEFieldId: 'px',
       delistDataItems: [
         {
@@ -127,7 +129,7 @@ export default {
         },
       ],
       pagingMode: 2,
-      pagingSize: 10,
+      pagingSize: 5,
       hasWFDataItems: true,
       showHeader: true,
       navViewPos: 'NONE',
@@ -160,7 +162,7 @@ export default {
       showBusyIndicator: true,
       codeName: 'list_roll_load',
       controlType: 'LIST',
-      height: 300,
+      height: 150,
       logicName: 'list_roll_load',
       appDataEntityId: 'web.master',
       controlParam: {

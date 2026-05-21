@@ -69,6 +69,15 @@ export const useViewStack = defineStore('viewStack', () => {
   });
 
   /**
+   * @description 清空视图堆栈
+   */
+  const clear = () => {
+    viewStack.cacheKeys = [];
+    viewStack.currentKey = '';
+    viewInfoMap.clear();
+  };
+
+  /**
    * 更新视图信息
    * @author lxm
    * @date 2023-06-29 09:17:54
@@ -125,8 +134,14 @@ export const useViewStack = defineStore('viewStack', () => {
           // 一级路由没变,更新视图信息
           updateViewInfo(key, to);
         } else if (viewStack.cacheKeys.includes(key)) {
-          // 跳转到已经缓存的页面，只有返回后退这一种情况，弹出记录
-          pop();
+          // 如果跳转的是首页则清空缓存，并重新添加视图缓存
+          if (key === '/-/index/-') {
+            clear();
+            push(key, to);
+          } else {
+            // 跳转到已经缓存的页面，只有返回后退这一种情况，弹出记录
+            pop();
+          }
         } else {
           // 缓存里没有的就是push新的页面
           push(key, to);
@@ -144,10 +159,8 @@ export const useViewStack = defineStore('viewStack', () => {
    * @date 2023-06-29 09:10:16
    */
   const goBack = () => {
-    // 返回上一个页面，找到堆栈倒数第二个视图，跳转回他的路由，后续删除会由监控那边触发pop处理。
-    const previousKey = viewStack.cacheKeys[viewStack.cacheKeys.length - 2];
-    const previousPath = viewInfoMap.get(previousKey)!.fullPath;
-    router.push(previousPath);
+    // fix: 直接调用router.back()，避免浏览器维护的历史记录和view-stack不一致的问题（在线预约平台：0267）
+    router.back();
   };
 
   return { viewStack, init, on, off, goBack };

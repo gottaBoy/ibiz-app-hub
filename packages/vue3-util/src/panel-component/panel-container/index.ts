@@ -1,11 +1,14 @@
 import { App } from 'vue';
-import { registerPanelItemProvider } from '@ibiz-template/runtime';
+import {
+  PanelContainerController,
+  PanelContainerState,
+  registerPanelItemProvider,
+} from '@ibiz-template/runtime';
 import { withInstall } from '../../util';
 import { PanelContainer } from './panel-container';
 import { PanelContainerProvider } from './panel-container.provider';
-import { PanelContainerState } from './panel-container.state';
-import { PanelContainerController } from './panel-container.controller';
 
+// 适配老版本面板容器通过该包导出
 export { PanelContainerState, PanelContainerController };
 
 export const IBizPanelContainer = withInstall(

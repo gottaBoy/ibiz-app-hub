@@ -15,7 +15,7 @@ export class TreeExpViewEngine extends ExpViewEngine {
   /**
    * 树导航视图控制器
    */
-  protected declare view: ViewController<
+  declare protected view: ViewController<
     IAppDETreeExplorerView,
     ITreeExpViewState,
     ITreeExpViewEvent

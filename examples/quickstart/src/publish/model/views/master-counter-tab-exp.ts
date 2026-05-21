@@ -171,7 +171,7 @@ export default {
           {
             caption: '默认',
             name: '默认',
-            id: 'a0aa99ad32515d58406',
+            id: 'nocache_refreshmode',
           },
         ],
         showTitle: true,
@@ -183,14 +183,14 @@ export default {
         appCounterRefId: 'd0a6e348d1ed8a3141d3466137925bc7',
         dedrctrlItems: [
           {
-            dedrbarGroupId: 'a0aa99ad32515d58406',
+            dedrbarGroupId: 'nocache_refreshmode',
             caption: '编辑表单',
             counterId: 'form',
             appViewId: 'web.master_counter_exp_form',
             id: 'form',
           },
           {
-            dedrbarGroupId: 'a0aa99ad32515d58406',
+            dedrbarGroupId: 'nocache_refreshmode',
             caption: '表格',
             counterId: 'grid',
             appViewId: 'web.master_counter_exp_grid',

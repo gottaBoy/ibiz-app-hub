@@ -1,46 +1,60 @@
+$input: (
+  color: getCssVar(editor, default, text-color),
+  color-placeholder: getCssVar(editor, default, placeholder, color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  // 清除按钮样式
+  clear-display: getCssVar(editor, default, required-style),
+);
+
 @include b('input') {
+  @include set-component-css-var(input, $input);
+
   height: 100%;
-  text-align: getCssVar(form-item-container, editor-align);
+  font-size: getCssVar(input, font-fontSize);
+  line-height: getCssVar(input, font-lineHeight);
+  color: getCssVar(input, color);
+  text-align: getCssVar(input, font-textAlign);
 
-  @include b('input') {
-    font-size: getCssVar('form-item', 'font-size');
-  }
+  --van-field-input-text-color: #{getCssVar(input, color)};
+  --van-cell-text-color: #{getCssVar(input, color)};
+  --van-cell-value-color: #{getCssVar(input, color)};
+  --van-cell-line-height: #{getCssVar(input, font-lineHeight)};
+  --van-cell-font-size: #{getCssVar(input, font-fontSize)};
+  --van-cell-value-font-size: #{getCssVar(input, font-fontSize)};
+  --van-field-input-disabled-text-color: #{getCssVar(input, color-disabled)};
 
-  input {
-    font-size: getCssVar('form-item', 'font-size');
-    line-height: getCssVar('form-item', 'line-height');
-    color: getCssVar('form-item', 'text-color');
-    border-color: getCssVar('form-item', 'border-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'text-color');
-  }
-
-  input::placeholder {
-    color: getCssVar('form-item', 'placeholder-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'placeholder-color');
-  }
-
-  input:disabled {
-    color: getCssVar('form-item', 'disabled-color');
-    background-color: getCssVar('form-item', 'disabled-bg-color');
-    border-color: getCssVar('form-item', 'disabled-border-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'disabled-color');
+  input::placeholder, textarea::placeholder {
+    color: getCssVar(input, color-placeholder);
+    -webkit-text-fill-color: getCssVar(input, color-placeholder);
   }
 
   @include m(readonly) {
-    color: getCssVar('form-item', 'readonly-color');
-    -webkit-text-fill-color: getCssVar('form-item', 'readonly-color');
+    color: getCssVar(input, color-readonly);
+    -webkit-text-fill-color: getCssVar(input, color-readonly);
   }
 
   // 单位后缀样式
   .#{bem('input','unit')} {
-    font-size: getCssVar('form-item', 'font-size');
+    font-size: getCssVar(input, font-fontSize);
     font-style: normal;
   }
 
   .van-field__clear{
-    display: getCssVar(form-item-container,required-style);
+    display: getCssVar(input, clear-display);
   }
-  .van-field__right-icon{
-    font-size: getCssVar('form-size', 'header-4');
+
+  @include e(ai-chat) {
+    @include flex(row, center, center);
+    width: calc(getCssVar('width-icon', 'medium') + 2 * getCssVar('spacing', 'tight'));
+    height: calc(getCssVar('width-icon', 'medium') + 2 * getCssVar('spacing', 'tight'));
+    padding: getCssVar('spacing', 'tight');
+    font-size: getCssVar('width-icon', 'medium');
+    color: getCssVar(color, white);
+    background-color: getCssVar(color, primary);
+    border-radius: getCssVar(border, radius, circle);
   }
 }

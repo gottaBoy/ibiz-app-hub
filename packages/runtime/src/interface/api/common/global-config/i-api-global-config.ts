@@ -12,6 +12,7 @@ import { IApiGlobalViewConfig } from './i-api-global-view-config';
 import { IApiGlobalFlowDrtabConfig } from './i-api-global-flow-drtab-config';
 import { IApiGlobalWaterMarkConfig } from './i-api-global-water-mark-config';
 import { IApiGlobalMobConfig } from './i-api-global-mob-config';
+import { IApiGlobalImgCompressConfig } from './i-api-global-img-compress-config';
 
 /**
  * 全局配置
@@ -23,7 +24,9 @@ export interface IApiGlobalConfig {
   /**
    * @description 应用默认主题
    * @type {('light' | 'dark' | 'blue')} (亮色|暗色|蓝色)
-   * @default 'light'
+   * @default light
+   * @platform web
+   * @platform mob
    * @memberof IApiGlobalConfig
    */
   theme?: 'light' | 'dark' | 'blue';
@@ -108,6 +111,8 @@ export interface IApiGlobalConfig {
   /**
    * @description 多数据部件默认排序配置,格式为“排序字段,排序顺序”，如："id,asc"
    * @type {string}
+   * @platform web
+   * @platform mob
    * @memberof IApiGlobalConfig
    */
   mdctrldefaultsort: string;
@@ -115,7 +120,8 @@ export interface IApiGlobalConfig {
   /**
    * @description 多数据部件刷新模式
    * @type {('nocache' | 'cache')}（无缓存模式 | 缓存模式）
-   * @default 'cache'
+   * @default cache
+   * @platform web
    * @memberof IApiGlobalConfig
    */
   mdctrlrefreshmode: 'nocache' | 'cache';
@@ -123,6 +129,7 @@ export interface IApiGlobalConfig {
   /**
    * @description 下拉选择类编辑器默认排序配置，编辑器获取下拉数据时的排序方向，如："asc"
    * @type {string}
+   * @platform web
    * @memberof IApiGlobalConfig
    */
   pickerdefaultsort: string;
@@ -130,7 +137,8 @@ export interface IApiGlobalConfig {
   /**
    * @description 提示框信息绘制模式
    * @type {('none' | 'md' | 'html)} (文本模式 | markdown模式 | html模式)
-   * @default 'md'
+   * @default md
+   * @platform web
    * @memberof IApiGlobalConfig
    */
   tooltiprendermode: 'none' | 'md' | 'html';
@@ -138,6 +146,7 @@ export interface IApiGlobalConfig {
   /**
    * @description 代码编辑器主题
    * @type {('light' | 'dark')}
+   * @platform web
    * @memberof IApiGlobalConfig
    */
   codeEditorTheme?: 'light' | 'dark';
@@ -162,4 +171,11 @@ export interface IApiGlobalConfig {
    * @memberof IApiGlobalConfig
    */
   mob: IApiGlobalMobConfig;
+
+  /**
+   * @description 图片压缩配置
+   * @type {IApiGlobalImgCompressConfig}
+   * @memberof IApiGlobalConfig
+   */
+  imgCompressConfig: IApiGlobalImgCompressConfig;
 }

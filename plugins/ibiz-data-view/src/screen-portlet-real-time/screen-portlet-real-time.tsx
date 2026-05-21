@@ -6,7 +6,6 @@ import './screen-portlet-real-time.scss';
 
 export const ScreenPortletRealTime = defineComponent({
   name: 'ScreenPortletRealTime',
-  // @ts-ignore
   props: getSpanProps<ScreenPortletRealTimeController>(),
   setup(props) {
     const ns = useNamespace('screen-portlet-real-time');

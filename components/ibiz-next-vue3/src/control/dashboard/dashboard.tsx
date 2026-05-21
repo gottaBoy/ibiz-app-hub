@@ -154,7 +154,7 @@ export const DashboardControl = defineComponent({
         },
       );
       if (targetIndex !== -1) {
-        const app = ibiz.hub.getApp(ibiz.env.appId);
+        const app = ibiz.hub.getApp(c.model.appId);
         const model: IDBPortletPart | undefined = await c.loadDynaPortletById(
           `${app.model.codeName}.${name}`,
         );

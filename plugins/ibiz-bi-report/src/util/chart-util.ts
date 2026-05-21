@@ -218,12 +218,12 @@ export function handleSeriesCodeList(
   opts: IData,
   callback?: Function,
 ): IData[] {
-  const { appDataEntityId, caption, dimension } = opts;
+  const { appDataEntityId, caption, dimension, appId } = opts;
   const seriesModel: IData[] = [];
   items.forEach((item: IAppBIReportMeasure, index: number) => {
     const serieModel = clone(model);
     const itemInput = {
-      appId: ibiz.env.appId,
+      appId,
       appDataEntityId,
       caption,
       catalog: dimension.dimensionTag,
@@ -272,6 +272,7 @@ export function handleSeriesCodeList(
 export function handleGroupToSeries(
   items: IData[],
   dimensions: IAppBIReportDimension[],
+  appId: string,
 ) {
   const series: IAppBIReportMeasure[] = [];
   if (items.length) {
@@ -285,7 +286,7 @@ export function handleGroupToSeries(
         measureTag: target.dimensionTag,
         measureName: target.dimensionName,
         appCodeListId: target.appCodeListId,
-        appId: ibiz.env.appId,
+        appId,
       });
     }
   }
@@ -467,6 +468,7 @@ export function getAllNoGroupDimensions(data: IAppBIReport) {
       serieGroup = handleGroupToSeries(
         tempData.group,
         data.appBIReportDimensions!,
+        data.appId || ibiz.env.appId,
       );
     }
   }

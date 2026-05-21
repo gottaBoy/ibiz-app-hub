@@ -56,6 +56,14 @@ export class UploadEditorController extends EditorController<IFileUploader> {
    */
   public autoPreview: boolean = false;
 
+  /**
+   * 是否启用无权限
+   *
+   * @type {boolean}
+   * @memberof UploadEditorController
+   */
+  public enableNoAccess: boolean = false;
+
   protected async onInit(): Promise<void> {
     await super.onInit();
     this.infoMap = ibiz.config.uploadEditor.infoMap;
@@ -91,6 +99,7 @@ export class UploadEditorController extends EditorController<IFileUploader> {
         exportparams,
         autopreview,
         infomap,
+        enablenoaccess,
       } = this.editorParams;
       if (isDrag) {
         this.isDrag = Boolean(isDrag);
@@ -115,6 +124,9 @@ export class UploadEditorController extends EditorController<IFileUploader> {
       }
       if (infomap) {
         this.infoMap = infomap;
+      }
+      if (enablenoaccess) {
+        this.enableNoAccess = enablenoaccess === 'true';
       }
       if (uploadParams) {
         try {

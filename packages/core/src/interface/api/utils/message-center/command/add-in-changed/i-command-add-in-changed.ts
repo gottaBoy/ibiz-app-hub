@@ -9,7 +9,7 @@ import { IAddInChanged } from './i-add-in-changed';
 export interface ICommandAddInChanged extends ICommandBase {
   /**
    * @description 发送消息
-   * @param {IAddInChanged} data
+   * @param {IAddInChanged} data 添加的变更数据
    * @memberof ICommandAddInChanged
    */
   send(data: IAddInChanged): void;

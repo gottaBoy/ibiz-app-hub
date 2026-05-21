@@ -1,16 +1,17 @@
 import { isOverlap } from '@ibiz-template/core';
 import { IPanelItem } from '@ibiz/model-core';
 import {
-  IPanelItemController,
-  IPanelController,
-  IPanelDataContainerController,
   IPanelItemState,
+  IPanelController,
   PanelItemEventName,
+  IPanelItemController,
+  IPanelDataContainerController,
 } from '../../../../interface';
 import { calcLayoutHeightWidth, calcDynaClass } from '../../../../model';
 import { verifyPanelGroupLogic } from '../../../../utils';
 import { PanelNotifyState } from '../../../constant';
 import { PanelItemState } from './panel-item.state';
+import { AppCounter } from '../../../../service';
 
 export class PanelItemController<T extends IPanelItem = IPanelItem>
   implements IPanelItemController
@@ -69,6 +70,13 @@ export class PanelItemController<T extends IPanelItem = IPanelItem>
   }
 
   /**
+   * @description 计数器对象
+   * @type {AppCounter}
+   * @memberof PanelItemController
+   */
+  counter?: AppCounter;
+
+  /**
    * Creates an instance of PanelItemController.
    * @author lxm
    * @date 2023-04-27 06:37:12
@@ -125,9 +133,45 @@ export class PanelItemController<T extends IPanelItem = IPanelItem>
     if (labelSysCss?.cssName) {
       this.state.class.label.push(labelSysCss.cssName);
     }
+    this.handleCounterChange = this.handleCounterChange.bind(this);
+    this.initCounter();
   }
 
-  destroy(): void {}
+  /**
+   * @description 初始化计数器
+   * @protected
+   * @returns {*}  {void}
+   * @memberof PanelItemController
+   */
+  protected initCounter(): void {
+    const { counters } = this.panel;
+    const { appCounterRefId } = this.model;
+    if (appCounterRefId) {
+      this.counter = counters[appCounterRefId];
+      this.counter?.onChange(this.handleCounterChange);
+    }
+  }
+
+  /**
+   * @description 处理计数器改变，并根据计数器模式计算显示状态
+   * @protected
+   * @param {IData} data
+   * @memberof PanelItemController
+   */
+  protected handleCounterChange(data: IData): void {
+    this.state.counterData = data;
+    let state: boolean = true;
+    const { counterId, counterMode } = this.model;
+    if (counterId) {
+      const count = this.counter?.getCounter(counterId);
+      if (counterMode === 1 && count === 0) state = false;
+      this.state.visible = state;
+    }
+  }
+
+  destroy(): void {
+    this.counter?.offChange(this.handleCounterChange);
+  }
 
   /**
    * 值校验

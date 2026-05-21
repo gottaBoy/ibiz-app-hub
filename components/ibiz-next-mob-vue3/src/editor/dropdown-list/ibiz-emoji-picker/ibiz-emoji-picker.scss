@@ -1,23 +1,42 @@
+$emoji-picker: (
+  // 颜色
+  color: getCssVar(editor, default, text-color),
+  color-disabled: getCssVar(editor, disabled, text-color),
+  color-readonly: getCssVar(editor, readonly, text-color),
+  color-icon: var(--van-field-clear-icon-color),
+  // 字体
+  font-fontSize: getCssVar(editor, default, font-size),
+  font-icon-fontSize: getCssVar(font-size, header, 5),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-textAlign: getCssVar(editor, default, text-align),
+  spacing-gap: getCssVar('spacing', 'extra-tight'),
+  // 其它
+  flex-justify-content: getCssVar(editor, default, flex-justify-content),
+);
 @include b('emoji-picker') {
+  @include set-component-css-var('emoji-picker', $emoji-picker);
+
   display: flex;
   align-items: center;
   width: 100%;
   height: 100%;
-  min-height: getCssVar('height-control', 'default');
+  font-size: getCssVar(emoji-picker, font-fontSize);
+  line-height: getCssVar(emoji-picker, font-lineHeight);
+  color: getCssVar(emoji-picker, color);
 
   @include e('button-content') {
     display: flex;
     align-items: center;
-    line-height: getCssVar('font-size', 'header-4');
+    line-height: getCssVar(emoji-picker, font-lineHeight);
 
     @include m('icon') {
-      margin-right: getCssVar('spacing', 'extra-tight');
-      fill: getCssVar(color, primary, text);
+      margin-right: getCssVar(emoji-picker, spacing-gap);
+      fill: currentcolor;
     }
     @include m('icon-clear') {
-      margin-left: getCssVar('spacing', 'extra-tight');
-      font-size: getCssVar('font-size', 'header-3');
-      fill: getCssVar('color', 'text', 3);
+      margin-left: getCssVar(emoji-picker, spacing-gap);
+      font-size: getCssVar(emoji-picker, font-icon-fontSize);
+      fill: getCssVar(emoji-picker, color, icon);
     }
   }
 
@@ -31,18 +50,19 @@
   @include m('readonly') {
     display: flex;
     align-items: center;
+    color: getCssVar(emoji-picker, color-readonly);
     pointer-events: none;
   }
   @include m('disabled') {
     display: flex;
     align-items: center;
+    color: getCssVar(emoji-picker, color-disabled);
     pointer-events: none;
-    opacity: 0.5;
   }
 
   .#{bem('emoji-picker','button')} {
     display: flex;
     flex-direction: row;
-    justify-content: getCssVar(form-item-container, editor-align);
+    justify-content: getCssVar(emoji-picker, flex-justify-content);
   }
 }

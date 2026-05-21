@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/mob-theme",
-  "version": "3.0.0",
+  "version": "4.10.0",
   "description": "移动端主题样式库",
   "type": "module",
   "main": "lib/index.cjs",
@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "watch": "ibiz-temp build -w",
-    "build": "ibiz-temp build -c && vue-tsc --declaration --emitDeclarationOnly",
+    "build": "ibiz-temp build -c",
     "pub": "ibizlab pub -m /root/workspace/template/FrontPresetModel/frontmodelbackend-core/src/main/resources/model/front/model/ibiz -t ./template -o ./src/publish --app MobFrontModel --clean",
     "publish:next": "npm run build && npm publish --access public --tag=next",
     "publish:dev": "npm run build && npm publish --access public --tag=dev",

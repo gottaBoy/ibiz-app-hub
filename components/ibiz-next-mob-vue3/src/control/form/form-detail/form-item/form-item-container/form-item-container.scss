@@ -1,24 +1,56 @@
+/* stylelint-disable order/properties-order */
 $form-item-container: (
-  label-width: rem(130px),
-  line-height: getCssVar(form-item, line-height),
-  require-mark-color: getCssVar(color, danger),
-  container-padding: getCssVar(spacing, base),
-  left-container-padding: getCssVar(spacing, base),
-  error-margin-top: getCssVar(spacing, extra-tight),
-  bg-color: getCssVar(color, bg, 1),
-  label-font-size: getCssVar(font-size, header-6),
-  label-text-color: getCssVar(color, text, 0),
-  container-error-padding: 0 getCssVar(spacing, base),
-  editor-padding: getCssVar(spacing, tight) getCssVar(spacing, none)
-    getCssVar(spacing, tight) getCssVar(spacing, none),
-  border: rem(1px) getCssVar(color, border) solid,
-  border-radius: rem(4px),
+  // 颜色
+  color-bg: getCssVar(color, bg, 2),
+  color-underline: getCssVar(color, border),
+  color-error: getCssVar(color, danger),
+
+  // 宽度
+  width-label: rem(130px),
+  width-underline: calc(100% - getCssVar(spacing, base) * 2),
+  width-border: calc(100% - getCssVar(spacing, base) * 2),
+
+  // 高度
+  height-underLine: getCssVar('border-thickness', 'control'),
+  height-show-border-min-height: getCssVar(editor, default, line-height),
+
+  // 间距
+  spacing-container-padding: getCssVar(spacing, base),
+  spacing-editor-padding: getCssVar(spacing, extra-tight) getCssVar(spacing, none)
+  getCssVar(spacing, extra-tight) getCssVar(spacing, none),
+  spacing-border-editor-padding: getCssVar(spacing, tight),
+
+  // 圆角
+  radius-border: getCssVar(border-radius, small),
+
+  // 字体
+  font-fontSize: getCssVar(font-size, header-6),
+  font-lineHeight: getCssVar(editor, default, line-height),
+  font-error-fontSize: getCssVar(font-size, regular),
+
+  // 边框
+  border: getCssVar('border-thickness', 'control') getCssVar(color, border) solid,
 );
 
 $form-item-label: (
-  line-height: 1,
-  font-size: getCssVar(font-size, header-5),
-  text-color: getCssVar(color, text, 0),
+  // 颜色
+  color-text: getCssVar(color, text, 0),
+  // 间距
+  spacing-icon-gap: getCssVar(spacing, extra-tight),
+);
+
+$form-item-popover: (
+  // 颜色
+  color-link: getCssVar(color, link),
+  // 间距
+  spacing-padding: getCssVar(spacing, tight),
+  spacing-cell-padding: getCssVar(spacing, extra-tight) getCssVar(spacing, tight),
+
+  // 字体大小
+  font-fontSize: getCssVar(font-size, header-6),
+
+  // 边框
+  border: getCssVar('border-thickness', 'control') solid getCssVar(color, border),
 );
 
 // 表单项基础样式
@@ -29,47 +61,38 @@ $form-item-label: (
   position: relative;
   width: 100%;
   height: 100%;
-  padding: getCssVar(form-item-container, container-padding);
-
-  // margin: getCssVar(form-item-container, container-margin);
-  font-size: getCssVar(form-item, font-size);
-  background-color: getCssVar(form-item-container, bg-color);
-  border-width: calc(100% - getCssVar(spacing, base) * 2);
-  border-radius: getCssVar(border-radius, small);
+  padding: getCssVar(form-item-container, spacing-container-padding);
+  font-size: getCssVar(form-item-container, font-fontSize);
+  background-color: getCssVar(form-item-container, color-bg);
+  border-width: getCssVar(form-item-container, width-border);
+  border-radius: getCssVar(form-item-container, radius-border);
 
   @include when(show-underLine) {
     &::after {
       position: absolute;
       z-index: 1;
-      width: calc(100% - getCssVar(spacing, base) * 2);
-      height: rem(1px);
+      width: getCssVar(form-item-container, width-underline);
+      height: getCssVar(form-item-container, height-underLine);
       content: '';
-      background-color: getCssVar(color, border);
+      background-color: getCssVar(form-item-container, color-underline);
       transform: scaleY(0.5);
     }
   }
 
   @include when(show-border) {
     .#{bem(form-item-container, editor)} {
-      margin-top: rem(4px);
-      min-height: calc(
-        getCssVar(form-item, line-height) + 2 * getCssVar(spacing, tight)
-      );
       outline: getCssVar(form-item-container, border);
-      border-radius: getCssVar(form-item-container, border-radius);
-      padding: getCssVar(spacing, tight);
-    }
-    &.#{bem(form-item-container, '', bottom)} {
-      .#{bem(form-item-container, editor)} {
-        margin-top: 0;
-        margin-bottom: rem(4px);
-      }
+      min-height: calc(#{getCssVar(form-item-container, height-show-border-min-height)} + #{getCssVar(spacing, tight)} * 2);
+      border-radius: getCssVar(form-item-container, radius-border);
+      padding: getCssVar(form-item-container, spacing-border-editor-padding);
     }
   }
 
   @include e(popover) {
     &.van-popover {
-      font-size: getCssVar(font-size, header-6);
+      @include set-component-css-var('form-item-popover', $form-item-popover);
+
+      font-size: getCssVar(form-item-popover, font-fontSize);
 
       table {
         border-spacing: 0;
@@ -78,18 +101,18 @@ $form-item-label: (
 
       table tr td,
       table tr th {
-        border: 1px solid getCssVar(color, border);
-        padding: getCssVar(spacing, extra-tight) getCssVar(spacing, tight);
+        border: getCssVar(form-item-popover, border);
+        padding: getCssVar(form-item-popover, spacing-padding);
       }
     }
 
     @include m(content) {
       overflow: auto;
       max-height: 30vh;
-      padding: getCssVar(spacing, tight);
+      padding: getCssVar(form-item-popover, spacing-padding);
 
       a {
-        color: getCssVar(color, link);
+        color: getCssVar(form-item-popover, color-link);
       }
     }
   }
@@ -99,43 +122,28 @@ $form-item-label: (
     flex-shrink: 0;
     align-items: center;
     position: relative;
-    width: getCssVar(form-item-container, label-width);
+    width: getCssVar(form-item-container, width-label);
     overflow: visible;
-    color: getCssVar(form-item-label, text-color);
-    height: getCssVar(form-item, line-height);
-    line-height: getCssVar(form-item, line-height);
+    color: getCssVar(form-item-label, color-text);
+    height: getCssVar(form-item-container, font-lineHeight);
+    line-height: getCssVar(form-item-container, font-lineHeight);
 
     @include m('icon') {
-      padding-right: getCssVar(spacing, extra-tight);
+      padding-right: getCssVar(form-item-label, spacing-icon-gap);
     }
 
     span {
       @include utils-ellipsis;
+
       display: inline-block;
       width: 100%;
-      font-size: getCssVar(form-item-container, label-font-size);
-      text-align: getCssVar(form-item-container, label-align);
+      text-align: getCssVar(form-item-container, font-textAlign);
     }
   }
 
   // 编辑器
   @include e(editor) {
     width: 100%;
-    text-align: getCssVar(form-item-container, editor-align);
-    min-height: calc(
-      getCssVar(form-item, line-height) + 2 * getCssVar(spacing, tight)
-    );
-    #{--van-cell-line-height}: getCssVar(form-item, line-height);
-    #{--van-cell-line-height}: getCssVar(form-item, line-height);
-
-    .van-cell {
-      padding-bottom: 0;
-    }
-
-    ::placeholder {
-      color: getCssVar('form-item', 'placeholder-color');
-      -webkit-text-fill-color: getCssVar('form-item', 'placeholder-color');
-    }
   }
 
   // 必填图标 *
@@ -143,12 +151,9 @@ $form-item-label: (
     @include e(label) {
       &::before {
         position: absolute;
-        top: rem(3px);
-        left: rem(-10px);
+        left: calc(-1 * getCssVar(spacing, tight));
         display: inline-block;
-        height: 100%;
-        font-size: rem(14px);
-        color: getCssVar(form-item, error-color);
+        color: getCssVar(form-item-container, color-error);
         content: '*';
       }
     }
@@ -157,14 +162,14 @@ $form-item-label: (
   // 错误border
   &.is-error {
     &::after {
-      background-color: getCssVar(form-item, error-color);
+      background-color: getCssVar(form-item-container, color-error);
     }
   }
 
   // 错误border
   &.is-error {
     @include b(form-item-container-content) {
-      border-color: getCssVar('form-item', 'error-color');
+      border-color: getCssVar(form-item-container, color-error);
     }
   }
 }
@@ -172,8 +177,9 @@ $form-item-label: (
 @include b(form-item-container) {
   @include m(left) {
     .#{bem(form-item-container, editor)} {
-      min-height: getCssVar(form-item, line-height);
+      min-height: getCssVar(form-item-container, font-lineHeight);
     }
+
     &::after {
       bottom: 0;
     }
@@ -181,8 +187,9 @@ $form-item-label: (
 
   @include m(right) {
     .#{bem(form-item-container, editor)} {
-      min-height: getCssVar(form-item, line-height);
+      min-height: getCssVar(form-item-container, font-lineHeight);
     }
+
     &::after {
       bottom: 0;
     }
@@ -191,7 +198,7 @@ $form-item-label: (
     @include when(required) {
       @include e(label) {
         &::before {
-          right: rem(-10px);
+          right: calc(-1 * getCssVar(spacing, tight));
           left: auto;
         }
       }
@@ -204,25 +211,25 @@ $form-item-label: (
   @include m(right) {
     @include e(editor) {
       position: relative;
-      width: calc(100% - getCssVar('form-item-container', 'label-width'));
+      width: calc(100% - getCssVar('form-item-container', 'width-label'));
     }
   }
 
   @include m(left) {
     @include e(editor) {
-      width: calc(100% - getCssVar('form-item-container', 'label-width'));
+      width: calc(100% - getCssVar('form-item-container', 'width-label'));
     }
   }
 
   @include m(top) {
     @include e(editor) {
-      padding: getCssVar(form-item-container, editor-padding);
+      padding: getCssVar(form-item-container, spacing-editor-padding);
     }
   }
 
   @include m(bottom) {
     @include e(editor) {
-      padding: getCssVar(form-item-container, editor-padding);
+      padding: getCssVar(form-item-container, spacing-editor-padding);
     }
   }
 
@@ -249,10 +256,9 @@ $form-item-label: (
 @include b(form-item-container-error) {
   position: absolute;
   bottom: 0;
-  width: calc(100% - getCssVar('spacing', 'base'));
-  padding-right: getCssVar('spacing', 'base');
-  font-size: getCssVar('form-item', 'error-font-size');
-  line-height: getCssVar('form-item', 'font-size');
-  color: getCssVar('form-item', 'error-color');
-  text-align: getCssVar('form-item-container', 'editor-align');
+  width: getCssVar(form-item-container, width-underline);
+  font-size: getCssVar('form-item-container', 'font-error-fontSize');
+  line-height: getCssVar('form-item-container', 'font-fontSize');
+  color: getCssVar('form-item-container', 'color-error');
+  text-align: getCssVar(editor, default, text-align);
 }

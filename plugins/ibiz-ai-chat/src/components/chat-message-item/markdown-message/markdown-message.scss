@@ -100,12 +100,35 @@
   background-color: getCssVar('ai-chat', 'background-color-light');
   border-radius: getCssVar('ai-chat', 'border-radius');
 
+  .cherry-markdown.theme__dark ul.cherry-list__default,
+  .cherry.theme__dark.cherry--no-toolbar,
   .cherry div.cherry-previewer {
     color: getCssVar(ai-chat, color);
     background-color: getCssVar('ai-chat', 'background-color-light');
   }
+  
+  .#{bem(chat-step)} {
+    + .#{bem(chat-thought-chain)} {
+      margin-top: 8px;
+    }
+  }
+
+  .#{bem(chat-step)} {
+    + .#{bem(chat-tool-call)} {
+      margin-top: 8px;
+    }
+  }
+
+  .#{bem(chat-tool-call)} {
+    + .#{bem(chat-thought-chain)} {
+      margin-top: 8px;
+    }
+  }
 }
 @include b(markdown-message-footer) {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   padding: 10px 0;
 }
 

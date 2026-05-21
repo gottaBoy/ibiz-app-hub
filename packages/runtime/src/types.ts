@@ -20,6 +20,10 @@ import {
   IFullscreenUtil,
   IThirdAuthService,
   IQrcodeUtil,
+  IInLineAIUtil,
+  IAIChatUtil,
+  IScreenShotUtil,
+  IPrintPreviewUtil,
 } from './interface';
 import { LogicSchedulerCenter } from './logic-scheduler';
 import { RegisterCenter } from './register/register-center';
@@ -121,6 +125,11 @@ declare module '@ibiz-template/core' {
      * @type {IAppUtil}
      */
     appUtil: IAppUtil;
+
+    /**
+     * 打印预览服务
+     */
+    printPreview: IPrintPreviewUtil;
 
     /**
      * 全局多种组件呈现工具类
@@ -252,6 +261,24 @@ declare module '@ibiz-template/core' {
      * @type {IQrcodeUtil}
      */
     qrcodeUtil: IQrcodeUtil;
+
+    /**
+     * 行内AI聊天工具类
+     * @type {IInLineAIUtil}
+     */
+    inLineAIUtil: IInLineAIUtil;
+
+    /**
+     * AI聊天工具类
+     */
+    aiChatUtil: IAIChatUtil;
+
+    /**
+     * @description 屏幕截图工具类
+     * @type {IScreenShotUtil}
+     * @memberof IBizSys
+     */
+    screenShotUtil: IScreenShotUtil;
   }
 
   interface IEnvironment {

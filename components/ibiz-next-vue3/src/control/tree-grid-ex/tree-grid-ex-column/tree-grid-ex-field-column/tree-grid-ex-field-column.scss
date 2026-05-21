@@ -69,9 +69,3 @@ $tree-grid-ex-field-column: (
     opacity: 0;
   }
 }
-
-.el-table .el-table__body-wrapper tr:hover {
-  @include b(tree-grid-ex-field-column-toolbar-container) {
-    opacity: 1;
-  }
-}

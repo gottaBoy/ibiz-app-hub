@@ -9,7 +9,7 @@ export default {
   capLanguageRes: {
     lanResTag: 'DE.LNAME.MASTER',
   },
-  caption: '树视图_计数器禁用',
+  caption: '树视图_计数器动态禁用',
   codeName: 'master_tree_counter_disabled',
   appDataEntityId: 'web.master',
   appViewEngines: [
@@ -25,7 +25,7 @@ export default {
       logicTrigger: 'VIEWEVENT',
       logicType: 'SCRIPT',
       scriptCode:
-        "view.ctx.evt.on('onRegister', (name, ctrl) => {\r\n   if (name === 'tree') {\r\n      ctrl?.disableCounter();\r\n      console.log('部件注册事触发调用部件禁用计数器');\r\n   }\r\n})",
+        "view.ctx.evt.on('onRegister', (name, ctrl) => {\r\n   if (name === 'tree') {\r\n      ctrl.disableCounter?.();\r\n      console.log('部件注册成功事件触发后，调用禁用部件计数器能力');\r\n   }\r\n})",
       builtinLogic: true,
       id: 'disable_counter',
     },
@@ -178,7 +178,7 @@ export default {
       capLanguageRes: {
         lanResTag: 'DE.LNAME.MASTER',
       },
-      caption: '树视图_计数器禁用',
+      caption: '树视图_计数器动态禁用',
       codeName: 'tree_counter_disabled_captionbar',
       controlType: 'CAPTIONBAR',
       appDataEntityId: 'web.master',
@@ -198,7 +198,7 @@ export default {
     controlParam: {},
     id: 'layoutpanel',
   },
-  title: '树视图_计数器禁用',
+  title: '树视图_计数器动态禁用',
   viewStyle: 'DEFAULT',
   viewType: 'DETREEVIEW',
   enableDP: true,

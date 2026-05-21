@@ -191,7 +191,7 @@ export class ModelHelper {
     }
     // 模型扩展标准视图布局面板
     const subViewRefs = app.model.appSubViewTypeRefs || [];
-    subViewRefs.forEach(item => {
+    subViewRefs.forEach((item: IModel) => {
       if (item.replaceDefault) {
         ibiz.util.layoutPanel.register(
           `${item.viewType}_DEFAULT`,
@@ -284,7 +284,11 @@ export class ModelHelper {
     const drCtrls = this.dsl.controls(sourceSubApp.getAllPSDEDRControls || []);
     drCtrlIds.forEach((id, index) => {
       const drCtrl = drCtrls[index];
-      ibiz.hub.registerSubAppDrControls(subApp.id || ibiz.env.appId, drCtrl);
+      if (drCtrl.controlType === 'TABEXPPANEL') {
+        ibiz.hub.registerSubAppTabExpPanel(subApp.id || ibiz.env.appId, drCtrl);
+      } else {
+        ibiz.hub.registerSubAppDrControls(subApp.id || ibiz.env.appId, drCtrl);
+      }
     });
     // 设置界面行为组到hub中
     const appDEUIActionGroupIds = subApp.appDEUIActionGroupIds || [];
@@ -319,6 +323,17 @@ export class ModelHelper {
         this.dsl.control(appControl),
       );
     });
+    // 设置代码表模型到hub中
+    const appCodeLists = sourceSubApp.getAllPSAppCodeLists || [];
+    if (subApp.id) {
+      appCodeLists.forEach((appCodeList: IModel) => {
+        this.deepFillSubAppId(appCodeList, subApp.id as string);
+        ibiz.hub.registerSubAppCodeList(
+          subApp.id!,
+          this.dsl.appCodeList(appCodeList) as IAppCodeList,
+        );
+      });
+    }
     // 实现子应用借助主应用独立打开,srfembsubapp的值为ref三段式的第一段哈希值，条件触发手动加载目标子应用
     if (
       this.appContext.srfembsubapp &&
@@ -402,6 +417,20 @@ export class ModelHelper {
   }
 
   /**
+   * @description 计算应用实体需要合并的子应用模型
+   * @protected
+   * @param {IAppDataEntity} appDataEntity
+   * @memberof ModelHelper
+   */
+  protected calcAppDataEntitySubAppModel(appDataEntity: IAppDataEntity): void {
+    // 合并AC模式界面行为组
+    this.merge.mergeSubAppDEACModesActionGroup(
+      appDataEntity.appDEACModes,
+      this.subAppRefs,
+    );
+  }
+
+  /**
    * 根据应用实体 codeName 获取应用实体模型
    *
    * @author chitanda
@@ -419,6 +448,9 @@ export class ModelHelper {
     const util = this.getModelUtil(appId);
     const model = await util.getAppDataEntityModel(name, isId, true);
     const dsl = this.dsl.appDataEntity(model) as IAppDataEntity;
+    if (!appId || appId === ibiz.env.appId) {
+      this.calcAppDataEntitySubAppModel(dsl);
+    }
     const list = await util.servicePathUtil.calcRequestPaths(dsl.id!);
     dsl.requestPaths = list;
     dsl.codeName2 = plural(dsl.codeName!.toLowerCase());
@@ -760,5 +792,13 @@ export class ModelHelper {
       appId = (data as { appId: string }).appId;
     }
     return appId;
+  }
+
+  /**
+   * 合并子应用代码表
+   * @param codeList
+   */
+  mergeSubAppCodeList(codeList: IAppCodeList): void {
+    this.merge.mergeSubAppCodeList(codeList, this.subAppRefs);
   }
 }

@@ -1,9 +1,10 @@
 import {
-  PanelController,
-  PanelItemController,
-  PanelNotifyState,
-  UIActionButtonState,
   UIActionUtil,
+  getUIActionById,
+  PanelController,
+  PanelNotifyState,
+  PanelItemController,
+  UIActionButtonState,
   ViewLayoutPanelController,
 } from '@ibiz-template/runtime';
 import { IPanelButton } from '@ibiz/model-core';
@@ -58,6 +59,25 @@ export class PanelButtonController extends PanelItemController<IPanelButton> {
   }
 
   /**
+   * @description AI按钮位置
+   * @private
+   * @type {('left'
+   *     | 'left-start'
+   *     | 'left-end'
+   *     | 'right'
+   *     | 'right-start'
+   *     | 'right-end')}
+   * @memberof PanelButtonController
+   */
+  private placement:
+    | 'left'
+    | 'left-start'
+    | 'left-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end' = 'right-end';
+
+  /**
    * 初始化
    *
    * @return {*}  {Promise<void>}
@@ -65,6 +85,12 @@ export class PanelButtonController extends PanelItemController<IPanelButton> {
    */
   async onInit(): Promise<void> {
     await super.onInit();
+    const { appId, uiactionId } = this.model;
+    if (uiactionId) {
+      const action = await getUIActionById(uiactionId, appId);
+      this.state.isGlobalAIAssistant =
+        action?.codeName === 'global_ai_assistant';
+    }
     this.updateButtonState();
   }
 
@@ -113,6 +139,7 @@ export class PanelButtonController extends PanelItemController<IPanelButton> {
    */
   async updateButtonState(): Promise<void> {
     await this.state.uiActionState.update(this.panel.context, this.data);
+    this.updateGlobalAIState();
   }
 
   /**
@@ -156,5 +183,23 @@ export class PanelButtonController extends PanelItemController<IPanelButton> {
       return;
     }
     super.calcItemDisabled(data);
+  }
+
+  /**
+   * @description 更新全局AI状态
+   * @memberof PanelButtonController
+   */
+  updateGlobalAIState(): void {
+    if (!this.state.isGlobalAIAssistant) return;
+    const { appId, uiactionId, actionType, sysImage } = this.model;
+    const params = ibiz.util.getGlobalParam();
+    params.AIAssistantState = {
+      appId,
+      sysImage,
+      actionType,
+      uiActionId: uiactionId,
+      placement: this.placement,
+      visible: this.state.uiActionState.visible,
+    };
   }
 }

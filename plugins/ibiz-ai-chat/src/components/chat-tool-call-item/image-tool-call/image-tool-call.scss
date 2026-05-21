@@ -1,0 +1,98 @@
+@include b('image-tool-call') {
+  padding: 4px;
+  margin-bottom: 8px;
+  background-color: getCssVar(chat-tool-call-item, bg);
+  border: getCssVar(chat-tool-call-item, border-color);
+  border-radius: 4px;
+
+  svg {
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  @include e('header') {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px;
+
+    >div {
+      display: flex;
+      column-gap: 4px;
+      align-items: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  @include e('header-left') {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    min-width: 0;
+    margin-right: 8px;
+
+    @include m(icon) {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+    }
+
+    @include m(caption) {
+      flex-shrink: 0;
+    }
+
+    @include m('desc') {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  @include e('header-right') {
+    flex-shrink: 0;
+
+    svg {
+      width: 14px !important;
+      height: 14px !important;
+      fill: none !important;
+    }
+  }
+
+  @include e('content') {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    color: getCssVar('color', 'text-2');
+  }
+
+  @include e('copy') {
+    display: flex;
+    align-items: center;
+  }
+
+  @include e('image') {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    object-fit: cover;
+  }
+
+  @include e('description') {
+    max-height: 200px;
+    overflow: auto;
+  }
+
+  @include e('error') {
+    color: getCssVar(chat-tool-call-item, text-error);
+  }
+
+  @include e('center-text') {
+    text-align: center;
+  }
+}

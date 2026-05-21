@@ -343,3 +343,42 @@ $control-toolbar-actions: (
     }
   }
 }
+
+// 行为组次级气泡显示样式
+@include b(control-toolbar-actions-popper) {
+  @include set-component-css-var(control-toolbar-actions, $control-toolbar-actions);
+
+  @include e('reference-btn') {
+    display: flex;
+    align-items: center;
+    @include m('chevron') {
+      flex-shrink: 0;
+    }
+  }
+  @include e('wrapper') {
+    padding: getCssVar(spacing, extra-tight) 0;
+    background-color: getCssVar(color, primary);
+  }
+
+  @include e('item') {
+    display: flex;
+    align-items: center;
+    height: getCssVar(control-toolbar-actions, dropdown-item-height);
+    color: getCssVar(color, primary, text);
+    background-color: getCssVar(color, primary);
+
+    &:hover{
+      color: getCssVar(color, primary, hover, text);
+      background-color: getCssVar(color, primary, hover);          
+    }
+  }
+
+  &.el-popover.el-popper {
+    // 解决el-popover在下拉菜单中显示时，被隐藏的问题
+    position: fixed !important;
+
+    // 解决el-popover的宽度自适应问题 必须要加 !important
+    width: auto !important;
+    min-width: 200px;
+  }
+}

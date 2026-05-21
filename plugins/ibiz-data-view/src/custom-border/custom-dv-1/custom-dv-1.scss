@@ -1,5 +1,5 @@
 $style-1: (
-    'offsetY': 0,
+  'offsetY': 0,
 );
 
 @include b(custom-border) {
@@ -8,14 +8,16 @@ $style-1: (
     position: relative;
     width: 100%;
     height: 100%;
-    @include e(wrapper){
+    @include e(wrapper) {
       position: absolute;
+      top: getCssVar(style-1, 'offsetY');
       width: 100%;
-      height: calc(100% - getCssVar(style-1,'offsetY'));
+      height: calc(100% - getCssVar(style-1, 'offsetY'));
     }
     @include e(border-box) {
-    z-index: 100;
-    height: 0;
+      position: relative;
+      z-index: 100;
+      height: 100%;
     }
     @include e(border) {
       position: absolute;

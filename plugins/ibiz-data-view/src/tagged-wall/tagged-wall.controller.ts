@@ -49,7 +49,9 @@ export class TaggedWallController extends ListController {
 
   protected async onCreated(): Promise<void> {
     await super.onCreated();
-
+    if (!this.model.controlParam?.ctrlParams) {
+      return;
+    }
     const {
       ENABLEFONTSIZERANDOM,
       RANDOMFONTSIZERANGE,

@@ -13,7 +13,7 @@ import {
   ICalendarController,
 } from '../../../interface';
 import { MDControlController } from '../../common';
-import { CalendarService } from './calendar.service';
+import { CalendarService, ILoadMoreItem } from './calendar.service';
 import { ViewLogicScheduler } from '../../../logic-scheduler';
 import { calcDeCodeNameById, getViewLogics } from '../../../model';
 import { ContextMenuController } from '../context-menu';
@@ -61,6 +61,39 @@ export class CalendarController
   contextMenus: { [p: string]: ContextMenuController } = {};
 
   /**
+   * @description 时光轴时间戳格式化串
+   * @type {string}
+   * @memberof CalendarController
+   */
+  public timelineCaptionFormat: string = 'YYYY-MM-DD';
+
+  /**
+   * @description 获取加载更多信息数据
+   * @readonly
+   * @type {{
+   *       [modelId: string]: ILoadMoreItem;
+   *     }}
+   * @memberof CalendarController
+   */
+  get loadMoreItems(): {
+    [modelId: string]: ILoadMoreItem;
+  } {
+    return this.service.loadMore;
+  }
+
+  /**
+   * @description 分组时间属性
+   * @readonly
+   * @type {('beginTime' | 'endTime')} 开始时间 | 结束时间
+   * @memberof CalendarController
+   */
+  get groupTimeField(): 'beginTime' | 'endTime' {
+    if (this.controlParams.grouptimefield)
+      return this.controlParams.grouptimefield;
+    return 'beginTime';
+  }
+
+  /**
    * 初始化状态
    *
    * @author zk
@@ -96,6 +129,11 @@ export class CalendarController
    */
   protected async onCreated(): Promise<void> {
     await super.onCreated();
+    // 初始化时间轴标题格式,默认值为YYYY-MM-DD
+    if (this.model.controlParam?.ctrlParams?.TIMELINECAPTIONFORMAT) {
+      this.timelineCaptionFormat =
+        this.model.controlParam.ctrlParams.TIMELINECAPTIONFORMAT;
+    }
     this.state.showDetail =
       this.model.controlParam?.ctrlParams?.SHOWDETAIL ||
       this.controlParams.showdetail === 'true' ||
@@ -352,6 +390,7 @@ export class CalendarController
       return [];
     }
     const isInitialLoad = args.isInitialLoad === true;
+    let isLoadMore = args.isLoadMore === true;
     // *查询参数处理
     const { context } = this.handlerAbilityParams(args);
     const params = await this.getFetchParams(args?.viewParam);
@@ -359,12 +398,18 @@ export class CalendarController
     if (calendarStyle === 'USER') {
       const { srfstartdate } = params;
       this.state.selectedDate = new Date(srfstartdate);
+    } else if (calendarStyle === 'TIMELINE' && isInitialLoad) {
+      // 初始化加载时间轴时标记加载更多
+      isLoadMore = true;
     }
     // *发起请求
     await this.startLoading();
     let items;
     try {
-      items = await this.service.search(context, params);
+      items = await this.service.search(context, params, {
+        isLoadMore,
+        sortField: this.groupTimeField,
+      });
     } finally {
       await this.endLoading();
     }
@@ -387,7 +432,7 @@ export class CalendarController
    */
   async afterLoad(args: MDCtrlLoadParams, items: IData[]): Promise<IData[]> {
     super.afterLoad(args, items);
-    this.sortItems(this.state.items);
+    this.sortItems(this.state.items, this.groupTimeField);
     this.calcShowMode(this.state.items);
     await this.handleDataGroup();
     return items;
@@ -563,7 +608,7 @@ export class CalendarController
       resultParams.sort = sortQuery;
     }
     // *请求参数处理
-    await this._evt.emit('onBeforeLoad', undefined);
+    await this._evt.emit('onBeforeLoad', { params: resultParams });
     // 合并搜索条件参数，这些参数在onBeforeLoad监听里由外部填入
     Object.assign(resultParams, {
       ...this.state.searchParams,
@@ -694,5 +739,41 @@ export class CalendarController
       needRefresh = true;
     }
     return needRefresh;
+  }
+
+  /**
+   * @description 跳转第一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof CalendarController
+   */
+  async goToFirstPage(): Promise<IData[]> {
+    return [];
+  }
+
+  /**
+   * @description 跳转上一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof CalendarController
+   */
+  async goToPreviousPage(): Promise<IData[]> {
+    return [];
+  }
+
+  /**
+   * @description 跳转下一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof CalendarController
+   */
+  async goToNextPage(): Promise<IData[]> {
+    return [];
+  }
+
+  /**
+   * @description 跳转最后一页
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof CalendarController
+   */
+  async goToLastPage(): Promise<IData[]> {
+    return [];
   }
 }

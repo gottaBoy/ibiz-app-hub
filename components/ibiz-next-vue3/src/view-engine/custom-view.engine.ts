@@ -19,7 +19,7 @@ import {
 } from '@ibiz/model-core';
 
 export class CustomViewEngine extends ViewEngineBase {
-  protected declare view: IViewController<
+  declare protected view: IViewController<
     IAppDECustomView,
     IViewState,
     IViewEvent

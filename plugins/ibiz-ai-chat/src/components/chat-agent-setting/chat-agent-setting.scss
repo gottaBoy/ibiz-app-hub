@@ -1,0 +1,66 @@
+@include b('chat-agent-setting') {
+  position: relative;
+  font-size: getCssVar('font-size', 'regular');
+
+  @include e('button') {
+    display: flex;
+    gap: getCssVar('spacing', 'extra', 'tight');
+    align-items: center;
+    cursor: pointer;
+
+    @include m('icon') {
+      display: flex;
+      align-items: center;
+      min-height: getCssVar('height-control', 'default');
+      line-height: 1;
+
+      .icon {
+        font-size: 16px;
+      }
+    }
+
+    @include m('suffix') {
+      .icon {
+        fill: none;
+      }
+    }
+  }
+
+  @include e('dropdown') {
+    position: absolute;
+    bottom: calc(100% + getCssVar('spacing', 'extra-tight'));
+    left: 0;
+    z-index: 1;
+    width: 200px;
+    padding: getCssVar('spacing', 'extra-tight') 0;
+    background-color: getCssVar('color', 'bg', '2');
+    border-radius: getCssVar('border-radius', 'small');
+    box-shadow: getCssVar('shadow', 'elevated');
+    
+    @include m('list') {
+      position: relative;
+      padding: 0;
+      margin: 0;
+    }
+
+    @include m('item') {
+      display: flex;
+      gap: getCssVar('spacing', 'extra', 'tight');
+      padding: getCssVar('spacing', 'tight') getCssVar('spacing', 'base');
+      cursor: pointer;
+      @include when('horizontal') {
+        gap: getCssVar('spacing', 'base');
+        align-items: center;
+      }
+      @include when('vertical') {
+        flex-direction: column;
+      }
+    }
+
+    @include m('item-label') {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

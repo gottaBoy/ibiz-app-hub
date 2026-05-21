@@ -2,6 +2,38 @@ import { IApiData } from '@ibiz-template/core';
 import { IApiMDControlState } from './i-api-md-control.state';
 
 /**
+ * @description 图例项数据接口
+ * @export
+ * @interface IApiLegend
+ */
+export interface IApiLegend {
+  /**
+   * @description 标识
+   * @type {string}
+   * @memberof IApiLegend
+   */
+  id?: string;
+  /**
+   * @description 名称
+   * @type {string}
+   * @memberof IApiLegend
+   */
+  name?: string;
+  /**
+   * @description 背景色
+   * @type {string}
+   * @memberof IApiLegend
+   */
+  bkcolor?: string;
+  /**
+   * @description 字体颜色
+   * @type {string}
+   * @memberof IApiLegend
+   */
+  color?: string;
+}
+
+/**
  * @description 日历项数据接口
  * @export
  * @interface IApiCalendarItemData
@@ -182,11 +214,11 @@ export interface IApiCalendarState extends IApiMDControlState {
 
   /**
    * @description 图例
-   * @type {IAPiData[]}
+   * @type {IApiLegend[]}
    * @default []
    * @memberof IApiCalendarState
    */
-  legends: IApiData[];
+  legends: IApiLegend[];
 
   /**
    * @description 日历名称

@@ -36,6 +36,7 @@ export const ViewContentPanelContainer: Component = defineComponent({
     const ns = useNamespace('view-content');
 
     const isRefreshing = ref(false);
+    const refreshDisabled = ref(false);
 
     const ctx = useMobCtx();
     const { view } = ctx;
@@ -62,6 +63,23 @@ export const ViewContentPanelContainer: Component = defineComponent({
       isScrollable = true;
     }
 
+    const contentRef: Ref<IData | undefined> = ref();
+    // 是否显示返回顶部按钮，如果视图参数中配置了srfshowbacktop为true，则显示返回顶部按钮，
+    // 否则按照全局配置判断，如果全局配置了显示返回按钮，则如果该视图在首页或者home下，则允许出返回按钮
+    const showBackTop = computed(() => {
+      const { appViewParams } = props.controller?.panel.view.model || {};
+      const srfshowbacktop = appViewParams?.find(
+        item => item.id!.toLowerCase() === 'srfshowbacktop',
+      )?.value;
+      if (srfshowbacktop) {
+        return srfshowbacktop === 'true';
+      }
+      if (ibiz.config.mob.mobShowBackTop) {
+        return isScrollable;
+      }
+      return false;
+    });
+
     // 调用预置的界面行为刷新界面
     const refresh = async () => {
       try {
@@ -78,13 +96,21 @@ export const ViewContentPanelContainer: Component = defineComponent({
         ...result,
         ...props.controller.containerClass,
         // 只有这个scroll 样式才出滚动条
-        ns.is('scroll', isScrollable),
+        ns.is('back-top', showBackTop.value),
         ns.is('embed', view.modal.viewUsage === 4),
         ns.is('hidden', !props.controller.state.visible),
+        ns.is('refresh', viewModel.enablePullDownRefresh === true),
       ];
       return result;
     });
-    const contentRef: Ref<IData | undefined> = ref();
+
+    const onScroll = () => {
+      // 只要离开顶部就禁用下拉
+      if (contentRef.value) {
+        refreshDisabled.value = contentRef.value.$el.scrollTop > 0;
+      }
+    };
+
     return {
       ns,
       viewModel,
@@ -92,7 +118,10 @@ export const ViewContentPanelContainer: Component = defineComponent({
       isScrollable,
       classArr,
       contentRef,
+      showBackTop,
+      refreshDisabled,
       refresh,
+      onScroll,
     };
   },
   render() {
@@ -103,8 +132,9 @@ export const ViewContentPanelContainer: Component = defineComponent({
         class={this.classArr}
         layout={this.modelData.layout}
         ref='contentRef'
+        onScroll={this.onScroll}
       >
-        {this.isScrollable && this.contentRef && (
+        {this.contentRef && this.showBackTop && (
           <van-back-top teleport={this.contentRef.$el} />
         )}
         {defaultSlots.map((slot: { props: IData }) => {
@@ -112,11 +142,9 @@ export const ViewContentPanelContainer: Component = defineComponent({
           if (!props || !props.controller) {
             return slot;
           }
+          const { layoutPos } = props.modelData;
           return (
-            <iBizCol
-              layoutPos={props.modelData.layoutPos}
-              state={props.controller.state}
-            >
+            <iBizCol layoutPos={layoutPos} state={props.controller.state}>
               {slot}
             </iBizCol>
           );
@@ -128,6 +156,7 @@ export const ViewContentPanelContainer: Component = defineComponent({
         <van-pull-refresh
           class={this.ns.b('refresh')}
           v-model={this.isRefreshing}
+          disabled={this.refreshDisabled}
           onRefresh={this.refresh}
         >
           {content}

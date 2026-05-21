@@ -1,0 +1,58 @@
+$chat-step: (
+    font-size: 14px,
+    color: var(--ibiz-ai-chat-color),
+    color-2: var(--ibiz-ai-chat-color-2),
+    disabled-color: var(--ibiz-ai-chat-disabled-color),
+    bg: var(--ibiz-ai-chat-hover-background-color),
+    border-radius: var(--ibiz-ai-chat-border-radius),
+    hover-bg-color: var(--ibiz-ai-chat-background-color),
+    border-color: var(--ibiz-ai-chat-border-color),
+    bg-light: var(--ibiz-ai-chat-background-color-light),
+);
+
+@include b(chat-step) {
+    @include set-component-css-var('chat-step', $chat-step);
+
+    font-size: getCssVar(chat-step, font-size);
+
+
+    @include e(container) {
+        background-color: getCssVar(chat-step, bg);
+        border-radius: getCssVar(chat-step, border-radius);
+    }
+
+    @include e(toggle) {
+        position: relative;
+        display: block;
+        padding: 8px 0;
+        margin-top: 8px;
+        color: getCssVar(chat-step, color-2);
+        text-align: center;
+        cursor: pointer;
+
+        &::before {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            left: 0;
+            z-index: 1;
+            height: 1px;
+            content: "";
+            background: linear-gradient(to right, transparent, getCssVar(chat-step, color), transparent);
+        }
+    }
+
+    @include e(toggle-label) {
+        position: relative;
+        z-index: 2;
+        padding: 0 16px;
+        font-weight: 500;
+        color: getCssVar(chat-step, color);
+        cursor: pointer;
+        user-select: none;
+        background-color: getCssVar(chat-step, bg-light);
+        border-radius: getCssVar(chat-step, border-radius);
+        transition: color 0.2s ease;
+    }
+
+}

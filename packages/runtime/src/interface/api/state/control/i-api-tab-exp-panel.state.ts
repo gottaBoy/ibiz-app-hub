@@ -1,4 +1,4 @@
-import { IApiParams } from '@ibiz-template/core';
+import { IApiData, IApiParams } from '@ibiz-template/core';
 import { ISysImage } from '@ibiz/model-core';
 import { IApiControlState } from './i-api-control.state';
 
@@ -90,4 +90,11 @@ export interface IApiTabExpPanelState extends IApiControlState {
    * @memberof IApiTabExpPanelState
    */
   expViewParams: IApiParams;
+
+  /**
+   * @description 计数器数据
+   * @type {IApiData}
+   * @memberof IApiTabExpPanelState
+   */
+  counterData: IApiData;
 }

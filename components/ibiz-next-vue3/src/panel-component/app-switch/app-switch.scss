@@ -39,6 +39,7 @@ $app-switch: (
         white-space: nowrap;
 
         @include when('active') {
+            color: getCssVar(color, primary, active, text) !important;
             background-color: getCssVar(color, primary, active) !important;
         }
     }
