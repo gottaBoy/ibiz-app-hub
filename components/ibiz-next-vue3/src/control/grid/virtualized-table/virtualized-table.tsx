@@ -313,7 +313,7 @@ export const VirtualizedTableControl = defineComponent({
     };
   },
   render() {
-    if (!this.c.state.isCreated) return;
+    if (!this.c.state.isCreated) return null;
     return (
       <iBizControlNavigation controller={this.c}>
         <iBizControlBase

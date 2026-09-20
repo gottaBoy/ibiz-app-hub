@@ -166,6 +166,9 @@ export async function calcFilterModelBySchema(
           type = 'number';
           break;
         default:
+          if (properties[key].$ref && properties[key].type == null) {
+            return;
+          }
           ibiz.log.error(
             ibiz.i18n.t('runtime.controller.control.grid.unsupported', {
               type: properties[key].type,

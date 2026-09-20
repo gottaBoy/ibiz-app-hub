@@ -64,7 +64,7 @@ export const NavPosIndex = defineComponent({
     const { state, viewModals } = this.c;
     const { currentKey, cacheKeys } = state;
     if (!currentKey) {
-      return;
+      return null;
     }
 
     return (

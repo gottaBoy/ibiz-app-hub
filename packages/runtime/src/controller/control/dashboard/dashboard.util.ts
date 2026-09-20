@@ -17,6 +17,23 @@ import {
 import { ValueOP } from '../../../constant';
 
 /**
+ * 判断应用功能组件加载失败是否由存储记录不存在引起
+ *
+ * @param error
+ * @returns
+ */
+export function isMissingUtilDataError(error: unknown): boolean {
+  const data = (
+    error as {
+      response?: {
+        data?: IData;
+      };
+    }
+  )?.response?.data;
+  return data?.type === 'DataEntityRuntimeException' && Number(data.code) === 3;
+}
+
+/**
  * 过滤器条件转化为查询条件
  *
  * @author tony001

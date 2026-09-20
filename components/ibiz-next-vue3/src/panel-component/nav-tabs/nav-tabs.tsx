@@ -89,7 +89,7 @@ export const NavTabs = defineComponent({
   },
   render() {
     const { state } = this.controller;
-    if (ibiz.config.view.disableHomeTabs) return;
+    if (ibiz.config.view.disableHomeTabs) return null;
     return (
       <div class={[this.ns.b(), ...this.controller.containerClass]}>
         <div class={this.ns.e('left')}>

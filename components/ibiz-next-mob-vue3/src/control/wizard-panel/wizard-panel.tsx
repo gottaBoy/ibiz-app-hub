@@ -47,6 +47,7 @@ export const WizardPanelControl = defineComponent({
     let stepsTitle = null;
     let formComponent = null;
     let footer = null;
+    let content = null;
 
     // 表单绘制
     if (activeFormTag && this.c.activeWizardForm) {
@@ -163,6 +164,16 @@ export const WizardPanelControl = defineComponent({
           </van-steps>
         );
       }
+
+      // Keep the dynamic form and footer under one stable element. Form
+      // providers may render fragments while switching steps, which is
+      // unsafe when they are siblings of other dynamic slot children.
+      content = (
+        <div key={`${activeFormTag}content`} class={this.ns.e('content')}>
+          {formComponent}
+          {footer}
+        </div>
+      );
     }
     return (
       <iBizControlBase
@@ -170,8 +181,7 @@ export const WizardPanelControl = defineComponent({
         class={[this.ns.b(), this.ns.is('header', this.c.model.showStepBar)]}
       >
         {stepsTitle}
-        {formComponent}
-        {footer}
+        {content}
       </iBizControlBase>
     );
   },

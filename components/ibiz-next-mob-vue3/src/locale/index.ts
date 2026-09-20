@@ -36,14 +36,18 @@ export class IBizI18n implements I18n {
    */
   async init(): Promise<void> {
     const lang = i18n.global.locale.value;
-    let p: () => Promise<IData>;
-    if (this.langMap.has(lang)) {
-      p = this.langMap.get(lang)!;
-    } else {
-      p = this.langMap.get(this.defaultLang)!;
-    }
+    const normalized = lang.replace(/_/g, '-').toLowerCase();
+    const configuredLang = [...this.langMap.keys()].find(
+      key => key.replace(/_/g, '-').toLowerCase() === normalized,
+    );
+    const resourceLang =
+      configuredLang || (/^en(?:-|$)/.test(normalized) ? 'en' : this.defaultLang);
+    const p = this.langMap.get(resourceLang)!;
     const module = await p();
-    i18n.global.setLocaleMessage(i18n.global.locale.value, module.default);
+    // Plugins and application overrides may register while the base module loads.
+    const registered = i18n.global.getLocaleMessage(lang);
+    i18n.global.setLocaleMessage(lang, module.default);
+    i18n.global.mergeLocaleMessage(lang, registered);
   }
 
   /**
@@ -73,9 +77,11 @@ export class IBizI18n implements I18n {
         title: ibiz.i18n.t('locale.prompt'),
         desc: ibiz.i18n.t('locale.switchLanguagePrompt'),
       })
-      .then(() => {
-        localStorage.setItem('language', lang);
-        window.location.reload();
+      .then((confirmed: boolean) => {
+        if (confirmed) {
+          localStorage.setItem('language', lang);
+          window.location.reload();
+        }
       });
   }
 
@@ -88,6 +94,10 @@ export class IBizI18n implements I18n {
   t(tag: string, defaultMsg?: string | undefined, options?: IParams): string;
 
   t(tag: unknown, defaultMsg?: unknown, options?: unknown): string {
+    if (typeof defaultMsg === 'string') {
+      const params = (options || {}) as IParams;
+      return i18n.global.t(tag as string, params, { ...params, default: defaultMsg });
+    }
     return i18n!.global.t(
       tag as string,
       defaultMsg as string,

@@ -12,6 +12,8 @@ export default {
     retract: 'Retract',
     close: 'Close',
     search: 'Search',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
   },
   // 组件
   component: {

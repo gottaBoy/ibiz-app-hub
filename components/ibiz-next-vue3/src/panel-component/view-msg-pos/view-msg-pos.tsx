@@ -41,7 +41,7 @@ export const ViewMsgPos = defineComponent({
   render() {
     const c = this.controller;
     if (!this.view.state.isCreated) {
-      return;
+      return null;
     }
     const position = c.rawItemParams.position || 'BODY';
     const scroll = c.rawItemParams.scroll === 'true';

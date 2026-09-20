@@ -4,6 +4,10 @@ import { en as modelHelperEn } from '@ibiz-template/model-helper';
 import { en as coreEn } from '@ibiz-template/core';
 
 export default {
+  locale: {
+    prompt: 'Notice',
+    switchLanguagePrompt: 'Switching languages requires a page reload. Continue?',
+  },
   // 应用级
   app: {
     logout: 'Logout',

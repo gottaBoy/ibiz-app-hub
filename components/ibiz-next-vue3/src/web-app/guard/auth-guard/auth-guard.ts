@@ -190,7 +190,7 @@ export class AuthGuard {
   async appInit(context: IParams): Promise<void> {
     await AppHooks.beforeInitApp.call({ context });
     try {
-      if (ibiz.env.isSaaSMode === true) {
+      if (ibiz.env.isSaaSMode === true && ibiz.env.isLocalModel !== true) {
         await this.loadOrgData();
       }
       await this.loadAppData(context);
@@ -220,7 +220,7 @@ export class AuthGuard {
               throw error;
             }
           }
-          if (ibiz.env.isSaaSMode === true) {
+          if (ibiz.env.isSaaSMode === true && ibiz.env.isLocalModel !== true) {
             await this.loadOrgData();
           }
           await this.loadAppData(context);

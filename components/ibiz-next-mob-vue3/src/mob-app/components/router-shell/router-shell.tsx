@@ -6,8 +6,6 @@ import {
   h,
   resolveComponent,
   PropType,
-  onActivated,
-  onDeactivated,
 } from 'vue';
 import { IRouteViewData, parseRouteViewData } from '@ibiz-template/vue3-util';
 import { useRoute, useRouter } from 'vue-router';
@@ -28,7 +26,6 @@ export const RouterShell = defineComponent({
     const router = useRouter();
     const viewData = ref<IRouteViewData>({});
     const isLoaded = ref(false);
-    const isActivated = ref(true);
     const destroyContext = () => {
       if (viewData.value.context) {
         const { context } = toRaw(viewData.value);
@@ -66,24 +63,16 @@ export const RouterShell = defineComponent({
       routeDepth: routeDepth + 1,
     });
 
-    onActivated(() => {
-      isActivated.value = true;
-    });
-
-    onDeactivated(() => {
-      isActivated.value = false;
-    });
     return {
       route,
       viewData,
       isLoaded,
-      isActivated,
       routeModal,
     };
   },
   render() {
     if (!this.isLoaded) {
-      return null;
+      return <div class='ibiz-router-shell' />;
     }
     const { context, params, srfnav, viewConfig } = this.viewData;
     const props = mergeDeepLeft(
@@ -99,16 +88,14 @@ export const RouterShell = defineComponent({
     );
 
     return (
-      <>
+      <div class='ibiz-router-shell'>
         {h(resolveComponent('IBizViewShell') as string, props, this.$slots)}
-        {this.isActivated && (
-          <router-view
-            key={viewConfig!.codeName}
-            name={RouteConst.ROUTE_MODAL_TAG}
-            modal={this.routeModal}
-          />
-        )}
-      </>
+        <router-view
+          key={viewConfig!.codeName}
+          name={RouteConst.ROUTE_MODAL_TAG}
+          modal={this.routeModal}
+        />
+      </div>
     );
   },
 });

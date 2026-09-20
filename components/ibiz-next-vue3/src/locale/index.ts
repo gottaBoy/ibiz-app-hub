@@ -64,14 +64,18 @@ export class IBizI18n implements I18n {
    */
   async init(): Promise<void> {
     const lang = i18n.global.locale.value;
-    let p: () => Promise<IData>;
-    if (this.langMap.has(lang)) {
-      p = this.langMap.get(lang)!;
-    } else {
-      p = this.langMap.get(this.defaultLang)!;
-    }
+    const normalized = lang.replace(/_/g, '-').toLowerCase();
+    const configuredLang = [...this.langMap.keys()].find(
+      key => key.replace(/_/g, '-').toLowerCase() === normalized,
+    );
+    const resourceLang =
+      configuredLang || (/^en(?:-|$)/.test(normalized) ? 'en' : this.defaultLang);
+    const p = this.langMap.get(resourceLang)!;
     const module = await p();
-    i18n.global.setLocaleMessage(i18n.global.locale.value, module.default);
+    // Plugins and application overrides may register while the base module loads.
+    const registered = i18n.global.getLocaleMessage(lang);
+    i18n.global.setLocaleMessage(lang, module.default);
+    i18n.global.mergeLocaleMessage(lang, registered);
   }
 
   /**
@@ -98,8 +102,8 @@ export class IBizI18n implements I18n {
   setLang(lang: string): void {
     ibiz.confirm
       .warning({
-        title: '提示',
-        desc: '切换语言需要刷新页面，确认切换?',
+        title: this.t('locale.prompt'),
+        desc: this.t('locale.switchLanguagePrompt'),
       })
       .then((val: boolean) => {
         if (val) {
@@ -154,6 +158,10 @@ export class IBizI18n implements I18n {
    * @return {*}  {string}
    */
   t(tag: unknown, defaultMsg?: unknown, options?: unknown): string {
+    if (typeof defaultMsg === 'string') {
+      const params = (options || {}) as IParams;
+      return i18n.global.t(tag as string, params, { ...params, default: defaultMsg });
+    }
     return i18n!.global.t(
       tag as string,
       defaultMsg as string,

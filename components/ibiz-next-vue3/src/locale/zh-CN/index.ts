@@ -4,6 +4,10 @@ import { zhCn as modelHelperZhCN } from '@ibiz-template/model-helper';
 import { zhCn as coreZhCN } from '@ibiz-template/core';
 
 export default {
+  locale: {
+    prompt: '提示',
+    switchLanguagePrompt: '切换语言需要刷新页面，确认切换?',
+  },
   // 应用级
   app: {
     logout: '退出登录',

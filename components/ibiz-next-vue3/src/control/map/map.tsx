@@ -69,7 +69,7 @@ const MapControl = defineComponent({
   },
   render() {
     const { state } = this.c;
-    if (!state.isCreated) return;
+    if (!state.isCreated) return null;
     let content;
     if (state.isLoaded) {
       content =

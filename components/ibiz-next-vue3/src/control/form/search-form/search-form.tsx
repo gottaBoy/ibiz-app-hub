@@ -125,7 +125,7 @@ export const SearchFormControl = defineComponent({
   render() {
     const { state } = this.c;
     if (!state.isCreated) {
-      return;
+      return null;
     }
     return (
       <iBizFormControl

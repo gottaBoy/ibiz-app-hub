@@ -52,7 +52,7 @@ export const PanelTabPanel = defineComponent({
   render() {
     // 动态控制显示
     if (!this.controller.state.visible) {
-      return;
+      return null;
     }
     // 内容区默认插槽处理，封装app-col
     const defaultSlots: VNode[] = this.$slots.default?.() || [];

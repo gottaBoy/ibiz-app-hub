@@ -675,7 +675,7 @@ export const GridControl = defineComponent({
   },
   render() {
     if (!this.c.state.isCreated) {
-      return;
+      return null;
     }
     const state = this.c.state;
     const defaultExpandAll = this.c.controlParams.defaultexpandall === 'true';

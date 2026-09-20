@@ -1,4 +1,4 @@
-import { IViewController } from '@ibiz-template/runtime';
+import { IViewController, ViewEngineBase } from '@ibiz-template/runtime';
 import { App } from 'vue';
 import { EditViewEngine } from './edit-view.engine';
 import { EditView2Engine } from './edit-view2.engine';
@@ -244,6 +244,15 @@ export const IBizViewEngine = {
     ibiz.engine.register(
       'VIEW_APPPANELVIEW',
       (c: IViewController) => new PanelViewEngine(c),
+    );
+    // HtmlViewController owns the URL; use the shared view lifecycle engine.
+    ibiz.engine.register(
+      'VIEW_HtmlView',
+      (c: IViewController) => new ViewEngineBase(c),
+    );
+    ibiz.engine.register(
+      'VIEW_DEHTMLVIEW',
+      (c: IViewController) => new ViewEngineBase(c),
     );
     ibiz.engine.register(
       'VIEW_DECUSTOMVIEW',

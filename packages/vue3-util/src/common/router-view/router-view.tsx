@@ -22,7 +22,7 @@ export const IBizRouterView = defineComponent({
     },
   },
   setup(props, { attrs }) {
-    const cache: { vNode?: VNode } = {};
+    const cache: { type?: VNode['type']; props?: Record<string, any> } = {};
 
     let isActive = true;
 
@@ -38,20 +38,21 @@ export const IBizRouterView = defineComponent({
     const renderComp = (Component: VNode, _route: any): VNode | undefined => {
       // 非激活时返回缓存
       if (!isActive) {
-        return cache.vNode;
+        return cache.type ? h(cache.type as string, cache.props) : undefined;
       }
       isActive = false;
       if (Component) {
         const tempProps = { ...Component.props };
         delete tempProps.onVnodeUnmounted;
         delete tempProps.ref;
-        const hNode = h(Component.type as string, {
+        const vnodeProps = {
           ...tempProps,
           ...attrs,
           key: props.manualKey,
-        });
-        cache.vNode = hNode;
-        return hNode;
+        };
+        cache.type = Component.type;
+        cache.props = vnodeProps;
+        return h(Component.type as string, vnodeProps);
       }
       return undefined;
     };

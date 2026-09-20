@@ -46,7 +46,14 @@ export class SearchBarService {
    * @author: zhujiamin
    * @Date: 2023-12-22 10:51:49
    */
-  themeUrl = '/extension/app_view_themes';
+  /**
+   * 主题配置实体的服务路径。
+   *
+   * PLM 使用 view_theme_setting 作为运行时主题配置实体；旧的
+   * /extension/app_view_themes 路径属于另一套平台扩展服务，在 PLM
+   * 部署中会被转发为 404。
+   */
+  themeUrl = '/view_theme_settings';
 
   /**
    * 执行查询多条数据的方法

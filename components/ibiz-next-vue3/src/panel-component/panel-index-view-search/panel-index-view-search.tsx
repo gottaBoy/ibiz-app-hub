@@ -129,7 +129,7 @@ export const PanelIndexViewSearch = defineComponent({
   render() {
     // 动态控制显示
     if (!this.controller.state.visible) {
-      return;
+      return null;
     }
     return (
       <div class={this.classArr}>

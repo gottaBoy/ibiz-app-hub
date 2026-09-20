@@ -102,7 +102,12 @@ export class UtilService {
    * @param {IParams} params
    * @return {*}  {Promise<IData>}
    */
-  async load(tag: string, context: IContext, params: IParams): Promise<IData> {
+  async load(
+    tag: string,
+    context: IContext,
+    params: IParams,
+    options: { silent?: boolean } = {},
+  ): Promise<IData> {
     const { utilType, utilTag } = this.appUtil as IModel;
     if (utilType === 'USER' && utilTag !== 'DYNAMENU') {
       try {
@@ -115,6 +120,9 @@ export class UtilService {
         );
         return this.handleUserResponse(res);
       } catch (error) {
+        if (options.silent === false) {
+          throw error;
+        }
         return {};
       }
     } else {
@@ -131,6 +139,9 @@ export class UtilService {
         );
         return this.handleResponse(res);
       } catch (error) {
+        if (options.silent === false) {
+          throw error;
+        }
         return {};
       }
     }

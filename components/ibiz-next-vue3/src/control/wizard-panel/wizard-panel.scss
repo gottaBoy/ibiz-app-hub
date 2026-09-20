@@ -12,6 +12,11 @@ $control-wizard-panel: (
 
   height: 100%;
 
+  @include e(content) {
+    height: 100%;
+    overflow: hidden;
+  }
+
   // 防止权重不够
   .#{bem(control-wizardpanel, form)} {
     height: calc(100% - getCssVar('control-wizard-panel', 'footer-height'));
@@ -19,8 +24,17 @@ $control-wizard-panel: (
   }
 
   @include when(header) {
+    @include e(content) {
+      height: calc(100% - getCssVar('control-wizard-panel', 'header-height'));
+    }
+
     @include e(form) {
-      height: calc(100% - getCssVar('control-wizard-panel', 'footer-height') - getCssVar('control-wizard-panel', 'header-height'));
+      height: calc(
+        100% - getCssVar('control-wizard-panel', 'footer-height') - getCssVar(
+            'control-wizard-panel',
+            'header-height'
+          )
+      );
     }
   }
 }
@@ -36,7 +50,6 @@ $control-wizard-panel: (
     --el-bg-color: #{getCssVar(color, bg, 1)};
   }
 }
-
 
 @include b(control-wizardpanel-footer) {
   @include flex(row, flex-end, center);

@@ -1,5 +1,6 @@
 $control-wizard-panel: (
-  'spacing-footer-margin': getCssVar('spacing', 'loose') getCssVar('spacing', 'tight'),
+  'spacing-footer-margin': getCssVar('spacing', 'loose')
+    getCssVar('spacing', 'tight'),
   'spacing-footer-gap': getCssVar('spacing', 'tight'),
   'color-active': getCssVar('color', 'primary'),
 );
@@ -10,6 +11,13 @@ $control-wizard-panel: (
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  @include e(content) {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+  }
 
   .van-steps {
     flex: none;
@@ -23,7 +31,6 @@ $control-wizard-panel: (
     overflow: auto;
   }
 }
-
 
 @include b(control-wizardpanel-footer) {
   @include flex(row, flex-end, center);

@@ -123,7 +123,7 @@ function getEditorModel(
  *   | undefined
  * >)}
  */
-async function calcColumnModelBySchema(
+export async function calcColumnModelBySchema(
   json: IData,
   c: GridController,
 ): Promise<{
@@ -176,11 +176,13 @@ async function calcColumnModelBySchema(
             type = 'number';
             break;
           default:
-            ibiz.log.error(
-              ibiz.i18n.t('runtime.controller.control.grid.unsupported', {
-                type: properties[key].type,
-              }),
-            );
+            if (!(properties[key].$ref && properties[key].type == null)) {
+              ibiz.log.error(
+                ibiz.i18n.t('runtime.controller.control.grid.unsupported', {
+                  type: properties[key].type,
+                }),
+              );
+            }
         }
         if (type) {
           columns.push({

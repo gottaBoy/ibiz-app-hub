@@ -82,6 +82,19 @@ export class WizardPanelController
   formControllers: Map<string, EditFormController> = new Map();
 
   /**
+   * 等待挂载中的表单控制器
+   */
+  protected formControllerWaiters: Map<
+    string,
+    {
+      promise: Promise<EditFormController>;
+      resolve: (controller: EditFormController) => void;
+      reject: (error: RuntimeError) => void;
+      timer: ReturnType<typeof setTimeout>;
+    }
+  > = new Map();
+
+  /**
    * 步骤集合
    * @return {*}
    * @author: zhujiamin
@@ -209,13 +222,55 @@ export class WizardPanelController
     const { activeFormTag } = this.state;
     const controller = this.formControllers.get(activeFormTag);
     if (!controller) {
-      throw new RuntimeError(
-        ibiz.i18n.t('runtime.controller.control.wizardPanel.formController', {
-          activeFormTag,
-        }),
-      );
+      throw this.createFormControllerError(activeFormTag);
     }
     return controller;
+  }
+
+  /**
+   * 创建表单控制器未挂载错误
+   */
+  protected createFormControllerError(formTag: string): RuntimeError {
+    return new RuntimeError(
+      ibiz.i18n.t('runtime.controller.control.wizardPanel.formController', {
+        activeFormTag: formTag,
+      }),
+    );
+  }
+
+  /**
+   * 等待指定表单完成挂载
+   */
+  protected async waitForFormController(
+    formTag: string = this.state.activeFormTag,
+  ): Promise<EditFormController> {
+    const controller = this.formControllers.get(formTag);
+    if (controller) {
+      return controller;
+    }
+
+    const currentWaiter = this.formControllerWaiters.get(formTag);
+    if (currentWaiter) {
+      return currentWaiter.promise;
+    }
+
+    let resolveController!: (mountedController: EditFormController) => void;
+    let rejectController!: (error: RuntimeError) => void;
+    const promise = new Promise<EditFormController>((resolve, reject) => {
+      resolveController = resolve;
+      rejectController = reject;
+    });
+    const timer = setTimeout(() => {
+      this.formControllerWaiters.delete(formTag);
+      rejectController(this.createFormControllerError(formTag));
+    }, 5000);
+    this.formControllerWaiters.set(formTag, {
+      promise,
+      resolve: resolveController,
+      reject: rejectController,
+      timer,
+    });
+    return promise;
   }
 
   /**
@@ -228,6 +283,12 @@ export class WizardPanelController
   async onFormMounted(activeFormTag: string, event: EventBase): Promise<void> {
     const formController = event.ctrl as EditFormController;
     this.formControllers.set(activeFormTag, formController);
+    const waiter = this.formControllerWaiters.get(activeFormTag);
+    if (waiter) {
+      clearTimeout(waiter.timer);
+      waiter.resolve(formController);
+      this.formControllerWaiters.delete(activeFormTag);
+    }
     formController.evt.on('onFormDataChange', evt => {
       this.calcButtonState(evt.data[0], formController);
     });
@@ -360,13 +421,11 @@ export class WizardPanelController
   async onPrevClick(): Promise<void> {
     this.startLoading();
     try {
+      const formController = await this.waitForFormController();
       // 状态向导先执行表单返回行为
       let data;
-      if (
-        (this.activeFormController.model as IDEWizardEditForm)
-          .goBackControlAction
-      ) {
-        data = await this.activeFormController.goBack();
+      if ((formController.model as IDEWizardEditForm).goBackControlAction) {
+        data = await formController.goBack();
       }
       let prevTag;
       // 返回上一个表单优先级 stateAppDEFieldId > tagHistory
@@ -410,8 +469,9 @@ export class WizardPanelController
   async onNextClick(): Promise<void> {
     this.startLoading();
     try {
+      const formController = await this.waitForFormController();
       // 保存
-      const data = await this.activeFormController.save({ silent: true });
+      const data = await formController.save({ silent: true });
       let nextTag;
       if (data.srfnextform) {
         const wizardForm = this.getWizardFormByTag(data.srfnextform);
@@ -476,8 +536,9 @@ export class WizardPanelController
   async onFinishClick(): Promise<void> {
     this.startLoading();
     try {
+      const formController = await this.waitForFormController();
       // 保存
-      await this.activeFormController.save({ silent: true });
+      await formController.save({ silent: true });
       await this.finish();
       // eslint-disable-next-line no-useless-catch
     } catch (error: unknown) {

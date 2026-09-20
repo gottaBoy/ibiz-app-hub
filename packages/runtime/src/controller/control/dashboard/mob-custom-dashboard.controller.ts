@@ -2,6 +2,7 @@ import { IAppUtil, IDashboard } from '@ibiz/model-core';
 import { ConfigService, UtilService } from '../../../service';
 import { IMobCustomDesign } from '../../../interface';
 import { DashboardController } from './dashboard.controller';
+import { isMissingUtilDataError } from './dashboard.util';
 
 export class MobCustomDashboardController implements IMobCustomDesign {
   /**
@@ -171,11 +172,20 @@ export class MobCustomDashboardController implements IMobCustomDesign {
   async load(): Promise<void> {
     let res;
     if (this.util) {
-      res = await this.util.load(
-        this.getResourceTag(),
-        this.context,
-        this.params,
-      );
+      try {
+        res = await this.util.load(
+          this.getResourceTag(),
+          this.context,
+          this.params,
+          { silent: false },
+        );
+      } catch (error) {
+        if (isMissingUtilDataError(error)) {
+          await this.save([]);
+          return;
+        }
+        throw error;
+      }
     } else if (this.config) {
       res = await this.config.load();
     }

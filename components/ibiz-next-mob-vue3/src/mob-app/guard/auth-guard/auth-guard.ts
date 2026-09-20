@@ -187,7 +187,7 @@ export class AuthGuard {
   async appInit(context: IParams): Promise<void> {
     await AppHooks.beforeInitApp.call({ context });
     await AuthGuardHooks.beforeAuth.call(null, null);
-    if (ibiz.env.isSaaSMode === true) {
+    if (ibiz.env.isSaaSMode === true && ibiz.env.isLocalModel !== true) {
       await this.loadOrgData();
     }
     await this.loadAppData(context);
