@@ -2,17 +2,18 @@
 import { isObject, isString } from 'lodash';
 import { computed, type ExtractPropTypes, watch, type Ref } from 'vue';
 import type rootProps from '@/components/root/rootProps';
-import Variables from '@/constants/vars';
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
 import useGanttHeader from './useGanttHeader';
 import { GanttHeader } from '@/models/param';
 import useLinks from './useLinks';
+import { useGanttLocale } from '@/locale';
 
 export default () => {
   const store = useStore();
   const { setGanttHeaders } = useGanttHeader();
   const { updateLinks } = useLinks();
+  const { t } = useGanttLocale();
 
   function initData(
     data: Ref<any[]>,
@@ -136,15 +137,20 @@ export default () => {
 
   function getProp(data: RowItem, prop?: string, empty?: string): string {
     if (isString(prop)) {
-      if (prop in data.data) return data.data[prop];
+      if (prop in data.data) return data.data[prop] ?? empty ?? t('emptyData');
       if (prop.includes('.')) {
         const [l, ...rest] = prop.split('.');
-        if (l in data.data)
-          return rest.reduce((acc, v) => acc[v], data.data[l]);
+        if (l in data.data) {
+          return (
+            rest.reduce((acc, v) => acc?.[v], data.data[l]) ??
+            empty ??
+            t('emptyData')
+          );
+        }
       }
     }
 
-    return empty ?? Variables.noData;
+    return empty ?? t('emptyData');
   }
 
   return {

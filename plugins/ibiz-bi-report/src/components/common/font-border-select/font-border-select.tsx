@@ -1,6 +1,7 @@
 import { PropType, VNode, computed, defineComponent, ref, watch } from 'vue';
 import { useNamespace } from '../../../use';
 import './font-border-select.scss';
+import { biReportT, biReportDefaultText } from '../../../locale';
 
 /** 字体线条选择组件 */
 export default defineComponent({
@@ -466,7 +467,7 @@ export default defineComponent({
                 return (
                   <el-option
                     key={item.value}
-                    label={item.label}
+                    label={biReportDefaultText(item.label)}
                     value={item.value}
                   ></el-option>
                 );
@@ -491,7 +492,7 @@ export default defineComponent({
                   >
                     {this.selectValue === '' && (
                       <div class={[this.ns.e('dropdown-input-content')]}>
-                        请选择
+                        {biReportT('select')}
                       </div>
                     )}
                     {this.selectValue === 'solid' && (

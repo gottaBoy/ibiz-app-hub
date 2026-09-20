@@ -5,7 +5,12 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { Component, createContext, createRef } from 'preact';
 import interact from 'interactjs';
-import { Namespace, isWithinBounds, limitDraggable } from '../../utils';
+import {
+  aiChatT,
+  Namespace,
+  isWithinBounds,
+  limitDraggable,
+} from '../../utils';
 import { ChatMessages } from '../chat-messages/chat-messages';
 import { ChatInput } from '../chat-input/chat-input';
 import { AiChatController, AiTopicController } from '../../controller';
@@ -582,12 +587,12 @@ export class ChatContainer extends Component<
           >
             <div ref={this.dragHandle} className={this.ns.b('header')}>
               <div className={this.ns.b('header-caption')}>
-                {this.props.caption || 'AI助手'}
+                {this.props.caption || aiChatT('aiAssistant')}
               </div>
               <div className={this.ns.b('header-action-wrapper')}>
                 {this.state.enableAIMinimize && (
                   <div
-                    title='最小化'
+                    title={aiChatT('minimize')}
                     className={`${this.ns.be(
                       'header-action-wrapper',
                       'action-item',
@@ -600,7 +605,7 @@ export class ChatContainer extends Component<
                 )}
                 {this.state.isFullScreen ? (
                   <div
-                    title='退出全屏'
+                    title={aiChatT('exitFullscreen')}
                     className={`${this.ns.be(
                       'header-action-wrapper',
                       'action-item',
@@ -615,7 +620,7 @@ export class ChatContainer extends Component<
                   </div>
                 ) : (
                   <div
-                    title='全屏'
+                    title={aiChatT('fullscreen')}
                     className={`${this.ns.be(
                       'header-action-wrapper',
                       'action-item',
@@ -627,7 +632,7 @@ export class ChatContainer extends Component<
                   </div>
                 )}
                 <div
-                  title='关闭'
+                  title={aiChatT('close')}
                   className={`${this.ns.be(
                     'header-action-wrapper',
                     'action-item',
@@ -643,7 +648,7 @@ export class ChatContainer extends Component<
               <div className={`${this.ns.be('main', 'loading')}`}>
                 <div className={`${this.ns.be('main', 'spinner')}`}></div>
                 <div className={`${this.ns.be('main', 'text')}`}>
-                  正在加载...
+                  {aiChatT('loading')}
                 </div>
               </div>
             ) : this.props.mode === 'TOPIC' ? (
@@ -723,7 +728,7 @@ export class ChatContainer extends Component<
           </div>
           {!this.props.isLoading && (
             <ChatMinimize
-              title={this.props.caption || 'AI助手'}
+              title={this.props.caption || aiChatT('aiAssistant')}
               controller={this.props.aiChat!}
               isMinimize={this.state.isMinimize}
               onClick={this.exitMinimize.bind(this)}

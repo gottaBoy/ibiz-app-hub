@@ -24,7 +24,7 @@ export const DevToolCollapse = defineComponent({
     const openArr = computed(() => {
       return props.value;
     });
-    const updateVModel = (name: string, isOpen: string) => {
+    const updateVModel = (name: string, isOpen: string): void => {
       const i = openArr.value.indexOf(name);
       i > -1 ? openArr.value.splice(i, 1) : openArr.value.push(name);
       emit('input', openArr.value); // input事件控制v-model的数据更改

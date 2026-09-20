@@ -15,6 +15,7 @@ import { useNamespace } from '@ibiz-template/vue3-util';
 import { createUUID } from 'qx-util';
 import { debounce, observerDomResize, getThemeVar } from '../../util';
 import './custom-dv-12.scss';
+import { dataViewT } from '../../locale';
 
 export const CustomDV12 = defineComponent({
   name: 'CustomDV12',
@@ -120,7 +121,7 @@ export const CustomDV12 = defineComponent({
      */
     const mergeColor = () => {
       if (!Array.isArray(props.color)) {
-        console.warn('颜色配置错误，需要一个数组');
+        console.warn(dataViewT('warnings.invalidColorArray'));
         mergedColor.value = [getThemeVar() || '#123afc', '#0000FF'];
         return;
       }

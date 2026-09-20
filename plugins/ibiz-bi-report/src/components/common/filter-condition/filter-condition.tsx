@@ -19,6 +19,7 @@ import { IFilterCondition, ISchemaField } from '../../../interface';
 import { ExcludeOPs, FilterModes, getEditor } from '../../../util';
 import { useNamespace } from '../../../use';
 import './filter-condition.scss';
+import { biReportT } from '../../../locale';
 
 export default defineComponent({
   name: 'BIFilterCondition',
@@ -58,14 +59,24 @@ export default defineComponent({
 
     // 逻辑连接符项
     const connectionItems = ref<{ text: string; value: string }[]>([
-      { text: '且', value: 'AND' },
-      { text: '或', value: 'OR' },
+      {
+        get text() {
+          return biReportT('and');
+        },
+        value: 'AND',
+      },
+      {
+        get text() {
+          return biReportT('or');
+        },
+        value: 'OR',
+      },
     ]);
 
     // 过滤操作模式映射
-    const filterModeMap = new Map<string, string>();
+    const filterModeMap = new Map<string, { readonly label: string }>();
 
-    FilterModes.forEach(mode => filterModeMap.set(mode.valueOP, mode.label));
+    FilterModes.forEach(mode => filterModeMap.set(mode.valueOP, mode));
 
     // jsonSchema属性字段映射
     const schemaFieldMap = ref<Map<string, ISchemaField>>(new Map());
@@ -250,7 +261,7 @@ export default defineComponent({
       <div class={[this.ns.b(), this.disabled && this.ns.m('disabled')]}>
         {this.borderMode === 'BORDER' && (
           <div class={this.ns.e('filter-number')}>
-            查询条件({this.items.length})
+            {biReportT('conditionCount', { count: this.items.length })}
           </div>
         )}
         <div
@@ -269,7 +280,7 @@ export default defineComponent({
                   ]}
                 >
                   {i === 0 ? (
-                    <div>当</div>
+                    <div>{biReportT('conditionWhen')}</div>
                   ) : (
                     <el-select
                       v-model={item.connection}
@@ -325,7 +336,7 @@ export default defineComponent({
                             <el-option
                               key={op}
                               value={op}
-                              label={this.filterModeMap.get(op) || op}
+                              label={this.filterModeMap.get(op)?.label || op}
                             />
                           );
                         })}
@@ -337,7 +348,7 @@ export default defineComponent({
                 </div>
                 <div
                   class={this.ns.be('item', 'btn')}
-                  title='删除'
+                  title={biReportT('delete')}
                   onClick={e => {
                     e.stopPropagation();
                     this.handleRemove(i);
@@ -381,7 +392,9 @@ export default defineComponent({
                 <path d='M8.578 7.383V1.602a.601.601 0 1 0-1.2 0v5.781H1.6a.601.601 0 0 0 0 1.203h5.777v5.812a.601.601 0 1 0 1.2 0V8.586H14.4a.601.601 0 0 0 0-1.203H8.578z'></path>
               </g>
             </svg>
-            <div class={this.ns.be('footer-btn', 'text')}>新增筛选条件</div>
+            <div class={this.ns.be('footer-btn', 'text')}>
+              {biReportT('addFilter')}
+            </div>
           </div>
         </div>
       </div>

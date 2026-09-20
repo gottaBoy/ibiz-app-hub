@@ -8,9 +8,11 @@ import {
 } from './components';
 import { registerAllChartProvider } from './provider';
 import plugins from './plugins';
+import { registerBiReportLocale } from './locale';
 
 export default {
   install(_app: App): void {
+    registerBiReportLocale();
     _app.component(BIReportDesign.name!, BIReportDesign);
     _app.component(BIReportContent.name!, BIReportContent);
     _app.component(BIReportDrillShell.name, BIReportDrillShell);

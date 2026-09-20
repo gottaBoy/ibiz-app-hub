@@ -5,7 +5,7 @@ import { VNode } from 'preact';
 import Cherry from 'cherry-markdown';
 import { useSignal } from '@preact/signals';
 import { useEffect, useMemo } from 'preact/hooks';
-import { Namespace, createUUID } from '../../../utils';
+import { aiChatT, Namespace, createUUID } from '../../../utils';
 import {
   IChatMessage,
   IChatSuggestion,
@@ -177,13 +177,13 @@ export const MarkdownMessage = (props: MarkdownMessageProps) => {
           parseThinkContent(message.content);
         if (isThoughtCompleted) {
           thoughtChain.value.icon = <CheckMarkCircleSvg />;
-          thoughtChain.value.title = '思考完成';
+          thoughtChain.value.title = aiChatT('thoughtCompleted');
         } else if (message.completed === true) {
           thoughtChain.value.icon = <CheckMarkCircleSvg />;
-          thoughtChain.value.title = '思考已停止';
+          thoughtChain.value.title = aiChatT('thoughtStopped');
         } else {
           thoughtChain.value.icon = <LoadingSvg />;
-          thoughtChain.value.title = '思考中...';
+          thoughtChain.value.title = aiChatT('thinking');
         }
         thoughtChain.value.description = thoughtContent || '';
         cherry.value.setMarkdown(answerContent || '');
@@ -202,10 +202,10 @@ export const MarkdownMessage = (props: MarkdownMessageProps) => {
         parseThinkContent(message.content);
       thoughtChain.value = {
         title: isThoughtCompleted
-          ? '思考完成'
+          ? aiChatT('thoughtCompleted')
           : message.completed === true
-            ? '思考已停止'
-            : '思考中...',
+            ? aiChatT('thoughtStopped')
+            : aiChatT('thinking'),
         description: thoughtContent || '',
         icon:
           isThoughtCompleted || message.completed === true ? (
@@ -280,7 +280,7 @@ export const MarkdownMessage = (props: MarkdownMessageProps) => {
                   break;
                 // 处理其他协议
                 default:
-                  console.error(`暂不支持${protocol}类型协议`);
+                  console.error(aiChatT('unsupportedProtocol', { protocol }));
                   break;
               }
             }
@@ -297,7 +297,9 @@ export const MarkdownMessage = (props: MarkdownMessageProps) => {
         <div className={ns.be('header', 'caption')}>AI </div>
         {props.children}
         {isTimeOut ? (
-          <div className={ns.be('header', 'timeout')}>请求超时</div>
+          <div className={ns.be('header', 'timeout')}>
+            {aiChatT('requestTimeout')}
+          </div>
         ) : null}
       </div>
       <div className={`${ns.b('content')} pre-wrap-container`}>

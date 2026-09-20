@@ -1,3 +1,5 @@
+import { aiChatT } from '..';
+
 export class IndexedDBUtil {
   // 数据库版本
   static version: number = 1;
@@ -20,7 +22,7 @@ export class IndexedDBUtil {
       const databases = await indexedDB.databases();
       return databases.some(db => db.name === storeName);
     } catch (error) {
-      console.error('检查数据库是否存在时出错:', error);
+      console.error(aiChatT('databaseCheckFailed'), error);
       return false;
     }
   }
@@ -47,12 +49,10 @@ export class IndexedDBUtil {
       };
 
       deleteRequest.onblocked = () => {
-        console.warn(
-          `删除数据库 ${storeName} 被阻塞，可能有其他连接正在使用该数据库。`,
-        );
+        console.warn(aiChatT('databaseDeleteBlocked', { storeName }));
 
         // 这里可以添加更复杂的处理逻辑
-        reject(new Error(`删除数据库 ${storeName} 被阻塞`));
+        reject(new Error(aiChatT('databaseDeleteFailed', { storeName })));
       };
     });
   }
@@ -341,7 +341,7 @@ export class IndexedDBUtil {
           };
 
           res.onerror = () => {
-            reject(new Error(`未找到数据${key}`));
+            reject(new Error(aiChatT('dataNotFound', { key })));
           };
         }
         request.result.close();

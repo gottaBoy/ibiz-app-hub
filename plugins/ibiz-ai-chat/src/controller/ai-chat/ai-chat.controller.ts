@@ -22,6 +22,7 @@ import {
 } from '../../interface';
 import {
   createUUID,
+  aiChatT,
   IndexedDBUtil,
   ChatStepParser,
   ChatSuggestionParser,
@@ -258,7 +259,7 @@ export class AiChatController {
         return currentTopic.caption;
       }
     }
-    return this.opts.caption || '新会话';
+    return this.opts.caption || aiChatT('newChat');
   }
 
   /**
@@ -743,7 +744,7 @@ export class AiChatController {
     const i = this.messages.value.findIndex(
       item => item.messageid === data.messageid,
     );
-    data.content = data.content || '用户中断';
+    data.content = data.content || aiChatT('userInterrupted');
     if (i !== -1) {
       this.messages.value[i].replace(data);
       this.messages.value = [...this.messages.value];
@@ -1187,7 +1188,7 @@ export class AiChatController {
           const actionID = (suggestion.data as any).actionid;
           const appId = (suggestion.data as any).appid;
           if (!actionID) {
-            throw new Error('actionid不能为空');
+            throw new Error(aiChatT('actionIdEmpty'));
           }
           this.addMessage({
             messageid: createUUID(),
@@ -1222,9 +1223,7 @@ export class AiChatController {
                 Object.assign(tempContext, { ...expandContext });
               }
             } catch (error) {
-              throw new Error(
-                'action_context参数解析异常，正确格式如:abc:123;cde:456',
-              );
+              throw new Error(aiChatT('actionContextInvalid'));
             }
           }
           const result: any = await this.opts.extendToolbarClick(
@@ -1255,7 +1254,7 @@ export class AiChatController {
         await this.question((suggestion.data as any).content);
         break;
       default:
-        throw new Error(`不支持${type}推荐类型`);
+        throw new Error(aiChatT('unsupportedRecommendation', { type }));
     }
   }
 
@@ -1278,7 +1277,7 @@ export class AiChatController {
           const actionID = (data as any).actionid;
           const appId = (data as any).appid;
           if (!actionID) {
-            throw new Error('actionid不能为空');
+            throw new Error(aiChatT('actionIdEmpty'));
           }
           // this.addMessage({
           //   messageid: createUUID(),
@@ -1313,9 +1312,7 @@ export class AiChatController {
                 Object.assign(tempContext, { ...expandContext });
               }
             } catch (error) {
-              throw new Error(
-                'action_context参数解析异常，正确格式如:abc:123;cde:456',
-              );
+              throw new Error(aiChatT('actionContextInvalid'));
             }
           }
           const result: any = await this.opts.extendToolbarClick(
@@ -1346,7 +1343,7 @@ export class AiChatController {
         await this.question((data as any).content);
         break;
       default:
-        throw new Error(`不支持${type}推荐类型`);
+        throw new Error(aiChatT('unsupportedRecommendation', { type }));
     }
   }
 
@@ -1555,11 +1552,11 @@ export class AiChatController {
       case 'chunkview':
         const chunkID = url.replace('chunkview://', '');
         if (!this.opts.chunkView) {
-          console.error('文档分片查看界面不存在，请确认chunkView是否配置');
+          console.error(aiChatT('missingView'));
           return;
         }
         if (!this.opts.chunkEntity) {
-          console.error('文档分片实体标识不存在，请确认chunkEntity是否配置');
+          console.error(aiChatT('missingEntity'));
           return;
         }
         const targetUrl = `view://${this.opts.chunkView}?srfnavctx={"${this.opts.chunkEntity}":"${chunkID}"}`;
@@ -1611,7 +1608,7 @@ export class AiChatController {
     const actionID = typeId;
     const appId = context.appid;
     if (!actionID) {
-      throw new Error('actionid不能为空');
+      throw new Error(aiChatT('actionIdEmpty'));
     }
     // 组装传出数据（和消息头传出去的格式保持一致）
     const tempData: any = { ...message };

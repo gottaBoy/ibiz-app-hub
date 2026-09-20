@@ -4,6 +4,7 @@ import { createUUID } from 'qx-util';
 import { useNamespace } from '../../../use';
 import BIFontBorderSelect from '../font-border-select/font-border-select';
 import './bi-chart-cordon.scss';
+import { biReportT } from '../../../locale';
 
 export const BIChartCordon = defineComponent({
   props: {
@@ -22,19 +23,27 @@ export const BIChartCordon = defineComponent({
     const items: Ref<IData[]> = ref([]);
     const cordonType = [
       {
-        name: '固定值',
+        get name() {
+          return biReportT('fixedValue');
+        },
         value: 'FIXED',
       },
       {
-        name: '最大值',
+        get name() {
+          return biReportT('maximum');
+        },
         value: 'MAX',
       },
       {
-        name: '最小值',
+        get name() {
+          return biReportT('minimum');
+        },
         value: 'MIN',
       },
       {
-        name: '平均值',
+        get name() {
+          return biReportT('averageValue');
+        },
         value: 'AVERAGE',
       },
     ];
@@ -53,7 +62,7 @@ export const BIChartCordon = defineComponent({
     const addItem = () => {
       items.value.push({
         id: createUUID(),
-        name: `警戒线${items.value.length + 1}`,
+        name: biReportT('thresholdName', { number: items.value.length + 1 }),
         lineStyle: 'dashed',
         lineSize: 1,
         lineColor: 'red',
@@ -128,7 +137,7 @@ export const BIChartCordon = defineComponent({
           <div class={ns.em('content', 'item')}>
             <div class={ns.em('content', 'item-header')}>
               <div class={ns.em('content', 'item-index')}>
-                警戒线({index + 1})
+                {biReportT('thresholdNumber', { number: index + 1 })}
               </div>
               <div
                 class={ns.em('content', 'item-delete')}
@@ -253,7 +262,7 @@ export const BIChartCordon = defineComponent({
               ></path>
             </g>
           </svg>
-          <span>新增警戒线</span>
+          <span>{biReportT('addThreshold')}</span>
         </div>
       );
     };
@@ -293,7 +302,9 @@ export const BIChartCordon = defineComponent({
     return (
       <div class={this.ns.b()}>
         <div class={this.ns.e('header')}>
-          <span class={this.ns.em('header', 'caption')}>警戒线</span>
+          <span class={this.ns.em('header', 'caption')}>
+            {biReportT('threshold')}
+          </span>
           <svg
             onClick={this.onCancel}
             class={this.ns.em('header', 'close')}
@@ -319,10 +330,10 @@ export const BIChartCordon = defineComponent({
         </div>
         <div class={this.ns.e('footer')}>
           <el-button link onClick={this.onCancel}>
-            取消
+            {biReportT('cancel')}
           </el-button>
           <el-button type='primary' onClick={this.onOK}>
-            确认
+            {biReportT('confirm')}
           </el-button>
         </div>
       </div>

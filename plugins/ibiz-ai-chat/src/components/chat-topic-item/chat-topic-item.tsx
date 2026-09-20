@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef, useState } from 'preact/hooks'; // 引入 useState
 import { useComputed, useSignal } from '@preact/signals';
+import { aiChatT, Namespace } from '../../utils';
 import { ChatTopic } from '../../entity';
-import { Namespace } from '../../utils';
 import {
   TopSvg,
   LinkSvg,
@@ -140,7 +140,7 @@ export const ChatTopicItem = (props: ChatTopicItemProps) => {
       {!isEditMode.value && (
         <div className={ns.e('icon')}>
           <span
-            title='跳转主视图'
+            title={aiChatT('openMainView')}
             className={ns.em('icon', 'item')}
             onClick={handleJumpToView.bind(this)}
           >
@@ -152,18 +152,26 @@ export const ChatTopicItem = (props: ChatTopicItemProps) => {
               actions={[
                 {
                   id: 'PINNED',
-                  caption: topic.isTop ? '取消置顶' : '置顶',
+                  caption: topic.isTop ? aiChatT('unpin') : aiChatT('pin'),
                   icon: topic.isTop ? <NoTopSvg /> : <TopSvg />,
                 },
-                { id: 'RENAME', caption: '重命名', icon: <RenameSvg /> },
-                { id: 'DELETE', caption: '删除话题', icon: <RemoveSvg /> },
+                {
+                  id: 'RENAME',
+                  caption: aiChatT('rename'),
+                  icon: <RenameSvg />,
+                },
+                {
+                  id: 'DELETE',
+                  caption: aiChatT('deleteTopic'),
+                  icon: <RemoveSvg />,
+                },
               ]}
               position='bottom'
               isOpen={isPopupOpen}
               onToggleOpen={setIsPopupOpen}
               onAction={handleAction.bind(this)}
             >
-              <span className={ns.em('icon', 'item')} title='更多'>
+              <span className={ns.em('icon', 'item')} title={aiChatT('more')}>
                 <MoreSvg className={ns.e('more-icon')} />
               </span>
             </Popup>

@@ -2,6 +2,7 @@ import { PropType, defineComponent, reactive, ref, watch } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import './user-config-edit.scss';
 import { DevToolConfig } from '../../controller/dev-tool-config';
+import { devtoolT } from '../../locale/helper';
 
 export const UserConfigEdit = defineComponent({
   name: 'DevToolUserConfigEdit',
@@ -29,13 +30,13 @@ export const UserConfigEdit = defineComponent({
       },
     );
 
-    const changeValue = (event: Event) => {
-      const value = (event.target as HTMLInputElement).value;
+    const changeValue = (event: Event): void => {
+      const { value } = event.target as HTMLInputElement;
       formData.studioBaseUrl = value;
     };
     const isFocus = ref<boolean>(false);
 
-    const changeMode = (event: Event) => {
+    const changeMode = (event: Event): void => {
       const value = (event.target as HTMLInputElement).checked;
       formData.v9Mode = value;
     };
@@ -46,7 +47,9 @@ export const UserConfigEdit = defineComponent({
     return (
       <div class={[this.ns.b()]}>
         <div class={this.ns.e('wrapper')}>
-          <span class={this.ns.e('wrapper-title')}>平台地址</span>
+          <span class={this.ns.e('wrapper-title')}>
+            {devtoolT('platformUrl')}
+          </span>
           <input
             class={[this.ns.e('wrapper-input'), this.isFocus ? 'focus' : '']}
             type='text'
@@ -61,7 +64,7 @@ export const UserConfigEdit = defineComponent({
           />
         </div>
         <div class={this.ns.e('wrapper')}>
-          <span class={this.ns.e('wrapper-title')}>V9模式</span>
+          <span class={this.ns.e('wrapper-title')}>{devtoolT('v9Mode')}</span>
           <label class={[this.ns.e('wrapper-switch')]}>
             <input
               type='checkbox'

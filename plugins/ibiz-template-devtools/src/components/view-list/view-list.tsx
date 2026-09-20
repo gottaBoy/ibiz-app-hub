@@ -5,6 +5,7 @@ import { IViewController } from '@ibiz-template/runtime';
 import { CenterController } from '../../controller/center.controller';
 import { DetailInfo } from '../detail-info/detail-info';
 import DevtoolButton from '../devtool-button/devtool-button';
+import { devtoolT } from '../../locale/helper';
 
 export const ViewList = defineComponent({
   name: 'DevToolViewList',
@@ -19,11 +20,11 @@ export const ViewList = defineComponent({
     const ns = useNamespace('view-list');
 
     /** 根据viewList的变更刷新render */
-    const renderRefreshByViewList = () => {
+    const renderRefreshByViewList = (): string => {
       return props.center.state.viewListRefreshKey;
     };
 
-    const onItemClick = (view: IViewController) => {
+    const onItemClick = (view: IViewController): void => {
       if (props.center.state.selectedViewId === view.id) {
         props.center.selectView();
       } else {
@@ -31,10 +32,10 @@ export const ViewList = defineComponent({
       }
     };
 
-    const onMouseEnter = (_event: MouseEvent, view: IViewController) => {
+    const onMouseEnter = (_event: MouseEvent, view: IViewController): void => {
       props.center.hoverView(view);
     };
-    const onMouseLeave = (_event: MouseEvent, _view: IViewController) => {
+    const onMouseLeave = (_event: MouseEvent, _view: IViewController): void => {
       props.center.hoverView();
     };
 
@@ -75,7 +76,7 @@ export const ViewList = defineComponent({
                   </div>
                   <div class={this.ns.be('item', 'toolbar')}>
                     <DevtoolButton
-                      title='拷贝代码名称'
+                      title={devtoolT('copyCodeName')}
                       onClick={(evt: MouseEvent) => {
                         evt.stopPropagation();
                         this.center.copyCodeName(view);
@@ -84,7 +85,7 @@ export const ViewList = defineComponent({
                       <ion-icon name='copy-outline'></ion-icon>
                     </DevtoolButton>
                     <DevtoolButton
-                      title='打开配置平台'
+                      title={devtoolT('openStudio')}
                       onClick={(evt: MouseEvent) => {
                         evt.stopPropagation();
                         this.center.openStudioUrl(view);
@@ -97,7 +98,7 @@ export const ViewList = defineComponent({
                         evt.stopPropagation();
                         this.center.skimViewModel(view);
                       }}
-                      title='查看视图模型'
+                      title={devtoolT('viewModel')}
                     >
                       <ion-icon name='layers-outline'></ion-icon>
                     </DevtoolButton>
@@ -106,7 +107,7 @@ export const ViewList = defineComponent({
                         evt.stopPropagation();
                         this.center.skimTempData(view);
                       }}
-                      title='输出作用域下的临时数据到控制台'
+                      title={devtoolT('logTempData')}
                     >
                       <ion-icon name='server-outline'></ion-icon>
                     </DevtoolButton>

@@ -14,6 +14,7 @@ import {
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { debounce, getThemeVar, observerDomResize } from '../../util';
 import './custom-dv-4.scss';
+import { dataViewT } from '../../locale';
 
 export const CustomDV4 = defineComponent({
   name: 'CustomDV4',
@@ -120,7 +121,7 @@ export const CustomDV4 = defineComponent({
      */
     const mergeColor = () => {
       if (!Array.isArray(props.color)) {
-        console.warn('颜色配置错误，需要一个数组');
+        console.warn(dataViewT('warnings.invalidColorArray'));
         mergedColor.value = [getThemeVar() || '#123afc', 'rgba(0,0,255,0.7)'];
         return;
       }

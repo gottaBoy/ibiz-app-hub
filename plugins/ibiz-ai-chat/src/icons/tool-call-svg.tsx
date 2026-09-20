@@ -1,3 +1,4 @@
+import { aiChatT } from '../utils';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export const ErrorSvg = (
@@ -79,7 +80,7 @@ export const ExpandSvg = (props: { style?: any }) => (
 export const KnowledgeSvg = (
   <svg
     className='icon'
-    title='知识库'
+    title={aiChatT('knowledgeBase')}
     viewBox='0 0 1024 1024'
     version='1.1'
     xmlns='http://www.w3.org/2000/svg'

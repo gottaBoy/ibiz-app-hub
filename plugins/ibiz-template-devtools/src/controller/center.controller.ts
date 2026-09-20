@@ -10,6 +10,7 @@ import { IndexPage, ViewModelViewer } from '../components';
 import { DevToolConfig } from './dev-tool-config';
 import { ICenterControllerState } from '../interface/i-center-controller-state';
 import { IDevToolController } from '../interface/i-devtool-controller';
+import { devtoolT } from '../locale/helper';
 
 /**
  * 控制中心
@@ -280,9 +281,9 @@ export class CenterController implements IDevToolController {
   copyCodeName(view: IViewController): void {
     const result = ibiz.util.text.copy(view.model.codeName!);
     if (result) {
-      ibiz.message.success('拷贝代码名称成功!');
+      ibiz.message.success(devtoolT('copyCodeNameSuccess'));
     } else {
-      ibiz.message.error('拷贝代码名称失败，浏览器copy操作不被支持或未被启用!');
+      ibiz.message.error(devtoolT('copyCodeNameFailed'));
     }
   }
 
@@ -294,12 +295,12 @@ export class CenterController implements IDevToolController {
    */
   openStudioUrl(view: IViewController): void {
     if (!this.config.studioBaseUrl) {
-      ibiz.message.error('请先配置studio的基础路径');
+      ibiz.message.error(devtoolT('studioBaseUrlRequired'));
       return;
     }
     const viewId = view.model.modelId;
     if (!viewId) {
-      ibiz.message.error('请获取不到视图模型的主键');
+      ibiz.message.error(devtoolT('viewModelIdMissing'));
       return;
     }
     const url = new URL(this.config.studioBaseUrl);
@@ -337,7 +338,7 @@ export class CenterController implements IDevToolController {
       if (!hash.includes('psdevslnsys')) {
         const app = ibiz.hub.getApp(view.model.appId);
         if (!app.model.devSlnSysId) {
-          ibiz.message.error('未配置系统标识，请联系管理员！');
+          ibiz.message.error(devtoolT('systemIdMissing'));
           return;
         }
         baseUrl = `${origin}${pathname}${hash}psdevslnsys=${app.model.devSlnSysId}/modelingindex/`;
@@ -428,7 +429,7 @@ export class CenterController implements IDevToolController {
    * @param {IViewController} [view]
    */
   async skimViewModel(view: IViewController): Promise<void> {
-    console.log('视图dsl模型：', toRaw(view.model));
+    console.log(devtoolT('modelDsl'), toRaw(view.model));
     if (this.viewModelPopover) {
       await this.viewModelPopover.dismiss();
     }
@@ -454,11 +455,15 @@ export class CenterController implements IDevToolController {
       view.context.srfsessionid,
     );
     if (!map) {
-      console.log('没有缓存数据');
+      console.log(devtoolT('noCachedData'));
       return;
     }
     map.forEach(service => {
-      console.group(`${service.model.codeName}实体的缓存数据`);
+      console.group(
+        devtoolT('entityCachedData', {
+          name: service.model.codeName,
+        }),
+      );
       console.log(service.local.cacheMap);
       console.groupEnd();
     });

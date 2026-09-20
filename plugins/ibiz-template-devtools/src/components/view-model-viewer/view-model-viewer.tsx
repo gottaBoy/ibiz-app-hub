@@ -7,13 +7,14 @@ import {
   ref,
   watch,
 } from 'vue';
-import * as monaco from 'monaco-editor';
 import loader from '@monaco-editor/loader';
 import { useNamespace, useUIStore } from '@ibiz-template/vue3-util';
 import './view-model-viewer.scss';
 import { IAppView } from '@ibiz/model-core';
 import interact from 'interactjs';
 import { CenterController } from '../../controller/center.controller';
+
+type LoaderMonaco = Awaited<ReturnType<typeof loader.init>>;
 
 export const ViewModelViewer = defineComponent({
   name: 'DevToolViewModelViewer',
@@ -30,12 +31,12 @@ export const ViewModelViewer = defineComponent({
   setup(props) {
     const ns = useNamespace('view-model-viewer');
 
-    const center = props.center;
+    const { center } = props;
 
     const currentVal = ref<string>('');
 
-    let editor: monaco.editor.IStandaloneCodeEditor;
-    let monacoEditor: typeof monaco.editor;
+    let editor: ReturnType<LoaderMonaco['editor']['create']>;
+    let monacoEditor: LoaderMonaco['editor'];
     const { UIStore } = useUIStore();
 
     // 编辑器主题
@@ -121,7 +122,7 @@ export const ViewModelViewer = defineComponent({
           edges: { left: true },
           listeners: {
             move(event) {
-              const width: number = event.rect.width;
+              const { width } = event.rect;
               // 设置css变量
               codeEditBox.value.style.setProperty(
                 ns.cssVarBlockName('width'),

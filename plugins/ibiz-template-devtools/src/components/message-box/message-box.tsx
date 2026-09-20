@@ -1,6 +1,7 @@
 import { defineComponent, Transition } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import './message-box.scss';
+import { devtoolT } from '../../locale/helper';
 
 export const MessageBox = defineComponent({
   name: 'MessageBox',
@@ -30,12 +31,12 @@ export const MessageBox = defineComponent({
   emits: ['hasClosed', 'changeDialog'],
   setup(props, { emit }) {
     const ns = useNamespace('devtool-dialog');
-    const closeDialog = (type: string = '') => {
+    const closeDialog = (type: string = ''): void => {
       emit('changeDialog', false);
       emit('hasClosed', type);
     };
 
-    const renderSvg = () => {
+    const renderSvg = (): JSX.Element => {
       return (
         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'>
           <path
@@ -46,11 +47,11 @@ export const MessageBox = defineComponent({
       );
     };
 
-    const clickMaskCloseFn = () => {
+    const clickMaskCloseFn = (): void => {
       closeDialog();
     };
 
-    const clickButton = (type: string) => {
+    const clickButton = (type: string): void => {
       closeDialog(type);
     };
 
@@ -85,13 +86,13 @@ export const MessageBox = defineComponent({
                   class={this.ns.e('footer-button')}
                   onClick={() => this.clickButton('cancel')}
                 >
-                  取消
+                  {devtoolT('cancel')}
                 </button>
                 <button
                   class={this.ns.e('footer-button')}
                   onClick={() => this.clickButton('confirm')}
                 >
-                  保存
+                  {devtoolT('save')}
                 </button>
               </div>
             </div>

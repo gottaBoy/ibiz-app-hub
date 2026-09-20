@@ -5,6 +5,7 @@ import { toNumber } from 'lodash-es';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import Wave from './wave';
 import { fade } from '../util';
+import { dataViewT } from '../locale';
 
 /**
  * 水位图控制器
@@ -121,7 +122,7 @@ export class WaterLevelPondController extends EditorController<ISlider> {
   protected async onInit(): Promise<void> {
     super.onInit();
     if (this.model.precision) {
-      ibiz.log.warn('滑动输入条不支持配置精度');
+      ibiz.log.warn(dataViewT('warnings.unsupportedPrecision'));
     }
     const {
       SHAPE,

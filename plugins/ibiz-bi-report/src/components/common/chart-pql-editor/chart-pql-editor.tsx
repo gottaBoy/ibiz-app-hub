@@ -8,6 +8,7 @@ import BIChartPqlEditorModal from './chart-pql-editor-modal/chart-pql-editor-mod
 import './chart-pql-editor.scss';
 import { getSchemaField } from '../../../util';
 import { ISchemaField } from '../../../interface';
+import { biReportT } from '../../../locale';
 
 export default defineComponent({
   name: 'BIChartPqlEditor',
@@ -158,7 +159,7 @@ export default defineComponent({
           fields={this.fields}
           value={this.currentValue}
           readonly={true}
-          placeholder='点击此处输入筛选条件'
+          placeholder={biReportT('pqlInputPlaceholder')}
           context={this.controller.context}
           params={this.controller.viewParams}
           onClick={(e: MouseEvent) => {

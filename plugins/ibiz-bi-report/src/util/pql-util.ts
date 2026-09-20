@@ -5,20 +5,87 @@ import { RuntimeError } from '@ibiz-template/core';
 import { ValueOP } from '@ibiz-template/runtime';
 import { IPqlItem } from '../interface';
 import { ExcludeOPs } from './fliter-util';
+import { biReportT } from '../locale';
 
 // 过滤操作模式
 const FilterModes = [
-  { valueOP: ValueOP.EQ, label: '等于', sqlOP: '=' },
-  { valueOP: ValueOP.NOT_EQ, label: '不等于', sqlOP: '<>' },
-  { valueOP: ValueOP.GT, label: '大于', sqlOP: '>' },
-  { valueOP: ValueOP.GT_AND_EQ, label: '大于等于', sqlOP: '>=' },
-  { valueOP: ValueOP.LT, label: '小于', sqlOP: '<' },
-  { valueOP: ValueOP.LT_AND_EQ, label: '小于等于', sqlOP: '<=' },
-  { valueOP: ValueOP.IS_NULL, label: '为空', sqlOP: 'IS NULL' },
-  { valueOP: ValueOP.IS_NOT_NULL, label: '非空', sqlOP: 'IS NOT NULL' },
-  { valueOP: ValueOP.IN, label: '属于', sqlOP: 'IN' },
-  { valueOP: ValueOP.NOT_IN, label: '不属于', sqlOP: 'NOT IN' },
-  { valueOP: ValueOP.LIKE, label: '文本包含', sqlOP: 'LIKE' },
+  {
+    valueOP: ValueOP.EQ,
+    get label() {
+      return biReportT('operators.equal');
+    },
+    sqlOP: '=',
+  },
+  {
+    valueOP: ValueOP.NOT_EQ,
+    get label() {
+      return biReportT('operators.notEqual');
+    },
+    sqlOP: '<>',
+  },
+  {
+    valueOP: ValueOP.GT,
+    get label() {
+      return biReportT('operators.greater');
+    },
+    sqlOP: '>',
+  },
+  {
+    valueOP: ValueOP.GT_AND_EQ,
+    get label() {
+      return biReportT('operators.greaterOrEqual');
+    },
+    sqlOP: '>=',
+  },
+  {
+    valueOP: ValueOP.LT,
+    get label() {
+      return biReportT('operators.less');
+    },
+    sqlOP: '<',
+  },
+  {
+    valueOP: ValueOP.LT_AND_EQ,
+    get label() {
+      return biReportT('operators.lessOrEqual');
+    },
+    sqlOP: '<=',
+  },
+  {
+    valueOP: ValueOP.IS_NULL,
+    get label() {
+      return biReportT('operators.empty');
+    },
+    sqlOP: 'IS NULL',
+  },
+  {
+    valueOP: ValueOP.IS_NOT_NULL,
+    get label() {
+      return biReportT('operators.notEmpty');
+    },
+    sqlOP: 'IS NOT NULL',
+  },
+  {
+    valueOP: ValueOP.IN,
+    get label() {
+      return biReportT('operators.in');
+    },
+    sqlOP: 'IN',
+  },
+  {
+    valueOP: ValueOP.NOT_IN,
+    get label() {
+      return biReportT('operators.notIn');
+    },
+    sqlOP: 'NOT IN',
+  },
+  {
+    valueOP: ValueOP.LIKE,
+    get label() {
+      return biReportT('operators.contains');
+    },
+    sqlOP: 'LIKE',
+  },
   // { valueOP: ValueOP.EXISTS, label: '存在', sqlOP: 'EXISTS' },
   // { valueOP: ValueOP.NOT_EXISTS, label: '不存在', sqlOP: 'NOT EXISTS' },
 ];
@@ -44,7 +111,7 @@ export const parseCustomCond = (cond: string): IData[] | undefined => {
         const connection = items[i];
         if (connection === 'and' || connection === 'or') {
           if (i === items.length - 1) {
-            throw new RuntimeError('pql自定义条件解析错误');
+            throw new RuntimeError(biReportT('pqlParseError'));
           }
           pqlItems.push({
             type: 'connection',
@@ -54,7 +121,7 @@ export const parseCustomCond = (cond: string): IData[] | undefined => {
             },
           });
         } else {
-          throw new RuntimeError('pql自定义条件解析错误');
+          throw new RuntimeError(biReportT('pqlParseError'));
         }
       }
       const key = items[i !== 0 ? ++i : i];
@@ -101,7 +168,7 @@ export const parseCustomCond = (cond: string): IData[] | undefined => {
           }
         }
       }
-      throw new RuntimeError('pql自定义条件解析错误');
+      throw new RuntimeError(biReportT('pqlParseError'));
     }
     return pqlItems;
   } catch (err) {

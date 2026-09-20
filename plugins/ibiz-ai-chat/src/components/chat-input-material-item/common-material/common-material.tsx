@@ -1,9 +1,9 @@
+import { useComputed } from '@preact/signals';
+import { aiChatT, Namespace } from '../../../utils';
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useComputed } from '@preact/signals';
 import { AiChatController } from '../../../controller';
 import { IMaterial } from '../../../interface';
-import { Namespace } from '../../../utils';
 import { DefaultMaterialSvg, DownLoadSvg } from '../../../icons';
 import { isSvg } from '../../../utils/util/util';
 import './common-material.scss';
@@ -39,7 +39,9 @@ export const CommonMaterial = (props: CommonMaterialProps) => {
       // 行为标识
       const actionID = mateData.downloadactionid;
       if (!downLoadActionId) {
-        throw new Error('downloadactionid不能为空');
+        throw new Error(
+          aiChatT('missingParameter', { name: 'downloadactionid' }),
+        );
       }
       // 应用标识
       const appId = mateData.downloadAppId;
@@ -65,7 +67,7 @@ export const CommonMaterial = (props: CommonMaterialProps) => {
           }
         } catch (error) {
           throw new Error(
-            'downloadContext参数解析异常，正确格式如:abc:123;cde:456,',
+            aiChatT('invalidParameter', { name: 'downloadContext' }),
           );
         }
       }
@@ -119,11 +121,11 @@ export const CommonMaterial = (props: CommonMaterialProps) => {
           {content}
         </div>
         <div className={ns.b('metadata')}>
-          <div>{targetToolbarItem?.label || '素材资源'}</div>
+          <div>{targetToolbarItem?.label || aiChatT('materialResource')}</div>
           {downLoadActionId && (
             <div
               className={ns.be('metadata', 'img')}
-              title='预览'
+              title={aiChatT('preview')}
               onClick={downloadFile}
             >
               <DownLoadSvg />

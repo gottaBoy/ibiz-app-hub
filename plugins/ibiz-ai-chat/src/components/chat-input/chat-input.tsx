@@ -3,10 +3,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCallback, useContext, useRef, useState } from 'preact/compat';
+import { useCallback, useRef, useState } from 'preact/compat';
 import { useComputed, useSignal } from '@preact/signals';
 import { Editor } from '@tiptap/core';
-import { Namespace } from '../../utils';
+import { aiChatT, Namespace } from '../../utils';
 import {
   Agent,
   AudioSvg,
@@ -22,7 +22,6 @@ import { ChatInputMaterial } from '../chat-input-material/chat-input-material';
 import { Popup } from '../popup/popup';
 import { IChatToolbarItem } from '../../interface';
 import { isSvg } from '../../utils/util/util';
-import { ContainerContext } from '../chat-container/chat-container';
 import { ChatEditor } from '../chat-editor/chat-editor';
 import { SingleSelect, MultipleSelect } from '../common';
 import { ChatAgentSetting } from '../chat-agent-setting/chat-agent-setting';
@@ -56,8 +55,6 @@ const SpeechRecognition =
 
 export const ChatInput = (props: ChatInputProps) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const containerContext = useContext(ContainerContext);
 
   const input = props.controller.input;
 
@@ -248,7 +245,7 @@ export const ChatInput = (props: ChatInputProps) => {
               popperStyle={{ height: '220px' }}
               value={props.controller.activeAIAgentID}
               options={props.controller.agentList.value}
-              icon={() => <div title='智能体'>{Agent()}</div>}
+              icon={() => <div title={aiChatT('agent')}>{Agent()}</div>}
               disabled={!props.controller.enableAIAgentChange}
               onSearch={handleAIAgentSearch}
               onChange={val => setActiveAIAgent(val as string)}
@@ -257,7 +254,9 @@ export const ChatInput = (props: ChatInputProps) => {
               <MultipleSelect
                 popperStyle={{ width: '160px' }}
                 options={props.controller.knowledgeBases.value}
-                icon={() => <div title='知识库'>{KnowledgeSvg}</div>}
+                icon={() => (
+                  <div title={aiChatT('knowledgeBase')}>{KnowledgeSvg}</div>
+                )}
                 value={props.controller.selectionKnowledgeBases.value}
                 onChange={handleKnowledgeChange}
               ></MultipleSelect>
@@ -273,7 +272,7 @@ export const ChatInput = (props: ChatInputProps) => {
                 'disabled',
                 props.controller.isLoading.value,
               )}`}
-              title={'上传资料'}
+              title={aiChatT('uploadMaterial')}
             >
               <Popup
                 triggerMode='hover'
@@ -289,7 +288,7 @@ export const ChatInput = (props: ChatInputProps) => {
                         <FileSvg />
                       </span>
                       <span className={ns.b('pop-action-item-title')}>
-                        文件资料
+                        {aiChatT('fileMaterial')}
                       </span>
                     </div>
                     {props.questionToolbarItems?.map(item => {
@@ -338,7 +337,11 @@ export const ChatInput = (props: ChatInputProps) => {
               </Popup>
             </div>
             <div
-              title={recording.value ? '语音输入中...' : '语音输入'}
+              title={
+                recording.value
+                  ? aiChatT('voiceInputting')
+                  : aiChatT('voiceInput')
+              }
               className={`${ns.be('right-action-wrapper', 'action-item')} ${ns.is(
                 'disabled',
                 props.controller.isLoading.value,
@@ -349,7 +352,7 @@ export const ChatInput = (props: ChatInputProps) => {
             </div>
             {props.controller.isLoading.value ? (
               <div
-                title={'停止生成'}
+                title={aiChatT('stopGenerating')}
                 className={`${ns.be('right-action-wrapper', 'action-item')}`}
                 onClick={stopQuestion}
               >
@@ -357,7 +360,7 @@ export const ChatInput = (props: ChatInputProps) => {
               </div>
             ) : (
               <div
-                title={'发送消息'}
+                title={aiChatT('send')}
                 className={`${ns.be('right-action-wrapper', 'action-item')} ${ns.is(
                   'disabled',
                   isDisableSend.value,

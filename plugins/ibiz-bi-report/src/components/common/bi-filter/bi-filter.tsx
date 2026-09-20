@@ -5,6 +5,7 @@ import { ISchemaField } from '../../../interface';
 import './bi-filter.scss';
 import { IFilterNodeGroup, IModal } from '@ibiz-template/runtime';
 import { RuntimeError } from '@ibiz-template/core';
+import { biReportT } from '../../../locale';
 
 export interface IFilterState {
   /**
@@ -264,7 +265,9 @@ export default defineComponent({
         {this.isLoaded
           ? [
               <div class={this.ns.b('header')}>
-                <div class={this.ns.b('header-text')}>筛选</div>
+                <div class={this.ns.b('header-text')}>
+                  {biReportT('filter')}
+                </div>
                 <div
                   class={[
                     this.ns.b('header-tab'),
@@ -272,7 +275,10 @@ export default defineComponent({
                   ]}
                 >
                   <el-tabs type='card' v-model={this.activeTab}>
-                    <el-tab-pane name='default' label='基本'></el-tab-pane>
+                    <el-tab-pane
+                      name='default'
+                      label={biReportT('basic')}
+                    ></el-tab-pane>
                     <el-tab-pane name='pql' label='PQL'></el-tab-pane>
                   </el-tabs>
                 </div>
@@ -302,7 +308,7 @@ export default defineComponent({
                   <iBizPqlEditor
                     ref='pqlEditor'
                     class={this.ns.e('pql-editor')}
-                    placeholder='输入筛选条件'
+                    placeholder={biReportT('filterPlaceholder')}
                     value={this.customCond}
                     fields={this.fields}
                     context={this.context}
@@ -327,20 +333,20 @@ export default defineComponent({
                   class={this.ns.be('footer', 'reset-btn')}
                   onClick={this.handleReset}
                 >
-                  重置
+                  {biReportT('reset')}
                 </div>
                 <el-button
                   class={this.ns.be('footer', 'cancel-btn')}
                   text
                   onClick={this.handleCancel}
                 >
-                  取消
+                  {biReportT('cancel')}
                 </el-button>
                 <el-button
                   class={this.ns.be('footer', 'confirm-btn')}
                   onClick={this.handleConfirm}
                 >
-                  确认
+                  {biReportT('confirm')}
                 </el-button>
               </div>,
             ]

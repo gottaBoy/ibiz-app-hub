@@ -1,6 +1,7 @@
 import { PropType, defineComponent, ref, watch } from 'vue';
 import { createUUID } from 'qx-util';
 import './color-scheme.scss';
+import { biReportDefaultText } from '../../../locale';
 import { useNamespace } from '../../../use';
 
 export interface ColorItem {
@@ -228,7 +229,7 @@ export default defineComponent({
               return (
                 <el-option
                   key={scheme.value}
-                  label={scheme.text}
+                  label={biReportDefaultText(scheme.text)}
                   value={scheme.value}
                 />
               );
@@ -247,7 +248,7 @@ export default defineComponent({
                     return (
                       <el-option
                         key={color.key}
-                        label={color.text}
+                        label={biReportDefaultText(color.text)}
                         value={color.key}
                       >
                         <div class={this.ns.b('template-color-picker-option')}>
@@ -274,7 +275,7 @@ export default defineComponent({
                           <div
                             class={this.ns.be('template-color-picker', 'text')}
                           >
-                            {color.text}
+                            {biReportDefaultText(color.text)}
                           </div>
                         </div>
                       </el-option>

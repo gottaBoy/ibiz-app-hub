@@ -11,13 +11,14 @@ import {
 import { useNamespace, useClickOutside } from '@ibiz-template/vue3-util';
 import { OnClickOutsideResult } from '@ibiz-template/core';
 import './devtool-select.scss';
+import { devtoolT } from '../../../locale/helper';
 
 export const DevtoolSelect = defineComponent({
   name: 'DevtoolSelect',
   props: {
     placeholder: {
       type: String as PropType<string>,
-      default: '请选择',
+      default: undefined,
     },
     value: {
       type: String as PropType<string>,
@@ -65,7 +66,7 @@ export const DevtoolSelect = defineComponent({
 
     const editorRef = ref();
     let funcs: OnClickOutsideResult;
-    const showOption = () => {
+    const showOption = (): void => {
       isShow.value = !isShow.value;
     };
 
@@ -98,14 +99,14 @@ export const DevtoolSelect = defineComponent({
       () => {
         const curOption = options.value.filter(item => item === props.value);
         if (curOption.length > 0) {
-          curLabel.value = curOption[0];
-          curValue.value = curOption[0];
+          [curLabel.value] = curOption;
+          [curValue.value] = curOption;
         }
       },
       { immediate: true, deep: true },
     );
 
-    const renderSvg = () => {
+    const renderSvg = (): JSX.Element => {
       return (
         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'>
           <path
@@ -141,7 +142,11 @@ export const DevtoolSelect = defineComponent({
           {this.curLabel ? (
             <span>{this.curLabel}</span>
           ) : (
-            <span class={this.ns.e('placeholder')}>{this.placeholder}</span>
+            <span class={this.ns.e('placeholder')}>
+              {this.placeholder === undefined
+                ? devtoolT('selectPlaceholder')
+                : this.placeholder}
+            </span>
           )}
           <span class={[this.ns.e('icon'), this.isShow ? 'reverse' : '']}>
             {this.renderSvg()}

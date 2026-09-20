@@ -1,6 +1,7 @@
 import { PropType, defineComponent, ref } from 'vue';
 import { useNamespace } from '../../../use';
 import './collapse-item.scss';
+import { biReportT } from '../../../locale';
 
 /** BI报表折叠组件 */
 export default defineComponent({
@@ -194,7 +195,7 @@ export default defineComponent({
                     {this.enableEditMode ? (
                       <el-tooltip
                         effect='dark'
-                        content={'切换编辑模式'}
+                        content={biReportT('switchEditMode')}
                         placement='top'
                         popper-class={this.ns.e('tooltip')}
                       >
@@ -245,7 +246,7 @@ export default defineComponent({
                                           'text',
                                         )}
                                       >
-                                        基本
+                                        {biReportT('basic')}
                                       </div>
                                       {this.editMode !== 'pql' &&
                                         this.checkSvg()}
@@ -280,7 +281,7 @@ export default defineComponent({
                     {this.enableRemove ? (
                       <el-tooltip
                         effect='dark'
-                        content={'清空'}
+                        content={biReportT('clear')}
                         placement='top'
                         popper-class={this.ns.e('tooltip')}
                       >

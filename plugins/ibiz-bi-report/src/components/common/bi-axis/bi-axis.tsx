@@ -2,6 +2,7 @@ import { IModal } from '@ibiz-template/runtime';
 import { PropType, defineComponent } from 'vue';
 import { useNamespace } from '../../../use';
 import './bi-axis.scss';
+import { biReportT } from '../../../locale';
 
 export const BIAxis = defineComponent({
   name: 'BIAxis',
@@ -51,11 +52,11 @@ export const BIAxis = defineComponent({
     return (
       <div class={this.ns.b()} onMouseleave={this.onMouseLevel}>
         <div class={this.ns.e('item')} onClick={() => this.onClick('LEFT')}>
-          <span>左轴</span>
+          <span>{biReportT('leftAxis')}</span>
           {this.value === 'LEFT' && this.renderSelectIcon()}
         </div>
         <div class={this.ns.e('item')} onClick={() => this.onClick('RIGHT')}>
-          <span>右轴</span>
+          <span>{biReportT('rightAxis')}</span>
           {this.value === 'RIGHT' && this.renderSelectIcon()}
         </div>
       </div>

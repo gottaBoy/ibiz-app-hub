@@ -4,6 +4,7 @@ import { useNamespace } from '../../use';
 import { BIReportPanelContentController } from './bi-report-panel-content.controller';
 import { IBIReportChartController } from '../../interface';
 import './bi-report-panel-content.scss';
+import { biReportT } from '../../locale';
 import {
   IFilterNodeField,
   IFilterNodeGroup,
@@ -225,7 +226,9 @@ export default defineComponent({
                 title: () => {
                   return (
                     <div class={this.ns.b('item-header')}>
-                      <div class={this.ns.b('item-header-left')}>图表</div>
+                      <div class={this.ns.b('item-header-left')}>
+                        {biReportT('chart')}
+                      </div>
                     </div>
                   );
                 },
@@ -253,8 +256,8 @@ export default defineComponent({
                     <div class={this.ns.b('item-header')}>
                       <div class={this.ns.b('item-header-left')}>
                         {this.c.gridType.includes(this.c.config.selectChartType)
-                          ? '图表'
-                          : '数据'}
+                          ? biReportT('chart')
+                          : biReportT('data')}
                       </div>
                       <div
                         class={[
@@ -276,7 +279,9 @@ export default defineComponent({
                             <path d='M1.6 2h12.8a.6.6 0 0 1 0 1.2H1.6a.6.6 0 1 1 0-1.2zm2.5 5.393h7.8a.6.6 0 0 1 0 1.2H4.1a.6.6 0 1 1 0-1.2zm2.5 5.416h2.8a.6.6 0 0 1 0 1.2H6.6a.6.6 0 1 1 0-1.2z'></path>
                           </g>
                         </svg>
-                        <div class={this.ns.be('filter', 'text')}>筛选</div>
+                        <div class={this.ns.be('filter', 'text')}>
+                          {biReportT('filter')}
+                        </div>
                         {!!this.c.state.condNum && (
                           <div class={this.ns.be('filter', 'badge')}>
                             {this.c.state.condNum}
@@ -292,13 +297,13 @@ export default defineComponent({
                         <el-checkbox
                           v-model={this.showAgg}
                           onChange={this.handleShowAggChange}
-                          label='显示合计'
+                          label={biReportT('showTotal')}
                           size='large'
                         />
                         <el-checkbox
                           v-model={this.showPercent}
                           onChange={this.handleShowPercentChange}
-                          label='显示百分比'
+                          label={biReportT('showPercent')}
                           size='large'
                         />
                       </div>

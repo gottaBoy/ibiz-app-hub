@@ -1,4 +1,5 @@
 import { ISchemaField } from '../interface';
+import { biReportT, biReportDefaultText } from '../locale';
 
 /**
  * 校验控制器
@@ -132,7 +133,13 @@ export class BIVerifyController {
       if (!_value || (_value && Array.isArray(_value) && _value.length === 0)) {
         return {
           ok: false,
-          msg: `${tempConfig.caption.split('/')[0]}不能为空`,
+          get msg() {
+            return biReportT('required', {
+              caption: biReportDefaultText(tempConfig.caption)
+                .split('/')[0]
+                .trim(),
+            });
+          },
         };
       }
     }
@@ -183,9 +190,14 @@ export class BIVerifyController {
       if (_value.length >= targetConfig.max) {
         return {
           ok: false,
-          msg: `${targetConfig.caption.split('/')[0]}最多支持${
-            targetConfig.max
-          }个`,
+          get msg() {
+            return biReportT('maxItems', {
+              caption: biReportDefaultText(targetConfig.caption)
+                .split('/')[0]
+                .trim(),
+              max: targetConfig.max,
+            });
+          },
         };
       }
     }
@@ -230,7 +242,13 @@ export class BIVerifyController {
     }
     const failResult = {
       ok: false,
-      msg: `该维度不支持${targetConfig.subCaption || targetConfig.caption}`,
+      get msg() {
+        return biReportT('unsupportedDimension', {
+          caption: biReportDefaultText(
+            targetConfig.subCaption || targetConfig.caption,
+          ),
+        });
+      },
     };
 
     const fid = targetItem?.psdefid?.split('.').at(-1);
@@ -313,7 +331,13 @@ export class BIVerifyController {
     }
     const failResult = {
       ok: false,
-      msg: `该维度不支持${targetConfig.subCaption || targetConfig.caption}`,
+      get msg() {
+        return biReportT('unsupportedDimension', {
+          caption: biReportDefaultText(
+            targetConfig.subCaption || targetConfig.caption,
+          ),
+        });
+      },
     };
     const { targetItem } = _opts;
     if (targetItem) {

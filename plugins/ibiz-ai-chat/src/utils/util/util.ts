@@ -1,3 +1,4 @@
+import { aiChatT } from '..';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * 生成随机字符串
@@ -128,7 +129,7 @@ export function parsePredefProtocol(urlStr: string): {
       try {
         Object.assign(context, JSON.parse(navCtx));
       } catch (error) {
-        console.error('srfnavctx 参数解析失败');
+        console.error(aiChatT('navContextFailed'));
       }
       url.searchParams.delete('srfnavctx');
     }
@@ -144,7 +145,7 @@ export function parsePredefProtocol(urlStr: string): {
         const value = decodeURIComponent(navCtx);
         Object.assign(context, JSON.parse(value));
       } catch (error) {
-        console.error('srfnavctx 参数解析失败');
+        console.error(aiChatT('navContextFailed'));
       }
       delete searchParams.srfnavctx;
     }

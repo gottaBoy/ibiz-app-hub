@@ -2,6 +2,7 @@ import { PropType, defineComponent, ref, watch } from 'vue';
 import { useNamespace } from '../../../use';
 import { icons, textIcons } from './position-select-iocns';
 import './position-select.scss';
+import { biReportDefaultText } from '../../../locale';
 
 export default defineComponent({
   name: 'BIPositionSelect',
@@ -69,7 +70,7 @@ export default defineComponent({
           return (
             <el-tooltip
               effect='dark'
-              content={item.caption}
+              content={biReportDefaultText(item.caption)}
               placement='top'
               show-after={200}
               hide-after={0}

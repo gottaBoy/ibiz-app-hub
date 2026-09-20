@@ -2,7 +2,7 @@
   <div class="xg-table-toolbar">
     <el-popover placement="bottom" trigger="click" :teleported="true">
       <template #reference>
-        <el-button title="设置"
+        <el-button :title="t('settings')"
           ><ion-icon name="settings-outline"></ion-icon
         ></el-button>
       </template>
@@ -22,7 +22,9 @@
 
 <script setup lang="ts">
 import useSlotsBox from '@/composables/useSlotsBox';
+import { useGanttLocale } from '@/locale';
 const { $slotsBox } = useSlotsBox();
+const { t } = useGanttLocale();
 </script>
 <style lang="scss">
 .xg-table-toolbar {

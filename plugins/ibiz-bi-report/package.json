@@ -17,6 +17,7 @@
     "README.md"
   ],
   "scripts": {
+    "test:i18n": "node --test tests/localization.test.cjs",
     "watch": "vite build --watch",
     "build": "vite build",
     "preview": "vite preview",

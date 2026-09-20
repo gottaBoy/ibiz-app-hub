@@ -1,14 +1,16 @@
 <template>
-  <Root ref="rootWrapRef" v-bind="$attrs" :slots="slots" />
+  <Root ref="rootWrapRef" v-bind="$attrs" :locale="props.locale" :slots="slots" />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, useSlots } from 'vue';
+import { computed, defineComponent, ref, useSlots } from 'vue';
 import { initStore } from '@/store';
 import Root from './index.vue';
 import { MoveSliderData } from '@/typings/data';
 import { LinkProps } from '@/typings/link';
 import { DropProps } from '@/typings/drop';
+import { provideGanttLocale } from '@/locale';
+import rootProps from './rootProps';
 
 export default defineComponent({
   name: 'RootWrap',
@@ -19,6 +21,8 @@ export default defineComponent({
 </script>
 
 <script lang="ts" setup>
+const props = defineProps({ locale: rootProps.locale });
+provideGanttLocale(computed(() => props.locale));
 const slots = useSlots();
 const emit = defineEmits<{
   (e: 'header-dragend',index: number, width:number):void;

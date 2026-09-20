@@ -1,7 +1,11 @@
+import { biReportT } from '../locale';
+
 export const ChartTypes = [
   {
     type: 'NUMBER',
-    caption: '数字',
+    get caption() {
+      return biReportT('chartTypes.number');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <title>数字</title>
         <g id="数字" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -11,7 +15,9 @@ export const ChartTypes = [
   },
   {
     type: 'MULTI_SERIES_COL',
-    caption: '多系列柱状图',
+    get caption() {
+      return biReportT('chartTypes.multiSeriesColumn');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>柱状图</title>
     <g id="柱状图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -27,7 +33,9 @@ export const ChartTypes = [
   },
   {
     type: 'STACK_COL',
-    caption: '堆叠柱状图',
+    get caption() {
+      return biReportT('chartTypes.stackedColumn');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>堆叠柱状图</title>
     <g id="堆叠柱状图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -45,7 +53,9 @@ export const ChartTypes = [
   },
   {
     type: 'ZONE_COL',
-    caption: '分区柱状图',
+    get caption() {
+      return biReportT('chartTypes.zoneColumn');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>分区柱状图</title>
     <g id="分区柱状图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -64,7 +74,9 @@ export const ChartTypes = [
   },
   {
     type: 'MULTI_SERIES_BAR',
-    caption: '多系列条形图',
+    get caption() {
+      return biReportT('chartTypes.multiSeriesBar');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>条形图</title>
     <g id="条形图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -80,7 +92,9 @@ export const ChartTypes = [
   },
   {
     type: 'STACK_BAR',
-    caption: '堆积条形图',
+    get caption() {
+      return biReportT('chartTypes.stackedBar');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>条形柱状图</title>
     <g id="条形柱状图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -99,7 +113,9 @@ export const ChartTypes = [
   },
   {
     type: 'MULTI_SERIES_LINE',
-    caption: '多系列折线图',
+    get caption() {
+      return biReportT('chartTypes.multiSeriesLine');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>折线图</title>
     <g id="折线图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -112,7 +128,9 @@ export const ChartTypes = [
   },
   {
     type: 'ZONE_LINE',
-    caption: '分区折线图',
+    get caption() {
+      return biReportT('chartTypes.zoneLine');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>分区折线图</title>
     <g id="分区折线图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -127,7 +145,9 @@ export const ChartTypes = [
   },
   {
     type: 'AREA',
-    caption: '面积图',
+    get caption() {
+      return biReportT('chartTypes.area');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>面积图</title>
     <g id="面积图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -140,7 +160,9 @@ export const ChartTypes = [
   },
   {
     type: 'GRID',
-    caption: '表格',
+    get caption() {
+      return biReportT('chartTypes.table');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>表格</title>
     <g id="表格" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -158,7 +180,9 @@ export const ChartTypes = [
   },
   {
     type: 'CROSSTABLE',
-    caption: '交叉表',
+    get caption() {
+      return biReportT('chartTypes.crossTable');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>交叉表</title>
     <g id="交叉表" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -173,7 +197,9 @@ export const ChartTypes = [
   },
   {
     type: 'PIE',
-    caption: '饼图',
+    get caption() {
+      return biReportT('chartTypes.pie');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>饼图</title>
     <g id="饼图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -186,7 +212,9 @@ export const ChartTypes = [
   },
   {
     type: 'RADAR',
-    caption: '雷达图',
+    get caption() {
+      return biReportT('chartTypes.radar');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>雷达图</title>
     <g id="雷达图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -203,7 +231,9 @@ export const ChartTypes = [
   },
   {
     type: 'GAUGE',
-    caption: '仪表盘',
+    get caption() {
+      return biReportT('chartTypes.gauge');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>仪表盘</title>
     <g id="仪表盘" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -221,7 +251,9 @@ export const ChartTypes = [
   },
   {
     type: 'SCATTER',
-    caption: '散点图',
+    get caption() {
+      return biReportT('chartTypes.scatter');
+    },
     icon: `<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>散点图</title>
     <g id="散点图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

@@ -20,6 +20,13 @@ export default defineConfig({
   ],
   eslint: true,
   stylelint: true,
+  pluginConfig: {
+    eslint: {
+      include: ['**/*.ts', '**/*.tsx'],
+      exclude: ['**/node_modules/**'],
+      throwOnError: true,
+    },
+  },
   theme: {
     prefix: `@import "${path.resolve(
       cwd,

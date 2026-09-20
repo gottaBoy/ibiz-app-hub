@@ -10,7 +10,7 @@ import {
   IResourceOptions,
 } from '../../interface';
 import { ChatController } from '../chat/chat.controller';
-import { IndexedDBUtil } from '../../utils';
+import { aiChatT, IndexedDBUtil } from '../../utils';
 import { AIChatConst } from '../../constants';
 import { getChatSessionId, getStringBeforeLastAt } from '../../utils/util/util';
 
@@ -508,7 +508,7 @@ export class AiTopicController {
         activedTopics.length
       }`;
     } else {
-      caption = '新会话';
+      caption = aiChatT('newChat');
     }
     const maxSequence = Math.max(
       ...this.topics.value.map(item => item.sequence),
@@ -698,7 +698,7 @@ export class AiTopicController {
   public enterTempChat(): void {
     this.isTempChat.value = true;
     if (!this.backupOptions) {
-      console.error('临时会话失败，无话题配置备份配置');
+      console.error(aiChatT('missingBackup'));
       return;
     }
     const backupTopicBaseID = getStringBeforeLastAt(this.backupOptions.id);
@@ -715,8 +715,8 @@ export class AiTopicController {
       id: `${backupTopicBaseID}@${Date.now()}`,
       type: this.backupOptions.type,
       captionMode: this.backupOptions.captionMode,
-      caption: '临时会话',
-      sourceCaption: '临时会话',
+      caption: aiChatT('temporaryChat'),
+      sourceCaption: aiChatT('temporaryChat'),
       url: this.backupOptions.url,
       aiChat: backupAIChat,
       sequence: maxSequence + 1,

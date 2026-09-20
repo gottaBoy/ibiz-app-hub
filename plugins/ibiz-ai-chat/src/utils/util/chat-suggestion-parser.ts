@@ -1,3 +1,4 @@
+import { aiChatT } from '..';
 import { IChatSuggestion } from '../../interface';
 
 /**
@@ -58,7 +59,9 @@ export class ChatSuggestionParser {
 
         return { type, data, metadata } as IChatSuggestion;
       } catch (e) {
-        throw new Error(`XML 解析错误: ${(e as Error).message}`);
+        throw new Error(
+          aiChatT('xmlParseFailed', { message: (e as Error).message }),
+        );
       }
     });
   }
@@ -120,7 +123,9 @@ export class ChatSuggestionParser {
         suggestions: [],
         remainingText,
         hasSuggestions: true,
-        error: `资源解析失败: ${(error as Error).message}`,
+        error: aiChatT('resourceParseFailed', {
+          message: (error as Error).message,
+        }),
       };
     }
   }

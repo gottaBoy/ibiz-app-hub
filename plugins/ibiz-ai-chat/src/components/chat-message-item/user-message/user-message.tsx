@@ -2,8 +2,13 @@ import { VNode } from 'preact';
 import { useComputed, useSignal } from '@preact/signals';
 import Cherry from 'cherry-markdown';
 import { useEffect, useRef } from 'preact/hooks';
+import {
+  aiChatT,
+  MaterialResourceParser,
+  Namespace,
+  createUUID,
+} from '../../../utils';
 import { IChatMessage } from '../../../interface';
-import { MaterialResourceParser, Namespace, createUUID } from '../../../utils';
 import { AiChatController } from '../../../controller';
 import { ChatInputMaterialtem } from '../../chat-input-material-item/chat-input-material-item';
 import { RefreshSvg, WarningSvg } from '../../../icons';
@@ -70,7 +75,6 @@ export const UserMessage = (props: UserMessageProps) => {
         syntax: {
           table: {
             enableChart: false,
-            externals: ['echarts'],
           },
         },
       },
@@ -95,7 +99,7 @@ export const UserMessage = (props: UserMessageProps) => {
   }, [editorRef.current]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-  const handWarningClick = (e: MouseEvent) => {
+  const handWarningClick = () => {
     if (!props.message || !props.controller) return;
     props.controller.refreshMessage(props.message, true);
   };
@@ -104,7 +108,7 @@ export const UserMessage = (props: UserMessageProps) => {
     <div className={ns.b()}>
       <div className={ns.e('user-header')}>
         {props.children}
-        <div className={ns.e('user')}>我</div>
+        <div className={ns.e('user')}>{aiChatT('user')}</div>
       </div>
       <div className={ns.e('content')}>
         {props.message.state === 40 && (
@@ -113,10 +117,10 @@ export const UserMessage = (props: UserMessageProps) => {
             onClick={handWarningClick}
           >
             <div className={ns.em('content', 'warning')}>
-              <div className='warning-icon' title='未发送成功，请重试'>
+              <div className='warning-icon' title={aiChatT('sendFailed')}>
                 <WarningSvg></WarningSvg>
               </div>
-              <div className='refresh-icon' title='未发送成功，请重试'>
+              <div className='refresh-icon' title={aiChatT('sendFailed')}>
                 <RefreshSvg></RefreshSvg>
               </div>
             </div>
@@ -148,7 +152,7 @@ export const UserMessage = (props: UserMessageProps) => {
             />
             <div
               className={`${ns.e('collapse-btn')} ${ns.is('visible', isVisible.value)}`}
-              title={isCollapse.value ? '展开' : '收起'}
+              title={isCollapse.value ? aiChatT('expand') : aiChatT('collapse')}
               onClick={() => {
                 isCollapse.value = !isCollapse.value;
               }}

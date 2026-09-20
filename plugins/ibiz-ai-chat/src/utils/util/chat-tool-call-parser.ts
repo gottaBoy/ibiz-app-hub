@@ -1,3 +1,4 @@
+import { aiChatT } from '..';
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -49,7 +50,10 @@ export class ChatToolCallParser {
             if (['desc_oss_image', 'fetch_chunks'].includes(toolCallData.type))
               result = JSON.parse(toolCallData.result);
           } catch (error) {
-            console.error(`解析 ${tempToolCall.type} 工具调用失败:`, error);
+            console.error(
+              aiChatT('toolParseFailed', { type: tempToolCall.type }),
+              error,
+            );
           } finally {
             Object.assign(tempToolCall, {
               result,
@@ -58,7 +62,7 @@ export class ChatToolCallParser {
         }
         toolCalls.push(tempToolCall);
       } catch (e) {
-        console.error('解析工具调用失败:', e);
+        console.error(aiChatT('parseToolFailed'), e);
       }
     }
     return { completed, toolCalls };

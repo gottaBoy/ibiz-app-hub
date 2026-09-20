@@ -43,16 +43,16 @@ export interface ChatSuggestionsProps {
 	  "appid":"xxxx"
   },
   "metadata": {
-   "content_name": "打开建立数据",
+   "content_name": aiChatT('openData'),
    "action_context": "hr_employee:${params.employee.id}"
   }
 },{
   "type": "raw",
   "data": {
-    "content": "确认生成"
+    "content": aiChatT('confirmGenerate')
   },
   "metadata": {
-   "content_name": "确认生成"
+   "content_name": aiChatT('confirmGenerate')
   }
 }]
  */

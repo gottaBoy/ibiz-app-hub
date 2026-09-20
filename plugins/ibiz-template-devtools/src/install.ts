@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { route2routePath } from '@ibiz-template/vue3-util';
 import { IBizContext } from '@ibiz-template/core';
-import { openRedirectView } from '@ibiz-template/runtime';
+import { IModalData, openRedirectView } from '@ibiz-template/runtime';
 import { IAppRedirectView } from '@ibiz/model-core';
 import { CenterController } from './controller/center.controller';
+import { registerDevtoolLocale } from './locale/helper';
 
 /**
  * 安装
@@ -12,6 +13,7 @@ import { CenterController } from './controller/center.controller';
  */
 export function install(): void {
   const { ibiz } = window;
+  registerDevtoolLocale();
   ibiz.devTool = new CenterController();
   ibiz.devTool.init();
 }
@@ -23,7 +25,7 @@ export function install(): void {
  * @date 2025-03-17 18:03:58
  * @export
  */
-export function updateDevToolConfig() {
+export function updateDevToolConfig(): void {
   ibiz.devTool.updateConfig(ibiz.appData?.context);
 }
 
@@ -35,12 +37,12 @@ export function updateDevToolConfig() {
  * @export
  * @param {IData} router
  */
-export function listenOpenDevTool(router: IData) {
+export function listenOpenDevTool(router: IData): void {
   // 跳转设计视图
   const redirectDesignView = async (
     appContext: IParams | undefined,
     _context: IData,
-  ) => {
+  ): Promise<IModalData | undefined> => {
     if (_context.srfredirectview && _context.psappview) {
       const viewCodeName = _context.srfredirectview;
       const fullViewModel = await ibiz.hub.getAppView(viewCodeName);
@@ -77,7 +79,7 @@ export function listenOpenDevTool(router: IData) {
   window.addEventListener(
     'message',
     async (event: MessageEvent) => {
-      const data = event.data;
+      const { data } = event;
       if (data && data.type && data.type === 'IBzOpenAppView' && data.context) {
         const { appContext } = route2routePath(
           router.currentRoute.value as any,

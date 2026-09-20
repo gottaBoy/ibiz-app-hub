@@ -2,6 +2,7 @@ import { PropType, computed, defineComponent } from 'vue';
 import { BIReportDesignController } from '../../../controller';
 import { useNamespace } from '../../../use';
 import './design.header.scss';
+import { biReportT } from '../../../locale';
 
 export default defineComponent({
   name: 'BIDesignHeader',
@@ -41,18 +42,16 @@ export default defineComponent({
       }
       // 重置为默认值
       const target = await (ibiz as IData).confirm.warning({
-        title: '确认取消保存',
+        title: biReportT('confirmCancelSave'),
         desc: (
           <div class={ns.b('report-caption')}>
-            <div>
-              确认取消保存报表
-              <div class={ns.be('report-caption', 'name')}>
-                {caption.value || '未命名'}
-              </div>
-              吗？
+            <div class={ns.be('report-caption', 'name')}>
+              {biReportT('cancelReportQuestion', {
+                caption: caption.value || biReportT('unnamed'),
+              })}
             </div>
             <div class={ns.be('report-caption', 'desc')}>
-              取消保存后无法保存编辑信息。
+              {biReportT('cancelSaveDesc')}
             </div>
           </div>
         ),
@@ -72,7 +71,7 @@ export default defineComponent({
         </div>
         <div class={this.ns.e('actions')}>
           <div class={this.ns.em('actions', 'close')} onClick={this.onClose}>
-            返回
+            {biReportT('back')}
           </div>
           <div class={this.ns.em('actions', 'save')}>
             <el-dropdown
@@ -84,12 +83,14 @@ export default defineComponent({
             >
               {{
                 default: () => {
-                  return <span>保存</span>;
+                  return <span>{biReportT('save')}</span>;
                 },
                 dropdown: () => {
                   return (
                     <el-dropdown-menu>
-                      <el-dropdown-item>取消保存</el-dropdown-item>
+                      <el-dropdown-item>
+                        {biReportT('cancelSave')}
+                      </el-dropdown-item>
                     </el-dropdown-menu>
                   );
                 },

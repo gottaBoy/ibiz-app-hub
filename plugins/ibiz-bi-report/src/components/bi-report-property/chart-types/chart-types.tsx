@@ -2,6 +2,7 @@ import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useNamespace } from '../../../use';
 import { ChartTypes } from '../../../config';
 import './chart-types.scss';
+import { biReportChartIcon } from '../../../locale';
 
 export default defineComponent({
   name: 'BIChartTypes',
@@ -59,7 +60,7 @@ export default defineComponent({
                         this.ns.is('selected', this.select === item.type),
                       ]}
                       onClick={() => this.onSelect(item)}
-                      v-html={item.icon}
+                      v-html={biReportChartIcon(item.icon, item.caption)}
                     ></div>
                   );
                 },

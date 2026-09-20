@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { aiChatT, Namespace, isSvg } from '../../../utils';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IChatToolbarItem } from '../../../interface';
-import { Namespace, isSvg } from '../../../utils';
 import './chat-toolbar-item.scss';
 
 export interface ChatToolberItemProps {
@@ -172,7 +172,11 @@ export const ChatToolberItem = (props: ChatToolberItemProps) => {
         <div className={ns.em('content', 'label')}>{model.label}</div>
       </div>
       {model.children?.length && (
-        <div title='更多' className={ns.e('more')} onClick={openMore}>
+        <div
+          title={aiChatT('more')}
+          className={ns.e('more')}
+          onClick={openMore}
+        >
           <i
             aria-hidden='true'
             className={`fa fa-angle-down ${ns.em('more', 'icon')}`}

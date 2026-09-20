@@ -1,3 +1,4 @@
+import { aiChatT } from '..';
 /* eslint-disable no-cond-assign */
 import { IChatStep } from '../../interface';
 
@@ -35,7 +36,7 @@ export class ChatStepParser {
         };
         chatSteps.push(tempChatStep);
       } catch (e) {
-        console.error('解析完整聊天步骤失败:', e);
+        console.error(aiChatT('parseStepFailed'), e);
       }
     }
     // 如果存在未闭合的标签，添加pending状态的步骤

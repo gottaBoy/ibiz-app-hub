@@ -1,6 +1,7 @@
 import { PropType, defineComponent, ref } from 'vue';
 import { useNamespace } from '../../../use';
 import { aggModeList } from '../../../util/constant-data';
+import { biReportT } from '../../../locale';
 import './bi-aggmode-select.scss';
 
 export const BIAggmodeSelect = defineComponent({
@@ -18,7 +19,7 @@ export const BIAggmodeSelect = defineComponent({
   setup(props, { emit }) {
     const ns = useNamespace('bi-aggmode-select');
     const aggmodeVisible = ref(false); // aggmode显隐
-    
+
     const aggModeClick = (value: string, event: MouseEvent) => {
       event.stopPropagation();
       event.preventDefault();
@@ -82,7 +83,7 @@ export const BIAggmodeSelect = defineComponent({
                       </g>
                     </g>
                   </svg>
-                  <span>计算</span>
+                  <span>{biReportT('calculate')}</span>
                 </span>
                 <svg
                   viewBox='0 0 16 16'

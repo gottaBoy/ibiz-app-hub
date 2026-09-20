@@ -1,3 +1,4 @@
+import { aiChatT } from './utils';
 import './app.scss';
 
 export function App() {
@@ -5,7 +6,7 @@ export function App() {
 
   return (
     <>
-      <button onClick={onClick}>打开</button>
+      <button onClick={onClick}>{aiChatT('open')}</button>
     </>
   );
 }

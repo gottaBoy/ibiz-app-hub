@@ -12,6 +12,7 @@ import { clone, plus } from '@ibiz-template/core';
 import { deepHandData, formatField } from '../util';
 import { BaseConverter } from './base-converter';
 import { IBIReportGridController } from '../interface';
+import { biReportT } from '../locale';
 
 /**
  * 交叉表转化器
@@ -158,7 +159,7 @@ export class CrossTableConverter extends BaseConverter {
       const column = {
         dataItemName: this.totalColTag,
         appDEFieldId: this.totalColTag,
-        caption: '合计',
+        caption: biReportT('total'),
         codeName: this.totalColTag,
         columnType: 'GROUPGRIDCOLUMN',
         id: this.totalColTag,
@@ -615,7 +616,7 @@ export class CrossTableConverter extends BaseConverter {
     const codeList = app.codeList.getCodeList(appCodeListId);
     // 顺便加载代码表模型
     if (!codeList) {
-      ibiz.message.error(`未找到代码表: ${appCodeListId}`);
+      ibiz.message.error(biReportT('codeListNotFound', { id: appCodeListId }));
       return [];
     }
 

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { biReportT } from '../locale';
 
 /**
  * 是否为日期
@@ -28,22 +29,32 @@ export function formatDate(
   value: string,
 ): string {
   if (type && type === 'DAY' && value && /^\d{8}$/.test(value)) {
-    return `${value.substring(0, 4)}年${value.substring(
-      4,
-      6,
-    )}月${value.substring(6)}日`;
+    return biReportT('date.day', {
+      year: value.substring(0, 4),
+      month: value.substring(4, 6),
+      day: value.substring(6),
+    });
   }
   if (type && type === 'WEEK' && value && /^\d{4}W\d{1,2}$/.test(value)) {
-    return `${value.substring(0, 4)}年${value.substring(5)}周`;
+    return biReportT('date.week', {
+      year: value.substring(0, 4),
+      week: value.substring(5),
+    });
   }
   if (type && type === 'MONTH' && value && /^\d{4}\d{2}$/.test(value)) {
-    return `${value.substring(0, 4)}年${value.substring(4)}月`;
+    return biReportT('date.month', {
+      year: value.substring(0, 4),
+      month: value.substring(4),
+    });
   }
   if (type && type === 'QUARTER' && value && /^\d{4}Q\d{1}$/.test(value)) {
-    return `${value.substring(0, 4)}年${value.substring(5)}季度`;
+    return biReportT('date.quarter', {
+      year: value.substring(0, 4),
+      quarter: value.substring(5),
+    });
   }
   if (type && type === 'YEAR' && value && /^\d{4}$/.test(value)) {
-    return `${value.substring(0, 4)}年`;
+    return biReportT('date.year', { year: value.substring(0, 4) });
   }
   return value;
 }

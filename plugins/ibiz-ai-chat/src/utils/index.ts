@@ -10,3 +10,4 @@ export { generateHashWithText } from './util/text-hash-util';
 export { ChatToolCallParser } from './util/chat-tool-call-parser';
 export { ChatStepParser } from './util/chat-step-parser';
 export { ChatUIActionParser } from './util/chat-ui-action-parser';
+export { t as aiChatT, registerAiChatLocale } from '../locale';

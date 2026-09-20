@@ -1,5 +1,5 @@
+import { aiChatT, Namespace } from '../../../utils';
 import { IChatMessage } from '../../../interface';
-import { Namespace } from '../../../utils';
 import './unknown-message.scss';
 
 export interface UnknownMessageProps {
@@ -20,7 +20,7 @@ export const UnknownMessage = (props: UnknownMessageProps) => {
   return (
     <div className={ns.b()}>
       <div className={`${ns.e('content')} pre-wrap-container`}>
-        暂未支持的消息类型: {props.message.type}
+        {aiChatT('unsupportedMessage', { type: props.message.type })}
       </div>
     </div>
   );

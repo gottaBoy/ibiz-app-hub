@@ -3,7 +3,7 @@
     class="xg-view-toolbar"
     :style="{ color: $styleBox.headerStyle?.textColor }"
   >
-    <div v-show="showToday" class="today" @click="jumpToday">今天</div>
+    <div v-show="showToday" class="today" @click="jumpToday">{{ t('today') }}</div>
     <el-dropdown
       popper-class="xg-view-toolbar-switch-action"
       trigger="click"
@@ -30,7 +30,7 @@
     <div
       class="full-screen"
       @click="fullscreenChange"
-      :title="$param.fullScreen ? '取消全屏' : '全屏模式'"
+      :title="$param.fullScreen ? t('exitFullscreen') : t('fullscreen')"
     >
       <ion-icon v-if="$param.fullScreen" name="contract-outline"></ion-icon>
       <ion-icon v-else name="expand-outline"></ion-icon>
@@ -45,19 +45,22 @@ import useParam from '@/composables/useParam';
 import useToday from '@/composables/useToday';
 import useGanttHeader from '@/composables/useGanttHeader';
 import { useStore } from '@/store';
+import { useGanttLocale } from '@/locale';
+import { computed } from 'vue';
 
 const { $styleBox } = useStyle();
 const { jumpToDate, fullscreenChange } = useExport();
 const { showToday } = useToday();
 const { setGanttHeaders } = useGanttHeader();
 const store = useStore();
+const { t } = useGanttLocale();
 
-const dateUnit = {
-  month: '月',
-  week: '周',
-  day: '天',
-  hour: '时',
-};
+const dateUnit = computed(() => ({
+  month: t('month'),
+  week: t('week'),
+  day: t('day'),
+  hour: t('hour'),
+}));
 
 const handleCommand = (unit: HeaderDateUnit) => {
   $styleBox.unit = unit;

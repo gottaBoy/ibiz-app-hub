@@ -1,25 +1,37 @@
 /**
  * 计算模式列表
  */
+import { biReportT } from '../locale';
+
 export const aggModeList = [
   {
-    name: '合计',
+    get name() {
+      return biReportT('total');
+    },
     value: 'SUM',
   },
   {
-    name: '平均',
+    get name() {
+      return biReportT('average');
+    },
     value: 'AVG',
   },
   {
-    name: '最大值',
+    get name() {
+      return biReportT('maximum');
+    },
     value: 'MAX',
   },
   {
-    name: '最小值',
+    get name() {
+      return biReportT('minimum');
+    },
     value: 'MIN',
   },
   {
-    name: '计数',
+    get name() {
+      return biReportT('count');
+    },
     value: 'COUNT',
   },
 ];

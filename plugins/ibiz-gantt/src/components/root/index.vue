@@ -89,6 +89,7 @@ import {
   Ref,
   ref,
   toRefs,
+  watch,
 } from 'vue';
 import rootProps from './rootProps';
 import useData from '@/composables/useData';
@@ -108,6 +109,12 @@ const containerId = uuid(10);
 const props = defineProps(rootProps);
 // 本地化
 setLocale(props.locale);
+watch(
+  () => props.locale,
+  locale => {
+    setLocale(locale);
+  },
+);
 
 // #region 挂载实例
 const { rootRef } = useRoot();

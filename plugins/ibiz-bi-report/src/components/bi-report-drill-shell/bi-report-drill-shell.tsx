@@ -10,6 +10,7 @@ import {
   getSearchconds,
 } from '../../util';
 import './bi-report-drill-shell.scss';
+import { biReportT } from '../../locale';
 
 export default defineComponent({
   name: 'BIReportDrillShell',
@@ -99,7 +100,7 @@ export default defineComponent({
         },
       );
       if (!targetMeasure) {
-        ibiz.log.error('执行数据反查未找到指标数据中断');
+        ibiz.log.error(biReportT('measureDataNotFound'));
         return;
       }
       Object.assign(result, {
@@ -296,10 +297,12 @@ export default defineComponent({
               </div>
               <div
                 class={this.ns.b('content-left-active-items')}
-                title={`已过滤的纬度：${this.activeText}`}
+                title={biReportT('filteredDimension', {
+                  text: this.activeText,
+                })}
               >
                 <span class={this.ns.be('content-left-active-items', 'text')}>
-                  已过滤的纬度：{this.activeText}
+                  {biReportT('filteredDimension', { text: this.activeText })}
                 </span>
               </div>
             </div>

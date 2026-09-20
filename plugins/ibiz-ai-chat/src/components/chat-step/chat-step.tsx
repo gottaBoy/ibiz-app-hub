@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-key */
 import { useSignal } from '@preact/signals';
 import { useEffect } from 'preact/hooks';
+import { aiChatT, Namespace } from '../../utils';
 import { IChatStep } from '../../interface';
-import { Namespace } from '../../utils';
 import { ChatStepItem } from '../chat-step-item/chat-step-item';
 import './chat-step.scss';
 
@@ -49,7 +49,11 @@ export const ChatStep = (props: ChatStepProps) => {
       {showToggle.value && (
         <div className={ns.e('toggle')} onClick={handleToggle}>
           <span className={ns.e('toggle-label')}>
-            {isExpanded.value ? '执行步骤  收缩' : '执行步骤  展开'}
+            {aiChatT(
+              isExpanded.value
+                ? 'collapseExecutionSteps'
+                : 'expandExecutionSteps',
+            )}
           </span>
         </div>
       )}

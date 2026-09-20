@@ -10,7 +10,6 @@ import { CustomImageSearchBoxEditorController } from './custom-image-search-box.
 
 export const CustomImageSearchBox = defineComponent({
   name: 'CustomImageSearchBox',
-  // @ts-ignore
   props: getRawProps<CustomImageSearchBoxEditorController>(),
   emits: getEditorEmits(),
   setup(props) {

@@ -29,13 +29,13 @@ export const DevToolCollapsePanel = defineComponent({
       },
       { immediate: true, deep: true },
     );
-    const handleHeaderClick = (event: MouseEvent) => {
+    const handleHeaderClick = (event: MouseEvent): void => {
       event.stopPropagation();
       collapse.updateVModel(props.name, isOpen.value);
       isOpen.value = !isOpen.value; // 内容依托于变量isOpen直接更新即可
     };
 
-    const renderSvg = () => {
+    const renderSvg = (): JSX.Element => {
       return (
         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'>
           <path

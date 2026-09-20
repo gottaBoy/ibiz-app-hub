@@ -1,3 +1,4 @@
+import { aiChatT } from '..';
 import { IMaterial } from '../../interface';
 
 /**
@@ -59,7 +60,9 @@ export class MaterialResourceParser {
 
         return { id, type, data, metadata } as IMaterial;
       } catch (e) {
-        throw new Error(`XML 解析错误: ${(e as Error).message}`);
+        throw new Error(
+          aiChatT('xmlParseFailed', { message: (e as Error).message }),
+        );
       }
     });
   }
@@ -123,7 +126,9 @@ export class MaterialResourceParser {
         resources: [],
         remainingText,
         hasResources: true,
-        error: `资源解析失败: ${(error as Error).message}`,
+        error: aiChatT('resourceParseFailed', {
+          message: (error as Error).message,
+        }),
       };
     }
   }

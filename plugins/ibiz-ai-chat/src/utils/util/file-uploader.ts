@@ -1,3 +1,4 @@
+import { aiChatT } from '..';
 import { FileUploaderOptions } from '../../interface';
 
 /**
@@ -55,9 +56,9 @@ export class FileUploader<T> {
       if (this.options.maxSize && file.size > this.options.maxSize) {
         this.options.onError?.(
           new Error(
-            `文件大小超过限制 (${this.formatSize(
-              file.size,
-            )} > ${this.formatSize(this.options.maxSize)})`,
+            aiChatT('fileTooLarge', {
+              size: `${this.formatSize(file.size)} > ${this.formatSize(this.options.maxSize)}`,
+            }),
           ),
           file,
         );
@@ -90,7 +91,7 @@ export class FileUploader<T> {
       this.options.onSuccess?.(result, file);
     } catch (error) {
       this.options.onError?.(
-        error instanceof Error ? error : new Error('上传失败'),
+        error instanceof Error ? error : new Error(aiChatT('uploadFailed')),
         file,
       );
     }

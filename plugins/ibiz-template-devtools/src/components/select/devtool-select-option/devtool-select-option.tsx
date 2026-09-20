@@ -16,7 +16,7 @@ export const OptionComponent = defineComponent({
 
     const select = inject('select') as IData;
 
-    const clickItem = (event: MouseEvent) => {
+    const clickItem = (event: MouseEvent): void => {
       event.stopPropagation();
       select.curValue.value = props.value;
       select.curLabel.value = props.label;

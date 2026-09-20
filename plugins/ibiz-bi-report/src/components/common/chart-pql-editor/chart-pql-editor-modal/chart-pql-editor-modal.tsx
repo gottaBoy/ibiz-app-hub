@@ -3,6 +3,7 @@ import { RuntimeError } from '@ibiz-template/core';
 import { useNamespace } from '../../../../use';
 import { ISchemaField } from '../../../../interface';
 import './chart-pql-editor-modal.scss';
+import { biReportT } from '../../../../locale';
 
 export default defineComponent({
   name: 'BIChartPqlEditorModal',
@@ -116,12 +117,12 @@ export default defineComponent({
   render() {
     return (
       <div class={this.ns.b()}>
-        <div class={this.ns.b('header')}>PQL 筛选编辑器</div>
+        <div class={this.ns.b('header')}>{biReportT('pqlEditor')}</div>
         <div class={this.ns.b('content')}>
           <iBizPqlEditor
             ref='pqlEditor'
             class={this.ns.e('pql-editor')}
-            placeholder='输入筛选条件'
+            placeholder={biReportT('filterPlaceholder')}
             value={this.currentValue}
             fields={this.fields}
             context={this.context}
@@ -132,9 +133,11 @@ export default defineComponent({
         </div>
         <div class={this.ns.b('footer')}>
           <el-button text onClick={this.handleCancel}>
-            取消
+            {biReportT('cancel')}
           </el-button>
-          <el-button onClick={this.handleConfirm}>确认</el-button>
+          <el-button onClick={this.handleConfirm}>
+            {biReportT('confirm')}
+          </el-button>
         </div>
       </div>
     );

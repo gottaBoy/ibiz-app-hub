@@ -2,7 +2,7 @@
 import { VNode } from 'preact';
 import { useSignal } from '@preact/signals';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { Namespace } from '../../../utils';
+import { aiChatT, Namespace } from '../../../utils';
 import { ArrowDown, EmptySvg } from '../../../icons';
 import { ChatSearch } from '../../chat-search/chat-search';
 import { Loading } from '../loading/loading';
@@ -160,7 +160,7 @@ export const MultipleSelect = (props: MultipleSelectProps) => {
       setList(items);
     } catch (error) {
       setList([]);
-      console.error('搜索失败:', error);
+      console.error(aiChatT('searchFailed'), error);
     } finally {
       setLoading(false);
     }
@@ -191,7 +191,7 @@ export const MultipleSelect = (props: MultipleSelectProps) => {
     return (
       <li className={`el-empty ${ns.e('empty')}`}>
         {EmptySvg}
-        <div className={ns.em('empty', 'text')}>暂无数据</div>
+        <div className={ns.em('empty', 'text')}>{aiChatT('noData')}</div>
       </li>
     );
   };
@@ -225,7 +225,7 @@ export const MultipleSelect = (props: MultipleSelectProps) => {
           {enableSearch ? (
             <div className={ns.em('dropdown', 'search')}>
               <ChatSearch
-                placeholder='搜索'
+                placeholder={aiChatT('search')}
                 value={query.value}
                 onEnter={handleSearch}
                 onChange={hadnleQueryChange}

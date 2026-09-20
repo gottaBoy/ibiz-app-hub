@@ -15,6 +15,7 @@ import {
 import { useNamespace } from '../../../use';
 import { AppBIPeriodData } from '../../../interface';
 import './bi-time-select.scss';
+import { biReportT } from '../../../locale';
 export const BITimeSelect = defineComponent({
   name: 'BITimeSelect',
   props: {
@@ -132,7 +133,9 @@ export const BITimeSelect = defineComponent({
     return (
       <div class={this.ns.b()}>
         <div class={this.ns.e('header')}>
-          <span class={this.ns.em('header', 'caption')}>配置</span>
+          <span class={this.ns.em('header', 'caption')}>
+            {biReportT('configure')}
+          </span>
           <svg
             onClick={this.onCancel}
             class={this.ns.em('header', 'close')}
@@ -152,15 +155,13 @@ export const BITimeSelect = defineComponent({
             </g>
           </svg>
         </div>
-        <div class={this.ns.e('content')}>
-        {this.renderEditor()}
-        </div>
+        <div class={this.ns.e('content')}>{this.renderEditor()}</div>
         <div class={this.ns.e('footer')}>
           <el-button link onClick={this.onCancel}>
-            取消
+            {biReportT('cancel')}
           </el-button>
           <el-button type='primary' onClick={this.onOK}>
-            确认
+            {biReportT('confirm')}
           </el-button>
         </div>
       </div>

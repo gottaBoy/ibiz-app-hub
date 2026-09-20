@@ -28,6 +28,8 @@
         }
       ]"
       :style="{ borderColor: bgColor }"
+      :title="t('createLinkStart')"
+      :aria-label="t('createLinkStart')"
       @pointerdown="onStartAnchorDown"
     ></div>
 
@@ -127,6 +129,8 @@
         }
       ]"
       :style="{ borderColor: bgColor }"
+      :title="t('createLinkEnd')"
+      :aria-label="t('createLinkEnd')"
       @pointerdown="onEndAnchorDown"
     ></div>
   </div>
@@ -151,6 +155,7 @@ import useElement from '@/composables/useElement';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useDragBackdrop from '@/composables/useDragBackdrop';
 import dayjs from 'dayjs';
+import { useGanttLocale } from '@/locale';
 import { XDate } from '@/models/param/date';
 import { Relation, RelationType } from '@/models/data/links';
 import { LinkProps } from '@/typings/link';
@@ -162,6 +167,7 @@ export default defineComponent({
 
 <script setup lang="ts">
 const props = defineProps(sliderProps);
+const { t } = useGanttLocale();
 const slots = useSlots();
 const { $param } = useParam();
 const { $styleBox } = useStyle();

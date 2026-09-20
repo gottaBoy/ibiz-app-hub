@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { Namespace } from '../../utils';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { aiChatT, Namespace } from '../../utils';
 import { SettingSvg } from '../../icons';
 import { SingleSelect, Slider } from '../common';
 import { AiChatController } from '../../controller';
@@ -25,15 +25,15 @@ export const ChatAgentSetting = (props: ChatAgentSettingProps) => {
 
   const options = [
     {
-      label: '禁用',
+      label: aiChatT('disabled'),
       value: 0,
     },
     {
-      label: '启用',
+      label: aiChatT('enabled'),
       value: 1,
     },
     {
-      label: '自动',
+      label: aiChatT('automatic'),
       value: 2,
     },
   ];
@@ -58,7 +58,7 @@ export const ChatAgentSetting = (props: ChatAgentSettingProps) => {
     <div className={ns.b()}>
       <div className={ns.e('button')} ref={buttonRef}>
         <span
-          title='召回设置'
+          title={aiChatT('retrievalSettings')}
           className={`${ns.em('button', 'icon')} ${ns.em('button', 'prefix')}`}
         >
           {SettingSvg()}
@@ -70,7 +70,9 @@ export const ChatAgentSetting = (props: ChatAgentSettingProps) => {
             <li
               className={`${ns.em('dropdown', 'item')} ${ns.is('horizontal', true)}`}
             >
-              <div className={ns.em('dropdown', 'item-label')}>召回重排:</div>
+              <div className={ns.em('dropdown', 'item-label')}>
+                {aiChatT('rerank')}
+              </div>
               <SingleSelect
                 options={options}
                 value={controller.reCallConfig.value.chunkrerank}
@@ -88,7 +90,9 @@ export const ChatAgentSetting = (props: ChatAgentSettingProps) => {
               className={`${ns.em('dropdown', 'item')} ${ns.is('vertical', true)}`}
             >
               <div className={ns.em('dropdown', 'item-label')}>
-                最大召回数量: {controller.reCallConfig.value.maxchunks}
+                {aiChatT('maxRecall', {
+                  count: controller.reCallConfig.value.maxchunks,
+                })}
               </div>
               <Slider
                 min={0}
@@ -104,7 +108,9 @@ export const ChatAgentSetting = (props: ChatAgentSettingProps) => {
               className={`${ns.em('dropdown', 'item')} ${ns.is('vertical', true)}`}
             >
               <div className={ns.em('dropdown', 'item-label')}>
-                召回相似度阈值: {controller.reCallConfig.value.chunkthreshold}
+                {aiChatT('similarityThreshold', {
+                  threshold: controller.reCallConfig.value.chunkthreshold,
+                })}
               </div>
               <Slider
                 min={0}

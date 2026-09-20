@@ -5,6 +5,7 @@ import { BIReportDesignController } from '../../controller';
 import BISplit from '../common/split/split';
 import BISelectGroup from './select-group/select-group';
 import { IAppBICubeData, IAppBISchemeData } from '../../interface';
+import { biReportT } from '../../locale';
 
 /** BI报表选择组件 */
 export default defineComponent({
@@ -70,7 +71,11 @@ export default defineComponent({
     const renderSwitchDataIcon = () => {
       return (
         <div class={ns.em('header', 'switch-data')}>
-          <el-tooltip effect='dark' content='切换数据集' placement='top'>
+          <el-tooltip
+            effect='dark'
+            content={biReportT('switchDataset')}
+            placement='top'
+          >
             {{
               default: () => {
                 return (
@@ -202,7 +207,11 @@ export default defineComponent({
           </div>
           <div class={ns.em('header', 'select-icon')}>
             <div class={ns.em('header', 'search')} onClick={changeSearchState}>
-              <el-tooltip effect='dark' content='搜索' placement='top'>
+              <el-tooltip
+                effect='dark'
+                content={biReportT('search')}
+                placement='top'
+              >
                 {renderSearchIcon()}
               </el-tooltip>
             </div>
@@ -241,7 +250,7 @@ export default defineComponent({
             class={ns.em('header', 'search-input')}
             v-model={uiState.value.searchValue}
             onKeydown={handleKeyDown}
-            placeholder='搜索'
+            placeholder={biReportT('search')}
           >
             {{
               prefix: () => {
@@ -341,13 +350,13 @@ export default defineComponent({
           <div class={[ns.e('content'), ns.is('collapse', collapseMode.value)]}>
             {[
               renderGroup(
-                '指标',
+                biReportT('measure'),
                 uiState.value.measureCollapse,
                 c.state?.measure || [],
                 'measure',
               ),
               renderGroup(
-                '维度',
+                biReportT('dimension'),
                 uiState.value.dimensionCollapse,
                 c.state?.dimension || [],
                 'dimension',
@@ -367,7 +376,7 @@ export default defineComponent({
             {{
               top: () => {
                 return renderGroup(
-                  '指标',
+                  biReportT('measure'),
                   uiState.value.measureCollapse,
                   c.state?.measure || [],
                   'measure',
@@ -375,7 +384,7 @@ export default defineComponent({
               },
               bottom: () => {
                 return renderGroup(
-                  '维度',
+                  biReportT('dimension'),
                   uiState.value.dimensionCollapse,
                   c.state?.dimension || [],
                   'dimension',

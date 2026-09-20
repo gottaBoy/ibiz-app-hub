@@ -3,6 +3,7 @@ import { getSpanProps, useNamespace } from '@ibiz-template/vue3-util';
 import day from 'dayjs';
 import { ScreenRealTimeController } from './screen-real-time.controller';
 import './screen-real-time.scss';
+import { dataViewT } from '../locale';
 
 export const ScreenRealTime = defineComponent({
   name: 'ScreenRealTime',
@@ -14,7 +15,15 @@ export const ScreenRealTime = defineComponent({
 
     let timerId: NodeJS.Timeout | null = null;
 
-    const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+    const weekDays = [
+      'sunday',
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+    ];
 
     const leftText = ref<string>('');
     const week = ref<string>('');
@@ -25,7 +34,9 @@ export const ScreenRealTime = defineComponent({
         const now = day();
 
         leftText.value = c.leftTime ? `${now.format(c.leftTime)} ` : '';
-        week.value = c.showWeek ? `星期${weekDays[now.day()]} ` : '';
+        week.value = c.showWeek
+          ? `${dataViewT(`week.${weekDays[now.day()]}`)} `
+          : '';
         rightText.value = c.rightTime ? now.format(c.rightTime) : '';
       }, 1000);
     });

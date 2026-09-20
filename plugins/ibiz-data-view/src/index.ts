@@ -13,6 +13,7 @@ import { IBizCustomButton } from './custom-button';
 import { IBizWaterLevelPond } from './water-level-pond';
 import { IBizCustomSearchBox } from './custom-search-box';
 import { IBizTaggedWall } from './tagged-wall';
+import { registerDataViewLocale } from './locale';
 
 // 自定义边框
 import {
@@ -44,6 +45,7 @@ import {
 // 注入组件
 export default {
   install(_app: App): void {
+    registerDataViewLocale();
     _app.use(IBizDigitalFlop);
     _app.use(IBizScreenDashboard);
     _app.use(IBizScreenPortlet);

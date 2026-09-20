@@ -30,6 +30,7 @@ import { FilterItem } from '../filter-item/filter-item';
 import { BITimeSelect } from '../bi-time-select/bi-time-select';
 import { calcUIActionTag, getSchemaField, isDate } from '../../../util';
 import './bi-drag-element.scss';
+import { biReportT } from '../../../locale';
 import { AppBIPeriodData, ISchemaField } from '../../../interface';
 import { BIAggmodeSelect } from '../bi-aggmode-select/bi-aggmode-select';
 import { aggModeList } from '../../../util/constant-data';
@@ -306,7 +307,9 @@ export default defineComponent({
         await overlay.onWillDismiss();
         overlay = null;
       } else {
-        ibiz.message.error(`未找到 ${item.codename} 属性的Schema配置`);
+        ibiz.message.error(
+          biReportT('schemaNotFound', { codename: item.codename }),
+        );
       }
     };
 
@@ -1171,7 +1174,7 @@ export default defineComponent({
             }
           >
             {icon}
-            <span>配置</span>
+            <span>{biReportT('configure')}</span>
           </div>
         );
       }
@@ -1397,7 +1400,7 @@ export default defineComponent({
           this.ns.is('empty_error', this.error && !this.error.ok),
         ]}
       >
-        拖入{this.caption}
+        {biReportT('dragIn', { caption: this.caption })}
       </div>,
       <div
         class={[

@@ -1,7 +1,7 @@
 import { useComputed, useSignal } from '@preact/signals';
 import { useEffect } from 'preact/hooks';
+import { aiChatT, Namespace } from '../../utils';
 import { IChatToolCall } from '../../interface';
-import { Namespace } from '../../utils';
 import { ChatToolCallItem } from '../chat-tool-call-item/chat-tool-call-item';
 import './chat-tool-call.scss';
 
@@ -48,7 +48,7 @@ export const ChatToolCall = (props: ChatToolCallProps) => {
     <div className={`${ns.b()}`}>
       {!props.toolcallCompleted && (
         <div className={ns.e('loading-container')}>
-          <div className={ns.e('loading-text')}>智能体工具调用执行中</div>
+          <div className={ns.e('loading-text')}>{aiChatT('toolCalling')}</div>
           <div className={ns.e('loading-dot')}></div>
           <div className={ns.e('loading-dot')}></div>
           <div className={ns.e('loading-dot')}></div>
@@ -61,7 +61,9 @@ export const ChatToolCall = (props: ChatToolCallProps) => {
       {props.toolcallCompleted && showToggle.value && (
         <div className={ns.e('toggle')} onClick={handleToggle}>
           <span className={ns.e('toggle-label')}>
-            {isExpanded.value ? '工具调用  收缩' : '工具调用  展开'}
+            {aiChatT(
+              isExpanded.value ? 'collapseToolCalls' : 'expandToolCalls',
+            )}
           </span>
         </div>
       )}

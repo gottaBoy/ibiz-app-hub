@@ -10,6 +10,7 @@ import {
   IUIActionGroupDetail,
 } from '@ibiz/model-core';
 import { RuntimeError } from '@ibiz-template/core';
+import { biReportT } from '../locale';
 import {
   ButtonContainerState,
   UIActionButtonState,
@@ -765,8 +766,8 @@ export class BIReportDesignController implements IBIReportDesignController {
   async close(): Promise<void> {
     if (this.state.dataChangeState) {
       const target = await (ibiz as IData).confirm.warning({
-        title: '确认返回',
-        desc: '返回则无法保存编辑的信息。',
+        title: biReportT('confirmBack'),
+        desc: biReportT('backWarning'),
       });
       if (this.dismiss && target) {
         this.dismiss({ ok: true, data: [] });
@@ -816,7 +817,7 @@ export class BIReportDesignController implements IBIReportDesignController {
       if (res && res.data) {
         result.data = res.data;
         this.setBackUpData(this.state.propertyData);
-        ibiz.message.success('保存成功');
+        ibiz.message.success(biReportT('saveSuccess'));
       }
       this.state.dataChangeState = false;
     } catch (error: any) {

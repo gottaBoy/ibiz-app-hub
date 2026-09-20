@@ -3,7 +3,7 @@
 import { cloneDeep } from 'lodash-es';
 import { useSignal } from '@preact/signals';
 import { useEffect } from 'preact/hooks';
-import { Namespace } from '../../../utils';
+import { aiChatT, Namespace } from '../../../utils';
 import { IChatToolCall } from '../../../interface';
 import {
   ErrorSvg,
@@ -113,7 +113,7 @@ export const ChunkToolCall = (props: ChunkToolCallProps) => {
     if (timerId) clearTimeout(timerId);
     isCopying.value = true;
     navigator.clipboard.writeText(JSON.stringify(props.item, undefined, 2));
-    (window as any).ibiz.message.success('已复制');
+    (window as any).ibiz.message.success(aiChatT('copied'));
     timerId = setTimeout(() => {
       isCopying.value = false;
     }, 2000);
@@ -170,7 +170,7 @@ export const ChunkToolCall = (props: ChunkToolCallProps) => {
         {chunk.type === 'CLUSTER' &&
           (chunk.source_count || chunk.source_count === 0) && (
             <div className={ns.em('footer', 'description')}>
-              由{chunk.source_count}个原文段落智能总结生成
+              {aiChatT('sourceSummary', { count: chunk.source_count })}
             </div>
           )}
         <div className={ns.em('footer', 'docname')}>{chunk.docname}</div>
@@ -190,7 +190,7 @@ export const ChunkToolCall = (props: ChunkToolCallProps) => {
         className={`${ns.e('item')} ${ns.em('item', chunk.type?.toLowerCase() || 'default')}`}
       >
         {chunk.type === 'KBGUIDANCE' ? (
-          <div className={ns.e('kbguidance')}>[引导]</div>
+          <div className={ns.e('kbguidance')}>{aiChatT('guidance')}</div>
         ) : (
           <div
             className={ns.e('similarity')}
@@ -199,9 +199,11 @@ export const ChunkToolCall = (props: ChunkToolCallProps) => {
         )}
 
         {chunk.original && (
-          <div
-            className={ns.e('original')}
-          >{`(向量${(chunk.original || 0).toFixed(2)})`}</div>
+          <div className={ns.e('original')}>
+            {aiChatT('vectorScore', {
+              score: (chunk.original || 0).toFixed(2),
+            })}
+          </div>
         )}
         <div className={ns.em('item', 'content')} title={chunk.content}>
           {chunk.content}
@@ -225,11 +227,15 @@ export const ChunkToolCall = (props: ChunkToolCallProps) => {
               style={`--percent: ${((chunk.similarity || 0) * 100).toFixed(2)}%;`}
             >{`SCORE ${(chunk.similarity || 0).toFixed(2)}`}</div>
             {chunk.original && (
-              <div
-                className={ns.e('original')}
-              >{`(向量${(chunk.original || 0).toFixed(2)})`}</div>
+              <div className={ns.e('original')}>
+                {aiChatT('vectorScore', {
+                  score: (chunk.original || 0).toFixed(2),
+                })}
+              </div>
             )}
-            <div className={ns.em('cluster', 'title')}>[摘要]</div>
+            <div className={ns.em('cluster', 'title')}>
+              {aiChatT('summary')}
+            </div>
             <div className={ns.em('cluster', 'summary')} title={chunk.content}>
               {chunk.content}
             </div>
@@ -244,7 +250,9 @@ export const ChunkToolCall = (props: ChunkToolCallProps) => {
                   transform: chunk.isExpand ? 'rotate(90deg)' : 'rotate(0deg)',
                 }}
               />
-              {`命中 ${chunk.children?.length || 0} 个子段落`}
+              {aiChatT('hitSubsections', {
+                count: chunk.children?.length || 0,
+              })}
             </div>
             {chunk.isExpand && (
               <div className={ns.em('cluster', 'children')}>
@@ -278,7 +286,7 @@ export const ChunkToolCall = (props: ChunkToolCallProps) => {
     return chunks.value.length > 0 ? (
       chunks.value.map(chunk => renderChunk(chunk))
     ) : (
-      <div className={`${ns.e('center-text')}`}>无数据</div>
+      <div className={`${ns.e('center-text')}`}>{aiChatT('noDataLabel')}</div>
     );
   };
 
@@ -287,7 +295,9 @@ export const ChunkToolCall = (props: ChunkToolCallProps) => {
       <div className={ns.e('header')} onClick={() => onCollapse()}>
         <div className={ns.e('header-left')}>
           <div className={ns.em('header-left', 'icon')}>{KnowledgeSvg}</div>
-          <div className={ns.em('header-left', 'caption')}>知识库检索：</div>
+          <div className={ns.em('header-left', 'caption')}>
+            {aiChatT('knowledgeRetrieval')}
+          </div>
           <div
             className={ns.em('header-left', 'desc')}
             title={props.item.result?.query}
@@ -296,10 +306,12 @@ export const ChunkToolCall = (props: ChunkToolCallProps) => {
           </div>
         </div>
         <div className={ns.e('header-right')}>
-          {props.item.error && <span style='color: red;'>发生错误</span>}
+          {props.item.error && (
+            <span style='color: red;'>{aiChatT('error')}</span>
+          )}
           {props.item.error && ErrorSvg}
           <span
-            title='复制'
+            title={aiChatT('copy')}
             className={ns.e('copy')}
             onClick={(event: MouseEvent) => onCopy(event)}
           >

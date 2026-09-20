@@ -8,6 +8,7 @@ import { DevtoolSelect, DevtoolSelectOption } from '../select/index';
 import DevtoolButton from '../devtool-button/devtool-button';
 import MessageBox from '../message-box/message-box';
 import UserConfigEdit from '../user-config-edit/user-config-edit';
+import { devtoolT } from '../../locale/helper';
 
 export const GlobalToolbar = defineComponent({
   name: 'DevToolGlobalToolbar',
@@ -32,7 +33,7 @@ export const GlobalToolbar = defineComponent({
     const result = ref<string>('');
 
     const changeData = ref<Partial<IDevToolConfig> | undefined>(undefined);
-    const onConfigEditClick = () => {
+    const onConfigEditClick = (): void => {
       changeData.value = undefined;
       result.value = '';
       dialog1.value = true;
@@ -49,7 +50,7 @@ export const GlobalToolbar = defineComponent({
       },
     );
 
-    const close = () => {
+    const close = (): void => {
       props.center.triggerVisible(false);
     };
 
@@ -64,7 +65,7 @@ export const GlobalToolbar = defineComponent({
 
     const logLevel = ref(props.center.config.logLevel);
 
-    const handleLevelChange = (value: LogLevelDesc) => {
+    const handleLevelChange = (value: LogLevelDesc): void => {
       if (value === logLevel.value) {
         return;
       }
@@ -83,7 +84,7 @@ export const GlobalToolbar = defineComponent({
       { immediate: true },
     );
 
-    const hasClosed = (type: string) => {
+    const hasClosed = (type: string): void => {
       result.value = type;
     };
 
@@ -103,7 +104,7 @@ export const GlobalToolbar = defineComponent({
     return (
       <div class={[this.ns.b()]}>
         <div class={this.ns.b('left')}>
-          日志级别：
+          {devtoolT('logLevel')}
           <DevtoolSelect
             value={this.logLevel as string}
             onChange={value => this.handleLevelChange(value)}
@@ -121,10 +122,13 @@ export const GlobalToolbar = defineComponent({
           </DevtoolSelect>
         </div>
         <div class={this.ns.b('right')}>
-          <DevtoolButton title='设置' onClick={this.onConfigEditClick}>
+          <DevtoolButton
+            title={devtoolT('settings')}
+            onClick={this.onConfigEditClick}
+          >
             <ion-icon name='settings-outline'></ion-icon>
           </DevtoolButton>
-          <DevtoolButton title='关闭' onClick={this.close}>
+          <DevtoolButton title={devtoolT('close')} onClick={this.close}>
             <ion-icon name='close-outline'></ion-icon>
           </DevtoolButton>
         </div>
@@ -132,7 +136,7 @@ export const GlobalToolbar = defineComponent({
           isShowDialog={this.dialog1}
           onHasClosed={(type: string) => this.hasClosed(type)}
           mask={true}
-          title={'编辑配置'}
+          title={devtoolT('editConfig')}
           onChangeDialog={value => {
             this.dialog1 = value;
           }}

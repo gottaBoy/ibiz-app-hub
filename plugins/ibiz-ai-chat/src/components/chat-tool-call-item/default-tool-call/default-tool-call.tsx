@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'preact/hooks';
 import { useComputed, useSignal } from '@preact/signals';
-import { Namespace } from '../../../utils';
+import { aiChatT, Namespace } from '../../../utils';
 import { IChatToolCall } from '../../../interface';
 import { CopyPasteSvg, CopyingSvg, ErrorSvg, ExpandSvg } from '../../../icons';
 import './default-tool-call.scss';
@@ -33,7 +33,7 @@ export const DefaultToolCall = (props: DefaultToolCallProps) => {
     if (timerId) clearTimeout(timerId);
     isCopying.value = true;
     navigator.clipboard.writeText(JSON.stringify(props.item, undefined, 2));
-    (window as any).ibiz.message.success('已复制');
+    (window as any).ibiz.message.success(aiChatT('copied'));
     timerId = setTimeout(() => {
       isCopying.value = false;
     }, 2000);
@@ -154,10 +154,12 @@ export const DefaultToolCall = (props: DefaultToolCallProps) => {
           </div>
         </div>
         <div className={ns.e('header-right')}>
-          {props.item.error && <span style='color: red;'>发生错误</span>}
+          {props.item.error && (
+            <span style='color: red;'>{aiChatT('error')}</span>
+          )}
           {props.item.error && ErrorSvg}
           <span
-            title='复制'
+            title={aiChatT('copy')}
             className={ns.e('copy')}
             onClick={(event: MouseEvent) => onCopy(event)}
           >

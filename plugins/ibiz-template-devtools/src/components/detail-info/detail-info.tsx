@@ -4,6 +4,7 @@ import { CenterController } from '../../controller/center.controller';
 import { DevToolCollapse, DevToolCollapsePanel } from '../collapse/index';
 import './detail-info.scss';
 import { ObjectViewer } from '../object-viewer/object-viewer';
+import { devtoolT } from '../../locale/helper';
 
 export const DetailInfo = defineComponent({
   name: 'DevToolDetailInfo',
@@ -39,10 +40,13 @@ export const DetailInfo = defineComponent({
     return (
       <div class={[this.ns.b()]}>
         <DevToolCollapse value={this.expandItems}>
-          <DevToolCollapsePanel title='视图上下文' name='context'>
+          <DevToolCollapsePanel title={devtoolT('viewContext')} name='context'>
             <ObjectViewer obj={view.context}></ObjectViewer>
           </DevToolCollapsePanel>
-          <DevToolCollapsePanel title='视图参数' name='viewparams'>
+          <DevToolCollapsePanel
+            title={devtoolT('viewParams')}
+            name='viewparams'
+          >
             {view.params && <ObjectViewer obj={view.params}></ObjectViewer>}
           </DevToolCollapsePanel>
         </DevToolCollapse>

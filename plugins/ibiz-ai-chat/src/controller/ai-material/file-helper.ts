@@ -17,8 +17,8 @@ export class FileHelper extends MaterialHelper {
    * @return {*}  {Promise<void>}
    */
   async excuteAction(
-    event: MouseEvent,
-    item?: IChatToolbarItem,
+    _event: MouseEvent,
+    _item?: IChatToolbarItem,
   ): Promise<void> {
     const uploader = this.aiChat.opts.uploader;
     const {

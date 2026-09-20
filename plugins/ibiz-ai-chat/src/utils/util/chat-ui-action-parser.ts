@@ -1,3 +1,4 @@
+import { aiChatT } from '..';
 import { IChatUIAction } from '../../interface';
 
 /**
@@ -44,7 +45,7 @@ export class ChatUIActionParser {
           chatuiactions = [...completeData.content];
         }
       } catch (e) {
-        console.error('解析完整聊天界面操作失败:', e);
+        console.error(aiChatT('parseActionFailed'), e);
       }
     }
     return chatuiactions;

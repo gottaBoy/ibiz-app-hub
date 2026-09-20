@@ -2,7 +2,7 @@
 import { VNode } from 'preact';
 import { useSignal } from '@preact/signals';
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { Namespace } from '../../../utils';
+import { aiChatT, Namespace } from '../../../utils';
 import { ArrowDown, EmptySvg } from '../../../icons';
 import { ChatSearch } from '../../chat-search/chat-search';
 import { Loading } from '../loading/loading';
@@ -88,7 +88,7 @@ export const SingleSelect = (props: SingleSelectProps) => {
     disabled = false,
     showBorder = true,
     enableSearch = false,
-    placeholder = '请选择',
+    placeholder = aiChatT('selectPlease'),
     icon,
     onChange,
     onSearch,
@@ -184,7 +184,7 @@ export const SingleSelect = (props: SingleSelectProps) => {
       setList(items);
     } catch (error) {
       setList([]);
-      console.error('搜索失败:', error);
+      console.error(aiChatT('searchFailed'), error);
     } finally {
       setLoading(false);
     }
@@ -209,7 +209,7 @@ export const SingleSelect = (props: SingleSelectProps) => {
     return (
       <li className={`el-empty ${ns.e('empty')}`}>
         {EmptySvg}
-        <div className={ns.em('empty', 'text')}>暂无数据</div>
+        <div className={ns.em('empty', 'text')}>{aiChatT('noData')}</div>
       </li>
     );
   };
@@ -244,7 +244,7 @@ export const SingleSelect = (props: SingleSelectProps) => {
           {enableSearch ? (
             <div className={ns.em('dropdown', 'search')}>
               <ChatSearch
-                placeholder='搜索'
+                placeholder={aiChatT('search')}
                 value={query.value}
                 onEnter={handleSearch}
                 onChange={hadnleQueryChange}

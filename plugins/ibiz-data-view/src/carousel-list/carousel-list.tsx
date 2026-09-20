@@ -13,7 +13,7 @@ import {
 import { IDEList, ILayoutPanel, IPanel } from '@ibiz/model-core';
 import { isNil } from 'lodash-es';
 import { createUUID } from 'qx-util';
-import { IControlProvider, IMDControlGroupState } from '@ibiz-template/runtime';
+import { IControlProvider, IApiMDControlGroupState } from '@ibiz-template/runtime';
 import { showTitle } from '@ibiz-template/core';
 import './carousel-list.scss';
 import { CarouselListController } from './carousel-list.controller';
@@ -166,7 +166,7 @@ export const CarouselList = defineComponent({
     };
 
     // 绘制分组
-    const renderGroup = (group: IMDControlGroupState): VNode => {
+    const renderGroup = (group: IApiMDControlGroupState): VNode => {
       const panel = props.modelData.itemLayoutPanel;
       return (
         <el-collapse-item
@@ -214,7 +214,7 @@ export const CarouselList = defineComponent({
             ]}
             style={moveStyle.value}
           >
-            {c.state.groups?.map((group: IMDControlGroupState) => {
+            {c.state.groups?.map(group => {
               return (
                 <div class={[ns.b('scroll-item')]}>{renderGroup(group)}</div>
               );

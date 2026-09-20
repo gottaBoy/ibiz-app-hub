@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useMemo } from 'preact/hooks';
+import { aiChatT, Namespace } from '../../utils';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IChatToolbarItem } from '../../interface';
 import { AiChatController } from '../../controller';
-import { Namespace } from '../../utils';
 import {
   CopySvg,
   DeleteSvg,
@@ -88,8 +88,8 @@ export const ChatToolbar = (props: ChatToolbarProps) => {
    */
   const FooterDefaultItems: IChatToolbarItem[] = [
     {
-      label: '重置对话',
-      title: '重置对话',
+      label: aiChatT('resetChat'),
+      title: aiChatT('resetChat'),
       icon: () => {
         return <ResetDialogueSvg />;
       },
@@ -98,8 +98,8 @@ export const ChatToolbar = (props: ChatToolbarProps) => {
       },
       children: [
         {
-          label: '清空对话',
-          title: '清空对话',
+          label: aiChatT('clearChat'),
+          title: aiChatT('clearChat'),
           icon: () => {
             return <ClearDialogueSvg />;
           },
@@ -117,8 +117,8 @@ export const ChatToolbar = (props: ChatToolbarProps) => {
    */
   const AnswerDefaultItems: IChatToolbarItem[] = [
     {
-      label: '刷新',
-      title: '刷新',
+      label: aiChatT('refresh'),
+      title: aiChatT('refresh'),
       icon: () => {
         return <RefreshSvg />;
       },
@@ -127,8 +127,8 @@ export const ChatToolbar = (props: ChatToolbarProps) => {
       },
     },
     {
-      label: '删除',
-      title: '删除',
+      label: aiChatT('delete'),
+      title: aiChatT('delete'),
       hidden: (): boolean => {
         return !data.realmessageid;
       },
@@ -140,8 +140,8 @@ export const ChatToolbar = (props: ChatToolbarProps) => {
       },
     },
     {
-      label: '复制',
-      title: '复制',
+      label: aiChatT('copy'),
+      title: aiChatT('copy'),
       icon: () => {
         return <CopySvg />;
       },
@@ -156,8 +156,8 @@ export const ChatToolbar = (props: ChatToolbarProps) => {
     AnswerDefaultItems.unshift(
       ...[
         {
-          label: '回填',
-          title: '回填',
+          label: aiChatT('backfill'),
+          title: aiChatT('backfill'),
           icon: () => {
             return <FillSvg />;
           },
@@ -174,8 +174,8 @@ export const ChatToolbar = (props: ChatToolbarProps) => {
    */
   const QuestionDefaultItems: IChatToolbarItem[] = [
     {
-      label: '刷新',
-      title: '刷新',
+      label: aiChatT('refresh'),
+      title: aiChatT('refresh'),
       icon: () => {
         return <RefreshSvg />;
       },

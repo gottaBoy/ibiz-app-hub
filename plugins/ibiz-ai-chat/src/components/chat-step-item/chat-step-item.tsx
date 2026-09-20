@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { aiChatT, Namespace } from '../../utils';
 import { CorrectSvg, FailSvg, LoadingSvg } from '../../icons';
 import { IChatStep } from '../../interface';
-import { Namespace } from '../../utils';
 import './chat-step-item.scss';
 
 export interface ChatStepItemProps {
@@ -128,13 +128,15 @@ export const ChatStepItem = (props: ChatStepItemProps) => {
                   handleToggleClick();
                 }}
               >
-                {expanded ? '收起' : '展开全部'}
+                {expanded ? aiChatT('collapse') : aiChatT('expandAll')}
               </button>
             )}
           </div>
         )}
         {element.status === 'pending' && (
-          <div className={`${ns.e('loadding-text')}`}>加载中......</div>
+          <div className={`${ns.e('loadding-text')}`}>
+            {aiChatT('loadingShort')}
+          </div>
         )}
       </div>
     </div>

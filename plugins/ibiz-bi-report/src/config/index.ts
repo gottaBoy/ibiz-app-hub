@@ -1,4 +1,5 @@
 import { RuntimeError } from '@ibiz-template/core';
+import { biReportT, localizeBiReportConfig } from '../locale';
 import { IChartDefaultConfig } from '../interface';
 import { NumberChartConfig, NumberDefaultData } from './number-chart-config';
 import {
@@ -100,97 +101,117 @@ export { ScatterChartConfig, ScatterChartModel, ScatterDefaultData };
 export { extendData } from './extend-data';
 
 export function getChartConfig(type: string): IChartDefaultConfig {
+  let result: IChartDefaultConfig;
   switch (type) {
     case 'NUMBER':
-      return {
+      result = {
         chartConfig: NumberChartConfig,
         chartDefaultValue: NumberDefaultData,
       };
+      break;
     case 'GAUGE':
-      return {
+      result = {
         chartConfig: GaugeChartConfig,
         chartModel: GaugeChartModel,
         chartDefaultValue: GaugeDefaultData,
       };
+      break;
     case 'MULTI_SERIES_COL':
-      return {
+      result = {
         chartConfig: MultiSeriesColChartConfig,
         chartModel: MultiSeriesColChartModel,
         chartDefaultValue: MultiSeriesColDefaultData,
       };
+      break;
     case 'STACK_COL':
-      return {
+      result = {
         chartConfig: StackColChartConfig,
         chartModel: StackColChartModel,
         chartDefaultValue: StackColDefaultData,
       };
+      break;
     case 'ZONE_COL':
-      return {
+      result = {
         chartConfig: ZoneColChartConfig,
         chartModel: ZoneColChartModel,
         chartDefaultValue: ZoneColDefaultData,
       };
+      break;
     case 'MULTI_SERIES_BAR':
-      return {
+      result = {
         chartConfig: MultiSeriesBarChartConfig,
         chartModel: MultiSeriesBarChartModel,
         chartDefaultValue: MultiSeriesBarDefaultData,
       };
+      break;
     case 'STACK_BAR':
-      return {
+      result = {
         chartConfig: StackBarChartConfig,
         chartModel: StackBarChartModel,
         chartDefaultValue: StackBarDefaultData,
       };
+      break;
     case 'MULTI_SERIES_LINE':
-      return {
+      result = {
         chartConfig: MultiSeriesLineChartConfig,
         chartModel: MultiSeriesLineChartModel,
         chartDefaultValue: MultiSeriesLineDefaultData,
       };
+      break;
     case 'ZONE_LINE':
-      return {
+      result = {
         chartConfig: ZoneLineChartConfig,
         chartModel: ZoneLineChartModel,
         chartDefaultValue: ZoneLineDefaultData,
       };
+      break;
     case 'AREA':
-      return {
+      result = {
         chartConfig: AreaChartConfig,
         chartModel: AreaChartModel,
         chartDefaultValue: AreaDefaultData,
       };
+      break;
     case 'GRID':
-      return {
+      result = {
         chartConfig: TableConfig,
         chartModel: TableModel,
         chartDefaultValue: TableDefaultData,
       };
+      break;
     case 'CROSSTABLE':
-      return {
+      result = {
         chartConfig: CrossTableConfig,
         chartModel: CrossTableModel,
         chartDefaultValue: CrossTableDefaultData,
       };
+      break;
     case 'PIE':
-      return {
+      result = {
         chartConfig: PieChartConfig,
         chartModel: PieChartModel,
         chartDefaultValue: PieDefaultData,
       };
+      break;
     case 'RADAR':
-      return {
+      result = {
         chartConfig: RadarChartConfig,
         chartModel: RadarChartModel,
         chartDefaultValue: RadarDefaultData,
       };
+      break;
     case 'SCATTER':
-      return {
+      result = {
         chartConfig: ScatterChartConfig,
         chartModel: ScatterChartModel,
         chartDefaultValue: ScatterDefaultData,
       };
+      break;
     default:
-      throw new RuntimeError(`传入类型${type}未识别`);
+      throw new RuntimeError(biReportT('unknownChartType', { type }));
   }
+  return {
+    ...result,
+    chartConfig: localizeBiReportConfig(result.chartConfig),
+  };
 }

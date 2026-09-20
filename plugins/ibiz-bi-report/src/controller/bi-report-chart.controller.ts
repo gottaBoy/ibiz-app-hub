@@ -13,6 +13,7 @@ import {
   IAppBIReportMeasure,
 } from '@ibiz/model-core';
 import { IBizContext } from '@ibiz-template/core';
+import { biReportT, biReportDefaultText } from '../locale';
 import { ConverterFactory } from '../converter';
 import {
   ChartType,
@@ -155,6 +156,18 @@ export abstract class BIReportChartController
   ) {
     const { chartModel, chartConfig, chartDefaultValue } = initData;
     this.chartModel = chartModel;
+    const defaultTitle = chartModel?.dechartTitle?.title;
+    if (defaultTitle) {
+      this.chartModel = {
+        ...chartModel,
+        dechartTitle: {
+          ...chartModel.dechartTitle,
+          get title() {
+            return biReportDefaultText(defaultTitle);
+          },
+        },
+      };
+    }
     this.chartConfig = chartConfig;
     this.chartDefaultValue = chartDefaultValue;
     let selectChartType: ChartType = 'NUMBER';
@@ -856,7 +869,7 @@ export abstract class BIReportChartController
   ): string | undefined {
     const { measure } = args;
     if (!measure || !measure.name) {
-      ibiz.log.error('执行数据反查无指标数据中断');
+      ibiz.log.error(biReportT('missingDrillMeasure'));
       return;
     }
     const targetMeasure = this.config.appBIReportMeasures?.find(
@@ -865,12 +878,12 @@ export abstract class BIReportChartController
       },
     );
     if (!targetMeasure) {
-      ibiz.log.error('执行数据反查未找到指标数据中断');
+      ibiz.log.error(biReportT('measureDataNotFound'));
       return;
     }
     const drillDetailAppViewId = targetMeasure.drillDetailAppViewId;
     if (!drillDetailAppViewId) {
-      ibiz.log.error('执行数据反查未找到反查视图中断');
+      ibiz.log.error(biReportT('missingDrillView'));
       return;
     }
     return drillDetailAppViewId;

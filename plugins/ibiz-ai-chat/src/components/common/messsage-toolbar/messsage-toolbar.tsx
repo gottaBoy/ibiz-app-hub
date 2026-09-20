@@ -1,5 +1,5 @@
 import { useMemo } from 'preact/hooks';
-import { Namespace, isSvg } from '../../../utils';
+import { aiChatT, Namespace, isSvg } from '../../../utils';
 import { LikeSvg, DislikeSvg } from '../../../icons';
 import { IChatMessage, IChatToolbarItem } from '../../../interface';
 import { ChatMessage } from '../../../entity';
@@ -29,8 +29,8 @@ export const MessageToolbar = (props: MessageToolbarProps) => {
   const items: IChatToolbarItem[] = [
     {
       id: 'islike',
-      label: '点赞',
-      title: '点赞',
+      label: aiChatT('like'),
+      title: aiChatT('like'),
       icon: () => {
         return <LikeSvg />;
       },
@@ -40,8 +40,8 @@ export const MessageToolbar = (props: MessageToolbarProps) => {
     },
     {
       id: 'isdislike',
-      label: '点踩',
-      title: '点踩',
+      label: aiChatT('dislike'),
+      title: aiChatT('dislike'),
       icon: () => {
         return <DislikeSvg />;
       },

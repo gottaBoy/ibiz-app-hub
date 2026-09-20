@@ -7,6 +7,9 @@ import libCss from 'vite-plugin-libcss';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    dedupe: ['vue'],
+  },
   build: {
     // sourcemap: true,
     lib: {

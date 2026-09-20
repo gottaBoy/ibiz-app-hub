@@ -13,7 +13,7 @@ const DevtoolButton = defineComponent({
   emits: ['click'],
   setup(props, { emit }) {
     const ns = useNamespace('devtool-button');
-    const click = (event: MouseEvent) => {
+    const click = (event: MouseEvent): void => {
       event.stopPropagation();
       emit('click', event);
     };

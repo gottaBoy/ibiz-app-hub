@@ -3,6 +3,7 @@ import { PropType, computed, defineComponent, ref, watch } from 'vue';
 import { IBIReportChartController } from '../../../interface';
 import { useNamespace } from '../../../use';
 import './bi-report-number.scss';
+import { biReportT } from '../../../locale';
 
 export default defineComponent({
   name: 'IBizBIReportNumber',
@@ -308,7 +309,7 @@ export default defineComponent({
                       </g>
                     </svg>
                     <span class={this.ns.em('check-detail', 'text')}>
-                      查看明细
+                      {biReportT('viewDetails')}
                     </span>
                   </div>
                 );
@@ -337,7 +338,7 @@ export default defineComponent({
             {this.reportUIModelStyle.yoy?.show && (
               <div class={this.ns.em('content', 'yoy')}>
                 <div class={this.ns.em('content', 'compare-number')}>
-                  <span>同比</span>
+                  <span>{biReportT('yoy')}</span>
                   <span
                     class={[
                       this.ns.em('content', 'yoy-yoyTotal'),
@@ -376,7 +377,7 @@ export default defineComponent({
             {this.reportUIModelStyle.qoq?.show && (
               <div class={this.ns.em('content', 'qoq')}>
                 <div class={this.ns.em('content', 'compare-number')}>
-                  <span>环比</span>
+                  <span>{biReportT('qoq')}</span>
                   <span
                     class={[
                       this.ns.em('content', 'qoq-qoqTotal'),

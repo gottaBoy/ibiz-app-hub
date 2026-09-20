@@ -3,6 +3,7 @@ import { IChartConfig } from '../../../interface';
 import { useNamespace } from '../../../use';
 import './content-caption.scss';
 import { BIReportDesignController } from '../../../controller';
+import { biReportT } from '../../../locale';
 
 export default defineComponent({
   name: 'BIContentCaption',
@@ -53,7 +54,9 @@ export default defineComponent({
     };
 
     const caption = computed(() => {
-      return props.controller?.state.propertyData.caption || '未命名';
+      return (
+        props.controller?.state.propertyData.caption || biReportT('unnamed')
+      );
     });
 
     return { ns, caption, uiState, onFocus, onChange, handleKeyDown };
@@ -87,18 +90,19 @@ export default defineComponent({
           <el-input
             class={this.ns.e('input')}
             v-model={this.uiState.chartCaption}
-            placeholder='请输入报表名称(不超过32字符)'
+            placeholder={biReportT('reportNamePlaceholder')}
             onFocus={this.onFocus}
             onKeydown={this.handleKeyDown}
             onBlur={this.onChange}
           ></el-input>
         </div>
         <div class={this.ns.e('data-total')}>
-          共
           <span class={this.ns.e('size')}>
-            {this.controller?.state.reportChart?.state?.items.length || 0}
+            {biReportT('recordCount', {
+              count:
+                this.controller?.state.reportChart?.state?.items.length || 0,
+            })}
           </span>
-          条数据
         </div>
       </div>
     );

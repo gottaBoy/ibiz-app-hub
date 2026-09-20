@@ -3,6 +3,7 @@
 import { PropType, Ref, computed, defineComponent, ref, watch } from 'vue';
 import { useNamespace } from '../../use';
 import './bi-report-property.scss';
+import { biReportT, localizeBiReportConfig } from '../../locale';
 import BIChartTypes from './chart-types/chart-types';
 import BICollapseItem from '../common/collapse-item/collapse-item';
 import BIColorScheme from '../common/color-scheme/color-scheme';
@@ -68,7 +69,9 @@ export default defineComponent({
 
     // 属性配置
     const propertyConfig = computed(() => {
-      return reportChart.value?.state?.propertyConfig || {};
+      return localizeBiReportConfig(
+        reportChart.value?.state?.propertyConfig || {},
+      );
     });
 
     // 切换报表时，重新设置伸缩配置
@@ -401,9 +404,9 @@ export default defineComponent({
             );
           default:
             return (
-              <div class={ns.e('no-support')}>{`${
-                (item.caption, groupId)
-              }暂未实现`}</div>
+              <div class={ns.e('no-support')}>
+                {biReportT('notImplemented', { name: item.caption || groupId })}
+              </div>
             );
         }
       });
@@ -453,7 +456,9 @@ export default defineComponent({
     const renderPagination = () => {
       return (
         <div class={ns.e('chart-pagination')}>
-          <span class={ns.em('chart-pagination', 'caption')}>显示条数:</span>
+          <span class={ns.em('chart-pagination', 'caption')}>
+            {biReportT('itemsPerPage')}
+          </span>
           <el-popover
             v-model:visible={groupConfig.value.paginationVisible}
             trigger='click'
@@ -471,7 +476,7 @@ export default defineComponent({
                       {propertyData.value?.data.size || 100}
                     </span>
                     <span class={ns.em('chart-pagination', 'icon')}>
-                      <span>条</span>
+                      <span>{biReportT('unitItem')}</span>
                       <svg
                         viewBox='0 0 16 16'
                         xmlns='http://www.w3.org/2000/svg'
@@ -534,7 +539,7 @@ export default defineComponent({
   render() {
     return (
       <div class={this.ns.b('container')}>
-        <div class={this.ns.e('caption')}>图表类型</div>
+        <div class={this.ns.e('caption')}>{biReportT('chartType')}</div>
         <div class={this.ns.e('chart-types')}>
           <bi-chart-types
             onSelect={this.onReportChartTypeChange}
@@ -567,7 +572,9 @@ export default defineComponent({
                   );
                 },
                 label: () => {
-                  return <div class={this.ns.e('data')}>数据</div>;
+                  return (
+                    <div class={this.ns.e('data')}>{biReportT('data')}</div>
+                  );
                 },
               }}
             </el-tab-pane>
@@ -590,7 +597,9 @@ export default defineComponent({
                   );
                 },
                 label: () => {
-                  return <div class={this.ns.e('style')}>样式</div>;
+                  return (
+                    <div class={this.ns.e('style')}>{biReportT('style')}</div>
+                  );
                 },
               }}
             </el-tab-pane>

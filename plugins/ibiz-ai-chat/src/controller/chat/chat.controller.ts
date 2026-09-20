@@ -6,7 +6,7 @@ import { IContainerOptions, IResourceOptions } from '../../interface';
 import { AiTopicController } from '../ai-topic/ai-topic.controller';
 import { AiChatController } from '../ai-chat/ai-chat.controller';
 import { ChatTopic } from '../../entity';
-import { IndexedDBUtil } from '../../utils';
+import { aiChatT, IndexedDBUtil } from '../../utils';
 import { AIChatConst } from '../../constants';
 import { getChatSessionId } from '../../utils/util/util';
 
@@ -143,7 +143,9 @@ export class ChatController {
         mode: opts.mode ? opts.mode : 'DEFAULT',
         containerOptions: opts.containerOptions,
         caption:
-          opts.mode && opts.mode === 'TOPIC' ? 'AI助手' : chatOptions.caption,
+          opts.mode && opts.mode === 'TOPIC'
+            ? aiChatT('aiAssistant')
+            : chatOptions.caption,
         autoClose: opts.containerOptions?.autoClose,
         openMode: opts.containerOptions?.openMode,
         hideTopicSidebar: opts.topicOptions?.hideTopicSidebar || false,
@@ -249,7 +251,9 @@ export class ChatController {
           mode: opts.mode ? opts.mode : 'DEFAULT',
           containerOptions: opts.containerOptions,
           caption:
-            opts.mode && opts.mode === 'TOPIC' ? 'AI助手' : chatOptions.caption,
+            opts.mode && opts.mode === 'TOPIC'
+              ? aiChatT('aiAssistant')
+              : chatOptions.caption,
           enableBackFill: opts.containerOptions?.enableBackFill,
           contentToolbarItems: chatOptions.contentToolbarItems,
           footerToolbarItems: chatOptions.footerToolbarItems,
@@ -311,8 +315,8 @@ export class ChatController {
       chatOptions.sessionid = sessionid;
       topicOptions.aiChat.sessionid = sessionid;
       // 更正话题标题
-      topicOptions.caption = '临时会话';
-      topicOptions.sourceCaption = '临时会话';
+      topicOptions.caption = aiChatT('temporaryChat');
+      topicOptions.sourceCaption = aiChatT('temporaryChat');
       return;
     }
     // 计算激活话题
@@ -359,11 +363,11 @@ export class ChatController {
     const resourceMode = resourceOptions.resourceMode;
     if (resourceMode === 'LOCAL') {
       if (topicOptions.captionMode !== 'default') {
-        topicOptions.sourceCaption = '新会话';
+        topicOptions.sourceCaption = aiChatT('newChat');
         if (currentTopic && currentTopic.caption) {
           topicOptions.caption = currentTopic.caption;
         } else {
-          topicOptions.caption = '新会话';
+          topicOptions.caption = aiChatT('newChat');
         }
       } else {
         topicOptions.sourceCaption = topicOptions.caption;
@@ -444,7 +448,7 @@ export class ChatController {
           caption:
             this.backupChatOptions?.mode &&
             this.backupChatOptions.mode === 'TOPIC'
-              ? 'AI助手'
+              ? aiChatT('aiAssistant')
               : opts.caption,
           enableBackFill:
             this.backupChatOptions?.containerOptions?.enableBackFill,

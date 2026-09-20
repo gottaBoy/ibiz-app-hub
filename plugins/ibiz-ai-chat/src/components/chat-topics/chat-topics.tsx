@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'preact/hooks';
 import { Fragment } from 'preact/jsx-runtime';
 import { AiTopicController } from '../../controller';
 import { ChatTopic } from '../../entity';
-import { Namespace } from '../../utils';
+import { aiChatT, Namespace } from '../../utils';
 import { ChatTopicItem } from '../chat-topic-item/chat-topic-item';
 import {
   NewDialogueSvg,
@@ -151,7 +151,7 @@ export const ChatTopics = (props: ChatTopicProps) => {
         <div className={ns.e('collapse-container')}>
           <div
             className={ns.e('icon-item')}
-            title={'打开侧栏'}
+            title={aiChatT('openSidebar')}
             onClick={() => switchSidebarCollapse()}
           >
             <SiderbarSvg />
@@ -159,7 +159,7 @@ export const ChatTopics = (props: ChatTopicProps) => {
           {props.controller.isTempChat.value === false ? (
             <div
               className={ns.e('icon-item')}
-              title={'进入临时会话'}
+              title={aiChatT('enterTemporaryChat')}
               onClick={() => switchTempChatState(true)}
             >
               <TempChatSvg />
@@ -167,7 +167,7 @@ export const ChatTopics = (props: ChatTopicProps) => {
           ) : (
             <div
               className={ns.e('icon-item')}
-              title={'退出临时会话'}
+              title={aiChatT('exitTemporaryChat')}
               onClick={() => switchTempChatState(false)}
             >
               <TempChatSelectedSvg />
@@ -180,14 +180,14 @@ export const ChatTopics = (props: ChatTopicProps) => {
             <div className={ns.e('icon-container')}>
               <div
                 className={ns.e('icon-item')}
-                title={'收起侧栏'}
+                title={aiChatT('collapseSidebar')}
                 onClick={() => switchSidebarCollapse()}
               >
                 <SiderbarSvg />
               </div>
               <div
                 className={ns.e('icon-item')}
-                title={'新建对话'}
+                title={aiChatT('newDialogue')}
                 onClick={() => globalNewTopic()}
               >
                 <NewDialogueSvg />
@@ -195,7 +195,7 @@ export const ChatTopics = (props: ChatTopicProps) => {
               {props.controller.isTempChat.value === false ? (
                 <div
                   className={ns.e('icon-item')}
-                  title={'进入临时会话'}
+                  title={aiChatT('enterTemporaryChat')}
                   onClick={() => switchTempChatState(true)}
                 >
                   <TempChatSvg />
@@ -203,7 +203,7 @@ export const ChatTopics = (props: ChatTopicProps) => {
               ) : (
                 <div
                   className={ns.e('icon-item')}
-                  title={'退出临时会话'}
+                  title={aiChatT('exitTemporaryChat')}
                   onClick={() => switchTempChatState(false)}
                 >
                   <TempChatSelectedSvg />
@@ -212,7 +212,7 @@ export const ChatTopics = (props: ChatTopicProps) => {
             </div>
             <ChatSearch
               value={query.value}
-              placeholder='搜索话题'
+              placeholder={aiChatT('searchTopic')}
               onChange={handleChange.bind(this)}
             />
           </div>
@@ -233,17 +233,17 @@ export const ChatTopics = (props: ChatTopicProps) => {
                 );
               })
             ) : (
-              <div className={ns.e('empty')}>暂无话题</div>
+              <div className={ns.e('empty')}>{aiChatT('noTopics')}</div>
             )}
           </div>
           <div className={ns.e('footer')}>
             <div
-              title='清空会话'
+              title={aiChatT('clearChat')}
               className={ns.e('action')}
               onClick={() => props.controller.clearTopic()}
             >
               <RemoveSvg />
-              <span>清空会话</span>
+              <span>{aiChatT('clearChat')}</span>
             </div>
           </div>
         </Fragment>

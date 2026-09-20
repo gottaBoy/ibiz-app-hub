@@ -15,6 +15,7 @@ import {
 } from '@ibiz/model-core';
 import { ISchemaField } from '../interface';
 import { parseReportUIModel } from './chart-util';
+import { biReportT } from '../locale';
 
 /**
  * 不需要编辑器的操作符
@@ -30,21 +31,96 @@ export const ExcludeOPs: string[] = [
  * 过滤操作模式
  */
 export const FilterModes = [
-  { valueOP: ValueOP.EQ, label: '等于' },
-  { valueOP: ValueOP.NOT_EQ, label: '不等于' },
-  { valueOP: ValueOP.GT, label: '大于' },
-  { valueOP: ValueOP.GT_AND_EQ, label: '大于等于' },
-  { valueOP: ValueOP.LT, label: '小于' },
-  { valueOP: ValueOP.LT_AND_EQ, label: '小于等于' },
-  { valueOP: ValueOP.IS_NULL, label: '为空' },
-  { valueOP: ValueOP.IS_NOT_NULL, label: '非空' },
-  { valueOP: ValueOP.IN, label: '属于' },
-  { valueOP: ValueOP.NOT_IN, label: '不属于' },
-  { valueOP: ValueOP.LIKE, label: '文本包含' },
-  { valueOP: ValueOP.LIFT_LIKE, label: '文本左包含' },
-  { valueOP: ValueOP.RIGHT_LIKE, label: '文本右包含' },
-  { valueOP: ValueOP.EXISTS, label: '存在' },
-  { valueOP: ValueOP.NOT_EXISTS, label: '不存在' },
+  {
+    valueOP: ValueOP.EQ,
+    get label() {
+      return biReportT('operators.equal');
+    },
+  },
+  {
+    valueOP: ValueOP.NOT_EQ,
+    get label() {
+      return biReportT('operators.notEqual');
+    },
+  },
+  {
+    valueOP: ValueOP.GT,
+    get label() {
+      return biReportT('operators.greater');
+    },
+  },
+  {
+    valueOP: ValueOP.GT_AND_EQ,
+    get label() {
+      return biReportT('operators.greaterOrEqual');
+    },
+  },
+  {
+    valueOP: ValueOP.LT,
+    get label() {
+      return biReportT('operators.less');
+    },
+  },
+  {
+    valueOP: ValueOP.LT_AND_EQ,
+    get label() {
+      return biReportT('operators.lessOrEqual');
+    },
+  },
+  {
+    valueOP: ValueOP.IS_NULL,
+    get label() {
+      return biReportT('operators.empty');
+    },
+  },
+  {
+    valueOP: ValueOP.IS_NOT_NULL,
+    get label() {
+      return biReportT('operators.notEmpty');
+    },
+  },
+  {
+    valueOP: ValueOP.IN,
+    get label() {
+      return biReportT('operators.in');
+    },
+  },
+  {
+    valueOP: ValueOP.NOT_IN,
+    get label() {
+      return biReportT('operators.notIn');
+    },
+  },
+  {
+    valueOP: ValueOP.LIKE,
+    get label() {
+      return biReportT('operators.contains');
+    },
+  },
+  {
+    valueOP: ValueOP.LIFT_LIKE,
+    get label() {
+      return biReportT('operators.leftContains');
+    },
+  },
+  {
+    valueOP: ValueOP.RIGHT_LIKE,
+    get label() {
+      return biReportT('operators.rightContains');
+    },
+  },
+  {
+    valueOP: ValueOP.EXISTS,
+    get label() {
+      return biReportT('operators.exists');
+    },
+  },
+  {
+    valueOP: ValueOP.NOT_EXISTS,
+    get label() {
+      return biReportT('operators.notExists');
+    },
+  },
 ];
 
 /**

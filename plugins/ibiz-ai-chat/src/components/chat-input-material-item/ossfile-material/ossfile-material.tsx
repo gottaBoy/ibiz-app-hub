@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useComputed } from '@preact/signals';
+import { aiChatT, Namespace } from '../../../utils';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AiChatController } from '../../../controller';
 import { IMaterial } from '../../../interface';
-import { Namespace } from '../../../utils';
 import './ossfile-material.scss';
 import { DownLoadSvg, FileSvg } from '../../../icons';
 
@@ -38,15 +38,15 @@ export const OssfileMaterial = (props: OssfileMaterialProps) => {
   const stateText = useComputed(() => {
     const tempState = (props.material.metadata as any).state;
     if (tempState === 'successed') {
-      return '上传成功';
+      return aiChatT('uploadSuccess');
     }
     if (tempState === 'uploading') {
-      return '上传中';
+      return aiChatT('uploading');
     }
     if (tempState === 'failed') {
-      return '上传失败';
+      return aiChatT('uploadFailed');
     }
-    return '未知状态';
+    return aiChatT('unknownStatus');
   });
 
   const stateColor = useComputed(() => {
@@ -89,7 +89,7 @@ export const OssfileMaterial = (props: OssfileMaterialProps) => {
           {state.value === 'successed' && (
             <div
               className={ns.be('metadata', 'img')}
-              title='下载'
+              title={aiChatT('download')}
               onClick={downloadFile}
             >
               <DownLoadSvg />

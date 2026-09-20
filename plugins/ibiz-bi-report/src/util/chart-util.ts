@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { clone } from 'ramda';
+import { biReportT, biReportScriptText } from '../locale';
 import {
   IAppBIReport,
   IAppBIReportDimension,
@@ -88,7 +89,7 @@ export function parseReportUIModel(key: string, report: IAppBIReport) {
       return model[key];
     }
   } catch (error) {
-    ibiz.message.error('解析报表UI模型错误');
+    ibiz.message.error(biReportT('parseModelError'));
   }
 }
 
@@ -326,7 +327,7 @@ export function handleSerieGroupTip(
           // 计算维度项分层
           let dimcatalogs = '';
           catalogData.forEach((item) => {
-            let text = item.valueText || '未定义'
+            let text = item.valueText || ${biReportScriptText('undefinedValue')}
             if(chartData && Object.keys(chartData).length > 0 && chartData[item.codename] && chartData[item.codename][item.value]){
               text = chartData[item.codename][item.value];
             }
@@ -358,7 +359,7 @@ export function handleSerieGroupTip(
         // 计算维度项分层
         let dimcatalogs = '';
         catalogData.forEach((item) => {
-          let text = item.valueText || '未定义'
+          let text = item.valueText || ${biReportScriptText('undefinedValue')}
           if(chartData && Object.keys(chartData).length > 0 && chartData[item.codename] && chartData[item.codename][item.value]){
             text = chartData[item.codename][item.value];
           }

@@ -17,6 +17,7 @@ import {
   ValueOP,
   getEditorProvider,
 } from '@ibiz-template/runtime';
+import { biReportT } from '../../../locale';
 import { IEditor } from '@ibiz/model-core';
 import { useNamespace } from '../../../use';
 import {
@@ -293,7 +294,9 @@ export const FilterItem = defineComponent({
     return (
       <div class={this.ns.b()}>
         <div class={this.ns.e('header')}>
-          <span class={this.ns.em('header', 'caption')}>筛选</span>
+          <span class={this.ns.em('header', 'caption')}>
+            {biReportT('filter')}
+          </span>
           <span class={this.ns.em('header', 'icon')}>
             <ion-icon name='close-outline' onClick={this.onClose}></ion-icon>
           </span>
@@ -301,9 +304,9 @@ export const FilterItem = defineComponent({
         {this.renderContent()}
         <div class={this.ns.e('footer')}>
           <el-button text onClick={this.onClose}>
-            取消
+            {biReportT('cancel')}
           </el-button>
-          <el-button onClick={this.onConfirm}>确定</el-button>
+          <el-button onClick={this.onConfirm}>{biReportT('confirm')}</el-button>
         </div>
       </div>
     );

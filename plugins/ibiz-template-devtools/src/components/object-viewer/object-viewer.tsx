@@ -2,6 +2,7 @@ import { defineComponent } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { DevToolCollapse, DevToolCollapsePanel } from '../collapse/index';
 import './object-viewer.scss';
+import { devtoolT } from '../../locale/helper';
 
 export const ObjectViewer = defineComponent({
   name: 'DevToolObjectViewer',
@@ -15,15 +16,15 @@ export const ObjectViewer = defineComponent({
   setup() {
     const ns = useNamespace('object-viewer');
 
-    const copy = (value: string) => {
+    const copy = (value: string): void => {
       if (!value) {
         return;
       }
       const result = ibiz.util.text.copy(value);
       if (result) {
-        ibiz.message.success('拷贝成功!');
+        ibiz.message.success(devtoolT('copySuccess'));
       } else {
-        ibiz.message.error('拷贝失败，浏览器copy操作不被支持或未被启用!');
+        ibiz.message.error(devtoolT('copyFailed'));
       }
     };
 

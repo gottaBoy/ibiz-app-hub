@@ -1,3 +1,4 @@
+import { aiChatT } from '../../utils';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IChatToolbarItem } from '../../interface';
 import { MaterialHelper } from './material-helper';
@@ -33,7 +34,7 @@ export class CommonHelper extends MaterialHelper {
           {},
         );
       } else {
-        console.error('未找到扩展工具栏点击事件');
+        console.error(aiChatT('noToolbarAction'));
       }
     }
     if (result && result.data && result.data.length > 0) {

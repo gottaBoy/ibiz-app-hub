@@ -125,7 +125,7 @@ export default {
    */
   emptyData: {
     type: String,
-    default: Variables.noData
+    default: undefined
   },
 
   /**
