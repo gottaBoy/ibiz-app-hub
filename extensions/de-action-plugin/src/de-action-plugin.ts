@@ -3,6 +3,7 @@ import { IDataEntity, Method } from '@ibiz-template/runtime';
 import { IAppDEAction } from '@ibiz/model-core';
 import dayjs from 'dayjs';
 import { createUUID } from 'qx-util';
+import { deActionT } from './locale';
 
 export class DeActionPlugin extends Method {
   declare method: IAppDEAction;
@@ -43,7 +44,7 @@ export class DeActionPlugin extends Method {
     params?: IParams,
   ): Promise<IHttpResponse<IDataEntity>> {
     if (!data) {
-      throw new RuntimeError('create行为没有传data');
+      throw new RuntimeError(deActionT('createMissingData'));
     }
     const path = this.calcPath(context);
     const res = await this.app.net.post(path, data, params);
@@ -69,7 +70,7 @@ export class DeActionPlugin extends Method {
     params?: IParams,
   ): Promise<IHttpResponse<IDataEntity>> {
     if (!data) {
-      throw new RuntimeError('update行为没有传data');
+      throw new RuntimeError(deActionT('updateMissingData'));
     }
     const path = this.calcPath(context);
     const res = await this.app.net.put(

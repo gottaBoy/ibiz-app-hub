@@ -1,4 +1,9 @@
-export default {
+import {
+  localizeThemeLayoutModel,
+  themePluginCaption,
+} from '../locale';
+
+const DEGridView = {
   layoutMode: 'FLEX',
   layout: {
     layout: 'FLEX',
@@ -15,7 +20,7 @@ export default {
         predefinedType: 'VIEWMSG_POS',
         id: 'viewmsg_pos_top',
       },
-      caption: '视图消息占位',
+      caption: themePluginCaption('viewMessagePlaceholder'),
       itemStyle: 'DEFAULT',
       itemType: 'RAWITEM',
       layoutPos: {
@@ -38,7 +43,7 @@ export default {
                   actionGroupExtractMode: 'ITEM',
                   panelItems: [
                     {
-                      caption: '页面标题',
+                      caption: themePluginCaption('pageTitle'),
                       itemStyle: 'DEFAULT',
                       itemType: 'CTRLPOS',
                       layoutPos: {
@@ -54,7 +59,7 @@ export default {
                     layout: 'FLEX',
                   },
                   dataRegionType: 'INHERIT',
-                  caption: '容器',
+                  caption: themePluginCaption('container'),
                   itemStyle: 'DEFAULT',
                   itemType: 'CONTAINER',
                   layoutPos: {
@@ -69,7 +74,7 @@ export default {
                 layout: 'FLEX',
               },
               dataRegionType: 'INHERIT',
-              caption: '容器',
+              caption: themePluginCaption('container'),
               itemStyle: 'DEFAULT',
               itemType: 'CONTAINER',
               layoutPos: {
@@ -86,7 +91,7 @@ export default {
                   actionGroupExtractMode: 'ITEM',
                   panelItems: [
                     {
-                      caption: '搜索栏',
+                      caption: themePluginCaption('searchBar'),
                       itemStyle: 'DEFAULT',
                       itemType: 'CTRLPOS',
                       layoutPos: {
@@ -102,7 +107,7 @@ export default {
                     layout: 'FLEX',
                   },
                   dataRegionType: 'INHERIT',
-                  caption: '容器',
+                  caption: themePluginCaption('container'),
                   itemStyle: 'DEFAULT',
                   itemType: 'CONTAINER',
                   layoutPos: {
@@ -116,7 +121,7 @@ export default {
                   actionGroupExtractMode: 'ITEM',
                   panelItems: [
                     {
-                      caption: '工具栏',
+                      caption: themePluginCaption('toolbar'),
                       itemStyle: 'DEFAULT',
                       itemType: 'CTRLPOS',
                       layoutPos: {
@@ -132,7 +137,7 @@ export default {
                     layout: 'FLEX',
                   },
                   dataRegionType: 'INHERIT',
-                  caption: '容器',
+                  caption: themePluginCaption('container'),
                   itemStyle: 'DEFAULT',
                   itemType: 'CONTAINER',
                   layoutPos: {
@@ -148,7 +153,7 @@ export default {
                 layout: 'FLEX',
               },
               dataRegionType: 'INHERIT',
-              caption: '容器',
+              caption: themePluginCaption('container'),
               itemStyle: 'DEFAULT',
               itemType: 'CONTAINER',
               layoutPos: {
@@ -167,7 +172,7 @@ export default {
             valign: 'center',
           },
           dataRegionType: 'INHERIT',
-          caption: '容器',
+          caption: themePluginCaption('container'),
           itemStyle: 'DEFAULT',
           itemType: 'CONTAINER',
           layoutPos: {
@@ -182,7 +187,7 @@ export default {
         layout: 'FLEX',
       },
       dataRegionType: 'INHERIT',
-      caption: '引用布局面板',
+      caption: themePluginCaption('referencedLayoutPanel'),
       itemStyle: 'DEFAULT',
       itemType: 'CONTAINER',
       layoutPos: {
@@ -203,7 +208,7 @@ export default {
         predefinedType: 'VIEWMSG_POS',
         id: 'viewmsg_pos_body',
       },
-      caption: '视图消息占位',
+      caption: themePluginCaption('viewMessagePlaceholder'),
       itemStyle: 'DEFAULT',
       itemType: 'RAWITEM',
       layoutPos: {
@@ -220,7 +225,7 @@ export default {
           actionGroupExtractMode: 'ITEM',
           panelItems: [
             {
-              caption: '搜索表单',
+              caption: themePluginCaption('searchForm'),
               itemStyle: 'DEFAULT',
               itemType: 'CTRLPOS',
               layoutPos: {
@@ -250,7 +255,7 @@ export default {
         layout: 'FLEX',
       },
       dataRegionType: 'INHERIT',
-      caption: '引用布局面板',
+      caption: themePluginCaption('referencedLayoutPanel'),
       itemStyle: 'DEFAULT',
       itemType: 'CONTAINER',
       layoutPos: {
@@ -264,7 +269,7 @@ export default {
       actionGroupExtractMode: 'ITEM',
       panelItems: [
         {
-          caption: '表格',
+          caption: themePluginCaption('grid'),
           itemStyle: 'DEFAULT',
           itemType: 'CTRLPOS',
           layoutPos: {
@@ -281,7 +286,7 @@ export default {
         layout: 'FLEX',
       },
       dataRegionType: 'INHERIT',
-      caption: '容器',
+      caption: themePluginCaption('container'),
       itemStyle: 'DEFAULT',
       itemType: 'CONTAINER',
       layoutPos: {
@@ -293,7 +298,7 @@ export default {
     },
     {
       rawItem: {
-        caption: '主题插件自定义布局',
+        caption: themePluginCaption('customLayout'),
         halign: 'LEFT',
         renderMode: 'PARAGRAPH',
         valign: 'MIDDLE',
@@ -303,7 +308,7 @@ export default {
         id: 'static_label',
         appId: 'sztrainsys__web',
       },
-      caption: '标签',
+      caption: themePluginCaption('label'),
       itemStyle: 'DEFAULT',
       itemType: 'RAWITEM',
       layoutPos: {
@@ -326,7 +331,7 @@ export default {
         predefinedType: 'VIEWMSG_POS',
         id: 'viewmsg_pos_bottom',
       },
-      caption: '视图消息占位',
+      caption: themePluginCaption('viewMessagePlaceholder'),
       itemStyle: 'DEFAULT',
       itemType: 'RAWITEM',
       layoutPos: {
@@ -340,7 +345,7 @@ export default {
   layoutPanel: true,
   codeName: 'GridViewLayout',
   controlType: 'VIEWLAYOUTPANEL',
-  logicName: '表格视图布局(预置模型)',
+  logicName: '\u8868\u683C\u89C6\u56FE\u5E03\u5C40(\u9884\u7F6E\u6A21\u578B)',
   appDataEntityId: 'frontmodel.viewlayoutmodelrepository',
   controlParam: {},
   modelId: 'd7c15227abc2b1d2198b5b99cb78b41d',
@@ -348,3 +353,5 @@ export default {
   name: 'layoutpanel',
   id: 'gridviewlayout',
 };
+
+export default localizeThemeLayoutModel(DEGridView);

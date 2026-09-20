@@ -5,6 +5,7 @@ import {
   useNamespace,
 } from '@ibiz-template/vue3-util';
 import { EditorPluginController } from './editor-plugin.controller';
+import { editorT } from './locale';
 import './editor-plugin.scss';
 
 export const EditorPlugin = defineComponent({
@@ -29,7 +30,7 @@ export const EditorPlugin = defineComponent({
           this.readonly ? this.ns.m('readonly') : '',
         ]}
       >
-        编辑器插件内容
+        {editorT('pluginContent')}
       </div>
     );
   },

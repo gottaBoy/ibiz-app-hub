@@ -23,6 +23,7 @@ import {
 } from '@ibiz-template/vue3-util';
 import { IAppView, IControl } from '@ibiz/model-core';
 import { ViewPluginController } from './view-plugin.controller';
+import { viewPluginT } from './locale';
 import './view-plugin.scss';
 
 export const ViewPlugin = defineComponent({
@@ -163,7 +164,7 @@ export const ViewPlugin = defineComponent({
       if (this.c.engines.length === 0) {
         layoutPanel = (
           <span style={'color:red;'}>
-            {ibiz.i18n.t('vue3Util.view.viewType', {
+            {viewPluginT('emptyViewType', {
               viewType: this.modelData.viewType,
             })}
           </span>
@@ -208,7 +209,7 @@ export const ViewPlugin = defineComponent({
         const tag = this.getCtrlTeleportTag(ctrl);
         if (!tag) {
           ibiz.log.error(
-            ibiz.i18n.t('vue3Util.view.noTeleportTag', {
+            viewPluginT('noTeleportTag', {
               name: ctrl.name,
             }),
           );
@@ -242,7 +243,9 @@ export const ViewPlugin = defineComponent({
         v-loading={this.c.state.isLoading}
       >
         {layoutPanel}
-        <div class={this.ns2.b('footer')}>视图底部自定义内容区域</div>
+        <div class={this.ns2.b('footer')}>
+          {viewPluginT('footer')}
+        </div>
         {teleportContent}
         {errorContent}
       </div>

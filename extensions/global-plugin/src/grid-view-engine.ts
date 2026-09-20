@@ -11,6 +11,7 @@ import {
   IApiGridViewCall,
 } from '@ibiz-template/runtime';
 import { IAppDEGridView } from '@ibiz/model-core';
+import { globalPluginT } from './locale';
 
 export class GridViewEngine extends MDViewEngine {
   declare protected view: ViewController<
@@ -44,7 +45,7 @@ export class GridViewEngine extends MDViewEngine {
         }
       }
       if (!tag) {
-        throw new RuntimeError(ibiz.i18n.t('viewEngine.noExpandTag'));
+        throw new RuntimeError(globalPluginT('noExpandTag'));
       }
       this.grid.changeCollapse({ tag, expand: true });
       return null;
@@ -60,7 +61,7 @@ export class GridViewEngine extends MDViewEngine {
         }
       }
       if (!tag) {
-        throw new RuntimeError(ibiz.i18n.t('viewEngine.noCollapseTag'));
+        throw new RuntimeError(globalPluginT('noCollapseTag'));
       }
       this.grid.changeCollapse({ tag, expand: false });
       return null;
@@ -92,6 +93,6 @@ export class GridViewEngine extends MDViewEngine {
 
   protected async load(args: MDCtrlLoadParams = {}): Promise<void> {
     await this.xdataControl.load({ isInitialLoad: true, ...args });
-    ibiz.message.success('全局插件触发成功');
+    ibiz.message.success(globalPluginT('loadSuccess'));
   }
 }

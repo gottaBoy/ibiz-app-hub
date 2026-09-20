@@ -2,6 +2,7 @@ import { IPanelItem } from '@ibiz/model-core';
 import { computed, defineComponent, PropType } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { PanelItemPluginController } from './panel-item-plugin.controller';
+import { panelItemT } from './locale';
 import './panel-item-plugin.scss';
 
 export const PanelItemPlugin = defineComponent({
@@ -33,6 +34,6 @@ export const PanelItemPlugin = defineComponent({
     };
   },
   render() {
-    return <div class={this.classArr}>面板项插件内容</div>;
+    return <div class={this.classArr}>{panelItemT('pluginContent')}</div>;
   },
 });

@@ -2,6 +2,7 @@ import { useNamespace } from '@ibiz-template/vue3-util';
 import { defineComponent, PropType } from 'vue';
 import { IDBPortletPart } from '@ibiz/model-core';
 import { PortletPluginController } from './portlet-plugin.controller';
+import { portletT } from './locale';
 import './portlet-plugin.scss';
 
 export const PortletPlugin = defineComponent({
@@ -28,6 +29,6 @@ export const PortletPlugin = defineComponent({
       this.ns.m(this.modelData.codeName),
       ...this.controller.containerClass,
     ];
-    return <div class={classArr}>门户部件插件内容</div>;
+    return <div class={classArr}>{portletT('pluginContent')}</div>;
   },
 });

@@ -17,6 +17,7 @@ export default defineConfig({
         '@ibiz-template/model-helper',
         '@ibiz-template/runtime',
         '@ibiz-template/theme',
+        '@ibiz-template/web-theme',
         '@ibiz-template/vue3-util',
         '@ibiz/dynamic-model-api',
         '@floating-ui/dom',

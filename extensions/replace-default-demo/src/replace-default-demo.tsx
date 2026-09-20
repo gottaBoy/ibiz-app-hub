@@ -3,6 +3,7 @@ import { useControlController, useNamespace } from '@ibiz-template/vue3-util';
 import { IDEGrid } from '@ibiz/model-core';
 import { IControlProvider } from '@ibiz-template/runtime';
 import { ReplaceDefaultDemoController } from './replace-default-demo.controller';
+import { replaceDefaultDemoT } from './locale';
 import './replace-default-demo.scss';
 
 export const ReplaceDefaultDemo = defineComponent({
@@ -63,6 +64,6 @@ export const ReplaceDefaultDemo = defineComponent({
     };
   },
   render() {
-    return <div class={this.ns.b()}>插件示例</div>;
+    return <div class={this.ns.b()}>{replaceDefaultDemoT('demoLabel')}</div>;
   },
 });

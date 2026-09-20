@@ -2,9 +2,11 @@ import { App } from 'vue';
 import { registerGridColumnProvider } from '@ibiz-template/runtime';
 import { GridColumnPlugin } from './grid-column-plugin';
 import { GridColumnPluginProvider } from './grid-column-plugin.provider';
+import { registerGridColumnLocale } from './locale';
 
 export default {
   install(app: App): void {
+    registerGridColumnLocale();
     // 全局注册表格列插件组件
     app.component(GridColumnPlugin.name!, GridColumnPlugin);
     // 全局注册表格列插件适配器，GRID_COLRENDER是插件类型，R9GridColumnPluginId是插件标识

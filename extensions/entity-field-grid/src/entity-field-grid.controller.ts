@@ -1,10 +1,23 @@
-import { GridController } from '@ibiz-template/runtime';
+import { CTX, GridController } from '@ibiz-template/runtime';
+import { IDEGrid } from '@ibiz/model-core';
 import { clone } from 'ramda';
 
 export class EntityFieldGridController extends GridController {
+  constructor(
+    model: IDEGrid,
+    context: IContext,
+    params: IParams,
+    ctx: CTX,
+  ) {
+    super(clone(model), context, params, ctx);
+  }
+
+  protected convertMultipleLanguages(): void {
+    // User model captions and language resource fields are data, not plugin UI.
+  }
+
   protected async onCreated(): Promise<void> {
     if (this.model.appDataEntityId) {
-      (this as IData).model = clone(this.model);
       const entity = await ibiz.hub.getAppDataEntity(
         this.model.appDataEntityId!,
         this.model.appId,

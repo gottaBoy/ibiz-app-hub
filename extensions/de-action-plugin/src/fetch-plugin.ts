@@ -1,6 +1,7 @@
 import { HttpResponse } from '@ibiz-template/core';
 import { Method, IDataEntity } from '@ibiz-template/runtime';
 import { IAppDEDataSet } from '@ibiz/model-core';
+import { deActionT } from './locale';
 
 export class FetchPlugin extends Method {
   declare method: IAppDEDataSet;
@@ -14,7 +15,7 @@ export class FetchPlugin extends Method {
     const items: IData[] = [
       {
         id: 'item1',
-        name: '动态代码表项1',
+        name: deActionT('dynamicCodeListItem', { index: 1 }),
         begin: 1,
         end: 25,
         bgcolor: '#c6e2ff',
@@ -25,7 +26,7 @@ export class FetchPlugin extends Method {
       },
       {
         id: 'item2',
-        name: '动态代码表项2',
+        name: deActionT('dynamicCodeListItem', { index: 2 }),
         begin: 26,
         end: 50,
         bgcolor: '#d1edc4',
@@ -36,7 +37,7 @@ export class FetchPlugin extends Method {
       },
       {
         id: 'item3',
-        name: '动态代码表项3',
+        name: deActionT('dynamicCodeListItem', { index: 3 }),
         begin: 51,
         end: 75,
         bgcolor: '#f8e3c5',
@@ -47,7 +48,7 @@ export class FetchPlugin extends Method {
       },
       {
         id: 'item4',
-        name: '动态代码表项4',
+        name: deActionT('dynamicCodeListItem', { index: 4 }),
         begin: 76,
         end: 100,
         bgcolor: '#fcd3d3',

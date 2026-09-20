@@ -2,6 +2,7 @@ import { defineComponent, PropType } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { IDEFormDetail } from '@ibiz/model-core';
 import { FormUserControlPluginController } from './form-user-control-plugin.controller';
+import { formUserControlT } from './locale';
 import './form-user-control-plugin.scss';
 
 export const FormUserControlPlugin = defineComponent({
@@ -30,7 +31,7 @@ export const FormUserControlPlugin = defineComponent({
           ...this.controller.containerClass,
         ]}
       >
-        表单成员插件内容
+        {formUserControlT('pluginContent')}
       </div>
     );
   },

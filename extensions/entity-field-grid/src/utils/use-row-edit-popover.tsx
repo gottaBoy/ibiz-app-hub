@@ -3,6 +3,7 @@ import { computePosition } from '@floating-ui/dom';
 import { RuntimeError } from '@ibiz-template/core';
 import { GridController, GridRowState } from '@ibiz-template/runtime';
 import { ComponentPublicInstance, reactive, ref, Ref } from 'vue';
+import { entityFieldGridT } from '../locale';
 
 export function useRowEditPopover(
   tableRef: Ref<IData | undefined>,
@@ -16,7 +17,7 @@ export function useRowEditPopover(
 
   const findTrEl = (row: GridRowState): HTMLElement => {
     if (!tableRef.value) {
-      throw new RuntimeError(ibiz.i18n.t('control.common.citeErrMessage'));
+      throw new RuntimeError(entityFieldGridT('errors.tableReference'));
     }
     const tableEl = tableRef.value.$el as HTMLElement;
 
@@ -27,7 +28,7 @@ export function useRowEditPopover(
     }
     const trEl = tableEl.querySelector(selector);
     if (!trEl) {
-      throw new RuntimeError(ibiz.i18n.t('control.common.noDomErrMessage'));
+      throw new RuntimeError(entityFieldGridT('errors.rowDom'));
     }
     return trEl as HTMLElement;
   };
@@ -35,7 +36,7 @@ export function useRowEditPopover(
   const showRowEditPop = async (row: GridRowState) => {
     const trEl = findTrEl(row);
     if (!popInstance) {
-      throw new RuntimeError(ibiz.i18n.t('control.common.noPopErrMessage'));
+      throw new RuntimeError(entityFieldGridT('errors.popover'));
     }
     const popEl = popInstance.$el as HTMLElement;
     const { x, y } = await computePosition(trEl, popEl, {

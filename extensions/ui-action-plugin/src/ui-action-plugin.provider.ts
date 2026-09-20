@@ -4,6 +4,7 @@ import {
   IUILogicParams,
   UIActionProviderBase,
 } from '@ibiz-template/runtime';
+import { uiActionT } from './locale';
 
 export class UiActionPluginProvider extends UIActionProviderBase {
   async execAction(
@@ -11,7 +12,7 @@ export class UiActionPluginProvider extends UIActionProviderBase {
     args: IUILogicParams,
   ): Promise<IUIActionResult> {
     ibiz.log.info(action, args);
-    ibiz.message.success('界面行为插件触发成功！');
+    ibiz.message.success(uiActionT('actionSuccess'));
     const actionResult: IUIActionResult = {};
     return actionResult;
   }

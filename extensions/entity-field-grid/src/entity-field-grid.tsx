@@ -45,6 +45,7 @@ import {
 import { useRowEditPopover } from './utils/use-row-edit-popover';
 import { usePagination } from './utils/use-pagination';
 import { EntityFieldGridController } from './entity-field-grid.controller';
+import { entityFieldGridT } from './locale';
 import './entity-field-grid.scss';
 
 /**
@@ -451,8 +452,7 @@ export const EntityFieldGrid = defineComponent({
         }
         return (
           <iBizNoData
-            text={c.model.emptyText}
-            emptyTextLanguageRes={c.model.emptyTextLanguageRes}
+            text={c.model.emptyText || entityFieldGridT('empty')}
             hideNoDataImage={c.state.hideNoDataImage}
           >
             {noDataSlots}
@@ -490,7 +490,7 @@ export const EntityFieldGrid = defineComponent({
         >
           <div class={ns.b('batch-toolbar-content')}>
             <div class={ns.b('batch-toolbar-text')}>
-              {ibiz.i18n.t('control.common.itemsSelected', {
+              {entityFieldGridT('itemsSelected', {
                 length: c.state.selectedData.length,
               })}
             </div>
@@ -760,7 +760,7 @@ export const EntityFieldGrid = defineComponent({
                       ) && (
                         <div class={this.ns.e('load-more-button')}>
                           <el-button text onClick={() => this.c.loadMore()}>
-                            {ibiz.i18n.t('control.common.loadMore')}
+                            {entityFieldGridT('loadMore')}
                           </el-button>
                         </div>
                       ),
@@ -771,7 +771,7 @@ export const EntityFieldGrid = defineComponent({
                         onClick={() => this.c.newRow()}
                       >
                         <ion-icon name='add-outline'></ion-icon>
-                        {ibiz.i18n.t('app.add')}
+                        {entityFieldGridT('add')}
                       </el-button>
                     ) : (
                       this.renderPopover()

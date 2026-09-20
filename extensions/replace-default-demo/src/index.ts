@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { App } from 'vue';
+import { registerReplaceDefaultDemoLocale } from './locale';
 import './replace-default-demo.scss';
 // import { registerControlProvider } from '@ibiz-template/runtime';
 // import { ReplaceDefaultDemo } from './replace-default-demo';
@@ -7,6 +8,7 @@ import './replace-default-demo.scss';
 
 export default {
   install(app: App, params: IParams = {}): void {
+    registerReplaceDefaultDemoLocale();
     // // 全局注册表格插件组件
     // app.component(ReplaceDefaultDemo.name!, ReplaceDefaultDemo);
     // console.log('全局注册表格插件组件输入参数--------', params);

@@ -2,6 +2,7 @@ import { defineComponent } from 'vue';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { GridRowState } from '@ibiz-template/runtime';
 import { GridColumnPluginController } from './grid-column-plugin.controller';
+import { gridColumnT } from './locale';
 import './grid-column-plugin.scss';
 
 export const GridColumnPlugin = defineComponent({
@@ -51,7 +52,7 @@ export const GridColumnPlugin = defineComponent({
 
     return (
       <div class={this.ns.b()}>
-        表格列插件内容
+        {gridColumnT('pluginContent')}
         {content()}
       </div>
     );
