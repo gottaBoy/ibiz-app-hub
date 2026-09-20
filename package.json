@@ -10,6 +10,9 @@
     "watch": "pnpm --parallel --filter=./models/* --filter=./packages/* --filter=./components/* --filter=./plugins/* run watch",
     "build": "pnpm -r --filter=./models/* --filter=./packages/* --filter=./components/* --filter=./plugins/* run build",
     "build:extension": "pnpm -r --filter=./extensions/* run build",
+    "harness:plugin-localization": "node scripts/harness-plugin-localization.mjs",
+    "harness:plugin-bilingual": "node scripts/harness-plugin-bilingual.mjs",
+    "harness:extension-localization": "node scripts/harness-extension-localization.mjs",
     "web:dev": "pnpm --filter ./apps/web-runner run dev",
     "mob:dev": "pnpm --filter ./apps/mob-runner run dev",
     "demo:dev": "pnpm --filter ./examples/quickstart run dev",
@@ -73,5 +76,6 @@
   "lint-staged": {
     "*.ts": "eslint --fix",
     "*.scss": "stylelint --custom-syntax=postcss-scss"
-  }
+  },
+  "packageManager": "pnpm@10.13.1+sha512.37ebf1a5c7a30d5fabe0c5df44ee8da4c965ca0c5af3dbab28c3a1681b70a256218d05c81c9c0dcf767ef6b8551eb5b960042b9ed4300c59242336377e01cfad"
 }
