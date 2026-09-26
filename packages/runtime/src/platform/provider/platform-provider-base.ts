@@ -1,5 +1,13 @@
-import { downloadFileFromBlob, RuntimeError } from '@ibiz-template/core';
-import { IPlatformProvider } from '../../interface';
+import {
+  RuntimeError,
+  downloadFileFromBlob,
+} from '@ibiz-template/core';
+import { exportData } from '../../controller';
+import {
+  IPlatformProvider,
+  IFrontExportParams,
+  IBackendExportParams,
+} from '../../interface';
 
 /**
  * 搭载平台处理器基类
@@ -21,6 +29,14 @@ export abstract class PlatformProviderBase implements IPlatformProvider {
 
   async destroyed(): Promise<void> {}
 
+  /**
+   * @description 登录
+   * @param {string} loginName
+   * @param {string} passWord
+   * @param {(string | undefined)} [_verificationCode]
+   * @returns {*}  {Promise<boolean>}
+   * @memberof PlatformProviderBase
+   */
   async login(
     loginName: string,
     passWord: string,
@@ -29,12 +45,19 @@ export abstract class PlatformProviderBase implements IPlatformProvider {
     return ibiz.auth.login(loginName, passWord);
   }
 
-  async download(url: string, name: string): Promise<boolean> {
+  /**
+   * @description 下载
+   * @param {string} url
+   * @param {string} fileName
+   * @returns {*}  {Promise<boolean>}
+   * @memberof PlatformProviderBase
+   */
+  async download(url: string, fileName: string): Promise<boolean> {
     // 发送get请求
     const response = await ibiz.net.request(url, {
+      baseURL: '',
       method: 'get',
       responseType: 'blob',
-      baseURL: '',
     });
     if (response.status !== 200) {
       throw new RuntimeError(ibiz.i18n.t('runtime.platform.failedDownload'));
@@ -43,11 +66,49 @@ export abstract class PlatformProviderBase implements IPlatformProvider {
     if (!response.data) {
       throw new RuntimeError(ibiz.i18n.t('runtime.platform.fileStreamData'));
     } else {
-      // 获取文件名
-      const fileName = name;
       downloadFileFromBlob(response.data as Blob, fileName);
       return Promise.resolve(true);
     }
+  }
+
+  /**
+   * @description 后台导出
+   * @param {IBackendExportParams} args
+   * @returns {*}  {Promise<boolean>}
+   * @memberof PlatformProviderBase
+   */
+  async backendExport(args: IBackendExportParams): Promise<boolean> {
+    const { baseURL, url, method, params, data, newWindow } = args;
+    const response = await ibiz.net.request(url, {
+      data,
+      method,
+      params,
+      baseURL,
+      responseType: 'blob',
+    });
+    if (response.status !== 200)
+      throw new RuntimeError(ibiz.i18n.t('runtime.platform.failedExport'));
+    // TODO 移动端不支持新窗口预览
+    if (!ibiz.env.isMob && newWindow) {
+      const link = window.URL.createObjectURL(response.data as Blob);
+      window.open(link, '_blank');
+    } else {
+      const fileName = ibiz.util.file.getFileName(response);
+      downloadFileFromBlob(response.data as Blob, fileName);
+    }
+    return true;
+  }
+
+  /**
+   * @description 前台导出
+   * @param {IFrontExportParams} args
+   * @returns {*}  {Promise<boolean>}
+   * @memberof PlatformProviderBase
+   */
+  async frontExport(args: IFrontExportParams): Promise<boolean> {
+    const { header, data, fileName } = args;
+    await exportData(header, data, fileName);
+    return true;
   }
 
   /**

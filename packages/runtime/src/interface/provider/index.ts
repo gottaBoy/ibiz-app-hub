@@ -11,7 +11,11 @@ export type * from './i-portlet.provider';
 export type { IAppCounterProvider } from './i-app-counter.provider';
 export type { IUILogicNodeProvider } from './i-ui-logic-node.provider';
 export type { IAsyncActionProvider } from './i-async-action.provider';
-export type { IPlatformProvider } from './i-platform-provider';
+export type {
+  IPlatformProvider,
+  IFrontExportParams,
+  IBackendExportParams,
+} from './i-platform-provider';
 export type {
   IDEMethodProvider,
   IDEMethodCreateOptions,

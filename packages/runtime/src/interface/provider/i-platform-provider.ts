@@ -1,4 +1,81 @@
 /**
+ * @description 后台导出参数
+ * @export
+ * @interface IBackendExportParams
+ */
+export interface IBackendExportParams {
+  /**
+   * @description 后台导出路径
+   * @type {string}
+   * @memberof IExportParams
+   */
+  url: string;
+
+  /**
+   * @description 请求方式
+   * @type {('post' | 'get')}
+   * @memberof IExportParams
+   */
+  method: 'post' | 'get';
+
+  /**
+   * @description 请求参数
+   * @type {IParams}
+   * @memberof IExportParams
+   */
+  params: IParams;
+
+  /**
+   * @description 请求数据
+   * @type {IData}
+   * @memberof IExportParams
+   */
+  data?: IData;
+
+  /**
+   * @description 基础路径
+   * @type {string}
+   * @memberof IExportParams
+   */
+  baseURL?: string;
+
+  /**
+   * @description 是否新窗口预览
+   * @type {boolean}
+   * @memberof IExportParams
+   */
+  newWindow?: boolean;
+}
+
+/**
+ * @description 前台导出参数
+ * @export
+ * @interface IFrontExportParams
+ */
+export interface IFrontExportParams {
+  /**
+   * @description 文件名称
+   * @type {string}
+   * @memberof IFrontExportParams
+   */
+  fileName: string;
+
+  /**
+   * @description 表头数据
+   * @type {string[]}
+   * @memberof IFrontExportParams
+   */
+  header: string[];
+
+  /**
+   * @description 表格数据
+   * @type {IData[][]}
+   * @memberof IFrontExportParams
+   */
+  data: IData[][];
+}
+
+/**
  * 搭载平台适配器接口
  *
  * @author zk
@@ -25,15 +102,29 @@ export interface IPlatformProvider {
   ): Promise<boolean>;
 
   /**
-   * 下载
-   *
-   * @author zk
-   * @date 2023-11-20 04:11:54
+   * @description 下载
    * @param {string} url 下载地址
-   * @param {string} name 文件名称
+   * @param {string} fileName 文件名称
+   * @returns {*}  {Promise<boolean>}
    * @memberof IPlatformProvider
    */
-  download(url: string, name: string): Promise<boolean>;
+  download(url: string, fileName: string): Promise<boolean>;
+
+  /**
+   * @description 后台导出
+   * @param {IBackendExportParams} args 导出参数
+   * @returns {*}  {Promise<boolean>}
+   * @memberof IPlatformProvider
+   */
+  backendExport(args: IBackendExportParams): Promise<boolean>;
+
+  /**
+   * @description 前台导出
+   * @param {IFrontExportParams} args
+   * @returns {*}  {Promise<boolean>}
+   * @memberof IPlatformProvider
+   */
+  frontExport(args: IFrontExportParams): Promise<boolean>;
 
   /**
    * 初始化
