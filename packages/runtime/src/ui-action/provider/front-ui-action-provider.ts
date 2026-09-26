@@ -1,8 +1,8 @@
 import {
   StringUtil,
-  RuntimeModelError,
   ModelError,
   RuntimeError,
+  RuntimeModelError,
   PartialWithObject,
 } from '@ibiz-template/core';
 import {
@@ -207,27 +207,31 @@ export class FrontUIActionProvider extends UIActionProviderBase {
       return print.id === action.appDEPrintId;
     });
     if (appDEPrint) {
-      let requestUrl: string = '';
+      let url: string = '';
       if (
         resultContext &&
         resultContext[appDataEntity.codeName!.toLowerCase()]
       ) {
         // TODO 临时写死printdata， 非标准，后续优化
         const resPath = calcResPath(resultContext, appDataEntity);
-        requestUrl += `${resPath}/${appDataEntity.deapicodeName2}/printdata/${encodeURIComponent(
+        url += `${resPath}/${appDataEntity.deapicodeName2}/printdata/${encodeURIComponent(
           resultContext[appDataEntity.codeName!.toLowerCase()],
         )}`;
       } else {
         throw new RuntimeError(ibiz.i18n.t('runtime.uiAction.dataPrimaryKey'));
       }
+      // 识别动态打印标识srfdynaprinttag，拼接格式为srfdynaprinttag@printtag，当srfdynaprinttag值为''时不拼接
+      let printTag = '';
+      if (resultContext.srfdynaprinttag) {
+        printTag += `${resultContext.srfdynaprinttag}@`;
+      }
+      printTag += appDEPrint.codeName;
+      const params = Object.assign({ srfprinttag: printTag }, resultParams);
       const app = await ibiz.hub.getAppAsync(action.appId);
-      const res = await app.net.request(requestUrl, {
+      const res = await app.net.request(url, {
         method: 'get',
         responseType: 'blob',
-        params: {
-          srfprinttag: appDEPrint.codeName,
-          ...resultParams,
-        },
+        params,
       });
       if (res.ok) {
         const success = await ibiz.printPreview.execPrint(
@@ -236,21 +240,12 @@ export class FrontUIActionProvider extends UIActionProviderBase {
           res.data as Blob,
         );
         if (success) return;
-        // 存在srfcontenttype参数需响应文件
-        if (resultParams && resultParams.srfcontenttype) {
-          const fileName = ibiz.util.file.getFileName(res);
-          const href = URL.createObjectURL(res.data as Blob);
-          const a = document.createElement('a');
-          a.href = href;
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(href);
-        } else {
-          const link = window.URL.createObjectURL(res.data as Blob);
-          window.open(link, '_blank');
-        }
+        ibiz.platform.backendExport({
+          url,
+          params,
+          method: 'get',
+          newWindow: !resultParams.srfcontenttype,
+        });
       } else {
         throw new RuntimeError(ibiz.i18n.t('runtime.uiAction.printFailure'));
       }
@@ -357,31 +352,22 @@ export class FrontUIActionProvider extends UIActionProviderBase {
         ...args.params,
         ...resultParams,
       };
-      const app = await ibiz.hub.getAppAsync(action.appId);
-      const res = await app.net.request(url, {
-        method: 'post',
-        responseType: 'blob',
-        params: queryParam,
-        data: params,
-      });
-      if (isAsyncAction) return;
-      if (res.status === 200) {
-        const fileName = ibiz.util.file.getFileName(res);
-        const blob = new Blob([res.data as Blob], {
-          type: 'application/vnd.ms-excel',
+      // 异步导出时只发消息不下载
+      if (isAsyncAction) {
+        const app = await ibiz.hub.getAppAsync(action.appId);
+        await app.net.request(url, {
+          method: 'post',
+          responseType: 'blob',
+          params: queryParam,
+          data: params,
         });
-        const elink = document.createElement('a');
-        elink.download = fileName;
-        elink.style.display = 'none';
-        elink.href = URL.createObjectURL(blob);
-        document.body.appendChild(elink);
-        elink.click();
-        URL.revokeObjectURL(elink.href); // 释放URL 对象
-        document.body.removeChild(elink);
       } else {
-        throw new RuntimeError(
-          ibiz.i18n.t('runtime.uiAction.exportRequestFailed'),
-        );
+        await ibiz.platform.backendExport({
+          url,
+          data: params,
+          method: 'post',
+          params: queryParam,
+        });
       }
     } else {
       throw new RuntimeError(
