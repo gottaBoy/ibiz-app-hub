@@ -19,4 +19,12 @@ export class PanelContainerState
    * @memberof PanelContainerState
    */
   loading: boolean = false;
+
+  /**
+   * @description 加载提示文本
+   * @exposedoc
+   * @type {string}
+   * @memberof PanelContainerState
+   */
+  loadingText: string = '';
 }

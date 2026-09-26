@@ -16,9 +16,10 @@ export interface IApiFormContainerController extends IApiFormDetailController {
 
   /**
    * @description 开始加载中
+   * @param {(string | undefined)} [loadingText] 加载提示文本
    * @memberof IApiFormContainerState
    */
-  startLoading(): void;
+  startLoading(loadingText?: string): void;
 
   /**
    * @description 结束加载中

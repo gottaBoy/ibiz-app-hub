@@ -97,9 +97,10 @@ export interface IApiViewController<
 
   /**
    * @description 开启视图loading
+   * @param {string | undefined} loadingText 加载提示文本
    * @memberof IApiViewController
    */
-  startLoading(): void;
+  startLoading(loadingText?: string): void;
 
   /**
    * @description 关闭视图loading

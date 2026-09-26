@@ -33,6 +33,13 @@ export interface IApiViewState extends IApiControllerState, IApiViewSession {
   isLoading: boolean;
 
   /**
+   * @description 视图加载时的提示文本
+   * @type {string}
+   * @memberof IApiViewState
+   */
+  loadingText: string;
+
+  /**
    * @description 默认不加载
    * @type {boolean}
    * @memberof IApiViewState

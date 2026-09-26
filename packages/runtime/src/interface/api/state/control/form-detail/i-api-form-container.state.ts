@@ -12,4 +12,11 @@ export interface IApiFormContainerState extends IApiFormDetailState {
    * @memberof IApiFormContainerState
    */
   loading: boolean;
+
+  /**
+   * @description 加载提示文本
+   * @type {string}
+   * @memberof IApiFormContainerState
+   */
+  loadingText: string;
 }

@@ -13,4 +13,6 @@ export class FormContainerState
   implements IApiFormContainerState
 {
   loading: boolean = false;
+
+  loadingText: string = '';
 }

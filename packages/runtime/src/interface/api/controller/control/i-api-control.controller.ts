@@ -57,10 +57,11 @@ export interface IApiControlController<
 
   /**
    * @description 开始加载
+   * @param {string | undefined} loadingText 加载提示文本
    * @returns {*}  {Promise<void>}
    * @memberof IApiControlController
    */
-  startLoading(): Promise<void>;
+  startLoading(loadingText?: string): Promise<void>;
 
   /**
    * @description 加载完毕

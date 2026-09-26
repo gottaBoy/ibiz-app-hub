@@ -14,7 +14,7 @@ import {
   RuntimeError,
   IPortalMessage,
 } from '@ibiz-template/core';
-import { clone, isNil } from 'ramda';
+import { clone, isNil, isNotNil } from 'ramda';
 import { notNilEmpty } from 'qx-util';
 import { BaseController } from '..';
 import { CTX } from '../../ctx';
@@ -218,6 +218,7 @@ export class ControlController<
     super.initState();
     this.state.activated = true;
     this.state.isLoading = false;
+    this.state.loadingText = '';
     this.state.disabled = false;
     this.state.maskOption = { mode: 'BLANK' };
     this.state.zIndex = undefined;
@@ -226,6 +227,11 @@ export class ControlController<
 
   protected async onCreated(): Promise<void> {
     await super.onCreated();
+
+    // 填充部件加载提示文本
+    if (isNotNil(ibiz.config.view.loadingText)) {
+      this.state.loadingText = ibiz.config.view.loadingText;
+    }
 
     // 部件布局面板
     if (this.controlPanel) {
@@ -337,9 +343,16 @@ export class ControlController<
    * @date 2022-09-21 15:09:18
    * @return {*}  {Promise<void>}
    */
-  async startLoading(): Promise<void> {
+  async startLoading(loadingText?: string): Promise<void> {
     this.state.isLoading = true;
-    this.ctx.startLoading();
+    if (isNotNil(loadingText)) {
+      this.state.loadingText = loadingText;
+    } else if (isNotNil(ibiz.config.view.loadingText)) {
+      this.state.loadingText = ibiz.config.view.loadingText;
+    } else {
+      this.state.loadingText = '';
+    }
+    this.ctx.startLoading(loadingText);
   }
 
   /**

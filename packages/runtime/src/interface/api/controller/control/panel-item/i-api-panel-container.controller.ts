@@ -20,9 +20,10 @@ export interface IApiPanelContainerController extends IApiPanelItemController {
   /**
    * @description 开始加载中
    * @exposedoc
+   * @param {string} [loadingText] 加载提示文本
    * @memberof IApiPanelContainerController
    */
-  startLoading(): void;
+  startLoading(loadingText?: string): void;
 
   /**
    * @description 结束加载中

@@ -40,6 +40,13 @@ export interface IApiControlState extends IApiControllerState {
   isLoading: boolean;
 
   /**
+   * @description 部件加载时的提示文本
+   * @type {string}
+   * @memberof IApiControlState
+   */
+  loadingText: string;
+
+  /**
    * @description 是否默认加载数据
    * @type {boolean}
    * @default true

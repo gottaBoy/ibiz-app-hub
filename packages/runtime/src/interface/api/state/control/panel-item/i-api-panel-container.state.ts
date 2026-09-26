@@ -15,4 +15,12 @@ export interface IApiPanelContainerState extends IApiPanelItemState {
    * @memberof IApiPanelContainerState
    */
   loading: boolean;
+
+  /**
+   * @description 加载提示文本
+   * @exposedoc
+   * @type {string}
+   * @memberof IApiPanelContainerState
+   */
+  loadingText: string;
 }

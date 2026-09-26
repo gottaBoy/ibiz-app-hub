@@ -122,11 +122,11 @@ export class CTX<V extends IViewController = IViewController>
    * @author lxm
    * @date 2023-03-27 01:59:22
    */
-  startLoading(): void {
+  startLoading(loadingText?: string): void {
     if (this.isDestroyed) {
       return;
     }
-    this.view.startLoading();
+    this.view.startLoading(loadingText);
   }
 
   /**

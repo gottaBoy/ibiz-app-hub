@@ -414,6 +414,7 @@ export class ViewController<
     super.initState();
     this.state.activated = true;
     this.state.isLoading = false;
+    this.state.loadingText = '';
     this.state.caption = this.model.caption!;
     this.state.srfactiveviewdata = null;
     this.state.viewMessages = {};
@@ -424,6 +425,10 @@ export class ViewController<
   }
 
   protected async onCreated(): Promise<void> {
+    // 新增识别srfloadingtext视图动态参数，用于指定视图加载时的提示文本，优先级高于全局配置
+    const { appViewParams } = this.model;
+    const LoaddingTextValue = appViewParams?.find(item => item.id!.toLowerCase() === 'srfloadingtext')?.value;
+    this.state.loadingText = LoaddingTextValue || ibiz.config.view.loadingText;
     this.state.isLoading = true;
     await super.onCreated();
 
@@ -678,9 +683,19 @@ export class ViewController<
     this._evt.emit('onRedrawView', { redrawData });
   }
 
-  startLoading(): void {
+  startLoading(loadingText?: string): void {
     this.viewLoading.begin();
     this.state.isLoading = this.viewLoading.isLoading;
+    if (isNotNil(loadingText)) {
+      this.state.loadingText = loadingText;
+    } else {
+      const { appViewParams } = this.model;
+      const LoaddingTextValue = appViewParams?.find(
+        item => item.id!.toLowerCase() === 'srfloadingtext',
+      )?.value;
+      this.state.loadingText =
+        LoaddingTextValue || ibiz.config.view.loadingText;
+    }
   }
 
   endLoading(): void {
