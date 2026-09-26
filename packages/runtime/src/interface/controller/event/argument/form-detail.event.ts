@@ -22,6 +22,10 @@ export enum FormDetailEventName {
    * 回车
    */
   ENTER = 'onEnter',
+  /**
+   * 自定义行为
+   */
+  CUSTOMACTION = 'onCustomAction',
 }
 
 /**

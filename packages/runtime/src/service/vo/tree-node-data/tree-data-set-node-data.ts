@@ -373,4 +373,11 @@ export class TreeDataSetNodeData extends TreeNodeData implements ITreeNodeData {
     }
     return html;
   }
+
+  /**
+   * 获取原始数据
+   */
+  getOrigin(): IData {
+    return this._deData;
+  }
 }

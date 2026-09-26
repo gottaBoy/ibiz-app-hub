@@ -397,6 +397,7 @@ export const zhCn = {
     platform: {
       failedDownload: '下载文件失败',
       fileStreamData: '文件流数据不存在',
+      failedExport: '文件导出失败',
     },
     register: {
       helper: {

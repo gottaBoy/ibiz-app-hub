@@ -481,6 +481,7 @@ export const en = {
     platform: {
       failedDownload: 'Failed to download file',
       fileStreamData: 'File stream data does not exist',
+      failedExport: 'Failed to export file',
     },
     register: {
       helper: {
