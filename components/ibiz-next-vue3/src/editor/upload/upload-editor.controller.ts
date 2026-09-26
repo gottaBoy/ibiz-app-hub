@@ -25,6 +25,26 @@ export class UploadEditorController extends EditorController<IFileUploader> {
   public accept: string = '';
 
   /**
+   * 是否开启压缩文件类解压,若开启unzip后，识别unzipfileext中后缀的上传时额外附加unzip=true参数，与unzipfileext参数搭配使用
+   */
+  public unzip: boolean = false;
+
+  /**
+   * 压缩文件类解压文件类型，当上传文件的后缀名包含该属性值时，若开启unzip，上传时会额外附加unzip=true参数，启用后端解压功能。格式为逗号分隔的文件后缀字符串，默认值：'.zip,.rar,.7z'，与unzip参数搭配使用
+   */
+  public unzipfileext: string = '.zip,.rar,.7z';
+
+  /**
+   * 上传文件模式，DEFAULT表示文件上传、FOLDER表示文件夹上传、ALL表示文件和文件夹都支持上传，默认值为DEFAULT
+   */
+  public uploadmode: 'DEFAULT' | 'FOLDER' | 'ALL' = 'DEFAULT';
+
+  /**
+   * 是否显示文件列表,默认显示
+   */
+  public showfilelist: boolean = true;
+
+  /**
    * 上传的文件大小
    *
    * @type {number}
@@ -100,6 +120,10 @@ export class UploadEditorController extends EditorController<IFileUploader> {
         autopreview,
         infomap,
         enablenoaccess,
+        unzip,
+        unzipfileext,
+        uploadmode,
+        showfilelist,
       } = this.editorParams;
       if (isDrag) {
         this.isDrag = Boolean(isDrag);
@@ -114,10 +138,22 @@ export class UploadEditorController extends EditorController<IFileUploader> {
         this.autoPreview = autopreview;
       }
       if (multiple) {
-        this.multiple = Boolean(multiple);
+        this.multiple = multiple === 'true';
       }
       if (accept) {
         this.accept = accept;
+      }
+      if (unzip) {
+        this.unzip = unzip === 'true';
+      }
+      if (unzipfileext) {
+        this.unzipfileext = unzipfileext;
+      }
+      if (uploadmode) {
+        this.uploadmode = uploadmode;
+      }
+      if (showfilelist) {
+        this.showfilelist = showfilelist === 'true';
       }
       if (size) {
         this.size = Number(size);

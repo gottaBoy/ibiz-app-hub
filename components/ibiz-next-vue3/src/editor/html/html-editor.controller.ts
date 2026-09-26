@@ -21,6 +21,7 @@ import {
   EmojiModule,
   InLineAIMenu,
   Plugin,
+  ExtraButtonMenu,
 } from './wang-editor';
 
 /**
@@ -122,6 +123,13 @@ export class HtmlEditorController
   inlineAiChatHeight?: number;
 
   /**
+   * @description 附加界面行为
+   * @type {IData[]}
+   * @memberof HtmlEditorController
+   */
+  extraActions: IData[] = [];
+
+  /**
    * 初始化
    *
    * @protected
@@ -202,8 +210,41 @@ export class HtmlEditorController
             .deService.getService(this.context, model.appDataEntityId!);
           this.chatCompletion = true;
         }
+        const { deuiactionGroup } = this.deACMode;
+        const uiactionGroupDetails =
+          deuiactionGroup?.uiactionGroupDetails || [];
+        if (uiactionGroupDetails.length > 0) {
+          this.extraActions = uiactionGroupDetails.filter(item =>
+            item.uiactionId?.startsWith('header_extra'),
+          );
+        }
+        if (this.extraActions.length > 0) {
+          this.addExtraRegister();
+        }
       }
     }
+  }
+
+  /**
+   * @description 注册额外行为菜单项
+   * @private
+   * @memberof HtmlEditorController
+   */
+  private addExtraRegister() {
+    this.extraActions.forEach(item => {
+      const { uiactionId } = item;
+      const tag = uiactionId.split('@')[0];
+      if (!(window as IData)[`${tag}Register`]) {
+        const extraMenu = {
+          key: tag,
+          factory(): ExtraButtonMenu {
+            return new ExtraButtonMenu(item);
+          },
+        };
+        Boot.registerMenu(extraMenu);
+        (window as IData)[`${tag}Register`] = true;
+      }
+    });
   }
 
   /**
@@ -485,5 +526,26 @@ export class HtmlEditorController
       },
       appId,
     );
+  }
+
+  /**
+   * @description 执行自定义界面行为
+   * @param {string} uiActionId
+   * @param {string} appId
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof HtmlEditorController
+   */
+  async doCustomUIAction(uiActionId: string, appId: string): Promise<IData[]> {
+    const eventArgs = this.ctrl.getEventArgs();
+    eventArgs.params = clone(eventArgs.params);
+    const result = await UIActionUtil.exec(
+      uiActionId!,
+      {
+        ...eventArgs,
+      },
+      appId,
+    );
+    const data = result.data || [];
+    return data;
   }
 }

@@ -19,6 +19,7 @@ export function initCustomMenu(
   c: MarkDownEditorController,
   opts: IData,
 ): IData[] {
+  if (!c) return [];
   const { props, isEditing, currentVal, emit } = opts;
   let chatInstance = opts.chatInstance;
   const AIMenu = Cherry.createMenuHook('AI', {
@@ -157,5 +158,26 @@ export function initCustomMenu(
       });
     },
   });
-  return [AIMenu, AIChart];
+
+  const customMenus: IData = {};
+  c.extraActions.forEach((item: IData) => {
+    const { uiactionId, sysImage, caption } = item;
+    const tag = uiactionId.split('@')[0];
+    const options: IData = {
+      onClick: async () => {
+        const data = await c.doCustomUIAction(uiactionId, c.model.appId);
+        if (data.length > 0) {
+          emit('customAction', { tag: uiactionId, data });
+        }
+      },
+    };
+    if (sysImage) {
+      options.icon = {
+        type: 'svg',
+        content: sysImage.rawContent,
+      };
+    }
+    customMenus[tag] = Cherry.createMenuHook(caption, options);
+  });
+  return [AIMenu, AIChart, customMenus];
 }
