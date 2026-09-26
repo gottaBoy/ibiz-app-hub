@@ -176,7 +176,13 @@ export async function calcColumnModelBySchema(
             type = 'number';
             break;
           default:
-            if (!(properties[key].$ref && properties[key].type == null)) {
+            // Both silence conditions are about log noise, not about the
+            // column: a $ref with no type resolves elsewhere, and array and
+            // object properties are nested data, so neither is unsupported.
+            if (
+              !(properties[key].$ref && properties[key].type == null) &&
+              !['array', 'object'].includes(properties[key].type as string)
+            ) {
               ibiz.log.error(
                 ibiz.i18n.t('runtime.controller.control.grid.unsupported', {
                   type: properties[key].type,

@@ -166,7 +166,13 @@ export async function calcFilterModelBySchema(
           type = 'number';
           break;
         default:
-          if (properties[key].$ref && properties[key].type == null) {
+          // See the grid schema: a $ref with no type and a nested array or
+          // object both describe something the search bar cannot filter on, so
+          // neither is an error worth logging.
+          if (
+            (properties[key].$ref && properties[key].type == null) ||
+            ['array', 'object'].includes(properties[key].type as string)
+          ) {
             return;
           }
           ibiz.log.error(

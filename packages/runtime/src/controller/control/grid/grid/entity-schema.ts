@@ -70,7 +70,13 @@ export async function calcColumnModelBySchema(
           type = 'number';
           break;
         default:
-          if (properties[key].$ref && properties[key].type == null) {
+          // Neither shape is a column the grid can draw, so neither is worth
+          // an error: a $ref with no type is resolved elsewhere, and array and
+          // object properties belong to nested data rather than a field.
+          if (
+            (properties[key].$ref && properties[key].type == null) ||
+            ['array', 'object'].includes(properties[key].type as string)
+          ) {
             return;
           }
           ibiz.log.error(
