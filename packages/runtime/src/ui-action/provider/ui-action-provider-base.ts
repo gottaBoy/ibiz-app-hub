@@ -45,7 +45,7 @@ export abstract class UIActionProviderBase implements IUIActionProvider {
     }
 
     // ** 界面逻辑替换执行界面行为
-    const { appDEUILogicId, appDataEntityId, uilogicAttachMode } = action;
+    const { appDEUILogicId, appDataEntityId, uilogicAttachMode, appId } = action;
     if (uilogicAttachMode === 'REPLACE') {
       if (!appDEUILogicId) {
         throw new RuntimeModelError(
@@ -59,6 +59,10 @@ export abstract class UIActionProviderBase implements IUIActionProvider {
         data,
         params,
       );
+      // 修正应用上下文中srfappid
+      Object.assign(resultContext, {
+        srfappid: appId,
+      });
       const res = await execUILogic(appDEUILogicId, appDataEntityId!, {
         ...args,
         context: resultContext,
@@ -102,11 +106,12 @@ export abstract class UIActionProviderBase implements IUIActionProvider {
           ibiz.i18n.t('runtime.logicScheduler.executor.noConfiguredLogic'),
         );
       }
-      await execUILogic(
-        appDEUILogicId,
-        appDataEntityId!,
-        this.mergeArgsByResult(args, result),
-      );
+      const tempParams = this.mergeArgsByResult(args, result);
+      // 修正应用上下文中srfappid
+      Object.assign(tempParams.context, {
+        srfappid: appId,
+      });
+      await execUILogic(appDEUILogicId, appDataEntityId!, tempParams);
     }
 
     // ** 后续界面行为
