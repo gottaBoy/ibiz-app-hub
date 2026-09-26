@@ -7,6 +7,7 @@ import {
   useAutoFocusBlur,
 } from '@ibiz-template/vue3-util';
 import { useIViewUpload } from '../use/use-iview-upload';
+import { useCustomUpload } from '../use/use-custom-upload';
 import { UploadEditorController } from '../upload-editor.controller';
 import './ibiz-file-upload.scss';
 
@@ -53,6 +54,7 @@ export const IBizFileUpload = defineComponent({
       onRemove,
       onSuccess,
       beforeUpload,
+      addCacheCount,
     } = useIViewUpload(
       props,
       value => {
@@ -61,6 +63,15 @@ export const IBizFileUpload = defineComponent({
       },
       c,
     );
+
+    const { customUpload, folderInputRef, selectFolder, handleFolderSelect } =
+      useCustomUpload(c, {
+        action: uploadUrl.value,
+        headers: headers.value,
+        onSuccess,
+        onError,
+        addCacheCount,
+      });
 
     // 不显示上传图标
     const noUploadIcon = computed(() => {
@@ -106,9 +117,85 @@ export const IBizFileUpload = defineComponent({
       isGridEditor,
       componentRef,
       showFormDefaultContent,
+      customUpload,
+      folderInputRef,
+      selectFolder,
+      handleFolderSelect,
     };
   },
   render() {
+    // 文件夹上传模式：在文件按钮旁再给一个选择文件夹的按钮和隐藏 input
+    if (this.c.uploadmode === 'ALL' || this.c.uploadmode === 'FOLDER') {
+      return (
+        <div
+          class={[
+            this.ns.b(),
+            this.ns.be('uploadmode', this.c.uploadmode.toLowerCase()),
+            this.disabled ? this.ns.m('disabled') : '',
+            this.readonly ? this.ns.m('readonly') : '',
+            this.ns.is('show-default', this.showFormDefaultContent),
+          ]}
+          ref='componentRef'
+        >
+          <el-upload
+            class={[
+              this.ns.b('icon'),
+              this.ns.is('not-show', this.noUploadIcon),
+            ]}
+            file-list={this.files}
+            action={this.uploadUrl}
+            headers={this.headers}
+            disabled={this.disabled || this.readonly}
+            multiple={this.c.multiple}
+            limit={this.limit}
+            drag={!!this.c.isDrag}
+            accept={this.c.accept}
+            before-upload={this.beforeUpload}
+            onSuccess={this.onSuccess}
+            onError={this.onError}
+            onRemove={this.onRemove}
+            onPreview={this.onDownload}
+            http-request={this.customUpload}
+            showFileList={this.c.showfilelist}
+            {...this.$attrs}
+          >
+            {this.noUploadIcon ? null : (
+              <el-button
+                class={[
+                  this.ns.b('button'),
+                  this.ns.be('button', this.c.uploadmode.toLowerCase()),
+                ]}
+                size={this.isGridEditor ? 'small' : 'default'}
+              >
+                {ibiz.i18n.t('editor.upload.uploadFiles')}
+              </el-button>
+            )}
+          </el-upload>
+          <div class={this.ns.be('folder', this.c.uploadmode.toLowerCase())}>
+            <el-button
+              class={[this.ns.b('button')]}
+              size={this.isGridEditor ? 'small' : 'default'}
+              onClick={(event: MouseEvent) => {
+                event.stopPropagation();
+                this.selectFolder();
+              }}
+            >
+              {ibiz.i18n.t('editor.upload.uploadfolders')}
+            </el-button>
+            <input
+              ref='folderInputRef'
+              type='file'
+              style={{ display: 'none' }}
+              {...{
+                webkitdirectory: true,
+                directory: true,
+              }}
+              onChange={this.handleFolderSelect}
+            ></input>
+          </div>
+        </div>
+      );
+    }
     return (
       <div
         class={[
@@ -134,6 +221,8 @@ export const IBizFileUpload = defineComponent({
           onError={this.onError}
           onRemove={this.onRemove}
           onPreview={this.onDownload}
+          http-request={this.customUpload}
+          showFileList={this.c.showfilelist}
           {...this.$attrs}
         >
           {this.noUploadIcon ? null : (
