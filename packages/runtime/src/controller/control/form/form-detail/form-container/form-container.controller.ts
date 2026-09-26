@@ -1,3 +1,4 @@
+import { isNotNil } from 'ramda';
 import { IDEFormDetail } from '@ibiz/model-core';
 import { IApiFormContainerController } from '../../../../../interface';
 import { FormDetailController } from '../form-detail/form-detail.controller';
@@ -26,10 +27,16 @@ export class FormContainerController<T extends IDEFormDetail = IDEFormDetail>
 
   /**
    * @description 开始加载中
+   * @param {(string | undefined)} [loadingText] 加载提示文本
    * @memberof FormContainerController
    */
-  startLoading(): void {
+  startLoading(loadingText?: string): void {
     this.state.loading = true;
+    if (isNotNil(loadingText)) {
+      this.state.loadingText = loadingText;
+    } else {
+      this.state.loadingText = '';
+    }
   }
 
   /**

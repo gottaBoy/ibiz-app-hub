@@ -1,3 +1,4 @@
+import { isNotNil } from 'ramda';
 import { IPanelItem } from '@ibiz/model-core';
 import {
   IApiPanelContainerController,
@@ -40,10 +41,16 @@ export class PanelContainerController<T extends IPanelItem = IPanelItem>
   /**
    * @description 开始加载中
    * @exposedoc
+   * @param {string} [loadingText] 加载提示文本
    * @memberof PanelContainerController
    */
-  startLoading(): void {
+  startLoading(loadingText?: string): void {
     this.state.loading = true;
+    if (isNotNil(loadingText)) {
+      this.state.loadingText = loadingText;
+    } else {
+      this.state.loadingText = '';
+    }
   }
 
   /**
