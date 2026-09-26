@@ -10,8 +10,8 @@ import {
   IUnkownItem,
 } from '@ibiz/model-core';
 import { isBase64, isBase64Image, isSvg } from '@ibiz-template/core';
-import './rawitem.scss';
 import { parseHtml } from '../../util';
+import './rawitem.scss';
 
 export const IBizRawItem = defineComponent({
   name: 'IBizRawItem',
@@ -25,6 +25,30 @@ export const IBizRawItem = defineComponent({
     },
     rawItem: {
       type: Object as PropType<IRawItemContainer>,
+      required: false,
+    },
+    chunkView: {
+      type: String,
+      required: false,
+    },
+    chunkEntity: {
+      type: String,
+      required: false,
+    },
+    ctrl: {
+      type: Object,
+      required: false,
+    },
+    view: {
+      type: Object,
+      required: false,
+    },
+    data: {
+      type: Object,
+      required: false,
+    },
+    context: {
+      type: Object,
       required: false,
     },
   },
@@ -318,7 +342,16 @@ export const IBizRawItem = defineComponent({
       }
       if (this.rawItemType === 'MARKDOWN') {
         return (
-          <iBizMarkDown value={this.content} disabled={true}></iBizMarkDown>
+          <iBizMarkDown
+            disabled={true}
+            ctrl={this.ctrl}
+            view={this.view}
+            data={this.data}
+            value={this.content}
+            context={this.context}
+            chunkView={this.chunkView}
+            chunkEntity={this.chunkEntity}
+          ></iBizMarkDown>
         );
       }
       if (['PLACEHOLDER'].includes(this.rawItemType)) {
