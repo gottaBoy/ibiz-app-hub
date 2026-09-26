@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   useNamespace,
+  renderTooltip,
   IBizCustomRender,
   useControlController,
   hasEmptyPanelRenderer,
@@ -100,9 +101,14 @@ export function renderFieldColumn(
   }
 
   let content = null;
-  const { controlRenders = [] } = c.model;
+  const { controlRenders = [], id } = c.model;
   const panel = controlRenders.find(
-    renderItem => renderItem.renderType === 'LAYOUTPANEL',
+    renderItem =>
+      renderItem.renderType === 'LAYOUTPANEL' &&
+      ![
+        `${id?.toLowerCase()}_tooltip`,
+        `${id?.toLowerCase()}_edit_tooltip`,
+      ].includes(renderItem.id!),
   )?.layoutPanel;
   const columnType = c.model.userParam?.columntype;
   if (panel) {
@@ -112,12 +118,18 @@ export function renderFieldColumn(
         modelData={panel}
         context={c.context}
         params={c.params}
+        v-tooltip={renderTooltip(row.data, c.model, c.grid)}
       ></iBizControlShell>
     );
     // 特殊处理附件列
   } else if (columnType === 'attachment') {
     content = (
-      <iBizAttachmentColumn data={row.data} value={fieldValue} controller={c} />
+      <iBizAttachmentColumn
+        data={row.data}
+        value={fieldValue}
+        controller={c}
+        v-tooltip={renderTooltip(row.data, c.model, c.grid)}
+      />
     );
   } else {
     const showValue = c.formatValue(fieldValue);
@@ -168,6 +180,7 @@ export function renderFieldColumn(
     content = (
       <span
         class={ns.e('text')}
+        v-tooltip={renderTooltip(row.data, c.model, c.grid)}
         title={showTitle(tooltip.value)}
         onClick={onTextClick}
       >

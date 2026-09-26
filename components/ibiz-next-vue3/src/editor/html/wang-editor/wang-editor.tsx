@@ -16,7 +16,7 @@ import { IEditorConfig, IToolbarConfig } from '@wangeditor/editor';
 import type { IDomEditor } from '@wangeditor/editor';
 import { isNil } from 'ramda';
 import {
-  getEditorEmits,
+  getHtmlEmits,
   getHtmlProps,
   useNamespace,
   useUIStore,
@@ -74,7 +74,7 @@ type InsertFnType = (_url: string, _alt: string, _href: string) => void;
 const IBizHtml = defineComponent({
   name: 'IBizHtml',
   props: getHtmlProps<HtmlEditorController>(),
-  emits: getEditorEmits(),
+  emits: getHtmlEmits(),
   setup(props, { emit, slots }) {
     const ns = useNamespace('html');
 
@@ -244,6 +244,12 @@ const IBizHtml = defineComponent({
 
     const toolbarKeys = genDefaultToolbarKeys();
     if (c.chatCompletion) toolbarKeys.unshift(...['aichart', '|']);
+    if (c.extraActions.length > 0) {
+      const keys = c.extraActions.map(item => {
+        return item.uiactionId.split('@')[0];
+      });
+      toolbarKeys.push(...keys);
+    }
 
     // 工具栏配置
     const toolbarConfig: Partial<IToolbarConfig> = {
@@ -450,6 +456,12 @@ const IBizHtml = defineComponent({
             },
           },
         );
+      });
+      editor.on('customAction', async (model: IData) => {
+        const data = await c.doCustomUIAction(model.uiactionId, c.model.appId);
+        if (data.length > 0) {
+          emit('customAction', { tag: model.uiactionId, data });
+        }
       });
     };
     // 编辑器内容、选区变化时的回调函数
