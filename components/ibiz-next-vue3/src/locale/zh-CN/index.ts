@@ -687,6 +687,7 @@ export default {
     },
     upload: {
       uploadFiles: '上传文件',
+      uploadfolders: '上传文件夹',
       fileSizeErr: '文件大小不能超过',
       uploadJsonFormatErr: '配置uploadparams没有按标准JSON格式',
       exportJsonFormatErr: '配置exportparams没有按标准JSON格式',
@@ -904,6 +905,15 @@ export default {
     },
     printPreviewUtil: {
       title: '打印预览',
+      exportPdfFailed: '导出pdf失败，请重试',
+      pdfValid: 'pdf导出内容不能为空且必须是字符串',
+      pdfEmpty: 'pdf导出内容不能为空白',
+      pdfFontSize: 'pdf导出字体大小必须在8-72之间',
+      pdfFilename: 'pdf导出文件名必须以.pdf结尾',
+      exportHtmlFailed: '导出html失败，请重试',
+      exportPdfCaption: '导出pdf',
+      updateExportPdf: 'pdf正在导出，请稍等...',
+      startExportPdf: '开始导出pdf',
     },
   },
   // runTime

@@ -735,6 +735,7 @@ export default {
     },
     upload: {
       uploadFiles: 'Upload files',
+      uploadfolders: 'Upload folders',
       fileSizeErr: 'The file size cannot exceed',
       uploadJsonFormatErr:
         'The configuration of uploadparams did not follow the standard JSON format',
@@ -961,6 +962,16 @@ export default {
     },
     printPreviewUtil: {
       title: 'Print Preview',
+      exportPdfFailed: 'Exporting the PDF failed. Please try again.',
+      pdfValid:
+        'The content exported from PDF cannot be empty and must be a string.',
+      pdfEmpty: 'The content exported from PDF cannot contain any blank spaces.',
+      pdfFontSize: 'The font size for PDF export must be between 8 and 72.',
+      pdfFilename: 'The file name for the PDF export must end with ".pdf".',
+      exportHtmlFailed: 'Exporting the HTML failed. Please try again.',
+      exportPdfCaption: 'Export PDF',
+      updateExportPdf: 'PDF is being exported. Please wait...',
+      startExportPdf: 'Start exporting PDF',
     },
   },
   // runTime
