@@ -1,7 +1,12 @@
 import { calcUniqueTag } from '@ibiz/rt-model-api';
 import { IAppDERS } from '@ibiz/model-core';
 import { isEmpty } from 'ramda';
-import { formatPath, mergeModel, ServicePathUtil } from './utils';
+import {
+  formatPath,
+  mergeModel,
+  resolveAppLangKey,
+  ServicePathUtil,
+} from './utils';
 import { PSSysApp } from './model/PSSYSAPP';
 
 /**
@@ -278,7 +283,12 @@ export class ModelUtil {
     const app = await this.getAppModel();
     if (app.getAllPSAppLans) {
       const langs = app.getAllPSAppLans as IModel[];
-      const lang = langs.find(item => item.language === language);
+      // 调用方给的是带地区后缀的语言标识，模型里的语言键只到语言本身。
+      const key = resolveAppLangKey(
+        language,
+        langs.map(item => item.language as string),
+      );
+      const lang = langs.find(item => item.language === key);
       if (lang) {
         return this.getModel(lang.path);
       }

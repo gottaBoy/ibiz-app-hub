@@ -25,7 +25,8 @@
     "publish:alpha": "npm run build && npm publish --access public --tag=alpha --registry=https://registry.npmjs.org/",
     "publish:beta": "npm run build && npm publish --access public --tag=beta --registry=https://registry.npmjs.org/",
     "publish:npm": "npm run build && npm publish --access public --registry=https://registry.npmjs.org/",
-    "publish:local": "npm run build && npm publish --access public --registry=http://172.16.240.221:8081/repository/local/"
+    "publish:local": "npm run build && npm publish --access public --registry=http://172.16.240.221:8081/repository/local/",
+    "test:node": "vitest run --config vitest.node.config.ts"
   },
   "author": "iBiz",
   "license": "MIT",
