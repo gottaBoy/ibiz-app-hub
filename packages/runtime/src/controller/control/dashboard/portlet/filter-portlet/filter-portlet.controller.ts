@@ -127,11 +127,12 @@ export class FilterPortletController
               childrenFields: ['searchconds'],
             },
           );
-          this.state.filterNode = SearchCondEx2filterNode({
+          this.searchConds = {
             condop: 'AND',
             condtype: 'GROUP',
             searchconds: tempFieldSearchConds,
-          });
+          };
+          this.state.filterNode = SearchCondEx2filterNode(this.searchConds);
         }
       }
     }

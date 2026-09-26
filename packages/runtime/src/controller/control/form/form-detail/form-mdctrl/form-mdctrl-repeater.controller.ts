@@ -329,7 +329,7 @@ export class FormMDCtrlRepeaterController
     Array.isArray(data)
       ? data.forEach((item: IData) => this.setDefaultValue(item, type))
       : this.setDefaultValue(data, type);
-    this.setValue(data);
+    this.form.state.data[this.name] = data;
   }
 
   /**
