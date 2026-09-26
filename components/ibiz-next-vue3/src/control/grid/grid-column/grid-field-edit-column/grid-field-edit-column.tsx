@@ -1,18 +1,19 @@
 import {
   h,
-  defineComponent,
-  resolveComponent,
   ref,
   computed,
   PropType,
   nextTick,
   renderSlot,
+  ComputedRef,
+  defineComponent,
+  resolveComponent,
 } from 'vue';
-import { useNamespace } from '@ibiz-template/vue3-util';
+import { useNamespace, renderTooltip } from '@ibiz-template/vue3-util';
 import { RuntimeError } from '@ibiz-template/core';
 import {
-  GridFieldEditColumnController,
   GridRowState,
+  GridFieldEditColumnController,
 } from '@ibiz-template/runtime';
 import { isNil } from 'ramda';
 import { useCellEdit } from './cell-edit';
@@ -45,6 +46,7 @@ export const GridFieldEditColumn = defineComponent({
     const useByShowMode = (): {
       gridEditItemProps: IData;
       editorProps: IData;
+      editable: ComputedRef<boolean>;
     } => {
       switch (c.grid.editShowMode) {
         case 'cell':
@@ -61,7 +63,7 @@ export const GridFieldEditColumn = defineComponent({
           );
       }
     };
-    const { gridEditItemProps, editorProps } = useByShowMode();
+    const { gridEditItemProps, editorProps, editable } = useByShowMode();
 
     // 编辑器值变更事件
     const rowDataChange = async (
@@ -89,11 +91,19 @@ export const GridFieldEditColumn = defineComponent({
     const onInfoTextChange = (text: string) => {
       infoText.value = text;
     };
+
+    const showTitle = computed(() => {
+      const { controlRenders = [], id } = c.model;
+      return !controlRenders.some(
+        renderItem =>
+          renderItem.id === `${id?.toLowerCase()}_tooltip` ||
+          renderItem.id === `${id?.toLowerCase()}_edit_tooltip`,
+      );
+    });
+
     const tooltip = computed<string | undefined>(() => {
       // 非信息态不显示tooltip
-      if (!editorProps.readonly) {
-        return undefined;
-      }
+      if (!editorProps.readonly || !showTitle.value) return undefined;
       if (isNil(infoText.value)) {
         const val = props.row.data[c.fieldName];
         return c.formatValue(val);
@@ -101,15 +111,24 @@ export const GridFieldEditColumn = defineComponent({
       return infoText.value;
     });
 
+    const tooltipId = computed(() => {
+      const { id } = c.model;
+      return editable.value
+        ? `${id?.toLowerCase()}_edit_tooltip`
+        : `${id?.toLowerCase()}_tooltip`;
+    });
+
     return {
-      ns,
       c,
-      componentRef,
+      ns,
       tooltip,
+      tooltipId,
+      showTitle,
+      editorProps,
+      componentRef,
+      gridEditItemProps,
       rowDataChange,
       onInfoTextChange,
-      gridEditItemProps,
-      editorProps,
     };
   },
   render() {
@@ -121,6 +140,7 @@ export const GridFieldEditColumn = defineComponent({
         class: this.ns.e('editor'),
         value: val,
         data: this.row.data,
+        showTitle: this.showTitle,
         controller: this.c.editor,
         overflowMode: this.c.grid.overflowMode,
         onChange: this.rowDataChange,
@@ -135,6 +155,7 @@ export const GridFieldEditColumn = defineComponent({
         value: val,
         data: this.row.data,
         controller: this.c.editor,
+        showTitle: this.showTitle,
         overflowMode: this.c.grid.overflowMode,
         onChange: this.rowDataChange,
         onInfoTextChange: this.onInfoTextChange,
@@ -158,6 +179,12 @@ export const GridFieldEditColumn = defineComponent({
           ],
           ...this.gridEditItemProps,
         }}
+        v-tooltip={renderTooltip(
+          this.row.data,
+          this.c.model,
+          this.c.grid,
+          this.tooltipId,
+        )}
       >
         {content}
       </iBizGridEditItem>

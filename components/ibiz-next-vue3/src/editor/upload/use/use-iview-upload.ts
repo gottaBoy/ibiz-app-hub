@@ -5,6 +5,7 @@ import { UploadRawFile } from 'element-plus';
 import { computed, ComputedRef, Ref, ref, watch } from 'vue';
 import { UploadEditorController } from '../upload-editor.controller';
 
+
 /**
  * iview的Upload适配逻辑
  *
@@ -37,6 +38,7 @@ export function useIViewUpload(
   onRemove: (file: IData) => void;
   onSuccess: (response: IData) => void;
   beforeUpload: (rawFile: UploadRawFile) => boolean;
+  addCacheCount: () => void;
 } {
   // 文件列表
   const files: Ref<
@@ -241,6 +243,12 @@ export function useIViewUpload(
     valueChange(value);
   };
 
+  // 新增上传缓存数量
+  const addCacheCount = (): void => {
+    uploadCache.count += 1;
+  };
+
+
   // 上传前回调
   const beforeUpload = (rawFile: UploadRawFile): boolean => {
     if (rawFile.name.split('.').pop() === 'svg') {
@@ -273,20 +281,31 @@ export function useIViewUpload(
     ) {
       ibiz.util.file.setDownloadTicket(response.id, response.ticket);
     }
-
-    uploadCache.cacheFiles.push({
-      name: response.filename,
-      id: response.fileid,
-      folder: response.folder,
-      ...c.transformInfoMap(response, c.infoMap),
-    });
-    if (response.name.split('.').pop() === 'svg') {
-      const blob = svgBlob.get(response.name);
-      if (blob) {
-        svgBlob.set(response.fileid, blob);
-        svgBlob.delete(response.name);
+    // 处理响应结果
+    const handleResponse = (file: IData): void => {
+      uploadCache.cacheFiles.push({
+        name: file.filename,
+        id: file.fileid,
+        folder: file.folder,
+        ...c.transformInfoMap(file, c.infoMap),
+      });
+      if (file.name.split('.').pop() === 'svg') {
+        const blob = svgBlob.get(file.name);
+        if (blob) {
+          svgBlob.set(file.fileid, blob);
+          svgBlob.delete(file.name);
+        }
       }
+    };
+    // 兼容响应为数组或对象的情况
+    if (Array.isArray(response)) {
+      for (let i = 0; i < response.length; i++) {
+        handleResponse(response[i]);
+      }
+    } else {
+      handleResponse(response);
     }
+
     uploadCache.count -= 1;
 
     // 回调都结束后抛出值变更
@@ -365,5 +384,6 @@ export function useIViewUpload(
     onRemove,
     onSuccess,
     beforeUpload,
+    addCacheCount,
   };
 }

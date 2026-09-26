@@ -1,8 +1,8 @@
 import { computed, defineComponent, Ref, ref, watch } from 'vue';
 import {
-  getEditorEmits,
   getRawProps,
   useNamespace,
+  getEditorEmits,
 } from '@ibiz-template/vue3-util';
 import { RawEditorController } from '../raw-editor.controller';
 import './ibiz-raw.scss';
@@ -14,6 +14,8 @@ import './ibiz-raw.scss';
  * @primary
  * @editorparams {name:contenttype,parameterType:'IMAGE' | 'TEXT' | 'RAW' | 'HEADING1' | 'HEADING2' | 'HEADING3' | 'HEADING4' | 'HEADING5' | 'HEADING6' | 'PARAGRAPH' | 'HTML' | 'VIDEO' | 'DIVIDER' | 'INFO' | 'WARNING' | 'ERROR' | 'MARKDOWN' | 'PLACEHOLDER',defaultvalue:'TEXT',description:定义组件展示的内容类型。包含`IMAGE`（图片）、`TEXT`（文本）、`RAW`（直接内容）、`HEADING1`-`HEADING6`（各级标题）、`PARAGRAPH`（段落）、`HTML`（Html内容）、`VIDEO`（视频）、`DIVIDER`（分割线）、`INFO`（常规提示）、`WARNING`（警告提示）、`ERROR`（错误提示）、`MARKDOWN`（Markdown内容）、`PLACEHOLDER`（占位）}
  * @editorparams {name:template,parameterType:string,description:配置的handlerBars模板内容，用于将组件输入参数中的value值解析并转换为HTML内容，实现动态内容的渲染}
+ * @editorparams {"name":"chunkview","parameterType":"string", "description":"切片视图，用于定义打开目标切片视图"}
+ * @editorparams {"name":"chunkentity","parameterType":"string", "description":"切片实体，用于打开切片视图数据主键key"}
  * @ignoreprops autoFocus | overflowMode
  * @ignoreemits change | blur | focus | enter | infoTextChange
  */
@@ -25,13 +27,15 @@ export const IBizRaw = defineComponent({
     const ns = useNamespace('raw');
     const c = props.controller;
     const editorModel = c.model;
-
     // 传入内容
     const content: Ref<string | number | undefined> = ref('');
 
     const enableOverFlow = computed(() => {
       return !!c.model.editorHeight;
     });
+
+    const chunkView = c.editorParams.chunkview;
+    const chunkEntity = c.editorParams.chunkentity;
 
     // 类型
     let type = 'TEXT';
@@ -103,9 +107,11 @@ export const IBizRaw = defineComponent({
 
     return {
       ns,
-      content,
       type,
+      content,
       template,
+      chunkView,
+      chunkEntity,
       enableOverFlow,
       showFormDefaultContent,
     };
@@ -123,9 +129,15 @@ export const IBizRaw = defineComponent({
       >
         {this.content && (
           <iBizRawItem
-            class={this.ns.b('content')}
-            content={this.content}
+            data={this.data}
             type={this.type}
+            content={this.content}
+            chunkView={this.chunkView}
+            chunkEntity={this.chunkEntity}
+            context={this.controller.context}
+            ctrl={this.controller.ctrl}
+            view={this.controller.view}
+            class={this.ns.b('content')}
           ></iBizRawItem>
         )}
       </div>
