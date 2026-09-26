@@ -543,6 +543,18 @@ export class FormItemController
   }
 
   /**
+   * 自定义行为
+   * @param value
+   */
+  async onCustomAction(value: IData): Promise<void> {
+    this.form.evt.emit('onFormDetailEvent', {
+      formDetailName: this.name || this.model.id!,
+      formDetailEventName: FormDetailEventName.CUSTOMACTION,
+      args: Object.assign({}, value),
+    });
+  }
+
+  /**
    * 加载输入提示信息
    *
    * @return {*}  {Promise<void>}
