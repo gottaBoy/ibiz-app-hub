@@ -62,5 +62,6 @@ export function useAllEdit(
   return {
     gridEditItemProps,
     editorProps,
+    editable,
   };
 }

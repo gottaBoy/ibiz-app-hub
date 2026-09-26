@@ -56,5 +56,6 @@ export function useRowEdit(
   return {
     gridEditItemProps,
     editorProps,
+    editable,
   };
 }

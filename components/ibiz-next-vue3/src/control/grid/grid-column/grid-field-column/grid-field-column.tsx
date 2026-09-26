@@ -3,6 +3,7 @@ import { computed, defineComponent, ref, VNode } from 'vue';
 import {
   useNamespace,
   computedAsync,
+  renderTooltip,
   useCodeListListen,
 } from '@ibiz-template/vue3-util';
 import {
@@ -159,9 +160,14 @@ export const GridFieldColumn = defineComponent({
     );
 
     const findLayoutPanel = (): IPanel | undefined => {
-      const { controlRenders = [] } = props.controller.model;
+      const { controlRenders = [], id } = props.controller.model;
       return controlRenders.find(
-        renderItem => renderItem.renderType === 'LAYOUTPANEL',
+        renderItem =>
+          renderItem.renderType === 'LAYOUTPANEL' &&
+          ![
+            `${id?.toLowerCase()}_tooltip`,
+            `${id?.toLowerCase()}_edit_tooltip`,
+          ].includes(renderItem.id!),
       )?.layoutPanel;
     };
 
@@ -183,21 +189,21 @@ export const GridFieldColumn = defineComponent({
 
     return {
       ns,
-      onCellClick,
-      onTextClick,
-      onInfoTextChange,
-      onActionClick,
+      zIndex,
+      percent,
+      tooltip,
       CustomHtml,
       fieldValue,
-      formatValue,
-      percent,
-      codeListValue,
-      tooltip,
-      zIndex,
       columnType,
-      codeListItems,
+      formatValue,
       hiddenEmpty,
+      codeListValue,
+      codeListItems,
+      onCellClick,
+      onTextClick,
+      onActionClick,
       findLayoutPanel,
+      onInfoTextChange,
       renderPanelItemLayout,
     };
   },
@@ -221,7 +227,11 @@ export const GridFieldColumn = defineComponent({
     const panel = this.findLayoutPanel();
     if (c.isCustomCode) {
       content = (
-        <span class={this.ns.e('script')} v-html={this.CustomHtml}></span>
+        <span
+          class={this.ns.e('script')}
+          v-html={this.CustomHtml}
+          v-tooltip={renderTooltip(this.row.data, c.model, c.grid)}
+        ></span>
       );
     } else if (panel) {
       content = (
@@ -230,6 +240,7 @@ export const GridFieldColumn = defineComponent({
           modelData={panel}
           context={c.context}
           params={c.params}
+          v-tooltip={renderTooltip(this.row.data, c.model, c.grid)}
         ></iBizControlShell>
       );
     } else if (c.codeList) {
@@ -242,6 +253,7 @@ export const GridFieldColumn = defineComponent({
           onClick={this.onTextClick}
           onInfoTextChange={this.onInfoTextChange}
           title={showTitle(this.tooltip)}
+          v-tooltip={renderTooltip(this.row.data, c.model, c.grid)}
         ></iBizCodeList>
       );
     } else if (this.columnType === 'attachment') {
@@ -250,14 +262,16 @@ export const GridFieldColumn = defineComponent({
           data={this.row.data}
           value={this.fieldValue}
           controller={this.controller}
+          v-tooltip={renderTooltip(this.row.data, c.model, c.grid)}
         />
       );
     } else {
       content = (
         <span
           class={this.ns.e('text')}
-          title={showTitle(this.tooltip)}
           onClick={this.onTextClick}
+          title={showTitle(this.tooltip)}
+          v-tooltip={renderTooltip(this.row.data, c.model, c.grid)}
         >
           {this.formatValue}
           {this.hiddenEmpty && c.model.unitName}

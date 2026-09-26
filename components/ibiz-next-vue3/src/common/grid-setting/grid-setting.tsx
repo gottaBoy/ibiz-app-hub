@@ -98,6 +98,7 @@ export const IBizGridSetting: ReturnType<typeof defineComponent> =
                     itemKey='key'
                     sort={this.isDraggable}
                     force-fallback={true}
+                    delay={100}
                     animation={500}
                     ghost-class={this.ns.b('column-state-ghost')}
                     filter='.unmover'

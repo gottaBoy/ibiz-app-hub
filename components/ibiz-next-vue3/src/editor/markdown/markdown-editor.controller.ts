@@ -134,6 +134,13 @@ export class MarkDownEditorController
    */
   inlineAiChatHeight?: number;
 
+  /**
+   * @description 附加界面行为
+   * @type {IData[]}
+   * @memberof MarkDownEditorController
+   */
+  extraActions: IData[] = [];
+
   protected async onInit(): Promise<void> {
     await super.onInit();
 
@@ -208,6 +215,14 @@ export class MarkDownEditorController
             .getApp(model.appId)
             .deService.getService(this.context, model.appDataEntityId!);
           this.chatCompletion = true;
+        }
+        const { deuiactionGroup } = this.deACMode;
+        const uiactionGroupDetails =
+          deuiactionGroup?.uiactionGroupDetails || [];
+        if (uiactionGroupDetails.length > 0) {
+          this.extraActions = uiactionGroupDetails.filter(item =>
+            item.uiactionId?.startsWith('header_extra'),
+          );
         }
       }
     }
@@ -428,5 +443,26 @@ export class MarkDownEditorController
       },
       appId,
     );
+  }
+
+  /**
+   * @description 执行自定义界面行为
+   * @param {string} uiActionId
+   * @param {string} appId
+   * @returns {*}  {Promise<IData[]>}
+   * @memberof MarkDownEditorController
+   */
+  async doCustomUIAction(uiActionId: string, appId: string): Promise<IData[]> {
+    const eventArgs = this.ctrl.getEventArgs();
+    eventArgs.params = clone(eventArgs.params);
+    const result = await UIActionUtil.exec(
+      uiActionId!,
+      {
+        ...eventArgs,
+      },
+      appId,
+    );
+    const data = result.data || [];
+    return data;
   }
 }

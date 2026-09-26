@@ -56,6 +56,7 @@ import {
   View403,
 } from './view';
 import { iBizI18n } from './locale';
+import { IBizDirectives } from './directives';
 import { IBizViewEngine } from './view-engine';
 
 export default {
@@ -117,5 +118,6 @@ export default {
     v.use(IBizViewPanelControl);
     // 编辑器
     v.use(IBizEditor);
+    v.use(IBizDirectives);
   },
 };

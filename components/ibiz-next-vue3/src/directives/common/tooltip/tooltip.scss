@@ -1,0 +1,48 @@
+@include b('tooltip') {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  min-width: 10px;
+  max-width: 40%;
+  max-height: 50%;
+  padding: getCssVar('spacing', 'base-tight');
+  background-color: getCssVar('color-bg-2');
+  border-radius: getCssVar('border-radius', 'extra-small');
+  box-shadow: getCssVar(shadow, elevated);
+
+  @include e('arrow') {
+    position: absolute;
+    z-index: -1;
+    width: getCssVar('width-icon', 'extra-small');
+    height: getCssVar('width-icon', 'extra-small');
+    background: getCssVar('color-bg-2');
+    transform: rotate(45deg);
+
+    &[data-placement^='top'] {
+      border-right: 1px solid getCssVar('color-border');
+      border-bottom: 1px solid getCssVar('color-border');
+    }
+
+    &[data-placement^='bottom'] {
+      border-top: 1px solid getCssVar('color-border');
+      border-left: 1px solid getCssVar('color-border');
+    }
+
+    &[data-placement^='left'] {
+      border-top: 1px solid getCssVar('color-border');
+      border-right: 1px solid getCssVar('color-border');
+    }
+
+    &[data-placement^='right'] {
+      border-bottom: 1px solid getCssVar('color-border');
+      border-left: 1px solid getCssVar('color-border');
+    }
+  }
+
+  @include e('content') {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+}

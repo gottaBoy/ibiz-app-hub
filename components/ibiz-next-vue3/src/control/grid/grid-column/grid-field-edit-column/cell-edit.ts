@@ -137,5 +137,6 @@ export function useCellEdit(
   return {
     gridEditItemProps,
     editorProps,
+    editable,
   };
 }
