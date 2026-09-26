@@ -52,6 +52,7 @@ export const ScrollContainerItem = defineComponent({
         class={this.classArr}
         layout={{ layout: 'FLEX' }}
         v-loading={this.controller.state.loading}
+        element-loading-text={this.controller.state.loadingText}
       >
         {defaultSlots.map(slot => {
           const props = slot.props as IData;

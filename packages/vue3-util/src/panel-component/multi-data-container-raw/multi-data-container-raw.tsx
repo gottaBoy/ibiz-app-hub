@@ -109,7 +109,7 @@ export const MultiDataContainerRaw = defineComponent({
       );
     }
     return (
-      <div class={this.classArr} v-loading={this.controller.state.loading}>
+      <div class={this.classArr} v-loading={this.controller.state.loading} element-loading-text={this.controller.state.loadingText}>
         {content}
       </div>
     );

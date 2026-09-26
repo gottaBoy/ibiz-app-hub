@@ -59,7 +59,7 @@ export const HtmlView = defineComponent({
 
     if (this.c.state.htmlUrl) {
       return (
-        <div class={this.viewClassNames} v-loading={this.isLoading}>
+        <div class={this.viewClassNames} v-loading={this.isLoading} element-loading-text={this.c.state.loadingText}>
           <iframe
             src={this.c.state.htmlUrl}
             onLoad={() => this.onLoad()}

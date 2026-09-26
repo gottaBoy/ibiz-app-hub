@@ -48,6 +48,7 @@ export const PanelTabPage = defineComponent({
         class={[this.ns.b(), this.ns.m(this.modelData.codeName), this.classArr]}
         layout={this.modelData.layout}
         v-loading={this.controller.state.loading}
+        element-loading-text={this.controller.state.loadingText}
       >
         {defaultSlots.map(slot => {
           const props = slot.props as IData;

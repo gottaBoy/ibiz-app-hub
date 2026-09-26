@@ -274,6 +274,7 @@ export const View = defineComponent({
         class={this.viewClassNames}
         id={this.c.id}
         v-loading={this.c.state.isLoading}
+        element-loading-text={this.c.state.loadingText}
       >
         {layoutPanel}
         {teleportContent}

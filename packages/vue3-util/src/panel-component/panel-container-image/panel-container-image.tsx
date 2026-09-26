@@ -94,6 +94,7 @@ export const PanelContainerImage = defineComponent({
       <div
         class={this.classArr}
         v-loading={this.controller.state.loading}
+        element-loading-text={this.controller.state.loadingText}
         onClick={event => this.controller.onClick(event)}
         style={this.backgroundStyle}
       >

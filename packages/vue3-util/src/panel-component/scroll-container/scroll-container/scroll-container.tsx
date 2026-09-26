@@ -101,7 +101,7 @@ export const ScrollContainer = defineComponent({
     }
 
     return (
-      <div class={this.classArr} v-loading={this.controller.state.loading}>
+      <div class={this.classArr} v-loading={this.controller.state.loading} element-loading-text={this.controller.state.loadingText}>
         <div class={[this.ns.e('header')]} style={slotStylle.top}>
           {top}
         </div>
