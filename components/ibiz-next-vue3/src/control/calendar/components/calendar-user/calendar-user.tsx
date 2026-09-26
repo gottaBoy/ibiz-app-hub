@@ -73,8 +73,8 @@ export const CalendarUser = defineComponent({
         return [
           slots.event?.({ data: items[0] }),
           <el-popover
-            popper-class={ns.e('custom-user-popover')}
             trigger='click'
+            popper-class={ns.e('custom-user-popover')}
             ref={(el: IData) => {
               if (el && items[0].id === popoverValue.value) {
                 curPopover.value = el;

@@ -5,7 +5,6 @@ import {
   useNamespace,
   useCodeListListen,
 } from '@ibiz-template/vue3-util';
-import './span.scss';
 import { CodeListItem } from '@ibiz-template/runtime';
 import { isNil } from 'ramda';
 import {
@@ -17,6 +16,7 @@ import {
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { SpanEditorController } from '../span-editor.controller';
+import './span.scss';
 
 dayjs.extend(customParseFormat);
 
@@ -253,14 +253,14 @@ export const IBizSpan = defineComponent({
 
     return (
       <span
+        ref='editorRef'
         class={[
           this.ns.b(),
           this.readonly ? this.ns.m('readonly') : '',
           this.ns.is('show-default', this.showFormDefaultContent),
           this.ns.is('is-ellipsis', isEllipsis),
         ]}
-        ref='editorRef'
-        title={showTitle(this.spanTitle)}
+        title={showTitle(this.showTitle ? this.spanTitle : undefined)}
       >
         {content}
       </span>

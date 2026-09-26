@@ -96,6 +96,7 @@ export const FormTabPanel = defineComponent({
           ...this.controller.containerClass,
         ]}
         model-value={this.controller.state.activeTab}
+        element-loading-text={this.controller.state.loadingText}
         v-loading={this.controller.state.loading && !isStyle2}
         onTabClick={this.onTabClick}
       >
@@ -157,6 +158,7 @@ export const FormTabPanel = defineComponent({
         <div
           class={this.ns.b('tab-panel-container-style2')}
           v-loading={this.controller.state.loading}
+          element-loading-text={this.controller.state.loadingText}
         >
           {tabContent}
           <el-popover

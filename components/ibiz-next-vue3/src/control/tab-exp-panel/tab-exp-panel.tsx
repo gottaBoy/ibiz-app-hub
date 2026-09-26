@@ -60,7 +60,7 @@ export const TabExpPanelControl = defineComponent({
     }
 
     watch(
-      () => route.fullPath,
+      () => route?.fullPath,
       (newVal, oldVal) => {
         if (newVal !== oldVal) {
           const depth = c.routeDepth;

@@ -1080,6 +1080,7 @@ export const GanttControl = defineComponent({
         controller={this.c}
         class={[this.ns.b(), !this.data?.length ? this.ns.m('empty') : '']}
         v-loading={this.loading}
+        element-loading-text={this.c.state.loadingText}
       >
         <x-gantt
           ref='ganttRef'

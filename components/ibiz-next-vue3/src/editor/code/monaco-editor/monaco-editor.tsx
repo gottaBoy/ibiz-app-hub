@@ -15,7 +15,7 @@ import {
   useUIStore,
   useNamespace,
   getCodeProps,
-  getEditorEmits,
+  getCodeEmits,
 } from '@ibiz-template/vue3-util';
 import { createUUID } from 'qx-util';
 import { ElMessageBox } from 'element-plus';
@@ -65,7 +65,7 @@ import './monaco-editor.scss';
 export const IBizCode = defineComponent({
   name: 'IBizCode',
   props: getCodeProps<CodeEditorController>(),
-  emits: getEditorEmits(),
+  emits: getCodeEmits(),
   setup(props, { emit }) {
     const codeEditBox = ref();
     const ns = useNamespace('code');

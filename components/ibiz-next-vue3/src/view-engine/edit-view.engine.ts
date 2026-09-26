@@ -247,8 +247,8 @@ export class EditViewEngine extends DEMainViewEngine {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   async call(key: keyof IApiEditViewCall, args: any): Promise<any> {
     if (key === SysUIActionTag.SAVE) {
-      await this.form.save();
-      return null;
+      const result = await this.form.save();
+      return result;
     }
     if (key === SysUIActionTag.SAVE_AND_EXIT) {
       await this.form.save();

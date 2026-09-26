@@ -50,7 +50,11 @@ export const SplitContainer = defineComponent({
   render() {
     const defaultSlots: VNode[] = this.$slots.default?.() || [];
     return (
-      <div class={this.classArr} v-loading={this.controller.state.loading}>
+      <div
+        class={this.classArr}
+        v-loading={this.controller.state.loading}
+        element-loading-text={this.controller.state.loadingText}
+      >
         <iBizSplit
           v-model={this.controller.state.splitValue}
           mode={this.controller.splitMode}

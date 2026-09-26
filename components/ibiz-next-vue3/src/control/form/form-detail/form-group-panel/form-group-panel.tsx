@@ -189,6 +189,7 @@ export const FormGroupPanel = defineComponent({
       <div
         class={classArr}
         v-loading={this.controller.state.loading}
+        element-loading-text={this.controller.state.loadingText}
         id={`${this.controller.form.view.model.codeName}_${this.controller.form.model.codeName}_${this.modelData.codeName}`}
         onClick={(event: MouseEvent) => this.controller.onClick(event)}
       >

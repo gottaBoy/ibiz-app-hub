@@ -131,10 +131,6 @@ export const TreeControl = defineComponent({
       }
     });
 
-    onUnmounted(() => {
-      c.counter?.offChange(fn);
-    });
-
     const ns = useNamespace(`control-${c.model.controlType!.toLowerCase()}`);
     const treeRef = ref<InstanceType<typeof ElTree> | null>(null);
     const treeviewRef = ref<IData | null>(null);
@@ -1174,6 +1170,7 @@ export const TreeControl = defineComponent({
         <iBizControlBase
           ref={'treeviewRef'}
           controller={this.c}
+          element-loading-text={this.c.state.loadingText}
           v-loading={this.c.state.isLoading}
         >
           {slots}

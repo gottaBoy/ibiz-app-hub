@@ -473,6 +473,7 @@ export const SearchGroups = defineComponent({
                 itemKey='id'
                 sort={true}
                 force-fallback={true}
+                delay={100}
                 animation={500}
                 ghost-class={this.ns.b('table-row-ghost')}
                 onChange={(evt: IData) => this.onDragChange(evt)}
