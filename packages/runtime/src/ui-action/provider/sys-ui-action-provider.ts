@@ -68,6 +68,8 @@ export class SysUIActionProvider extends UIActionProviderBase {
 
     const result = await view.callUIAction(uIActionTag, args);
 
-    return result || {};
+    return result
+      ? { data: Array.isArray(result) ? [...result] : [result] }
+      : {};
   }
 }
