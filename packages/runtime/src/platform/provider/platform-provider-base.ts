@@ -2,7 +2,7 @@ import {
   RuntimeError,
   downloadFileFromBlob,
 } from '@ibiz-template/core';
-import { exportData } from '../../controller';
+import { exportData } from '../../controller/utils/data-file-util/data-file-util';
 import {
   IPlatformProvider,
   IFrontExportParams,
