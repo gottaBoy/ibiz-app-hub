@@ -80,7 +80,7 @@ export const IBizPickerSelectView = defineComponent({
 
     // 克隆的视图参数
     const cloneParams = computed(() => {
-      return { ...params.value };
+      return { checkstrictly: true, ...params.value };
     });
 
     watch(
@@ -640,7 +640,7 @@ export const IBizPickerSelectView = defineComponent({
               h(viewShell, {
                 modal: this.modal,
                 context: this.context,
-                params: { checkstrictly: true, ...this.cloneParams },
+                params: this.cloneParams,
                 viewId: this.c.pickupView.id,
                 style: {
                   height: `${

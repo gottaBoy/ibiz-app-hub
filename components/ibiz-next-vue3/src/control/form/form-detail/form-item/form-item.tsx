@@ -1,5 +1,11 @@
-import { defineComponent, h, PropType, resolveComponent } from 'vue';
-import { useNamespace, computedAsync } from '@ibiz-template/vue3-util';
+import {
+  computed,
+  defineComponent,
+  h,
+  PropType,
+  resolveComponent,
+} from 'vue';
+import { renderTooltip, useNamespace, computedAsync } from '@ibiz-template/vue3-util';
 import { IDEFormItem } from '@ibiz/model-core';
 import { FormItemController } from '@ibiz-template/runtime';
 import CompositeFormItem from './composite-form-item/composite-form-item';
@@ -37,7 +43,14 @@ export const FormItem = defineComponent({
       return html;
     });
 
-    return { ns, c, CustomHtml, onValueChange };
+    const showTitle = computed(() => {
+      const { controlRenders = [], id } = c.model;
+      return !controlRenders.some(
+        renderItem => renderItem.id === `${id?.toLowerCase()}_tooltip`,
+      );
+    });
+
+    return { ns, c, showTitle, CustomHtml, onValueChange };
   },
   render() {
     if (!this.c.state.visible || this.c.model.editor?.editorType === 'HIDDEN')
@@ -69,6 +82,7 @@ export const FormItem = defineComponent({
         style: this.c.editor?.style,
         value: this.c.value,
         data: this.c.data,
+        showTitle: this.showTitle,
         controller: this.c.editor,
         disabled: this.c.state.disabled,
         readonly: this.c.state.readonly,
@@ -81,6 +95,7 @@ export const FormItem = defineComponent({
         onEnter: (event: MouseEvent) => this.c.onEnter(event),
         onClick: (event: MouseEvent, params: IParams) =>
           this.c.onClick(event, params),
+        onCustomAction: (_value: IData) => this.c.onCustomAction(_value),
         ...this.attrs,
       };
       if (this.$slots.default) {
@@ -111,6 +126,11 @@ export const FormItem = defineComponent({
             ...this.c.containerClass,
           ]}
           v-html={this.CustomHtml}
+          v-tooltip={renderTooltip(
+            this.c.data,
+            this.c.model,
+            this.c.form,
+          )}
         ></div>
       );
 

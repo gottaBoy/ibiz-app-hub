@@ -1,4 +1,4 @@
-import { IBizIcon, useNamespace } from '@ibiz-template/vue3-util';
+import { IBizIcon, renderTooltip, useNamespace } from '@ibiz-template/vue3-util';
 import {
   ref,
   PropType,
@@ -125,9 +125,9 @@ export const IBizFormItemContainer = defineComponent({
                   )}
                   <div
                     class={ns.em('label', 'text')}
-                    title={
-                      enableInputTip ? undefined : showTitle(c.labelCaption)
-                    }
+                    title={showTitle(
+                      enableInputTip ? undefined : c.labelCaption,
+                    )}
                   >
                     {c.labelCaption}
                   </div>
@@ -200,7 +200,16 @@ export const IBizFormItemContainer = defineComponent({
           this.ns.em('content', `label-${labelPos?.toLowerCase()}`),
         ]}
       >
-        <div class={[this.ns.e('editor')]}>{this.$slots.default?.()}</div>
+        <div
+          class={[this.ns.e('editor')]}
+          v-tooltip={renderTooltip(
+            this.controller.data,
+            this.controller.model,
+            this.controller.form,
+          )}
+        >
+          {this.$slots.default?.()}
+        </div>
         {this.showError && this.controller.state.error ? (
           <div
             title={showTitle(this.controller.state.error)}

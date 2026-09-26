@@ -232,6 +232,12 @@ export const SearchBarControl = defineComponent({
                     ]}
                     onClick={() => this.onGroupClick(groupItem)}
                   >
+                    {groupItem.sysImage && (
+                      <iBizIcon
+                        icon={groupItem.sysImage}
+                        class={this.ns.be('quick-group-item', 'icon')}
+                      ></iBizIcon>
+                    )}
                     {groupItem.caption}
                     {groupItem.counterId && (
                       <iBizBadge

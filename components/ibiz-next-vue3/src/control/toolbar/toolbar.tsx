@@ -22,8 +22,6 @@ import {
   ToolbarController,
 } from '@ibiz-template/runtime';
 import { showTitle } from '@ibiz-template/core';
-import { IBizExportExcel } from './export-excel/export-excel';
-import { IBizShortCutButton } from './short-cut-button/short-cut-button';
 import { convertBtnType } from '../../util';
 import './toolbar.scss';
 
@@ -196,7 +194,7 @@ export const ToolbarControl = defineComponent({
       ).buttonStyle?.toLowerCase();
       if (actionId === 'exportexcel' || actionId === 'gridview_exportaction') {
         return (
-          <IBizExportExcel
+          <i-biz-export-excel
             class={[
               ns.e('menu-exportexcel'),
               ns.em('item', buttonType),
@@ -212,7 +210,7 @@ export const ToolbarControl = defineComponent({
             onExportExcel={(e: MouseEvent, data: IData): void => {
               handleActionClick(detail, e, data);
             }}
-          ></IBizExportExcel>
+          ></i-biz-export-excel>
         );
       }
       return (
@@ -695,7 +693,7 @@ export const ToolbarControl = defineComponent({
                     actionId === 'gridview_exportaction'
                   ) {
                     return (
-                      <IBizExportExcel
+                      <i-biz-export-excel
                         class={[
                           ns.e('menu-exportexcel'),
                           ns.em('item', buttonType),
@@ -711,7 +709,7 @@ export const ToolbarControl = defineComponent({
                         onExportExcel={(e: MouseEvent, data: IData): void => {
                           handleClick(item2, e, data);
                         }}
-                      ></IBizExportExcel>
+                      ></i-biz-export-excel>
                     );
                   }
                   return (
@@ -806,7 +804,7 @@ export const ToolbarControl = defineComponent({
           actionId === 'gridview_exportaction'
         ) {
           return (
-            <IBizExportExcel
+            <i-biz-export-excel
               class={[
                 ns.e('item'),
                 ns.e('item-deuiaction'),
@@ -822,12 +820,12 @@ export const ToolbarControl = defineComponent({
               onExportExcel={(e: MouseEvent, data: IData): void => {
                 handleClick(item, e, data);
               }}
-            ></IBizExportExcel>
+            ></i-biz-export-excel>
           );
         }
         if (actionId === 'shortcut') {
           return (
-            <IBizShortCutButton
+            <i-biz-short-cut-button
               key={itemId}
               class={[
                 ns.e('item'),
