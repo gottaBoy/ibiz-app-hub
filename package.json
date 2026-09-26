@@ -86,7 +86,8 @@
       "core-js": "3.45.1",
       "@babel/runtime": "7.28.4",
       "jspdf>dompurify": "2.5.8",
-      "modern-screenshot": "4.6.7"
+      "modern-screenshot": "4.6.7",
+      "@ibiz-template/devtool>@monaco-editor/loader": "1.4.0"
     }
   }
 }
