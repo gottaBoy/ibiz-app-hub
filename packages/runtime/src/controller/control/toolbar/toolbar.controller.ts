@@ -189,8 +189,9 @@ export class ToolbarController<
 
       // 是否过程中启用loading
       const enableLoading =
-        ['SYS', 'BACKEND', 'WFBACKEND'].includes(uiAction.uiactionMode!) &&
-        uiAction.showBusyIndicator !== false;
+        (['SYS', 'BACKEND', 'WFBACKEND'].includes(uiAction.uiactionMode!) &&
+          uiAction.showBusyIndicator !== false) ||
+        uiAction.showBusyIndicator === true;
 
       if (enableLoading) {
         this.state.buttonsState.setLoading(item.id!);
@@ -291,6 +292,22 @@ export class ToolbarController<
     await super.onCreated();
 
     this.state.viewMode = this.ctx.view.modal.mode;
+    await this.initButtonState();
+    await this.initToolbarItemProviders();
+    if (!this.state.manualCalcButtonState) {
+      await this.calcButtonState(undefined, this.model.appDataEntityId, {
+        view: this.view,
+        ctrl: this,
+      });
+    } else {
+      await this.state.buttonsState.init();
+    }
+  }
+
+  /**
+   * 初始化工具栏按钮状态对象
+   */
+  async initButtonState(): Promise<void> {
 
     // 收集所有遍历过程中的异步任务
     const asyncTasks: Promise<IDEUIActionGroup>[] = [];
@@ -356,17 +373,6 @@ export class ToolbarController<
         );
       }
     });
-
-    await this.initToolbarItemProviders();
-
-    if (!this.state.manualCalcButtonState) {
-      await this.calcButtonState(undefined, this.model.appDataEntityId, {
-        view: this.view,
-        ctrl: this,
-      });
-    } else {
-      await this.state.buttonsState.init();
-    }
   }
 
   /**
