@@ -12,3 +12,4 @@ export * from './storage';
 export * from './autofocus-blur/autofocus-blur';
 export * from './popover/popover';
 export * from './vue-use';
+export * from './tooltip/tooltip';

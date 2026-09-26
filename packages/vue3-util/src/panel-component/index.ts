@@ -9,7 +9,6 @@ export * from './multi-data-container-raw';
 export * from './single-data-container';
 export * from './grid-container';
 export * from './panel-container-image';
-export * from './panel-container-group';
 export * from './panel-tab-page';
 export * from './panel-item-render';
 export * from './teleport-placeholder';

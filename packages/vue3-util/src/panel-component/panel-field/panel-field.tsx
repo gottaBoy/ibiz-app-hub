@@ -1,6 +1,6 @@
 import { IPanelField } from '@ibiz/model-core';
 import { computed, defineComponent, PropType, resolveComponent, h } from 'vue';
-import { useNamespace } from '../../use';
+import { renderTooltip, useNamespace } from '../../use';
 import { PanelFieldController } from './panel-field.controller';
 import './panel-field.scss';
 
@@ -51,9 +51,18 @@ export const PanelField = defineComponent({
       props.controller.setDataValue(val, name);
     };
 
+    // 存在自定义 tooltip 渲染项时，编辑器不再显示默认 title
+    const showTitle = computed(() => {
+      const { controlRenders = [], id } = props.modelData;
+      return !controlRenders.some(
+        renderItem => renderItem.id === `${id?.toLowerCase()}_tooltip`,
+      );
+    });
+
     return {
       ns,
       classArr,
+      showTitle,
       onValueChange,
     };
   },
@@ -67,6 +76,7 @@ export const PanelField = defineComponent({
         controller: this.controller.editor,
         disabled: this.controller.state.disabled,
         class: this.ns.b('content'),
+        showTitle: this.showTitle,
         readonly: this.controller.state.readonly,
         onChange: this.onValueChange,
         onFocus: (event: MouseEvent) => this.controller.onFocus(event),
@@ -92,6 +102,11 @@ export const PanelField = defineComponent({
       <div
         class={this.classArr}
         onClick={event => this.controller.onClick(event)}
+        v-tooltip={renderTooltip(
+          this.controller.data,
+          this.controller.model,
+          this.controller.panel,
+        )}
       >
         {editor}
         {this.controller.state.error && (

@@ -9,7 +9,6 @@ import {
   IBizMultiDataContainer,
   IBizMultiDataContainerRaw,
   IBizPanelTabPage,
-  IBizPanelContainerGroup,
   IBizSingleDataContainer,
   IBizScrollContainer,
   IBizPanelContainerImage,
@@ -40,6 +39,7 @@ import IBizViewMsgPos from './view-msg-pos';
 import IBizSettingContainer from './setting-container';
 import IBizSplitContainer from './split-container';
 import IBizThemeToggling from './theme-toggling';
+import { IBizPanelContainerGroup } from './panel-container-group';
 
 export const IBizPanelComponents = {
   install: (v: App): void => {

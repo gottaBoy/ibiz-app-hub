@@ -162,16 +162,23 @@ export class MultiDataContainerRawController
    * @memberof MultiDataContainerRawController
    */
   protected computeNavParams(): IData {
+    const parentData = this.dataParent.data || {};
     const { navigateContexts, navigateParams } = this.model;
     const context = this.panel.context.clone();
     Object.assign(
       context,
-      convertNavData(navigateContexts, this.panel.params, this.panel.context),
+      convertNavData(
+        navigateContexts,
+        parentData,
+        this.panel.context,
+        this.panel.params,
+      ),
     );
     const params = convertNavData(
       navigateParams,
-      this.panel.params,
+      parentData,
       this.panel.context,
+      this.panel.params,
     );
     Object.assign(params, this.panel.params);
     return { context, params };
@@ -183,77 +190,83 @@ export class MultiDataContainerRawController
    * @protected
    * @memberof MultiDataContainerRawController
    */
-  protected initContainerData(): void {
-    const { dataSourceType, dataName, scriptCode } = this.model;
-    switch (dataSourceType) {
-      case 'DEACTION':
-      case 'DEDATASET':
-        this.setDataByDeMethod();
-        break;
-      case 'APPGLOBALPARAM':
-        this.setDataByAppGlobalParam();
-        break;
-      case 'DELOGIC':
-        this.setDataByDeLogic();
-        break;
-      case 'TOPVIEWSESSIONPARAM': {
-        if (!dataName) {
-          throw new RuntimeModelError(
-            this.model,
-            ibiz.i18n.t('vue3Util.panelComponent.noConfiguardDataObject'),
-          );
+  protected async initContainerData(): Promise<void> {
+    const { dataSourceType, dataName, scriptCode, showBusyIndicator } =
+      this.model;
+    try {
+      if (showBusyIndicator) this.startLoading();
+      switch (dataSourceType) {
+        case 'DEACTION':
+        case 'DEDATASET':
+          await this.setDataByDeMethod();
+          break;
+        case 'APPGLOBALPARAM':
+          this.setDataByAppGlobalParam();
+          break;
+        case 'DELOGIC':
+          await this.setDataByDeLogic();
+          break;
+        case 'TOPVIEWSESSIONPARAM': {
+          if (!dataName) {
+            throw new RuntimeModelError(
+              this.model,
+              ibiz.i18n.t('vue3Util.panelComponent.noConfiguardDataObject'),
+            );
+          }
+          this.bindViewData(this.panel.getTopView(), dataName);
+          break;
         }
-        this.bindViewData(this.panel.getTopView(), dataName);
-        break;
-      }
-      case 'VIEWSESSIONPARAM': {
-        if (!dataName) {
-          throw new RuntimeModelError(
-            this.model,
-            ibiz.i18n.t('vue3Util.panelComponent.noConfiguardDataObject'),
-          );
+        case 'VIEWSESSIONPARAM': {
+          if (!dataName) {
+            throw new RuntimeModelError(
+              this.model,
+              ibiz.i18n.t('vue3Util.panelComponent.noConfiguardDataObject'),
+            );
+          }
+          this.bindViewData(this.panel.view, dataName);
+          break;
         }
-        this.bindViewData(this.panel.view, dataName);
-        break;
-      }
-      case 'ACTIVEDATAPARAM': {
-        if (!dataName) {
-          throw new RuntimeModelError(
-            this.model,
-            ibiz.i18n.t('vue3Util.panelComponent.noConfiguardDataObject'),
-          );
+        case 'ACTIVEDATAPARAM': {
+          if (!dataName) {
+            throw new RuntimeModelError(
+              this.model,
+              ibiz.i18n.t('vue3Util.panelComponent.noConfiguardDataObject'),
+            );
+          }
+          await this.setData(this.dataParent.data[dataName]);
+          break;
         }
-        this.setData(this.dataParent.data[dataName]);
-        break;
-      }
-      case 'CUSTOM': {
-        if (!scriptCode) {
-          throw new RuntimeModelError(
-            this.model,
-            ibiz.i18n.t('vue3Util.panelComponent.noConfiguredScript'),
-          );
+        case 'CUSTOM': {
+          if (!scriptCode) {
+            throw new RuntimeModelError(
+              this.model,
+              ibiz.i18n.t('vue3Util.panelComponent.noConfiguredScript'),
+            );
+          }
+          const computeData = ScriptFactory.execScriptFn(
+            {
+              ...this.panel.getEventArgs(),
+              data: this.dataParent.data,
+            },
+            scriptCode,
+            {
+              isAsync: false,
+              singleRowReturn: true,
+            },
+          ) as IData[];
+          await this.setData(computeData);
+          break;
         }
-        const computeData = ScriptFactory.execScriptFn(
-          {
-            ...this.panel.getEventArgs(),
-            data: this.dataParent.data,
-          },
-          scriptCode,
-          {
-            isAsync: false,
-            singleRowReturn: true,
-          },
-        ) as IData[];
-        this.setData(computeData);
-        break;
+        default:
+          throw new ModelError(
+            this.model,
+            ibiz.i18n.t('vue3Util.panelComponent.noSupportedDataSourceType', {
+              dataSourceType,
+            }),
+          );
       }
-      default:
-        throw new ModelError(
-          this.model,
-          ibiz.i18n.t('vue3Util.panelComponent.noSupportedDataSourceType', {
-            dataSourceType,
-          }),
-        );
+    } finally {
+      if (showBusyIndicator) this.endLoading();
     }
   }
 

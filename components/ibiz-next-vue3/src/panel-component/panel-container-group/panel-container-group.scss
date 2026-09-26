@@ -1,0 +1,140 @@
+$panel-container-group: (
+  'bg-color': transparent,
+  'icon-padding-right':  getCssVar(spacing,tight),
+  'counter-padding-left': getCssVar(spacing, tight),
+);
+
+$panel-container-group-header: (
+  'bg-color': transparent,
+  'padding': getCssVar(spacing, base, tight),
+  'border-color': getCssVar('color', 'border'),
+  'height': 49px,
+);
+
+$panel-container-group-caption: (
+  'text-color': getCssVar(color, text, 0),
+  'font-size': getCssVar('font-size', 'header-5'),
+  'font-weight': getCssVar(font-weight, bold),
+);
+
+$panel-container-group-content: (
+  'bg-color': transparent,
+  'padding': getCssVar(spacing, tight),
+);
+
+@include b(panel-container-group) {
+  @include set-component-css-var('panel-container-group', $panel-container-group);
+  @include set-component-css-var('panel-container-group-header', $panel-container-group-header);
+  @include set-component-css-var('panel-container-group-caption', $panel-container-group-caption);
+  @include set-component-css-var('panel-container-group-content', $panel-container-group-content);
+}
+
+@include b(panel-container-group) {
+  height: 100%;
+  background-color: getCssVar('panel-container-group', 'bg-color');
+  border-radius: getCssVar('border-radius', 'base');
+
+  @include e(caption) {
+    @include utils-ellipsis;
+
+    display: flex;
+    align-items: center;
+    font-size: getCssVar('panel-container-group-caption', 'font-size');
+    font-weight: getCssVar('panel-container-group-caption', 'font-weight');
+    color: getCssVar('panel-container-group-caption', 'text-color');
+
+    @include m('icon'){
+      padding-right: getCssVar('panel-container-group','icon-padding-right');
+    }
+  }
+
+  @include e(counter) {
+    margin-left: getCssVar('panel-container-group','counter-padding-left');
+  }
+
+  @include when(mob) {
+    #{getCssVarName('panel-container-group-header', 'height')}: rem(48px);
+    #{getCssVarName('panel-container-group-header', 'padding')}: getCssVar(spacing, base);
+    #{getCssVarName('panel-container-group-header', 'bg-color')}: getCssVar(color, bg, 0);
+    #{getCssVarName('panel-container-group-content', 'padding')}: rem(8px) rem(16px);
+    #{getCssVarName('panel-container-group-caption', 'text-color')}: getCssVar(color, text, 2);
+    #{getCssVarName('panel-container-group-caption', 'font-size')}: getCssVar(font-size, '5');
+    #{getCssVarName('panel-container-group-caption', 'font-weight')}: getCssVar(font-weight, regular);
+    #{getCssVarName('panel-container-group-content', 'bg-color')}: getCssVar(color, bg, 1);
+    #{getCssVarName('panel-container-group-caption', 'font-lineHeight')}: rem(16px);
+
+    @include e(caption) {
+      line-height: getCssVar('panel-container-group-caption', 'font-lineHeight');
+    }
+
+    @include b(panel-container-group-header) {
+      background-color: getCssVar('panel-container-group-header','bg-color');
+      border-bottom: none;
+    }
+
+    @include b(panel-container-group-content) {
+      padding: getCssVar('panel-container-group-content', 'padding');
+      background-color: getCssVar('panel-container-group-content', 'bg-color');
+    }
+  }
+}
+
+// 折叠相关样式
+@include b(panel-container-group-collapse) {
+  > .#{bem(panel-container-group-content)} {
+    display: block;
+  }
+
+  @include when(collapse) {
+    > .#{bem(panel-container-group-content)} {
+      display: none;
+    }
+  }
+}
+
+@include b(panel-container-group-header) {
+  @include flex;
+
+  height: getCssVar('panel-container-group-header', 'height');
+  padding: getCssVar('panel-container-group-header', 'padding');
+  margin: getCssVar('panel-container-group-header', 'margin');
+  border-bottom: 1px solid getCssVar('panel-container-group-header', 'border-color');
+
+  @include e((left, right)) {
+    display: inline-block;
+    width: 50%;
+  }
+
+  @include e(right) {
+    text-align: right;
+    @include flex(row, flex-end, center);
+  }
+
+  @include when('is-mob'){
+    .#{bem(panel-container-group-header,left)}{
+      flex-grow: 1;
+      width: auto;
+    }
+    .#{bem(panel-container-group-header,right)}{
+      flex-grow: 1;
+      width: auto;
+    }
+  }
+}
+
+@include b(panel-container-group-content) {
+  width: 100%;
+  height: 100%;
+  > .#{bem('row')}{
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.#{bem('panel-container-group', '', 'show-header')} {
+  > .#{bem('panel-container-group-content')} {
+    height: calc(100% - getCssVar('panel-container-group-header', 'height'));
+    padding: getCssVar('panel-container-group-content', 'padding');
+    background-color: getCssVar('panel-container-group-content', 'bg-color');
+  }
+}

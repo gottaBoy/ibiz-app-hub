@@ -1,8 +1,7 @@
-import { IPanelContainer } from '@ibiz/model-core';
+import { IPanelContainer, IUIActionGroupDetail } from '@ibiz/model-core';
 import { ref, VNode, computed, PropType, defineComponent } from 'vue';
+import { IBizIcon, useNamespace, useUIStore } from '@ibiz-template/vue3-util';
 import { PanelContainerGroupController } from './panel-container-group.controller';
-import { useNamespace } from '../../use';
-import { IBizIcon } from '../../common';
 import './panel-container-group.scss';
 
 /**
@@ -33,10 +32,21 @@ export const PanelContainerGroup = defineComponent({
 
     const isCollapse = ref(!props.controller.defaultExpansion);
 
+    const { zIndex } = useUIStore();
+
     const changeCollapse = (): void => {
       if (!props.controller.disableClose) {
         isCollapse.value = !isCollapse.value;
       }
+    };
+
+    // 标题右侧工具栏点击
+    const onActionClick = async (
+      detail: IUIActionGroupDetail,
+      event: MouseEvent,
+    ): Promise<void> => {
+      const tempParams = { srfgroupid: props.modelData.codeName };
+      await props.controller.onActionClick(detail, event, tempParams);
     };
 
     const captionText = computed(() => {
@@ -51,9 +61,17 @@ export const PanelContainerGroup = defineComponent({
       return text;
     });
 
-    return { ns, captionText, isCollapse, changeCollapse };
+    return {
+      ns,
+      captionText,
+      isCollapse,
+      zIndex,
+      changeCollapse,
+      onActionClick,
+    };
   },
   render() {
+    const { state } = this.controller;
     const classArr: string[] = [
       this.ns.b(),
       this.ns.m(this.modelData.id),
@@ -118,6 +136,23 @@ export const PanelContainerGroup = defineComponent({
             </div>
           </div>
           <div class={[this.ns.be('header', 'right')]}>
+            {this.modelData.uiactionGroup && (
+              <iBizActionToolbar
+                zIndex={this.zIndex.zIndex}
+                class={this.ns.e('toolbar')}
+                action-details={
+                  this.modelData.uiactionGroup.uiactionGroupDetails
+                }
+                actions-state={state.actionGroupState}
+                onActionClick={this.onActionClick}
+                caption={this.modelData.uiactionGroup.name}
+                mode={
+                  this.modelData.actionGroupExtractMode === 'ITEMS'
+                    ? 'dropdown'
+                    : 'buttons'
+                }
+              ></iBizActionToolbar>
+            )}
             {this.modelData.titleBarCloseMode !== undefined &&
               this.modelData.titleBarCloseMode !== 0 &&
               (this.isCollapse ? (
@@ -131,7 +166,11 @@ export const PanelContainerGroup = defineComponent({
     }
 
     return (
-      <div class={classArr} v-loading={this.controller.state.loading}>
+      <div
+        class={classArr}
+        v-loading={this.controller.state.loading}
+        element-loading-text={this.controller.state.loadingText}
+      >
         {header}
         <div class={[this.ns.b('content')]}>{content}</div>
       </div>

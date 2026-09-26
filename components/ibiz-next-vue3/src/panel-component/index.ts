@@ -12,7 +12,6 @@ import {
   IBizSingleDataContainer,
   IBizPanelContainerImage,
   IBizPanelTabPage,
-  IBizPanelContainerGroup,
   IBizPanelItemRender,
   IBizTeleportPlaceholder,
   IBizPanelContainerTabs,
@@ -51,6 +50,7 @@ import IBizIndexBlankPlaceholder from './index-blank-placeholder';
 import IBizGlobalSearch from './global-search';
 import IBizAppSwitch from './app-switch';
 import IBizAppExtendMenu from './app-extend-menu';
+import { IBizPanelContainerGroup } from './panel-container-group';
 
 export * from './auth-userinfo';
 export * from './nav-pos-index';
