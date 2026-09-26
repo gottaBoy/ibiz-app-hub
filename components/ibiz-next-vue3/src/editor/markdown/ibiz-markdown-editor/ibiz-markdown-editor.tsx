@@ -12,11 +12,17 @@ import {
 import {
   useUIStore,
   useNamespace,
-  getEditorEmits,
+  getMarkDownEmits,
   getMarkDownProps,
 } from '@ibiz-template/vue3-util';
 import { createUUID } from 'qx-util';
 import Cherry from 'cherry-markdown';
+import {
+  parseSearchParams,
+  UIActionUtil,
+  OpenAppViewCommand,
+} from '@ibiz-template/runtime';
+import { IBizContext } from '@ibiz-template/core';
 import { MarkDownEditorController } from '../markdown-editor.controller';
 import { initCustomMenu } from './custom-menu';
 import { useImgPreviewRender } from './render-util';
@@ -66,7 +72,7 @@ import './ibiz-markdown-editor.scss';
 const IBizMarkDown: any = defineComponent({
   name: 'IBizMarkDown',
   props: getMarkDownProps<MarkDownEditorController>(),
-  emits: getEditorEmits(),
+  emits: getMarkDownEmits(),
   setup(props, { emit, slots }) {
     const ns = useNamespace('markdown');
 
@@ -148,7 +154,9 @@ const IBizMarkDown: any = defineComponent({
     if (c?.editorParams?.tocpos) {
       tocPos = c.editorParams.tocpos === 'fixed' ? 'fixed' : 'absolute';
     }
-    const [AIMenu, AIChart] = initCustomMenu(c as MarkDownEditorController, {
+    const [AIMenu, AIChart, customMenus] = initCustomMenu(
+      c as MarkDownEditorController,
+      {
       props,
       chatInstance,
       isEditing,
@@ -189,9 +197,7 @@ const IBizMarkDown: any = defineComponent({
      * @returns {*}  {string}
      */
     const getDownloadUrl = (data: IData, file: IData): string => {
-      if (!c) {
-        return '';
-      }
+      if (!c) return '';
       const editorParams = {
         ...c.editorParams,
         enableNoAccess,
@@ -301,6 +307,140 @@ const IBizMarkDown: any = defineComponent({
     // 图片加载回调
     const beforeImageMounted = (e: string, src: string) => {
       return { [e]: src };
+    };
+
+    /**
+     * @description 解析url
+     * @param {string} urlStr
+     * @returns {*}  {{ context: IParams; params: IParams; protocolId: string }}
+     */
+    const parseProtocol = (
+      urlStr: string,
+    ): {
+      context: IParams;
+      params: IParams;
+      protocolId: string;
+    } => {
+      const url = new URL(urlStr);
+      const context: IParams = {};
+      const params: IParams = {};
+      let protocolId = '';
+      if (url.searchParams.size > 0) {
+        const navCtx = url.searchParams.get('srfnavctx');
+        if (navCtx) {
+          try {
+            Object.assign(context, JSON.parse(navCtx));
+          } catch (error) {
+            ibiz.log.error(
+              ibiz.i18n.t(
+                'runtime.utils.openRedirectView.parseSrfnavctxParameter',
+                { urlStr },
+              ),
+              error,
+            );
+          }
+          url.searchParams.delete('srfnavctx');
+        }
+        url.searchParams.forEach((value, _key) => {
+          params[_key] = value;
+        });
+        // 路径中存在search但searchParams为空，说明浏览器不支持URLSearchParams对象
+      } else if (url.search) {
+        const searchParams = parseSearchParams(url.search);
+        const navCtx: string = searchParams.srfnavctx;
+        if (navCtx) {
+          try {
+            const value = decodeURIComponent(navCtx);
+            Object.assign(context, JSON.parse(value));
+          } catch (error) {
+            ibiz.log.error(
+              ibiz.i18n.t(
+                'runtime.utils.openRedirectView.parseSrfnavctxParameter',
+                { urlStr },
+              ),
+              error,
+            );
+          }
+          delete searchParams.srfnavctx;
+        }
+        Object.keys(searchParams).forEach(key => {
+          params[key] = searchParams[key];
+        });
+      }
+      // 兼容edge浏览器
+      const pathname = url.pathname || url.hostname;
+      const rdTagItems = pathname.replace('//', '').split('/');
+      // 当只有一个时，为视图标识。当有两个时，第二个是视图标识
+      const [appOrViewTag, viewTag] = rdTagItems;
+      // 特殊处理action协议
+      protocolId =
+        url.protocol === 'action:'
+          ? `${url.username}@${pathname}`
+          : viewTag || appOrViewTag;
+      return {
+        params,
+        context,
+        protocolId,
+      };
+    };
+
+    /**
+     * @description 点击预览
+     * @param {MouseEvent} event
+     * @returns {*}  {void}
+     */
+    const onClickPreview = (event: MouseEvent): void => {
+      const link = (event.target as HTMLElement)?.closest(
+        'a[href^="chunkview://"], a[href^="view://"], a[href^="action://"]',
+      );
+      if (!link) return;
+      event.preventDefault();
+      let href = link.getAttribute('href');
+      if (!href) return;
+      const protocols = ['chunkview', 'view', 'action'];
+      // 寻找第一个满足条件的前缀
+      const match = protocols.find(p => href!.startsWith(`${p}://`));
+      const protocol = match || '';
+      if (!protocol) return;
+      if (protocol === 'chunkview') {
+        const chunkView = c?.editorParams.chunkview || props.chunkView;
+        const chunkEntity = c?.editorParams.chunkentity || props.chunkEntity;
+        if (!chunkView || !chunkEntity) return;
+        const chunkID = href.replace('chunkview://', '');
+        href = `view://${chunkView}?srfnavctx={"${chunkEntity}":"${chunkID}"}`;
+      }
+      const { protocolId, context: _context, params } = parseProtocol(href);
+      if (!protocolId) return;
+      const context: IContext =
+        c?.context?.clone() || props.context?.clone() || IBizContext.create({});
+      Object.assign(context, _context);
+      switch (protocol) {
+        case 'chunkview':
+        case 'view':
+          ibiz.commands.execute(
+            OpenAppViewCommand.TAG,
+            protocolId,
+            Object.assign(context, { srfkeepnull: true }),
+            params,
+          );
+          break;
+        case 'action':
+          UIActionUtil.exec(
+            protocolId,
+            {
+              event,
+              params,
+              context,
+              data: [props.data || {}],
+              view: (c?.view || props.view) as IViewController,
+              ctrl: c?.ctrl || props.ctrl,
+            },
+            context.appid || context.srfappid,
+          );
+          break;
+        default:
+          break;
+      }
     };
 
     // 创建元素
@@ -480,6 +620,12 @@ const IBizMarkDown: any = defineComponent({
           toolbar.unshift('AIChart');
           bubble.unshift('AI');
         }
+        if (c && c.extraActions.length > 0) {
+          const keys = c.extraActions.map(item => {
+            return item.uiactionId.split('@')[0];
+          });
+          toolbar.push(...keys);
+        }
         editor = new Cherry({
           id,
           value: currentVal.value,
@@ -510,6 +656,7 @@ const IBizMarkDown: any = defineComponent({
             codemirror: {
               // 是否自动focus 默认为true
               autofocus: false,
+              placeholder: c.placeHolder,
             },
           },
           toolbars: {
@@ -528,6 +675,7 @@ const IBizMarkDown: any = defineComponent({
             customMenu: {
               AI: AIMenu,
               AIChart,
+              ...customMenus,
             },
             // 定义侧边栏，默认为空
             sidebar: ['theme', 'copy'],
@@ -544,6 +692,7 @@ const IBizMarkDown: any = defineComponent({
           },
           callback: {
             afterChange,
+            onClickPreview,
             beforeImageMounted,
           },
           event: {
