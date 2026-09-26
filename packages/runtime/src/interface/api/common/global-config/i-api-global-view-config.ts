@@ -79,4 +79,13 @@ export interface IApiGlobalViewConfig {
    * @memberof IApiGlobalViewConfig
    */
   viewAccUserMode: 1 | 2 | 3 | 4;
+
+  /**
+   * @description 视图加载时的提示文本
+   * @type {string}
+   * @platform web
+   * @platform mob
+   * @memberof IApiGlobalViewConfig
+   */
+  loadingText: string;
 }

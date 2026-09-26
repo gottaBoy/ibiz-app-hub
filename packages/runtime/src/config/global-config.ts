@@ -37,6 +37,7 @@ export class GlobalConfig implements IGlobalConfig {
     timeoutDuration: 5 * 60 * 1000,
     onlyShowDataInfo: false,
     viewAccUserMode: 3,
+    loadingText: '',
   };
 
   // 全局表格配置
@@ -122,6 +123,7 @@ export class GlobalConfig implements IGlobalConfig {
     reRankDefaultValue: 2,
     maxChunksDefaultValue: 10,
     chunkThresholdDefaultValue: 0.1,
+    chunkPageIndexDefaultValue: undefined,
     enableAsyncActionNotice: false,
     aiChunkView: '',
     aiChunkEntity: '',

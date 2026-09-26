@@ -159,6 +159,15 @@ export interface IApiGlobalCommonConfig {
   chunkThresholdDefaultValue: number;
 
   /**
+   * @description 资料页面目录召回
+   * @type {0 | 1 | undefined}
+   * @default undefined
+   * @platform web
+   * @memberof IApiGlobalCommonConfig
+   */
+  chunkPageIndexDefaultValue: 0 | 1 | undefined;
+
+  /**
    * @description 是否启用全局下载文件前缀
    * @type {boolean}
    * @default false
