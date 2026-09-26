@@ -150,25 +150,23 @@ export class MDControlService<
   }
 
   /**
-   * 导出数据
-   *
-   * @author lxm
-   * @date 2022-11-25 14:11:09
+   * @description 导出数据
    * @param {IAppDEDataExport} dataExport 导出模型
    * @param {IContext} context 上下文
    * @param {IParams} [params={}] 请求参数
-   * @returns {*}  {Promise<IHttpResponse>}
+   * @returns {*}  {Promise<boolean>}
+   * @memberof MDControlService
    */
   async exportData(
     dataExport: IAppDEDataExport,
     context: IContext,
     params: IParams = {},
-  ): Promise<IHttpResponse<Blob>> {
+  ): Promise<boolean> {
     const entityService = await this.app.deService.getService(
       context,
       this.model.appDataEntityId!,
     );
-    return entityService.file.exportData(
+    return entityService.file.export(
       dataExport,
       dataExport.appDEDataSetId ||
         this.model.fetchControlAction!.appDEMethodId!,

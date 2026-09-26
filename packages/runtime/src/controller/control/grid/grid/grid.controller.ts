@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
@@ -58,7 +59,6 @@ import { ControlVO, Srfuf } from '../../../../service';
 import { MDControlController } from '../../../common';
 import { GridNotifyState } from '../../../constant';
 import {
-  exportData,
   ValueExUtil,
   isValueChange,
   getDefaultValue,
@@ -1698,9 +1698,22 @@ export class GridController<
           value = ValueExUtil.toText(fieldColumnC.model, value);
         }
         if (this.allExportCodelistMap.get(key)) {
-          value =
-            this.allExportCodelistMap.get(key)!.find(x => x.value === item[key])
-              ?.text || value;
+          // fix: 修复多选的代码表项未正常转换
+          const codelist = fieldColumnC.codeList;
+          const getVal = (val: string) => {
+            return (
+              this.allExportCodelistMap.get(key)!.find(x => x.value == val)
+                ?.text || val
+            );
+          };
+          if (codelist && codelist.valueSeparator) {
+            const textSeparator =
+              codelist.textSeparator || codelist.valueSeparator || ',';
+            const values = item[key]?.split(codelist.valueSeparator) as string[];
+            value = values?.map(v => getVal(v)).join(textSeparator);
+          } else {
+            value = getVal(item[key]);
+          }
         } else {
           value = this.formatValue(isDate, format, value) + unitName;
         }
@@ -1785,29 +1798,7 @@ export class GridController<
     }
     Object.assign(fetchParams, tempParams);
     // 执行导出
-    const res = await this.service.exportData(
-      this.dataExport!,
-      this.context,
-      fetchParams,
-    );
-    if (res.status === 200) {
-      const fileName = ibiz.util.file.getFileName(res);
-      const blob = new Blob([res.data as Blob], {
-        type: 'application/vnd.ms-excel',
-      });
-      const elink = document.createElement('a');
-      elink.download = fileName;
-      elink.style.display = 'none';
-      elink.href = URL.createObjectURL(blob);
-      document.body.appendChild(elink);
-      elink.click();
-      URL.revokeObjectURL(elink.href); // 释放URL 对象
-      document.body.removeChild(elink);
-    } else {
-      throw new RuntimeError(
-        ibiz.i18n.t('runtime.controller.common.md.exportRequestFailed'),
-      );
-    }
+    await this.service.exportData(this.dataExport!, this.context, fetchParams);
   }
 
   /**
@@ -1835,7 +1826,11 @@ export class GridController<
     const data = await this.getExportData(args.params);
     const formatData = this.formatExcelData(data, fields);
     const table = formatData.map(v => Object.values(v));
-    await exportData(header, table, this.model.logicName!);
+    await ibiz.platform.frontExport({
+      header,
+      data: table,
+      fileName: this.model.logicName!,
+    });
   }
 
   /**

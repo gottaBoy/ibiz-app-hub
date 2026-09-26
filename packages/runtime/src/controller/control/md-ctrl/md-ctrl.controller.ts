@@ -25,11 +25,7 @@ import { MobMDCtrlRowState } from './md-ctrl-row.state';
 import { MDControlController } from '../../common';
 import { ControlVO } from '../../../service';
 import { UIActionUtil } from '../../../ui-action';
-import {
-  ButtonContainerState,
-  UIActionButtonState,
-  exportData,
-} from '../../utils';
+import { ButtonContainerState, UIActionButtonState } from '../../utils';
 import { calcUIActionGroup, getAllUIActionItems } from '../../../model';
 
 export class MDCtrlController
@@ -708,9 +704,24 @@ export class MDCtrlController
       Object.keys(item).forEach((key: string) => {
         let value = item[key];
         if (this.allExportCodelistMap.get(key)) {
-          value =
-            this.allExportCodelistMap.get(key)!.find(x => x.value === item[key])
-              ?.text || value;
+          // fix: 修复多选的代码表项未正常转换
+          const getVal = (val: string) => {
+            return (
+              this.allExportCodelistMap.get(key)!.find(x => x.value == val)?.text || val
+            );
+          };
+          const currentColumn = this.allExportColumns.find(exportColumn => {
+            return exportColumn.appDEFieldId === key;
+          });
+          const codelist = currentColumn?.codeList;
+          if (codelist && codelist.valueSeparator) {
+            const textSeparator =
+              codelist.textSeparator || codelist.valueSeparator || ',';
+            const values = item[key]?.split(codelist.valueSeparator) as string[];
+            value = values?.map(v => getVal(v)).join(textSeparator);
+          } else {
+            value = getVal(item[key]);
+          }
         } else {
           value = `${value != null ? value : ''}`;
         }
@@ -762,29 +773,7 @@ export class MDCtrlController
     }
     Object.assign(fetchParams, tempParams);
     // 执行导出
-    const res = await this.service.exportData(
-      this.dataExport!,
-      this.context,
-      fetchParams,
-    );
-    if (res.status === 200) {
-      const fileName = ibiz.util.file.getFileName(res);
-      const blob = new Blob([res.data as Blob], {
-        type: 'application/vnd.ms-excel',
-      });
-      const elink = document.createElement('a');
-      elink.download = fileName;
-      elink.style.display = 'none';
-      elink.href = URL.createObjectURL(blob);
-      document.body.appendChild(elink);
-      elink.click();
-      URL.revokeObjectURL(elink.href); // 释放URL 对象
-      document.body.removeChild(elink);
-    } else {
-      throw new RuntimeError(
-        ibiz.i18n.t('runtime.controller.common.md.exportRequestFailed'),
-      );
-    }
+    await this.service.exportData(this.dataExport!, this.context, fetchParams);
   }
 
   /**
@@ -815,6 +804,10 @@ export class MDCtrlController
     const data = await this.getExportData(args.params || {});
     const formatData = this.formatExcelData(data, fields);
     const table = formatData.map(v => Object.values(v));
-    await exportData(header, table, this.model.logicName!);
+    await ibiz.platform.frontExport({
+      header,
+      data: table,
+      fileName: this.model.logicName!,
+    });
   }
 }
