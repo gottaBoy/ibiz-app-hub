@@ -77,5 +77,16 @@
     "*.ts": "eslint --fix",
     "*.scss": "stylelint --custom-syntax=postcss-scss"
   },
-  "packageManager": "pnpm@10.13.1+sha512.37ebf1a5c7a30d5fabe0c5df44ee8da4c965ca0c5af3dbab28c3a1681b70a256218d05c81c9c0dcf767ef6b8551eb5b960042b9ed4300c59242336377e01cfad"
+  "packageManager": "pnpm@10.13.1+sha512.37ebf1a5c7a30d5fabe0c5df44ee8da4c965ca0c5af3dbab28c3a1681b70a256218d05c81c9c0dcf767ef6b8551eb5b960042b9ed4300c59242336377e01cfad",
+  "pnpm": {
+    "patchedDependencies": {
+      "@amap/amap-jsapi-loader@1.0.1": "patches/@amap__amap-jsapi-loader@1.0.1.patch"
+    },
+    "overrides": {
+      "core-js": "3.45.1",
+      "@babel/runtime": "7.28.4",
+      "jspdf>dompurify": "2.5.8",
+      "modern-screenshot": "4.6.7"
+    }
+  }
 }
