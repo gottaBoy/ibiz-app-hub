@@ -1,4 +1,8 @@
-import { getEditorProps, getGridEditorCommonProps } from './common';
+import {
+  getEditorEmits,
+  getEditorProps,
+  getGridEditorCommonProps,
+} from './common';
 
 /**
  * @description 获取html编辑框props
@@ -25,4 +29,21 @@ export function getHtmlProps<C>() {
  */
 export function getGridHtmlProps<C>() {
   return { ...getHtmlProps<C>(), ...getGridEditorCommonProps() };
+}
+
+/**
+ * @description 获取HTML编辑器通用emits
+ * @export
+ * @returns {*}
+ * @editoremits
+ */
+export function getHtmlEmits() {
+  return {
+    ...getEditorEmits(),
+    /**
+     * 自定义行为事件
+     * @description 自定义行为事件，action：行为标识，value：行为参数
+     */
+    customAction: (_value: unknown) => true,
+  };
 }

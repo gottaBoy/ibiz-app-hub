@@ -1,4 +1,8 @@
-import { getEditorProps, getGridEditorCommonProps } from './common';
+import {
+  getEditorEmits,
+  getEditorProps,
+  getGridEditorCommonProps,
+} from './common';
 
 /**
  * @description 获取代码编辑器props
@@ -37,4 +41,21 @@ export function getCodeProps<C>() {
  */
 export function getGridCodeProps<C>() {
   return { ...getCodeProps<C>(), ...getGridEditorCommonProps() };
+}
+
+/**
+ * @description 获取Code编辑器通用emits
+ * @export
+ * @returns {*}
+ * @editoremits
+ */
+export function getCodeEmits() {
+  return {
+    ...getEditorEmits(),
+    /**
+     * 自定义行为事件
+     * @description 自定义行为事件，action：行为标识，value：行为参数
+     */
+    customAction: (_value: unknown) => true,
+  };
 }

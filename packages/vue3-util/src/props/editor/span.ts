@@ -14,6 +14,11 @@ export function getSpanProps<C>() {
      * @description 编辑器值
      */
     value: [String, Number, Object, Array],
+    /**
+     * @description 是否显示title
+     * @default true
+     */
+    showTitle: { type: Boolean, default: true },
   };
 }
 
