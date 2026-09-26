@@ -489,8 +489,8 @@ export class DRTabController
       this.openNavPosView(drBarItem, isRoutePushed);
     } else {
       this.setVisible('form');
-      if (this.routeDepth && this.state.drTabPages[0]) {
-        this.router.push(this.state.drTabPages[0].fullPath!);
+      if (this.routeDepth && this.state.drTabPages[0]?.fullPath) {
+        this.router.push(this.state.drTabPages[0].fullPath);
       }
     }
   }
@@ -623,8 +623,8 @@ export class DRTabController
       this.openNavPosView(drBarItem, false, createUUID());
     } else {
       this.setVisible('form');
-      if (this.routeDepth && this.state.drTabPages[0]) {
-        this.router.push(this.state.drTabPages[0].fullPath!);
+      if (this.routeDepth && this.state.drTabPages[0]?.fullPath) {
+        this.router.push(this.state.drTabPages[0].fullPath);
       }
     }
   }
