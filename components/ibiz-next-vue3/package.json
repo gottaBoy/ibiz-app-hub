@@ -53,6 +53,7 @@
     "element-plus": "2.4.4",
     "file-saver": "^2.0.5",
     "interactjs": "^1.10.20",
+    "jspdf": "2.5.2",
     "lodash-es": "^4.17.21",
     "monaco-editor": "^0.52.2",
     "nprogress": "^0.2.0",
