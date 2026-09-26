@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/vue3-components",
-  "version": "0.7.41-alpha.70",
+  "version": "0.7.41-alpha.78",
   "description": "web端组件库(vue3)",
   "main": "lib/index.cjs",
   "module": "es/index.mjs",
