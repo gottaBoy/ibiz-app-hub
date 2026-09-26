@@ -34,6 +34,7 @@ import {
   IChatMessage,
   IPortalAsyncAction,
 } from '@ibiz-template/core';
+import { isNotNil } from 'ramda';
 import { AIFeedback } from './ai-feedback/ai-feedback';
 
 export class AIChatUtil implements IApiAIChatUtil {
@@ -196,6 +197,15 @@ export class AIChatUtil implements IApiAIChatUtil {
       );
     }
     chatOptions.chunkThresholdDefaultValue = chunkThresholdDefaultValue;
+    // 分页页码默认值
+    let chunkpageindexDefaultValue: number =
+      ibiz.config.common.chunkPageIndexDefaultValue;
+    if (isNotNil(editorParams.chunkpageindexdefaultvalue)) {
+      chunkpageindexDefaultValue = Number(
+        editorParams.chunkpageindexdefaultvalue,
+      );
+    }
+    chatOptions.chunkPageIndexDefaultValue = chunkpageindexDefaultValue;
     // 摘要最大长度
     if (editorParams.summarymaxtokens) {
       chatOptions.summaryMaxTokens = Number(editorParams.summarymaxtokens);
@@ -334,8 +344,9 @@ export class AIChatUtil implements IApiAIChatUtil {
         if (srfmode) questionRequestData.mode = srfmode;
         if (srfknowledgebases)
           questionRequestData.knowledgebases = srfknowledgebases;
-        if (srfaiagentconfig)
+        if (srfaiagentconfig) {
           Object.assign(questionRequestData, srfaiagentconfig);
+        }
         await deService.aiChatSse(
           (msg: IPortalAsyncAction) => {
             // 20: 持续回答中，消息会持续推送。同一个消息 id 会显示在同一个框内
@@ -515,7 +526,7 @@ export class AIChatUtil implements IApiAIChatUtil {
       globalDownloadPrifix = ibiz.config.common.globalDownloadPrifix;
     }
     chatOptions.uploader = {
-      folder: `${folder}$`,
+      folder: folder ? `${folder}$` : undefined,
       globalDownloadPrifix,
       onUpload: async (
         file: File,
@@ -854,6 +865,14 @@ export class AIChatUtil implements IApiAIChatUtil {
       delete params.chunkthresholddefaultvalue;
     }
     chatOptions.chunkThresholdDefaultValue = chunkThresholdDefaultValue;
+    // 分页页码默认值
+    let chunkpageindexDefaultValue: number =
+      ibiz.config.common.chunkPageIndexDefaultValue;
+    if (isNotNil(params.chunkpageindexdefaultvalue)) {
+      chunkpageindexDefaultValue = Number(params.chunkpageindexdefaultvalue);
+      delete params.chunkpageindexdefaultvalue;
+    }
+    chatOptions.chunkPageIndexDefaultValue = chunkpageindexDefaultValue;
     // 摘要最大长度
     if (params.hasOwnProperty('summarymaxtokens')) {
       chatOptions.summaryMaxTokens = Number(params.summarymaxtokens);
@@ -991,8 +1010,9 @@ export class AIChatUtil implements IApiAIChatUtil {
         if (srfmode) questionRequestData.mode = srfmode;
         if (srfknowledgebases)
           questionRequestData.knowledgebases = srfknowledgebases;
-        if (srfaiagentconfig)
+        if (srfaiagentconfig) {
           Object.assign(questionRequestData, srfaiagentconfig);
+        }
         await deService.aiChatSse(
           (msg: IPortalAsyncAction) => {
             // 20: 持续回答中，消息会持续推送。同一个消息 id 会显示在同一个框内
@@ -1173,7 +1193,7 @@ export class AIChatUtil implements IApiAIChatUtil {
       globalDownloadPrifix = ibiz.config.common.globalDownloadPrifix;
     }
     chatOptions.uploader = {
-      folder: `${folder}$`,
+      folder: folder ? `${folder}$` : undefined,
       globalDownloadPrifix,
       onUpload: async (
         file: File,
@@ -1395,7 +1415,7 @@ export class AIChatUtil implements IApiAIChatUtil {
     editorParams?: IData,
   ): Promise<IData[]> {
     let items: IData[] = [];
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(context.srfappid || ibiz.env.appId);
     const aiAgentUtil = app.getAppUtil('DYNAMICAIGENT', 'CUSTOM');
     if (!aiAgentUtil) return items;
     const { utilParams, utilDE2Name } = aiAgentUtil;
@@ -1427,7 +1447,7 @@ export class AIChatUtil implements IApiAIChatUtil {
     editorParams?: IData,
   ): Promise<IData[]> {
     const emptyList: IData[] = [];
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+    const app = ibiz.hub.getApp(context.srfappid || ibiz.env.appId);
     const aiAgentUtil = app.getAppUtil('DYNAMICAIGENT', 'CUSTOM');
     if (!aiAgentUtil) return emptyList;
     const utilService = new UtilService(aiAgentUtil);
@@ -1478,8 +1498,10 @@ export class AIChatUtil implements IApiAIChatUtil {
    * 获取AI会话应用功能
    * @returns
    */
-  private async getAIResourceUtil(): Promise<IAppUtil | undefined> {
-    const app = ibiz.hub.getApp(ibiz.env.appId);
+  private async getAIResourceUtil(
+    context: IContext,
+  ): Promise<IAppUtil | undefined> {
+    const app = ibiz.hub.getApp(context.srfappid || ibiz.env.appId);
     const aiSessionUtil = app.getAppUtil('DYNAMICAISESSION', 'CUSTOM');
     return aiSessionUtil;
   }
@@ -1499,7 +1521,7 @@ export class AIChatUtil implements IApiAIChatUtil {
       return resourceOptions;
     }
     // 没有应用配置，则判断当前应用是否存在AI会话应用功能，若存在，则使用远程模式
-    const aiSessionUtil = await this.getAIResourceUtil();
+    const aiSessionUtil = await this.getAIResourceUtil(context);
     // REMOTE：远程模式，话题存储config和远程session，消息存储消息表；LOCAL：本地模式，话题存储config，消息存储客户端；默认本地模式
     resourceOptions.resourceMode = aiSessionUtil ? 'REMOTE' : 'LOCAL';
     if (!aiSessionUtil) {
