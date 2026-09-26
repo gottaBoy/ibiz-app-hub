@@ -553,9 +553,11 @@ export class FormDetailController<T extends IDEFormDetail = IDEFormDetail>
    */
   getRenderCode(): string {
     let result = '';
-    const { controlRenders = [] } = this.model;
+    const { controlRenders = [], id } = this.model;
     const item = controlRenders.find(
-      renderItem => renderItem.renderType === 'LAYOUTPANEL_MODEL',
+      renderItem =>
+        renderItem.renderType === 'LAYOUTPANEL_MODEL' &&
+        renderItem.id !== `${id?.toLowerCase()}_tooltip`,
     );
     if (item) result = item.layoutPanelModel || '';
     return result;

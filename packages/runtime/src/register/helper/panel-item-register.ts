@@ -51,7 +51,7 @@ export async function getPanelItemProvider(
   viewModel: IAppView,
 ): Promise<IPanelItemProvider | undefined> {
   let provider: IPanelItemProvider | undefined;
-  const { itemType, sysPFPluginId, appId, controlRenders } =
+  const { itemType, sysPFPluginId, appId, controlRenders, id } =
     model as Required<IPanelItem>;
 
   // 找自定义注册的适配器
@@ -87,7 +87,8 @@ export async function getPanelItemProvider(
       return provider;
     }
   }
-  if (controlRenders && controlRenders.length > 0) {
+  const renders = controlRenders?.filter(render => render.id !== `${id?.toLowerCase()}_tooltip`) || [];
+  if (renders.length > 0) {
     // 默认预定义 绘制器
     provider = getProvider('PREDEFINE_RENDER');
   } else {
@@ -140,8 +141,7 @@ export async function getPanelItemProvider(
 
     // 特殊部件占位
     if (itemType === 'CTRLPOS') {
-      const id = model.id?.toUpperCase();
-      const key = `CTRLPOS_${id}`;
+      const key = `CTRLPOS_${id?.toUpperCase()}`;
       provider = getProvider(key);
       if (provider) {
         return provider;

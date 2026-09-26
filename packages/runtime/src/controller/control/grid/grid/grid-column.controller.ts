@@ -240,9 +240,14 @@ export class GridColumnController<T extends IDEGridColumn = IDEGridColumn>
    */
   getRenderCode(): string {
     let result = '';
-    const { controlRenders = [] } = this.model;
+    const { controlRenders = [], id } = this.model;
     const item = controlRenders.find(
-      renderItem => renderItem.renderType === 'LAYOUTPANEL_MODEL',
+      renderItem =>
+        renderItem.renderType === 'LAYOUTPANEL_MODEL' &&
+        ![
+          `${id?.toLowerCase()}_tooltip`,
+          `${id?.toLowerCase()}_edit_tooltip`,
+        ].includes(renderItem.id!),
     );
     if (item) {
       result = item.layoutPanelModel || '';
