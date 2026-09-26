@@ -31,7 +31,7 @@
   "license": "MIT",
   "dependencies": {
     "animejs": "^3.2.2",
-    "dingtalk-jsapi": "^3.0.41",
+    "dingtalk-jsapi": "3.2.0",
     "html2canvas": "^1.4.1",
     "js-base64": "3.7.7",
     "jsencrypt": "^3.3.2"
