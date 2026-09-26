@@ -48,8 +48,12 @@ export function calcMimeByFileName(fileName: string): string {
     case 'tar':
       mime = 'application/x-tar';
       break;
-    case 'xlsx':
+    case 'xls':
       mime = 'application/vnd.ms-excel';
+      break;
+    case 'xlsx':
+      mime =
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
       break;
     case 'pdf':
       mime = 'application/pdf';

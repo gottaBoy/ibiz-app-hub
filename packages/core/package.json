@@ -1,6 +1,6 @@
 {
   "name": "@ibiz-template/core",
-  "version": "0.7.41-alpha.63",
+  "version": "0.7.41-alpha.78",
   "description": "运行时核心库",
   "type": "module",
   "main": "out/index.js",
