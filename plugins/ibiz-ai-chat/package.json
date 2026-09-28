@@ -7,7 +7,7 @@
   "types": "dist/types/index.d.ts",
   "system": "dist/index.legacy.js",
   "styles": [
-    "dist/index.min.css"
+    "dist/style.css"
   ],
   "files": [
     "dist",
