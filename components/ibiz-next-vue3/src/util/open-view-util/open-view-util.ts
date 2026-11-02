@@ -96,13 +96,18 @@ export class OpenViewUtil implements IOpenViewUtil {
     params?: IParams,
     modalOptions?: IData,
   ): Promise<IModalData> {
+    const shouldNavigate = (): boolean =>
+      typeof modalOptions?.shouldNavigate !== 'function' ||
+      modalOptions.shouldNavigate();
     const appView = await ibiz.hub.config.view.get(appViewId!);
+    if (!shouldNavigate()) return { ok: false };
     const { path } = await generateRoutePath(
       appView,
       this.router.currentRoute.value,
       context,
       params,
     );
+    if (!shouldNavigate()) return { ok: false };
     if (modalOptions && modalOptions.replace === true) {
       this.router.replace({ path });
     } else {

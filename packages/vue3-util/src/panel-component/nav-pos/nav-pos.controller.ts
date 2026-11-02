@@ -60,6 +60,12 @@ export class NavPosController
    */
   router!: Router;
 
+  protected ownerRoutePath?: string;
+
+  protected destroyed = false;
+
+  protected pendingNavViewMsg?: INavViewMsg;
+
   /**
    * @description 关联部件标识集合，根据配置的REFCTRL参数指定关联部件，关联部件可控制导航视图
    * @exposedoc
@@ -115,6 +121,33 @@ export class NavPosController
    */
   setRouter(router: Router): void {
     this.router = router;
+    if (this.routeDepth) {
+      this.ownerRoutePath = getNestedRoutePath(this.route, this.routeDepth);
+    }
+    if (this.pendingNavViewMsg) {
+      const message = this.pendingNavViewMsg;
+      this.pendingNavViewMsg = undefined;
+      this.openView(message);
+    }
+  }
+
+  protected canNavigate(): boolean {
+    if (this.destroyed || this.panel.view.state.isDestroyed) {
+      return false;
+    }
+    if (!this.routeDepth || !this.state.routeOpen) {
+      return true;
+    }
+    return (
+      !!this.ownerRoutePath &&
+      this.ownerRoutePath === getNestedRoutePath(this.route, this.routeDepth)
+    );
+  }
+
+  destroy(): void {
+    this.destroyed = true;
+    this.pendingNavViewMsg = undefined;
+    super.destroy();
   }
 
   protected async onInit(): Promise<void> {
@@ -213,6 +246,7 @@ export class NavPosController
    * @memberof NavPosController
    */
   onRouteChange(route: RouteLocationNormalizedLoaded): void {
+    if (!this.canNavigate()) return;
     // 没有当前导航视图信息时不做任何处理
     if (this.curNavViewMsg) {
       const cacheKey = this.calcCacheKey(this.curNavViewMsg);
@@ -292,6 +326,7 @@ export class NavPosController
   }
 
   toBlankRoute(): void {
+    if (!this.canNavigate()) return;
     const blankRoute = getNestedRoutePath(this.route, this.routeDepth!);
     this.router.push(blankRoute);
   }
@@ -303,6 +338,17 @@ export class NavPosController
    * @memberof NavPosController
    */
   openView(openViewMsg: INavViewMsg): void {
+    // Relationship controls can emit their initial selection before mounting.
+    if (
+      !this.destroyed &&
+      this.routeDepth &&
+      this.state.routeOpen &&
+      !this.router
+    ) {
+      this.pendingNavViewMsg = openViewMsg;
+      return;
+    }
+    if (!this.canNavigate()) return;
     // 当key为空时，直接切换currentKey，绘制null
     if (!openViewMsg.key) {
       this.state.currentKey = this.calcCacheKey(openViewMsg);
@@ -326,6 +372,7 @@ export class NavPosController
    * @memberof NavPosController
    */
   async openViewByPath(openViewMsg: INavViewMsg): Promise<void> {
+    if (!this.canNavigate()) return;
     const cacheKey = this.calcCacheKey(openViewMsg);
     this.setNavViewMsgs(openViewMsg);
     const isRoutePushed = openViewMsg.isRoutePushed === true;
@@ -394,6 +441,8 @@ export class NavPosController
             modalOption: {
               replace: !this.state.currentKey,
               ...openViewMsg.modalOptions,
+              // Model lookup may finish after the owning view has been left.
+              shouldNavigate: () => this.canNavigate(),
             },
           },
         );
