@@ -6,7 +6,8 @@ import { en as coreEn } from '@ibiz-template/core';
 export default {
   locale: {
     prompt: 'Notice',
-    switchLanguagePrompt: 'Switching languages requires a page reload. Continue?',
+    switchLanguagePrompt:
+      'Switching languages requires a page reload. Continue?',
   },
   // 应用级
   app: {
@@ -120,7 +121,7 @@ export default {
       citeErrMessage: 'Unable to find table component reference',
       noDomErrMessage: 'Unable to find corresponding table row dom element',
       noPopErrMessage: 'Unable to obtain an instance of the pop component',
-      currentNoData: 'Current no data',
+      currentNoData: 'No data available',
       updateSuccess: 'Update success',
       newSuccCreated: 'New successfully created',
       deleteSuccess: 'Delete successful',
@@ -965,7 +966,8 @@ export default {
       exportPdfFailed: 'Exporting the PDF failed. Please try again.',
       pdfValid:
         'The content exported from PDF cannot be empty and must be a string.',
-      pdfEmpty: 'The content exported from PDF cannot contain any blank spaces.',
+      pdfEmpty:
+        'The content exported from PDF cannot contain any blank spaces.',
       pdfFontSize: 'The font size for PDF export must be between 8 and 72.',
       pdfFilename: 'The file name for the PDF export must end with ".pdf".',
       exportHtmlFailed: 'Exporting the HTML failed. Please try again.',

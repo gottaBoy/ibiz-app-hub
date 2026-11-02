@@ -1,5 +1,5 @@
 import { useNamespace } from '@ibiz-template/vue3-util';
-import { defineComponent, PropType, ref } from 'vue';
+import { defineComponent, PropType, computed } from 'vue';
 import { ILanguageRes } from '@ibiz/model-core';
 import './no-data.scss';
 
@@ -8,7 +8,7 @@ export const IBizNoData = defineComponent({
   props: {
     text: {
       type: String,
-      default: '暂无数据',
+      default: () => ibiz.i18n.t('control.common.currentNoData', '暂无数据'),
     },
     emptyTextLanguageRes: {
       type: Object as PropType<ILanguageRes>,
@@ -22,14 +22,11 @@ export const IBizNoData = defineComponent({
   setup(props) {
     const ns = useNamespace('no-data');
 
-    const label = ref(props.text);
-
-    if (props.emptyTextLanguageRes) {
-      label.value = ibiz.i18n.t(
-        props.emptyTextLanguageRes.lanResTag!,
-        props.text,
-      );
-    }
+    const label = computed(() =>
+      props.emptyTextLanguageRes
+        ? ibiz.i18n.t(props.emptyTextLanguageRes.lanResTag!, props.text)
+        : props.text,
+    );
 
     return { ns, label };
   },
