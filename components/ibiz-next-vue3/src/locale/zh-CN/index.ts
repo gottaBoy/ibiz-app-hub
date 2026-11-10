@@ -95,6 +95,7 @@ export default {
     authGuard: {
       loginFailed: '匿名用户登录失败',
       noPermission: '无权限访问！',
+      organizationContextUnavailable: '机构上下文不可用',
     },
     unauthorizedHandler: {
       noFoundEnvParams: '找不到环境参数casLoginUrl',

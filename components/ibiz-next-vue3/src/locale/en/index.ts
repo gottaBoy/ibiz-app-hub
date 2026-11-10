@@ -102,6 +102,7 @@ export default {
     authGuard: {
       loginFailed: 'Anonymous user login failed',
       noPermission: 'No permission to access!',
+      organizationContextUnavailable: 'Organization context is unavailable',
     },
     unauthorizedHandler: {
       noFoundEnvParams: 'Unable to find environment parameter casLoginUrl',

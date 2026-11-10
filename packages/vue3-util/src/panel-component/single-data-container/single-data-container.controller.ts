@@ -434,9 +434,12 @@ export class SingleDataContainerController
       return;
     }
     const updateData = (): void => {
-      const originData = (view.state as IData)[dataName] as IData;
+      const originData = (view.state as IData)[dataName] as IData | null | undefined;
       if (originData) {
         this.setData(originData);
+      } else if (dataName === 'srfactiveviewdata' && originData === null) {
+        // A view has no active record before loading or after clearing it.
+        this.setData({});
       } else {
         ibiz.log.error(
           ibiz.i18n.t('vue3Util.panelComponent.viewStateAttribute', {

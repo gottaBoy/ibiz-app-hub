@@ -279,6 +279,15 @@ export interface IEnvironment {
   isSaaSMode?: boolean;
 
   /**
+   * @description Require organization context before application initialization, including local-model mode
+   * @type {boolean}
+   * @default false
+   * @platform web
+   * @memberof IEnvironment
+   */
+  requireOrganizationContext?: boolean;
+
+  /**
    * @description 是否为移动端应用
    * @type {boolean}
    * @default false

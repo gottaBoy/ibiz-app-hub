@@ -104,7 +104,7 @@ export class IndexViewEngine extends ViewEngineBase {
   protected toggleCollapse(): void {
     // 非左侧菜单模式折叠功能不生效
     if (!this.enableCollapse) {
-      ibiz.log.error('非左侧菜单模式折叠功能不启用');
+      ibiz.log.warn('非左侧菜单模式折叠功能不启用');
       return;
     }
 

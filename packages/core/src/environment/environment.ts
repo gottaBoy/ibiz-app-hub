@@ -32,6 +32,7 @@ export const Environment: IEnvironment = {
   enableWfAllHistory: false,
   isMob: false,
   isSaaSMode: true,
+  requireOrganizationContext: false,
   AppTitle: '',
   AppLabel: '',
   favicon: './favicon.ico',

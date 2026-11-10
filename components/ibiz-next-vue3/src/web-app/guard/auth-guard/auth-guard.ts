@@ -29,10 +29,44 @@ export class AuthGuard {
    */
   customModelLoader?: ModelLoaderProvider;
 
+  protected readonly environmentOverrides?: Readonly<{ enableMqtt?: boolean }>;
+
+  static validateEnvironmentOverrides(
+    value: unknown,
+  ): Readonly<{ enableMqtt?: boolean }> | undefined {
+    if (value === undefined) return undefined;
+    const invalid = () => new Error(
+      'Invalid environmentOverrides: only an enableMqtt boolean is supported',
+    );
+    if (
+      value === null ||
+      typeof value !== 'object' ||
+      ![Object.prototype, null].includes(Object.getPrototypeOf(value)) ||
+      Reflect.ownKeys(value).some(key => key !== 'enableMqtt')
+    ) {
+      throw invalid();
+    }
+    const mqtt = Object.getOwnPropertyDescriptor(value, 'enableMqtt');
+    if (!mqtt) return Object.freeze({});
+    if (!('value' in mqtt) || typeof mqtt.value !== 'boolean') {
+      throw invalid();
+    }
+    return Object.freeze({ enableMqtt: mqtt.value });
+  }
+
+  protected get shouldLoadOrgData(): boolean {
+    return ibiz.env.requireOrganizationContext === true ||
+      (ibiz.env.isSaaSMode === true && ibiz.env.isLocalModel !== true);
+  }
+
   constructor(opts?: {
-    isFullCode: boolean;
-    customModelLoader: ModelLoaderProvider;
+    isFullCode?: boolean;
+    customModelLoader?: ModelLoaderProvider;
+    environmentOverrides?: { enableMqtt?: boolean };
   }) {
+    this.environmentOverrides = AuthGuard.validateEnvironmentOverrides(
+      opts?.environmentOverrides,
+    );
     this.isFullCode = opts?.isFullCode || false;
     this.customModelLoader = opts?.customModelLoader || undefined;
 
@@ -190,7 +224,7 @@ export class AuthGuard {
   async appInit(context: IParams): Promise<void> {
     await AppHooks.beforeInitApp.call({ context });
     try {
-      if (ibiz.env.isSaaSMode === true && ibiz.env.isLocalModel !== true) {
+      if (this.shouldLoadOrgData) {
         await this.loadOrgData();
       }
       await this.loadAppData(context);
@@ -220,7 +254,7 @@ export class AuthGuard {
               throw error;
             }
           }
-          if (ibiz.env.isSaaSMode === true && ibiz.env.isLocalModel !== true) {
+          if (this.shouldLoadOrgData) {
             await this.loadOrgData();
           }
           await this.loadAppData(context);
@@ -284,7 +318,29 @@ export class AuthGuard {
    * @return {*}  {Promise<void>}
    */
   async loadOrgData(): Promise<void> {
+    const required = ibiz.env.requireOrganizationContext === true;
+    const validId = (value: unknown): value is string =>
+      typeof value === 'string' && value.length > 0 &&
+      value.trim() === value && !/[\u0000-\u001f\u007f]/.test(value);
+    const unavailable = () => new RuntimeError(
+      ibiz.i18n.t('webApp.authGuard.organizationContextUnavailable'),
+    );
+    if (required) {
+      ibiz.orgData = undefined;
+      if (!validId(ibiz.env.dcSystem)) throw unavailable();
+    }
     const res = await ibiz.net.get(`/uaa/getbydcsystem/${ibiz.env.dcSystem}`);
+    if (required) {
+      const data = Array.isArray(res.data) ? res.data[0] : undefined;
+      if (!res.ok || !data || typeof data !== 'object' || Array.isArray(data) ||
+        !Object.prototype.hasOwnProperty.call(data, 'systemid') ||
+        !Object.prototype.hasOwnProperty.call(data, 'orgid') ||
+        !validId(data.systemid) || !validId(data.orgid)) {
+        throw unavailable();
+      }
+      ibiz.orgData = data as OrgData;
+      return;
+    }
     if (res.ok) {
       const orgDataItems = res.data as OrgData[];
       if (orgDataItems) {
@@ -373,6 +429,9 @@ export class AuthGuard {
       }
       // 重新设置日志级别
       ibiz.log.setLevel(ibiz.env.logLevel);
+    }
+    if (this.environmentOverrides?.enableMqtt !== undefined) {
+      ibiz.env.enableMqtt = this.environmentOverrides.enableMqtt;
     }
   }
 

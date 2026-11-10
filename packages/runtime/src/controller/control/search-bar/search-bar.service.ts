@@ -36,8 +36,15 @@ export class SearchBarService {
     this.viewTag = viewTag;
   }
 
-  async init(_context?: IContext): Promise<void> {
+  async init(context?: IContext): Promise<void> {
     this.app = ibiz.hub.getApp(this.model.appId);
+    if (
+      context?.srfappid === 'plmweb' ||
+      this.model.appId === 'plmweb' ||
+      this.model.appDataEntityId?.startsWith('plmweb.')
+    ) {
+      this.themeUrl = '/extension/app_view_themes';
+    }
   }
 
   /**
@@ -46,13 +53,7 @@ export class SearchBarService {
    * @author: zhujiamin
    * @Date: 2023-12-22 10:51:49
    */
-  /**
-   * 主题配置实体的服务路径。
-   *
-   * PLM 使用 view_theme_setting 作为运行时主题配置实体；旧的
-   * /extension/app_view_themes 路径属于另一套平台扩展服务，在 PLM
-   * 部署中会被转发为 404。
-   */
+  /** PLM exposes theme settings under the extension API; other apps keep the original endpoint. */
   themeUrl = '/view_theme_settings';
 
   /**
