@@ -16,6 +16,7 @@ export const Environment: IEnvironment = {
   pluginBaseUrl: 'http://172.16.240.221',
   isLocalModel: false,
   remoteModelUrl: '/remotemodel',
+  enableExtensionPlugin: true,
   assetsUrl: './assets',
   dcSystem: '',
   // {cat} 会替换模型 IApplication的getDefaultOSSCat 参数 如果没有会截取掉/{cat}

@@ -423,6 +423,8 @@ export const en = {
     hub: {
       failedParse: 'View parameter {paramsName} failed to parse: {error}',
       noExist: 'View [{id}] does not exist',
+      noExtensionPlugin:
+        'Attempted to load application [{appId}] extension plugin, but no extension plugin was found',
     },
     logicScheduler: {
       executor: {

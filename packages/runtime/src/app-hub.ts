@@ -4,6 +4,7 @@ import {
   IAppBIScheme,
   IAppCodeList,
   IAppDataEntity,
+  IAppPFPluginRef,
   IAppView,
   IApplication,
   ISubAppRef,
@@ -828,6 +829,92 @@ export class AppHub implements IAppHubService {
   ): IAppCodeList | undefined {
     const targetCodeListMap = this.codeLists.get(appId);
     return targetCodeListMap?.get(id);
+  }
+
+  /**
+   * Load the optional extension bundle only when the deployment allows it.
+   */
+  public async loadExtensionPlugin(appId: string): Promise<void> {
+    const deployment =
+      typeof window === 'undefined'
+        ? undefined
+        : Object.getOwnPropertyDescriptor(
+          window.Environment || {},
+          'enableExtensionPlugin',
+        );
+    const setting =
+      deployment ||
+      Object.getOwnPropertyDescriptor(
+        ibiz.env,
+        'enableExtensionPlugin',
+      );
+    if (
+      setting &&
+      (!Object.prototype.hasOwnProperty.call(setting, 'value') ||
+        typeof setting.value !== 'boolean')
+    ) {
+      throw new TypeError('enableExtensionPlugin must be a boolean data property');
+    }
+    if (setting?.value === false) return;
+    const invalidUrl = (): TypeError => new TypeError(
+      'Extension plugin requires a valid HTTP(S) API URL and application path',
+    );
+    const baseUrl = ibiz.env.baseUrl;
+    const remoteModelUrl = ibiz.env.remoteModelUrl;
+    if (
+      typeof baseUrl !== 'string' ||
+      /[\s?#\\]/.test(baseUrl) ||
+      typeof appId !== 'string' ||
+      !appId.trim() ||
+      ['.', '..'].includes(appId) ||
+      typeof remoteModelUrl !== 'string' ||
+      !/^\/(?!\/)/.test(remoteModelUrl) ||
+      /[\s?#\\]/.test(remoteModelUrl) ||
+      remoteModelUrl.split('/').some(segment => ['.', '..'].includes(segment))
+    ) {
+      throw invalidUrl();
+    }
+    let extensionUrl: URL;
+    try {
+      if (/^https?:\/\//i.test(baseUrl)) {
+        extensionUrl = new URL(baseUrl);
+      } else {
+        if (!/^\/(?!\/)/.test(baseUrl)) throw invalidUrl();
+        const origin = new URL(window.location.origin);
+        if (
+          !['http:', 'https:'].includes(origin.protocol) ||
+          origin.pathname !== '/' ||
+          origin.search ||
+          origin.hash ||
+          origin.username ||
+          origin.password
+        ) {
+          throw invalidUrl();
+        }
+        extensionUrl = new URL(baseUrl, origin.origin);
+      }
+      if (
+        !['http:', 'https:'].includes(extensionUrl.protocol) ||
+        extensionUrl.username ||
+        extensionUrl.password
+      ) {
+        throw invalidUrl();
+      }
+      extensionUrl.pathname =
+        `${extensionUrl.pathname.replace(/\/+$/, '')}/${encodeURIComponent(appId)}` +
+        `${remoteModelUrl.replace(/\/+$/, '')}/ext`;
+    } catch (error) {
+      throw invalidUrl();
+    }
+    try {
+      await ibiz.plugin.loadPlugin({
+        runtimeObject: true,
+        rtobjectName: 'ExtensionPlugin',
+        rtobjectRepo: extensionUrl.href,
+      } as IAppPFPluginRef);
+    } catch (error) {
+      ibiz.log.warn(ibiz.i18n.t('runtime.hub.noExtensionPlugin', { appId }));
+    }
   }
 
   /**

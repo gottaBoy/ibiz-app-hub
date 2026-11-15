@@ -147,6 +147,12 @@ export interface IEnvironment {
   remoteModelUrl: string;
 
   /**
+   * Deployment capability for the optional application extension bundle.
+   * An explicit window.Environment boolean takes precedence over model parameters.
+   */
+  enableExtensionPlugin?: boolean;
+
+  /**
    * @description 资源文件根路径
    * @type {string}
    * @default ./assets

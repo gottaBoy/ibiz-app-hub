@@ -8,7 +8,11 @@ import {
   resolveComponent,
   PropType,
 } from 'vue';
-import { IRouteViewData, parseRouteViewData } from '@ibiz-template/vue3-util';
+import {
+  IRouteViewData,
+  ModelContextError,
+  parseRouteViewData,
+} from '@ibiz-template/vue3-util';
 import { useRoute, useRouter } from 'vue-router';
 import { IModal, Modal, RouteConst, ViewMode } from '@ibiz-template/runtime';
 import { IBizContext } from '@ibiz-template/core';
@@ -27,25 +31,33 @@ export const RouterShell = defineComponent({
     const router = useRouter();
     const viewData = ref<IRouteViewData>({});
     const isLoaded = ref(false);
+    let loadGeneration = 0;
+    let disposed = false;
     const destroyContext = (): void => {
-      if (viewData.value.context) {
-        const { context } = toRaw(viewData.value);
-        if (context) context.destroy();
-      }
+      const { context } = toRaw(viewData.value);
+      viewData.value = {};
+      if (context) context.destroy();
     };
     const routeDepth = props.modal?.routeDepth;
 
     // 销毁视图上下文
     onUnmounted(() => {
+      disposed = true;
+      loadGeneration += 1;
+      isLoaded.value = false;
       destroyContext();
     });
 
     // 根据应用模型解析视图参数
     const calcViewData = async (): Promise<void> => {
       // 获取视图
-      if (!routeDepth) return;
+      if (!routeDepth || disposed) return;
+      const generation = ++loadGeneration;
+      isLoaded.value = false;
+      destroyContext();
       try {
         const _viewData = await parseRouteViewData(route, routeDepth);
+        if (disposed || generation !== loadGeneration) return;
         // 封装IBizContext
         const _context = IBizContext.create(_viewData.context);
         viewData.value = {
@@ -55,6 +67,11 @@ export const RouterShell = defineComponent({
         // 确定视图组件
         isLoaded.value = true;
       } catch (error) {
+        if (disposed || generation !== loadGeneration) return;
+        if (error instanceof ModelContextError) {
+          ibiz.util.error.handle(error);
+          return;
+        }
         router.push({
           name: `errorView${routeDepth}`,
           params: { code: '404' },
@@ -63,11 +80,18 @@ export const RouterShell = defineComponent({
     };
     calcViewData();
     watch(
-      () => route.params.view1,
-      () => {
-        if (routeDepth === 1) {
-          // 第一级路由壳监测到view1变化后，就重新计算一遍viewData
-          destroyContext();
+      () => [
+        route.params.appContext,
+        route.params[`view${routeDepth}`],
+        route.fullPath,
+      ],
+      (current, previous) => {
+        // Loaded parent shells keep their context during child navigation.
+        if (
+          current[0] !== previous[0] ||
+          current[1] !== previous[1] ||
+          !isLoaded.value
+        ) {
           calcViewData();
         }
       },

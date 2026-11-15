@@ -351,6 +351,7 @@ export const zhCn = {
     hub: {
       failedParse: '视图参数 {paramsName} 解析失败：{error}',
       noExist: '视图[{id}]不存在',
+      noExtensionPlugin: '尝试加载应用[{appId}]扩展插件，暂未找到扩展插件',
     },
     logicScheduler: {
       executor: {

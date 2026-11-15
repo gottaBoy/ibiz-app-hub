@@ -283,6 +283,17 @@ export class PluginFactory implements IPluginFactory {
     return false;
   }
 
+  protected normalizedPath(base: string, relativePath: string): string {
+    if (this.urlReg.test(relativePath)) {
+      return new URL(relativePath).href;
+    }
+    if (this.urlReg.test(base)) {
+      const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+      return new URL(relativePath, normalizedBase).href;
+    }
+    return path.join(base, relativePath);
+  }
+
   /**
    * 加载插件
    *
@@ -301,8 +312,7 @@ export class PluginFactory implements IPluginFactory {
       styles = [],
       extraParams = {},
     } = remotePlugin.config;
-    let scriptUrl = '';
-    scriptUrl = join(pluginPath, system);
+    const scriptUrl = this.normalizedPath(pluginPath, system);
     if (scriptUrl) {
       if (this.cache.has(scriptUrl)) {
         return;
@@ -314,7 +324,10 @@ export class PluginFactory implements IPluginFactory {
       let data: IParams | null = null;
       const url = this.parseUrl(scriptUrl, baseUrl);
       const styleUrls = (typeof styles === 'string' ? [styles] : styles).map(
-        styleUrl => this.parseUrl(path.join(pluginPath, styleUrl), baseUrl),
+        styleUrl => this.parseUrl(
+          this.normalizedPath(pluginPath, styleUrl),
+          baseUrl,
+        ),
       );
       System.addImportMap({
         imports: {

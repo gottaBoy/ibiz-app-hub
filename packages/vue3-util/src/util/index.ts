@@ -1,4 +1,5 @@
 export * from './route/route';
+export * from './route/model-context';
 export * from './route/route-listener';
 export * from './install';
 export * from './render/render';

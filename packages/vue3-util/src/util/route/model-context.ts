@@ -1,19 +1,33 @@
 import { RuntimeError } from '@ibiz-template/core';
 
-interface ModelContext {
+export interface ModelContext {
   psdevslnsys: string;
   pssystemid: string;
 }
 
-interface ModelContextSnapshot {
+export interface ModelContextSnapshot {
   appData: IData;
   projection: unknown;
   context: ModelContext;
   token: unknown;
 }
 
-function unavailable(): RuntimeError {
-  return new RuntimeError(ibiz.i18n.t('vue3Util.util.modelContextUnavailable'));
+export class ModelContextError extends RuntimeError {
+  readonly kind: 'unavailable' | 'changed';
+
+  constructor(kind: 'unavailable' | 'changed') {
+    super(ibiz.i18n.t(
+      kind === 'unavailable'
+        ? 'vue3Util.util.modelContextUnavailable'
+        : 'vue3Util.util.modelContextChanged',
+    ));
+    this.kind = kind;
+    this.name = 'ModelContextError';
+  }
+}
+
+function unavailable(): ModelContextError {
+  return new ModelContextError('unavailable');
 }
 
 function readProjection(value: unknown): ModelContext {
@@ -60,7 +74,7 @@ export function bindModelContext(
   if (current !== snapshot.appData || projection !== snapshot.projection ||
       value.psdevslnsys !== snapshot.context.psdevslnsys ||
       value.pssystemid !== snapshot.context.pssystemid || token !== snapshot.token) {
-    throw new RuntimeError(ibiz.i18n.t('vue3Util.util.modelContextChanged'));
+    throw new ModelContextError('changed');
   }
   if (typeof token !== 'string' || !token ||
       context.psdevslnsys !== value.psdevslnsys ||
