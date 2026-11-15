@@ -58,6 +58,8 @@ export const en = {
       convertString: 'Failed to convert to string',
       viewIdentifiers: 'View identifiers do not exist for {depth} level routes',
       noFoundView: 'View not found {viewCodeName}',
+      modelContextUnavailable: 'The authorized modeling context is unavailable.',
+      modelContextChanged: 'The modeling context changed. Reload this view.',
       routeCorrectly:
         'Cannot get the route correctly, could be a dependency issue.',
     },

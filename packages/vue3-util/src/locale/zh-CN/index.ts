@@ -52,6 +52,8 @@ export const zhCn = {
       convertString: '转换成字符串失败',
       viewIdentifiers: '第{depth}级路由不存在视图标识',
       noFoundView: '找不到视图{viewCodeName}',
+      modelContextUnavailable: '当前模型上下文不可用或未经授权。',
+      modelContextChanged: '模型上下文已变化，请重新加载此视图。',
       routeCorrectly: '无法正确获取route,可能是依赖问题',
     },
     view: {

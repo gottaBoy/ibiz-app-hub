@@ -12,6 +12,7 @@ import {
 } from '@ibiz-template/runtime';
 import { isNil, isNotNil } from 'ramda';
 import { IRoutePath, IRoutePathNode, IRouteViewData } from '../../interface';
+import { bindModelContext, captureModelContext } from './model-context';
 
 /**
  * 路径字符串转换成路由路径对象
@@ -465,6 +466,8 @@ export async function parseRouteViewData(
   depth: number,
   isRouteModal: boolean = false,
 ): Promise<IRouteViewData> {
+  const modelContext = captureModelContext();
+  const routePathAtStart = route.fullPath;
   // 解析路由的视图参数
   const routePath = route2routePath(route, isRouteModal);
 
@@ -522,6 +525,13 @@ export async function parseRouteViewData(
       }
     }
   }
+
+  if ((modelContext && route.fullPath !== routePathAtStart) ||
+      (!modelContext && ibiz.appData &&
+        Object.prototype.hasOwnProperty.call(ibiz.appData, 'srfmodelcontext'))) {
+    throw new RuntimeError(ibiz.i18n.t('vue3Util.util.modelContextChanged'));
+  }
+  bindModelContext(modelContext, context);
 
   // 最后一级路由对应的视图才会解析视图参数
   const { params, srfnav } = routePath.pathNodes[depth - 1];
