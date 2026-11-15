@@ -113,10 +113,12 @@ export class AppUtil implements IAppUtil {
   ): Promise<boolean> {
     const bol = await ibiz.auth.login(loginName, password, remember, headers);
     if (bol === true) {
-      window.location.hash =
+      const redirect =
         (this.router.currentRoute.value.query.ru as string) || '/';
+      const target = new URL(window.location.href);
+      target.hash = redirect;
       // 重置会话记录state,防止直接返回到登录页
-      window.history.pushState({}, '');
+      window.history.pushState({}, '', target.href);
       window.location.reload();
     }
     return bol;

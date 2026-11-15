@@ -109,9 +109,11 @@ export class LoginViewEngine extends ViewEngineBase {
     if (bol === true) {
       const loginFailed =
         window.location.href.indexOf('srfthird_auth_success=false') >= 0;
-      window.location.hash = (this.route.query.ru as string) || '/';
+      const redirect = (this.route.query.ru as string) || '/';
+      const target = new URL(window.location.href);
+      target.hash = redirect;
       // 重置会话记录state,防止直接返回到登录页
-      window.history.pushState({}, '');
+      window.history.pushState({}, '', target.href);
       if (loginFailed) {
         const path = window.location.href.replace(
           '?srfthird_auth_success=false',
