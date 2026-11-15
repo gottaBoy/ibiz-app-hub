@@ -6,6 +6,7 @@ import {
   NavigationGuardNext,
   RouteLocationNormalized,
   RouteLocationNormalizedLoaded,
+  RouteLocationRaw,
   Router,
   RouteRecordRaw,
 } from 'vue-router';
@@ -27,10 +28,28 @@ export class AppRouter {
     notLogin?: boolean,
   ) => Promise<boolean>;
 
+  private static loginRedirect?: (returnUrl: string) => RouteLocationRaw | undefined;
+
   static setAuthGuard(
     authGuard: (context: IParams, notLogin?: boolean) => Promise<boolean>,
+    loginRedirect?: (returnUrl: string) => RouteLocationRaw | undefined,
   ): void {
     this.authGuard = authGuard;
+    this.loginRedirect = loginRedirect;
+  }
+
+  private static async beforeProtectedRoute(
+    to: RouteLocationNormalized,
+    next: NavigationGuardNext,
+  ): Promise<void> {
+    const redirect = this.loginRedirect?.(to.fullPath);
+    if (redirect) {
+      next(redirect);
+      return;
+    }
+    const authority = await this.authGuard(this.getAppContext(to));
+    if (authority) next();
+    else next(false);
   }
 
   static getAppContext(route: RouteLocationNormalized): IParams {
@@ -79,12 +98,7 @@ export class AppRouter {
           from: RouteLocationNormalizedLoaded,
           next: NavigationGuardNext,
         ): Promise<void> => {
-          const authority = await this.authGuard(this.getAppContext(_to));
-          if (authority) {
-            next();
-          } else {
-            next(false);
-          }
+          await this.beforeProtectedRoute(_to, next);
         },
         component: ShareView,
       },
@@ -101,12 +115,7 @@ export class AppRouter {
           from: RouteLocationNormalizedLoaded,
           next: NavigationGuardNext,
         ): Promise<void> => {
-          const authority = await this.authGuard(this.getAppContext(_to));
-          if (authority) {
-            next();
-          } else {
-            next(false);
-          }
+          await this.beforeProtectedRoute(_to, next);
         },
         component: AppRedirectView,
       },
@@ -117,12 +126,7 @@ export class AppRouter {
           from: RouteLocationNormalizedLoaded,
           next: NavigationGuardNext,
         ): Promise<void> => {
-          const authority = await this.authGuard(this.getAppContext(_to));
-          if (authority) {
-            next();
-          } else {
-            next(false);
-          }
+          await this.beforeProtectedRoute(_to, next);
         },
         component: RouterShell,
         meta: {

@@ -3,6 +3,7 @@ import {
   CoreConst,
   getAppCookie,
   HttpError,
+  LoginMode,
   OrgData,
   RuntimeError,
 } from '@ibiz-template/core';
@@ -13,6 +14,27 @@ import { AppHooks } from '@ibiz-template/vue3-util';
 import { updateDevToolConfig } from '@ibiz-template/devtool';
 
 export class AuthGuard {
+  // An ordinary first visit needs the login model, not a failing protected request.
+  getLoginRedirect(
+    returnUrl: string,
+  ): { path: string; replace: boolean; query: { ru: string } } | undefined {
+    if (
+      ibiz.env.enableAnonymous ||
+      ibiz.env.loginMode !== LoginMode.DEFAULT ||
+      /^\/login(?:[?#]|$)/.test(returnUrl) ||
+      ibiz.auth.getAuthInfo()?.token
+    ) {
+      return undefined;
+    }
+    if (
+      getAppCookie(CoreConst.TOKEN_REMEMBER) &&
+      getAppCookie(CoreConst.REFRESH_TOKEN)
+    ) {
+      return undefined;
+    }
+    return { path: '/login', replace: true, query: { ru: returnUrl } };
+  }
+
   /**
    * 是否是全代码模式
    * @author lxm

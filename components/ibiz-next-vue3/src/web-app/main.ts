@@ -119,8 +119,11 @@ export async function runApp(
       environmentOverrides,
     });
   }
-  AppRouter.setAuthGuard((context: IParams, notLogin?: boolean) =>
-    authGuard.verify(context, notLogin),
+  AppRouter.setAuthGuard(
+    (context: IParams, notLogin?: boolean) => authGuard.verify(context, notLogin),
+    opts?.getAuthGuard
+      ? undefined
+      : returnUrl => authGuard.getLoginRedirect(returnUrl),
   );
   app.use(AppRouter.getRouter(opts?.userRoutes));
   // 监听打开设计器

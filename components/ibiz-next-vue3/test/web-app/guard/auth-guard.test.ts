@@ -15,6 +15,7 @@ const hooks = vi.hoisted(() => ({
 
 vi.mock('@ibiz-template/core', () => ({
   CoreConst: { TOKEN_REMEMBER: 'remember', REFRESH_TOKEN: 'refresh' },
+  LoginMode: { DEFAULT: 'DEFAULT' },
   getAppCookie: (name: string) => hooks.cookies.get(name),
   RuntimeError: class extends Error {},
   HttpError: class extends Error {},
@@ -50,6 +51,7 @@ function createRuntime() {
       isSaaSMode: false,
       isLocalModel: true,
       enableAnonymous: false,
+      loginMode: 'DEFAULT',
       requireOrganizationContext: undefined as boolean | undefined,
       enableMqtt: false,
       logLevel: 'info',
@@ -73,6 +75,7 @@ function createRuntime() {
       ),
     },
     auth: {
+      getAuthInfo: vi.fn(() => undefined),
       refreshToken: vi.fn(async () => undefined),
       anonymousLogin: vi.fn(async () => true),
       extendLogin: vi.fn(async () => undefined),
@@ -331,6 +334,32 @@ describe.each([
       runtime.util = { ...runtime.util, error: { register: vi.fn() } } as typeof runtime.util;
       return { dependencies, guards, boundary, run: sourceRunApp(active, dependencies) };
     }
+
+    it('wires the default guard login redirect before protected initialization', async () => {
+      const selected = entrypoint();
+      await expect(selected.run()).rejects.toBe(selected.boundary);
+      const [verify, redirect] = selected.dependencies.AppRouter.setAuthGuard.mock.calls[0] as unknown as [
+        (context: object, notLogin?: boolean) => Promise<boolean>,
+        (returnUrl: string) => unknown,
+      ];
+      expect(redirect('/psdevslnsys=owned-root/modelingindex/-')).toEqual({
+        path: '/login', replace: true,
+        query: { ru: '/psdevslnsys=owned-root/modelingindex/-' },
+      });
+      expect(runtime.net.get).not.toHaveBeenCalled();
+      const validation = vi.spyOn(selected.guards[0], 'verify').mockResolvedValue(true);
+      await verify({ psdevslnsys: 'owned-root' }, false);
+      expect(validation).toHaveBeenCalledWith({ psdevslnsys: 'owned-root' }, false);
+    });
+
+    it('does not impose the default login redirect on a caller-supplied guard', async () => {
+      const selected = entrypoint();
+      const custom = new Guard();
+      await expect(selected.run(undefined, { getAuthGuard: () => custom })).rejects.toBe(selected.boundary);
+      expect(selected.guards).toHaveLength(0);
+      const args = selected.dependencies.AppRouter.setAuthGuard.mock.calls[0] as unknown as unknown[];
+      expect(args[1]).toBeUndefined();
+    });
 
     it.each([false, true])('forwards the validated explicit %s to the actual default guard', async enableMqtt => {
       const selected = entrypoint();
