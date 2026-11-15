@@ -200,14 +200,16 @@ export class V7AuthService implements IAuthService {
     const token = getAppCookie(CoreConst.TOKEN);
     const expirein = getAppCookie(CoreConst.TOKEN_EXPIRES);
     if (token && expirein) {
-      // 计算到过期时间所需的延时毫秒数，预留提前量
-      let wait = Number(expirein) - new Date().getTime();
-      const early = 5 * 60 * 1000;
-      wait = wait > early ? wait - early : 0;
-      // 修复setTimeout函数delay参数将转换为带符号的32位整数，当 delay 大于2147483647时，将会被设置为 1导致的异常
-      if (wait > 2147483647) {
-        wait = 2147483647;
+      const remaining = Number(expirein) - Date.now();
+      if (!Number.isFinite(remaining) || remaining <= 0) {
+        return;
       }
+      // Short-lived tokens need a positive delay, with at most five minutes of advance.
+      const early = Math.min(5 * 60 * 1000, remaining / 4);
+      const wait = Math.min(
+        2147483647,
+        Math.max(1, Math.floor(remaining - early)),
+      );
       setTimeout(async () => {
         const remember = getAppCookie(CoreConst.TOKEN_REMEMBER);
         const refreshToken = getAppCookie(CoreConst.REFRESH_TOKEN);
@@ -242,7 +244,7 @@ export class V7AuthService implements IAuthService {
           clearAppCookie(CoreConst.REFRESH_TOKEN);
         }
         // 下一次延时做准备
-        this.extendLogin();
+        this.extendLogin(context);
       }, wait);
     }
   }
