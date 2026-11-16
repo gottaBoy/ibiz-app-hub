@@ -246,7 +246,9 @@ export class CustomDashboardController implements ICustomDesign {
         );
       } catch (error) {
         if (isMissingUtilDataError(error)) {
-          return this.saveCustomModelData([]);
+          // A missing personal layout is a valid first-use state. Do not
+          // write a row during view initialization; save only after editing.
+          return { model: this.customModelData, config: this.portletConfig };
         }
         throw error;
       }
