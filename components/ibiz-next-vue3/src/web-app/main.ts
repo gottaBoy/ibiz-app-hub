@@ -13,7 +13,7 @@ import {
   useAppStore,
 } from '@ibiz-template/vue3-util';
 import { Plugin } from 'vue';
-import { RouteRecordRaw } from 'vue-router';
+import { RouteLocationRaw, RouteRecordRaw } from 'vue-router';
 import { createVueApp } from './create-vue-app';
 
 import { attachEnvironmentConfig } from './attach-environment-config';
@@ -43,6 +43,7 @@ export async function runApp(
   plugins?: Plugin[],
   opts?: {
     getAuthGuard?: () => AuthGuard;
+    getLoginRedirect?: (returnUrl: string) => RouteLocationRaw | undefined;
     userRoutes?: RouteRecordRaw[];
     environmentOverrides?: { enableMqtt?: boolean };
   },
@@ -51,7 +52,9 @@ export async function runApp(
     opts?.environmentOverrides,
   );
   if (environmentOverrides !== undefined && opts?.getAuthGuard !== undefined) {
-    throw new Error('environmentOverrides cannot be combined with getAuthGuard');
+    throw new Error(
+      'environmentOverrides cannot be combined with getAuthGuard',
+    );
   }
   AppHooks.createApp.tap((_, app) => {
     if (plugins) {
@@ -120,10 +123,12 @@ export async function runApp(
     });
   }
   AppRouter.setAuthGuard(
-    (context: IParams, notLogin?: boolean) => authGuard.verify(context, notLogin),
-    opts?.getAuthGuard
-      ? undefined
-      : returnUrl => authGuard.getLoginRedirect(returnUrl),
+    (context: IParams, notLogin?: boolean) =>
+      authGuard.verify(context, notLogin),
+    opts?.getLoginRedirect ??
+      (opts?.getAuthGuard
+        ? undefined
+        : returnUrl => authGuard.getLoginRedirect(returnUrl)),
   );
   app.use(AppRouter.getRouter(opts?.userRoutes));
   // 监听打开设计器
