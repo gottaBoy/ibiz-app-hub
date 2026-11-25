@@ -7,6 +7,7 @@ import {
   getInternalMessageProvider,
 } from '@ibiz-template/runtime';
 import { parseHtml } from '../../../../util';
+import { localizeInternalMessageHtml } from '../../../../util/user-message-util/internal-message-locale';
 import './internal-message-group.scss';
 
 export const InternalMessagGroup = defineComponent({
@@ -49,7 +50,13 @@ export const InternalMessagGroup = defineComponent({
       const { content_type, content } = props.message;
       if (content_type === 'JSON')
         return content ? (JSON.parse(content).html as string) : content;
-      if (content === 'HTML') return parseHtml(content);
+      if (content_type === 'HTML') {
+        return localizeInternalMessageHtml(
+          parseHtml(content),
+          ibiz.i18n.getLang(),
+          props.message.message_type,
+        );
+      }
       return content;
     });
 

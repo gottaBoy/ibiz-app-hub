@@ -28,8 +28,9 @@ $user-message: (
 }
 
 @include b(user-message-popover) {
-  width: 500px !important;
-  height: 500px !important;
+  box-sizing: border-box;
+  width: min(500px, calc(100vw - 24px)) !important;
+  height: min(500px, calc(100dvh - 24px)) !important;
   
   &.el-popover{
     padding-top: getCssVar('spacing', 'super-tight');

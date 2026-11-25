@@ -189,16 +189,16 @@ export class SearchBarService {
       if (item.name) {
         tempItem.name = item.name;
       }
-      if (item.caption) {
+      if (Object.prototype.hasOwnProperty.call(item, 'caption')) {
         tempItem.caption = item.caption;
       }
-      if (item.theme_model) {
+      if (typeof item.theme_model === 'string' && item.theme_model.length > 0) {
         tempItem.searchGroupData = JSON.parse(item.theme_model);
       }
       if (typeof item.valid_flag === 'number') {
         tempItem.show = item.valid_flag === 1;
       }
-      if (item.order_value) {
+      if (typeof item.order_value === 'number') {
         tempItem.order = item.order_value;
       }
       if (item.owner_type) {
@@ -227,7 +227,10 @@ export class SearchBarService {
       if (item.name) {
         tempItem.name = item.name;
       }
-      if (item.caption) {
+      if (
+        Object.prototype.hasOwnProperty.call(item, 'caption') &&
+        item.ownerType !== 'SYSTEM'
+      ) {
         tempItem.caption = item.caption;
       }
       if (
@@ -239,7 +242,7 @@ export class SearchBarService {
       if (typeof item.show === 'boolean') {
         tempItem.valid_flag = item.show ? 1 : 0;
       }
-      if (item.order) {
+      if (typeof item.order === 'number') {
         tempItem.order_value = item.order;
       }
       if (item.ownerType) {

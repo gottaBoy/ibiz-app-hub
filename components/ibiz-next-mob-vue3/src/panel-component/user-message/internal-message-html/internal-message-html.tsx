@@ -4,6 +4,7 @@ import { IInternalMessage } from '@ibiz-template/core';
 import { useNamespace } from '@ibiz-template/vue3-util';
 import { InternalMessageHTMLtProvider } from './internal-message-html.provider';
 import { parseHtml } from '../user-message.util';
+import { localizeInternalMessageHtml } from '../internal-message-locale';
 import './internal-message-html.scss';
 
 export const InternalMessageHTML = defineComponent({
@@ -24,7 +25,12 @@ export const InternalMessageHTML = defineComponent({
   setup(props) {
     const ns = useNamespace('internal-message-html');
     const msgContent = computed(() => {
-      return parseHtml(props.message.content);
+      const parsed = parseHtml(props.message.content);
+      return localizeInternalMessageHtml(
+        parsed,
+        ibiz.i18n.getLang(),
+        props.message.message_type,
+      );
     });
     return { ns, msgContent };
   },

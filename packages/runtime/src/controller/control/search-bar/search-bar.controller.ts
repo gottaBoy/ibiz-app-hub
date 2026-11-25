@@ -38,6 +38,7 @@ import { ItemsValueOPs, isSimpleItems } from './util';
 import { SearchBarFilterSimpleItemsController } from './search-bar-filter-simple-items.controller';
 import { findFieldById } from '../../../model';
 import { AppCounter, CounterService } from '../../../service';
+import { mergeBackendSearchGroup } from './search-bar-group.util';
 
 const ScriptValueRegex = /\$\{[^}]*\}/; // 匹配${xxx}格式字符串
 
@@ -127,6 +128,13 @@ export class SearchBarController
    */
   get searchBarFilters(): ISearchBarFilter[] {
     return this.model.searchBarFilters || [];
+  }
+
+  private mergeBackendGroup(
+    target: IBackendSearchBarGroup,
+    incoming: IData,
+  ): void {
+    mergeBackendSearchGroup(target, incoming);
   }
 
   /**
@@ -723,7 +731,7 @@ export class SearchBarController
             item => item.name === group.name,
           );
           if (existGroup) {
-            mergeInLeft(existGroup, group);
+            this.mergeBackendGroup(existGroup, group);
             if (group.owner_type === 'PERSONAL') {
               existGroup.saved = true;
             }
@@ -906,7 +914,7 @@ export class SearchBarController
       // 请求获取到搜索分组数据
       const res = await this.service.get(groupItem.id!);
       if (res.ok) {
-        mergeInLeft(groupItem, res.data);
+        this.mergeBackendGroup(groupItem, res.data);
         groupItem.show = true;
       }
     }

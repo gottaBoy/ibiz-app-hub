@@ -64,3 +64,18 @@
     }
   }
 }
+
+@media (hover: none) and (pointer: coarse) {
+  @include b(internal-message-container) {
+    padding-right: calc(24px + 2 * getCssVar(spacing, tight));
+  }
+
+  @include b(internal-message-container-toolbar) {
+    display: flex;
+
+    @include e(button) {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
