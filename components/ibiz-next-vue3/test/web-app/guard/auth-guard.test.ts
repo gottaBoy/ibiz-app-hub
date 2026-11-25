@@ -4,6 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthGuard as HubAuthGuard } from '../../../src/web-app/guard/auth-guard/auth-guard';
 import { AuthGuard as ActiveAuthGuard } from '../../../../../../modelingweb/packages-latest/@ibiz-template/vue3-components/src/web-app/guard/auth-guard/auth-guard';
 import { AppFuncBlockProvider } from '../../../../../../modelingweb/packages-latest/@ibiz-template/vue3-components/src/web-app/util/app-func-block-provider/app-func-block-provider';
+import { attachEnvironmentConfig as attachHubEnvironment } from '../../../src/web-app/attach-environment-config';
+import { attachEnvironmentConfig as attachActiveEnvironment } from '../../../../../../modelingweb/packages-latest/@ibiz-template/vue3-components/src/web-app/attach-environment-config';
 
 const hooks = vi.hoisted(() => ({
   before: vi.fn(),
@@ -424,6 +426,53 @@ describe.each([
   });
 
   describe('organization-context initialization policy', () => {
+    const attachEnvironment = active ? attachActiveEnvironment : attachHubEnvironment;
+    const environmentWindow = (environment: object) => {
+      vi.stubGlobal('window', { Environment: environment, location: { search: '' } });
+    };
+
+    it.each([false, true])(
+      'maps explicit organization requirement %j when an older core has no enumerable default',
+      async required => {
+        delete (runtime.env as { requireOrganizationContext?: boolean }).requireOrganizationContext;
+        environmentWindow({ requireOrganizationContext: required });
+        await attachEnvironment();
+        expect(runtime.env.requireOrganizationContext).toBe(required);
+        await guard.appInit({});
+        expect(runtime.net.get.mock.calls.map(call => call[0])).toEqual(
+          required ? [organizationUrl, '/appdata'] : ['/appdata'],
+        );
+      },
+    );
+
+    it('keeps an older core default absent when the deployment has not opted in', async () => {
+      delete (runtime.env as { requireOrganizationContext?: boolean }).requireOrganizationContext;
+      environmentWindow({});
+      await attachEnvironment();
+      expect(Object.hasOwn(runtime.env, 'requireOrganizationContext')).toBe(false);
+      await guard.appInit({});
+      expect(runtime.net.get.mock.calls.map(call => call[0])).toEqual(['/appdata']);
+    });
+
+    it.each([null, undefined, 'true', 'false', 0, 1, {}, []])(
+      'rejects an invalid explicit organization flag before initialization: %j',
+      async value => {
+        environmentWindow({ requireOrganizationContext: value });
+        await expect(attachEnvironment()).rejects.toThrow('requireOrganizationContext must be a boolean data property');
+        expect(runtime.net.get).not.toHaveBeenCalled();
+      },
+    );
+
+    it('does not execute a deployment getter or inherit a requirement from its prototype', async () => {
+      const getter = vi.fn(() => true);
+      environmentWindow(Object.defineProperty({}, 'requireOrganizationContext', { get: getter }));
+      await expect(attachEnvironment()).rejects.toThrow('requireOrganizationContext must be a boolean data property');
+      expect(getter).not.toHaveBeenCalled();
+      environmentWindow(Object.create({ requireOrganizationContext: true }));
+      await attachEnvironment();
+      expect(runtime.env.requireOrganizationContext).toBeUndefined();
+    });
+
     it.each(
       [undefined, false, true].flatMap(required =>
         [false, true].flatMap(saas =>

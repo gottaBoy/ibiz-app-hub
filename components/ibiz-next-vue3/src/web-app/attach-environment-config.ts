@@ -23,6 +23,17 @@ export async function attachEnvironmentConfig(): Promise<void> {
   ) {
     throw new TypeError('enableExtensionPlugin must be a boolean data property');
   }
+  const organization = Object.getOwnPropertyDescriptor(
+    env || {},
+    'requireOrganizationContext',
+  );
+  if (
+    organization &&
+    (!Object.prototype.hasOwnProperty.call(organization, 'value') ||
+      typeof organization.value !== 'boolean')
+  ) {
+    throw new TypeError('requireOrganizationContext must be a boolean data property');
+  }
 
   const query = qs.parse(window.location.search, { ignoreQueryPrefix: true });
 
@@ -33,6 +44,7 @@ export async function attachEnvironmentConfig(): Promise<void> {
       if (extension) ibiz.env.enableExtensionPlugin = extension.value;
       return;
     }
+    if (key === 'requireOrganizationContext') return;
     if (env[key2] != null) {
       if (key2 === 'customParams' || key2 === 'devtoolConfig') {
         (ibiz.env as any)[key] = JSON.parse(env[key2]);
@@ -41,6 +53,8 @@ export async function attachEnvironmentConfig(): Promise<void> {
       }
     }
   });
+  // Older core builds do not enumerate this optional deployment flag.
+  if (organization) ibiz.env.requireOrganizationContext = organization.value;
 
   if (query) {
     if (query.srfdcsystem) {

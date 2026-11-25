@@ -13,6 +13,7 @@ export default defineConfig({
       '@ibiz-template/vue3-util': fileURLToPath(new URL('../../packages/vue3-util/src/index.ts', import.meta.url)),
       '@ibiz-template/devtool': fileURLToPath(new URL('../../plugins/ibiz-template-devtools/src/index.ts', import.meta.url)),
       ramda: require.resolve('ramda'),
+      qs: require.resolve('qs'),
     },
   },
   test: {
