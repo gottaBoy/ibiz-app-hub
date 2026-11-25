@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import JSEncrypt from 'jsencrypt';
 import {
   CoreConst,
   clearAppCookie,
@@ -6,6 +7,7 @@ import {
   setAppCookie,
 } from '@ibiz-template/core';
 import { V7AuthService } from '../../../src/service/service/auth/v7-auth.service';
+import { EncyptionUtil } from '../../../src/utils/encryption-uitl/encryption-uitl';
 
 const clock = 1800000000000;
 const maxTimeout = 2147483647;
@@ -16,6 +18,100 @@ const authCookies = [
   CoreConst.REFRESH_TOKEN,
   CoreConst.IS_ANONYMOUS,
 ];
+
+describe('V7 login result and anonymous credentials', () => {
+  const post = vi.fn();
+  const notification = vi.fn();
+
+  beforeEach(() => {
+    authCookies.forEach(name => clearAppCookie(name));
+    post.mockReset();
+    notification.mockReset();
+    vi.stubGlobal('ibiz', {
+      env: {},
+      net: { post },
+      i18n: { t: (key: string) => key },
+      notification: { error: notification },
+      log: { error: vi.fn() },
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    authCookies.forEach(name => clearAppCookie(name));
+  });
+
+  it.each([undefined, null, '', ' ', 123, {}])(
+    'rejects a successful HTTP response with invalid token %j',
+    async token => {
+      setAppCookie(CoreConst.TOKEN, 'old-session-token', 0);
+      post.mockResolvedValue({ ok: true, data: { token } });
+      expect(await new V7AuthService().login('owned-user', 'private')).toBe(false);
+      for (const name of authCookies) expect(getAppCookie(name)).toBeNull();
+      expect(notification).toHaveBeenCalledOnce();
+    },
+  );
+
+  it('accepts only a returned token and retains the plaintext request when encryption is disabled', async () => {
+    const password = '中文🙂 e\u0301 " \' \\ \n';
+    post.mockResolvedValue({ ok: true, data: { token: 'returned-token', expirein: 30 } });
+    expect(await new V7AuthService().login('owned-user', password)).toBe(true);
+    expect(post).toHaveBeenCalledWith('/v7/login', {
+      loginname: 'owned-user', password, rememberme: undefined,
+    }, {}, undefined);
+    expect(getAppCookie(CoreConst.TOKEN)).toBe('returned-token');
+    expect(notification).not.toHaveBeenCalled();
+  });
+
+  it('does not mark an anonymous session when the server omits its token', async () => {
+    ibiz.env.anonymousUser = 'owned-visitor';
+    ibiz.env.anonymousPwd = 'private';
+    post.mockResolvedValue({ ok: true, data: {} });
+    expect(await new V7AuthService().anonymousLogin()).toBe(false);
+    expect(getAppCookie(CoreConst.IS_ANONYMOUS)).toBeNull();
+    expect(getAppCookie(CoreConst.TOKEN)).toBeNull();
+  });
+
+  it('encrypts anonymous credentials once with the actual RSA utility and sets session cookies after success', async () => {
+    const rsa = new JSEncrypt({ default_key_size: '1024' });
+    const publicKey = rsa.getPublicKey();
+    const get = vi.fn().mockResolvedValue({ ok: true, data: publicKey });
+    const encryption = new EncyptionUtil();
+    ibiz.env.enableEncryption = true;
+    ibiz.env.anonymousUser = 'owned-visitor';
+    ibiz.env.anonymousPwd = 'A!owned-rsa-password9';
+    ibiz.net.get = get;
+    ibiz.util = { encryption } as never;
+    post.mockImplementation(async (_path, body, _config, headers) => {
+      const decrypted = rsa.decrypt(body.password);
+      expect(decrypted).toMatch(/^A!owned-rsa-password9\|\d+$/);
+      expect(headers).toEqual({ 'captcha-state': 'RSA' });
+      return { ok: true, data: { token: 'visitor-token', expirein: 20 } };
+    });
+    expect(await new V7AuthService().anonymousLogin()).toBe(true);
+    expect(get).toHaveBeenCalledOnce();
+    expect(post).toHaveBeenCalledOnce();
+    expect(getAppCookie(CoreConst.TOKEN)).toBe('visitor-token');
+    expect(getAppCookie(CoreConst.IS_ANONYMOUS)).toBe('1');
+    expect(notification).not.toHaveBeenCalled();
+  });
+
+  it('clears an existing session and reports encryption failure before sending credentials', async () => {
+    setAppCookie(CoreConst.TOKEN, 'old-session-token', 0);
+    ibiz.env.enableEncryption = true;
+    ibiz.env.anonymousUser = 'owned-visitor';
+    ibiz.env.anonymousPwd = 'private';
+    ibiz.util = {
+      encryption: { encryptByRSA: vi.fn().mockRejectedValue(new Error('encryption unavailable')) },
+    } as never;
+    expect(await new V7AuthService().anonymousLogin()).toBe(false);
+    expect(post).not.toHaveBeenCalled();
+    expect(getAppCookie(CoreConst.TOKEN)).toBeNull();
+    expect(getAppCookie(CoreConst.IS_ANONYMOUS)).toBeNull();
+    expect(notification).toHaveBeenCalledOnce();
+  });
+});
 
 describe('V7 refresh scheduling', () => {
   beforeEach(() => {

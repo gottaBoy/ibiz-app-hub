@@ -34,20 +34,7 @@ export class V7AuthService implements IAuthService {
       ibiz.log.error(ibiz.i18n.t('runtime.service.noFoundUsernamePassword'));
       return false;
     }
-    let password = anonymousPwd;
-    let headers = {};
-    if (ibiz.env.enableEncryption) {
-      password = await ibiz.util.encryption.encryptByRSA(
-        `${anonymousPwd}|${getRandomInt()}`,
-      );
-      headers = { 'captcha-state': 'RSA' };
-    }
-    const result = await this.login(
-      anonymousUser,
-      password,
-      undefined,
-      headers,
-    );
+    const result = await this.login(anonymousUser, anonymousPwd);
     if (result) {
       setAppCookie(CoreConst.IS_ANONYMOUS, '1', 0);
 
@@ -103,20 +90,21 @@ export class V7AuthService implements IAuthService {
         headers,
       );
       const { data } = res;
-      if (data && data.token) {
-        const cacheDay = remember ? 30 : 0;
-        if (remember) {
-          setAppCookie(CoreConst.TOKEN_REMEMBER, '1', cacheDay);
-        }
-        setAppCookie(CoreConst.TOKEN, data.token, cacheDay);
-        const expiredDate =
-          new Date().getTime() + (data.expirein || 7199) * 1000;
-        setAppCookie(CoreConst.TOKEN_EXPIRES, `${expiredDate}`, cacheDay);
-        if (data.refresh_token) {
-          setAppCookie(CoreConst.REFRESH_TOKEN, data.refresh_token, cacheDay);
-        }
-        clearAppCookie(CoreConst.IS_ANONYMOUS);
+      if (!data || typeof data.token !== 'string' || !data.token.trim()) {
+        throw new Error(ibiz.i18n.t('runtime.service.loginFailure'));
       }
+      const cacheDay = remember ? 30 : 0;
+      if (remember) {
+        setAppCookie(CoreConst.TOKEN_REMEMBER, '1', cacheDay);
+      }
+      setAppCookie(CoreConst.TOKEN, data.token, cacheDay);
+      const expiredDate =
+        new Date().getTime() + (data.expirein || 7199) * 1000;
+      setAppCookie(CoreConst.TOKEN_EXPIRES, `${expiredDate}`, cacheDay);
+      if (data.refresh_token) {
+        setAppCookie(CoreConst.REFRESH_TOKEN, data.refresh_token, cacheDay);
+      }
+      clearAppCookie(CoreConst.IS_ANONYMOUS);
       return true;
     } catch (err: unknown) {
       ibiz.notification.error({
