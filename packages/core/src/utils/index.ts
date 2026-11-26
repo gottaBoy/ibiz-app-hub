@@ -1,6 +1,6 @@
 export * from './interceptor';
 export { MessageCenter } from './message-center';
-export { Namespace } from './namespace/namespace';
+export { Namespace, defaultNamespace } from './namespace/namespace';
 export { HttpResponse } from './net/http-response';
 export { Net } from './net/net';
 export { StringUtil } from './string-util/string-util';

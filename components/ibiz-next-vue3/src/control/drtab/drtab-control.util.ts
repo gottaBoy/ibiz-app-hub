@@ -1,5 +1,5 @@
 import { Ref, onUnmounted, ref, watch, watchEffect } from 'vue';
-import { defaultNamespace } from '@ibiz-template/core/out/utils/namespace/namespace';
+import { defaultNamespace } from '@ibiz-template/core';
 import { DRTabController } from './drtab.controller';
 
 /**

@@ -3,7 +3,7 @@
 
 import { createApp } from 'vue';
 import ElementPlus from 'element-plus';
-import { defaultNamespace } from '@ibiz-template/core/out/utils/namespace/namespace';
+import { defaultNamespace } from '@ibiz-template/core';
 import { IBizFullscreenToolbar } from '../../common/fullscreen-toolbar/fullscreen-toolbar';
 
 /**
