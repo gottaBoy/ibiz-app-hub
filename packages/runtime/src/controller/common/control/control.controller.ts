@@ -226,7 +226,9 @@ export class ControlController<
   }
 
   protected async onCreated(): Promise<void> {
+    this.assertLifecycleActive();
     await super.onCreated();
+    this.assertLifecycleActive();
 
     // 填充部件加载提示文本
     if (isNotNil(ibiz.config.view.loadingText)) {
@@ -237,6 +239,7 @@ export class ControlController<
     if (this.controlPanel) {
       this.childNames.push(this.controlPanel.name!);
       const provider = await getControlProvider(this.controlPanel);
+      this.assertLifecycleActive();
       this.providers[this.controlPanel.name!] = provider!;
     }
     // 部件逻辑初始化
@@ -268,6 +271,7 @@ export class ControlController<
 
   protected async onMounted(): Promise<void> {
     await super.onMounted();
+    this.assertLifecycleActive();
 
     // 启动定时器触发
     this.scheduler?.startTimerTrigger();

@@ -11,6 +11,7 @@ import { IControllerState } from '../../interface';
 import { ActivityCounter, ControllerEvent } from '../utils';
 
 const SELF_KEY = '__self';
+const LIFECYCLE_CANCELLED = new Error('Controller lifecycle cancelled');
 
 /**
  * 控制器基类
@@ -147,15 +148,32 @@ export class BaseController<
    */
   childNames: string[] = [];
 
+  protected isDestroying = false;
+
+  protected assertLifecycleActive(): void {
+    if (this.isDestroying || this.state.isDestroyed || this.ctx.isDestroyed) {
+      throw LIFECYCLE_CANCELLED;
+    }
+  }
+
   /**
    * 生命周期-创建完成，不推荐子类实现
    * @author lxm
    * @date 2023-04-25 11:08:54
    */
   async created(): Promise<void> {
-    // 登记自身
-    this.mountCounter.enroll(SELF_KEY);
-    await this.onCreated();
+    try {
+      this.assertLifecycleActive();
+      // 登记自身
+      this.mountCounter.enroll(SELF_KEY);
+      await this.onCreated();
+      this.assertLifecycleActive();
+    } catch (error) {
+      if (error === LIFECYCLE_CANCELLED) {
+        return;
+      }
+      throw error;
+    }
     this.state.isCreated = true;
     this.force(() => {
       this.mountSelf();
@@ -207,7 +225,16 @@ export class BaseController<
    * @date 2023-04-25 11:08:54
    */
   protected async mounted(): Promise<void> {
-    await this.onMounted();
+    try {
+      this.assertLifecycleActive();
+      await this.onMounted();
+      this.assertLifecycleActive();
+    } catch (error) {
+      if (error === LIFECYCLE_CANCELLED) {
+        return;
+      }
+      throw error;
+    }
     this.state.isMounted = true;
     ibiz.log.debug(`${this.constructor.name}:${this.name} onMounted`);
     this._evt.emit('onMounted', undefined);
@@ -229,6 +256,7 @@ export class BaseController<
    * @date 2023-04-25 11:08:54
    */
   async destroyed(): Promise<void> {
+    this.isDestroying = true;
     await this._evt.emit('onBeforeDestroy', undefined);
     await this.onDestroyed();
     this.state.isDestroyed = true;
