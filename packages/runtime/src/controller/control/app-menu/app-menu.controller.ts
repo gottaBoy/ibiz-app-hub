@@ -4,6 +4,7 @@ import {
   RuntimeModelError,
 } from '@ibiz-template/core';
 import { IAppMenu, IAppMenuItem } from '@ibiz/model-core';
+import { clone, equals } from 'ramda';
 import { AppFuncCommand } from '../../../command';
 import {
   IAppMenuState,
@@ -32,6 +33,8 @@ export class AppMenuController
   implements IAppMenuController
 {
   app!: IAppService;
+
+  protected menuNavigationGeneration = 0;
 
   protected initState(): void {
     super.initState();
@@ -426,6 +429,9 @@ export class AppMenuController
     useDepth: boolean = true,
     opts: IData = {},
   ): Promise<void> {
+    if (this.isDestroying || this.state.isDestroyed || this.ctx.isDestroyed) {
+      return;
+    }
     const menuItem = findRecursiveChild(this.model, id, {
       compareField: 'id',
       childrenFields: ['appMenuItems'],
@@ -435,6 +441,22 @@ export class AppMenuController
         ibiz.i18n.t('runtime.controller.control.menu.noFindMenu', { id }),
       );
     }
+    this.menuNavigationGeneration += 1;
+    const generation = this.menuNavigationGeneration;
+    const sourceUrl = window.location.href;
+    const sourceView = this.view;
+    const sourceContext = clone(this.context.deepClone());
+    const { modalOption } = opts;
+    const shouldNavigate = (): boolean =>
+      generation === this.menuNavigationGeneration &&
+      !this.isDestroying &&
+      !this.state.isDestroyed &&
+      !this.ctx.isDestroyed &&
+      this.view === sourceView &&
+      window.location.href === sourceUrl &&
+      equals(this.context.deepClone(), sourceContext) &&
+      (typeof modalOption?.shouldNavigate !== 'function' ||
+        modalOption.shouldNavigate());
 
     this.evt.emit('onClick', {
       eventArg: id,
@@ -472,7 +494,11 @@ export class AppMenuController
       menuItem.appFuncId,
       tempContext,
       param,
-      { ...opts, view: this.view },
+      {
+        ...opts,
+        view: this.view,
+        modalOption: { ...modalOption, shouldNavigate },
+      },
     );
   }
 
